@@ -22,6 +22,7 @@ This Standard Operating Procedure (SOP) establishes comprehensive protocols for 
 This SOP applies to all labeling and identification activities within the cannabis production facility, including:
 
 - **Product Categories**:
+
   - Cannabis flower products (dried, cured, trimmed)
   - Cannabis concentrates and extracts
   - Infused edible products and beverages
@@ -32,6 +33,7 @@ This SOP applies to all labeling and identification activities within the cannab
   - Laboratory samples and reference standards
 
 - **Labeling Systems**:
+
   - Regulatory compliance labeling
   - Seed-to-sale tracking labels
   - QR codes and digital identification
@@ -112,14 +114,14 @@ state_compliance_requirements:
     manufacture_date: "Date of product processing/packaging"
     expiration_date: "Product shelf life and use-by date"
     testing_facility: "Laboratory name and license number"
-    
+
   warning_statements:
     health_warnings: "Pregnancy, nursing, and medical condition warnings"
     impairment_warnings: "Operating vehicles and machinery restrictions"
     children_warnings: "Keep away from children and pets"
     dosage_warnings: "Start low, go slow dosing instructions"
     medical_use_only: "For qualified patients only (where applicable)"
-    
+
   format_requirements:
     font_size_minimum: "Legible text size per state specifications"
     contrast_requirements: "Adequate color contrast for readability"
@@ -138,13 +140,13 @@ federal_compliance:
     allergen_warnings: "Major allergen identification and warnings"
     net_quantity: "Accurate weight/volume declarations"
     country_of_origin: "Product origin identification where required"
-    
+
   cpsc_standards:
     child_resistant_labeling: "Child-resistant package identification"
     safety_warnings: "Product safety and handling instructions"
     emergency_information: "Poison control and emergency contact information"
     storage_instructions: "Proper storage condition requirements"
-    
+
   usda_requirements:
     organic_labeling: "Organic certification display (where applicable)"
     ingredient_sourcing: "Organic ingredient identification"
@@ -164,14 +166,14 @@ tracking_integration:
     leaf_data_systems: "LeafData system connectivity"
     custom_state_systems: "Proprietary state tracking platforms"
     real_time_updates: "Immediate transaction reporting and synchronization"
-    
+
   data_elements:
     unique_identifiers: "State-assigned product identification numbers"
     batch_genealogy: "Complete production history from seed to sale"
     location_tracking: "Current and historical product locations"
     quantity_tracking: "Precise weight and unit count management"
     transaction_history: "All transfers, sales, and inventory adjustments"
-    
+
   compliance_monitoring:
     automatic_alerts: "Non-compliance detection and notification"
     audit_trails: "Complete transaction and handling documentation"
@@ -190,14 +192,14 @@ internal_identification:
     gs1_standards: "Global standards for supply chain identification"
     verification_systems: "Barcode quality and scanability testing"
     redundancy_systems: "Multiple barcode placement for reliability"
-    
+
   rfid_technology:
     passive_rfid_tags: "Battery-free tags for basic identification"
     active_rfid_systems: "Real-time location and monitoring"
     read_range_optimization: "Optimal reading distance and reliability"
     data_capacity: "Expanded data storage capabilities"
     integration_systems: "ERP and WMS system connectivity"
-    
+
   digital_platforms:
     qr_code_integration: "Consumer-facing product information access"
     blockchain_tracking: "Immutable record keeping and verification"
@@ -218,14 +220,14 @@ design_specifications:
     typography_guidelines: "Font selection and hierarchy standards"
     imagery_requirements: "Photography and graphic element standards"
     layout_templates: "Standardized design templates and formats"
-    
+
   regulatory_integration:
     mandatory_element_placement: "Required information positioning"
     warning_prominence: "Appropriate warning statement visibility"
     font_size_compliance: "Regulatory minimum text size requirements"
     color_contrast_verification: "Readability and accessibility compliance"
     symbol_integration: "Required regulatory symbols and pictograms"
-    
+
   technical_specifications:
     print_resolution: "Minimum 300 DPI for text and graphics"
     color_gamut: "CMYK color space for printing consistency"
@@ -244,14 +246,14 @@ production_workflows:
     quality_monitoring: "Real-time print quality assessment"
     color_management: "Consistent color reproduction and matching"
     speed_optimization: "Production efficiency and throughput maximization"
-    
+
   conventional_printing:
     flexographic_printing: "High-volume, cost-effective production"
     offset_printing: "High-quality graphics and color reproduction"
     screen_printing: "Specialty inks and durable applications"
     gravure_printing: "Ultra-high volume and premium quality"
     letterpress_printing: "Tactile and premium finishing effects"
-    
+
   finishing_operations:
     die_cutting: "Precise label shape and size cutting"
     lamination: "Protective coating and durability enhancement"
@@ -272,14 +274,14 @@ application_protocols:
     adhesion_verification: "Proper adhesion and bubble elimination"
     quality_inspection: "Visual inspection and defect identification"
     documentation_completion: "Application record keeping and traceability"
-    
+
   automated_application:
     machine_setup: "Equipment calibration and parameter setting"
     feed_system_optimization: "Label supply and feeding consistency"
     application_pressure: "Optimal pressure for adhesion without damage"
     speed_control: "Balance between speed and application quality"
     reject_systems: "Automatic defect detection and removal"
-    
+
   special_applications:
     curved_surfaces: "Application to cylindrical and complex shapes"
     flexible_packaging: "Application to pouches and flexible containers"
@@ -298,14 +300,14 @@ quality_control_procedures:
     adhesion_evaluation: "Edge lifting, bubbles, and wrinkle detection"
     damage_assessment: "Tears, scratches, and contamination identification"
     completeness_verification: "All required information present and correct"
-    
+
   automated_inspection:
     vision_systems: "Camera-based defect detection and rejection"
     barcode_verification: "Scanability and data accuracy testing"
     color_measurement: "Spectrophotometric color verification"
     registration_checking: "Multi-color alignment and positioning"
     text_recognition: "OCR verification of variable data accuracy"
-    
+
   sampling_protocols:
     statistical_sampling: "Representative sample selection for testing"
     frequency_standards: "Risk-based inspection frequency determination"
@@ -326,14 +328,14 @@ data_management:
     inventory_systems: "Weight and quantity verification"
     regulatory_databases: "License and compliance status verification"
     supplier_information: "Vendor and material source verification"
-    
+
   data_validation:
     cross_reference_checking: "Multiple source data comparison"
     calculation_verification: "Mathematical accuracy and formula validation"
     format_compliance: "Regulatory format and content requirements"
     completeness_assessment: "All required data elements present"
     accuracy_confirmation: "Data source verification and validation"
-    
+
   change_control:
     revision_procedures: "Systematic data change management"
     approval_processes: "Multi-level review and authorization"
@@ -352,14 +354,14 @@ system_integration:
     production_scheduling: "Work order and resource planning integration"
     quality_management: "Test results and approval status integration"
     financial_systems: "Cost accounting and pricing integration"
-    
+
   laboratory_integration:
     lims_connectivity: "Laboratory Information Management System integration"
     automatic_data_transfer: "Test result import and validation"
     coa_generation: "Automatic certificate of analysis creation"
     compliance_verification: "Regulatory limit and specification checking"
     trend_analysis: "Historical data analysis and reporting"
-    
+
   regulatory_systems:
     state_reporting: "Automatic compliance report generation"
     tracking_updates: "Real-time inventory and transaction reporting"
@@ -380,14 +382,14 @@ equipment_requirements:
     inkjet_printers: "High-resolution printing for graphics and text"
     laser_printers: "Professional quality for office and administrative labels"
     industrial_printers: "High-volume, continuous operation capabilities"
-    
+
   application_equipment:
     manual_dispensers: "Hand-held label dispensing and application"
     semi_automatic_applicators: "Operator-assisted application systems"
     automatic_applicators: "High-speed, hands-free application"
     wrap_around_labelers: "Cylindrical container labeling systems"
     top_and_bottom_labelers: "Multi-surface labeling capabilities"
-    
+
   inspection_systems:
     vision_inspection: "Camera-based quality control and verification"
     barcode_verifiers: "Print quality and scanability testing"
@@ -406,14 +408,14 @@ maintenance_protocols:
     monthly_calibration: "Accuracy verification and correction"
     quarterly_service: "Professional maintenance and parts replacement"
     annual_overhaul: "Complete equipment refurbishment and upgrade"
-    
+
   calibration_procedures:
     measurement_standards: "Traceable calibration standards and references"
     frequency_schedules: "Risk-based calibration frequency determination"
     documentation_requirements: "Complete calibration records and certificates"
     drift_monitoring: "Performance trending and predictive maintenance"
     corrective_actions: "Out-of-tolerance equipment repair and adjustment"
-    
+
   performance_monitoring:
     efficiency_metrics: "Throughput and productivity measurement"
     quality_metrics: "Defect rates and accuracy assessment"
@@ -434,14 +436,14 @@ training_requirements:
     quality_standards: "Recognition of quality requirements and defects"
     safety_procedures: "Personal and equipment safety protocols"
     documentation_requirements: "Record keeping and traceability procedures"
-    
+
   advanced_training:
     troubleshooting: "Problem diagnosis and resolution techniques"
     quality_control: "Advanced inspection and testing procedures"
     system_integration: "Understanding of connected systems and processes"
     regulatory_updates: "Ongoing compliance requirement changes"
     leadership_development: "Supervisory and management skills"
-    
+
   specialized_certifications:
     equipment_certification: "Machine-specific operation authorization"
     quality_inspector_certification: "Advanced quality control competency"
@@ -460,7 +462,7 @@ competency_verification:
     quality_performance: "Work quality and accuracy monitoring"
     safety_compliance: "Safety protocol adherence and awareness"
     problem_solving: "Ability to identify and resolve operational issues"
-    
+
   certification_maintenance:
     annual_recertification: "Ongoing competency verification and renewal"
     continuing_education: "Required training hours and professional development"
@@ -481,14 +483,14 @@ audit_protocols:
     monthly_regulatory_reviews: "Complete regulatory compliance assessment"
     quarterly_process_audits: "End-to-end process evaluation and improvement"
     annual_comprehensive_audits: "Complete program assessment and validation"
-    
+
   audit_documentation:
     finding_classification: "Severity levels and priority rankings"
     corrective_action_plans: "Systematic problem resolution and prevention"
     follow_up_procedures: "Verification of corrective action effectiveness"
     trend_analysis: "Pattern identification and systemic improvement"
     management_reporting: "Executive summary and strategic recommendations"
-    
+
   continuous_monitoring:
     real_time_alerts: "Immediate notification of compliance deviations"
     automated_reporting: "Scheduled compliance status reports"
@@ -507,14 +509,14 @@ audit_preparation:
     accuracy_confirmation: "Data verification and validation"
     access_procedures: "Authorized personnel and information sharing"
     backup_systems: "Redundant documentation and data storage"
-    
+
   staff_preparation:
     role_assignments: "Clear responsibilities during audit activities"
     communication_protocols: "Consistent messaging and information sharing"
     escort_procedures: "Auditor guidance and facility access management"
     question_response: "Accurate and complete information provision"
     escalation_procedures: "Management involvement and decision authority"
-    
+
   facility_preparation:
     area_organization: "Clean, organized, and professional presentation"
     equipment_readiness: "Proper operation and maintenance demonstration"
@@ -535,21 +537,21 @@ performance_metrics:
     corrective_action_timeliness: "Speed of problem resolution"
     training_compliance: "Percentage of staff with current certifications"
     documentation_completeness: "Percentage of complete and accurate records"
-    
+
   quality_metrics:
     label_accuracy: "Percentage of labels with correct information"
     print_quality: "Visual and technical print quality assessment"
     application_quality: "Proper placement and adhesion rates"
     defect_rates: "Parts per million error rates"
     customer_complaints: "Quality-related customer feedback"
-    
+
   efficiency_metrics:
     production_throughput: "Labels produced per hour or shift"
     equipment_uptime: "Percentage of scheduled operating time"
     labor_productivity: "Output per labor hour"
     material_utilization: "Waste percentage and efficiency"
     changeover_time: "Time required for product or format changes"
-    
+
   cost_metrics:
     cost_per_label: "Total labeling cost per unit"
     material_costs: "Raw material and supply expenses"
@@ -568,14 +570,14 @@ improvement_initiatives:
     workflow_optimization: "Process flow and layout improvement"
     standard_work: "Best practice standardization and documentation"
     error_proofing: "Mistake prevention and quality improvement"
-    
+
   technology_advancement:
     equipment_upgrades: "Newer, more efficient labeling technology"
     software_enhancements: "Improved data management and integration"
     automation_integration: "Robotic and automated labeling systems"
     digital_transformation: "Paperless processes and electronic workflows"
     artificial_intelligence: "AI-powered quality control and optimization"
-    
+
   sustainability_programs:
     material_reduction: "Label size and material optimization"
     recyclable_materials: "Environmentally friendly label materials"
@@ -596,21 +598,21 @@ emergency_procedures:
     vendor_support: "Emergency repair and replacement services"
     production_continuity: "Alternative equipment and workflow activation"
     communication_protocols: "Stakeholder notification and coordination"
-    
+
   system_failures:
     manual_procedures: "Hand-written labels and temporary identification"
     data_backup_access: "Alternative data sources and verification"
     regulatory_notification: "Immediate reporting of tracking system issues"
     recovery_procedures: "System restoration and data synchronization"
     audit_trail_maintenance: "Complete documentation during system downtime"
-    
+
   compliance_emergencies:
     immediate_containment: "Product isolation and investigation initiation"
     regulatory_notification: "Immediate reporting to appropriate authorities"
     corrective_actions: "Rapid problem resolution and prevention"
     communication_management: "Internal and external stakeholder communication"
     business_impact_mitigation: "Minimization of operational and financial impact"
-    
+
   supply_chain_disruptions:
     alternative_suppliers: "Backup material sources and emergency procurement"
     inventory_management: "Strategic material stockpiling and allocation"
@@ -629,7 +631,7 @@ continuity_measures:
     cross_training: "Multi-skilled workforce for operational flexibility"
     facility_alternatives: "Backup labeling locations and capabilities"
     data_backup: "Redundant data storage and access systems"
-    
+
   recovery_procedures:
     damage_assessment: "Rapid evaluation of equipment and system damage"
     resource_mobilization: "Emergency repair and replacement coordination"
@@ -650,14 +652,14 @@ documentation_requirements:
     quality_control_data: "All inspection and testing results"
     personnel_assignments: "Staff responsible for each labeling operation"
     equipment_used: "Machinery and systems used for labeling"
-    
+
   compliance_documentation:
     regulatory_submissions: "Required reports and notifications to authorities"
     audit_reports: "Internal and external audit findings and responses"
     training_records: "Personnel training and competency verification"
     change_control_documentation: "Process and system change management"
     complaint_handling: "Customer complaint investigation and resolution"
-    
+
   quality_documentation:
     inspection_reports: "Detailed quality control and inspection records"
     non_conformance_reports: "Documentation of quality failures and corrections"
@@ -676,7 +678,7 @@ record_management:
     training_records: "Duration of employment plus 2 years"
     audit_records: "Minimum 7 years from audit date"
     compliance_records: "Per regulatory requirements, typically 7+ years"
-    
+
   storage_systems:
     electronic_records: "Secure, backed-up digital storage systems"
     physical_records: "Organized, protected physical filing systems"
@@ -696,13 +698,13 @@ review_procedures:
     regulatory_updates: "New requirement identification and implementation"
     staff_feedback: "Employee input on procedure effectiveness"
     technology_assessment: "New technology evaluation and adoption"
-    
+
   annual_evaluations:
     comprehensive_review: "Complete procedure assessment and optimization"
     regulatory_compliance: "Full compliance verification and gap analysis"
     cost_effectiveness: "Economic performance and optimization opportunities"
     industry_benchmarking: "Comparison with best practices and standards"
-    
+
   change_management:
     revision_procedures: "Systematic change control and approval"
     impact_assessment: "Change effect evaluation and risk analysis"
@@ -724,15 +726,21 @@ review_procedures:
 ## Appendices
 
 ### Appendix A: Regulatory Reference Documents and Standards
+
 ### Appendix B: Label Design Templates and Approval Checklists
+
 ### Appendix C: Equipment Specifications and Maintenance Schedules
+
 ### Appendix D: Emergency Contact Information and Response Procedures
+
 ### Appendix E: Training Materials and Competency Assessment Tools
+
 ### Appendix F: Quality Control Procedures and Testing Methods
 
 ---
 
 **Document Control:**
+
 - Created: 2025-09-02
 - Last Modified: 2025-09-02
 - Next Review: 2026-09-02

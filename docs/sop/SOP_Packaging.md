@@ -22,6 +22,7 @@ This Standard Operating Procedure (SOP) establishes comprehensive protocols for 
 This SOP applies to all packaging operations within the cannabis production facility, including:
 
 - **Product Categories**:
+
   - Dried cannabis flower (loose and pre-packaged)
   - Pre-rolls and joints
   - Cannabis concentrates and extracts
@@ -31,6 +32,7 @@ This SOP applies to all packaging operations within the cannabis production faci
   - Accessories and ancillary products
 
 - **Packaging Operations**:
+
   - Primary packaging (direct product contact)
   - Secondary packaging (outer containers and cartons)
   - Tertiary packaging (bulk shipping containers)
@@ -104,14 +106,14 @@ child_resistant_specifications:
     material_safety: "FDA food-grade materials for direct contact"
     barrier_properties: "Moisture and oxygen barrier requirements"
     tamper_evidence: "Visible indication of container opening"
-    
+
   closure_systems:
     push_turn_caps: "Twist-off child-resistant closures"
     squeeze_turn_caps: "Dual-action child-resistant mechanisms"
     blister_packs: "Individual dose child-resistant packaging"
     pouch_systems: "Resealable child-resistant pouches"
     slide_locks: "Child-resistant sliding lock mechanisms"
-    
+
   performance_requirements:
     child_resistance_test: "85% of children under 5 cannot open in 5 minutes"
     adult_accessibility: "90% of adults 18-45 can open and close"
@@ -130,14 +132,14 @@ protective_packaging:
     seal_integrity: "Heat seal strength >2 lbs/inch minimum"
     puncture_resistance: "Minimum 200g puncture strength"
     flexibility_retention: "No cracking after 1000 flex cycles"
-    
+
   oxygen_barriers:
     oxygen_transmission_rate: "<0.1 cc/m²/day for oxidation-sensitive products"
     barrier_materials: "EVOH, aluminum foil, metallized polyester"
     shelf_life_protection: "Minimum 2-year protection under specified conditions"
     gas_flushing_compatibility: "Nitrogen or argon gas replacement capability"
     vacuum_packaging: "Vacuum seal maintenance and integrity"
-    
+
   light_protection:
     uv_barrier: "Complete UV-A and UV-B protection"
     visible_light_blocking: "Amber tint or opaque materials"
@@ -156,21 +158,21 @@ product_specific_packaging:
     static_protection: "Anti-static bags for trichome preservation"
     compression_prevention: "Rigid containers to prevent flower crushing"
     aroma_preservation: "Airtight seals to maintain terpene profiles"
-    
+
   concentrate_packaging:
     non_stick_surfaces: "PTFE or silicone-lined containers"
     temperature_stability: "Performance from -20°C to +40°C"
     solvent_resistance: "Chemical compatibility with extraction solvents"
     portion_control: "Pre-measured dose containers where applicable"
     dabbing_tools: "Integrated or separate dabbing tool inclusion"
-    
+
   edible_packaging:
     food_grade_materials: "FDA-approved food contact substances"
     nutritional_labeling: "Required nutrition facts and ingredient lists"
     allergen_information: "Clear allergen warnings and cross-contamination statements"
     dose_identification: "Individual dose marking and separation"
     freshness_preservation: "Modified atmosphere or vacuum packaging"
-    
+
   liquid_products:
     dropper_bottles: "Calibrated droppers for accurate dosing"
     spray_systems: "Metered dose spray mechanisms"
@@ -191,14 +193,14 @@ packaging_machinery:
     pneumatic_fillers: "Air-assisted filling for light materials"
     multi_head_weighers: "High-speed accurate portion control"
     checkweighers: "In-line weight verification and rejection"
-    
+
   sealing_equipment:
     heat_sealers: "Impulse and constant heat sealing systems"
     induction_sealers: "Hermetic seal creation for containers"
     vacuum_sealers: "Atmosphere modification and preservation"
     ultrasonic_sealers: "Non-thermal sealing for heat-sensitive products"
     crimp_cappers: "Automatic closure application and torque control"
-    
+
   labeling_systems:
     pressure_sensitive_labelers: "Automatic label application systems"
     print_and_apply_systems: "Real-time label printing and application"
@@ -217,14 +219,14 @@ quality_control_systems:
     torque_meters: "Closure application force verification"
     weight_checkers: "Statistical process control for fill weights"
     seal_testers: "Package integrity and seal strength testing"
-    
+
   environmental_monitoring:
     temperature_loggers: "Packaging area climate monitoring"
     humidity_sensors: "Moisture control verification"
     particulate_counters: "Clean room air quality monitoring"
     pressure_sensors: "Room pressurization and containment"
     air_velocity_meters: "Laminar flow verification"
-    
+
   testing_instruments:
     thickness_gauges: "Material thickness verification"
     tensile_testers: "Package strength and durability testing"
@@ -245,14 +247,14 @@ preparation_procedures:
     sample_testing: "Representative testing of critical materials"
     storage_condition_verification: "Proper material storage and handling"
     inventory_rotation: "FIFO usage and expiration date monitoring"
-    
+
   equipment_setup:
     machine_calibration: "Filling accuracy and sealing parameter verification"
     tooling_installation: "Proper die, former, and guide installation"
     safety_system_check: "Guard, interlock, and emergency stop verification"
     quality_standard_setup: "Inspection parameters and reject criteria"
     changeover_procedures: "Product-specific setup and validation"
-    
+
   environmental_preparation:
     clean_room_qualification: "Air quality and cleanliness verification"
     personnel_hygiene: "Hand washing, gowning, and health verification"
@@ -275,7 +277,7 @@ packaging_workflows:
     sealing_operation: "Container closure and seal integrity verification"
     label_application: "Accurate labeling with required information"
     final_inspection: "Complete package quality and compliance verification"
-    
+
   concentrate_packaging_procedure:
     container_preparation: "Non-stick container cleaning and inspection"
     product_temperature_conditioning: "Optimal handling temperature achievement"
@@ -285,7 +287,7 @@ packaging_workflows:
     weight_verification: "Net weight accuracy and documentation"
     labeling_and_marking: "Compliance labeling and batch identification"
     quality_inspection: "Visual inspection and seal integrity verification"
-    
+
   edible_packaging_procedure:
     sanitary_setup: "Food-grade packaging environment preparation"
     product_inspection: "Quality, appearance, and dose uniformity verification"
@@ -313,14 +315,14 @@ labeling_compliance:
     license_number: "Facility license number and regulatory information"
     warnings_statements: "Required health and safety warnings"
     laboratory_testing: "Testing facility and certificate information"
-    
+
   warning_requirements:
     health_warnings: "Pregnancy, breastfeeding, and health condition warnings"
     impairment_warnings: "Driving and operating machinery restrictions"
     keeping_away_from_children: "Child safety and storage instructions"
     for_medical_use_only: "Medical cannabis specific warnings"
     dosage_information: "Recommended serving size and onset time"
-    
+
   format_requirements:
     font_size_minimums: "Readable text size requirements"
     contrast_requirements: "Background and text color contrast"
@@ -339,14 +341,14 @@ label_production:
     typography_standards: "Font selection and hierarchy"
     regulatory_review: "Legal compliance verification"
     print_quality_standards: "Resolution, clarity, and durability requirements"
-    
+
   printing_processes:
     digital_printing: "Variable data and short run capability"
     flexographic_printing: "High volume and cost-effective production"
     thermal_transfer_printing: "Durable and chemical-resistant marking"
     laser_engraving: "Permanent marking for containers"
     holographic_features: "Anti-counterfeiting security elements"
-    
+
   quality_control:
     color_matching: "Spectrophotometric color verification"
     text_accuracy: "100% text accuracy verification"
@@ -367,14 +369,14 @@ quality_control_procedures:
     label_placement_verification: "Position accuracy and readability inspection"
     container_defect_detection: "Visual and automated defect identification"
     line_speed_optimization: "Balance between speed and quality"
-    
+
   sampling_protocols:
     statistical_sampling: "Representative sample selection for testing"
     testing_frequency: "Risk-based testing schedule and intervals"
     acceptance_criteria: "Clear pass/fail criteria and action levels"
     documentation_requirements: "Complete testing record keeping"
     trend_analysis: "Pattern identification and process improvement"
-    
+
   corrective_actions:
     immediate_response: "Real-time problem identification and correction"
     root_cause_analysis: "Systematic investigation of quality issues"
@@ -393,14 +395,14 @@ final_inspection:
     seal_integrity: "Complete closure and tamper-evidence verification"
     product_presentation: "Proper product placement and orientation"
     defect_identification: "Scratches, dents, contamination, or damage"
-    
+
   functional_testing:
     closure_operation: "Child-resistance and adult accessibility verification"
     leak_testing: "Package integrity under pressure and vacuum"
     weight_verification: "Net weight accuracy and compliance"
     dimensional_inspection: "Package size and shape conformity"
     durability_testing: "Drop test and handling simulation"
-    
+
   documentation_verification:
     label_accuracy: "All required information present and correct"
     batch_traceability: "Lot number and production record correlation"
@@ -421,14 +423,14 @@ clean_room_requirements:
     air_change_rate: "Minimum 20 air changes per hour"
     pressure_differential: "Positive pressure relative to adjacent areas"
     temperature_humidity_control: "20-24°C, 45-65% RH optimal"
-    
+
   personnel_protocols:
     gowning_procedures: "Complete coverage protective clothing"
     hand_hygiene: "Hand washing and sanitization protocols"
     health_monitoring: "Illness reporting and exclusion policies"
     training_requirements: "Clean room behavior and contamination prevention"
     visitor_controls: "Limited access and escort requirements"
-    
+
   cleaning_and_sanitization:
     daily_cleaning: "End-of-shift cleaning and sanitization"
     weekly_deep_cleaning: "Comprehensive cleaning and disinfection"
@@ -447,14 +449,14 @@ contamination_control:
     cleaning_validation: "Verification of cleaning effectiveness"
     allergen_control: "Special procedures for allergenic ingredients"
     line_clearance: "Verification of complete product changeover"
-    
+
   foreign_object_prevention:
     metal_detection: "In-line metal detection and rejection"
     visual_inspection: "Human and automated foreign object detection"
     tool_control: "Inventory and accountability for loose items"
     maintenance_protocols: "Proper maintenance procedures and part control"
     glass_plastic_policy: "Restrictions on materials in packaging areas"
-    
+
   microbial_control:
     environmental_monitoring: "Regular air and surface sampling"
     personnel_hygiene: "Hand washing and protective equipment"
@@ -475,14 +477,14 @@ material_qualification:
     quality_history: "Track record of consistent quality delivery"
     financial_stability: "Business continuity and reliability assessment"
     geographic_proximity: "Supply chain efficiency and responsiveness"
-    
+
   material_testing:
     physical_properties: "Strength, barrier, and performance characteristics"
     chemical_compatibility: "Product contact safety and stability"
     migration_testing: "Extractable and leachable substance analysis"
     shelf_life_validation: "Long-term stability and performance"
     regulatory_compliance: "FDA and state regulatory requirement verification"
-    
+
   approval_process:
     technical_review: "Engineering and quality team evaluation"
     trial_production: "Small-scale production and performance verification"
@@ -501,14 +503,14 @@ inventory_control:
     quarantine_procedures: "Hold for approval before use"
     system_entry: "Inventory management system data entry"
     storage_assignment: "Appropriate storage location and conditions"
-    
+
   storage_management:
     environmental_control: "Temperature, humidity, and light control"
     fifo_rotation: "First In, First Out usage rotation"
     segregation_requirements: "Separation by type, lot, and approval status"
     damage_prevention: "Proper handling and protection procedures"
     inventory_monitoring: "Regular cycle counts and audits"
-    
+
   usage_tracking:
     lot_traceability: "Complete usage tracking by lot number"
     consumption_monitoring: "Usage rate and efficiency tracking"
@@ -529,14 +531,14 @@ training_requirements:
     safety_procedures: "Personal safety and equipment safety protocols"
     hygiene_protocols: "Clean room behavior and contamination prevention"
     documentation_requirements: "Record keeping and traceability requirements"
-    
+
   specialized_training:
     child_resistant_packaging: "CRP requirements and testing procedures"
     regulatory_compliance: "State and federal labeling and packaging requirements"
     quality_control: "Inspection techniques and problem identification"
     troubleshooting: "Equipment problem diagnosis and resolution"
     lean_manufacturing: "Waste reduction and efficiency improvement"
-    
+
   ongoing_education:
     regulatory_updates: "Changes in laws and regulations"
     new_equipment_training: "Operation of new machinery and technology"
@@ -555,14 +557,14 @@ competency_verification:
     quality_performance: "Work quality and accuracy assessment"
     safety_compliance: "Safety protocol adherence and awareness"
     problem_solving: "Ability to identify and resolve issues"
-    
+
   certification_requirements:
     initial_certification: "New employee competency verification"
     annual_recertification: "Ongoing competency maintenance and verification"
     equipment_specific_certification: "Machine-specific operation authorization"
     quality_inspector_certification: "Advanced quality control competency"
     trainer_certification: "Ability to train and mentor other employees"
-    
+
   continuous_improvement:
     performance_feedback: "Regular coaching and improvement guidance"
     skill_development_planning: "Individual growth and advancement planning"
@@ -583,21 +585,21 @@ performance_metrics:
     customer_complaints: "Quality-related customer feedback"
     rework_rate: "Percentage of products requiring rework"
     reject_rate: "Percentage of products rejected and discarded"
-    
+
   efficiency_metrics:
     overall_equipment_effectiveness: "Equipment utilization and performance"
     throughput_rate: "Units per hour production capacity"
     changeover_time: "Time required for product changeovers"
     labor_productivity: "Units per labor hour"
     material_utilization: "Waste percentage and material efficiency"
-    
+
   compliance_metrics:
     regulatory_violations: "Number of compliance issues and citations"
     audit_findings: "Internal and external audit non-conformances"
     label_accuracy: "Percentage of labels with correct information"
     weight_accuracy: "Percentage of packages within weight tolerance"
     documentation_completeness: "Percentage of complete records"
-    
+
   cost_metrics:
     packaging_cost_per_unit: "Total packaging cost per finished product"
     material_waste_cost: "Cost of discarded and unusable materials"
@@ -616,14 +618,14 @@ improvement_initiatives:
     automation_opportunities: "Technology implementation for productivity"
     workflow_optimization: "Material flow and layout improvement"
     standard_work: "Best practice standardization and implementation"
-    
+
   technology_advancement:
     equipment_upgrades: "Newer, more efficient packaging machinery"
     quality_control_technology: "Advanced inspection and testing equipment"
     data_analytics: "Performance monitoring and predictive analytics"
     automation_integration: "Robotic and automated packaging systems"
     digital_transformation: "Paperless documentation and tracking"
-    
+
   sustainability_programs:
     material_reduction: "Packaging material minimization and optimization"
     recyclable_materials: "Environmentally friendly packaging options"
@@ -644,21 +646,21 @@ emergency_procedures:
     manual_procedures: "Hand packaging procedures for critical products"
     vendor_support: "Emergency repair and replacement services"
     production_rescheduling: "Alternative production planning and timing"
-    
+
   quality_failures:
     product_isolation: "Immediate segregation of affected products"
     root_cause_investigation: "Rapid problem identification and analysis"
     corrective_actions: "Implementation of immediate corrections"
     customer_notification: "Communication with affected customers"
     regulatory_reporting: "Notification of regulatory agencies where required"
-    
+
   supply_chain_disruptions:
     alternative_suppliers: "Backup material suppliers and sources"
     inventory_management: "Strategic material stockpiling and allocation"
     specification_flexibility: "Alternative material options and approvals"
     transportation_alternatives: "Multiple shipping and logistics options"
     communication_protocols: "Supply chain coordination and updates"
-    
+
   facility_emergencies:
     evacuation_procedures: "Safe personnel evacuation protocols"
     product_protection: "Securing and protecting work-in-process inventory"
@@ -677,7 +679,7 @@ continuity_measures:
     cross_training: "Multi-skilled workforce for operational flexibility"
     facility_alternatives: "Co-packing and alternative location options"
     inventory_buffers: "Strategic material and finished goods stockpiling"
-    
+
   recovery_procedures:
     damage_assessment: "Rapid evaluation of equipment and facility damage"
     insurance_claims: "Quick insurance notification and claim processing"
@@ -698,14 +700,14 @@ regulatory_framework:
     laboratory_testing: "Required testing and certificate documentation"
     tracking_compliance: "Seed-to-sale tracking and reporting requirements"
     advertising_restrictions: "Marketing and promotional compliance"
-    
+
   federal_regulations:
     fda_food_contact: "Food contact substance safety requirements"
     cpsc_child_resistance: "Consumer Product Safety Commission standards"
     ftc_labeling: "Federal Trade Commission truth in advertising"
     usda_organic: "Organic certification and labeling requirements"
     dot_shipping: "Department of Transportation packaging and shipping"
-    
+
   industry_standards:
     iso_quality_systems: "Quality management system requirements"
     sqi_cannabis_standards: "Cannabis industry quality and safety standards"
@@ -724,14 +726,14 @@ documentation_requirements:
     quality_control_data: "All testing and inspection results"
     personnel_assignments: "Staff responsible for each operation"
     equipment_used: "Machinery and tooling used for packaging"
-    
+
   quality_documentation:
     inspection_reports: "Detailed quality control and inspection records"
     non_conformance_reports: "Documentation of quality failures and corrections"
     corrective_actions: "Problem resolution and prevention measures"
     validation_studies: "Equipment and process qualification documentation"
     training_records: "Personnel training and competency verification"
-    
+
   compliance_documentation:
     regulatory_submissions: "Required reports and notifications to authorities"
     audit_reports: "Internal and external audit findings and responses"
@@ -751,19 +753,19 @@ review_procedures:
     staff_feedback_integration: "Employee input on procedure effectiveness and efficiency"
     equipment_performance_analysis: "Machinery reliability and optimization opportunities"
     cost_effectiveness_evaluation: "Economic performance and cost reduction opportunities"
-    
+
   annual_comprehensive_evaluations:
     regulatory_compliance_review: "Complete assessment of regulatory requirement adherence"
     technology_advancement_assessment: "Evaluation of new equipment and process technologies"
     supplier_performance_evaluation: "Material supplier quality and service assessment"
     market_trend_analysis: "Industry development and competitive analysis"
-    
+
   regulatory_updates:
     law_change_monitoring: "Tracking of regulatory requirement changes and updates"
     procedure_adaptation: "Immediate incorporation of new compliance requirements"
     staff_retraining: "Updated training for regulatory and procedure changes"
     compliance_verification: "Confirmation of continued regulatory compliance"
-    
+
   innovation_integration:
     industry_best_practices: "Adoption of proven improvement methods and technologies"
     research_collaboration: "Partnership with equipment manufacturers and research institutions"
@@ -784,15 +786,21 @@ review_procedures:
 ## Appendices
 
 ### Appendix A: Child-Resistant Packaging Testing Procedures
+
 ### Appendix B: Label Design Templates and Compliance Checklists
+
 ### Appendix C: Equipment Specifications and Maintenance Schedules
+
 ### Appendix D: Emergency Contact Information and Response Procedures
+
 ### Appendix E: Regulatory Reference Documents and Standards
+
 ### Appendix F: Training Materials and Competency Assessment Tools
 
 ---
 
 **Document Control:**
+
 - Created: 2025-09-02
 - Last Modified: 2025-09-02
 - Next Review: 2026-09-02

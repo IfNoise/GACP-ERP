@@ -22,6 +22,7 @@ This Standard Operating Procedure (SOP) establishes comprehensive protocols for 
 This SOP applies to all storage and inventory management activities within the cannabis production facility, including:
 
 - **Product Categories**:
+
   - Fresh harvested cannabis flower
   - Dried and cured cannabis flower
   - Trimmed cannabis products
@@ -31,6 +32,7 @@ This SOP applies to all storage and inventory management activities within the c
   - Laboratory samples and reference standards
 
 - **Storage Environments**:
+
   - Climate-controlled storage rooms
   - Refrigerated storage units
   - Freezer storage facilities
@@ -106,7 +108,7 @@ flower_storage_conditions:
     light_protection: "Complete darkness or amber lighting"
     oxygen_levels: "Nitrogen flushing for long-term storage"
     container_requirements: "Airtight, food-grade containers"
-    
+
   fresh_flower_storage:
     temperature_range: "2-4°C (36-39°F) refrigerated"
     humidity_range: "85-95% relative humidity"
@@ -114,7 +116,7 @@ flower_storage_conditions:
     storage_duration: "Maximum 7 days before processing"
     container_requirements: "Breathable, moisture-retaining containers"
     handling_protocols: "Gentle handling to prevent trichome damage"
-    
+
   bulk_storage_areas:
     temperature_range: "18-21°C (64-70°F) controlled"
     humidity_range: "45-55% relative humidity"
@@ -135,14 +137,14 @@ concentrate_storage_specifications:
     container_materials: "Borosilicate glass or PTFE-lined containers"
     storage_duration: "12-24 months maximum at optimal conditions"
     handling_protocols: "Minimize temperature fluctuations"
-    
+
   rosin_and_live_products:
     temperature_range: "-10 to -18°C (14 to -0.4°F) frozen"
     humidity_protection: "Vacuum-sealed or nitrogen-flushed containers"
     oxidation_prevention: "Minimal air exposure during handling"
     quality_monitoring: "Regular visual and analytical assessment"
     rotation_schedule: "First In, First Out (FIFO) system"
-    
+
   distillates_and_isolates:
     temperature_range: "Room temperature 18-25°C acceptable"
     moisture_protection: "Desiccant packs in storage containers"
@@ -162,14 +164,14 @@ infused_product_storage:
     beverage_products: "2-8°C (36-46°F) refrigerated"
     baked_goods: "Room temperature with moisture control"
     shelf_life_monitoring: "Expiration date tracking and rotation"
-    
+
   topical_products:
     temperature_range: "15-25°C (59-77°F) stable environment"
     humidity_control: "Low humidity to prevent container degradation"
     light_protection: "Dark storage to prevent degradation"
     container_integrity: "Regular inspection for leaks or damage"
     microbial_control: "Sterile storage environment maintenance"
-    
+
   tinctures_and_oils:
     temperature_range: "15-25°C (59-77°F) room temperature"
     light_protection: "Amber glass bottles in dark storage"
@@ -190,14 +192,14 @@ tracking_systems:
     movement_logging: "All transfers and location changes"
     batch_genealogy: "Complete production history tracking"
     real_time_updates: "Immediate system updates for all transactions"
-    
+
   internal_tracking:
     warehouse_management_system: "WMS integration with ERP systems"
     location_tracking: "Specific bin, shelf, and zone identification"
     quantity_tracking: "Real-time weight and unit count management"
     quality_status_tracking: "Released, quarantine, and rejected product status"
     expiration_date_management: "Automated alerts for approaching expiration"
-    
+
   chain_of_custody:
     transfer_documentation: "Signed transfer records for all movements"
     personnel_accountability: "Individual responsibility assignment"
@@ -216,14 +218,14 @@ inventory_control_protocols:
     quarantine_placement: "Isolation until quality release"
     system_entry: "Immediate inventory system registration"
     location_assignment: "Optimal storage location designation"
-    
+
   storage_management:
     fifo_rotation: "First In, First Out rotation system"
     lot_segregation: "Separate storage by batch and strain"
     cross_contamination_prevention: "Physical separation protocols"
     accessibility_optimization: "Fast-moving product placement"
     capacity_utilization: "Efficient space usage and planning"
-    
+
   picking_and_fulfillment:
     order_prioritization: "Urgency and expiration date consideration"
     accurate_selection: "Lot-specific picking verification"
@@ -244,14 +246,14 @@ environmental_monitoring:
     pressure_sensors: "Differential pressure monitoring for containment"
     light_sensors: "UV and visible light exposure monitoring"
     gas_sensors: "Oxygen, CO2, and volatile compound detection"
-    
+
   data_logging_systems:
     continuous_recording: "5-minute interval data logging minimum"
     cloud_storage: "Secure, redundant data storage and backup"
     trend_analysis: "Historical performance and pattern recognition"
     alarm_systems: "Immediate alerts for out-of-range conditions"
     reporting_tools: "Automated compliance and performance reports"
-    
+
   control_automation:
     hvac_integration: "Automated temperature and humidity control"
     ventilation_control: "Air exchange rate optimization"
@@ -270,14 +272,14 @@ equipment_maintenance:
     weighing_equipment: "Weekly calibration with certified weights"
     monitoring_systems: "Annual comprehensive calibration service"
     backup_equipment: "Quarterly readiness verification and testing"
-    
+
   preventive_maintenance:
     hvac_systems: "Monthly filter changes and system inspection"
     refrigeration_units: "Quarterly professional service and inspection"
     monitoring_equipment: "Weekly visual inspection and cleaning"
     backup_generators: "Monthly operation testing and fuel verification"
     fire_suppression: "Annual inspection and testing by certified technicians"
-    
+
   maintenance_documentation:
     service_records: "Complete maintenance history and documentation"
     calibration_certificates: "Traceable calibration documentation"
@@ -298,14 +300,14 @@ security_systems:
     pin_code_entry: "Secondary authentication for sensitive areas"
     visitor_management: "Escort requirements and temporary access badges"
     access_level_management: "Role-based access permissions and restrictions"
-    
+
   surveillance_systems:
     camera_coverage: "100% coverage of all storage and handling areas"
     recording_duration: "Minimum 90-day video retention"
     motion_detection: "Automated alerts for unauthorized movement"
     remote_monitoring: "24/7 monitoring by security personnel"
     backup_systems: "Redundant recording and power backup"
-    
+
   intrusion_detection:
     perimeter_sensors: "Building envelope monitoring and alerts"
     interior_motion_sensors: "Room-level movement detection"
@@ -324,14 +326,14 @@ inventory_security:
     inventory_limits: "Maximum quantities for different security levels"
     transport_security: "Armored transport for high-value transfers"
     insurance_requirements: "Comprehensive coverage for stored inventory"
-    
+
   loss_prevention:
     regular_audits: "Weekly cycle counts and monthly full inventories"
     discrepancy_investigation: "Immediate investigation of inventory variances"
     employee_screening: "Background checks and ongoing monitoring"
     anonymous_reporting: "Whistleblower protection and investigation"
     prosecution_policy: "Legal action for theft and fraud"
-    
+
   emergency_procedures:
     evacuation_protocols: "Product security during emergency evacuation"
     disaster_response: "Protection and recovery procedures"
@@ -352,14 +354,14 @@ quality_monitoring:
     pest_monitoring: "Insect and rodent activity detection"
     packaging_integrity: "Seal and label condition assessment"
     foreign_matter_detection: "Contamination identification and removal"
-    
+
   analytical_testing:
     potency_stability: "Quarterly cannabinoid analysis for long-term storage"
     microbial_testing: "Monthly pathogen screening for stored products"
     moisture_content: "Water activity monitoring for stability"
     pesticide_residues: "Periodic screening for contamination"
     heavy_metals: "Annual testing for environmental contamination"
-    
+
   environmental_correlation:
     condition_tracking: "Storage environment impact on product quality"
     degradation_monitoring: "Rate of quality loss under different conditions"
@@ -378,14 +380,14 @@ contamination_control:
     air_filtration: "HEPA filtration for airborne contamination control"
     water_management: "Moisture control and leak prevention"
     waste_management: "Proper disposal of contaminated materials"
-    
+
   cross_contamination_prevention:
     product_segregation: "Physical separation of different product types"
     equipment_cleaning: "Sanitization between different product handling"
     personnel_hygiene: "Hand washing and protective equipment protocols"
     vehicle_cleaning: "Transport vehicle sanitization procedures"
     packaging_integrity: "Sealed containers and barrier protection"
-    
+
   allergen_management:
     allergen_identification: "Clear labeling of allergenic ingredients"
     segregated_storage: "Separate storage for allergen-containing products"
@@ -406,14 +408,14 @@ packaging_storage:
     labeling_materials: "Adhesive labels and printed materials"
     protective_materials: "Cushioning and barrier materials"
     security_features: "Tamper-evident and anti-counterfeiting elements"
-    
+
   storage_requirements:
     environmental_control: "Climate-controlled storage for sensitive materials"
     contamination_protection: "Clean, covered storage areas"
     inventory_rotation: "FIFO rotation to prevent material aging"
     quality_preservation: "Protection from moisture, light, and pests"
     accessibility: "Organized storage for efficient retrieval"
-    
+
   quality_control:
     incoming_inspection: "Verification of specifications and quality"
     batch_testing: "Representative sampling and testing"
@@ -432,7 +434,7 @@ material_traceability:
     usage_tracking: "Products packaged with specific material lots"
     recall_capability: "Rapid identification of affected products"
     documentation_retention: "Long-term record keeping for traceability"
-    
+
   quality_documentation:
     certificates_of_analysis: "Supplier-provided quality certifications"
     internal_testing_results: "Facility-performed quality verification"
@@ -453,14 +455,14 @@ waste_management:
     contaminated_materials: "Products with microbial or chemical contamination"
     production_waste: "Trim, stems, and processing byproducts"
     packaging_waste: "Used containers and packaging materials"
-    
+
   destruction_procedures:
     witnessed_destruction: "Required personnel present during disposal"
     documentation_requirements: "Complete records of destroyed materials"
     method_validation: "Approved destruction methods and verification"
     security_protocols: "Secure transport and destruction facility access"
     environmental_compliance: "Proper disposal according to regulations"
-    
+
   waste_reduction_strategies:
     inventory_optimization: "Improved demand forecasting and ordering"
     shelf_life_extension: "Optimal storage conditions and packaging"
@@ -479,7 +481,7 @@ loss_control:
     root_cause_analysis: "Systematic investigation of loss causes"
     corrective_actions: "Implementation of preventive measures"
     monitoring_effectiveness: "Tracking of improvement measures"
-    
+
   shrinkage_monitoring:
     regular_inventories: "Frequent cycle counts and full inventories"
     trend_analysis: "Pattern identification and predictive analytics"
@@ -500,14 +502,14 @@ training_requirements:
     safety_protocols: "Personal and product safety procedures"
     quality_awareness: "Recognition of quality issues and contamination"
     inventory_systems: "Operation of tracking and management systems"
-    
+
   specialized_training:
     security_procedures: "Access control and loss prevention protocols"
     environmental_monitoring: "Monitoring system operation and response"
     quality_control: "Sampling, testing, and quality assessment"
     emergency_response: "Fire, security, and medical emergency procedures"
     regulatory_compliance: "Legal requirements and reporting obligations"
-    
+
   ongoing_education:
     quarterly_updates: "New procedures and regulatory changes"
     annual_recertification: "Competency testing and skill verification"
@@ -526,7 +528,7 @@ competency_verification:
     performance_monitoring: "Work quality and efficiency assessment"
     peer_evaluation: "Team-based competency verification"
     customer_feedback: "External validation of service quality"
-    
+
   certification_maintenance:
     continuing_education: "Required training hours and professional development"
     performance_reviews: "Regular assessment and improvement planning"
@@ -547,21 +549,21 @@ performance_metrics:
     carrying_costs: "Storage cost per unit and total inventory value"
     accuracy_rates: "Inventory counting and tracking precision"
     shrinkage_rates: "Loss and waste percentages"
-    
+
   quality_metrics:
     product_degradation: "Rate of quality loss during storage"
     contamination_incidents: "Frequency of quality failures"
     customer_complaints: "Quality-related customer feedback"
     recall_frequency: "Product recall incidents and scope"
     compliance_violations: "Regulatory non-compliance events"
-    
+
   operational_efficiency:
     labor_productivity: "Tasks completed per labor hour"
     space_utilization: "Storage capacity usage optimization"
     energy_consumption: "Environmental control energy usage"
     equipment_uptime: "Reliability and maintenance effectiveness"
     process_cycle_times: "Speed of storage and retrieval operations"
-    
+
   security_performance:
     access_violations: "Unauthorized access attempts and breaches"
     theft_incidents: "Product loss due to security failures"
@@ -580,14 +582,14 @@ improvement_initiatives:
     layout_optimization: "Storage facility design and flow improvement"
     equipment_upgrades: "Technology adoption and modernization"
     standard_operating_procedure_refinement: "Process improvement and standardization"
-    
+
   technology_integration:
     warehouse_management_systems: "Advanced WMS implementation and optimization"
     iot_sensors: "Internet of Things monitoring and control"
     artificial_intelligence: "Predictive analytics and optimization"
     robotics_automation: "Automated storage and retrieval systems"
     blockchain_tracking: "Enhanced traceability and transparency"
-    
+
   sustainability_programs:
     energy_efficiency: "Reduced environmental impact and cost"
     waste_reduction: "Minimization of disposal and destruction"
@@ -608,21 +610,21 @@ emergency_procedures:
     fire_suppression: "Automated and manual fire fighting systems"
     emergency_contacts: "Fire department and emergency services notification"
     post_incident_assessment: "Damage evaluation and recovery planning"
-    
+
   security_breaches:
     immediate_response: "Containment and law enforcement notification"
     inventory_verification: "Rapid assessment of missing or damaged products"
     investigation_cooperation: "Support for law enforcement investigations"
     insurance_claims: "Documentation and claim processing"
     system_recovery: "Security system restoration and enhancement"
-    
+
   natural_disasters:
     facility_protection: "Preparation and protection measures"
     product_evacuation: "Emergency relocation of critical inventory"
     alternative_storage: "Backup storage facility arrangements"
     communication_plans: "Stakeholder notification and coordination"
     recovery_procedures: "Facility restoration and operation resumption"
-    
+
   equipment_failures:
     backup_systems: "Redundant equipment and emergency procedures"
     vendor_support: "Emergency service and repair arrangements"
@@ -641,14 +643,14 @@ continuity_measures:
     vendor_partnerships: "Third-party storage and logistics arrangements"
     geographic_distribution: "Risk mitigation through location diversity"
     capacity_planning: "Adequate backup storage capacity"
-    
+
   data_protection:
     backup_systems: "Regular data backup and recovery testing"
     cloud_storage: "Off-site data storage and accessibility"
     system_redundancy: "Multiple system access and control points"
     cyber_security: "Protection against data breaches and attacks"
     recovery_procedures: "Rapid system restoration capabilities"
-    
+
   supply_chain_resilience:
     supplier_diversity: "Multiple supplier relationships and contracts"
     inventory_buffers: "Safety stock for critical materials and products"
@@ -669,14 +671,14 @@ regulatory_framework:
     security_requirements: "Mandated security measures and monitoring"
     quality_standards: "Product quality and safety requirements"
     reporting_obligations: "Regular compliance reports and notifications"
-    
+
   federal_compliance:
     dea_requirements: "Federal drug enforcement compliance"
     fda_regulations: "Food and drug safety requirements for edibles"
     usda_organic: "Organic certification requirements where applicable"
     osha_safety: "Workplace safety and health compliance"
     epa_environmental: "Environmental protection and waste management"
-    
+
   local_ordinances:
     zoning_compliance: "Land use and facility location requirements"
     building_codes: "Construction and safety code compliance"
@@ -695,21 +697,21 @@ documentation_requirements:
     quality_certificates: "Laboratory testing and quality release documentation"
     disposition_records: "Product release, hold, and destruction documentation"
     audit_trails: "Complete chain of custody and handling records"
-    
+
   environmental_documentation:
     monitoring_data: "Continuous environmental condition records"
     calibration_certificates: "Equipment accuracy and reliability verification"
     maintenance_logs: "Equipment service and repair documentation"
     deviation_reports: "Out-of-specification condition documentation"
     corrective_actions: "Problem resolution and prevention measures"
-    
+
   security_documentation:
     access_logs: "Personnel entry and exit records"
     incident_reports: "Security breach and investigation documentation"
     surveillance_records: "Video and monitoring system data"
     training_records: "Personnel security training and certification"
     audit_reports: "Security compliance assessment documentation"
-    
+
   compliance_reporting:
     regulatory_submissions: "Required reports to regulatory agencies"
     inspection_reports: "Documentation of regulatory inspections"
@@ -729,19 +731,19 @@ review_procedures:
     staff_feedback_integration: "Employee input on procedure effectiveness"
     technology_assessment: "Evaluation of new tools and systems"
     compliance_verification: "Regulatory requirement adherence confirmation"
-    
+
   annual_comprehensive_evaluations:
     facility_assessment: "Storage capacity and condition evaluation"
     security_review: "Security system effectiveness and enhancement"
     environmental_optimization: "Storage condition and energy efficiency improvement"
     cost_benefit_analysis: "Economic performance and optimization opportunities"
-    
+
   regulatory_updates:
     law_change_monitoring: "Tracking of regulatory requirement changes"
     procedure_updates: "Immediate incorporation of new requirements"
     staff_retraining: "Updated training for regulatory changes"
     compliance_verification: "Confirmation of continued compliance"
-    
+
   industry_best_practices:
     benchmarking_studies: "Comparison with industry leaders"
     technology_adoption: "Implementation of proven innovations"
@@ -762,15 +764,21 @@ review_procedures:
 ## Appendices
 
 ### Appendix A: Environmental Monitoring Equipment Specifications
+
 ### Appendix B: Security System Configuration and Maintenance Procedures
+
 ### Appendix C: Emergency Contact Information and Response Procedures
+
 ### Appendix D: Regulatory Reference Documents and Compliance Checklists
+
 ### Appendix E: Training Materials and Competency Assessment Tools
+
 ### Appendix F: Vendor Qualification and Management Procedures
 
 ---
 
 **Document Control:**
+
 - Created: 2025-09-02
 - Last Modified: 2025-09-02
 - Next Review: 2026-09-02
