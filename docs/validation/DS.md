@@ -27,15 +27,17 @@ last_updated: "2025-09-14"
 
 ### Расширенные модули
 
-- FS-FIN-001-005 → DS-FIN-001-005 (Financial Module)
-- FS-WF-001-004 → DS-WF-001-003 (Workforce Management)
-- FS-SP-001-002 → DS-SP-001 (Spatial Planning)
-- FS-FC-001-003 → DS-FC-001 (Forecasting & Analytics)
+- FS-FIN-001-005 → DS-FIN-001-007 (Financial Module - включая Transactions, GL, Biological Assets, Cost Allocations, AP/AR, Payroll)
+- FS-WF-001-004 → DS-WF-001-004 (Workforce Management - включая планирование рабочей силы)
+- FS-SP-001-002 → DS-SP-001 (Spatial Planning - зонирование и оптимизация)
+- FS-FC-001-003 → DS-FC-001 (Forecasting & Analytics - модели прогнозирования)
 - FS-PR-001-003 → DS-PR-001,DS-PR-002 (Procurement)
+- FS-EQ-001-002 → DS-EQP-001 (Equipment Management)
+- FS-SEC-001-002 → DS-SEC-001 (Security & Surveillance)
+- FS-KM-001-002 → DS-KM-001 (Knowledge Management)
 - FS-API-001-002 → DS-API-001 (External Integrations)
 - FS-AND-001-003 → DS-AND-001 (Android Terminals)
 - FS-IOT-001 → DS-IOT-001 (IoT Sensor Data)
-- FS-EQP-001 → DS-EQP-001 (Equipment Data)
 
 ## 3. Core Data Models
 
@@ -517,6 +519,234 @@ last_updated: "2025-09-14"
 - correlation_id: UUID, идентификатор корреляции
 - timestamp: timestamp, время запроса
 - user_id: UUID, пользователь инициировавший запрос
+
+### 3.26 Financial Transactions (DS-FIN-001)
+
+**Основные финансовые транзакции**
+
+- transaction_id: UUID, Primary Key
+- transaction_type: enum (purchase, sale, transfer, adjustment, depreciation)
+- reference_number: varchar(50), номер документа
+- transaction_date: date, дата транзакции
+- posting_date: date, дата проводки
+- amount: decimal(15,2), сумма транзакции
+- currency: varchar(3), валюта
+- exchange_rate: decimal(10,6), курс валют
+- debit_account: varchar(20), дебетовый счёт
+- credit_account: varchar(20), кредитовый счёт
+- cost_center: varchar(20), центр затрат
+- batch_id: UUID, связь с партией растений
+- supplier_id: UUID, поставщик (если применимо)
+- customer_id: UUID, клиент (если применимо)
+- description: text, описание транзакции
+- status: enum (draft, posted, reversed, closed)
+- created_by: UUID, создатель
+- approved_by: UUID, утвердивший
+- reversal_of: UUID, ссылка на отменяемую транзакцию
+
+### 3.27 General Ledger (DS-FIN-002)
+
+**Главная книга**
+
+- gl_entry_id: UUID, Primary Key
+- account_code: varchar(20), код счёта
+- account_name: varchar(255), название счёта
+- transaction_id: UUID, Foreign Key к financial_transactions
+- posting_date: date, дата проводки
+- fiscal_period: varchar(10), отчётный период
+- debit_amount: decimal(15,2), дебетовая сумма
+- credit_amount: decimal(15,2), кредитовая сумма
+- running_balance: decimal(15,2), текущий баланс
+- description: text, описание проводки
+- cost_center: varchar(20), центр затрат
+- project_code: varchar(20), код проекта
+- batch_reference: UUID, ссылка на партию
+- reconciled: boolean, сверено
+- reconciliation_date: date, дата сверки
+
+### 3.28 Biological Assets (DS-FIN-003)
+
+**Биологические активы (растения как финансовые активы)**
+
+- bio_asset_id: UUID, Primary Key
+- plant_id: UUID, Foreign Key к plants
+- batch_id: UUID, Foreign Key к batches
+- asset_category: enum (raw_material, wip, finished_goods, mother_plant)
+- acquisition_date: date, дата приобретения
+- acquisition_cost: decimal(15,2), первоначальная стоимость
+- current_fair_value: decimal(15,2), текущая справедливая стоимость
+- accumulated_costs: decimal(15,2), накопленные затраты
+- last_valuation_date: date, дата последней оценки
+- valuation_method: enum (cost, fair_value, net_realizable_value)
+- estimated_harvest_date: date, ожидаемая дата сбора
+- estimated_yield: decimal(10,3), ожидаемый урожай в кг
+- stage_at_valuation: enum (seed, clone, veg, flower, harvest)
+- depreciation_rate: decimal(5,4), норма амортизации (для mother plants)
+- impairment_losses: decimal(15,2), убытки от обесценения
+- disposal_date: date, дата выбытия
+- disposal_proceeds: decimal(15,2), выручка от продажи
+
+### 3.29 Cost Allocations (DS-FIN-004)
+
+**Распределение затрат по партиям**
+
+- allocation_id: UUID, Primary Key
+- batch_id: UUID, Foreign Key к batches
+- cost_type: enum (materials, labor, overhead, utilities, equipment)
+- cost_category: varchar(100), категория затрат
+- allocation_date: date, дата распределения
+- allocated_amount: decimal(15,2), распределённая сумма
+- allocation_method: enum (direct, activity_based, standard, proportional)
+- allocation_basis: varchar(100), база распределения
+- source_transaction_id: UUID, исходная транзакция
+- cost_center: varchar(20), центр затрат
+- employee_id: UUID, сотрудник (для labour costs)
+- hours_worked: decimal(8,2), отработанные часы
+- material_quantity: decimal(10,3), количество материалов
+- overhead_rate: decimal(10,4), ставка накладных расходов
+- period: varchar(10), отчётный период
+- reversal_reason: text, причина сторнирования
+
+### 3.30 Accounts Payable (DS-FIN-005)
+
+**Кредиторская задолженность**
+
+- ap_id: UUID, Primary Key
+- supplier_id: UUID, Foreign Key к suppliers
+- invoice_number: varchar(50), номер счёта
+- purchase_order_id: UUID, заказ на поставку
+- invoice_date: date, дата счёта
+- due_date: date, срок оплаты
+- invoice_amount: decimal(15,2), сумма счёта
+- tax_amount: decimal(15,2), сумма налога
+- total_amount: decimal(15,2), общая сумма
+- paid_amount: decimal(15,2), оплаченная сумма
+- outstanding_amount: decimal(15,2), остаток к оплате
+- currency: varchar(3), валюта
+- payment_terms: varchar(50), условия оплаты
+- status: enum (pending, approved, paid, overdue, disputed)
+- approval_date: date, дата утверждения
+- approved_by: UUID, утвердивший
+- payment_date: date, дата оплаты
+- payment_reference: varchar(100), номер платежа
+- early_payment_discount: decimal(5,2), скидка за досрочную оплату
+
+### 3.31 Accounts Receivable (DS-FIN-006)
+
+**Дебиторская задолженность**
+
+- ar_id: UUID, Primary Key
+- customer_id: UUID, Foreign Key к customers
+- invoice_number: varchar(50), номер счёта
+- sales_order_id: UUID, заказ продажи
+- invoice_date: date, дата счёта
+- due_date: date, срок оплаты
+- invoice_amount: decimal(15,2), сумма счёта
+- tax_amount: decimal(15,2), сумма налога
+- total_amount: decimal(15,2), общая сумма
+- received_amount: decimal(15,2), полученная сумма
+- outstanding_amount: decimal(15,2), остаток к получению
+- currency: varchar(3), валюта
+- payment_terms: varchar(50), условия оплаты
+- status: enum (pending, sent, paid, overdue, written_off)
+- credit_limit: decimal(15,2), кредитный лимит клиента
+- collection_date: date, дата поступления
+- collection_reference: varchar(100), номер поступления
+- aging_bucket: enum (current, 30_days, 60_days, 90_days, over_90)
+
+### 3.32 Payroll Data (DS-FIN-007)
+
+**Данные расчёта заработной платы**
+
+- payroll_id: UUID, Primary Key
+- employee_id: UUID, Foreign Key к employees
+- pay_period_start: date, начало периода
+- pay_period_end: date, окончание периода
+- regular_hours: decimal(8,2), обычные часы
+- overtime_hours: decimal(8,2), сверхурочные часы
+- holiday_hours: decimal(8,2), праздничные часы
+- sick_hours: decimal(8,2), больничные часы
+- vacation_hours: decimal(8,2), отпускные часы
+- hourly_rate: decimal(10,2), часовая ставка
+- overtime_rate: decimal(10,2), ставка сверхурочных
+- gross_pay: decimal(12,2), валовая зарплата
+- federal_tax: decimal(12,2), федеральный налог
+- state_tax: decimal(12,2), налог штата
+- social_security: decimal(12,2), социальное страхование
+- medicare: decimal(12,2), медицинское страхование
+- other_deductions: decimal(12,2), прочие удержания
+- net_pay: decimal(12,2), чистая зарплата
+- pay_date: date, дата выплаты
+- payment_method: enum (direct_deposit, check, cash)
+- cost_allocations: JSONB, распределение по партиям/проектам
+
+### 3.33 Forecasting Models (DS-FC-001)
+
+**Модели прогнозирования**
+
+- forecast_id: UUID, Primary Key
+- forecast_type: enum (yield, demand, revenue, costs, capacity)
+- model_name: varchar(100), название модели
+- target_entity: varchar(50), целевая сущность (batch, strain, zone)
+- entity_id: UUID, идентификатор сущности
+- forecast_date: date, дата прогноза
+- horizon_days: integer, горизонт прогнозирования в днях
+- predicted_value: decimal(15,4), прогнозируемое значение
+- confidence_interval_lower: decimal(15,4), нижняя граница
+- confidence_interval_upper: decimal(15,4), верхняя граница
+- accuracy_score: decimal(5,4), точность модели
+- input_features: JSONB, входные параметры
+- model_version: varchar(20), версия модели
+- training_date: date, дата обучения модели
+- actual_value: decimal(15,4), фактическое значение
+- variance: decimal(15,4), отклонение от прогноза
+- notes: text, заметки аналитика
+
+### 3.34 Spatial Planning (DS-SP-001)
+
+**Пространственное планирование**
+
+- zone_layout_id: UUID, Primary Key
+- zone_id: UUID, Foreign Key к zones
+- layout_name: varchar(100), название планировки
+- layout_version: varchar(20), версия планировки
+- coordinates_2d: JSONB, 2D координаты зоны
+- coordinates_3d: JSONB, 3D координаты (если применимо)
+- area_square_meters: decimal(10,2), площадь в м²
+- volume_cubic_meters: decimal(10,2), объём в м³
+- max_capacity_plants: integer, максимальная вместимость
+- current_occupancy: integer, текущее заполнение
+- occupancy_percentage: decimal(5,2), процент заполнения
+- equipment_placement: JSONB, размещение оборудования
+- airflow_patterns: JSONB, схемы воздушных потоков
+- lighting_zones: JSONB, зоны освещения
+- irrigation_layout: JSONB, схема полива
+- workflow_paths: JSONB, маршруты персонала
+- emergency_exits: JSONB, аварийные выходы
+- last_optimization: date, дата последней оптимизации
+- optimization_score: decimal(5,2), оценка оптимизации
+
+### 3.35 Workforce Planning (DS-WF-004)
+
+**Планирование рабочей силы**
+
+- planning_id: UUID, Primary Key
+- planning_period: varchar(20), период планирования
+- zone_id: UUID, зона планирования
+- shift_type: enum (day, evening, night, weekend)
+- required_headcount: integer, требуемое количество
+- available_headcount: integer, доступное количество
+- skill_requirements: JSONB, требования к навыкам
+- estimated_workload: decimal(8,2), ожидаемая нагрузка в часах
+- actual_workload: decimal(8,2), фактическая нагрузка
+- efficiency_target: decimal(5,2), целевая эффективность
+- actual_efficiency: decimal(5,2), фактическая эффективность
+- overtime_budget: decimal(10,2), бюджет сверхурочных
+- overtime_actual: decimal(10,2), фактические сверхурочные
+- training_hours_planned: decimal(8,2), запланированное обучение
+- training_hours_actual: decimal(8,2), фактическое обучение
+- cost_per_hour: decimal(10,2), стоимость часа работы
+- planning_notes: text, заметки планировщика
 
 ## 4. Data Relationships
 
