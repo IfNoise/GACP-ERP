@@ -2,3 +2,56 @@
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
+
+# Temporary and intermediate files
+*.tmp
+*.bak
+*.old
+*~
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.orig
+
+# Editor temp files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Documentation intermediate files
+*_TEMP.md
+*_DRAFT.md
+*_ANALYSIS.md
+*_AUDIT.md
+*_COVERAGE.md
+*_STATUS.md
+
+# Log files
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+node_modules/
+.next/
+.nuxt/
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.cache/
+.parcel-cache/
+.nx/cache/
