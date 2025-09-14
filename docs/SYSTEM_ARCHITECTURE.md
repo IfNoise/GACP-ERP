@@ -66,8 +66,8 @@
 │  │ │Monitoring   │ │Competency   │ │Management   │ │& Forecast │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
-│  │ │Authentication│ │Audit Trail  │ │Document Mgmt│ │Reporting  │ ││
-│  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Engine     │ ││
+│  │ │Authentication│ │Audit Trail  │ │Document Mgmt│ │PDF Report │ ││
+│  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Generator  │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
 │  │ │Internal     │ │Database     │ │Knowledge    │ │External   │ ││
@@ -639,6 +639,263 @@ CREATE TRIGGER worm_enforcement
     ON audit.audit_trail_events
     FOR EACH ROW
     EXECUTE FUNCTION enforce_worm_policy();
+```
+
+#### 3.2.4 PDF Report Generator Module
+
+**Bounded Context**: Автоматическая генерация PDF-отчетов для GACP-соответствия
+
+```typescript
+// Domain Entities
+interface PDFReportTemplate {
+  id: TemplateId;
+  name: string;
+  version: string;
+  templateType: 'daily-plant-report' | 'weekly-summary' | 'batch-lifecycle' | 'audit-trail-export';
+  reactComponent: string; // React component definition
+  fields: TemplateField[];
+  gacpCompliant: boolean;
+  author: string;
+  createdAt: Date;
+  isActive: boolean;
+}
+
+interface PDFDocument {
+  id: DocumentId;
+  templateId: TemplateId;
+  fileName: string;
+  hash: string; // SHA-256 hash for integrity
+  digitalSignature: string; // OpenSSL signature
+  qrCode: string; // QR code for verification
+  edmDocumentId: string; // Mayan EDMS document ID
+  backupUrl: string; // S3/MinIO URL
+  metadata: DocumentMetadata;
+  generatedAt: Date;
+  generatedBy: string;
+}
+
+interface ReportGenerationEvent {
+  eventId: EventId;
+  triggerEvent: AuditEvent;
+  templateType: string;
+  documentId: DocumentId;
+  status: 'pending' | 'generating' | 'signing' | 'storing' | 'completed' | 'failed';
+  metrics: GenerationMetrics;
+}
+```
+
+**PDF Generation Service**:
+
+```typescript
+@Injectable()
+export class PDFGeneratorService {
+  constructor(
+    private readonly templateEngine: TemplateEngine,
+    private readonly signatureService: DigitalSignatureService,
+    private readonly edmService: MayanEDMSService,
+    private readonly storageService: StorageService
+  ) {}
+
+  async generateReport(
+    templateName: string,
+    data: any,
+    metadata: ReportMetadata
+  ): Promise<PDFDocument> {
+    // 1. Generate PDF using React-PDF renderer
+    const { filePath, hash } = await this.templateEngine.render(templateName, data);
+    
+    // 2. Create digital signature
+    const signature = await this.signatureService.signWithOpenSSL(filePath);
+    
+    // 3. Generate QR code for verification
+    const qrCode = await this.generateVerificationQR(hash, metadata.edmUrl);
+    
+    // 4. Store in Mayan EDMS
+    const edmDocument = await this.edmService.upload(filePath, {
+      label: metadata.label,
+      hash,
+      signature,
+      template: templateName
+    });
+    
+    // 5. Backup to S3/MinIO
+    const backupUrl = await this.storageService.upload(filePath);
+    
+    return {
+      id: generateDocumentId(),
+      templateId: templateName,
+      fileName: path.basename(filePath),
+      hash,
+      digitalSignature: signature,
+      qrCode,
+      edmDocumentId: edmDocument.id,
+      backupUrl,
+      metadata,
+      generatedAt: new Date(),
+      generatedBy: 'pdf-service'
+    };
+  }
+
+  private async generateVerificationQR(hash: string, edmUrl: string): Promise<string> {
+    const verificationUrl = `${edmUrl}/verify?hash=${hash}`;
+    return await QRCode.toDataURL(verificationUrl);
+  }
+}
+```
+
+**Template Engine с React Components**:
+
+```typescript
+// libs/pdf-generator/templates/daily-plant-report.tsx
+import React from 'react';
+import { Document, Page, Text, View, Image } from '@react-pdf/renderer';
+import { Header, Table, Footer, QRCode } from '../components';
+
+interface DailyPlantReportProps {
+  period: string;
+  userName: string;
+  plantEvents: PlantEvent[];
+  edmUrl: string;
+  hash: string;
+}
+
+export const DailyPlantReport: React.FC<DailyPlantReportProps> = ({
+  period, userName, plantEvents, edmUrl, hash
+}) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <Header 
+        title="Daily Plant Activity Report" 
+        period={period}
+        userName={userName}
+      />
+      
+      <Table 
+        columns={['Plant ID', 'Activity', 'Timestamp', 'Status']}
+        data={plantEvents.map(e => [e.plantId, e.activity, e.timestamp, e.status])}
+      />
+      
+      <Footer hash={hash} generatedAt={new Date()} />
+      
+      <QRCode 
+        value={`${edmUrl}/verify?hash=${hash}`}
+        style={styles.qr}
+      />
+    </Page>
+  </Document>
+);
+```
+
+**Kafka Integration для автоматической генерации**:
+
+```typescript
+@KafkaConsumer("audit.events")
+export class ReportGenerationConsumer {
+  constructor(private readonly pdfService: PDFGeneratorService) {}
+
+  @MessagePattern("daily_plant_activity")
+  async handleDailyPlantActivity(event: AuditEvent): Promise<void> {
+    await this.pdfService.generateReport('daily-plant-report', {
+      period: event.payload.period,
+      userName: event.payload.userName,
+      plantEvents: event.payload.events
+    }, {
+      label: `Daily Report ${event.payload.period}`,
+      edmUrl: process.env.MAYAN_BASE_URL
+    });
+  }
+
+  @MessagePattern("batch_completed")
+  async handleBatchCompleted(event: AuditEvent): Promise<void> {
+    await this.pdfService.generateReport('batch-lifecycle', event.payload, {
+      label: `Batch Lifecycle ${event.payload.batchId}`,
+      edmUrl: process.env.MAYAN_BASE_URL
+    });
+  }
+}
+
+@KafkaProducer()
+export class ReportEventPublisher {
+  async publishReportGenerated(document: PDFDocument): Promise<void> {
+    await this.emit('pdf.generated', {
+      documentId: document.id,
+      hash: document.hash,
+      edmUrl: document.edmDocumentId,
+      template: document.templateId,
+      generatedAt: document.generatedAt
+    });
+  }
+}
+```
+
+**Digital Signature через OpenSSL**:
+
+```typescript
+@Injectable()
+export class DigitalSignatureService {
+  private readonly privateKeyPath = process.env.PRIVATE_KEY_PATH;
+  private readonly publicKeyPath = process.env.PUBLIC_KEY_PATH;
+
+  async signWithOpenSSL(filePath: string): Promise<string> {
+    const sigPath = `${filePath}.sig`;
+    
+    await execFileAsync('openssl', [
+      'dgst', '-sha256', '-sign', this.privateKeyPath,
+      '-out', sigPath, filePath
+    ]);
+    
+    // Return base64 encoded signature
+    const signature = await fs.readFile(sigPath);
+    return signature.toString('base64');
+  }
+
+  async verifySignature(filePath: string, signature: string): Promise<boolean> {
+    try {
+      const sigPath = `${filePath}.sig`;
+      await fs.writeFile(sigPath, Buffer.from(signature, 'base64'));
+      
+      await execFileAsync('openssl', [
+        'dgst', '-sha256', '-verify', this.publicKeyPath,
+        '-signature', sigPath, filePath
+      ]);
+      
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+```
+
+**GACP Compliance Integration**:
+
+```typescript
+interface GACPComplianceMetadata {
+  documentType: 'audit-report' | 'batch-record' | 'calibration-cert';
+  gacpVersion: string;
+  complianceLevel: 'basic' | 'enhanced' | 'full';
+  auditTrailHash: string;
+  witnessSignatures: WitnessSignature[];
+  regulatoryReferences: string[];
+  retentionPeriod: number; // years
+}
+
+@Injectable()
+export class GACPComplianceService {
+  async validateCompliance(document: PDFDocument): Promise<ComplianceReport> {
+    return {
+      isCompliant: true,
+      checks: {
+        digitalSignature: await this.validateSignature(document),
+        hashIntegrity: await this.validateHash(document),
+        auditTrail: await this.validateAuditTrail(document),
+        retention: await this.validateRetention(document)
+      },
+      validatedAt: new Date(),
+      validatedBy: 'gacp-compliance-service'
+    };
+  }
+}
 ```
 
 ---
