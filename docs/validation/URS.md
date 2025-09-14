@@ -502,7 +502,106 @@ localization:
     - Поддержка CSV/JSON импорта CoA/результатов; валидация против спецификаций; аудит изменений.
   - Verification: OQ, PQ
 
-## 3.14 Конфигурации и изменение системы (Change Control)
+## 3.20 Financial Module (Comprehensive ERP Integration)
+
+- **URS-FIN-001** — **Accounts Payable (AP)**
+
+  - Priority: MUST | Risk: High
+  - Rationale: GACP требует прослеживаемость всех поставок и их финансового учёта
+  - Acceptance:
+    - Purchase Orders с привязкой к receiving, supplier invoice reconciliation, approval workflows, GL integration.
+  - Verification: OQ, PQ
+
+- **URS-FIN-002** — **Accounts Receivable (AR)**
+
+  - Priority: MUST | Risk: High  
+  - Acceptance:
+    - Customer invoicing, payment tracking, aging reports, credit management, integration с sales module.
+  - Verification: OQ
+
+- **URS-FIN-003** — **General Ledger (GL)**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Chart of Accounts management, automated journal entries, trial balance, period close procedures, multi-currency support.
+  - Verification: OQ, PQ
+
+- **URS-FIN-004** — **Biological Assets Accounting**
+
+  - Priority: MUST | Risk: High
+  - Rationale: Cannabis plants требуют учёта как биологические активы по стадиям
+  - Acceptance:
+    - Plant batches as WIP inventory, cost accumulation (materials, labor, overhead), fair value adjustments, harvest capitalization.
+  - Verification: OQ, PQ
+
+- **URS-FIN-005** — **Cost Accounting & Product Costing**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - FIFO/weighted average costing, batch cost allocation, labor distribution from timesheet, overhead allocation, COGS calculation.
+  - Verification: OQ, PQ
+
+- **URS-FIN-006** — **Payroll Integration**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Integration с workforce module, timesheet processing, payroll calculations, tax deductions, payslip generation, GL posting.
+  - Verification: OQ
+
+- **URS-FIN-007** — **Fixed Assets & Depreciation**
+
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - Asset registration, depreciation schedules, maintenance cost tracking, disposal processing.
+  - Verification: OQ
+
+- **URS-FIN-008** — **Immutable Financial Audit Trail**
+
+  - Priority: MUST | Risk: High
+  - Rationale: Финансовые записи должны соответствовать ALCOA+ principles
+  - Acceptance:
+    - All financial transactions записываются в immudb, no UPDATE/DELETE operations, только корректировочные проводки.
+  - Verification: OQ, SR
+
+- **URS-FIN-009** — **External Accounting System Integration**
+
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - Export to SAP/QuickBooks/1C, GL interface, standard accounting formats (XML, CSV), scheduled data synchronization.
+  - Verification: OQ
+
+## 3.21 Go Audit Trail Consumer
+
+- **URS-AUD-GO-001** — **High-Performance Event Processing**
+
+  - Priority: MUST | Risk: High
+  - Rationale: Kafka events должны обрабатываться с высокой производительностью в immudb
+  - Acceptance:
+    - Go consumer обработка 10,000+ events/second, batch processing (100-1000 events per batch), graceful shutdown.
+  - Verification: OQ, Performance Testing
+
+- **URS-AUD-GO-002** — **Reliable Message Processing**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Circuit breaker pattern, retry logic с exponential backoff, dead letter queue для failed messages, health checks.
+  - Verification: OQ, SR
+
+- **URS-AUD-GO-003** — **Dual Storage Architecture**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Primary storage в immudb для cryptographic verification, PostgreSQL replica для query performance, eventual consistency handling.
+  - Verification: OQ, DR
+
+- **URS-AUD-GO-004** — **Monitoring & Observability**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Prometheus metrics (throughput, latency, errors), structured logging, distributed tracing integration.
+  - Verification: OQ
+
+## 3.22 Конфигурации и изменение системы (Change Control)
 
 - **URS-CHG-001** — **Управление изменениями**
 
@@ -517,7 +616,7 @@ localization:
     - Для High-risk компонентов — OQ/PQ регресс-наборы и подписи ответственных.
   - Verification: OQ, PQ, DR
 
-## 3.15 Локализация и соответствие TZ
+## 3.23 Локализация и соответствие TZ
 
 - **URS-LOC-001** — **Три языка (en/ru/th)**
 
@@ -532,7 +631,7 @@ localization:
     - Все timestamps — ISO8601 + TZ; отображение в локальном TZ пользователя, хранение в UTC.
   - Verification: OQ
 
-## 3.16 Юзабилити и доступность
+## 3.24 Юзабилити и доступность
 
 - **URS-UX-001** — **Сканеры/бейджи/QR**
 
@@ -547,7 +646,7 @@ localization:
     - Контрасты, фокус, навигация с клавиатуры для критичных операций.
   - Verification: DR
 
-## 3.17 Юридические и хранение/удаление данных
+## 3.25 Юридические и хранение/удаление данных
 
 - **URS-LGL-001** — **Retention и Legal Hold**
 
@@ -562,7 +661,7 @@ localization:
     - Персональные данные — минимизация, маскирование в отчетах при необходимости; аудит доступа.
   - Verification: SR, DR
 
-## 3.19 External Integrations и API
+## 3.26 External Integrations и API
 
 - **URS-API-001** — **External API Support**
 
@@ -577,7 +676,7 @@ localization:
     - Real-time notifications для external systems, configurable webhook endpoints, retry mechanisms.
   - Verification: OQ
 
-## 3.20 Android Terminal Support
+## 3.27 Android Terminal Support
 
 - **URS-AND-001** — **Offline capability**
 
@@ -599,7 +698,7 @@ localization:
     - QR/NFC scanning, camera integration, barcode printing support, push notifications.
   - Verification: OQ
 
-## 3.21 Электронные подписи и документооборот
+## 3.28 Электронные подписи и документооборот
 
 - **URS-ES-001** — **PKI инфраструктура**
 
