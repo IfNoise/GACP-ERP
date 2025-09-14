@@ -90,7 +90,7 @@
                                 │
         ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
         │ Jicofo          │    │ Jigasi          │    │ Keycloak SSO    │
-        │ (Conference Mgmt)│    │ (SIP Gateway)   │    │ (Authentication)│
+        │(Conference Mgmt)│    │ (SIP Gateway)   │    │ (Authentication)│
         └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
