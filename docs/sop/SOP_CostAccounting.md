@@ -31,6 +31,7 @@ approval: "QA Manager"
 ## 4. Cost Categories
 
 ### 4.1 Direct Materials
+
 - Seeds и clones
 - Nutrients и fertilizers
 - Growing media (soil, substrates)
@@ -38,13 +39,15 @@ approval: "QA Manager"
 - Packaging materials
 
 ### 4.2 Direct Labour
+
 - Cultivation activities
-- Harvesting operations  
+- Harvesting operations
 - Processing time
 - Quality control testing
 - Packaging labour
 
 ### 4.3 Manufacturing Overhead
+
 - Facility rent allocation
 - Utilities (electricity, water, HVAC)
 - Equipment depreciation
@@ -56,6 +59,7 @@ approval: "QA Manager"
 ### 5.1 Daily Cost Allocation
 
 1. **Material Cost Allocation**
+
    - Review material receipts from previous day
    - Identify batch assignments в system
    - Verify quantities used против requisitions
@@ -67,6 +71,7 @@ approval: "QA Manager"
    ```
 
 2. **Labour Cost Distribution**
+
    - Import timesheet data from workforce module
    - Validate hours против task assignments
    - Calculate fully-loaded labour rates including benefits
@@ -87,6 +92,7 @@ approval: "QA Manager"
 ### 5.2 Weekly Cost Analysis
 
 1. **Batch Cost Review**
+
    - Generate batch cost reports for all active batches
    - Analyze cost variances против standards
    - Identify unusual cost patterns или anomalies
@@ -101,6 +107,7 @@ approval: "QA Manager"
 ### 5.3 Monthly Overhead Allocation
 
 1. **Overhead Rate Calculation**
+
    - Compile actual overhead costs для month
    - Determine allocation bases (sq ft, plant count, labour hours)
    - Calculate overhead rates по cost center:
@@ -110,6 +117,7 @@ approval: "QA Manager"
    ```
 
 2. **Overhead Application**
+
    - Apply calculated rates к all active batches
    - Create journal entries для overhead allocation:
 
@@ -126,10 +134,11 @@ approval: "QA Manager"
 ### 5.4 Batch Closing and Final Costing
 
 1. **Harvest Cost Finalization**
+
    - При harvest completion, finalize all costs для batch
    - Calculate total accumulated costs:
      - Direct materials
-     - Direct labour  
+     - Direct labour
      - Applied overhead
      - Quality control costs
 
@@ -140,6 +149,7 @@ approval: "QA Manager"
    ```
 
 3. **Transfer to Inventory**
+
    - Transfer final costs к finished goods inventory
    - Update inventory records с cost per unit
    - Create final cost transfer entry:
@@ -152,6 +162,7 @@ approval: "QA Manager"
 ### 5.5 Variance Analysis
 
 1. **Standard vs Actual Analysis**
+
    - Compare actual costs к standard costs по category
    - Calculate variances:
      - Material price variance
@@ -170,11 +181,13 @@ approval: "QA Manager"
 ## 6. Cost Allocation Methods
 
 ### 6.1 Direct Cost Tracing
+
 - Materials traced через lot numbers
 - Labour traced через timesheet task assignments
 - Direct costs charged to specific batches
 
 ### 6.2 Overhead Allocation Bases
+
 - **Facility costs**: Square footage occupied
 - **Utilities**: Plant count или square footage
 - **Equipment depreciation**: Machine hours или plant capacity
@@ -184,12 +197,14 @@ approval: "QA Manager"
 ## 7. System Integration
 
 ### 7.1 Automated Interfaces
+
 - Timesheet data from workforce module
 - Material usage from inventory module
 - Production metrics from plant lifecycle module
 - Overhead costs from general ledger
 
 ### 7.2 Real-time Updates
+
 - Costs updated as transactions occur
 - Real-time batch profitability visibility
 - Automated variance calculations
@@ -198,12 +213,14 @@ approval: "QA Manager"
 ## 8. Documentation Requirements
 
 ### 8.1 Daily Records
+
 - Material allocation reports
 - Labour distribution summaries
 - Cost variance reports
 - Batch status updates
 
 ### 8.2 Monthly Documentation
+
 - Overhead rate calculations
 - Variance analysis reports
 - Standard cost updates
@@ -212,12 +229,14 @@ approval: "QA Manager"
 ## 9. Quality Control
 
 ### 9.1 Daily QC Checks
+
 - Verify cost allocation accuracy
 - Review unusual cost entries
 - Validate timesheet data completeness
 - Check overhead rate applications
 
 ### 9.2 Monthly Reviews
+
 - Analyze cost trends и patterns
 - Review standard cost accuracy
 - Validate allocation methodology
@@ -248,6 +267,6 @@ approval: "QA Manager"
 
 ## 13. Revision History
 
-| Version | Date | Changes | Approved By |
-|---------|------|---------|-------------|
-| 1.0 | 2025-09-14 | Initial version | QA Manager |
+| Version | Date       | Changes         | Approved By |
+| ------- | ---------- | --------------- | ----------- |
+| 1.0     | 2025-09-14 | Initial version | QA Manager  |

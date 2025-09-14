@@ -40,6 +40,7 @@ approval: "QA Manager"
 ### 5.1 Initial Recognition
 
 1. **Plant Registration**
+
    - При переходе растения в стадию vegetation автоматически создаётся biological asset record
    - Initial cost = accumulated costs (seeds/clones + direct labour + materials)
    - System creates journal entry:
@@ -51,17 +52,19 @@ approval: "QA Manager"
 
 2. **Asset Classification**
    - Vegetation stage: Current biological assets
-   - Flowering stage: Current biological assets  
+   - Flowering stage: Current biological assets
    - Mature plants ready for harvest: Current assets
 
 ### 5.2 Fair Value Measurement
 
 1. **Market Rate Determination**
+
    - Weekly update market rates per gram для каждого strain
    - Sources: Licensed dispensaries, wholesale markets, broker quotes
    - Document источники в fair value support file
 
 2. **Yield Estimation**
+
    - Use historical yield data по strain и growing conditions
    - Adjust для current batch characteristics
    - Consider plant health score и environmental factors
@@ -79,6 +82,7 @@ approval: "QA Manager"
      - Late Flowering: 90-95%
 
 4. **System Update**
+
    - Input fair value в biological asset record
    - System automatically creates gain/loss journal entry:
 
@@ -90,11 +94,13 @@ approval: "QA Manager"
 ### 5.3 Monthly Fair Value Review
 
 1. **Data Collection**
+
    - Gather current market rates from approved sources
    - Review yield estimates с cultivation team
    - Assess environmental factors affecting growth
 
 2. **Revaluation Process**
+
    - Calculate новую fair value для каждого batch
    - Compare с carrying amount
    - Generate revaluation journal entries
@@ -108,12 +114,14 @@ approval: "QA Manager"
 ### 5.4 Impairment Testing
 
 1. **Impairment Indicators**
+
    - Plant health score drops below 70
    - Pest or disease issues
    - Environmental damage
    - Market price decline > 20%
 
 2. **Impairment Loss Calculation**
+
    - Determine recoverable amount (higher of value in use или fair value less costs to sell)
    - Compare с carrying amount
    - Recognize impairment loss if carrying amount exceeds recoverable amount
@@ -128,11 +136,13 @@ approval: "QA Manager"
 ### 5.5 Harvest and Disposal
 
 1. **Harvest Notification**
+
    - Cultivation team notifies через ERP system при harvest initiation
    - System automatically triggers transfer process
    - Final fair value measurement на harvest date
 
 2. **Transfer to Inventory**
+
    - Calculate final biological asset value
    - Transfer к finished goods inventory at fair value
    - Journal entry:
@@ -149,6 +159,7 @@ approval: "QA Manager"
 ### 5.6 Sale of Living Plants
 
 1. **Pre-Sale Approval**
+
    - Obtain approval для sale living plants
    - Determine sale price и payment terms
    - Document regulatory compliance
@@ -165,12 +176,14 @@ approval: "QA Manager"
 ## 6. Documentation Requirements
 
 ### 6.1 Fair Value Support
+
 - Market rate sources и methodology
 - Yield estimation basis
 - Completion factor determination
 - Independent validation при available
 
 ### 6.2 Impairment Documentation
+
 - Impairment indicators identification
 - Recoverable amount calculation
 - Write-down authorization
@@ -179,12 +192,14 @@ approval: "QA Manager"
 ## 7. Quality Control
 
 ### 7.1 Monthly QC Procedures
+
 - Review fair value inputs для reasonableness
 - Compare actual yields к estimates
 - Validate market rate sources
 - Test calculation accuracy
 
 ### 7.2 Annual Procedures
+
 - Independent review fair value methodology
 - Compare results к industry benchmarks
 - Update procedures для process improvements
@@ -192,11 +207,13 @@ approval: "QA Manager"
 ## 8. Compliance Requirements
 
 ### 8.1 IFRS 41 Compliance
+
 - Biological assets measured at fair value less costs to sell
 - Gains and losses recognized в profit or loss
 - Disclosure fair value measurement techniques
 
 ### 8.2 Audit Trail
+
 - All valuation changes logged в audit trail
 - Electronic signatures для significant revaluations
 - Supporting documentation maintained
@@ -218,6 +235,6 @@ approval: "QA Manager"
 
 ## 11. Revision History
 
-| Version | Date | Changes | Approved By |
-|---------|------|---------|-------------|
-| 1.0 | 2025-09-14 | Initial version | QA Manager |
+| Version | Date       | Changes         | Approved By |
+| ------- | ---------- | --------------- | ----------- |
+| 1.0     | 2025-09-14 | Initial version | QA Manager  |

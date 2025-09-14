@@ -16,7 +16,9 @@ approval: "System Architect"
 ## 2. Architecture Decision
 
 ### 2.1 Language Choice: Go
+
 **Обоснование выбора Go:**
+
 - Высокая производительность и низкая латентность
 - Отличная интеграция с Kafka (sarama, segmentio/kafka-go)
 - Нативная поддержка immudb клиента
@@ -25,11 +27,13 @@ approval: "System Architect"
 - Компактные бинарники для Docker deployment
 
 **Интеграция с TypeScript:**
+
 - Contract-first approach: Zod schemas → JSON Schema → Go structs
 - Автоматическая генерация типов через quicktype/protobuf
 - End-to-end типобезопасность от frontend до storage
 
 ### 2.2 Event-Driven Architecture
+
 ```
 [ERP Monolith/Microservices] → [Kafka Broker] → [Go Audit Consumer] → [immudb Storage]
                                       ↓
@@ -39,6 +43,7 @@ approval: "System Architect"
 ## 3. Technical Requirements
 
 ### 3.1 Kafka Integration
+
 - **Consumer Group**: `audit-trail-consumer`
 - **Topics**: Subscribe to all ERP topics (`plant-events`, `financial-events`, `workforce-events`, etc.)
 - **Offset Management**: Auto-commit with configurable intervals
@@ -46,12 +51,14 @@ approval: "System Architect"
 - **Latency**: < 100ms end-to-end processing time
 
 ### 3.2 immudb Storage
+
 - **Storage Type**: Immutable, cryptographically verifiable key-value store
 - **Data Format**: JSON events with timestamp + entity_id keys
 - **Verification**: Cryptographic proof of data integrity
 - **Retention**: Permanent storage for compliance
 
 ### 3.3 Type Safety
+
 ```go
 // Generated from Zod schemas
 type PlantCreatedEvent struct {
@@ -72,6 +79,7 @@ type FinancialTransactionEvent struct {
 ```
 
 ### 3.4 PDF Report Generation
+
 - **Library**: gofpdf или unidoc/unipdf
 - **Triggers**: Daily, weekly, monthly reports
 - **Storage**: MinIO/S3 compatible storage
@@ -80,6 +88,7 @@ type FinancialTransactionEvent struct {
 ## 4. Implementation Structure
 
 ### 4.1 Project Structure
+
 ```
 services/audit-trail-go/
 ├── cmd/
@@ -113,6 +122,7 @@ services/audit-trail-go/
 ### 4.2 Core Components
 
 #### 4.2.1 Kafka Consumer
+
 ```go
 type Consumer struct {
     reader     *kafka.Reader
@@ -131,7 +141,7 @@ func (c *Consumer) Start(ctx context.Context) error {
                 c.logger.Error("Failed to read message", zap.Error(err))
                 continue
             }
-            
+
             if err := c.processEvent(msg); err != nil {
                 c.logger.Error("Failed to process event", zap.Error(err))
             }
@@ -141,6 +151,7 @@ func (c *Consumer) Start(ctx context.Context) error {
 ```
 
 #### 4.2.2 Event Processing
+
 ```go
 func (c *Consumer) processEvent(msg kafka.Message) error {
     // Validate event structure
@@ -148,7 +159,7 @@ func (c *Consumer) processEvent(msg kafka.Message) error {
     if err := json.Unmarshal(msg.Value, &baseEvent); err != nil {
         return fmt.Errorf("invalid event structure: %w", err)
     }
-    
+
     // Store in immudb with cryptographic verification
     key := fmt.Sprintf("%s_%s_%d", baseEvent.Type, baseEvent.EntityID, baseEvent.Timestamp.Unix())
     _, err := c.immuClient.Set(ctx, []byte(key), msg.Value)
@@ -157,6 +168,7 @@ func (c *Consumer) processEvent(msg kafka.Message) error {
 ```
 
 ### 4.3 Report Generation
+
 ```go
 type ReportGenerator struct {
     storage    ObjectStorage
@@ -169,14 +181,14 @@ func (r *ReportGenerator) GenerateDailyAuditReport(date time.Time) error {
     if err != nil {
         return err
     }
-    
+
     // Generate PDF
     pdf := gofpdf.New("P", "mm", "A4", "")
     pdf.AddPage()
-    
+
     // Add content to PDF
     r.addAuditSummary(pdf, events)
-    
+
     // Save to storage
     filename := fmt.Sprintf("audit-report-%s.pdf", date.Format("2006-01-02"))
     return r.storage.Upload(filename, pdf)
@@ -186,6 +198,7 @@ func (r *ReportGenerator) GenerateDailyAuditReport(date time.Time) error {
 ## 5. Configuration
 
 ### 5.1 Environment Variables
+
 ```bash
 # Kafka Configuration
 KAFKA_BROKERS=kafka:9092
@@ -213,6 +226,7 @@ REPORT_SCHEDULE=0 2 * * *  # Daily at 2 AM
 ```
 
 ### 5.2 Docker Configuration
+
 ```dockerfile
 FROM golang:1.21-alpine AS builder
 WORKDIR /app
@@ -231,16 +245,19 @@ CMD ["./audit-consumer"]
 ## 6. Performance Requirements
 
 ### 6.1 Throughput
+
 - **Target**: 10,000+ events/second
 - **Peak Load**: 50,000+ events/second
 - **Batch Processing**: 100-1000 events per batch
 
 ### 6.2 Latency
+
 - **Event Processing**: < 100ms per event
 - **Storage Write**: < 50ms to immudb
 - **Report Generation**: < 5 minutes for daily report
 
 ### 6.3 Reliability
+
 - **Uptime**: 99.9% availability
 - **Data Loss**: Zero tolerance
 - **Recovery Time**: < 5 minutes from failure
@@ -248,6 +265,7 @@ CMD ["./audit-consumer"]
 ## 7. Monitoring & Observability
 
 ### 7.1 Metrics (Prometheus)
+
 ```go
 var (
     eventsProcessed = prometheus.NewCounterVec(
@@ -257,7 +275,7 @@ var (
         },
         []string{"event_type", "status"},
     )
-    
+
     processingLatency = prometheus.NewHistogramVec(
         prometheus.HistogramOpts{
             Name: "audit_processing_duration_seconds",
@@ -269,18 +287,19 @@ var (
 ```
 
 ### 7.2 Health Checks
+
 ```go
 func (c *Consumer) HealthCheck() error {
     // Check Kafka connectivity
     if err := c.reader.Stats(); err != nil {
         return fmt.Errorf("kafka unhealthy: %w", err)
     }
-    
+
     // Check immudb connectivity
     if err := c.immuClient.HealthCheck(ctx); err != nil {
         return fmt.Errorf("immudb unhealthy: %w", err)
     }
-    
+
     return nil
 }
 ```
@@ -288,6 +307,7 @@ func (c *Consumer) HealthCheck() error {
 ## 8. Deployment & Scaling
 
 ### 8.1 Kubernetes Deployment
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -301,18 +321,19 @@ spec:
   template:
     spec:
       containers:
-      - name: audit-consumer
-        image: audit-trail-go:latest
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: audit-consumer
+          image: audit-trail-go:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 ```
 
 ### 8.2 Horizontal Scaling
+
 - Multiple consumer instances with different partition assignments
 - Load balancing through Kafka consumer groups
 - Stateless design for easy scaling
@@ -320,11 +341,13 @@ spec:
 ## 9. Security
 
 ### 9.1 Data Encryption
+
 - TLS for Kafka connections
 - Encrypted storage in immudb
 - Secure credential management
 
 ### 9.2 Access Control
+
 - Service account authentication
 - RBAC for Kubernetes deployment
 - Audit trail access logging
@@ -332,11 +355,13 @@ spec:
 ## 10. Compliance
 
 ### 10.1 Regulatory Requirements
+
 - GACP compliance for audit trail integrity
 - 21 CFR Part 11 for electronic records
 - EU GMP Annex 11 for computerized systems
 
 ### 10.2 Data Retention
+
 - Permanent retention in immudb
 - Periodic backup to long-term storage
 - Compliance reporting capabilities
@@ -344,11 +369,13 @@ spec:
 ## 11. Migration & Integration
 
 ### 11.1 Nx Monorepo Integration
+
 - Use @nx-go/nx-go plugin for Go support
 - Shared contract generation from TypeScript schemas
 - Unified CI/CD pipeline
 
 ### 11.2 Type Generation Pipeline
+
 ```bash
 # Generate JSON Schema from Zod
 npm run generate:schemas

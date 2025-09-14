@@ -138,11 +138,11 @@ type EventMetadata struct {
 func (c *Consumer) writeToImmudb(events []AuditEvent) error {
     // Batch writes для performance optimization
     kvList := make([]*schema.KeyValue, 0, len(events))
-    
+
     for _, event := range events {
         key := fmt.Sprintf("audit:%s:%s", event.EntityType, event.EventID)
         value, _ := json.Marshal(event)
-        
+
         kvList = append(kvList, &schema.KeyValue{
             Key:   []byte(key),
             Value: value,
@@ -154,7 +154,7 @@ func (c *Consumer) writeToImmudb(events []AuditEvent) error {
     if err != nil {
         return fmt.Errorf("failed to batch write to immudb: %w", err)
     }
-    
+
     return nil
 }
 
@@ -165,13 +165,13 @@ func (c *Consumer) verifyAuditRecord(eventID string) error {
     if err != nil {
         return fmt.Errorf("record not found: %w", err)
     }
-    
+
     // Cryptographic verification
     verified := entry.Verified
     if !verified {
         return fmt.Errorf("audit record verification failed")
     }
-    
+
     return nil
 }
 ```
@@ -205,14 +205,14 @@ func (c *Consumer) writeToPostgres(events []AuditEvent) error {
         metadataJSON, _ := json.Marshal(event.Metadata)
         oldValueJSON, _ := json.Marshal(event.OldValue)
         newValueJSON, _ := json.Marshal(event.NewValue)
-        
+
         immudbKey := fmt.Sprintf("audit:%s:%s", event.EntityType, event.EventID)
-        
+
         _, err := stmt.Exec(
-            event.EventID, event.TraceID, event.Timestamp, 
+            event.EventID, event.TraceID, event.Timestamp,
             event.EntityType, event.EntityID, event.Action,
             event.UserID, event.SessionID, oldValueJSON, newValueJSON,
-            event.Reason, event.SignatureID, metadataJSON, 
+            event.Reason, event.SignatureID, metadataJSON,
             immudbKey, true, // verified = true after successful immudb write
         )
 
@@ -402,20 +402,20 @@ func (r *ReportGenerator) GenerateAuditReportPDF(req AuditReport) (string, error
 
     // Заголовок с GACP compliance информацией
     r.addHeader(pdf, req)
-    
+
     // Cryptographic verification summary
     r.addVerificationSection(pdf, auditData)
-    
+
     // Детальная таблица событий
     r.addEventsTable(pdf, auditData.Events)
-    
+
     // Digital signature section
     r.addSignatureSection(pdf, req.RequestedBy)
 
     // Сохранение в MinIO с Object Lock (WORM)
-    reportPath := fmt.Sprintf("audit-reports/%s/%s.pdf", 
+    reportPath := fmt.Sprintf("audit-reports/%s/%s.pdf",
         req.ReportType, req.ReportID)
-    
+
     var buf bytes.Buffer
     err = pdf.Output(&buf)
     if err != nil {
@@ -423,7 +423,7 @@ func (r *ReportGenerator) GenerateAuditReportPDF(req AuditReport) (string, error
     }
 
     // Upload в защищенное хранилище
-    err = r.storageClient.PutObject(reportPath, &buf, 
+    err = r.storageClient.PutObject(reportPath, &buf,
         storage.WithRetention(7*365*24*time.Hour)) // 7 years retention
     if err != nil {
         return "", fmt.Errorf("failed to store report: %w", err)
@@ -437,21 +437,21 @@ func (r *ReportGenerator) addVerificationSection(pdf *gofpdf.Fpdf, data *AuditDa
     pdf.SetFont("Arial", "B", 12)
     pdf.Cell(0, 10, "Cryptographic Verification Summary")
     pdf.Ln(8)
-    
+
     pdf.SetFont("Arial", "", 10)
-    
+
     verifiedCount := 0
     for _, event := range data.Events {
         if event.Verified {
             verifiedCount++
         }
     }
-    
+
     pdf.Cell(0, 6, fmt.Sprintf("Total Events: %d", len(data.Events)))
     pdf.Ln(6)
     pdf.Cell(0, 6, fmt.Sprintf("Cryptographically Verified: %d", verifiedCount))
     pdf.Ln(6)
-    pdf.Cell(0, 6, fmt.Sprintf("Verification Rate: %.2f%%", 
+    pdf.Cell(0, 6, fmt.Sprintf("Verification Rate: %.2f%%",
         float64(verifiedCount)/float64(len(data.Events))*100))
     pdf.Ln(8)
 }
@@ -463,7 +463,7 @@ func (r *ReportGenerator) addVerificationSection(pdf *gofpdf.Fpdf, data *AuditDa
 // Scheduled Reports
 func (r *ReportGenerator) GenerateDailyReports() error {
     yesterday := time.Now().AddDate(0, 0, -1)
-    
+
     reportReq := AuditReport{
         ReportID:   uuid.New().String(),
         ReportType: "daily",
@@ -474,15 +474,15 @@ func (r *ReportGenerator) GenerateDailyReports() error {
         RequestedBy: "system",
         CreatedAt:   time.Now(),
     }
-    
+
     _, err := r.GenerateAuditReportPDF(reportReq)
     return err
 }
 
 // Compliance Reports для regulatory authorities
-func (r *ReportGenerator) GenerateComplianceReport(entityType, entityID string, 
+func (r *ReportGenerator) GenerateComplianceReport(entityType, entityID string,
     dateRange DateRange, requestedBy string) (string, error) {
-    
+
     reportReq := AuditReport{
         ReportID:    uuid.New().String(),
         ReportType:  "compliance",
@@ -492,14 +492,14 @@ func (r *ReportGenerator) GenerateComplianceReport(entityType, entityID string,
         RequestedBy: requestedBy,
         CreatedAt:   time.Now(),
     }
-    
+
     return r.GenerateAuditReportPDF(reportReq)
 }
 
 // Investigation Reports для CAPA процессов
 func (r *ReportGenerator) GenerateInvestigationReport(investigationID string,
     events []string, requestedBy string) (string, error) {
-    
+
     // Special report для specific event IDs
     reportReq := AuditReport{
         ReportID:    fmt.Sprintf("investigation-%s", investigationID),
@@ -507,7 +507,7 @@ func (r *ReportGenerator) GenerateInvestigationReport(investigationID string,
         RequestedBy: requestedBy,
         CreatedAt:   time.Now(),
     }
-    
+
     return r.GenerateAuditReportPDF(reportReq)
 }
 ```
@@ -520,7 +520,7 @@ func (r *ReportGenerator) GenerateInvestigationReport(investigationID string,
 // Object Lock configuration для immutable storage
 func (r *ReportGenerator) configureReportBucket() error {
     bucketName := "gacp-audit-reports"
-    
+
     // Create bucket с Object Lock enabled
     err := r.storageClient.MakeBucket(bucketName, &storage.BucketOptions{
         ObjectLocking: true,
@@ -529,13 +529,13 @@ func (r *ReportGenerator) configureReportBucket() error {
     if err != nil {
         return err
     }
-    
+
     // Set default retention policy
     retentionConfig := &storage.Retention{
         Mode:     storage.RetentionCompliance, // WORM mode
         Duration: 7 * 365 * 24 * time.Hour,   // 7 years
     }
-    
+
     return r.storageClient.SetBucketRetention(bucketName, retentionConfig)
 }
 ```
@@ -552,12 +552,12 @@ func (h *ReportHandler) GenerateReport(w http.ResponseWriter, r *http.Request) {
         EntityType string    `json:"entity_type,omitempty"`
         EntityID   string    `json:"entity_id,omitempty"`
     }
-    
+
     if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
         http.Error(w, "Invalid request", http.StatusBadRequest)
         return
     }
-    
+
     // Async generation для больших отчетов
     go func() {
         reportPath, err := h.reportGen.GenerateComplianceReport(
@@ -565,16 +565,16 @@ func (h *ReportHandler) GenerateReport(w http.ResponseWriter, r *http.Request) {
             DateRange{From: req.DateFrom, To: req.DateTo},
             r.Header.Get("User-ID"),
         )
-        
+
         if err != nil {
             // Log error и notify user
             return
         }
-        
+
         // Notify completion через WebSocket/SSE
         h.notifyReportReady(reportPath)
     }()
-    
+
     w.WriteHeader(http.StatusAccepted)
     json.NewEncoder(w).Encode(map[string]string{
         "status": "processing",
@@ -753,7 +753,7 @@ spec:
 ### 12.1 Functional Requirements
 
 - [x] Обработка минимум 10,000 events/second
-- [x] Batch processing для optimized performance  
+- [x] Batch processing для optimized performance
 - [x] Graceful shutdown с zero data loss
 - [x] Complete audit trail в immudb с cryptographic verification
 - [x] PostgreSQL replica для query optimization
@@ -794,7 +794,7 @@ spec:
 
 - [x] Docker containerization
 - [x] Kubernetes deployment manifests
-- [x] Prometheus metrics integration  
+- [x] Prometheus metrics integration
 - [x] Structured logging с correlation IDs
 - [x] Circuit breaker pattern implementation
 - [x] Dead letter queue для failed events

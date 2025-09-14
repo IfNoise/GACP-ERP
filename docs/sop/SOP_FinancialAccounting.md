@@ -40,12 +40,14 @@ approval: "QA Manager"
 ### 5.1 Daily Financial Processing
 
 1. **Проверка автоматических проводок**
+
    - Войти в Financial модуль ERP системы
    - Открыть "Daily Transaction Review" dashboard
    - Проверить все автоматические проводки за предыдущий день
    - Подтвердить соответствие проводок фактическим операциям
 
 2. **Review Accounts Payable**
+
    - Открыть "Accounts Payable" модуль
    - Проверить новые invoices от suppliers
    - Подтвердить matching с purchase orders и receipts
@@ -60,16 +62,21 @@ approval: "QA Manager"
 ### 5.2 Inventory Integration
 
 1. **Material Receipts Processing**
+
    - При поступлении материалов система автоматически создаёт проводку:
+
      ```
      Dr. Raw Materials Inventory
      Cr. Accounts Payable
      ```
+
    - Проверить автоматическую проводку в General Ledger
    - Подтвердить соответствие amounts в Purchase Order
 
 2. **Production Cost Allocation**
+
    - Система автоматически распределяет costs по batches:
+
      ```
      Dr. Work in Process - Batch [ID]
      Cr. Raw Materials Inventory
@@ -80,6 +87,7 @@ approval: "QA Manager"
 ### 5.3 Banking Reconciliation
 
 1. **Daily Bank Statement Import**
+
    - Импортировать bank statement через secure API
    - Система автоматически matches transactions
    - Review unmatched items и manually reconcile
@@ -93,6 +101,7 @@ approval: "QA Manager"
 ### 5.4 Period End Closing
 
 1. **Month End Procedures**
+
    - Complete all accruals и deferrals
    - Review biological asset valuations
    - Process depreciation журналы
@@ -107,16 +116,19 @@ approval: "QA Manager"
 ## 6. Critical Control Points
 
 ### 6.1 Segregation of Duties
+
 - Different users для creation и approval transactions
 - Mandatory dual approval для transactions > $10,000
 - System enforced approval workflows
 
 ### 6.2 Electronic Signatures
+
 - Required для all journal entries > $1,000
 - Mandatory для period end closing
 - PKI certificates для high-value transactions
 
 ### 6.3 Audit Trail Integrity
+
 - All changes logged в immutable audit trail
 - No deletion возможности для posted transactions
 - Automatic backup всех financial data
@@ -124,12 +136,14 @@ approval: "QA Manager"
 ## 7. Documentation
 
 ### 7.1 Required Records
+
 - General Ledger printouts (monthly)
 - Bank reconciliation statements
 - Audit trail reports
 - Electronic signature logs
 
 ### 7.2 Retention Period
+
 - Financial records: 10 years minimum
 - Audit trails: Permanent retention
 - Supporting documents: 7 years
@@ -144,12 +158,14 @@ approval: "QA Manager"
 ## 9. Quality Control
 
 ### 9.1 Daily QC Checks
+
 - Verify trial balance balances
 - Check for unusual journal entries
 - Review exception reports
 - Confirm backup completion
 
 ### 9.2 Weekly Reviews
+
 - Accounts aging analysis
 - Cash flow projections review
 - Variance analysis против budget
@@ -157,12 +173,14 @@ approval: "QA Manager"
 ## 10. Corrective Actions
 
 ### 10.1 Error Correction
+
 - Use reversal entries, never delete original transactions
 - Document reason для correction в audit trail
 - Require supervisor approval для corrections
 - Electronic signature required
 
 ### 10.2 System Issues
+
 - Immediately notify IT support
 - Document incident в system log
 - Implement manual backup procedures if needed
@@ -178,9 +196,9 @@ approval: "QA Manager"
 
 ## 12. Revision History
 
-| Version | Date | Changes | Approved By |
-|---------|------|---------|-------------|
-| 1.0 | 2025-09-14 | Initial version | QA Manager |
+| Version | Date       | Changes         | Approved By |
+| ------- | ---------- | --------------- | ----------- |
+| 1.0     | 2025-09-14 | Initial version | QA Manager  |
 
 ## 13. Approval
 

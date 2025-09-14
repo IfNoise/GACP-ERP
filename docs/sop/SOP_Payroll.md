@@ -40,6 +40,7 @@ approval: "QA Manager"
 ### 5.1 Employee Setup
 
 1. **New Employee Registration**
+
    - Create employee record в HR module
    - Set up pay rate, tax withholdings, benefit deductions
    - Assign employee to appropriate cost centers
@@ -55,12 +56,14 @@ approval: "QA Manager"
 ### 5.2 Timesheet Processing
 
 1. **Daily Timesheet Review**
+
    - Review submitted timesheets from mobile devices/SCUD systems
    - Validate clock-in/clock-out times
    - Verify task assignments и batch allocations
    - Check для missing timesheets
 
 2. **Timesheet Approval**
+
    - Supervisors review и approve subordinate timesheets
    - Resolve any discrepancies или questions
    - Electronic signature required для approval
@@ -84,6 +87,7 @@ approval: "QA Manager"
    ```
 
 2. **Deductions Processing**
+
    - Federal income tax withholding
    - State income tax withholding
    - Social Security (6.2%)
@@ -101,6 +105,7 @@ approval: "QA Manager"
 ### 5.4 Cost Allocation
 
 1. **Batch Cost Distribution**
+
    - Распределить labour costs based на timesheet batch assignments
    - Calculate fully-loaded rates including:
      - Base wages
@@ -149,12 +154,14 @@ approval: "QA Manager"
 ### 5.6 Payroll Reporting
 
 1. **Employee Pay Statements**
+
    - Generate electronic pay stubs
    - Include year-to-date information
    - Store в EDMS system для compliance
    - Email/mobile notification to employees
 
 2. **Management Reports**
+
    - Labour cost by batch/strain
    - Department labour summaries
    - Overtime analysis
@@ -169,6 +176,7 @@ approval: "QA Manager"
 ### 5.7 Month-End Procedures
 
 1. **Payroll Accruals**
+
    - Accrue unpaid wages для period
    - Accrue employer taxes и benefits
    - Update cost allocations
@@ -182,18 +190,21 @@ approval: "QA Manager"
 ## 6. Compliance Requirements
 
 ### 6.1 Federal Compliance
+
 - Fair Labor Standards Act (FLSA)
 - Federal unemployment tax
 - Social Security и Medicare taxes
 - Federal income tax withholding
 
 ### 6.2 State Compliance
+
 - State unemployment insurance
 - Workers' compensation
 - State disability insurance
 - State income tax withholding
 
 ### 6.3 Cannabis Industry Compliance
+
 - 280E tax considerations
 - State-specific employment requirements
 - Background check compliance
@@ -202,12 +213,14 @@ approval: "QA Manager"
 ## 7. System Controls
 
 ### 7.1 Access Controls
+
 - Role-based access to payroll functions
 - Segregation of duties (processing vs approval)
 - Electronic signatures для critical changes
 - Audit trail для all payroll transactions
 
 ### 7.2 Data Validation
+
 - Timesheet completeness checks
 - Rate change authorization
 - Overtime calculation validation
@@ -216,12 +229,14 @@ approval: "QA Manager"
 ## 8. Documentation Requirements
 
 ### 8.1 Employee Records
+
 - Timesheets (7 years)
 - Pay statements (7 years)
 - Tax withholding forms (4 years)
 - Personnel files (employment + 7 years)
 
 ### 8.2 Compliance Records
+
 - Tax deposits и returns
 - Workers' compensation filings
 - Unemployment claims
@@ -230,12 +245,14 @@ approval: "QA Manager"
 ## 9. Quality Control
 
 ### 9.1 Daily QC Procedures
+
 - Verify timesheet data integrity
 - Check payroll calculation accuracy
 - Review exception reports
 - Validate cost allocations
 
 ### 9.2 Monthly QC Reviews
+
 - Reconcile payroll bank account
 - Review labour cost variances
 - Validate tax accruals
@@ -244,12 +261,14 @@ approval: "QA Manager"
 ## 10. Error Correction
 
 ### 10.1 Payroll Corrections
+
 - Use adjustment entries, not reversals
 - Document correction reasons
 - Obtain supervisor approval
 - Update affected employee records
 
 ### 10.2 Tax Corrections
+
 - File amended returns when necessary
 - Correct employee W-2s if needed
 - Notify employees of corrections
@@ -279,6 +298,6 @@ approval: "QA Manager"
 
 ## 14. Revision History
 
-| Version | Date | Changes | Approved By |
-|---------|------|---------|-------------|
-| 1.0 | 2025-09-14 | Initial version | QA Manager |
+| Version | Date       | Changes         | Approved By |
+| ------- | ---------- | --------------- | ----------- |
+| 1.0     | 2025-09-14 | Initial version | QA Manager  |

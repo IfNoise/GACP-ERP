@@ -18,14 +18,14 @@
 
 ```typescript
 interface SpatialAddress {
-  facility: string;      // Код объекта (F001)
-  building?: string;     // Здание (B001)  
-  floor?: string;        // Этаж (L01)
-  room: string;          // Комната (R001)
-  zone?: string;         // Зона (Z001)
-  position?: string;     // Позиция (P001)
-  entityType: string;    // Тип сущности (PLT, EQP, STG)
-  entityId: string;      // ID сущности
+  facility: string; // Код объекта (F001)
+  building?: string; // Здание (B001)
+  floor?: string; // Этаж (L01)
+  room: string; // Комната (R001)
+  zone?: string; // Зона (Z001)
+  position?: string; // Позиция (P001)
+  entityType: string; // Тип сущности (PLT, EQP, STG)
+  entityId: string; // ID сущности
 }
 
 // Формат адреса: F001.B001.L01.R001.Z001.P001.PLT.12345
@@ -35,39 +35,39 @@ interface SpatialAddress {
 
 ```typescript
 interface FarmEntity {
-  id: string;                    // Уникальный UUID
-  type: EntityType;              // Тип сущности
+  id: string; // Уникальный UUID
+  type: EntityType; // Тип сущности
   spatialAddress: SpatialAddress; // Иерархический адрес
-  qrCode?: string;               // QR-код для отслеживания
-  coordinates: Coordinates3D;     // Локальные координаты
-  metadata: EntityMetadata;       // Специфичные данные
-  auditTrail: MovementHistory[];  // История перемещений
+  qrCode?: string; // QR-код для отслеживания
+  coordinates: Coordinates3D; // Локальные координаты
+  metadata: EntityMetadata; // Специфичные данные
+  auditTrail: MovementHistory[]; // История перемещений
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
   lastModifiedBy: string;
 }
 
-type EntityType = 
-  | 'plant'           // Растение
-  | 'equipment'       // Оборудование
-  | 'storageUnit'     // Единица хранения
-  | 'dryingUnit'      // Сушильная установка
-  | 'finishedProduct' // Готовая продукция
-  | 'operator'        // Оператор
-  | 'drone'           // Дрон
-  | 'sensor'          // Датчик
-  | 'alert'           // Алерт
-  | 'inventoryItem'   // Инвентарь
-  | 'waste'           // Отходы
-  | 'package'         // Упаковка
-  | 'sample';         // Образец
+type EntityType =
+  | "plant" // Растение
+  | "equipment" // Оборудование
+  | "storageUnit" // Единица хранения
+  | "dryingUnit" // Сушильная установка
+  | "finishedProduct" // Готовая продукция
+  | "operator" // Оператор
+  | "drone" // Дрон
+  | "sensor" // Датчик
+  | "alert" // Алерт
+  | "inventoryItem" // Инвентарь
+  | "waste" // Отходы
+  | "package" // Упаковка
+  | "sample"; // Образец
 
 interface Coordinates3D {
-  x: number;          // Координата X (метры)
-  y: number;          // Координата Y (метры) 
-  z?: number;         // Координата Z (метры, опционально)
-  rotation?: number;  // Поворот (градусы)
+  x: number; // Координата X (метры)
+  y: number; // Координата Y (метры)
+  z?: number; // Координата Z (метры, опционально)
+  rotation?: number; // Поворот (градусы)
 }
 
 interface EntityMetadata {
@@ -86,7 +86,7 @@ interface MovementHistory {
   timestamp: Date;
   operatorId: string;
   reason: string;
-  method: 'manual' | 'qr_scan' | 'system' | 'drone';
+  method: "manual" | "qr_scan" | "system" | "drone";
   notes?: string;
 }
 ```
@@ -96,7 +96,7 @@ interface MovementHistory {
 ```typescript
 interface Facility {
   id: string;
-  code: string;           // F001
+  code: string; // F001
   name: string;
   address: PhysicalAddress;
   buildings: Building[];
@@ -105,7 +105,7 @@ interface Facility {
 
 interface Building {
   id: string;
-  code: string;           // B001
+  code: string; // B001
   name: string;
   facilityId: string;
   floors: Floor[];
@@ -114,8 +114,8 @@ interface Building {
 
 interface Floor {
   id: string;
-  code: string;           // L01, L02, etc.
-  level: number;          // 1, 2, -1 (подвал)
+  code: string; // L01, L02, etc.
+  level: number; // 1, 2, -1 (подвал)
   buildingId: string;
   rooms: Room[];
   corridors: Corridor[];
@@ -125,7 +125,7 @@ interface Floor {
 
 interface Room {
   id: string;
-  code: string;           // R001
+  code: string; // R001
   name: string;
   type: RoomType;
   floorId: string;
@@ -136,52 +136,52 @@ interface Room {
   metadata: RoomMetadata;
 }
 
-type RoomType = 
-  | 'vegetation'      // Комната вегетации
-  | 'flowering'       // Комната цветения
-  | 'mother'          // Комната маточных растений
-  | 'clone'           // Комната клонирования
-  | 'drying'          // Комната сушки
-  | 'curing'          // Комната пролечки
-  | 'storage'         // Склад
-  | 'processing'      // Обработка
-  | 'packaging'       // Упаковка
-  | 'qa_lab'          // Лаборатория QA
-  | 'office'          // Офис
-  | 'corridor'        // Коридор
-  | 'utility'         // Подсобное помещение
-  | 'security'        // Охрана
-  | 'waste'           // Утилизация отходов
-  | 'quarantine';     // Карантин
+type RoomType =
+  | "vegetation" // Комната вегетации
+  | "flowering" // Комната цветения
+  | "mother" // Комната маточных растений
+  | "clone" // Комната клонирования
+  | "drying" // Комната сушки
+  | "curing" // Комната пролечки
+  | "storage" // Склад
+  | "processing" // Обработка
+  | "packaging" // Упаковка
+  | "qa_lab" // Лаборатория QA
+  | "office" // Офис
+  | "corridor" // Коридор
+  | "utility" // Подсобное помещение
+  | "security" // Охрана
+  | "waste" // Утилизация отходов
+  | "quarantine"; // Карантин
 
 interface Zone {
   id: string;
-  code: string;           // Z001
+  code: string; // Z001
   name: string;
   type: ZoneType;
   roomId: string;
-  boundaries: Polygon;    // Границы зоны
+  boundaries: Polygon; // Границы зоны
   capacity: ZoneCapacity;
   environmentalSettings: EnvironmentalSettings;
   metadata: ZoneMetadata;
 }
 
-type ZoneType = 
-  | 'growing'         // Зона выращивания
-  | 'storage'         // Зона хранения
-  | 'processing'      // Зона обработки
-  | 'quarantine'      // Карантинная зона
-  | 'restricted'      // Ограниченная зона
-  | 'maintenance'     // Техническая зона
-  | 'access_control'; // Зона контроля доступа
+type ZoneType =
+  | "growing" // Зона выращивания
+  | "storage" // Зона хранения
+  | "processing" // Зона обработки
+  | "quarantine" // Карантинная зона
+  | "restricted" // Ограниченная зона
+  | "maintenance" // Техническая зона
+  | "access_control"; // Зона контроля доступа
 
 interface Position {
   id: string;
-  code: string;           // P001
+  code: string; // P001
   zoneId?: string;
   coordinates: Coordinates3D;
   capacity: PositionCapacity;
-  occupiedBy?: string[];  // ID сущностей
+  occupiedBy?: string[]; // ID сущностей
   metadata: PositionMetadata;
 }
 ```
@@ -219,7 +219,7 @@ PUT /api/spatial/entities/{id}/position
 GET /api/spatial/entities
 ?type={EntityType}
 &facility={facilityCode}
-&building={buildingCode} 
+&building={buildingCode}
 &room={roomCode}
 &zone={zoneCode}
 
@@ -326,10 +326,10 @@ GET /api/spatial/positions/available
 interface Spatial3DIntegration {
   // Получение 3D карты объекта
   get3DMap(facilityId: string): Promise<FacilityMap3D>;
-  
+
   // Обновление позиций в реальном времени
   subscribeToUpdates(callback: (update: EntityUpdate) => void): void;
-  
+
   // Рендеринг сущностей в 3D
   renderEntities(entities: FarmEntity[]): Three.Object3D[];
 }
@@ -341,10 +341,10 @@ interface Spatial3DIntegration {
 interface SCUDIntegration {
   // Проверка разрешений доступа
   checkAccess(operatorId: string, zoneId: string): Promise<boolean>;
-  
+
   // Лог входа в зону
   logZoneEntry(operatorId: string, zoneId: string): Promise<void>;
-  
+
   // Получение разрешенных зон
   getAllowedZones(operatorId: string): Promise<Zone[]>;
 }
@@ -356,10 +356,10 @@ interface SCUDIntegration {
 interface BMSIntegration {
   // Получение данных окружения для позиции
   getEnvironmentalData(coordinates: Coordinates3D): Promise<EnvironmentalData>;
-  
+
   // Связывание датчиков с позициями
   associateSensors(positionId: string, sensorIds: string[]): Promise<void>;
-  
+
   // Алерты на основе позиции
   createLocationBasedAlert(alert: LocationAlert): Promise<void>;
 }
@@ -370,11 +370,16 @@ interface BMSIntegration {
 ```typescript
 interface InventoryIntegration {
   // Обновление инвентаря при перемещении
-  updateInventoryLocation(itemId: string, newLocation: SpatialAddress): Promise<void>;
-  
+  updateInventoryLocation(
+    itemId: string,
+    newLocation: SpatialAddress
+  ): Promise<void>;
+
   // Получение инвентаря по локации
-  getInventoryByLocation(spatialAddress: SpatialAddress): Promise<InventoryItem[]>;
-  
+  getInventoryByLocation(
+    spatialAddress: SpatialAddress
+  ): Promise<InventoryItem[]>;
+
   // Резервирование позиций
   reservePositions(positionIds: string[], reservedBy: string): Promise<void>;
 }
@@ -493,13 +498,13 @@ CREATE INDEX idx_movement_history_timestamp ON movement_history(timestamp);
 ## Схемы Валидации (Zod)
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 export const Coordinates3DSchema = z.object({
   x: z.number(),
   y: z.number(),
   z: z.number().optional(),
-  rotation: z.number().optional()
+  rotation: z.number().optional(),
 });
 
 export const SpatialAddressSchema = z.object({
@@ -510,13 +515,23 @@ export const SpatialAddressSchema = z.object({
   zone: z.string().optional(),
   position: z.string().optional(),
   entityType: z.string(),
-  entityId: z.string()
+  entityId: z.string(),
 });
 
 export const EntityTypeSchema = z.enum([
-  'plant', 'equipment', 'storageUnit', 'dryingUnit', 'finishedProduct',
-  'operator', 'drone', 'sensor', 'alert', 'inventoryItem', 'waste',
-  'package', 'sample'
+  "plant",
+  "equipment",
+  "storageUnit",
+  "dryingUnit",
+  "finishedProduct",
+  "operator",
+  "drone",
+  "sensor",
+  "alert",
+  "inventoryItem",
+  "waste",
+  "package",
+  "sample",
 ]);
 
 export const FarmEntitySchema = z.object({
@@ -526,32 +541,52 @@ export const FarmEntitySchema = z.object({
   qrCode: z.string().optional(),
   coordinates: Coordinates3DSchema,
   metadata: z.record(z.any()),
-  auditTrail: z.array(z.object({
-    fromAddress: SpatialAddressSchema.optional(),
-    toAddress: SpatialAddressSchema,
-    fromCoordinates: Coordinates3DSchema.optional(),
-    toCoordinates: Coordinates3DSchema,
-    timestamp: z.date(),
-    operatorId: z.string(),
-    reason: z.string(),
-    method: z.enum(['manual', 'qr_scan', 'system', 'drone']),
-    notes: z.string().optional()
-  })),
+  auditTrail: z.array(
+    z.object({
+      fromAddress: SpatialAddressSchema.optional(),
+      toAddress: SpatialAddressSchema,
+      fromCoordinates: Coordinates3DSchema.optional(),
+      toCoordinates: Coordinates3DSchema,
+      timestamp: z.date(),
+      operatorId: z.string(),
+      reason: z.string(),
+      method: z.enum(["manual", "qr_scan", "system", "drone"]),
+      notes: z.string().optional(),
+    })
+  ),
   createdAt: z.date(),
   updatedAt: z.date(),
   createdBy: z.string(),
-  lastModifiedBy: z.string()
+  lastModifiedBy: z.string(),
 });
 
 export const RoomTypeSchema = z.enum([
-  'vegetation', 'flowering', 'mother', 'clone', 'drying', 'curing',
-  'storage', 'processing', 'packaging', 'qa_lab', 'office', 'corridor',
-  'utility', 'security', 'waste', 'quarantine'
+  "vegetation",
+  "flowering",
+  "mother",
+  "clone",
+  "drying",
+  "curing",
+  "storage",
+  "processing",
+  "packaging",
+  "qa_lab",
+  "office",
+  "corridor",
+  "utility",
+  "security",
+  "waste",
+  "quarantine",
 ]);
 
 export const ZoneTypeSchema = z.enum([
-  'growing', 'storage', 'processing', 'quarantine', 'restricted',
-  'maintenance', 'access_control'
+  "growing",
+  "storage",
+  "processing",
+  "quarantine",
+  "restricted",
+  "maintenance",
+  "access_control",
 ]);
 ```
 
@@ -562,30 +597,30 @@ export const ZoneTypeSchema = z.enum([
 ```typescript
 const plant: FarmEntity = {
   id: generateUUID(),
-  type: 'plant',
+  type: "plant",
   spatialAddress: {
-    facility: 'F001',
-    building: 'B001',
-    floor: 'L01',
-    room: 'R001',
-    zone: 'Z001',
-    position: 'P045',
-    entityType: 'PLT',
-    entityId: 'PLT001234'
+    facility: "F001",
+    building: "B001",
+    floor: "L01",
+    room: "R001",
+    zone: "Z001",
+    position: "P045",
+    entityType: "PLT",
+    entityId: "PLT001234",
   },
   coordinates: { x: 12.5, y: 8.3, z: 1.2 },
   metadata: {
-    strain: 'Purple Haze',
-    plantDate: '2024-01-15',
-    stage: 'vegetative',
-    batchId: 'B20240115001'
+    strain: "Purple Haze",
+    plantDate: "2024-01-15",
+    stage: "vegetative",
+    batchId: "B20240115001",
   },
-  qrCode: generateQRCode('PLT001234'),
+  qrCode: generateQRCode("PLT001234"),
   auditTrail: [],
   createdAt: new Date(),
   updatedAt: new Date(),
-  createdBy: 'operator123',
-  lastModifiedBy: 'operator123'
+  createdBy: "operator123",
+  lastModifiedBy: "operator123",
 };
 
 await spatialService.createEntity(plant);
@@ -595,21 +630,21 @@ await spatialService.createEntity(plant);
 
 ```typescript
 const scanResult = await spatialService.scanQRCode({
-  qrCode: 'PLT001234',
-  operatorId: 'OP001',
+  qrCode: "PLT001234",
+  operatorId: "OP001",
   newPosition: {
     spatialAddress: {
-      facility: 'F001',
-      building: 'B001', 
-      floor: 'L01',
-      room: 'R002',
-      zone: 'Z003',
-      position: 'P012',
-      entityType: 'PLT',
-      entityId: 'PLT001234'
+      facility: "F001",
+      building: "B001",
+      floor: "L01",
+      room: "R002",
+      zone: "Z003",
+      position: "P012",
+      entityType: "PLT",
+      entityId: "PLT001234",
     },
-    coordinates: { x: 5.2, y: 3.8, z: 1.2 }
-  }
+    coordinates: { x: 5.2, y: 3.8, z: 1.2 },
+  },
 });
 ```
 
@@ -617,29 +652,29 @@ const scanResult = await spatialService.scanQRCode({
 
 ```typescript
 const entitiesInRoom = await spatialService.findEntities({
-  facility: 'F001',
-  room: 'R001'
+  facility: "F001",
+  room: "R001",
 });
 
 const plantsInZone = await spatialService.findEntities({
-  facility: 'F001',
-  room: 'R001',
-  zone: 'Z001',
-  type: 'plant'
+  facility: "F001",
+  room: "R001",
+  zone: "Z001",
+  type: "plant",
 });
 ```
 
 ### 4. История Перемещений
 
 ```typescript
-const history = await spatialService.getMovementHistory('PLT001234', {
-  from: new Date('2024-01-01'),
-  to: new Date('2024-01-31')
+const history = await spatialService.getMovementHistory("PLT001234", {
+  from: new Date("2024-01-01"),
+  to: new Date("2024-01-31"),
 });
 
 // Восстановление состояния на определенную дату
 const stateAt = await spatialService.getStateAtDate(
-  new Date('2024-01-15T10:00:00Z')
+  new Date("2024-01-15T10:00:00Z")
 );
 ```
 

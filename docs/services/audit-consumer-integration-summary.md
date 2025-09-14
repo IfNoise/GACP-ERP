@@ -5,7 +5,7 @@
 ### 🎯 Архитектурные решения
 
 - **Go vs TypeScript:** Окончательно выбран Go для performance и Kafka integration
-- **Type Safety:** Contract-first подход с автогенерацией Go structs из Zod schemas  
+- **Type Safety:** Contract-first подход с автогенерацией Go structs из Zod schemas
 - **Event-Driven Architecture:** Kafka как центральный message broker
 - **Fault Isolation:** Отдельный сервис для независимости от монолита
 
@@ -31,7 +31,7 @@
 ### 🚀 Production Ready
 
 - **Performance:** 10,000+ events/second throughput
-- **Reliability:** Circuit breakers, retry logic, dead letter queues  
+- **Reliability:** Circuit breakers, retry logic, dead letter queues
 - **Security:** TLS encryption, secret rotation, Pod Security Standards
 - **Monitoring:** Prometheus metrics, health checks, distributed tracing
 
@@ -54,5 +54,3 @@
 2. 🔄 Реализация Go сервиса по спецификации
 3. 🔄 Nx integration и type generation pipeline
 4. 🔄 Kubernetes deployment и monitoring setup
-
-

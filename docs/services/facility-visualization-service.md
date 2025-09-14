@@ -56,7 +56,7 @@ Facility Visualization Service (FVS) предоставляет 3D-визуал�
 **Data Layer:**
 
 - **PostgreSQL + PostGIS:** Spatial data и facility layout
-- **InfluxDB:** Time series sensor data
+- **VictoriaMetrics:** Time series sensor data
 - **Redis:** Caching и session management
 
 ## 3. Spatial Entity Addressing System
@@ -131,14 +131,14 @@ Facility Visualization Service (FVS) предоставляет 3D-визуал�
 
 ```typescript
 interface XeoKitVisualization {
-  viewer: Viewer;              // Основной 3D viewer
-  scene: Scene;                // 3D сцена
-  models: Map<string, Model>;  // Загруженные модели (IFC, glTF)
+  viewer: Viewer; // Основной 3D viewer
+  scene: Scene; // 3D сцена
+  models: Map<string, Model>; // Загруженные модели (IFC, glTF)
   plugins: {
-    bimViewer: BIMViewerPlugin;     // BIM функциональность
+    bimViewer: BIMViewerPlugin; // BIM функциональность
     annotations: AnnotationsPlugin; // Аннотации
-    section: SectionPlanesPlugin;   // Секущие плоскости
-    navCube: NavCubePlugin;         // Навигационный куб
+    section: SectionPlanesPlugin; // Секущие плоскости
+    navCube: NavCubePlugin; // Навигационный куб
   };
 }
 

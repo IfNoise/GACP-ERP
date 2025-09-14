@@ -92,24 +92,28 @@ last_updated: "2025-09-01"
 ## 3.7 Financial Module
 
 - **FS-FIN-001** — **Accounts Payable/Receivable Management**
+
   - Система ведёт счета поставщиков с автоматическим созданием проводок при получении товаров
   - Интеграция с inventory модулем для автоматического списания при поступлении материалов
   - API для интеграции с банковскими системами и автоматической сверки платежей
   - Полный audit trail всех финансовых операций с невозможностью изменения исторических записей
 
 - **FS-FIN-002** — **General Ledger и автоматические проводки**
+
   - Автоматическое формирование бухгалтерских проводок при всех операциях с растениями/материалами
   - Append-only структура для всех ledger entries с поддержкой reversal entries
   - Chart of accounts настроенный для cannabis industry (biological assets, COGS, etc.)
   - Real-time финансовая отчётность с drill-down до исходных транзакций
 
 - **FS-FIN-003** — **Biological Assets Accounting**
+
   - Автоматический перевод растений в биологические активы при переходе в стадию вегетации
   - Fair value оценка на основе market rates и historical yield data
   - Возможность продажи растений на любой стадии с автоматическим расчётом gain/loss
   - Интеграция с cost accounting для корректного распределения затрат по стадиям
 
 - **FS-FIN-004** — **Cost Accounting по партиям**
+
   - Автоматическое накопление прямых затрат (материалы, labour) по партиям растений
   - Распределение overhead costs (электричество, аренда, equipment depreciation)
   - Automatic costing при закрытии партии с расчётом cost per gram
@@ -124,18 +128,21 @@ last_updated: "2025-09-01"
 ## 3.8 Workforce Management
 
 - **FS-WF-001** — **Task Assignment и Skills Verification**
+
   - Система назначает задачи только сотрудникам с подтверждёнными навыками для конкретной SOP
   - Integration с training module для проверки актуальности сертификатов
   - Автоматическая блокировка задач при истечении required certifications
   - Mobile notifications для assignment/deadline reminders
 
 - **FS-WF-002** — **Timesheet Management**
+
   - Automatic time tracking через SCUD/mobile app с GPS verification
   - Integration с payroll для accurate cost calculation
   - Overtime detection и approval workflows
   - Project/batch allocation для accurate cost accounting
 
 - **FS-WF-003** — **Android Terminals Integration**
+
   - Offline-capable mobile app для SOP execution с local SQLite cache
   - Automatic sync when connectivity restored с conflict resolution
   - QR/NFC scanning для plant/equipment identification
@@ -150,6 +157,7 @@ last_updated: "2025-09-01"
 ## 3.9 Spatial Planning Module
 
 - **FS-SP-001** — **Growing Zone Visualization**
+
   - 2D/3D визуализация grow rooms с real-time plant placement
   - Integration с IoT sensors для environmental monitoring overlay
   - Capacity planning с optimization algorithms для максимального yield
@@ -164,12 +172,14 @@ last_updated: "2025-09-01"
 ## 3.10 Forecasting и Analytics
 
 - **FS-FC-001** — **Yield Forecasting**
+
   - ML-based models используют historical data, environmental conditions, strain characteristics
   - Integration с IoT data для real-time model updates
   - Confidence intervals и risk assessment для production planning
   - What-if scenarios для different growing conditions
 
 - **FS-FC-002** — **Resource Planning**
+
   - Automated forecasting потребности в materials на основе production plans
   - Staff scheduling optimization на основе workload predictions
   - Equipment capacity planning с predictive maintenance integration
@@ -184,12 +194,14 @@ last_updated: "2025-09-01"
 ## 3.11 Procurement Module
 
 - **FS-PR-001** — **Supplier Management**
+
   - Supplier qualification process с document management
   - Performance tracking: delivery time, quality metrics, compliance
   - Contract management с automatic renewal notifications
   - Risk assessment и backup supplier identification
 
 - **FS-PR-002** — **Purchase Orders Automation**
+
   - Automatic PO generation на основе inventory thresholds
   - Integration с financial module для budget control
   - Multi-level approval workflows на основе amount/category
@@ -204,6 +216,7 @@ last_updated: "2025-09-01"
 ## 3.12 Knowledge Management System
 
 - **FS-KM-001** — **Integrated Knowledge Base**
+
   - Integration с Wiki.js/EDMS для centralized documentation
   - Automatic linking SOPs к relevant tasks в mobile app
   - Version control с audit trail для document changes
@@ -218,6 +231,7 @@ last_updated: "2025-09-01"
 ## 3.13 External Integrations и API
 
 - **FS-API-001** — **External API Support**
+
   - RESTful API для integration с tax systems, regulatory reporting platforms
   - Real-time data synchronization с third-party analytics tools
   - Webhook support для external system notifications
@@ -232,12 +246,14 @@ last_updated: "2025-09-01"
 ## 3.14 Android Terminal Support
 
 - **FS-AND-001** — **Offline Operations**
+
   - Full SOP execution capability в offline mode с local SQLite storage
   - Automatic conflict resolution when syncing with server
   - Local photo/video storage с background upload
   - Emergency mode для critical operations without connectivity
 
 - **FS-AND-002** — **SOP Guided Workflows**
+
   - Step-by-step SOP execution с visual guides и photos
   - Digital signature capture для compliance
   - Automatic progress tracking и completion verification
@@ -252,12 +268,14 @@ last_updated: "2025-09-01"
 ## 3.15 Electronic Signatures и Document Workflow
 
 - **FS-ES-004** — **PKI Infrastructure**
+
   - Digital certificate management для all users
   - Signature verification и timestamp services
   - Certificate revocation list (CRL) management
   - Integration с external PKI providers if required
 
 - **FS-ES-005** — **Document Workflow Automation**
+
   - Automated routing documents for approval на основе document type
   - Deadline tracking и escalation procedures
   - Electronic approval chains с full audit trail
