@@ -7,8 +7,20 @@ review_date: "2026-09-14"
 approved_by: "Quality Assurance Manager"
 department: "IT Operations / Quality Management"
 classification: "Critical Infrastructure"
-related_procedures: ["SOP_InternalAlerts", "SOP_VoiceCalls", "SOP_AuditTrail", "SOP_ITSecurity", "SOP_DataIntegrity"]
-regulatory_references: ["ALCOA+ Data Integrity", "MHRA Data Integrity Guidelines", "FDA 21 CFR Part 11"]
+related_procedures:
+  [
+    "SOP_InternalAlerts",
+    "SOP_VoiceCalls",
+    "SOP_AuditTrail",
+    "SOP_ITSecurity",
+    "SOP_DataIntegrity",
+  ]
+regulatory_references:
+  [
+    "ALCOA+ Data Integrity",
+    "MHRA Data Integrity Guidelines",
+    "FDA 21 CFR Part 11",
+  ]
 ---
 
 # SOP: Internal Messaging System
@@ -50,6 +62,7 @@ All messaging activities must comply with:
 ### 2.1 Jitsi-Prosody Messaging Infrastructure
 
 **Core Components:**
+
 - **Prosody XMPP Server**: Backend messaging server integrated with Jitsi ecosystem
 - **Keycloak SSO**: Single sign-on authentication for corporate access
 - **Web Client**: Browser-based messaging interface
@@ -60,6 +73,7 @@ All messaging activities must comply with:
 ### 2.2 Message Classifications
 
 #### 2.2.1 Business-Critical Messages
+
 - Production planning and coordination
 - Quality control communications
 - Compliance-related discussions
@@ -67,12 +81,14 @@ All messaging activities must comply with:
 - Batch documentation references
 
 #### 2.2.2 Operational Messages
+
 - Shift communications
 - Maintenance coordination
 - Training announcements
 - General business communications
 
 #### 2.2.3 Administrative Messages
+
 - HR announcements
 - Policy updates
 - Meeting notifications
@@ -81,9 +97,11 @@ All messaging activities must comply with:
 ## 3. User Roles and Responsibilities
 
 ### 3.1 Message Sender
+
 **Qualifications**: Authorized GACP-ERP system users
 
 **Responsibilities**:
+
 - Send clear, professional messages
 - Use appropriate message classification
 - Follow confidentiality protocols
@@ -91,9 +109,11 @@ All messaging activities must comply with:
 - Escalate urgent matters appropriately
 
 ### 3.2 Message Recipient
+
 **Qualifications**: Authorized GACP-ERP system users
 
 **Responsibilities**:
+
 - Monitor messages during working hours
 - Respond promptly to business-critical communications
 - Follow up on action items
@@ -101,9 +121,11 @@ All messaging activities must comply with:
 - Maintain message confidentiality
 
 ### 3.3 Chat Room Moderator
+
 **Qualifications**: Supervisory role or designated team leader
 
 **Responsibilities**:
+
 - Manage chat room membership
 - Maintain discussion focus and professionalism
 - Archive important decisions and communications
@@ -115,12 +137,15 @@ All messaging activities must comply with:
 ### 4.1 Accessing the Messaging System
 
 #### 4.1.1 Web Browser Access
+
 1. **Login to GACP-ERP**
+
    - Navigate to GACP-ERP portal
    - Use corporate credentials for authentication
    - Complete multi-factor authentication if required
 
 2. **Access Messaging Interface**
+
    - Click on "Messages" in the main navigation
    - Wait for contact list to load
    - Verify your online status is displayed
@@ -131,7 +156,9 @@ All messaging activities must comply with:
    - Configure notification preferences
 
 #### 4.1.2 Mobile Application Access
+
 1. **Install Corporate Messaging App**
+
    - Download approved XMPP client from company app store
    - Verify app authenticity and permissions
    - Configure with corporate server settings
@@ -144,12 +171,15 @@ All messaging activities must comply with:
 ### 4.2 One-to-One Messaging
 
 #### 4.2.1 Starting a Conversation
+
 1. **Select Recipient**
+
    - Browse contact list or use search function
    - Verify recipient's availability status
    - Check if recipient is authorized for the discussion topic
 
 2. **Compose Message**
+
    - Type clear, concise message
    - Include context and background if necessary
    - Add relevant document references or batch numbers
@@ -161,7 +191,9 @@ All messaging activities must comply with:
    - Follow up if urgent response is needed
 
 #### 4.2.2 Message Content Guidelines
+
 1. **Professional Communication**
+
    - Use proper business language and tone
    - Include sufficient context for understanding
    - Reference relevant SOPs or procedures when applicable
@@ -176,12 +208,15 @@ All messaging activities must comply with:
 ### 4.3 Group Messaging and Chat Rooms
 
 #### 4.3.1 Joining Chat Rooms
+
 1. **Browse Available Rooms**
+
    - Access chat room directory
    - Review room descriptions and purposes
    - Check membership requirements and permissions
 
 2. **Request Access**
+
    - Submit join request to room moderator
    - Provide business justification for access
    - Wait for approval before participating
@@ -192,12 +227,15 @@ All messaging activities must comply with:
    - Follow established room etiquette and guidelines
 
 #### 4.3.2 Creating New Chat Rooms
+
 1. **Room Planning**
+
    - Define clear purpose and scope for the room
    - Identify required participants and permissions
    - Determine data classification and retention requirements
 
 2. **Room Creation Process**
+
    - Access room creation interface in messaging system
    - Enter room name using standard naming convention
    - Add room description and purpose statement
@@ -210,7 +248,9 @@ All messaging activities must comply with:
    - Configure integration with audit trail systems
 
 #### 4.3.3 Room Management
+
 1. **Member Management**
+
    - Add new members based on business needs
    - Remove inactive or unauthorized members
    - Update member permissions as roles change
@@ -225,13 +265,16 @@ All messaging activities must comply with:
 ### 4.4 File Sharing Procedures
 
 #### 4.4.1 Sharing Documents
+
 1. **File Preparation**
+
    - Ensure document is finalized and approved
    - Verify file format is supported (PDF, DOC, XLS, images)
    - Check file size limits (maximum 25MB per file)
    - Scan for viruses and malware
 
 2. **Upload Process**
+
    - Click file attachment button in message interface
    - Select file from local storage or network drive
    - Add descriptive filename and comments
@@ -244,7 +287,9 @@ All messaging activities must comply with:
    - Monitor download confirmations
 
 #### 4.4.2 File Security Requirements
+
 1. **Access Controls**
+
    - Only share files with authorized recipients
    - Use password protection for sensitive documents
    - Set appropriate expiration dates for temporary access
@@ -261,6 +306,7 @@ All messaging activities must comply with:
 ### 5.1 ERP System Integration
 
 #### 5.1.1 Production Notifications
+
 - Batch completion alerts
 - Quality test results
 - Equipment maintenance reminders
@@ -268,7 +314,9 @@ All messaging activities must comply with:
 - Compliance deadline notifications
 
 #### 5.1.2 Notification Management
+
 1. **Receiving System Notifications**
+
    - Monitor dedicated system notification channels
    - Acknowledge receipt of critical notifications
    - Take required action based on notification type
@@ -283,13 +331,16 @@ All messaging activities must comply with:
 ### 5.2 IoT Sensor Alerts
 
 #### 5.2.1 Environmental Monitoring Alerts
+
 - Temperature and humidity deviations
 - Equipment status changes
 - Security system notifications
 - Utility system alerts
 
 #### 5.2.2 Alert Response Procedures
+
 1. **Immediate Response**
+
    - Assess alert severity and impact
    - Take immediate corrective action if required
    - Notify appropriate personnel and supervisors
@@ -306,12 +357,14 @@ All messaging activities must comply with:
 ### 6.1 Automatic Archival
 
 #### 6.1.1 Archival Categories
+
 - **Critical Messages**: Production, quality, compliance communications
 - **Standard Messages**: General business communications
 - **Administrative Messages**: Announcements, notifications
 - **System Messages**: Automated notifications and alerts
 
 #### 6.1.2 Retention Schedules
+
 - **Critical Messages**: 7 years minimum retention
 - **Standard Messages**: 2 years retention
 - **Administrative Messages**: 1 year retention
@@ -320,7 +373,9 @@ All messaging activities must comply with:
 ### 6.2 Message Retrieval Procedures
 
 #### 6.2.1 Search and Retrieval
+
 1. **Access Archive System**
+
    - Log into GACP-ERP message archive module
    - Select appropriate date range and message categories
    - Enter search criteria (sender, recipient, keywords)
@@ -332,7 +387,9 @@ All messaging activities must comply with:
    - Document retrieval activities for audit purposes
 
 #### 6.2.2 Audit and Compliance Support
+
 1. **Audit Preparation**
+
    - Prepare message archives for auditor review
    - Ensure all required metadata is available
    - Verify message integrity and authenticity
@@ -349,6 +406,7 @@ All messaging activities must comply with:
 ### 7.1 Emergency Message Broadcasting
 
 #### 7.1.1 Emergency Notification Triggers
+
 - Safety incidents requiring immediate response
 - Security breaches or threats
 - Environmental emergencies
@@ -356,7 +414,9 @@ All messaging activities must comply with:
 - Regulatory compliance emergencies
 
 #### 7.1.2 Emergency Broadcasting Process
+
 1. **Initiate Emergency Broadcast**
+
    - Access emergency communication interface
    - Select appropriate emergency category
    - Compose urgent notification message
@@ -371,7 +431,9 @@ All messaging activities must comply with:
 ### 7.2 Emergency Response Coordination
 
 #### 7.2.1 Response Team Communication
+
 1. **Establish Emergency Chat Room**
+
    - Create dedicated emergency response chat room
    - Add all relevant emergency response team members
    - Enable recording for incident documentation
@@ -388,8 +450,10 @@ All messaging activities must comply with:
 ### 8.1 Common Technical Issues
 
 #### 8.1.1 Connection Problems
+
 **Issue**: Unable to connect to messaging server
 **Resolution Steps**:
+
 1. Check internet connectivity and firewall settings
 2. Verify corporate credentials and authentication
 3. Clear browser cache and restart application
@@ -397,14 +461,17 @@ All messaging activities must comply with:
 
 **Issue**: Messages not being delivered
 **Resolution Steps**:
+
 1. Check recipient's online status and availability
 2. Verify message size and format requirements
 3. Retry sending message after brief delay
 4. Use alternative communication method if urgent
 
 #### 8.1.2 Performance Issues
+
 **Issue**: Slow message loading or delivery
 **Resolution Steps**:
+
 1. Check network bandwidth and connectivity
 2. Close unnecessary applications and browser tabs
 3. Clear application cache and temporary files
@@ -413,12 +480,14 @@ All messaging activities must comply with:
 ### 8.2 Support Resources
 
 #### 8.2.1 Technical Support
+
 - **IT Help Desk**: ext. 2500 during business hours
-- **Email Support**: itsupport@gacp-erp.com
+- **Email Support**: <itsupport@gacp-erp.com>
 - **Emergency Support**: [Emergency IT Hotline]
 - **Self-Service**: Online knowledge base and user guides
 
 #### 8.2.2 Training Resources
+
 - **User Training Videos**: Available in GACP-ERP training portal
 - **Quick Reference Guides**: Downloadable PDF guides
 - **Interactive Tutorials**: Built-in system tutorials
@@ -429,6 +498,7 @@ All messaging activities must comply with:
 ### 9.1 Data Integrity Requirements
 
 #### 9.1.1 ALCOA+ Compliance
+
 - **Attributable**: All messages linked to authenticated users
 - **Legible**: Messages stored in readable format
 - **Contemporaneous**: Real-time timestamping
@@ -440,6 +510,7 @@ All messaging activities must comply with:
 - **Available**: Secure access with proper controls
 
 #### 9.1.2 Audit Trail Requirements
+
 - Message creation, modification, and deletion events
 - User authentication and authorization activities
 - File sharing and download activities
@@ -449,12 +520,14 @@ All messaging activities must comply with:
 ### 9.2 Regular Quality Reviews
 
 #### 9.2.1 Monthly Communication Reviews
+
 - Review message usage patterns and compliance
 - Assess system performance and reliability
 - Evaluate user training effectiveness
 - Identify areas for improvement
 
 #### 9.2.2 Annual System Audits
+
 - Comprehensive review of communication practices
 - Verification of data integrity and retention compliance
 - Assessment of security controls and access management
@@ -465,8 +538,10 @@ All messaging activities must comply with:
 ### 10.1 User Training Requirements
 
 #### 10.1.1 Basic User Training
+
 **Target Audience**: All GACP-ERP users
 **Training Content**:
+
 - Basic messaging procedures and etiquette
 - File sharing and security requirements
 - Emergency communication procedures
@@ -477,8 +552,10 @@ All messaging activities must comply with:
 **Frequency**: Initial training plus annual refresh
 
 #### 10.1.2 Moderator Training
+
 **Target Audience**: Chat room moderators and team leaders
 **Training Content**:
+
 - Advanced messaging features and administration
 - Room management and moderation techniques
 - Compliance monitoring and reporting
@@ -491,12 +568,14 @@ All messaging activities must comply with:
 ### 10.2 Training Documentation
 
 #### 10.2.1 Training Materials
+
 - **User Manual**: Comprehensive messaging system guide
 - **Quick Start Guide**: Essential procedures for new users
 - **Video Tutorials**: Step-by-step instructional videos
 - **Reference Cards**: Handy reference for common tasks
 
 #### 10.2.2 Training Records
+
 - Individual training completion records
 - Competency assessment results
 - Training effectiveness measurements
@@ -512,10 +591,10 @@ All messaging activities must comply with:
 
 ### 11.2 Revision History
 
-| Version | Date | Changes | Approved By |
-|---------|------|---------|-------------|
-| 1.0 | 2025-09-14 | Initial release with extensive Python code | QA Manager |
-| 2.0 | 2025-09-14 | Converted to proper SOP format, removed code | QA Manager |
+| Version | Date       | Changes                                      | Approved By |
+| ------- | ---------- | -------------------------------------------- | ----------- |
+| 1.0     | 2025-09-14 | Initial release with extensive Python code   | QA Manager  |
+| 2.0     | 2025-09-14 | Converted to proper SOP format, removed code | QA Manager  |
 
 ### 11.3 Next Review
 
@@ -526,9 +605,10 @@ All messaging activities must comply with:
 ---
 
 **Document Control Notice**
+
 - **Reviewed by**: Quality Assurance Manager, [Signature Required]
 - **Approved by**: Operations Director, [Signature Required]
 
 ---
 
-*This document is controlled under the GACP-ERP Document Management System. Printed copies are uncontrolled unless specifically marked otherwise.*
+_This document is controlled under the GACP-ERP Document Management System. Printed copies are uncontrolled unless specifically marked otherwise._

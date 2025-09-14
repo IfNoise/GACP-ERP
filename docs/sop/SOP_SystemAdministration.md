@@ -94,7 +94,7 @@ All system administration activities must comply with:
 
 ### 2.2 Monitoring and Observability
 
-- **Prometheus**: Metrics collection and alerting
+- **VictoriaMetrics**: Metrics collection and alerting
 - **Grafana**: Visualization and dashboards
 - **ELK Stack**: Centralized logging (Elasticsearch, Logstash, Kibana)
 - **Jaeger**: Distributed tracing

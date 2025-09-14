@@ -375,4 +375,3 @@ spec:
 - **Qualified Electronic Signature** (QES) через HSM
 - **Blockchain anchoring** через Ethereum/Hyperledger
 - **Timestamping** через RFC 3161 серверы
-

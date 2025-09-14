@@ -151,40 +151,33 @@
 **Bounded Context**: Управление жизненным циклом растений
 
 ```typescript
-// Domain Entities
-interface Plant {
-  id: PlantId;
-  batchId: BatchId;
-  genetics: Genetics;
-  stage: PlantStage;
-  location: Location;
-  metadata: PlantMetadata;
-  history: PlantEvent[];
-}
+// 🎯 Все схемы данных определены через Zod
+// См. CONTRACT_SPECIFICATIONS.md для полных определений
 
-interface Batch {
-  id: BatchId;
-  strain: Strain;
-  plants: Plant[];
-  startDate: Date;
-  harvestDate?: Date;
-  status: BatchStatus;
-}
+import {
+  PlantSchema,
+  BatchSchema,
+  PlantEventSchema,
+} from "@gacp/shared/schemas";
 
-// Domain Events
-type PlantEvent =
-  | PlantCreatedEvent
-  | PlantTransitionedEvent
-  | PlantMovedEvent
-  | PlantHarvestedEvent;
+// Type inference из Zod схем
+type Plant = z.infer<typeof PlantSchema>;
+type Batch = z.infer<typeof BatchSchema>;
+type PlantEvent = z.infer<typeof PlantEventSchema>;
+
+// Runtime validation для всех операций
+const validatePlant = (data: unknown): Plant => PlantSchema.parse(data);
+const validateBatch = (data: unknown): Batch => BatchSchema.parse(data);
+```
 
 // Aggregates
 class PlantAggregate {
-  transition(newStage: PlantStage): PlantEvent[];
-  move(newLocation: Location): PlantEvent[];
-  harvest(): PlantEvent[];
+transition(newStage: PlantStage): PlantEvent[];
+move(newLocation: Location): PlantEvent[];
+harvest(): PlantEvent[];
 }
-```
+
+````
 
 **API Endpoints**:
 
@@ -199,7 +192,7 @@ POST   /api/v1/plants/:id/move     // Move plant
 GET    /api/v1/batches             // List batches
 POST   /api/v1/batches             // Create batch
 GET    /api/v1/batches/:id/plants  // Get batch plants
-```
+````
 
 **Database Schema**:
 
@@ -354,59 +347,40 @@ class SopService {
 **Bounded Context**: Сбор и анализ IoT данных
 
 ```typescript
-// Domain Entities
-interface Sensor {
-  id: SensorId;
-  type: SensorType;
-  location: Location;
-  calibration: CalibrationData;
-  status: SensorStatus;
-  lastReading?: SensorReading;
-}
+// 🎯 Все IoT схемы определены через Zod
+// См. CONTRACT_SPECIFICATIONS.md секция "2.3 IoT Sensors Schemas"
 
-interface SensorReading {
-  sensorId: SensorId;
-  value: number;
-  unit: string;
-  timestamp: Date;
-  quality: ReadingQuality;
-}
+import {
+  SensorSchema,
+  SensorReadingSchema,
+  SensorAlertTriggeredEventSchema,
+} from "@gacp/shared/schemas";
 
-interface Alert {
-  id: AlertId;
-  sensorId: SensorId;
-  type: AlertType;
-  severity: AlertSeverity;
-  message: string;
-  triggeredAt: Date;
-  acknowledgedAt?: Date;
-}
+// Type inference из Zod схем - NO TypeScript interfaces!
+type Sensor = z.infer<typeof SensorSchema>;
+type SensorReading = z.infer<typeof SensorReadingSchema>;
+type SensorAlert = z.infer<typeof SensorAlertTriggeredEventSchema>;
+
+// Runtime validation для всех MQTT сообщений
+const validateSensorReading = (data: unknown): SensorReading =>
+  SensorReadingSchema.parse(data);
 ```
 
-**MQTT Integration**:
+**MQTT Integration с Zod валидацией**:
 
 ```typescript
-// MQTT Message Handling
-interface SensorDataMessage {
-  sensorId: string;
-  readings: {
-    temperature?: number;
-    humidity?: number;
-    co2?: number;
-    light?: number;
-    ph?: number;
-  };
-  timestamp: string;
-  deviceId: string;
-}
+// MQTT сообщения валидируются через Zod схемы
+import { SensorReadingRecordedEventSchema } from "@gacp/shared/events";
 
 class MqttHandler {
   @Subscribe("sensors/+/data")
-  handleSensorData(topic: string, payload: SensorDataMessage) {
-    // Process sensor data
-    // Store in VictoriaMetrics
-    // Check thresholds
-    // Generate alerts if needed
+  async handleSensorData(topic: string, payload: unknown) {
+    // Runtime validation через Zod
+    const validatedReading = SensorReadingRecordedEventSchema.parse(payload);
+
+    // Process validated data
+    await this.storageService.save(validatedReading);
+    await this.alertService.checkThresholds(validatedReading);
   }
 }
 ```
@@ -651,7 +625,11 @@ interface PDFReportTemplate {
   id: TemplateId;
   name: string;
   version: string;
-  templateType: 'daily-plant-report' | 'weekly-summary' | 'batch-lifecycle' | 'audit-trail-export';
+  templateType:
+    | "daily-plant-report"
+    | "weekly-summary"
+    | "batch-lifecycle"
+    | "audit-trail-export";
   reactComponent: string; // React component definition
   fields: TemplateField[];
   gacpCompliant: boolean;
@@ -679,7 +657,13 @@ interface ReportGenerationEvent {
   triggerEvent: AuditEvent;
   templateType: string;
   documentId: DocumentId;
-  status: 'pending' | 'generating' | 'signing' | 'storing' | 'completed' | 'failed';
+  status:
+    | "pending"
+    | "generating"
+    | "signing"
+    | "storing"
+    | "completed"
+    | "failed";
   metrics: GenerationMetrics;
 }
 ```
@@ -702,25 +686,28 @@ export class PDFGeneratorService {
     metadata: ReportMetadata
   ): Promise<PDFDocument> {
     // 1. Generate PDF using React-PDF renderer
-    const { filePath, hash } = await this.templateEngine.render(templateName, data);
-    
+    const { filePath, hash } = await this.templateEngine.render(
+      templateName,
+      data
+    );
+
     // 2. Create digital signature
     const signature = await this.signatureService.signWithOpenSSL(filePath);
-    
+
     // 3. Generate QR code for verification
     const qrCode = await this.generateVerificationQR(hash, metadata.edmUrl);
-    
+
     // 4. Store in Mayan EDMS
     const edmDocument = await this.edmService.upload(filePath, {
       label: metadata.label,
       hash,
       signature,
-      template: templateName
+      template: templateName,
     });
-    
+
     // 5. Backup to S3/MinIO
     const backupUrl = await this.storageService.upload(filePath);
-    
+
     return {
       id: generateDocumentId(),
       templateId: templateName,
@@ -732,11 +719,14 @@ export class PDFGeneratorService {
       backupUrl,
       metadata,
       generatedAt: new Date(),
-      generatedBy: 'pdf-service'
+      generatedBy: "pdf-service",
     };
   }
 
-  private async generateVerificationQR(hash: string, edmUrl: string): Promise<string> {
+  private async generateVerificationQR(
+    hash: string,
+    edmUrl: string
+  ): Promise<string> {
     const verificationUrl = `${edmUrl}/verify?hash=${hash}`;
     return await QRCode.toDataURL(verificationUrl);
   }
@@ -747,9 +737,9 @@ export class PDFGeneratorService {
 
 ```typescript
 // libs/pdf-generator/templates/daily-plant-report.tsx
-import React from 'react';
-import { Document, Page, Text, View, Image } from '@react-pdf/renderer';
-import { Header, Table, Footer, QRCode } from '../components';
+import React from "react";
+import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
+import { Header, Table, Footer, QRCode } from "../components";
 
 interface DailyPlantReportProps {
   period: string;
@@ -760,27 +750,33 @@ interface DailyPlantReportProps {
 }
 
 export const DailyPlantReport: React.FC<DailyPlantReportProps> = ({
-  period, userName, plantEvents, edmUrl, hash
+  period,
+  userName,
+  plantEvents,
+  edmUrl,
+  hash,
 }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <Header 
-        title="Daily Plant Activity Report" 
+      <Header
+        title="Daily Plant Activity Report"
         period={period}
         userName={userName}
       />
-      
-      <Table 
-        columns={['Plant ID', 'Activity', 'Timestamp', 'Status']}
-        data={plantEvents.map(e => [e.plantId, e.activity, e.timestamp, e.status])}
+
+      <Table
+        columns={["Plant ID", "Activity", "Timestamp", "Status"]}
+        data={plantEvents.map((e) => [
+          e.plantId,
+          e.activity,
+          e.timestamp,
+          e.status,
+        ])}
       />
-      
+
       <Footer hash={hash} generatedAt={new Date()} />
-      
-      <QRCode 
-        value={`${edmUrl}/verify?hash=${hash}`}
-        style={styles.qr}
-      />
+
+      <QRCode value={`${edmUrl}/verify?hash=${hash}`} style={styles.qr} />
     </Page>
   </Document>
 );
@@ -795,21 +791,25 @@ export class ReportGenerationConsumer {
 
   @MessagePattern("daily_plant_activity")
   async handleDailyPlantActivity(event: AuditEvent): Promise<void> {
-    await this.pdfService.generateReport('daily-plant-report', {
-      period: event.payload.period,
-      userName: event.payload.userName,
-      plantEvents: event.payload.events
-    }, {
-      label: `Daily Report ${event.payload.period}`,
-      edmUrl: process.env.MAYAN_BASE_URL
-    });
+    await this.pdfService.generateReport(
+      "daily-plant-report",
+      {
+        period: event.payload.period,
+        userName: event.payload.userName,
+        plantEvents: event.payload.events,
+      },
+      {
+        label: `Daily Report ${event.payload.period}`,
+        edmUrl: process.env.MAYAN_BASE_URL,
+      }
+    );
   }
 
   @MessagePattern("batch_completed")
   async handleBatchCompleted(event: AuditEvent): Promise<void> {
-    await this.pdfService.generateReport('batch-lifecycle', event.payload, {
+    await this.pdfService.generateReport("batch-lifecycle", event.payload, {
       label: `Batch Lifecycle ${event.payload.batchId}`,
-      edmUrl: process.env.MAYAN_BASE_URL
+      edmUrl: process.env.MAYAN_BASE_URL,
     });
   }
 }
@@ -817,12 +817,12 @@ export class ReportGenerationConsumer {
 @KafkaProducer()
 export class ReportEventPublisher {
   async publishReportGenerated(document: PDFDocument): Promise<void> {
-    await this.emit('pdf.generated', {
+    await this.emit("pdf.generated", {
       documentId: document.id,
       hash: document.hash,
       edmUrl: document.edmDocumentId,
       template: document.templateId,
-      generatedAt: document.generatedAt
+      generatedAt: document.generatedAt,
     });
   }
 }
@@ -838,27 +838,37 @@ export class DigitalSignatureService {
 
   async signWithOpenSSL(filePath: string): Promise<string> {
     const sigPath = `${filePath}.sig`;
-    
-    await execFileAsync('openssl', [
-      'dgst', '-sha256', '-sign', this.privateKeyPath,
-      '-out', sigPath, filePath
+
+    await execFileAsync("openssl", [
+      "dgst",
+      "-sha256",
+      "-sign",
+      this.privateKeyPath,
+      "-out",
+      sigPath,
+      filePath,
     ]);
-    
+
     // Return base64 encoded signature
     const signature = await fs.readFile(sigPath);
-    return signature.toString('base64');
+    return signature.toString("base64");
   }
 
   async verifySignature(filePath: string, signature: string): Promise<boolean> {
     try {
       const sigPath = `${filePath}.sig`;
-      await fs.writeFile(sigPath, Buffer.from(signature, 'base64'));
-      
-      await execFileAsync('openssl', [
-        'dgst', '-sha256', '-verify', this.publicKeyPath,
-        '-signature', sigPath, filePath
+      await fs.writeFile(sigPath, Buffer.from(signature, "base64"));
+
+      await execFileAsync("openssl", [
+        "dgst",
+        "-sha256",
+        "-verify",
+        this.publicKeyPath,
+        "-signature",
+        sigPath,
+        filePath,
       ]);
-      
+
       return true;
     } catch {
       return false;
@@ -871,9 +881,9 @@ export class DigitalSignatureService {
 
 ```typescript
 interface GACPComplianceMetadata {
-  documentType: 'audit-report' | 'batch-record' | 'calibration-cert';
+  documentType: "audit-report" | "batch-record" | "calibration-cert";
   gacpVersion: string;
-  complianceLevel: 'basic' | 'enhanced' | 'full';
+  complianceLevel: "basic" | "enhanced" | "full";
   auditTrailHash: string;
   witnessSignatures: WitnessSignature[];
   regulatoryReferences: string[];
@@ -889,10 +899,10 @@ export class GACPComplianceService {
         digitalSignature: await this.validateSignature(document),
         hashIntegrity: await this.validateHash(document),
         auditTrail: await this.validateAuditTrail(document),
-        retention: await this.validateRetention(document)
+        retention: await this.validateRetention(document),
       },
       validatedAt: new Date(),
-      validatedBy: 'gacp-compliance-service'
+      validatedBy: "gacp-compliance-service",
     };
   }
 }
@@ -929,134 +939,75 @@ export class ApiGatewayModule {
 }
 ```
 
-### 4.2 Contract-First Development
+### 4.2 Zod-First API Development
 
-**OpenAPI Specification Example**:
-
-```yaml
-# plants-api.yaml
-openapi: 3.0.3
-info:
-  title: GACP-ERP Plants API
-  version: 1.0.0
-  description: Plant lifecycle management API
-
-paths:
-  /plants:
-    get:
-      summary: List plants
-      parameters:
-        - name: batchId
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - name: stage
-          in: query
-          schema:
-            $ref: "#/components/schemas/PlantStage"
-      responses:
-        "200":
-          description: List of plants
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Plant"
-
-components:
-  schemas:
-    Plant:
-      type: object
-      required:
-        - id
-        - batchId
-        - stage
-      properties:
-        id:
-          type: string
-          format: uuid
-        batchId:
-          type: string
-          format: uuid
-        stage:
-          $ref: "#/components/schemas/PlantStage"
-        genetics:
-          $ref: "#/components/schemas/Genetics"
-        location:
-          $ref: "#/components/schemas/Location"
-
-    PlantStage:
-      type: string
-      enum:
-        - seedling
-        - vegetative
-        - flowering
-        - harvest
-        - disposed
-```
-
-### 4.3 Type-Safe API с ts-rest
+**Все API контракты определены через Zod схемы**:
 
 ```typescript
-// API Contract Definition
-import { initContract } from "@ts-rest/core";
-import { z } from "zod";
+// 🎯 НЕТ OpenAPI YAML! Всё генерируется из Zod схем
+// См. CONTRACT_SPECIFICATIONS.md секция "4. HTTP API CONTRACTS"
 
-const PlantSchema = z.object({
-  id: z.string().uuid(),
-  batchId: z.string().uuid(),
-  stage: z.enum(["seedling", "vegetative", "flowering", "harvest"]),
-  genetics: z.object({
-    strain: z.string(),
-    lineage: z.string(),
-  }),
-  location: z.object({
-    facilityId: z.string(),
-    zoneId: z.string(),
-    position: z.string(),
-  }),
+import {
+  PlantsApiContract,
+  SensorsApiContract,
+  UserApiContract
+} from '@gacp/shared/api-contracts';
+
+// Автоматическая генерация OpenAPI из Zod
+import { generateOpenAPISpec } from '@gacp/tools/openapi-generator';
+
+// Runtime validation для всех endpoints
+import { validateSchema } from '@gacp/shared/validation';
+
+@Controller('plants')
+export class PlantsController {
+  @Get()
+  @UseInterceptors(validateSchema(PlantsApiContract.listPlants.request.query, 'query'))
+  async getPlants(@Query() query: any) {
+    // query автоматически валидирован через Zod
+    const validatedQuery = PlantsApiContract.listPlants.request.query.parse(query);
+
+    const plants = await this.plantsService.findMany(validatedQuery);
+
+    // Response тоже валидируется через Zod
+    return PlantsApiContract.listPlants.responses[200].parse({
+      success: true,
+      data: { items: plants, pagination: {...} },
+      timestamp: new Date(),
+      request_id: crypto.randomUUID(),
+    });
+  }
+}
+```
+
+### 4.3 Type-Safe Client с полной Zod интеграцией
+
+```typescript
+// Клиент автоматически типизирован из Zod схем
+import { createApiClient } from "@gacp/shared/api-client";
+import { PlantsApiContract } from "@gacp/shared/api-contracts";
+
+const apiClient = createApiClient({
+  baseUrl: process.env.API_URL,
+  contracts: { plants: PlantsApiContract },
 });
 
-const contract = initContract({
-  plants: {
-    getPlants: {
-      method: "GET",
-      path: "/plants",
-      query: z.object({
-        batchId: z.string().uuid().optional(),
-        stage: z
-          .enum(["seedling", "vegetative", "flowering", "harvest"])
-          .optional(),
-      }),
-      responses: {
-        200: z.array(PlantSchema),
-      },
-    },
-    createPlant: {
-      method: "POST",
-      path: "/plants",
-      body: PlantSchema.omit({ id: true }),
-      responses: {
-        201: PlantSchema,
-      },
-    },
+// Полная type safety + runtime validation
+const response = await apiClient.plants.listPlants({
+  query: {
+    stage: "FLOWERING", // Type-safe enum
+    page: 1,
+    limit: 20,
   },
 });
 
-// Client Usage
-const client = initClient(contract, {
-  baseUrl: "https://api.gacp-erp.com",
-  baseHeaders: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-
-// Type-safe API calls
-const plants = await client.plants.getPlants({
-  query: { stage: "flowering" },
-});
+// response.data автоматически типизирован через z.infer
+if (response.success) {
+  response.data.items.forEach((plant) => {
+    // plant типизирован как z.infer<typeof PlantSchema>
+    console.log(plant.plant_tag, plant.current_stage);
+  });
+}
 ```
 
 ---
@@ -1629,6 +1580,33 @@ export class PlantsController {
 ```
 
 ---
+
+## 📚 **СВЯЗАННАЯ ДОКУМЕНТАЦИЯ**
+
+### Infrastructure & Operations
+
+- **[Data Replication Architecture](./infrastructure/DATA_REPLICATION_ARCHITECTURE.md)** - Критическая документация по репликации данных для GACP compliance
+- **[Infrastructure Overview](./infrastructure/README.md)** - Обзор инфраструктурной документации
+
+### API & Contract Specifications
+
+- **[Contract Specifications](./CONTRACT_SPECIFICATIONS.md)** - **🎯 ГЛАВНЫЙ ДОКУМЕНТ** по всем Zod схемам, API контрактам, Kafka событиям и интеграциям
+- **[PDF Report Generator](./services/pdf-report-generator.md)** - Спецификация сервиса генерации PDF отчетов с цифровыми подписями
+
+### Validation Documentation
+
+- **[Design Specification (DS)](./validation/DS.md)** - Техническая спецификация системы
+- **[Functional Specification (FS)](./validation/FS.md)** - Функциональные требования
+- **[Validation Master Plan](./validation/VMP.md)** - План валидации системы
+
+### Standard Operating Procedures
+
+- **[Database Replication SOP](./sop/SOP_DatabaseReplication.md)** - Операционные процедуры репликации
+- **[Data Backup SOP](./sop/SOP_DataBackup.md)** - Процедуры резервного копирования
+
+---
+
+## 🎯 **ЗАКЛЮЧЕНИЕ**
 
 Этот документ представляет собой comprehensive архитектурную основу для GACP-ERP системы. Он включает все ключевые компоненты: модульную структуру, API спецификации, схемы баз данных, event-driven patterns, и интеграции с Mayan-EDMS.
 
