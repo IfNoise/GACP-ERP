@@ -217,7 +217,289 @@ module.exports = {
 
 ---
 
-## 📝 **3. CODING STANDARDS**
+## � **2.5 ZOD-FIRST DEVELOPMENT APPROACH**
+
+> **🏛️ ФУНДАМЕНТАЛЬНЫЙ ПРИНЦИП**: В нашей архитектуре Zod-схемы являются единственным источником истины для всех типов и валидации
+
+### 2.5.1 Zod как Single Source of Truth
+
+**ПРАВИЛО №1**: Всегда начинаем с Zod-схемы, никогда с интерфейса TypeScript
+
+```typescript
+// ✅ ПРАВИЛЬНО: Начинаем с Zod-схемы
+import { z } from "zod";
+
+// 1. Сначала определяем Zod-схему
+export const UserSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  firstName: z.string().min(1).max(50),
+  lastName: z.string().min(1).max(50),
+  role: z.enum(["admin", "operator", "viewer"]),
+  isActive: z.boolean(),
+  lastLoginAt: z.date().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+// 2. Затем выводим TypeScript тип
+export type User = z.infer<typeof UserSchema>;
+
+// ❌ НЕПРАВИЛЬНО: Не начинаем с интерфейса
+interface User {
+  id: string;
+  email: string;
+  // ... остальные поля
+}
+```
+
+### 2.5.2 Kafka Events с Zod Validation
+
+**ОБЯЗАТЕЛЬНО**: Все Kafka события должны быть описаны Zod-схемами
+
+```typescript
+// ✅ Правильно: Event-driven architecture с Zod
+export const PlantCreatedEventSchema = z.object({
+  eventType: z.literal("plant.created"),
+  eventId: z.string().uuid(),
+  timestamp: z.string().datetime(),
+  version: z.literal("1.0"),
+  payload: z.object({
+    plantId: z.string().uuid(),
+    batchId: z.string().uuid(),
+    genetics: GeneticsSchema,
+    location: LocationSchema,
+    createdBy: z.string().uuid(),
+  }),
+  metadata: z.object({
+    source: z.literal("cultivation-service"),
+    correlationId: z.string().uuid(),
+    causationId: z.string().uuid().optional(),
+  }),
+});
+
+export type PlantCreatedEvent = z.infer<typeof PlantCreatedEventSchema>;
+
+// Kafka producer с типобезопасностью
+export async function publishPlantCreated(event: PlantCreatedEvent) {
+  // Валидация на runtime
+  const validatedEvent = PlantCreatedEventSchema.parse(event);
+  
+  await kafka.producer().send({
+    topic: "cultivation.events",
+    messages: [{ 
+      key: event.payload.plantId,
+      value: JSON.stringify(validatedEvent) 
+    }],
+  });
+}
+```
+
+### 2.5.3 API Contracts с ts-rest + Zod
+
+**ОБЯЗАТЕЛЬНО**: Используем ts-rest для type-safe API контрактов
+
+```typescript
+import { initContract } from "@ts-rest/core";
+import { z } from "zod";
+
+// 1. Определяем входные/выходные схемы
+const CreatePlantRequestSchema = z.object({
+  batchId: z.string().uuid(),
+  genetics: GeneticsSchema,
+  location: LocationSchema.optional(),
+});
+
+const PlantResponseSchema = z.object({
+  id: z.string().uuid(),
+  batchId: z.string().uuid(),
+  genetics: GeneticsSchema,
+  location: LocationSchema.nullable(),
+  stage: z.enum(["seedling", "vegetative", "flowering", "harvested"]),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+// 2. Создаем типобезопасный контракт
+const c = initContract();
+
+export const plantsContract = c.router({
+  createPlant: {
+    method: "POST",
+    path: "/plants",
+    responses: {
+      201: PlantResponseSchema,
+      400: z.object({ error: z.string(), details: z.array(z.string()).optional() }),
+      422: z.object({ error: z.string(), validation: z.record(z.array(z.string())) }),
+    },
+    body: CreatePlantRequestSchema,
+    summary: "Create a new plant",
+  },
+  getPlant: {
+    method: "GET",
+    path: "/plants/:id",
+    responses: {
+      200: PlantResponseSchema,
+      404: z.object({ error: z.string() }),
+    },
+    pathParams: z.object({ id: z.string().uuid() }),
+  },
+}, {
+  pathPrefix: "/api/v1",
+});
+
+// 3. Типы выводятся автоматически
+export type CreatePlantRequest = z.infer<typeof CreatePlantRequestSchema>;
+export type PlantResponse = z.infer<typeof PlantResponseSchema>;
+```
+
+### 2.5.4 Component Props с Zod
+
+**ОБЯЗАТЕЛЬНО**: Все React компоненты используют Zod для валидации props
+
+```typescript
+import { z } from "zod";
+import { forwardRef } from "react";
+
+// 1. Определяем схему props
+const PlantCardPropsSchema = z.object({
+  plant: PlantResponseSchema,
+  onClick: z.function().args(z.string().uuid()).returns(z.void()).optional(),
+  isSelected: z.boolean().default(false),
+  className: z.string().optional(),
+});
+
+export type PlantCardProps = z.infer<typeof PlantCardPropsSchema>;
+
+// 2. Компонент с типобезопасными props
+export const PlantCard = forwardRef<HTMLDivElement, PlantCardProps>(
+  (props, ref) => {
+    // Runtime валидация в development
+    if (process.env.NODE_ENV === "development") {
+      PlantCardPropsSchema.parse(props);
+    }
+
+    const { plant, onClick, isSelected = false, className } = props;
+
+    return (
+      <div
+        ref={ref}
+        className={cn("plant-card", { selected: isSelected }, className)}
+        onClick={() => onClick?.(plant.id)}
+      >
+        <h3>{plant.genetics.strain}</h3>
+        <p>Stage: {plant.stage}</p>
+        <p>Created: {new Date(plant.createdAt).toLocaleDateString()}</p>
+      </div>
+    );
+  }
+);
+```
+
+### 2.5.5 Database Models с Zod
+
+**ОБЯЗАТЕЛЬНО**: Схемы БД соответствуют Zod-схемам
+
+```typescript
+// 1. Zod схема для создания записи
+export const CreatePlantDbSchema = z.object({
+  id: z.string().uuid(),
+  batch_id: z.string().uuid(),
+  genetics_id: z.string().uuid(),
+  location_zone: z.string().optional(),
+  location_row: z.number().int().positive().optional(),
+  location_position: z.number().int().positive().optional(),
+  stage: z.enum(["seedling", "vegetative", "flowering", "harvested"]),
+  created_at: z.date(),
+  updated_at: z.date(),
+});
+
+// 2. Zod схема для чтения из БД (может включать computed поля)
+export const PlantDbRecordSchema = CreatePlantDbSchema.extend({
+  // Добавляем computed поля
+  age_days: z.number().int().nonnegative(),
+  is_active: z.boolean(),
+  last_activity_at: z.date().nullable(),
+});
+
+// 3. Типы для TypeScript
+export type CreatePlantDbRecord = z.infer<typeof CreatePlantDbSchema>;
+export type PlantDbRecord = z.infer<typeof PlantDbRecordSchema>;
+
+// 4. Трансформация между API и DB моделями
+export function transformApiToDb(apiPlant: CreatePlantRequest): CreatePlantDbRecord {
+  return CreatePlantDbSchema.parse({
+    id: crypto.randomUUID(),
+    batch_id: apiPlant.batchId,
+    genetics_id: apiPlant.genetics.id,
+    location_zone: apiPlant.location?.zone,
+    location_row: apiPlant.location?.row,
+    location_position: apiPlant.location?.position,
+    stage: "seedling",
+    created_at: new Date(),
+    updated_at: new Date(),
+  });
+}
+```
+
+### 2.5.6 Zod Best Practices
+
+#### 2.5.6.1 Композиция схем
+
+```typescript
+// ✅ Базовые схемы для переиспользования
+export const TimestampsSchema = z.object({
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const AuditableSchema = TimestampsSchema.extend({
+  createdBy: z.string().uuid(),
+  updatedBy: z.string().uuid(),
+});
+
+// ✅ Композиция сложных схем
+export const PlantSchema = z.object({
+  id: z.string().uuid(),
+  batchId: z.string().uuid(),
+  genetics: GeneticsSchema,
+  location: LocationSchema.nullable(),
+  stage: PlantStageSchema,
+}).merge(AuditableSchema);
+```
+
+#### 2.5.6.2 Валидация с transform
+
+```typescript
+// ✅ Автоматическая нормализация данных
+export const EmailSchema = z.string()
+  .email()
+  .transform(email => email.toLowerCase().trim());
+
+export const CurrencyAmountSchema = z.number()
+  .positive()
+  .transform(amount => Math.round(amount * 100)); // В центах
+```
+
+#### 2.5.6.3 Conditional validation
+
+```typescript
+// ✅ Условная валидация
+export const CreateUserSchema = z.object({
+  email: z.string().email(),
+  role: z.enum(["admin", "operator", "viewer"]),
+  departmentId: z.string().uuid().optional(),
+}).refine(
+  (data) => data.role === "admin" || data.departmentId !== undefined,
+  {
+    message: "Department ID is required for non-admin users",
+    path: ["departmentId"],
+  }
+);
+```
+
+---
+
+## �📝 **3. CODING STANDARDS**
 
 ### 3.1 TypeScript Best Practices
 
