@@ -196,7 +196,306 @@ last_updated: "2025-09-14"
 - completed_at: timestamp
 - notes: text, заметки по выполнению
 
-### 3.10 Employee Competencies (DS-WF-002)
+### 3.10 Accounts Payable (DS-FIN-006)
+
+**Управление кредиторской задолженностью**
+
+- ap_id: UUID, Primary Key
+- supplier_id: UUID, Foreign Key к suppliers
+- purchase_order_id: UUID, Foreign Key к purchase_orders
+- receiving_id: UUID, Foreign Key к receiving_records
+- invoice_number: varchar(100), номер счёта поставщика
+- invoice_date: date, дата счёта
+- due_date: date, срок оплаты
+- total_amount: decimal(15,2), общая сумма
+- tax_amount: decimal(15,2), сумма НДС
+- discount_amount: decimal(15,2), сумма скидки
+- paid_amount: decimal(15,2), оплаченная сумма
+- status: enum (pending, approved, paid, disputed, cancelled)
+- payment_terms: varchar(50), условия оплаты
+- currency: varchar(3), валюта
+- exchange_rate: decimal(10,6), курс валют
+- approval_workflow_id: UUID, процесс утверждения
+- created_at: timestamp
+- approved_at: timestamp
+- paid_at: timestamp
+
+### 3.11 Accounts Receivable (DS-FIN-007)
+
+**Управление дебиторской задолженностью**
+
+- ar_id: UUID, Primary Key
+- customer_id: UUID, Foreign Key к customers
+- invoice_number: varchar(100), номер счёта
+- invoice_date: date, дата выставления
+- due_date: date, срок оплаты
+- total_amount: decimal(15,2), общая сумма
+- tax_amount: decimal(15,2), сумма НДС
+- discount_amount: decimal(15,2), сумма скидки
+- received_amount: decimal(15,2), полученная сумма
+- outstanding_amount: decimal(15,2), остаток задолженности
+- status: enum (issued, partial_paid, paid, overdue, written_off)
+- payment_terms: varchar(50), условия оплаты
+- aging_category: enum (current, 30_days, 60_days, 90_days, over_90)
+- collection_status: enum (normal, follow_up, legal_action)
+- currency: varchar(3), валюта
+- sales_order_id: UUID, ссылка на заказ продаж
+- shipped_at: timestamp, дата отгрузки
+
+### 3.12 Chart of Accounts (DS-FIN-008)
+
+**План счетов бухгалтерского учёта**
+
+- account_id: UUID, Primary Key
+- account_code: varchar(20), код счёта
+- account_name: varchar(255), название счёта
+- account_type: enum (asset, liability, equity, revenue, expense)
+- account_subtype: varchar(100), подтип счёта
+- parent_account_id: UUID, родительский счёт
+- normal_balance: enum (debit, credit), нормальное сальдо
+- is_active: boolean, активен ли счёт
+- is_system: boolean, системный счёт
+- consolidation_account: varchar(20), счёт консолидации
+- currency: varchar(3), валюта счёта
+- cost_center: varchar(50), центр затрат
+- profit_center: varchar(50), центр прибыли
+- description: text, описание счёта
+- created_at: timestamp
+- updated_at: timestamp
+
+### 3.13 Spatial Planning (DS-SP-001)
+
+**Планирование пространства и зон**
+
+- zone_id: UUID, Primary Key
+- zone_name: varchar(100), название зоны
+- zone_type: enum (propagation, vegetative, flowering, drying, storage, maintenance)
+- facility_id: UUID, Foreign Key к facilities
+- parent_zone_id: UUID, родительская зона
+- dimensions: JSONB, размеры зоны (length, width, height)
+- area_m2: decimal(8,2), площадь в квадратных метрах
+- volume_m3: decimal(8,2), объём в кубических метрах
+- coordinates: JSONB, координаты на плане (x, y, z)
+- max_capacity: integer, максимальная вместимость растений
+- current_occupancy: integer, текущая занятость
+- environmental_controls: JSONB, настройки окружающей среды
+- equipment_ids: UUID[], массив оборудования в зоне
+- lighting_circuits: varchar(100)[], осветительные контуры
+- hvac_zone: varchar(50), зона вентиляции
+- irrigation_zone: varchar(50), зона полива
+- monitoring_sensors: UUID[], массив датчиков
+- access_level: enum (public, restricted, high_security)
+- safety_requirements: JSONB, требования безопасности
+- is_active: boolean, активна ли зона
+- created_at: timestamp
+- updated_at: timestamp
+
+### 3.14 Zone Assignments (DS-SP-002)
+
+**Назначения растений и партий зонам**
+
+- assignment_id: UUID, Primary Key
+- zone_id: UUID, Foreign Key к zones
+- assignable_type: enum (plant, batch, equipment)
+- assignable_id: UUID, ID назначаемого объекта
+- assigned_at: timestamp, время назначения
+- expected_duration: interval, ожидаемое время пребывания
+- actual_duration: interval, фактическое время
+- position: JSONB, позиция в зоне (x, y, z)
+- status: enum (assigned, active, completed, moved)
+- moved_to_zone_id: UUID, зона перемещения
+- moved_at: timestamp, время перемещения
+- assignment_reason: text, причина назначения
+- assigned_by: UUID, кто назначил
+- notes: text, заметки
+
+### 3.15 Forecasting Models (DS-FC-001)
+
+**Модели прогнозирования**
+
+- model_id: UUID, Primary Key
+- model_name: varchar(100), название модели
+- model_type: enum (yield_prediction, resource_demand, financial_forecast, quality_prediction)
+- algorithm: enum (linear_regression, random_forest, neural_network, time_series)
+- version: varchar(20), версия модели
+- features: JSONB, входные переменные модели
+- target_variable: varchar(100), целевая переменная
+- training_data_start: date, начало обучающих данных
+- training_data_end: date, конец обучающих данных
+- last_trained: timestamp, последнее обучение
+- model_parameters: JSONB, параметры модели
+- performance_metrics: JSONB, метрики производительности
+- accuracy_score: decimal(5,4), точность модели (0-1)
+- confidence_level: decimal(5,4), уровень доверия
+- validation_results: JSONB, результаты валидации
+- is_active: boolean, активна ли модель
+- created_by: UUID, создатель модели
+- created_at: timestamp
+
+### 3.16 Predictions (DS-FC-002)
+
+**Прогнозы и предсказания**
+
+- prediction_id: UUID, Primary Key
+- model_id: UUID, Foreign Key к forecasting_models
+- prediction_type: enum (yield, cost, revenue, quality, resource_need)
+- target_entity_type: enum (plant, batch, zone, facility)
+- target_entity_id: UUID, ID целевой сущности
+- prediction_date: date, дата прогноза
+- prediction_horizon: integer, горизонт прогноза в днях
+- predicted_value: decimal(15,4), прогнозируемое значение
+- confidence_lower: decimal(15,4), нижняя граница доверительного интервала
+- confidence_upper: decimal(15,4), верхняя граница доверительного интервала
+- confidence_level: decimal(5,4), уровень доверия
+- actual_value: decimal(15,4), фактическое значение (после реализации)
+- accuracy: decimal(5,4), точность прогноза
+- influencing_factors: JSONB, влияющие факторы
+- created_at: timestamp
+- updated_at: timestamp
+
+### 3.17 Procurement Data (DS-PR-001)
+
+**Данные закупок и поставщиков**
+
+- supplier_id: UUID, Primary Key
+- supplier_name: varchar(255), название поставщика
+- supplier_code: varchar(50), код поставщика
+- supplier_type: enum (raw_materials, equipment, services, utilities)
+- legal_entity_name: varchar(255), юридическое наименование
+- tax_id: varchar(50), налоговый номер
+- registration_number: varchar(100), регистрационный номер
+- contact_info: JSONB, контактная информация
+- addresses: JSONB, адреса (shipping, billing, headquarters)
+- payment_terms: varchar(100), условия оплаты
+- credit_limit: decimal(15,2), кредитный лимит
+- currency: varchar(3), основная валюта
+- status: enum (active, inactive, suspended, blacklisted)
+- qualification_status: enum (pending, qualified, conditional, rejected)
+- quality_rating: decimal(3,2), рейтинг качества (1-5)
+- delivery_rating: decimal(3,2), рейтинг доставки (1-5)
+- compliance_rating: decimal(3,2), рейтинг соответствия (1-5)
+- certifications: JSONB, сертификаты и лицензии
+- audit_date: date, дата последнего аудита
+- contract_expiry: date, окончание контракта
+- created_at: timestamp
+- updated_at: timestamp
+
+### 3.18 Purchase Orders (DS-PR-002)
+
+**Заказы на поставку**
+
+- po_id: UUID, Primary Key
+- po_number: varchar(100), номер заказа
+- supplier_id: UUID, Foreign Key к suppliers
+- requisition_id: UUID, ссылка на заявку
+- po_date: date, дата заказа
+- delivery_date: date, планируемая дата поставки
+- delivery_address: JSONB, адрес доставки
+- status: enum (draft, approved, sent, acknowledged, partial_delivered, delivered, invoiced, closed, cancelled)
+- total_amount: decimal(15,2), общая сумма
+- tax_amount: decimal(15,2), сумма НДС
+- currency: varchar(3), валюта
+- exchange_rate: decimal(10,6), курс валют
+- payment_terms: varchar(100), условия оплаты
+- shipping_terms: varchar(100), условия доставки
+- priority: enum (low, medium, high, urgent)
+- buyer_id: UUID, покупатель
+- approver_id: UUID, утверждающий
+- created_at: timestamp
+- approved_at: timestamp
+- sent_at: timestamp
+
+### 3.19 Android Terminal Data (DS-AND-001)
+
+**Данные мобильных терминалов**
+
+- terminal_id: UUID, Primary Key
+- device_id: varchar(100), уникальный ID устройства
+- terminal_name: varchar(100), имя терминала
+- assigned_employee_id: UUID, назначенный сотрудник
+- device_model: varchar(100), модель устройства
+- os_version: varchar(50), версия ОС
+- app_version: varchar(50), версия приложения
+- mac_address: varchar(17), MAC-адрес
+- ip_address: inet, IP-адрес
+- location: JSONB, местоположение (GPS координаты)
+- zone_id: UUID, текущая зона
+- battery_level: integer, уровень заряда батареи
+- storage_used: bigint, использованное хранилище (байты)
+- storage_total: bigint, общее хранилище (байты)
+- connection_status: enum (online, offline, syncing, error)
+- last_sync: timestamp, последняя синхронизация
+- sync_status: JSONB, статус синхронизации
+- pending_tasks: integer, количество ожидающих задач
+- completed_tasks: integer, выполненных задач
+- error_count: integer, количество ошибок
+- is_active: boolean, активен ли терминал
+- created_at: timestamp
+- updated_at: timestamp
+
+### 3.20 Offline Data Sync (DS-AND-002)
+
+**Синхронизация офлайн данных**
+
+- sync_id: UUID, Primary Key
+- terminal_id: UUID, Foreign Key к android_terminals
+- sync_type: enum (full, incremental, delta, conflict_resolution)
+- sync_direction: enum (upload, download, bidirectional)
+- started_at: timestamp, начало синхронизации
+- completed_at: timestamp, окончание синхронизации
+- status: enum (pending, in_progress, completed, failed, cancelled)
+- records_total: integer, общее количество записей
+- records_processed: integer, обработано записей
+- records_failed: integer, записей с ошибками
+- data_size: bigint, размер данных (байты)
+- compression_ratio: decimal(4,3), коэффициент сжатия
+- conflicts_detected: integer, обнаруженных конфликтов
+- conflicts_resolved: integer, разрешённых конфликтов
+- error_details: JSONB, детали ошибок
+- performance_metrics: JSONB, метрики производительности
+- checksum: varchar(64), контрольная сумма
+- created_at: timestamp
+
+### 3.21 Knowledge Base (DS-KM-001)
+
+**База знаний и документооборот**
+
+- document_id: UUID, Primary Key
+- title: varchar(500), заголовок документа
+- content: text, содержимое документа
+- document_type: enum (sop, manual, guide, training, reference, form, template)
+- category: varchar(100), категория документа
+- subcategory: varchar(100), подкатегория
+- version: varchar(20), версия документа
+- status: enum (draft, review, approved, published, superseded, retired)
+- language: varchar(5), язык документа
+- author_id: UUID, автор документа
+- reviewer_id: UUID, рецензент
+- approver_id: UUID, утверждающий
+- owner_department: varchar(100), владелец-отдел
+- target_audience: varchar(200)[], целевая аудитория
+- prerequisites: varchar(200)[], необходимые знания
+- keywords: varchar(100)[], ключевые слова
+- tags: varchar(50)[], теги для поиска
+- estimated_read_time: integer, время чтения (минуты)
+- access_level: enum (public, internal, restricted, confidential)
+- compliance_relevant: boolean, связан с соответствием
+- risk_level: enum (low, medium, high), уровень риска
+- effective_date: date, дата вступления в силу
+- review_date: date, дата пересмотра
+- expiry_date: date, дата истечения
+- supersedes: UUID[], замещаемые документы
+- related_documents: UUID[], связанные документы
+- attachments: JSONB, приложения и файлы
+- view_count: integer, количество просмотров
+- download_count: integer, количество скачиваний
+- rating_average: decimal(3,2), средняя оценка
+- rating_count: integer, количество оценок
+- created_at: timestamp
+- updated_at: timestamp
+- published_at: timestamp
+
+### 3.22 Employee Competencies (DS-WF-002)
 
 **Компетенции и допуски сотрудников**
 
