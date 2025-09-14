@@ -48,7 +48,7 @@ last_updated: "2025-09-14"
 - source_type: enum (seed, clone)
 - source_reference: UUID, опциональная ссылка на родителя
 - strain: varchar(255), сорт
-- stage: enum (germination, vegetation, flowering, harvest)
+- stage: enum (germination,cloning, vegetation,mother_plant, flowering,stopped, harvest)
 - current_health_score: integer (0-100)
 - current_zone_id: UUID, текущее расположение
 - biological_asset_value: decimal(15,2), справедливая стоимость как биологический актив

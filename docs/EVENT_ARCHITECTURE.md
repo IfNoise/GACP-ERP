@@ -49,12 +49,12 @@
 │         │                   │                        │              │
 │         │                   │                        │              │
 │    ┌────▼───────────────────▼────────────────────────▼──────────┐   │
-│    │                  KAFKA EVENT BUS                          │   │
-│    │  ┌─────────────────────────────────────────────────────┐  │   │
-│    │  │ Topics: cultivation.*, quality.*, financial.*,     │  │   │
-│    │  │         audit.*, notifications.*, integration.*   │  │   │
-│    │  └─────────────────────────────────────────────────────┘  │   │
-│    └─────────────────────────────────────────────────────────────┘   │
+│    │                  KAFKA EVENT BUS                           │   │
+│    │  ┌─────────────────────────────────────────────────────┐   │   │
+│    │  │ Topics: cultivation.*, quality.*, financial.*,      │   │   │
+│    │  │         audit.*, notifications.*, integration.*      │  │   │
+│    │  └─────────────────────────────────────────────────────┘   │   │
+│    └────────────────────────────────────────────────────────────┘   │
 │         │                   │                        │              │
 │         │                   │                        │              │
 │  ┌─────▼─────┐    ┌─────────▼─┐    ┌─────────────────▼─────────────┐  │
@@ -77,11 +77,13 @@ export const KafkaConfigSchema = z.object({
   brokers: z.array(z.string().url()),
   clientId: z.string(),
   ssl: z.boolean().default(true),
-  sasl: z.object({
-    mechanism: z.enum(["plain", "scram-sha-256", "scram-sha-512"]),
-    username: z.string(),
-    password: z.string(),
-  }).optional(),
+  sasl: z
+    .object({
+      mechanism: z.enum(["plain", "scram-sha-256", "scram-sha-512"]),
+      username: z.string(),
+      password: z.string(),
+    })
+    .optional(),
   retries: z.number().int().positive().default(5),
   requestTimeout: z.number().int().positive().default(30000),
   connectionTimeout: z.number().int().positive().default(10000),
@@ -93,8 +95,8 @@ export type KafkaConfig = z.infer<typeof KafkaConfigSchema>;
 export const productionKafkaConfig: KafkaConfig = {
   brokers: [
     "kafka-1.gacp-erp.internal:9092",
-    "kafka-2.gacp-erp.internal:9092", 
-    "kafka-3.gacp-erp.internal:9092"
+    "kafka-2.gacp-erp.internal:9092",
+    "kafka-3.gacp-erp.internal:9092",
   ],
   clientId: "gacp-erp-main",
   ssl: true,
@@ -116,25 +118,25 @@ export const productionKafkaConfig: KafkaConfig = {
 export const TOPICS = {
   // Cultivation Domain
   CULTIVATION_PLANTS: "cultivation.plants.v1",
-  CULTIVATION_BATCHES: "cultivation.batches.v1", 
+  CULTIVATION_BATCHES: "cultivation.batches.v1",
   CULTIVATION_HARVEST: "cultivation.harvest.v1",
   CULTIVATION_IRRIGATION: "cultivation.irrigation.v1",
-  
+
   // Quality Domain
   QUALITY_TESTING: "quality.testing.v1",
   QUALITY_SAMPLING: "quality.sampling.v1",
   QUALITY_COMPLIANCE: "quality.compliance.v1",
-  
-  // Financial Domain  
+
+  // Financial Domain
   FINANCIAL_TRANSACTIONS: "financial.transactions.v1",
   FINANCIAL_ASSETS: "financial.assets.v1",
   FINANCIAL_REPORTING: "financial.reporting.v1",
-  
+
   // System Events
   AUDIT_EVENTS: "audit.events.v1",
   NOTIFICATIONS: "notifications.events.v1",
   INTEGRATIONS: "integrations.events.v1",
-  
+
   // Dead Letter Queues
   DLQ: "dlq.events.v1",
 } as const;
@@ -154,26 +156,31 @@ export const BaseEventSchema = z.object({
   // Event Identification
   eventId: z.string().uuid(),
   eventType: z.string().min(1),
-  eventVersion: z.string().regex(/^\d+\.\d+$/).default("1.0"),
-  
+  eventVersion: z
+    .string()
+    .regex(/^\d+\.\d+$/)
+    .default("1.0"),
+
   // Timing
   timestamp: z.string().datetime(),
-  
+
   // Correlation & Causation
   correlationId: z.string().uuid(),
   causationId: z.string().uuid().optional(),
-  
+
   // Metadata
   source: z.string().min(1),
   userId: z.string().uuid().optional(),
   sessionId: z.string().uuid().optional(),
-  
+
   // Compliance & Audit
-  auditContext: z.object({
-    ipAddress: z.string().ip().optional(),
-    userAgent: z.string().optional(), 
-    complianceFlags: z.array(z.string()).default([]),
-  }).optional(),
+  auditContext: z
+    .object({
+      ipAddress: z.string().ip().optional(),
+      userAgent: z.string().optional(),
+      complianceFlags: z.array(z.string()).default([]),
+    })
+    .optional(),
 });
 
 export type BaseEvent = z.infer<typeof BaseEventSchema>;
@@ -202,7 +209,7 @@ export interface PlantEvent<T = unknown> extends DomainEvent<T> {
   };
 }
 
-// Quality Events  
+// Quality Events
 export interface QualityEvent<T = unknown> extends DomainEvent<T> {
   eventType: `quality.${string}`;
   payload: T & {
@@ -241,10 +248,12 @@ export const PlantCreatedPayloadSchema = z.object({
     type: z.enum(["indica", "sativa", "hybrid"]),
     thcPercentage: z.number().min(0).max(100),
     cbdPercentage: z.number().min(0).max(100),
-    lineage: z.object({
-      mother: z.string().optional(),
-      father: z.string().optional(),
-    }).optional(),
+    lineage: z
+      .object({
+        mother: z.string().optional(),
+        father: z.string().optional(),
+      })
+      .optional(),
   }),
   location: z.object({
     facilityId: z.string().uuid(),
@@ -258,7 +267,9 @@ export const PlantCreatedPayloadSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const PlantCreatedEventSchema = EventWithPayloadSchema(PlantCreatedPayloadSchema).extend({
+export const PlantCreatedEventSchema = EventWithPayloadSchema(
+  PlantCreatedPayloadSchema
+).extend({
   eventType: z.literal("plant.created"),
 });
 
@@ -271,31 +282,63 @@ export type PlantCreatedEvent = z.infer<typeof PlantCreatedEventSchema>;
 export const PlantStageChangedPayloadSchema = z.object({
   plantId: z.string().uuid(),
   batchId: z.string().uuid(),
-  previousStage: z.enum(["seedling", "vegetative", "pre_flower", "flowering", "drying", "curing", "ready", "harvested", "disposed"]),
-  newStage: z.enum(["seedling", "vegetative", "pre_flower", "flowering", "drying", "curing", "ready", "harvested", "disposed"]),
+  previousStage: z.enum([
+    "seedling",
+    "cloning",
+    "vegetative",
+    "mother_plant",
+    "pre_flower",
+    "flowering",
+    "drying",
+    "curing",
+    "ready",
+    "harvested",
+    "disposed",
+  ]),
+  newStage: z.enum([
+    "seedling",
+    "vegetative",
+    "pre_flower",
+    "flowering",
+    "drying",
+    "curing",
+    "ready",
+    "harvested",
+    "disposed",
+  ]),
   stageChangedAt: z.string().datetime(),
   stageChangedBy: z.string().uuid(),
   reason: z.string().optional(),
-  environmentalConditions: z.object({
-    temperature: z.number(),
-    humidity: z.number().min(0).max(100),
-    vpd: z.number().positive().optional(),
-    co2: z.number().positive().optional(),
-    lightIntensity: z.number().nonnegative().optional(),
-  }).optional(),
-  photos: z.array(z.object({
-    id: z.string().uuid(),
-    url: z.string().url(),
-    type: z.enum(["overview", "close_up", "microscopic"]),
-    metadata: z.record(z.string(), z.unknown()).optional(),
-  })).optional(),
+  environmentalConditions: z
+    .object({
+      temperature: z.number(),
+      humidity: z.number().min(0).max(100),
+      vpd: z.number().positive().optional(),
+      co2: z.number().positive().optional(),
+      lightIntensity: z.number().nonnegative().optional(),
+    })
+    .optional(),
+  photos: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        url: z.string().url(),
+        type: z.enum(["overview", "close_up", "microscopic"]),
+        metadata: z.record(z.string(), z.unknown()).optional(),
+      })
+    )
+    .optional(),
 });
 
-export const PlantStageChangedEventSchema = EventWithPayloadSchema(PlantStageChangedPayloadSchema).extend({
+export const PlantStageChangedEventSchema = EventWithPayloadSchema(
+  PlantStageChangedPayloadSchema
+).extend({
   eventType: z.literal("plant.stage_changed"),
 });
 
-export type PlantStageChangedEvent = z.infer<typeof PlantStageChangedEventSchema>;
+export type PlantStageChangedEvent = z.infer<
+  typeof PlantStageChangedEventSchema
+>;
 ```
 
 #### 4.1.3 Plant Harvested
@@ -312,19 +355,23 @@ export const PlantHarvestedPayloadSchema = z.object({
       amount: z.number().positive(),
       unit: z.enum(["g", "kg", "oz", "lb"]),
     }),
-    dryWeight: z.object({
-      amount: z.number().positive(),
-      unit: z.enum(["g", "kg", "oz", "lb"]),
-    }).optional(),
-    qualityGrade: z.enum(["A+", "A", "B+", "B", "C", "reject"]).optional(),
-    sections: z.array(z.object({
-      type: z.enum(["colas", "trim", "shake", "popcorn"]),
-      weight: z.object({
+    dryWeight: z
+      .object({
         amount: z.number().positive(),
         unit: z.enum(["g", "kg", "oz", "lb"]),
-      }),
-      destinationId: z.string().uuid(), // Container/batch для дальнейшей обработки
-    })),
+      })
+      .optional(),
+    qualityGrade: z.enum(["A+", "A", "B+", "B", "C", "reject"]).optional(),
+    sections: z.array(
+      z.object({
+        type: z.enum(["colas", "trim", "shake", "popcorn"]),
+        weight: z.object({
+          amount: z.number().positive(),
+          unit: z.enum(["g", "kg", "oz", "lb"]),
+        }),
+        destinationId: z.string().uuid(), // Container/batch для дальнейшей обработки
+      })
+    ),
   }),
   environmentalConditions: z.object({
     temperature: z.number(),
@@ -333,7 +380,9 @@ export const PlantHarvestedPayloadSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const PlantHarvestedEventSchema = EventWithPayloadSchema(PlantHarvestedPayloadSchema).extend({
+export const PlantHarvestedEventSchema = EventWithPayloadSchema(
+  PlantHarvestedPayloadSchema
+).extend({
   eventType: z.literal("plant.harvested"),
 });
 
@@ -371,7 +420,9 @@ export const BatchCreatedPayloadSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const BatchCreatedEventSchema = EventWithPayloadSchema(BatchCreatedPayloadSchema).extend({
+export const BatchCreatedEventSchema = EventWithPayloadSchema(
+  BatchCreatedPayloadSchema
+).extend({
   eventType: z.literal("batch.created"),
 });
 
@@ -387,7 +438,16 @@ export const EnvironmentalAlertPayloadSchema = z.object({
   alertId: z.string().uuid(),
   facilityId: z.string().uuid(),
   zone: z.string(),
-  alertType: z.enum(["temperature", "humidity", "vpd", "co2", "light", "ph", "ec", "water_level"]),
+  alertType: z.enum([
+    "temperature",
+    "humidity",
+    "vpd",
+    "co2",
+    "light",
+    "ph",
+    "ec",
+    "water_level",
+  ]),
   severity: z.enum(["info", "warning", "critical", "emergency"]),
   currentValue: z.number(),
   expectedRange: z.object({
@@ -398,19 +458,25 @@ export const EnvironmentalAlertPayloadSchema = z.object({
   deviation: z.number(),
   sensorId: z.string().uuid(),
   triggeredAt: z.string().datetime(),
-  autoCorrection: z.object({
-    attempted: z.boolean(),
-    successful: z.boolean().optional(),
-    actions: z.array(z.string()).optional(),
-  }).optional(),
+  autoCorrection: z
+    .object({
+      attempted: z.boolean(),
+      successful: z.boolean().optional(),
+      actions: z.array(z.string()).optional(),
+    })
+    .optional(),
   affectedBatches: z.array(z.string().uuid()).optional(),
 });
 
-export const EnvironmentalAlertEventSchema = EventWithPayloadSchema(EnvironmentalAlertPayloadSchema).extend({
+export const EnvironmentalAlertEventSchema = EventWithPayloadSchema(
+  EnvironmentalAlertPayloadSchema
+).extend({
   eventType: z.literal("environment.alert"),
 });
 
-export type EnvironmentalAlertEvent = z.infer<typeof EnvironmentalAlertEventSchema>;
+export type EnvironmentalAlertEvent = z.infer<
+  typeof EnvironmentalAlertEventSchema
+>;
 ```
 
 ---
@@ -426,7 +492,15 @@ export const SampleCollectedPayloadSchema = z.object({
   sampleId: z.string().uuid(),
   batchId: z.string().uuid(),
   plantId: z.string().uuid().optional(),
-  sampleType: z.enum(["flower", "trim", "extract", "edible", "soil", "water", "air"]),
+  sampleType: z.enum([
+    "flower",
+    "trim",
+    "extract",
+    "edible",
+    "soil",
+    "water",
+    "air",
+  ]),
   collectionMethod: z.enum(["random", "systematic", "targeted", "composite"]),
   collectedAt: z.string().datetime(),
   collectedBy: z.string().uuid(),
@@ -445,17 +519,21 @@ export const SampleCollectedPayloadSchema = z.object({
     light: z.enum(["dark", "ambient", "bright"]),
     container: z.string(),
   }),
-  chainOfCustody: z.array(z.object({
-    transferredAt: z.string().datetime(),
-    transferredBy: z.string().uuid(),
-    transferredTo: z.string().uuid(),
-    condition: z.enum(["good", "damaged", "compromised"]),
-    notes: z.string().optional(),
-  })),
+  chainOfCustody: z.array(
+    z.object({
+      transferredAt: z.string().datetime(),
+      transferredBy: z.string().uuid(),
+      transferredTo: z.string().uuid(),
+      condition: z.enum(["good", "damaged", "compromised"]),
+      notes: z.string().optional(),
+    })
+  ),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const SampleCollectedEventSchema = EventWithPayloadSchema(SampleCollectedPayloadSchema).extend({
+export const SampleCollectedEventSchema = EventWithPayloadSchema(
+  SampleCollectedPayloadSchema
+).extend({
   eventType: z.literal("quality.sample_collected"),
 });
 
@@ -470,8 +548,14 @@ export const TestResultsAvailablePayloadSchema = z.object({
   sampleId: z.string().uuid(),
   batchId: z.string().uuid(),
   testType: z.enum([
-    "potency", "pesticides", "heavy_metals", "residual_solvents", 
-    "microbials", "moisture", "foreign_matter", "terpenes"
+    "potency",
+    "pesticides",
+    "heavy_metals",
+    "residual_solvents",
+    "microbials",
+    "moisture",
+    "foreign_matter",
+    "terpenes",
   ]),
   laboratory: z.object({
     id: z.string().uuid(),
@@ -483,13 +567,15 @@ export const TestResultsAvailablePayloadSchema = z.object({
   testedAt: z.string().datetime(),
   results: z.object({
     overall: z.enum(["pass", "fail", "pending", "retest"]),
-    details: z.array(z.object({
-      analyte: z.string(),
-      result: z.number(),
-      unit: z.string(),
-      limit: z.number().optional(),
-      status: z.enum(["pass", "fail", "not_detected", "below_limit"]),
-    })),
+    details: z.array(
+      z.object({
+        analyte: z.string(),
+        result: z.number(),
+        unit: z.string(),
+        limit: z.number().optional(),
+        status: z.enum(["pass", "fail", "not_detected", "below_limit"]),
+      })
+    ),
     certificate: z.object({
       number: z.string(),
       url: z.string().url().optional(),
@@ -500,11 +586,15 @@ export const TestResultsAvailablePayloadSchema = z.object({
   complianceNotes: z.string().optional(),
 });
 
-export const TestResultsAvailableEventSchema = EventWithPayloadSchema(TestResultsAvailablePayloadSchema).extend({
+export const TestResultsAvailableEventSchema = EventWithPayloadSchema(
+  TestResultsAvailablePayloadSchema
+).extend({
   eventType: z.literal("quality.test_results_available"),
 });
 
-export type TestResultsAvailableEvent = z.infer<typeof TestResultsAvailableEventSchema>;
+export type TestResultsAvailableEvent = z.infer<
+  typeof TestResultsAvailableEventSchema
+>;
 ```
 
 ---
@@ -519,32 +609,52 @@ export type TestResultsAvailableEvent = z.infer<typeof TestResultsAvailableEvent
 export const TransactionCreatedPayloadSchema = z.object({
   transactionId: z.string().uuid(),
   transactionNumber: z.string(),
-  type: z.enum(["revenue", "expense", "transfer", "adjustment", "depreciation"]),
+  type: z.enum([
+    "revenue",
+    "expense",
+    "transfer",
+    "adjustment",
+    "depreciation",
+  ]),
   category: z.enum([
-    "cultivation_supplies", "equipment", "utilities", "labor", 
-    "testing", "compliance", "insurance", "rent", "sales", "other"
+    "cultivation_supplies",
+    "equipment",
+    "utilities",
+    "labor",
+    "testing",
+    "compliance",
+    "insurance",
+    "rent",
+    "sales",
+    "other",
   ]),
   amount: z.object({
     value: z.number(),
     currency: z.string().length(3), // ISO 4217
   }),
   accounts: z.object({
-    debit: z.array(z.object({
-      accountId: z.string().uuid(),
-      amount: z.number(),
-    })),
-    credit: z.array(z.object({
-      accountId: z.string().uuid(),
-      amount: z.number(),
-    })),
+    debit: z.array(
+      z.object({
+        accountId: z.string().uuid(),
+        amount: z.number(),
+      })
+    ),
+    credit: z.array(
+      z.object({
+        accountId: z.string().uuid(),
+        amount: z.number(),
+      })
+    ),
   }),
-  relatedEntities: z.object({
-    batchId: z.string().uuid().optional(),
-    plantId: z.string().uuid().optional(),
-    supplierId: z.string().uuid().optional(),
-    customerId: z.string().uuid().optional(),
-    equipmentId: z.string().uuid().optional(),
-  }).optional(),
+  relatedEntities: z
+    .object({
+      batchId: z.string().uuid().optional(),
+      plantId: z.string().uuid().optional(),
+      supplierId: z.string().uuid().optional(),
+      customerId: z.string().uuid().optional(),
+      equipmentId: z.string().uuid().optional(),
+    })
+    .optional(),
   description: z.string(),
   reference: z.string().optional(),
   dueDate: z.string().date().optional(),
@@ -553,11 +663,15 @@ export const TransactionCreatedPayloadSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const TransactionCreatedEventSchema = EventWithPayloadSchema(TransactionCreatedPayloadSchema).extend({
+export const TransactionCreatedEventSchema = EventWithPayloadSchema(
+  TransactionCreatedPayloadSchema
+).extend({
   eventType: z.literal("financial.transaction_created"),
 });
 
-export type TransactionCreatedEvent = z.infer<typeof TransactionCreatedEventSchema>;
+export type TransactionCreatedEvent = z.infer<
+  typeof TransactionCreatedEventSchema
+>;
 ```
 
 #### 6.1.2 Asset Depreciation
@@ -571,7 +685,11 @@ export const AssetDepreciationPayloadSchema = z.object({
     end: z.string().date(),
   }),
   depreciation: z.object({
-    method: z.enum(["straight_line", "declining_balance", "units_of_production"]),
+    method: z.enum([
+      "straight_line",
+      "declining_balance",
+      "units_of_production",
+    ]),
     amount: z.number().positive(),
     accumulatedDepreciation: z.number().nonnegative(),
     bookValue: z.number().nonnegative(),
@@ -587,11 +705,15 @@ export const AssetDepreciationPayloadSchema = z.object({
   calculatedAt: z.string().datetime(),
 });
 
-export const AssetDepreciationEventSchema = EventWithPayloadSchema(AssetDepreciationPayloadSchema).extend({
+export const AssetDepreciationEventSchema = EventWithPayloadSchema(
+  AssetDepreciationPayloadSchema
+).extend({
   eventType: z.literal("financial.asset_depreciation"),
 });
 
-export type AssetDepreciationEvent = z.infer<typeof AssetDepreciationEventSchema>;
+export type AssetDepreciationEvent = z.infer<
+  typeof AssetDepreciationEventSchema
+>;
 ```
 
 ---
@@ -618,10 +740,12 @@ export const DataAccessPayloadSchema = z.object({
   userAgent: z.string().optional(),
   sessionId: z.string().uuid(),
   accessedAt: z.string().datetime(),
-  dataSnapshot: z.object({
-    before: z.record(z.string(), z.unknown()).optional(),
-    after: z.record(z.string(), z.unknown()).optional(),
-  }).optional(),
+  dataSnapshot: z
+    .object({
+      before: z.record(z.string(), z.unknown()).optional(),
+      after: z.record(z.string(), z.unknown()).optional(),
+    })
+    .optional(),
   complianceContext: z.object({
     regulation: z.array(z.enum(["GACP", "GMP", "21CFR11", "ALCOA+"])),
     criticality: z.enum(["low", "medium", "high", "critical"]),
@@ -629,7 +753,9 @@ export const DataAccessPayloadSchema = z.object({
   }),
 });
 
-export const DataAccessEventSchema = EventWithPayloadSchema(DataAccessPayloadSchema).extend({
+export const DataAccessEventSchema = EventWithPayloadSchema(
+  DataAccessPayloadSchema
+).extend({
   eventType: z.literal("audit.data_access"),
 });
 
@@ -643,36 +769,56 @@ export type DataAccessEvent = z.infer<typeof DataAccessEventSchema>;
 ```typescript
 export const ComplianceViolationPayloadSchema = z.object({
   violationId: z.string().uuid(),
-  type: z.enum(["data_integrity", "access_control", "record_retention", "electronic_signature", "audit_trail"]),
+  type: z.enum([
+    "data_integrity",
+    "access_control",
+    "record_retention",
+    "electronic_signature",
+    "audit_trail",
+  ]),
   severity: z.enum(["minor", "major", "critical"]),
   regulation: z.array(z.enum(["GACP", "GMP", "21CFR11", "ALCOA+", "local"])),
   description: z.string(),
   detectedAt: z.string().datetime(),
   detectedBy: z.enum(["system", "user", "audit"]),
-  affectedRecords: z.array(z.object({
-    type: z.string(),
-    id: z.string().uuid(),
-    impact: z.enum(["read", "write", "delete", "export"]),
-  })),
+  affectedRecords: z.array(
+    z.object({
+      type: z.string(),
+      id: z.string().uuid(),
+      impact: z.enum(["read", "write", "delete", "export"]),
+    })
+  ),
   rootCause: z.string().optional(),
-  correctiveActions: z.array(z.object({
-    action: z.string(),
-    assignedTo: z.string().uuid(),
-    dueDate: z.string().date(),
-    status: z.enum(["planned", "in_progress", "completed", "overdue"]),
-  })).optional(),
-  preventiveActions: z.array(z.object({
-    action: z.string(),
-    assignedTo: z.string().uuid(),
-    dueDate: z.string().date(),
-  })).optional(),
+  correctiveActions: z
+    .array(
+      z.object({
+        action: z.string(),
+        assignedTo: z.string().uuid(),
+        dueDate: z.string().date(),
+        status: z.enum(["planned", "in_progress", "completed", "overdue"]),
+      })
+    )
+    .optional(),
+  preventiveActions: z
+    .array(
+      z.object({
+        action: z.string(),
+        assignedTo: z.string().uuid(),
+        dueDate: z.string().date(),
+      })
+    )
+    .optional(),
 });
 
-export const ComplianceViolationEventSchema = EventWithPayloadSchema(ComplianceViolationPayloadSchema).extend({
+export const ComplianceViolationEventSchema = EventWithPayloadSchema(
+  ComplianceViolationPayloadSchema
+).extend({
   eventType: z.literal("audit.compliance_violation"),
 });
 
-export type ComplianceViolationEvent = z.infer<typeof ComplianceViolationEventSchema>;
+export type ComplianceViolationEvent = z.infer<
+  typeof ComplianceViolationEventSchema
+>;
 ```
 
 ---
@@ -687,42 +833,64 @@ export type ComplianceViolationEvent = z.infer<typeof ComplianceViolationEventSc
 export const AlertNotificationPayloadSchema = z.object({
   notificationId: z.string().uuid(),
   alertType: z.enum([
-    "environmental", "equipment", "quality", "compliance", 
-    "security", "maintenance", "harvest", "deadline"
+    "environmental",
+    "equipment",
+    "quality",
+    "compliance",
+    "security",
+    "maintenance",
+    "harvest",
+    "deadline",
   ]),
   priority: z.enum(["info", "low", "medium", "high", "critical", "emergency"]),
   title: z.string(),
   message: z.string(),
-  recipients: z.array(z.object({
-    userId: z.string().uuid(),
-    role: z.string(),
-    notificationMethod: z.array(z.enum(["email", "sms", "push", "in_app", "voice"])),
-  })),
+  recipients: z.array(
+    z.object({
+      userId: z.string().uuid(),
+      role: z.string(),
+      notificationMethod: z.array(
+        z.enum(["email", "sms", "push", "in_app", "voice"])
+      ),
+    })
+  ),
   sourceContext: z.object({
     source: z.string(),
     relatedEventId: z.string().uuid().optional(),
-    relatedRecords: z.array(z.object({
-      type: z.string(),
-      id: z.string().uuid(),
-    })).optional(),
+    relatedRecords: z
+      .array(
+        z.object({
+          type: z.string(),
+          id: z.string().uuid(),
+        })
+      )
+      .optional(),
   }),
   scheduledFor: z.string().datetime().optional(),
   expiresAt: z.string().datetime().optional(),
-  escalation: z.object({
-    enabled: z.boolean(),
-    levels: z.array(z.object({
-      delay: z.number().int().positive(), // минуты
-      recipients: z.array(z.string().uuid()),
-      methods: z.array(z.enum(["email", "sms", "push", "voice"])),
-    })),
-  }).optional(),
+  escalation: z
+    .object({
+      enabled: z.boolean(),
+      levels: z.array(
+        z.object({
+          delay: z.number().int().positive(), // минуты
+          recipients: z.array(z.string().uuid()),
+          methods: z.array(z.enum(["email", "sms", "push", "voice"])),
+        })
+      ),
+    })
+    .optional(),
 });
 
-export const AlertNotificationEventSchema = EventWithPayloadSchema(AlertNotificationPayloadSchema).extend({
+export const AlertNotificationEventSchema = EventWithPayloadSchema(
+  AlertNotificationPayloadSchema
+).extend({
   eventType: z.literal("notification.alert"),
 });
 
-export type AlertNotificationEvent = z.infer<typeof AlertNotificationEventSchema>;
+export type AlertNotificationEvent = z.infer<
+  typeof AlertNotificationEventSchema
+>;
 ```
 
 ---
@@ -738,27 +906,26 @@ import { z } from "zod";
 
 export abstract class BaseEventHandler<T extends z.ZodType> {
   protected schema: T;
-  
+
   constructor(schema: T) {
     this.schema = schema;
   }
-  
+
   async handle(rawEvent: unknown): Promise<void> {
     try {
       // Валидация события через Zod
       const event = this.schema.parse(rawEvent);
-      
+
       // Проверка идемпотентности
       if (await this.isAlreadyProcessed(event.eventId)) {
         return;
       }
-      
+
       // Обработка события
       await this.processEvent(event);
-      
+
       // Маркировка как обработанного
       await this.markAsProcessed(event.eventId, event.timestamp);
-      
     } catch (error) {
       if (error instanceof z.ZodError) {
         // Ошибка валидации - отправляем в DLQ
@@ -769,23 +936,33 @@ export abstract class BaseEventHandler<T extends z.ZodType> {
       }
     }
   }
-  
+
   protected abstract processEvent(event: z.infer<T>): Promise<void>;
-  
+
   private async isAlreadyProcessed(eventId: string): Promise<boolean> {
     // Проверка в Redis или БД
     return false;
   }
-  
-  private async markAsProcessed(eventId: string, timestamp: string): Promise<void> {
+
+  private async markAsProcessed(
+    eventId: string,
+    timestamp: string
+  ): Promise<void> {
     // Сохранение в Redis или БД
   }
-  
-  private async sendToDLQ(event: unknown, reason: string, details: string): Promise<void> {
+
+  private async sendToDLQ(
+    event: unknown,
+    reason: string,
+    details: string
+  ): Promise<void> {
     // Отправка в Dead Letter Queue
   }
-  
-  private async handleProcessingError(event: unknown, error: unknown): Promise<void> {
+
+  private async handleProcessingError(
+    event: unknown,
+    error: unknown
+  ): Promise<void> {
     // Логирование и обработка ошибок
   }
 }
@@ -794,7 +971,9 @@ export abstract class BaseEventHandler<T extends z.ZodType> {
 #### 9.1.2 Plant Created Handler Example
 
 ```typescript
-export class PlantCreatedHandler extends BaseEventHandler<typeof PlantCreatedEventSchema> {
+export class PlantCreatedHandler extends BaseEventHandler<
+  typeof PlantCreatedEventSchema
+> {
   constructor(
     private plantRepository: PlantRepository,
     private batchRepository: BatchRepository,
@@ -802,7 +981,7 @@ export class PlantCreatedHandler extends BaseEventHandler<typeof PlantCreatedEve
   ) {
     super(PlantCreatedEventSchema);
   }
-  
+
   protected async processEvent(event: PlantCreatedEvent): Promise<void> {
     // 1. Создаем запись растения в БД
     await this.plantRepository.create({
@@ -814,10 +993,10 @@ export class PlantCreatedHandler extends BaseEventHandler<typeof PlantCreatedEve
       createdAt: new Date(event.timestamp),
       createdBy: event.userId!,
     });
-    
+
     // 2. Обновляем счетчик в батче
     await this.batchRepository.incrementPlantCount(event.payload.batchId);
-    
+
     // 3. Отправляем уведомление команде
     await this.notificationService.notify({
       type: "plant_created",
@@ -828,16 +1007,18 @@ export class PlantCreatedHandler extends BaseEventHandler<typeof PlantCreatedEve
         location: event.payload.location,
       },
     });
-    
+
     // 4. Планируем следующие события (например, первый осмотр)
     await this.scheduleFollowUpEvents(event);
   }
-  
-  private async scheduleFollowUpEvents(event: PlantCreatedEvent): Promise<void> {
+
+  private async scheduleFollowUpEvents(
+    event: PlantCreatedEvent
+  ): Promise<void> {
     // Планирование первого осмотра через 7 дней
     const firstInspectionDate = new Date(event.timestamp);
     firstInspectionDate.setDate(firstInspectionDate.getDate() + 7);
-    
+
     await this.eventScheduler.schedule({
       eventType: "plant.inspection_due",
       scheduledFor: firstInspectionDate,
@@ -859,10 +1040,12 @@ export class HarvestProcessSaga {
     private eventBus: EventBus,
     private sagaRepository: SagaRepository
   ) {}
-  
-  async handlePlantReadyForHarvest(event: PlantReadyForHarvestEvent): Promise<void> {
+
+  async handlePlantReadyForHarvest(
+    event: PlantReadyForHarvestEvent
+  ): Promise<void> {
     const sagaId = crypto.randomUUID();
-    
+
     // Создаем saga state
     await this.sagaRepository.create({
       id: sagaId,
@@ -877,7 +1060,7 @@ export class HarvestProcessSaga {
         { name: "inventory_update", status: "pending" },
       ],
     });
-    
+
     // Запускаем первый шаг
     await this.eventBus.publish({
       eventType: "quality.inspection_requested",
@@ -888,17 +1071,23 @@ export class HarvestProcessSaga {
       },
     });
   }
-  
-  async handleQualityInspectionCompleted(event: QualityInspectionCompletedEvent): Promise<void> {
+
+  async handleQualityInspectionCompleted(
+    event: QualityInspectionCompletedEvent
+  ): Promise<void> {
     if (!event.payload.sagaId) return;
-    
+
     const saga = await this.sagaRepository.findById(event.payload.sagaId);
     if (!saga || saga.type !== "harvest_process") return;
-    
+
     if (event.payload.result === "approved") {
       // Обновляем saga и переходим к следующему шагу
-      await this.sagaRepository.updateStep(saga.id, "quality_check", "completed");
-      
+      await this.sagaRepository.updateStep(
+        saga.id,
+        "quality_check",
+        "completed"
+      );
+
       await this.eventBus.publish({
         eventType: "cultivation.harvest_authorized",
         payload: {
@@ -909,7 +1098,7 @@ export class HarvestProcessSaga {
     } else {
       // Обрабатываем отклонение
       await this.sagaRepository.updateStatus(saga.id, "failed");
-      
+
       await this.eventBus.publish({
         eventType: "cultivation.harvest_rejected",
         payload: {
@@ -919,7 +1108,7 @@ export class HarvestProcessSaga {
       });
     }
   }
-  
+
   // ... остальные обработчики шагов saga
 }
 ```
@@ -957,7 +1146,7 @@ export class EventSystemHealthCheck {
     private redis: Redis,
     private metrics: MetricsCollector
   ) {}
-  
+
   async checkHealth(): Promise<HealthStatus> {
     const checks = await Promise.allSettled([
       this.checkKafkaConnectivity(),
@@ -966,15 +1155,17 @@ export class EventSystemHealthCheck {
       this.checkDLQSize(),
       this.checkProcessingRate(),
     ]);
-    
-    const overallHealth = checks.every(check => 
-      check.status === "fulfilled" && check.value.healthy
+
+    const overallHealth = checks.every(
+      (check) => check.status === "fulfilled" && check.value.healthy
     );
-    
+
     return {
       healthy: overallHealth,
-      checks: checks.map(check => 
-        check.status === "fulfilled" ? check.value : { healthy: false, error: check.reason }
+      checks: checks.map((check) =>
+        check.status === "fulfilled"
+          ? check.value
+          : { healthy: false, error: check.reason }
       ),
       timestamp: new Date().toISOString(),
     };
@@ -1019,7 +1210,7 @@ export const PlantCreatedEventV1_1Schema = z.object({
 export class EventMigrator {
   migrate(rawEvent: unknown): unknown {
     const baseEvent = BaseEventSchema.parse(rawEvent);
-    
+
     switch (baseEvent.eventVersion) {
       case "1.0":
         return this.migrateV1ToV1_1(rawEvent);
@@ -1029,10 +1220,10 @@ export class EventMigrator {
         throw new Error(`Unsupported event version: ${baseEvent.eventVersion}`);
     }
   }
-  
+
   private migrateV1ToV1_1(event: unknown): unknown {
     const v1Event = PlantCreatedEventV1Schema.parse(event);
-    
+
     return {
       ...v1Event,
       eventVersion: "1.1",
@@ -1053,6 +1244,7 @@ export class EventMigrator {
 ## 📋 **12. IMPLEMENTATION CHECKLIST**
 
 ### 12.1 Phase 1: Core Infrastructure
+
 - [ ] Kafka cluster setup и configuration
 - [ ] Base event schemas с Zod validation
 - [ ] Event bus wrapper с типобезопасностью
@@ -1060,18 +1252,21 @@ export class EventMigrator {
 - [ ] Basic monitoring и health checks
 
 ### 12.2 Phase 2: Domain Events
+
 - [ ] Cultivation domain events (plant lifecycle)
 - [ ] Quality domain events (testing, sampling)
 - [ ] Financial domain events (transactions, assets)
 - [ ] Audit domain events (access, compliance)
 
 ### 12.3 Phase 3: Advanced Patterns
+
 - [ ] Saga pattern implementation
 - [ ] Event sourcing для критических агрегатов
 - [ ] CQRS read models
 - [ ] Event replay functionality
 
 ### 12.4 Phase 4: Production Ready
+
 - [ ] Schema registry integration
 - [ ] Advanced monitoring и alerting
 - [ ] Performance optimization

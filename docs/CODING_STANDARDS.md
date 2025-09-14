@@ -283,13 +283,15 @@ export type PlantCreatedEvent = z.infer<typeof PlantCreatedEventSchema>;
 export async function publishPlantCreated(event: PlantCreatedEvent) {
   // Валидация на runtime
   const validatedEvent = PlantCreatedEventSchema.parse(event);
-  
+
   await kafka.producer().send({
     topic: "cultivation.events",
-    messages: [{ 
-      key: event.payload.plantId,
-      value: JSON.stringify(validatedEvent) 
-    }],
+    messages: [
+      {
+        key: event.payload.plantId,
+        value: JSON.stringify(validatedEvent),
+      },
+    ],
   });
 }
 ```
@@ -322,30 +324,39 @@ const PlantResponseSchema = z.object({
 // 2. Создаем типобезопасный контракт
 const c = initContract();
 
-export const plantsContract = c.router({
-  createPlant: {
-    method: "POST",
-    path: "/plants",
-    responses: {
-      201: PlantResponseSchema,
-      400: z.object({ error: z.string(), details: z.array(z.string()).optional() }),
-      422: z.object({ error: z.string(), validation: z.record(z.array(z.string())) }),
+export const plantsContract = c.router(
+  {
+    createPlant: {
+      method: "POST",
+      path: "/plants",
+      responses: {
+        201: PlantResponseSchema,
+        400: z.object({
+          error: z.string(),
+          details: z.array(z.string()).optional(),
+        }),
+        422: z.object({
+          error: z.string(),
+          validation: z.record(z.array(z.string())),
+        }),
+      },
+      body: CreatePlantRequestSchema,
+      summary: "Create a new plant",
     },
-    body: CreatePlantRequestSchema,
-    summary: "Create a new plant",
-  },
-  getPlant: {
-    method: "GET",
-    path: "/plants/:id",
-    responses: {
-      200: PlantResponseSchema,
-      404: z.object({ error: z.string() }),
+    getPlant: {
+      method: "GET",
+      path: "/plants/:id",
+      responses: {
+        200: PlantResponseSchema,
+        404: z.object({ error: z.string() }),
+      },
+      pathParams: z.object({ id: z.string().uuid() }),
     },
-    pathParams: z.object({ id: z.string().uuid() }),
   },
-}, {
-  pathPrefix: "/api/v1",
-});
+  {
+    pathPrefix: "/api/v1",
+  }
+);
 
 // 3. Типы выводятся автоматически
 export type CreatePlantRequest = z.infer<typeof CreatePlantRequestSchema>;
@@ -426,7 +437,9 @@ export type CreatePlantDbRecord = z.infer<typeof CreatePlantDbSchema>;
 export type PlantDbRecord = z.infer<typeof PlantDbRecordSchema>;
 
 // 4. Трансформация между API и DB моделями
-export function transformApiToDb(apiPlant: CreatePlantRequest): CreatePlantDbRecord {
+export function transformApiToDb(
+  apiPlant: CreatePlantRequest
+): CreatePlantDbRecord {
   return CreatePlantDbSchema.parse({
     id: crypto.randomUUID(),
     batch_id: apiPlant.batchId,
@@ -458,43 +471,46 @@ export const AuditableSchema = TimestampsSchema.extend({
 });
 
 // ✅ Композиция сложных схем
-export const PlantSchema = z.object({
-  id: z.string().uuid(),
-  batchId: z.string().uuid(),
-  genetics: GeneticsSchema,
-  location: LocationSchema.nullable(),
-  stage: PlantStageSchema,
-}).merge(AuditableSchema);
+export const PlantSchema = z
+  .object({
+    id: z.string().uuid(),
+    batchId: z.string().uuid(),
+    genetics: GeneticsSchema,
+    location: LocationSchema.nullable(),
+    stage: PlantStageSchema,
+  })
+  .merge(AuditableSchema);
 ```
 
 #### 2.5.6.2 Валидация с transform
 
 ```typescript
 // ✅ Автоматическая нормализация данных
-export const EmailSchema = z.string()
+export const EmailSchema = z
+  .string()
   .email()
-  .transform(email => email.toLowerCase().trim());
+  .transform((email) => email.toLowerCase().trim());
 
-export const CurrencyAmountSchema = z.number()
+export const CurrencyAmountSchema = z
+  .number()
   .positive()
-  .transform(amount => Math.round(amount * 100)); // В центах
+  .transform((amount) => Math.round(amount * 100)); // В центах
 ```
 
 #### 2.5.6.3 Conditional validation
 
 ```typescript
 // ✅ Условная валидация
-export const CreateUserSchema = z.object({
-  email: z.string().email(),
-  role: z.enum(["admin", "operator", "viewer"]),
-  departmentId: z.string().uuid().optional(),
-}).refine(
-  (data) => data.role === "admin" || data.departmentId !== undefined,
-  {
+export const CreateUserSchema = z
+  .object({
+    email: z.string().email(),
+    role: z.enum(["admin", "operator", "viewer"]),
+    departmentId: z.string().uuid().optional(),
+  })
+  .refine((data) => data.role === "admin" || data.departmentId !== undefined, {
     message: "Department ID is required for non-admin users",
     path: ["departmentId"],
-  }
-);
+  });
 ```
 
 ---

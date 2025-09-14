@@ -207,7 +207,7 @@
 ### Техническая поддержка
 
 - **Architecture**: Event-driven microservices
-- **Technology Stack**: TypeScript, Next.js, NestJS, PostgreSQL
+- **Technology Stack**: TypeScript, Next.js, NestJS, PostgreSQL, Golang, ImmuDB
 - **Deployment**: Docker + Kubernetes
 - **Monitoring**: VictoriaMetrics + Grafana + OpenTelemetry
 - **Logging**: Loki + Grafana

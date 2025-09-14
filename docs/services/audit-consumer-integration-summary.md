@@ -1,7 +1,5 @@
 # Audit Consumer Integration Summary
 
-## Успешно интегрированы insights из ChatGPT разговора
-
 ### 🎯 Архитектурные решения
 
 - **Go vs TypeScript:** Окончательно выбран Go для performance и Kafka integration
@@ -13,11 +11,12 @@
 
 - **immudb:** Primary immutable storage с cryptographic verification
 - **PostgreSQL:** Query optimization layer с read replicas
+- **Mayan-EDMS:** Документ менеджмент с REST API интеграцией
 - **MinIO:** WORM-compliant storage для PDF отчетов с Object Lock
 
-### 📊 PDF Reports
+### 📊 PDF Reports Nest.js
 
-- **gofpdf:** Go-native PDF generation библиотека
+- **react-pdf:** React-native PDF generation библиотека
 - **Report Types:** Daily, compliance, investigation reports
 - **Storage:** 7-year retention в WORM-compliant MinIO
 - **API:** Async generation через HTTP endpoints

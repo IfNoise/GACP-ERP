@@ -456,14 +456,19 @@ interface Message {
 // Jitsi Service Integration
 @Injectable()
 export class JitsiService {
-  async createConference(request: CreateConferenceRequest): Promise<Conference> {
+  async createConference(
+    request: CreateConferenceRequest
+  ): Promise<Conference> {
     // Create room in Prosody XMPP
     // Configure Jicofo for media management
     // Setup recording if required
     // Generate JWT token for authentication
   }
 
-  async joinConference(conferenceId: ConferenceId, userId: UserId): Promise<JoinResponse> {
+  async joinConference(
+    conferenceId: ConferenceId,
+    userId: UserId
+  ): Promise<JoinResponse> {
     // Authenticate user via Keycloak SSO
     // Generate secure conference JWT
     // Configure participant permissions
@@ -488,7 +493,7 @@ VirtualHost "gacp-erp.local"
     app_id = "gacp_erp"
     app_secret = "secure_secret_from_keycloak"
     allow_empty_token = false
-    
+
     modules_enabled = {
         "bosh";
         "websocket";
@@ -582,7 +587,7 @@ export class DatabaseReplicationService {
 ```typescript
 // Kafka Topics for Database Events
 interface DatabaseChangeEvent {
-  operation: 'INSERT' | 'UPDATE' | 'DELETE';
+  operation: "INSERT" | "UPDATE" | "DELETE";
   table: string;
   schema: string;
   oldData?: Record<string, any>;
@@ -593,7 +598,7 @@ interface DatabaseChangeEvent {
   checksum: string;
 }
 
-@KafkaConsumer('database-changes')
+@KafkaConsumer("database-changes")
 export class ReplicationConsumer {
   async processChange(event: DatabaseChangeEvent): Promise<void> {
     // Stream to cloud replicas
@@ -612,10 +617,10 @@ CREATE OR REPLACE FUNCTION enforce_worm_policy()
 RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'UPDATE' OR TG_OP = 'DELETE' THEN
-        RAISE EXCEPTION 'WORM violation: % operation not allowed on table %', 
+        RAISE EXCEPTION 'WORM violation: % operation not allowed on table %',
                         TG_OP, TG_TABLE_NAME;
     END IF;
-    
+
     -- Log to audit trail
     INSERT INTO audit.worm_access_log (
         table_name, operation, user_id, timestamp, checksum
@@ -623,7 +628,7 @@ BEGIN
         TG_TABLE_NAME, TG_OP, current_user, NOW(),
         md5(row_to_json(NEW)::text)
     );
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

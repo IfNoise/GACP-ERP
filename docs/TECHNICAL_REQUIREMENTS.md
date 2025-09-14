@@ -67,7 +67,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                    DATA LAYER                               │
 ├─────────────────────────────────────────────────────────────┤
-│ PostgreSQL │ MongoDB │ VictoriaMetrics │ ImmuDB │ Redis    │
+│ PostgreSQL │ Mayan-EDMS │ VictoriaMetrics │ ImmuDB │ Redis    │
 │ (Primary)  │ (Docs)  │ (TSDB)          │ (Audit)│ (Cache)  │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -102,10 +102,9 @@
 #### Databases
 
 - **Primary DB**: PostgreSQL 15+ (с PostGIS)
-- **Document Store**: MongoDB 7+
 - **EDMS**: Mayan-EDMS (электронный документооборот)
 - **Time Series**: VictoriaMetrics
-- **Audit Store**: ImmuDB (immutable)
+- **Audit Store**: ImmuDB (immutable, Multi-cloud replication)
 - **Cache**: Redis 7+
 - **Database Replication**: PostgreSQL Streaming Replication с поддержкой WORM хранилища
 - **Cloud Replicas**: Multi-cloud репликация (AWS RDS, Azure PostgreSQL) с ALCOA+ соответствием
@@ -126,7 +125,7 @@
 - **Containerization**: Docker + Kubernetes
 - **Message Broker**: Apache Kafka (включая события репликации БД)
 - **IoT Protocol**: MQTT/CoAP (EMQX)
-- **Monitoring**: Prometheus + Grafana
+- **Monitoring**: VictoriaMetrics + Grafana
 - **CI/CD**: GitHub Actions
 - **Database Streaming**: WAL-E/WAL-G для архивирования и восстановления
 - **Network Security**: TLS 1.3, mutual TLS для всех internal communications
@@ -148,6 +147,7 @@
 - Batch management с уникальными идентификаторами
 - QR-код система для каждого plant/tray/batch
 - Генеалогия растений (mother plants, clones)
+- База данных сортов (strains) с характеристиками
 - Интеграция с IoT сенсорами
 
 **Технические требования**:
@@ -164,7 +164,7 @@
 
 **Функциональность**:
 
-- Immutable audit trail всех операций
+- Immutable audit trail всех операций (ImmuDB)
 - ALCOA+ compliance (Attributable, Legible, Contemporaneous, Original, Accurate)
 - Electronic signatures (EU/FDA compliant)
 - Change control с approval workflows
@@ -189,12 +189,14 @@
 - SSO integration (SAML/OAuth2)
 - Session management
 - API security (JWT tokens)
+- SCUD Mobile app access
 
 **Технические требования**:
 
-- Keycloak identity provider
+- Keycloak identity provider one source of truth User Management + Custom ISP Kafka event producer
 - OAuth2/OIDC protocols
 - JWT token validation
+- Qr-code flows for 2FA and Terminal access via mobile app
 - Rate limiting и DDoS protection
 - Security headers (OWASP)
 
