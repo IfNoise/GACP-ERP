@@ -1,12 +1,36 @@
 ---
-title: "Functional Specification (FS)"
+title: "## 2. Traceability
+
+Каждое требование URS имеет свой FS-эквивалент с полной прослеживаемостью:
+
+### Основные модули:
+- URS-DI-001 → FS-DI-001 (Data Integrity)
+- URS-AUTH-001 → FS-AUTH-001 (Authentication)
+- URS-ES-001 → FS-ES-001 (Electronic Signatures)
+- URS-PLM-001 → FS-PLM-001 (Plant Lifecycle Management)
+- URS-TRAIN-001 → FS-TRAIN-001 (Training & Competency)
+- URS-DR-001 → FS-DR-001 (Disaster Recovery)
+
+### Расширенные модули:
+- URS-FIN-001 → FS-FIN-001 (Financial Module)
+- URS-WF-001 → FS-WF-001 (Workforce Management)
+- URS-SP-001 → FS-SP-001 (Spatial Planning)
+- URS-FC-001 → FS-FC-001 (Forecasting & Analytics)
+- URS-PR-001 → FS-PR-001 (Procurement)
+- URS-KM-001 → FS-KM-001 (Knowledge Management)
+- URS-API-001 → FS-API-001 (External Integrations)
+- URS-AND-001 → FS-AND-001 (Android Terminals)
+
+### Дополнительные функциональности:
+- URS-ES-002 → FS-ES-004 (PKI Infrastructure)
+- URS-ES-003 → FS-ES-005 (Document Workflow)nal Specification (FS)"
 system: "ERP for GACP-Compliant Cannabis Cultivation"
 version: "0.1-draft"
 status: "draft"
 last_updated: "2025-09-01"
 ---
 
-# 1. Purpose
+## 1. Purpose
 
 Документ описывает функциональные требования системы ERP для управления производством каннабиса с полным соответствием GACP/GxP. FS является прямым продолжением URS и детализирует, как каждое требование URS реализуется в функциональности.
 
@@ -18,7 +42,7 @@ last_updated: "2025-09-01"
 - URS-DI-002 → FS-DI-002
 - ...
 
-# 3. Functional Requirements
+## 3. Functional Requirements
 
 ## 3.1 Data Integrity & Audit Trail
 
@@ -65,16 +89,247 @@ last_updated: "2025-09-01"
 - **FS-DR-003**: Автоматизированный сценарий failover + тестирование 1 раз в год.
 - **FS-DR-004**: Daily backup с хранением минимум 5 лет, шифрование резервов.
 
-# 4. Acceptance Criteria
+## 3.7 Financial Module
+
+- **FS-FIN-001** — **Accounts Payable/Receivable Management**
+  - Система ведёт счета поставщиков с автоматическим созданием проводок при получении товаров
+  - Интеграция с inventory модулем для автоматического списания при поступлении материалов
+  - API для интеграции с банковскими системами и автоматической сверки платежей
+  - Полный audit trail всех финансовых операций с невозможностью изменения исторических записей
+
+- **FS-FIN-002** — **General Ledger и автоматические проводки**
+  - Автоматическое формирование бухгалтерских проводок при всех операциях с растениями/материалами
+  - Append-only структура для всех ledger entries с поддержкой reversal entries
+  - Chart of accounts настроенный для cannabis industry (biological assets, COGS, etc.)
+  - Real-time финансовая отчётность с drill-down до исходных транзакций
+
+- **FS-FIN-003** — **Biological Assets Accounting**
+  - Автоматический перевод растений в биологические активы при переходе в стадию вегетации
+  - Fair value оценка на основе market rates и historical yield data
+  - Возможность продажи растений на любой стадии с автоматическим расчётом gain/loss
+  - Интеграция с cost accounting для корректного распределения затрат по стадиям
+
+- **FS-FIN-004** — **Cost Accounting по партиям**
+  - Автоматическое накопление прямых затрат (материалы, labour) по партиям растений
+  - Распределение overhead costs (электричество, аренда, equipment depreciation)
+  - Automatic costing при закрытии партии с расчётом cost per gram
+  - Integration с payroll для accurate labour costing
+
+- **FS-FIN-005** — **Payroll Integration**
+  - Автоматический расчёт зарплаты на основе timesheet data из workforce модуля
+  - Поддержка различных схем оплаты: hourly, salary, piece-rate для harvest operations
+  - Автоматические налоговые расчёты и генерация payslips в EDMS
+  - Integration с cost accounting для распределения labour costs по партиям
+
+## 3.8 Workforce Management
+
+- **FS-WF-001** — **Task Assignment и Skills Verification**
+  - Система назначает задачи только сотрудникам с подтверждёнными навыками для конкретной SOP
+  - Integration с training module для проверки актуальности сертификатов
+  - Автоматическая блокировка задач при истечении required certifications
+  - Mobile notifications для assignment/deadline reminders
+
+- **FS-WF-002** — **Timesheet Management**
+  - Automatic time tracking через SCUD/mobile app с GPS verification
+  - Integration с payroll для accurate cost calculation
+  - Overtime detection и approval workflows
+  - Project/batch allocation для accurate cost accounting
+
+- **FS-WF-003** — **Android Terminals Integration**
+  - Offline-capable mobile app для SOP execution с local SQLite cache
+  - Automatic sync when connectivity restored с conflict resolution
+  - QR/NFC scanning для plant/equipment identification
+  - Photo/video capture для SOP compliance documentation
+
+- **FS-WF-004** — **Competency Verification**
+  - Real-time проверка допуска к выполнению SOP на основе training records
+  - Automatic blocking доступа при expired certifications
+  - Skills matrix с visual competency tracking
+  - Integration с HR systems для performance management
+
+## 3.9 Spatial Planning Module
+
+- **FS-SP-001** — **Growing Zone Visualization**
+  - 2D/3D визуализация grow rooms с real-time plant placement
+  - Integration с IoT sensors для environmental monitoring overlay
+  - Capacity planning с optimization algorithms для максимального yield
+  - Historical utilization analytics для improve planning
+
+- **FS-SP-002** — **Resource Optimization**
+  - Algorithms для оптимального размещения с учётом energy efficiency
+  - Workflow optimization для minimizing staff movement time
+  - Equipment utilization tracking и optimization recommendations
+  - Integration с forecasting для future capacity planning
+
+## 3.10 Forecasting и Analytics
+
+- **FS-FC-001** — **Yield Forecasting**
+  - ML-based models используют historical data, environmental conditions, strain characteristics
+  - Integration с IoT data для real-time model updates
+  - Confidence intervals и risk assessment для production planning
+  - What-if scenarios для different growing conditions
+
+- **FS-FC-002** — **Resource Planning**
+  - Automated forecasting потребности в materials на основе production plans
+  - Staff scheduling optimization на основе workload predictions
+  - Equipment capacity planning с predictive maintenance integration
+  - Cash flow forecasting на основе production и sales forecasts
+
+- **FS-FC-003** — **Financial Forecasting**
+  - Revenue forecasting на основе yield predictions и market prices
+  - Cost analysis по strain/growing method/season
+  - Profitability analysis по batches/strains/grow zones
+  - ROI calculations для new investments/strains
+
+## 3.11 Procurement Module
+
+- **FS-PR-001** — **Supplier Management**
+  - Supplier qualification process с document management
+  - Performance tracking: delivery time, quality metrics, compliance
+  - Contract management с automatic renewal notifications
+  - Risk assessment и backup supplier identification
+
+- **FS-PR-002** — **Purchase Orders Automation**
+  - Automatic PO generation на основе inventory thresholds
+  - Integration с financial module для budget control
+  - Multi-level approval workflows на основе amount/category
+  - Real-time tracking от PO creation до delivery
+
+- **FS-PR-003** — **Receiving и Quality Control**
+  - QR-код scanning для incoming materials с automatic lot creation
+  - Integration с QC processes для inspection workflows
+  - Automatic inventory updates и cost allocation
+  - Non-conformance tracking и supplier feedback
+
+## 3.12 Knowledge Management System
+
+- **FS-KM-001** — **Integrated Knowledge Base**
+  - Integration с Wiki.js/EDMS для centralized documentation
+  - Automatic linking SOPs к relevant tasks в mobile app
+  - Version control с audit trail для document changes
+  - Advanced search functionality across all documentation
+
+- **FS-KM-002** — **Training Content Delivery**
+  - Delivery training materials через mobile app с offline capability
+  - Interactive content support: videos, quizzes, simulations
+  - Progress tracking и automatic certificate generation
+  - Microlearning modules для just-in-time training
+
+## 3.13 External Integrations и API
+
+- **FS-API-001** — **External API Support**
+  - RESTful API для integration с tax systems, regulatory reporting platforms
+  - Real-time data synchronization с third-party analytics tools
+  - Webhook support для external system notifications
+  - API rate limiting и authentication для security
+
+- **FS-API-002** — **Regulatory Reporting**
+  - Automated generation regulatory reports для health authorities
+  - Integration с government tracking systems (METRC, etc.)
+  - Electronic submission capabilities с audit trail
+  - Compliance monitoring и alert systems
+
+## 3.14 Android Terminal Support
+
+- **FS-AND-001** — **Offline Operations**
+  - Full SOP execution capability в offline mode с local SQLite storage
+  - Automatic conflict resolution when syncing with server
+  - Local photo/video storage с background upload
+  - Emergency mode для critical operations without connectivity
+
+- **FS-AND-002** — **SOP Guided Workflows**
+  - Step-by-step SOP execution с visual guides и photos
+  - Digital signature capture для compliance
+  - Automatic progress tracking и completion verification
+  - Real-time validation requirements и quality checks
+
+- **FS-AND-003** — **Hardware Integration**
+  - QR/NFC scanning для plant/equipment identification
+  - Camera integration для photo documentation
+  - Barcode printing support для new labels
+  - Push notification system для alerts и assignments
+
+## 3.15 Electronic Signatures и Document Workflow
+
+- **FS-ES-004** — **PKI Infrastructure**
+  - Digital certificate management для all users
+  - Signature verification и timestamp services
+  - Certificate revocation list (CRL) management
+  - Integration с external PKI providers if required
+
+- **FS-ES-005** — **Document Workflow Automation**
+  - Automated routing documents for approval на основе document type
+  - Deadline tracking и escalation procedures
+  - Electronic approval chains с full audit trail
+  - Document version control с signature preservation
 
 - Все FS требования должны быть покрыты IQ/OQ/PQ тестами.
 - Маппинг на RTM: FS → URS.
 - Полное покрытие Audit Trail, e-signature, disaster recovery, RBAC.
 
-# 5. Glossary
+## 4. Acceptance Criteria
+
+- Все FS требования должны быть покрыты IQ/OQ/PQ тестами.
+- Маппинг на RTM: FS → URS с полной traceability для всех модулей.
+- Полное покрытие всех новых модулей: Financial, Workforce, Spatial Planning, Forecasting, Procurement.
+- Integration testing для всех API и external systems.
+- Performance testing для Android terminals в offline/online режимах.
+- Security testing для PKI infrastructure и digital signatures.
+- Compliance validation для всех regulatory requirements.
+
+## 5. Integration Points
+
+### 5.1 Inter-module Dependencies
+
+- **Financial ↔ Inventory**: Автоматические проводки при движении материалов
+- **Workforce ↔ Training**: Проверка компетенций перед назначением задач
+- **Spatial Planning ↔ IoT**: Real-time environmental data для оптимизации
+- **Forecasting ↔ All modules**: Data aggregation для ML models
+- **Procurement ↔ Financial**: Budget control и automatic cost allocation
+
+### 5.2 External Integrations
+
+- **Banking Systems**: Automated payment processing и reconciliation
+- **Government Systems**: Regulatory reporting и compliance tracking
+- **Third-party Analytics**: Data export для advanced analytics
+- **PKI Providers**: Certificate management и validation services
+
+## 6. Performance Requirements
+
+- **API Response Time**: < 500ms для 95% requests
+- **Mobile App Sync**: < 30 seconds для typical daily data
+- **Offline Capability**: Minimum 8 hours операций без connectivity
+- **Concurrent Users**: Support for 200+ simultaneous users
+- **Data Retention**: 10+ years для regulatory compliance
+- **Backup/Recovery**: RTO < 4 hours, RPO < 1 hour
+
+## 7. Security Requirements
+
+- **Data Encryption**: AES-256 для data at rest, TLS 1.3 для data in transit
+- **Access Control**: RBAC с mandatory 2FA для privileged operations
+- **Audit Logging**: 100% coverage всех user actions и system events
+- **Network Security**: Zero-trust architecture с microsegmentation
+- **Mobile Security**: Device encryption и remote wipe capabilities
+
+## 8. Glossary
 
 - **WORM** — Write Once Read Many
 - **RBAC** — Role-Based Access Control
 - **Audit Trail** — неизменяемый журнал действий пользователей
 - **QR-code/NFC e-signature** — подпись через сканирование бейджа QR или NFC
 - **Seed-to-sale report** — отчёт с полной трассировкой растения или партии
+- **Biological Assets** — растения как финансовые активы в соответствии с IFRS/GAAP
+- **Fair Value** — справедливая стоимость биологических активов
+- **Cost Accounting** — система учёта затрат по партиям/проектам
+- **PKI** — Public Key Infrastructure для digital signatures
+- **ML** — Machine Learning для forecasting и analytics
+- **IoT** — Internet of Things для environmental monitoring
+- **API** — Application Programming Interface
+- **SOP** — Standard Operating Procedure
+- **SCUD** — Smart Card User Device
+- **GPS** — Global Positioning System
+- **SQLite** — локальная база данных для offline operations
+- **RTO** — Recovery Time Objective
+- **RPO** — Recovery Point Objective
+- **METRC** — государственная система tracking cannabis
+- **CRL** — Certificate Revocation List

@@ -36,4 +36,4 @@ last_updated: "2025-09-01"
 
 ## 6. Notes
 
-- Документооборот управляется через ERP модуль Document Management
+- Документооборот управляется через MayanEDMS

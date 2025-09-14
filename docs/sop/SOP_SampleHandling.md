@@ -22,6 +22,7 @@ This Standard Operating Procedure (SOP) establishes comprehensive protocols for 
 This SOP applies to all sample handling activities within the cannabis laboratory and production facility, including:
 
 - **Sample Types**:
+
   - Cannabis flower and trim samples
   - Cannabis concentrate and extract samples
   - Edible and infused product samples
@@ -31,6 +32,7 @@ This SOP applies to all sample handling activities within the cannabis laborator
   - Reference standard and control samples
 
 - **Sample Handling Activities**:
+
   - Sample receipt and accessioning
   - Sample identification and labeling
   - Sample storage and preservation
@@ -106,21 +108,21 @@ sample_receipt_procedures:
     documentation_completeness: "Chain of custody and sample submission form verification"
     sample_container_integrity: "Physical inspection of sample containers and seals"
     quantity_verification: "Confirmation of expected sample number and volume"
-    
+
   immediate_actions:
     receipt_time_documentation: "Accurate timestamp recording for sample arrival"
     condition_documentation: "Photographic and written documentation of sample condition"
     temperature_recording: "Temperature measurement and documentation for temperature-sensitive samples"
     preliminary_inspection: "Visual assessment of sample appearance and obvious contamination"
     priority_classification: "Rush, routine, or special handling designation"
-    
+
   rejection_criteria:
     damaged_containers: "Broken, leaking, or compromised sample containers"
     temperature_excursions: "Samples outside acceptable temperature ranges"
     incomplete_documentation: "Missing or inadequate chain of custody documentation"
     contamination_evidence: "Visible contamination or adulteration signs"
     expired_samples: "Samples received beyond acceptable holding times"
-    
+
   receipt_documentation:
     sample_receipt_log: "Comprehensive log of all samples received"
     condition_assessment_forms: "Detailed sample condition documentation"
@@ -139,21 +141,21 @@ sample_identification_system:
     qr_code_integration: "QR code linking to electronic sample records"
     batch_correlation: "Connection to production batch and regulatory tracking numbers"
     sample_type_classification: "Product type and matrix identification coding"
-    
+
   labeling_requirements:
     primary_label_information: "Sample ID, date, time, collector, and sample type"
     secondary_label_backup: "Duplicate labeling for identification redundancy"
     tamper_evident_features: "Security features to detect sample tampering"
     chemical_resistant_materials: "Labels resistant to solvents and laboratory chemicals"
     temperature_resistant_labels: "Labels maintaining adhesion and legibility at storage temperatures"
-    
+
   label_verification_procedures:
     double_check_protocol: "Two-person verification of label accuracy and completeness"
     barcode_scanning_verification: "Electronic verification of barcode accuracy and readability"
     label_adhesion_testing: "Verification of label adhesion and durability"
     legibility_assessment: "Visual confirmation of label readability and clarity"
     duplicate_prevention: "System checks to prevent duplicate sample identification numbers"
-    
+
   special_labeling_requirements:
     hazardous_samples: "Special labeling for samples containing hazardous materials"
     controlled_substances: "DEA-compliant labeling for controlled substance samples"
@@ -174,21 +176,21 @@ storage_conditions:
     ultra_low_temperature: "-80°C storage for specialized sample preservation"
     room_temperature_storage: "15-25°C controlled ambient storage"
     stability_chamber_storage: "Controlled temperature and humidity for stability studies"
-    
+
   environmental_control_parameters:
     humidity_control: "Relative humidity control to prevent sample degradation"
     light_protection: "UV and visible light protection for photosensitive samples"
     atmosphere_control: "Inert gas purging for oxidation-sensitive samples"
     vibration_control: "Vibration-free storage for sensitive analytical samples"
     contamination_prevention: "Clean storage environments free from cross-contamination"
-    
+
   storage_container_specifications:
     glass_containers: "Borosilicate glass vials and bottles for chemical compatibility"
     plastic_containers: "HDPE and polypropylene containers for aqueous samples"
     metal_containers: "Stainless steel containers for specialized applications"
     barrier_bags: "Multi-layer barrier bags for moisture and oxygen protection"
     desiccant_packaging: "Desiccant-protected packaging for moisture-sensitive samples"
-    
+
   storage_monitoring_systems:
     continuous_temperature_monitoring: "24/7 temperature recording with alarm systems"
     humidity_monitoring: "Real-time humidity measurement and logging"
@@ -207,21 +209,21 @@ preservation_protocols:
     preservative_addition: "Antimicrobial preservatives for biological samples"
     stabilizer_addition: "Chemical stabilizers for reactive or unstable compounds"
     derivatization: "Chemical modification for enhanced stability and analysis"
-    
+
   physical_preservation:
     freezing_protocols: "Controlled freezing procedures for biological samples"
     lyophilization: "Freeze-drying for long-term sample preservation"
     vacuum_packaging: "Oxygen-free packaging for oxidation prevention"
     inert_gas_flushing: "Nitrogen or argon gas purging for stability"
     desiccation: "Moisture removal for hygroscopic sample protection"
-    
+
   sample_stability_assessment:
     stability_testing_protocols: "Systematic stability evaluation under storage conditions"
     degradation_monitoring: "Regular analysis to detect sample deterioration"
     shelf_life_determination: "Maximum storage time before sample degradation"
     stability_indicating_methods: "Analytical methods to detect sample changes"
     acceptance_criteria: "Minimum sample quality standards for analytical use"
-    
+
   preservation_documentation:
     preservation_method_records: "Documentation of all preservation procedures applied"
     stability_study_data: "Complete records of sample stability assessments"
@@ -242,21 +244,21 @@ chain_of_custody_procedures:
     collection_time_and_date: "Accurate timestamp for sample collection activities"
     sample_description: "Detailed physical description and characteristics"
     collection_method_documentation: "Sampling procedure and equipment used"
-    
+
   custody_transfer_procedures:
     transfer_authorization: "Authorized personnel signature for custody transfer"
     receiving_personnel_verification: "Identity verification of receiving laboratory staff"
     transfer_time_documentation: "Precise timestamp for custody transfer activities"
     sample_condition_verification: "Assessment of sample condition during transfer"
     transportation_documentation: "Shipping method and condition documentation"
-    
+
   custody_documentation_requirements:
     continuous_custody_chain: "Unbroken chain of custody from collection to disposal"
     authorized_signature_requirements: "Authorized personnel signatures for all custody transfers"
     witness_requirements: "Independent witness verification for critical transfers"
     documentation_completeness: "Complete and accurate custody documentation"
     regulatory_compliance_verification: "Compliance with all applicable custody requirements"
-    
+
   electronic_chain_of_custody:
     digital_signature_authentication: "Electronic signature verification and validation"
     timestamp_verification: "Tamper-proof electronic timestamp documentation"
@@ -275,21 +277,21 @@ sample_tracking_systems:
     rfid_integration: "Radio frequency identification for automated tracking"
     real_time_location_tracking: "GPS and location-based tracking for mobile samples"
     automated_workflow_management: "Automated sample routing and processing workflow"
-    
+
   regulatory_compliance_tracking:
     seed_to_sale_integration: "Integration with state cannabis tracking systems"
     batch_traceability: "Connection to production batch and harvest tracking"
     regulatory_reporting: "Automated regulatory reporting and compliance verification"
     audit_trail_maintenance: "Complete audit trail for regulatory inspections"
     compliance_verification: "Real-time compliance status monitoring and verification"
-    
+
   sample_status_management:
     receipt_status_tracking: "Real-time sample receipt and accessioning status"
     testing_progress_monitoring: "Analytical testing progress and completion tracking"
     result_availability_notification: "Automatic notification of completed analyses"
     sample_disposition_tracking: "Final sample disposition and disposal tracking"
     exception_handling: "Automated handling of sample exceptions and issues"
-    
+
   data_integration_and_reporting:
     erp_system_integration: "Integration with enterprise resource planning systems"
     quality_management_integration: "Connection with quality management systems"
@@ -310,21 +312,21 @@ sample_preparation_protocols:
     temperature_control: "Temperature management during sample preparation"
     contamination_prevention: "Clean equipment and cross-contamination prevention"
     homogeneity_verification: "Assessment of sample uniformity and consistency"
-    
+
   extraction_procedures:
     solvent_extraction: "Standardized extraction procedures for various matrices"
     solid_phase_extraction: "SPE procedures for sample cleanup and concentration"
     liquid_liquid_extraction: "Partition extraction for compound isolation"
     supercritical_fluid_extraction: "SFE procedures for specialized applications"
     microwave_assisted_extraction: "MAE procedures for enhanced extraction efficiency"
-    
+
   concentration_and_dilution:
     sample_concentration: "Concentration procedures for trace analysis"
     serial_dilution: "Standardized dilution procedures for quantitative analysis"
     matrix_matching: "Preparation of matrix-matched calibration standards"
     recovery_assessment: "Spike and recovery studies for method validation"
     quality_control_samples: "Preparation of QC samples for analytical verification"
-    
+
   derivatization_procedures:
     chemical_derivatization: "Chemical modification for enhanced detection"
     enzymatic_treatment: "Enzyme-based sample preparation procedures"
@@ -343,21 +345,21 @@ aliquoting_procedures:
     aliquot_size_determination: "Calculation of appropriate aliquot volumes"
     replicate_aliquot_preparation: "Multiple aliquots for analytical replication"
     quality_assessment: "Verification of aliquot representativeness"
-    
+
   aliquot_identification:
     sub_sample_labeling: "Clear identification of aliquots and parent samples"
     tracking_number_assignment: "Unique identification for each aliquot"
     analysis_designation: "Identification of intended analysis for each aliquot"
     storage_condition_labeling: "Storage requirement identification for aliquots"
     expiration_date_assignment: "Stability-based expiration date determination"
-    
+
   aliquot_storage_management:
     segregated_storage: "Separate storage for different analysis types"
     first_in_first_out: "FIFO inventory management for aliquots"
     condition_monitoring: "Storage condition monitoring for aliquots"
     inventory_tracking: "Real-time aliquot inventory and location tracking"
     automated_retrieval: "Automated aliquot retrieval and delivery systems"
-    
+
   quality_control_aliquots:
     duplicate_aliquots: "Duplicate aliquots for precision assessment"
     blind_duplicate_preparation: "Blind duplicate aliquots for quality verification"
@@ -378,21 +380,21 @@ internal_transportation:
     shock_resistant_packaging: "Protective packaging for fragile samples"
     tracking_during_transport: "Real-time tracking of samples during internal movement"
     chain_of_custody_maintenance: "Continuous custody documentation during transport"
-    
+
   pneumatic_tube_systems:
     system_validation: "Pneumatic tube system validation for sample integrity"
     container_specifications: "Specialized containers for pneumatic transport"
     sample_type_restrictions: "Limitations on samples suitable for pneumatic transport"
     delivery_confirmation: "Automated confirmation of sample delivery"
     error_handling_procedures: "Procedures for pneumatic system failures or errors"
-    
+
   automated_transport_systems:
     robotic_sample_handling: "Automated robot systems for sample movement"
     conveyor_belt_systems: "Automated conveyor systems for high-throughput laboratories"
     sample_sorting_systems: "Automated sorting and routing based on analysis requirements"
     integration_with_lims: "Integration with laboratory information management systems"
     quality_control_monitoring: "Automated quality checks during transport"
-    
+
   manual_transport_procedures:
     trained_personnel_requirements: "Qualified personnel for manual sample transport"
     transport_documentation: "Complete documentation of manual transport activities"
@@ -411,21 +413,21 @@ external_shipping_procedures:
     temperature_control_systems: "Cold chain packaging for temperature-sensitive samples"
     hazardous_material_compliance: "DOT and IATA compliance for hazardous samples"
     security_measures: "Tamper-evident packaging and tracking systems"
-    
+
   carrier_selection_and_management:
     approved_carrier_list: "Pre-qualified shipping carriers and services"
     service_level_selection: "Appropriate shipping speed and service level"
     tracking_and_monitoring: "Real-time shipment tracking and status monitoring"
     insurance_and_liability: "Appropriate insurance coverage for sample value"
     carrier_performance_monitoring: "Regular assessment of carrier performance and reliability"
-    
+
   regulatory_compliance:
     controlled_substance_shipping: "DEA-compliant shipping for controlled substances"
     interstate_commerce_regulations: "Compliance with interstate shipping regulations"
     international_shipping_requirements: "Import/export documentation and permits"
     chain_of_custody_requirements: "Continuous custody documentation during shipping"
     receiving_confirmation: "Confirmation of sample receipt and condition"
-    
+
   shipping_quality_assurance:
     packaging_validation: "Validation of packaging systems for sample integrity"
     temperature_monitoring: "Data loggers for temperature monitoring during shipping"
@@ -446,21 +448,21 @@ physical_security:
     intrusion_detection: "Motion sensors and alarm systems for unauthorized access"
     environmental_monitoring: "Security monitoring integrated with environmental controls"
     visitor_access_control: "Strict visitor policies and escort requirements"
-    
+
   sample_container_security:
     tamper_evident_seals: "Security seals to detect unauthorized sample access"
     locked_storage_containers: "Secure containers for high-value or controlled samples"
     individual_sample_locks: "Lock systems for individual sample containers"
     security_labeling: "Security labels and markings for sample identification"
     inventory_verification: "Regular physical inventory and security audits"
-    
+
   personnel_security:
     background_checks: "Comprehensive background checks for sample handling personnel"
     access_authorization: "Role-based access authorization and permission systems"
     training_and_certification: "Security training and certification requirements"
     accountability_measures: "Individual accountability for sample access and handling"
     incident_reporting: "Immediate reporting of security incidents or breaches"
-    
+
   controlled_substance_security:
     dea_registration_compliance: "DEA registration and controlled substance protocols"
     vault_storage_requirements: "High-security vault storage for controlled samples"
@@ -479,21 +481,21 @@ information_security:
     audit_trail_monitoring: "Complete audit trails for all data access and modifications"
     session_management: "Automatic session timeout and security controls"
     password_policy_enforcement: "Strong password requirements and regular updates"
-    
+
   data_encryption_and_protection:
     data_encryption_at_rest: "Encryption of stored sample data and documentation"
     data_encryption_in_transit: "Encryption of data during transmission and communication"
     backup_security: "Secure backup systems with encryption and access control"
     cloud_security: "Security measures for cloud-based sample data storage"
     data_retention_policies: "Secure data retention and disposal procedures"
-    
+
   system_security:
     network_security: "Firewall and intrusion detection for laboratory networks"
     malware_protection: "Antivirus and anti-malware systems for all laboratory computers"
     software_updates: "Regular security updates and patch management"
     vulnerability_assessments: "Regular security assessments and penetration testing"
     incident_response: "Cybersecurity incident response and recovery procedures"
-    
+
   confidentiality_protection:
     non_disclosure_agreements: "Confidentiality agreements for all personnel"
     proprietary_information_protection: "Protection of trade secrets and proprietary data"
@@ -514,21 +516,21 @@ sample_quality_control:
     contamination_detection: "Screening for biological, chemical, and physical contamination"
     identity_verification: "Confirmation of sample identity and matrix type"
     stability_assessment: "Evaluation of sample stability and degradation"
-    
+
   quality_control_samples:
     method_blanks: "Blank samples to assess method contamination and background"
     laboratory_control_samples: "Known standards to verify method performance"
     duplicate_samples: "Duplicate analyses for precision assessment"
     spiked_samples: "Fortified samples for recovery and accuracy assessment"
     blind_quality_control: "Blind QC samples for unbiased quality verification"
-    
+
   acceptance_criteria:
     visual_appearance_standards: "Acceptable sample appearance and condition criteria"
     physical_property_limits: "Acceptable ranges for sample physical properties"
     contamination_limits: "Maximum allowable contamination levels"
     stability_requirements: "Minimum sample stability and shelf life requirements"
     identity_confirmation_requirements: "Standards for sample identity verification"
-    
+
   quality_control_documentation:
     qc_sample_preparation_records: "Documentation of QC sample preparation procedures"
     qc_analysis_results: "Complete records of QC sample analysis results"
@@ -547,21 +549,21 @@ proficiency_testing:
     reference_material_testing: "Analysis of certified reference materials"
     blind_sample_programs: "Participation in blind sample testing programs"
     performance_evaluation: "Assessment of laboratory performance versus peers"
-    
+
   internal_proficiency_verification:
     analyst_competency_testing: "Regular testing of analyst proficiency and skills"
     method_verification_studies: "Internal verification of analytical methods"
     equipment_performance_verification: "Verification of instrument and equipment performance"
     cross_training_assessments: "Assessment of personnel cross-training effectiveness"
     quality_system_audits: "Internal audits of sample handling and quality systems"
-    
+
   method_validation_for_sample_handling:
     sample_stability_validation: "Validation of sample stability under storage conditions"
     preservation_method_validation: "Validation of sample preservation procedures"
     transportation_validation: "Validation of sample integrity during transportation"
     storage_condition_validation: "Validation of storage condition requirements"
     chain_of_custody_validation: "Validation of chain of custody procedures"
-    
+
   corrective_action_and_improvement:
     proficiency_failure_investigation: "Investigation of proficiency testing failures"
     method_improvement_initiatives: "Method optimization based on proficiency results"
@@ -582,21 +584,21 @@ sample_disposal_protocols:
     environmental_impact_assessment: "Assessment of environmental impact for disposal methods"
     cost_benefit_analysis: "Economic analysis of disposal options and methods"
     documentation_requirements: "Complete documentation of disposal decisions and rationale"
-    
+
   disposal_methods:
     high_temperature_incineration: "Controlled incineration for organic sample destruction"
     chemical_treatment: "Chemical neutralization and treatment for hazardous samples"
     biological_treatment: "Biodegradation for appropriate organic samples"
     secure_landfill_disposal: "Approved landfill disposal for non-hazardous samples"
     recycling_and_recovery: "Material recovery and recycling where appropriate"
-    
+
   controlled_substance_disposal:
     dea_witnessed_destruction: "DEA-witnessed destruction for controlled substances"
     reverse_distributor_disposal: "Authorized reverse distributor disposal services"
     documentation_requirements: "Complete DEA Form 41 documentation for destroyed substances"
     security_measures: "High-security measures for controlled substance disposal"
     audit_trail_maintenance: "Complete audit trail for controlled substance destruction"
-    
+
   environmental_compliance:
     waste_characterization: "Proper characterization of waste samples for disposal"
     manifest_preparation: "Hazardous waste manifest preparation and tracking"
@@ -615,14 +617,14 @@ disposal_documentation:
     witness_verification: "Independent witness verification of disposal activities"
     photographic_documentation: "Photographic evidence of disposal activities"
     certificate_of_destruction: "Official certificates of destruction from disposal facilities"
-    
+
   regulatory_compliance_documentation:
     waste_characterization_reports: "Complete waste characterization and classification reports"
     regulatory_notifications: "Required notifications to regulatory agencies"
     permit_compliance_verification: "Verification of compliance with disposal permits"
     environmental_impact_documentation: "Documentation of environmental impact assessments"
     audit_trail_maintenance: "Complete audit trail for all disposal activities"
-    
+
   verification_and_quality_assurance:
     disposal_effectiveness_verification: "Verification of complete sample destruction"
     environmental_monitoring: "Post-disposal environmental monitoring and assessment"
@@ -643,21 +645,21 @@ training_requirements:
     storage_and_preservation: "Training on proper sample storage and preservation techniques"
     chain_of_custody_procedures: "Training on chain of custody documentation and management"
     safety_and_security_procedures: "Training on sample handling safety and security requirements"
-    
+
   advanced_sample_handling_training:
     specialized_sample_types: "Training on handling of specialized and unusual sample types"
     complex_preparation_procedures: "Training on advanced sample preparation and processing"
     quality_control_procedures: "Training on quality control and quality assurance procedures"
     troubleshooting_and_problem_solving: "Training on problem identification and resolution"
     regulatory_compliance_requirements: "Training on regulatory compliance and audit requirements"
-    
+
   specialized_certifications:
     hazardous_material_handling: "HAZMAT certification for hazardous sample handling"
     controlled_substance_handling: "DEA registration and controlled substance training"
     biosafety_certification: "Biosafety training for biological sample handling"
     radiation_safety_training: "Radiation safety training for radioactive samples"
     quality_system_training: "Quality management system training and certification"
-    
+
   ongoing_education_requirements:
     annual_refresher_training: "Annual update training for all sample handling personnel"
     regulatory_update_training: "Training on regulatory changes and new requirements"
@@ -676,14 +678,14 @@ competency_management:
     case_study_evaluations: "Problem-solving assessment using real-world scenarios"
     peer_evaluation: "Colleague assessment of sample handling competency"
     supervisor_observation: "Direct supervisor evaluation of work performance"
-    
+
   competency_standards:
     technical_proficiency: "Demonstrated ability to perform all required sample handling procedures"
     accuracy_and_precision: "Consistent accurate and precise sample handling performance"
     compliance_adherence: "Strict adherence to all regulatory and procedural requirements"
     problem_solving_ability: "Effective identification and resolution of sample handling issues"
     communication_skills: "Clear communication of sample handling activities and issues"
-    
+
   certification_maintenance:
     annual_competency_verification: "Annual assessment and verification of continued competency"
     continuing_education_requirements: "Ongoing education and training requirements"
@@ -704,21 +706,21 @@ documentation_requirements:
     sample_condition_reports: "Detailed reports on sample condition and integrity"
     rejection_and_exception_reports: "Documentation of rejected samples and exceptions"
     photographic_documentation: "Photographic records of sample condition and handling"
-    
+
   sample_processing_documentation:
     sample_preparation_worksheets: "Detailed worksheets for sample preparation procedures"
     aliquoting_and_sub_sampling_records: "Records of aliquot preparation and distribution"
     quality_control_documentation: "QC sample preparation and analysis records"
     equipment_usage_logs: "Logs of equipment used for sample processing"
     environmental_condition_records: "Documentation of environmental conditions during processing"
-    
+
   sample_storage_and_tracking_documentation:
     storage_location_records: "Detailed records of sample storage locations"
     storage_condition_monitoring: "Continuous monitoring records of storage conditions"
     sample_inventory_logs: "Regular inventory and tracking logs"
     sample_movement_records: "Documentation of sample transfers and movements"
     disposal_and_destruction_records: "Complete records of sample disposal activities"
-    
+
   electronic_documentation_systems:
     lims_integration: "Integration with laboratory information management systems"
     electronic_signatures: "Digital signature validation and authentication"
@@ -737,14 +739,14 @@ record_management:
     legal_hold_procedures: "Legal hold procedures for litigation and investigations"
     historical_value_assessment: "Assessment of historical and research value of records"
     cost_benefit_analysis: "Economic analysis of record retention costs and benefits"
-    
+
   archival_and_storage:
     physical_record_storage: "Secure storage of physical sample handling records"
     electronic_record_archival: "Long-term electronic record storage and management"
     offsite_backup_storage: "Secure offsite backup storage for critical records"
     environmental_protection: "Environmental protection for stored records"
     access_control_and_security: "Security measures for archived records"
-    
+
   record_retrieval_and_access:
     rapid_retrieval_systems: "Efficient record retrieval for routine access"
     emergency_access_procedures: "Emergency access to critical records"
@@ -765,14 +767,14 @@ performance_monitoring:
     chain_of_custody_compliance: "Compliance rate for chain of custody procedures"
     quality_control_performance: "Quality control sample performance metrics"
     customer_satisfaction: "Customer satisfaction with sample handling services"
-    
+
   trend_analysis:
     historical_performance_analysis: "Analysis of historical performance trends"
     seasonal_variation_assessment: "Assessment of seasonal variations in performance"
     capacity_utilization_analysis: "Analysis of sample handling capacity utilization"
     error_rate_trending: "Trending of error rates and quality issues"
     cost_performance_analysis: "Analysis of cost efficiency and optimization opportunities"
-    
+
   benchmarking:
     industry_benchmarking: "Comparison with industry best practices and standards"
     peer_laboratory_comparison: "Performance comparison with peer laboratories"
@@ -791,14 +793,14 @@ innovation_initiatives:
     digitalization_initiatives: "Digital transformation of sample handling processes"
     artificial_intelligence_applications: "AI applications for sample handling optimization"
     robotics_integration: "Robotics integration for enhanced sample handling"
-    
+
   process_improvement:
     lean_process_optimization: "Lean methodology application to sample handling"
     workflow_optimization: "Sample handling workflow analysis and improvement"
     error_reduction_initiatives: "Systematic error reduction and prevention programs"
     capacity_enhancement: "Sample handling capacity improvement initiatives"
     sustainability_improvements: "Environmental sustainability enhancement programs"
-    
+
   research_and_development:
     method_development: "Development of new sample handling methods and procedures"
     technology_development: "Development of proprietary sample handling technologies"
@@ -819,14 +821,14 @@ review_procedures:
     annual_comprehensive_reviews: "Complete evaluation of sample handling systems and processes"
     regulatory_compliance_reviews: "Regular review of regulatory compliance and requirements"
     technology_and_innovation_reviews: "Assessment of technology advancement and innovation opportunities"
-    
+
   change_management:
     change_request_procedures: "Formal procedures for requesting sample handling procedure changes"
     impact_assessment: "Assessment of change impact on sample handling operations and compliance"
     stakeholder_consultation: "Consultation with affected stakeholders for procedure changes"
     implementation_planning: "Systematic planning for procedure change implementation"
     effectiveness_monitoring: "Post-implementation monitoring of change effectiveness"
-    
+
   continuous_improvement:
     improvement_opportunity_identification: "Systematic identification of improvement opportunities"
     best_practice_integration: "Integration of industry best practices and innovations"

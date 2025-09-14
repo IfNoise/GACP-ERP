@@ -42,7 +42,8 @@ systems_context:
     - "Audit trail: immudb (append-only)"
     - "Object storage: MinIO with Object Lock (WORM)"
     - "RDBMS: PostgreSQL (business data)"
-    - "Telemetry: OpenTelemetry → VictoriaMetrics, Loki, Tempo"
+    - "Observability: OpenTelemetry → VictoriaMetrics, Loki, Tempo"
+    - "Telemetry: EMQX → Telegraf → VictoriaMetrics"
     - "Containers: Docker; Orchestrator: Kubernetes (Helm, GitOps)"
     - "Event Streaming: Kafka"
     - "IOT mqtt/coap broker EMQX"
@@ -347,7 +348,146 @@ localization:
     - Поддержка ≥ 1e8 audit-трейл записей; ≥ 1e9 IoT метрик/год; ротация не нарушает ALCOA+.
   - Verification: DR, OQ
 
-## 3.13 Интеграции и API
+## 3.13 Финансовый модуль (Finance)
+
+- **URS-FIN-001** — **Accounts Payable/Receivable**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Система должна вести счета поставщиков/клиентов с полным audit trail, интеграцией с inventory и автоматическим журналированием в GL.
+  - Verification: OQ, PQ
+
+- **URS-FIN-002** — **General Ledger и проводки**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Автоматическое формирование бухгалтерских проводок, append-only ledger entries, поддержка reversal entries с полной traceability.
+  - Verification: OQ
+
+- **URS-FIN-003** — **Биологические активы учёт**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Учёт растений как биологических активов по стадиям (семена→клоны→вегетация→цветение→harvest), automatic costing, возможность продажи на любой стадии.
+  - Verification: OQ, PQ
+
+- **URS-FIN-004** — **Cost Accounting для партий**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Распределение затрат (материалы + труд + overhead) по партиям растений, автоматический расчёт себестоимости при закрытии партии.
+  - Verification: PQ
+
+- **URS-FIN-005** — **Payroll интеграция**
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Расчёт зарплаты на основе timesheet data, автоматические налоговые расчёты, генерация payslips в EDMS.
+  - Verification: OQ
+
+## 3.14 Workforce Management модуль
+
+- **URS-WF-001** — **Управление персоналом и задачами**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Назначение задач сотрудникам с проверкой навыков/сертификации, интеграция с training records, mobile Android support.
+  - Verification: OQ, PQ
+
+- **URS-WF-002** — **Timesheet и смены**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Отслеживание рабочего времени через SCUD/mobile app, автоматические расчёты переработок, интеграция с payroll.
+  - Verification: OQ
+
+- **URS-WF-003** — **Android терминалы интеграция**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Mobile app для SOP выполнения, QR/NFC scanning, offline capability с последующей синхронизацией, push notifications.
+  - Verification: OQ, PQ
+
+- **URS-WF-004** — **Компетенции и допуски**
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Проверка допуска к выполнению SOP на основе training records, автоматическая блокировка задач при истёкших сертификатах.
+  - Verification: OQ
+
+## 3.15 Spatial Planning модуль
+
+- **URS-SP-001** — **Планирование зон выращивания**
+
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - 2D/3D визуализация зон, оптимизация размещения растений, capacity planning, интеграция с IoT для мониторинга условий.
+  - Verification: PQ
+
+- **URS-SP-002** — **Оптимизация ресурсов**
+  - Priority: SHOULD | Risk: Low
+  - Acceptance:
+    - Алгоритмы оптимального размещения с учётом energy efficiency, workflow optimization, equipment utilization.
+  - Verification: PQ
+
+## 3.16 Forecasting и аналитика
+
+- **URS-FC-001** — **Прогнозирование урожайности**
+
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - ML-модели для прогноза yield на основе historical data, environmental conditions, strain characteristics.
+  - Verification: PQ
+
+- **URS-FC-002** — **Планирование ресурсов**
+
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - Прогнозирование потребности в материалах, персонале, equipment capacity на основе production plans.
+  - Verification: PQ
+
+- **URS-FC-003** — **Financial forecasting**
+  - Priority: SHOULD | Risk: Medium
+  - Acceptance:
+    - Прогнозы cash flow, cost analysis, profitability analysis по партиям/сортам/зонам.
+  - Verification: PQ
+
+## 3.17 Procurement модуль
+
+- **URS-PR-001** — **Управление поставщиками**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Supplier qualification, contract management, performance tracking, compliance documentation.
+  - Verification: OQ
+
+- **URS-PR-002** — **Purchase Orders**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Автоматическое создание PO на основе inventory levels, approval workflows, integration с financial module.
+  - Verification: OQ
+
+- **URS-PR-003** — **Receiving и inspection**
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - QR-код сканирование incoming materials, automatic lot creation, integration с QC процессами.
+  - Verification: OQ, PQ
+
+## 3.18 Knowledge Management System
+
+- **URS-KM-001** — **База знаний интеграция**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Integration с Wiki.js/EDMS, automatic linking SOP к задачам, search functionality, version control.
+  - Verification: OQ
+
+- **URS-KM-002** — **Training content delivery**
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Delivery training materials через mobile app, progress tracking, automatic certificate generation.
+  - Verification: OQ, PQ
+
+## 3.19 Интеграции и API
 
 - **URS-INT-001** — **Contract-first API**
 
@@ -422,17 +562,69 @@ localization:
     - Персональные данные — минимизация, маскирование в отчетах при необходимости; аудит доступа.
   - Verification: SR, DR
 
-# 4. Constraints & Assumptions
+## 3.19 External Integrations и API
+
+- **URS-API-001** — **External API Support**
+
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - REST API для интеграции с tax systems, regulatory reporting, third-party analytics platforms.
+  - Verification: OQ
+
+- **URS-API-002** — **Webhooks и notifications**
+  - Priority: SHOULD | Risk: Low
+  - Acceptance:
+    - Real-time notifications для external systems, configurable webhook endpoints, retry mechanisms.
+  - Verification: OQ
+
+## 3.20 Android Terminal Support
+
+- **URS-AND-001** — **Offline capability**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Работа в offline режиме с последующей синхронизацией, local SQLite cache, conflict resolution.
+  - Verification: OQ, PQ
+
+- **URS-AND-002** — **SOP guided workflows**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Step-by-step SOP execution с фото/видео captures, digital signatures, automatic progress tracking.
+  - Verification: OQ, PQ
+
+- **URS-AND-003** — **Hardware integration**
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - QR/NFC scanning, camera integration, barcode printing support, push notifications.
+  - Verification: OQ
+
+## 3.21 Электронные подписи и документооборот
+
+- **URS-ES-001** — **PKI инфраструктура**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Digital signatures для SOPs, batch records, analytical results. Certificate management, signature verification.
+  - Verification: IQ, OQ
+
+- **URS-ES-002** — **Document workflow**
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Электронный документооборот с approval chains, automatic routing, deadline tracking.
+  - Verification: OQ, PQ
+
+## 4. Constraints & Assumptions
 
 - Все High-risk данные должны быть доступны при отказе одного DC.
 - Любые операции массового обновления данных должны иметь dry-run и двойное подтверждение.
 - Внеплановые изменения конфигураций в прод — запрещены без Change Control.
 
-# 5. Acceptance of URS
+## 5. Acceptance of URS
 
 Подтверждением данного URS является подписание ответственными лицами (электронные подписи по Part 11). После утверждения — документ является основой для FS/DS/RA и матрицы трассируемости.
 
-# 6. Appendices
+## 6. Appendices
 
 - Примеры подписываемых операций (неисчерпывающий список): создание/закрытие партии, изменение master data, подтверждение CoA, отклонения/CAPA, выпуск отчета Batch Record.
 - Классификация операций по риску: прилагается в RA.
