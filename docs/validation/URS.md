@@ -487,7 +487,52 @@ localization:
     - Delivery training materials через mobile app, progress tracking, automatic certificate generation.
   - Verification: OQ, PQ
 
-## 3.19 Интеграции и API
+## 3.19 Equipment Management модуль
+
+- **URS-EQ-001** — **Оборудование и калибровка**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Ведение реестра оборудования, schedules калибровки и maintenance, integration с IoT sensors для monitoring.
+  - Verification: OQ, PQ
+
+- **URS-EQ-002** — **SCADA/HMI интеграция**
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Real-time monitoring климатических систем, automatic alerts, integration с MQTT brokers, alarm management.
+  - Verification: OQ
+
+## 3.20 Security & Surveillance модуль
+
+- **URS-SEC-001** — **Видеонаблюдение интеграция**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Связка событий CCTV с user actions в ERP, automatic video bookmarking при critical operations, retention policies.
+  - Verification: OQ, PQ
+
+- **URS-SEC-002** — **СКУД (Access Control)**
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Physical access control integration, door/zone access logging, correlation с employee shifts и tasks.
+  - Verification: OQ
+
+## 3.21 External System Integrations
+
+- **URS-EXT-001** — **Regulatory reporting**
+
+  - Priority: MUST | Risk: High
+  - Acceptance:
+    - Automated reporting к регулятором (METRC, BioTrackTHC), real-time compliance status, submission tracking.
+  - Verification: OQ, PQ
+
+- **URS-EXT-002** — **Tax system integration**
+  - Priority: MUST | Risk: Medium
+  - Acceptance:
+    - Automatic tax calculations, integration с external accounting systems, compliance reporting.
+  - Verification: OQ
+
+## 3.22 Интеграции и API
 
 - **URS-INT-001** — **Contract-first API**
 
@@ -502,7 +547,7 @@ localization:
     - Поддержка CSV/JSON импорта CoA/результатов; валидация против спецификаций; аудит изменений.
   - Verification: OQ, PQ
 
-## 3.14 Конфигурации и изменение системы (Change Control)
+## 3.23 Конфигурации и изменение системы (Change Control)
 
 - **URS-CHG-001** — **Управление изменениями**
 
@@ -517,7 +562,7 @@ localization:
     - Для High-risk компонентов — OQ/PQ регресс-наборы и подписи ответственных.
   - Verification: OQ, PQ, DR
 
-## 3.15 Локализация и соответствие TZ
+## 3.24 Локализация и соответствие TZ
 
 - **URS-LOC-001** — **Три языка (en/ru/th)**
 
@@ -532,7 +577,7 @@ localization:
     - Все timestamps — ISO8601 + TZ; отображение в локальном TZ пользователя, хранение в UTC.
   - Verification: OQ
 
-## 3.16 Юзабилити и доступность
+## 3.25 Юзабилити и доступность
 
 - **URS-UX-001** — **Сканеры/бейджи/QR**
 
@@ -547,7 +592,7 @@ localization:
     - Контрасты, фокус, навигация с клавиатуры для критичных операций.
   - Verification: DR
 
-## 3.17 Юридические и хранение/удаление данных
+## 3.26 Юридические и хранение/удаление данных
 
 - **URS-LGL-001** — **Retention и Legal Hold**
 
@@ -562,22 +607,7 @@ localization:
     - Персональные данные — минимизация, маскирование в отчетах при необходимости; аудит доступа.
   - Verification: SR, DR
 
-## 3.19 External Integrations и API
-
-- **URS-API-001** — **External API Support**
-
-  - Priority: MUST | Risk: Medium
-  - Acceptance:
-    - REST API для интеграции с tax systems, regulatory reporting, third-party analytics platforms.
-  - Verification: OQ
-
-- **URS-API-002** — **Webhooks и notifications**
-  - Priority: SHOULD | Risk: Low
-  - Acceptance:
-    - Real-time notifications для external systems, configurable webhook endpoints, retry mechanisms.
-  - Verification: OQ
-
-## 3.20 Android Terminal Support
+## 3.27 Android Terminal Support
 
 - **URS-AND-001** — **Offline capability**
 
@@ -599,7 +629,7 @@ localization:
     - QR/NFC scanning, camera integration, barcode printing support, push notifications.
   - Verification: OQ
 
-## 3.21 Электронные подписи и документооборот
+## 3.28 Электронные подписи и документооборот
 
 - **URS-ES-001** — **PKI инфраструктура**
 
