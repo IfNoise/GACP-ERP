@@ -1,5 +1,16 @@
 ---
-title: "## 2. Traceability
+title: "Functional Specification (FS)"
+system: "ERP for GACP-Compliant Cannabis Cultivation"
+version: "0.1-draft"
+status: "draft"
+last_updated: "2025-09-14"
+---
+
+## 1. Purpose
+
+Документ описывает функциональные требования системы ERP для управления производством каннабиса с полным соответствием GACP/GxP. FS является прямым продолжением URS и детализирует, как каждое требование URS реализуется в функциональности.
+
+## 2. Traceability
 
 Каждое требование URS имеет свой FS-эквивалент с полной прослеживаемостью:
 
@@ -12,35 +23,19 @@ title: "## 2. Traceability
 - URS-DR-001 → FS-DR-001 (Disaster Recovery)
 
 ### Расширенные модули:
-- URS-FIN-001 → FS-FIN-001 (Financial Module)
-- URS-WF-001 → FS-WF-001 (Workforce Management)
-- URS-SP-001 → FS-SP-001 (Spatial Planning)
-- URS-FC-001 → FS-FC-001 (Forecasting & Analytics)
-- URS-PR-001 → FS-PR-001 (Procurement)
-- URS-KM-001 → FS-KM-001 (Knowledge Management)
-- URS-API-001 → FS-API-001 (External Integrations)
-- URS-AND-001 → FS-AND-001 (Android Terminals)
+- URS-FIN-001-005 → FS-FIN-001-005 (Financial Module)
+- URS-WF-001-004 → FS-WF-001-003 (Workforce Management)
+- URS-SP-001-002 → FS-SP-001-002 (Spatial Planning)
+- URS-FC-001-003 → FS-FC-001-003 (Forecasting & Analytics)
+- URS-PR-001-003 → FS-PR-001-003 (Procurement)
+- URS-KM-001-002 → FS-KM-001-002 (Knowledge Management)
+- URS-EQ-001-002 → FS-EQ-001-002 (Equipment Management)
+- URS-SEC-001-002 → FS-SEC-001-002 (Security & Surveillance)
+- URS-INT-001-002 → FS-INT-001-002 (External Integrations)
+- URS-AND-001-003 → FS-AND-001-003 (Android Terminals)
 
 ### Дополнительные функциональности:
-- URS-ES-002 → FS-ES-004 (PKI Infrastructure)
-- URS-ES-003 → FS-ES-005 (Document Workflow)nal Specification (FS)"
-system: "ERP for GACP-Compliant Cannabis Cultivation"
-version: "0.1-draft"
-status: "draft"
-last_updated: "2025-09-01"
----
-
-## 1. Purpose
-
-Документ описывает функциональные требования системы ERP для управления производством каннабиса с полным соответствием GACP/GxP. FS является прямым продолжением URS и детализирует, как каждое требование URS реализуется в функциональности.
-
-# 2. Traceability
-
-Каждое требование URS имеет свой FS-эквивалент:
-
-- URS-DI-001 → FS-DI-001
-- URS-DI-002 → FS-DI-002
-- ...
+- URS-ES-001-002 → FS-ES-001-005 (PKI Infrastructure & Document Workflow)
 
 ## 3. Functional Requirements
 
@@ -294,7 +289,174 @@ last_updated: "2025-09-01"
 - **Third-party Analytics**: Data export для advanced analytics
 - **PKI Providers**: Certificate management и validation services
 
-## 6. Performance Requirements
+## 6. Financial Module Requirements
+
+### 6.1 Accounts Payable/Receivable (FS-FIN-001)
+
+- **AP Management**: Automated invoice processing with three-way matching (PO, receipt, invoice)
+- **AR Management**: Automatic invoice generation based on delivery confirmation
+- **Credit Management**: Credit limits and aging analysis with automated collection workflows
+- **GL Integration**: Real-time posting of all AP/AR transactions to General Ledger
+- **Audit Trail**: Complete transaction history with electronic signatures
+
+### 6.2 Biological Assets Accounting (FS-FIN-003)
+
+- **Stage-based Valuation**: Different accounting treatment per growth stage:
+  - Seeds/Clones: Raw materials at cost
+  - Vegetation/Flowering: Biological assets at fair value or cost
+  - Harvest: Finished goods inventory
+- **Cost Accumulation**: Track labor, materials, and overhead costs per batch
+- **Fair Value Adjustments**: Periodic revaluation with regulatory compliance
+- **Sales Integration**: Support sales at any growth stage with proper revenue recognition
+
+### 6.3 Cost Accounting (FS-FIN-004)
+
+- **Batch Costing**: Accumulate all costs (materials, labor, overhead) per production batch
+- **Standard Costing**: Variance analysis between standard and actual costs
+- **Activity-Based Costing**: Allocation of indirect costs based on resource consumption
+- **Profitability Analysis**: Real-time P&L per strain, batch, or zone
+
+### 6.4 Payroll Integration (FS-FIN-005)
+
+- **Timesheet Integration**: Automatic import from workforce management system
+- **Cost Allocation**: Distribute labor costs to appropriate cost centers and batches
+- **Compliance**: Tax calculations and regulatory reporting
+- **Electronic Payslips**: Generation and secure delivery via EDMS
+
+## 7. Workforce Management Requirements
+
+### 7.1 Employee Management (FS-WF-001)
+
+- **Skill Matrix**: Define and track employee competencies and certifications
+- **Task Assignment**: Automated task routing based on skills and availability
+- **Performance Tracking**: KPIs and productivity metrics per employee
+- **Training Integration**: Automatic training assignment based on skill gaps
+
+### 7.2 Shift Management (FS-WF-002)
+
+- **Shift Scheduling**: Visual scheduling with drag-and-drop interface
+- **Time Tracking**: Integration with СКУД systems for accurate time recording
+- **Overtime Management**: Automatic calculation and approval workflows
+- **Mobile Access**: Real-time schedule access via Android terminals
+
+### 7.3 Android Terminal Integration (FS-WF-003)
+
+- **Offline Capability**: Full SOP execution without network connectivity
+- **Data Synchronization**: Conflict resolution and merge capabilities
+- **Digital Signatures**: PKI-based signatures for SOP completion
+- **Media Capture**: Photo/video evidence collection with automatic timestamping
+
+## 8. Spatial Planning Requirements
+
+### 8.1 Zone Management (FS-SP-001)
+
+- **3D Visualization**: Interactive facility layout with real-time occupancy
+- **Capacity Planning**: Optimization algorithms for space utilization
+- **Environmental Mapping**: Integration with IoT sensors for microclimate tracking
+- **Resource Allocation**: Automated assignment of equipment and personnel
+
+### 8.2 Workflow Optimization (FS-SP-002)
+
+- **Path Planning**: Minimize travel time for personnel and materials
+- **Bottleneck Analysis**: Identify and resolve workflow constraints
+- **Energy Efficiency**: Optimize lighting and HVAC based on zone occupancy
+- **Compliance Zones**: Separate handling of different compliance levels
+
+## 9. Forecasting & Analytics Requirements
+
+### 9.1 Yield Prediction (FS-FC-001)
+
+- **ML Models**: Machine learning algorithms using historical and environmental data
+- **Strain Analytics**: Performance comparison across different cannabis strains
+- **Environmental Correlation**: Predict yields based on temperature, humidity, lighting
+- **Harvest Planning**: Optimize harvest timing for maximum yield and quality
+
+### 9.2 Resource Planning (FS-FC-002)
+
+- **Demand Forecasting**: Predict material and labor requirements
+- **Inventory Optimization**: Minimize inventory costs while ensuring availability
+- **Capacity Planning**: Long-term facility expansion planning
+- **Supply Chain Analytics**: Supplier performance and risk analysis
+
+### 9.3 Financial Forecasting (FS-FC-003)
+
+- **Cash Flow Prediction**: 13-week rolling cash flow forecasts
+- **Profitability Modeling**: Scenario analysis for different business strategies
+- **Cost Variance Analysis**: Predict and prevent cost overruns
+- **Investment Analysis**: ROI calculations for facility and equipment investments
+
+## 10. Procurement & Supplier Management Requirements
+
+### 10.1 Supplier Qualification (FS-PR-001)
+
+- **Vendor Assessment**: Standardized qualification process with scoring
+- **Certificate Management**: Track certifications and compliance documents
+- **Performance Monitoring**: KPIs for delivery, quality, and service
+- **Risk Assessment**: Supplier risk categorization and mitigation plans
+
+### 10.2 Purchase Order Management (FS-PR-002)
+
+- **Automated PO Generation**: Based on inventory levels and reorder points
+- **Approval Workflows**: Multi-level approval based on value and category
+- **Electronic Ordering**: Integration with supplier systems where possible
+- **Change Management**: Controlled process for PO modifications
+
+### 10.3 Receiving & Inspection (FS-PR-003)
+
+- **QR Code Scanning**: Mobile receipt confirmation with lot tracking
+- **Quality Inspection**: Integration with QC processes and hold procedures
+- **Discrepancy Management**: Automated variance reporting and resolution
+- **Supplier Feedback**: Performance data back to supplier management
+
+## 11. Equipment Management Requirements
+
+### 11.1 Asset Management (FS-EQ-001)
+
+- **Equipment Registry**: Complete asset tracking with specifications and history
+- **Maintenance Scheduling**: Preventive maintenance with automatic work orders
+- **Calibration Management**: Scheduled calibrations with certificate tracking
+- **Performance Monitoring**: Equipment effectiveness and utilization metrics
+
+### 11.2 SCADA Integration (FS-EQ-002)
+
+- **Real-time Monitoring**: Live data from climate control systems
+- **Alarm Management**: Automated alerting with escalation procedures
+- **Historical Trending**: Long-term performance and efficiency analysis
+- **Remote Control**: Secure remote operation of critical systems
+
+## 12. Security & Surveillance Requirements
+
+### 12.1 Video Integration (FS-SEC-001)
+
+- **Event Correlation**: Link video footage to specific ERP transactions
+- **Automated Bookmarking**: Mark critical operations for compliance review
+- **Retention Management**: Automated archival based on regulatory requirements
+- **Privacy Controls**: Masking and access controls for sensitive areas
+
+### 12.2 Access Control Integration (FS-SEC-002)
+
+- **Real-time Monitoring**: Live view of facility access and occupancy
+- **Compliance Tracking**: Ensure only authorized personnel in controlled areas
+- **Emergency Procedures**: Automated lockdown and evacuation protocols
+- **Audit Integration**: Access events included in comprehensive audit trail
+
+## 13. Knowledge Management Requirements
+
+### 13.1 Document Management (FS-KM-001)
+
+- **Version Control**: Automatic versioning with change tracking
+- **Search Functionality**: Full-text search across all documents and SOPs
+- **Access Control**: Role-based access to sensitive documents
+- **Integration**: Seamless linking from tasks and training modules
+
+### 13.2 Training Content Delivery (FS-KM-002)
+
+- **Multi-media Support**: Video, audio, and interactive content delivery
+- **Progress Tracking**: Detailed analytics on learning progress
+- **Certification Management**: Automatic certificate generation and renewal
+- **Mobile Delivery**: Content accessible via Android terminals
+
+## 14. Performance Requirements
 
 - **API Response Time**: < 500ms для 95% requests
 - **Mobile App Sync**: < 30 seconds для typical daily data
@@ -303,7 +465,7 @@ last_updated: "2025-09-01"
 - **Data Retention**: 10+ years для regulatory compliance
 - **Backup/Recovery**: RTO < 4 hours, RPO < 1 hour
 
-## 7. Security Requirements
+## 15. Security Requirements
 
 - **Data Encryption**: AES-256 для data at rest, TLS 1.3 для data in transit
 - **Access Control**: RBAC с mandatory 2FA для privileged operations
@@ -311,7 +473,7 @@ last_updated: "2025-09-01"
 - **Network Security**: Zero-trust architecture с microsegmentation
 - **Mobile Security**: Device encryption и remote wipe capabilities
 
-## 8. Glossary
+## 16. Glossary
 
 - **WORM** — Write Once Read Many
 - **RBAC** — Role-Based Access Control
