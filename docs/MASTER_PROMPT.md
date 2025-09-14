@@ -42,12 +42,28 @@ Backend: NestJS 10+ с TypeScript
 Frontend: Next.js 14+ App Router с TypeScript
 API: ts-rest с Zod валидацией
 Базы данных: PostgreSQL 15+ (основная), immudb (audit trail), Kafka для event streaming
-Go services: Audit Trail Consumer (high-performance Kafka → immudb pipeline)
+Go services: Audit Trail Consumer (high-performance Kafka → immudb pipeline с 10,000+ events/sec throughput)
 Событийная шина: Apache Kafka 3.5+
 WORM хранилище: MinIO с Object Lock
 Identity Provider: Keycloak 22+
 Мониторинг: VictoriaMetrics, Loki, Tempo, Grafana
 Контейнеризация: Docker + Kubernetes
+
+АРХИТЕКТУРНЫЕ ПРИНЦИПЫ:
+
+- Contract-First API (ts-rest + Zod shared types)
+- Event-Driven Architecture (Kafka для всех business events)
+- Go Audit Consumer: высокопроизводительный consumer для audit trail с:
+  * Batch processing (100-1000 events per batch)
+  * Circuit breaker pattern + Dead Letter Queue
+  * Graceful shutdown и health checks
+  * Prometheus metrics и structured logging
+  * Прямая запись в immudb для cryptographic proof
+- Hybrid Cloud: on-prem primary + cloud disaster recovery
+- Zero-trust security model
+- Risk-based validation (GAMP 5)
+- Микросервисы для audit trail и external integrations
+- Monolith для business logic с четкими module boundaries
 CI/CD: GitHub Actions или GitLab CI
 
 АРХИТЕКТУРНЫЕ ПРИНЦИПЫ:
@@ -177,6 +193,86 @@ INTEGRATIONS: IoT sensors, environmental controls, lab systems
 RISK LEVEL: HIGH (влияет на качество продукта)
 ```
 
+### 💰 Financial Module
+
+```markdown
+КОНТЕКСТ: Финансовый учёт и управление биологическими активами
+ТРЕБОВАНИЯ GACP: учёт затрат по партиям, biological assets accounting
+CRITICAL FEATURES: AP/AR, General Ledger, Cost Accounting, Payroll, биологические активы
+INTEGRATIONS: bank systems, tax reporting, external accounting
+RISK LEVEL: HIGH (финансовая отчётность и compliance)
+```
+
+### 👥 Workforce Management Module
+
+```markdown
+КОНТЕКСТ: Управление персоналом и задачами через Android терминалы
+ТРЕБОВАНИЯ GACP: competency matrix, training records, task assignment
+CRITICAL FEATURES: shift management, skill tracking, mobile SOP execution, timesheet integration
+INTEGRATIONS: payroll systems, training platforms, access control
+RISK LEVEL: HIGH (critical для compliance и безопасности)
+```
+
+### 🏭 Spatial Planning Module
+
+```markdown
+КОНТЕКСТ: Планирование пространства и оптимизация размещения
+ТРЕБОВАНИЯ GACP: зонирование, capacity planning, workflow optimization
+CRITICAL FEATURES: 2D/3D visualization, resource allocation, energy efficiency
+INTEGRATIONS: IoT sensors, HVAC systems, facility management
+RISK LEVEL: MEDIUM (efficiency и cost optimization)
+```
+
+### 📈 Forecasting & Analytics Module
+
+```markdown
+КОНТЕКСТ: Прогнозирование урожайности и планирование ресурсов
+ТРЕБОВАНИЯ GACP: predictive analytics для quality и yield
+CRITICAL FEATURES: ML models, yield prediction, resource planning, financial forecasting
+INTEGRATIONS: historical data, environmental sensors, market data
+RISK LEVEL: MEDIUM (business intelligence и planning)
+```
+
+### 🛒 Procurement Module
+
+```markdown
+КОНТЕКСТ: Управление поставщиками и закупками
+ТРЕБОВАНИЯ GACP: supplier qualification, material traceability
+CRITICAL FEATURES: vendor management, PO processing, receiving/inspection, QR scanning
+INTEGRATIONS: financial systems, inventory management, quality control
+RISK LEVEL: HIGH (material quality и supply chain integrity)
+```
+
+### ⚙️ Equipment Management Module
+
+```markdown
+КОНТЕКСТ: Управление оборудованием и SCADA интеграция
+ТРЕБОВАНИЯ GACP: equipment qualification, calibration, maintenance
+CRITICAL FEATURES: asset tracking, preventive maintenance, calibration management, SCADA monitoring
+INTEGRATIONS: IoT devices, SCADA systems, maintenance management
+RISK LEVEL: HIGH (equipment reliability и data integrity)
+```
+
+### 🔒 Security & Surveillance Module
+
+```markdown
+КОНТЕКСТ: Видеонаблюдение и контроль доступа
+ТРЕБОВАНИЯ GACP: physical security, access control, audit trail correlation
+CRITICAL FEATURES: CCTV integration, СКУД, event correlation, retention management
+INTEGRATIONS: security systems, access control, employee management
+RISK LEVEL: HIGH (security compliance и audit requirements)
+```
+
+### 📚 Knowledge Management Module
+
+```markdown
+КОНТЕКСТ: База знаний и управление документами
+ТРЕБОВАНИЯ GACP: SOP management, training content, version control
+CRITICAL FEATURES: Wiki.js/EDMS integration, document workflow, search functionality
+INTEGRATIONS: training systems, mobile apps, workflow management
+RISK LEVEL: MEDIUM (knowledge sharing и compliance documentation)
+```
+
 ### 🔬 Quality Control Module
 
 ```markdown
@@ -190,11 +286,31 @@ RISK LEVEL: HIGH (критично для безопасности продук�
 ### 🏭 Equipment & Environment Module
 
 ```markdown
-КОНТЕКСТ: Мониторинг оборудования и условий среды
+КОНТЕКСТ: Мониторинг оборудования и условий среды (объединён с Equipment Management)
 ТРЕБОВАНИЯ GACP: контроль температуры, влажности, калибровка оборудования
 CRITICAL FEATURES: IoT data collection, alarm management, calibration tracking
 INTEGRATIONS: SCADA systems, sensor networks, maintenance systems
-RISK LEVEL: MEDIUM (влияет на условия производства)
+RISK LEVEL: HIGH (equipment reliability и environmental control)
+```
+
+### 🔌 External Integrations & API Module
+
+```markdown
+КОНТЕКСТ: Интеграции с внешними системами и regulatory reporting
+ТРЕБОВАНИЯ GACP: regulatory compliance, third-party system integration
+CRITICAL FEATURES: METRC/BioTrackTHC integration, tax systems, banking APIs
+INTEGRATIONS: government systems, financial institutions, analytics platforms
+RISK LEVEL: HIGH (regulatory compliance и data exchange)
+```
+
+### 📱 Android Terminal Support
+
+```markdown
+КОНТЕКСТ: Мобильные терминалы для shop floor operations
+ТРЕБОВАНИЯ GACP: mobile SOP execution, offline capability, data synchronization
+CRITICAL FEATURES: offline SQLite, QR/NFC scanning, photo/video capture, digital signatures
+INTEGRATIONS: workforce management, task systems, document management
+RISK LEVEL: HIGH (field operations и data integrity)
 ```
 
 ### 📊 Compliance & Reporting Module
