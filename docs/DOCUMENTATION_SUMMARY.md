@@ -94,11 +94,10 @@
 - Асинхронная обработка событий между модулями
 - Domain events для business logic
 - Event sourcing для audit trail
-- CQRS pattern для read/write разделения
 
 ### 🛡️ Security & Compliance
 
-- Keycloak для authentication/authorization
+- Keycloak для authentication/authorization single source of truth
 - End-to-end encryption для sensitive data
 - ALCOA+ principles implementation
 - GMP/GACP compliance validation
@@ -106,7 +105,6 @@
 ### 💾 Multi-Database Strategy
 
 - **PostgreSQL**: Основные operational данные
-- **MongoDB**: Document store для Mayan-EDMS
 - **VictoriaMetrics**: Time-series для IoT и monitoring
 - **ImmuDB**: Immutable audit logs
 - **Redis**: Caching и session management
@@ -156,6 +154,7 @@
 - Advanced audit capabilities
 - Integration APIs
 - Performance optimization
+- Internal communications (Jitsi)
 
 ### Phase 6: Validation & Deployment (Неделя 30)
 
@@ -210,7 +209,8 @@
 - **Architecture**: Event-driven microservices
 - **Technology Stack**: TypeScript, Next.js, NestJS, PostgreSQL
 - **Deployment**: Docker + Kubernetes
-- **Monitoring**: Prometheus + Grafana
+- **Monitoring**: VictoriaMetrics + Grafana + OpenTelemetry
+- **Logging**: Loki + Grafana
 
 ---
 

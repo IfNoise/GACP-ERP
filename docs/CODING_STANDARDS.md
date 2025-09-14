@@ -14,7 +14,10 @@
 Данный документ определяет обязательные стандарты кодирования для GACP-ERP системы с акцентом на:
 
 - AI-assisted разработку с GitHub Copilot + Claude
+- Schema-first API design с ts-rest + Zod!
+- Zod single source of truth z.infer for all types!
 - Type-safe development с TypeScript
+- NX monorepo для организации кода
 - Domain-driven design principles
 - Clean Architecture patterns
 - Comprehensive testing strategies

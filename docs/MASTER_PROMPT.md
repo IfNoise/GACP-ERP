@@ -38,6 +38,7 @@ GxP-совместимых систем для фармацевтической 
 - GAMP 5 (2nd ed., 2022) (валидация систем)
 
 ОБЯЗАТЕЛЬНЫЕ ТЕХНОЛОГИИ:
+ZOD one source of truth!all types from Zod schemas
 Backend: NestJS 10+ с TypeScript
 Frontend: Next.js 14+ App Router с TypeScript
 API: ts-rest с Zod валидацией
@@ -45,7 +46,7 @@ API: ts-rest с Zod валидацией
 Go services: Audit Trail Consumer (high-performance Kafka → immudb pipeline)
 Событийная шина: Apache Kafka 3.5+
 WORM хранилище: MinIO с Object Lock
-Identity Provider: Keycloak 22+
+Identity Provider: Keycloak 26+ , Custom Kafka ISP Event Producer
 Мониторинг: VictoriaMetrics, Loki, Tempo, Grafana
 Контейнеризация: Docker + Kubernetes
 CI/CD: GitHub Actions или GitLab CI

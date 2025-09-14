@@ -107,14 +107,29 @@
 - **Time Series**: VictoriaMetrics
 - **Audit Store**: ImmuDB (immutable)
 - **Cache**: Redis 7+
+- **Database Replication**: PostgreSQL Streaming Replication с поддержкой WORM хранилища
+- **Cloud Replicas**: Multi-cloud репликация (AWS RDS, Azure PostgreSQL) с ALCOA+ соответствием
+
+#### Communications & Collaboration
+
+- **Video Conferencing**: Jitsi Meet (полный стек)
+- **WebRTC Media**: Jitsi Videobridge (SFU архитектура)
+- **XMPP Server**: Prosody (сообщения и сигнализация)
+- **Conference Management**: Jicofo (управление конференциями)
+- **SIP Gateway**: Jigasi (интеграция с внешней телефонией)
+- **Real-time Messaging**: XMPP + WebSocket для instant messaging
+- **Conference Recording**: Jibri для записи видеоконференций
+- **Secure Communications**: End-to-end encryption для всех типов коммуникаций
 
 #### Infrastructure
 
 - **Containerization**: Docker + Kubernetes
-- **Message Broker**: Apache Kafka
+- **Message Broker**: Apache Kafka (включая события репликации БД)
 - **IoT Protocol**: MQTT/CoAP (EMQX)
 - **Monitoring**: Prometheus + Grafana
 - **CI/CD**: GitHub Actions
+- **Database Streaming**: WAL-E/WAL-G для архивирования и восстановления
+- **Network Security**: TLS 1.3, mutual TLS для всех internal communications
 
 ---
 
@@ -375,6 +390,56 @@
 - Version control
 - Integration с Mayan-EDMS
 - Collaborative tools
+
+#### 3.3.5 Internal Communications
+
+**Приоритет**: HIGH | **Риск**: Medium
+
+**Функциональность**:
+
+- Real-time messaging и chat
+- Video conferencing для meetings и inspections
+- VoIP calls для operational coordination
+- System alerts и notifications
+- Emergency communication channels
+- Conference recording для compliance
+- Screen sharing для remote support
+
+**Технические требования**:
+
+- Jitsi Meet (full stack) для video conferencing
+- Prosody XMPP server для messaging
+- WebRTC protocols для media streaming
+- JWT authentication через Keycloak
+- End-to-end encryption для всех communications
+- Integration с audit trail (immudb)
+- Push notifications для mobile devices
+- Offline message storage и synchronization
+
+#### 3.3.6 Database Replication & High Availability
+
+**Приоритет**: CRITICAL | **Риск**: High
+
+**Функциональность**:
+
+- Continuous database replication между on-premise и cloud
+- WORM (Write Once, Read Many) storage для audit compliance
+- Automated failover при primary database сбоях
+- Point-in-time recovery capabilities
+- Cross-region backup и disaster recovery
+- Real-time monitoring replication lag
+- Automated integrity validation
+
+**Технические требования**:
+
+- PostgreSQL streaming replication
+- Kafka integration для change events
+- Multi-cloud database replicas (AWS RDS, Azure PostgreSQL)
+- WORM storage enforcement на cloud replicas
+- Automated backup verification
+- Performance monitoring и alerting
+- ALCOA+ compliance validation
+- Encryption in transit и at rest
 
 ---
 

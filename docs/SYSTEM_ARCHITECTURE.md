@@ -69,6 +69,11 @@
 │  │ │Authentication│ │Audit Trail  │ │Document Mgmt│ │Reporting  │ ││
 │  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Engine     │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
+│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
+│  │ │Internal     │ │Database     │ │Knowledge    │ │External   │ ││
+│  │ │Communications│ │Replication  │ │Management   │ │Integration│ ││
+│  │ │(Jitsi Stack)│ │& WORM       │ │(Wiki.js)    │ │& APIs     │ ││
+│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  └─────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────┘
                               │
@@ -85,6 +90,11 @@
 │ │Redis        │ │Mayan-EDMS   │ │File Storage │ │Elasticsearch│   │
 │ │(Cache)      │ │(Documents)  │ │(S3)         │ │(Search)     │   │
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
+│ │PostgreSQL   │ │Prosody XMPP │ │Cloud        │ │WORM Storage │   │
+│ │Replicas     │ │Server       │ │Database     │ │(Compliance) │   │
+│ │(Multi-Cloud)│ │(Jitsi)      │ │Replicas     │ │             │   │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
                               │
                         INFRASTRUCTURE
@@ -98,6 +108,11 @@
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
 │ │Prometheus   │ │Grafana      │ │Traefik      │ │Cert-Manager │   │
 │ │(Monitoring) │ │(Dashboards) │ │(Load Bal.)  │ │(TLS)        │   │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
+│ │Jitsi Meet   │ │Jitsi        │ │Jicofo       │ │Jigasi       │   │
+│ │(Video Conf) │ │Videobridge  │ │(Conference  │ │(SIP Gateway)│   │
+│ │             │ │(Media SFU)  │ │ Management) │ │             │   │
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -394,6 +409,231 @@ class MqttHandler {
     // Generate alerts if needed
   }
 }
+```
+
+#### 3.2.2 Internal Communications Module (Jitsi Stack)
+
+**Bounded Context**: Внутренние коммуникации и конференц-связь
+
+```typescript
+// Domain Entities
+interface Conference {
+  id: ConferenceId;
+  name: string;
+  roomId: string;
+  participants: Participant[];
+  startTime: Date;
+  endTime?: Date;
+  recording?: RecordingInfo;
+  moderator: UserId;
+}
+
+interface Participant {
+  userId: UserId;
+  displayName: string;
+  jid: string; // XMPP Jabber ID
+  role: ParticipantRole; // moderator | participant
+  joinTime: Date;
+  leaveTime?: Date;
+  status: ParticipantStatus; // active | muted | away
+}
+
+interface Message {
+  id: MessageId;
+  from: UserId;
+  to: UserId | ConferenceId;
+  content: string;
+  type: MessageType; // chat | notification | alert
+  timestamp: Date;
+  delivered: boolean;
+  read: boolean;
+}
+```
+
+**Jitsi Integration Architecture**:
+
+```typescript
+// Jitsi Service Integration
+@Injectable()
+export class JitsiService {
+  async createConference(request: CreateConferenceRequest): Promise<Conference> {
+    // Create room in Prosody XMPP
+    // Configure Jicofo for media management
+    // Setup recording if required
+    // Generate JWT token for authentication
+  }
+
+  async joinConference(conferenceId: ConferenceId, userId: UserId): Promise<JoinResponse> {
+    // Authenticate user via Keycloak SSO
+    // Generate secure conference JWT
+    // Configure participant permissions
+    // Log access for audit trail
+  }
+
+  async sendMessage(message: MessageRequest): Promise<void> {
+    // Send via Prosody XMPP server
+    // Store in audit trail (immudb)
+    // Push notification if user offline
+    // Integrate with Kafka events
+  }
+}
+```
+
+**XMPP/Prosody Configuration**:
+
+```lua
+-- prosody.cfg.lua configuration for GACP-ERP
+VirtualHost "gacp-erp.local"
+    authentication = "token"
+    app_id = "gacp_erp"
+    app_secret = "secure_secret_from_keycloak"
+    allow_empty_token = false
+    
+    modules_enabled = {
+        "bosh";
+        "websocket";
+        "smacks";
+        "carbons";
+        "mam"; -- Message Archive Management
+        "token_verification";
+        "presence";
+        "roster";
+        "audit_log"; -- Custom audit module
+    }
+
+Component "conference.gacp-erp.local" "muc"
+    modules_enabled = {
+        "muc_meeting_id";
+        "muc_domain_mapper";
+        "token_verification";
+        "muc_rate_limit";
+        "audit_conference"; -- Custom audit module
+    }
+```
+
+#### 3.2.3 Database Replication Module
+
+**Bounded Context**: Репликация данных и обеспечение непрерывности
+
+```typescript
+// Domain Entities
+interface ReplicationStream {
+  id: StreamId;
+  name: string;
+  sourceDatabase: DatabaseConfig;
+  targetReplicas: ReplicaConfig[];
+  status: ReplicationStatus;
+  lag: number; // milliseconds
+  lastSync: Date;
+  configuration: StreamConfiguration;
+}
+
+interface ReplicaConfig {
+  id: ReplicaId;
+  type: ReplicaType; // primary | standby | cloud
+  location: ReplicaLocation; // on-premise | aws | azure
+  isWORM: boolean; // Write Once Read Many for compliance
+  retentionPolicy: RetentionPolicy;
+  encryptionConfig: EncryptionConfig;
+}
+
+interface AuditReplicationEvent {
+  eventId: EventId;
+  streamId: StreamId;
+  eventType: ReplicationEventType;
+  timestamp: Date;
+  sourceWAL: WALPosition;
+  targetWAL: WALPosition;
+  latency: number;
+  checksum: string;
+}
+```
+
+**PostgreSQL Streaming Replication**:
+
+```typescript
+@Injectable()
+export class DatabaseReplicationService {
+  async configureStreaming(config: ReplicationConfig): Promise<void> {
+    // Configure WAL streaming
+    // Setup replication slots
+    // Configure Kafka for change events
+    // Initialize cloud replicas with WORM
+  }
+
+  async monitorReplicationLag(): Promise<ReplicationStatus> {
+    // Check pg_stat_replication view
+    // Verify Kafka consumer lag
+    // Validate WORM integrity
+    // Generate alerts if thresholds exceeded
+  }
+
+  async validateDataIntegrity(): Promise<IntegrityReport> {
+    // Compare checksums between primary and replicas
+    // Verify ALCOA+ compliance on audit tables
+    // Check WORM policy enforcement
+    // Generate compliance report
+  }
+}
+```
+
+**Kafka Integration for Replication Events**:
+
+```typescript
+// Kafka Topics for Database Events
+interface DatabaseChangeEvent {
+  operation: 'INSERT' | 'UPDATE' | 'DELETE';
+  table: string;
+  schema: string;
+  oldData?: Record<string, any>;
+  newData?: Record<string, any>;
+  timestamp: Date;
+  transactionId: string;
+  userId: string;
+  checksum: string;
+}
+
+@KafkaConsumer('database-changes')
+export class ReplicationConsumer {
+  async processChange(event: DatabaseChangeEvent): Promise<void> {
+    // Stream to cloud replicas
+    // Validate against WORM policies
+    // Store in immudb for audit
+    // Update replication metrics
+  }
+}
+```
+
+**Cloud WORM Storage Implementation**:
+
+```sql
+-- WORM (Write Once, Read Many) enforcement
+CREATE OR REPLACE FUNCTION enforce_worm_policy()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'UPDATE' OR TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION 'WORM violation: % operation not allowed on table %', 
+                        TG_OP, TG_TABLE_NAME;
+    END IF;
+    
+    -- Log to audit trail
+    INSERT INTO audit.worm_access_log (
+        table_name, operation, user_id, timestamp, checksum
+    ) VALUES (
+        TG_TABLE_NAME, TG_OP, current_user, NOW(),
+        md5(row_to_json(NEW)::text)
+    );
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply to all audit tables on cloud replicas
+CREATE TRIGGER worm_enforcement
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON audit.audit_trail_events
+    FOR EACH ROW
+    EXECUTE FUNCTION enforce_worm_policy();
 ```
 
 ---

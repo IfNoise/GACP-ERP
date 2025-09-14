@@ -654,6 +654,7 @@ src/components/documents/
 // IoT Data Pipeline
 interface SensorReading {
   sensorId: string;
+  serialNumber: string;
   facilityId: string;
   zoneId: string;
   readings: {
@@ -662,6 +663,10 @@ interface SensorReading {
     co2?: number;
     ph?: number;
     ec?: number;
+    ecK?: number;
+    ecMg?: number;
+    ecCa?: number;
+    ecNO3?: number;
     light?: number;
   };
   timestamp: Date;
