@@ -74,7 +74,7 @@
                           INFRASTRUCTURE
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│ Docker + Kubernetes │ Kafka │ MQTT │ Keycloak │ Monitoring │
+│ Docker + Kubernetes │ Kafka │ EMQX │ Keycloak │ Monitoring │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -94,7 +94,7 @@
 
 - **Framework**: NestJS (Node.js)
 - **Language**: TypeScript 5+
-- **API**: REST + GraphQL + WebSocket
+- **API**: REST + WebSocket
 - **Authentication**: Keycloak (OAuth2/OIDC)
 - **Validation**: TSrest + Zod
 - **API Documentation**: OpenAPI 3.0 + Swagger
