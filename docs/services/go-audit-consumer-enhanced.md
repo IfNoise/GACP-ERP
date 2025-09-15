@@ -100,9 +100,6 @@ services/audit-trail-go/
 │   ├── storage/                # immudb integration
 │   │   ├── immudb.go
 │   │   └── storage.go
-│   ├── reports/                # PDF generation
-│   │   ├── generator.go
-│   │   └── templates.go
 │   ├── events/                 # Generated Go structs
 │   │   ├── plant_events.go
 │   │   ├── financial_events.go

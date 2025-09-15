@@ -2,7 +2,7 @@
 id: URS
 title: "User Requirements Specification (URS) — GACP ERP"
 version: 1.0.0
-status: Draft
+status: active
 owner: "QA/CSV Lead"
 approvers:
   - "Head of Cultivation"
@@ -514,7 +514,7 @@ localization:
 
 - **URS-FIN-002** — **Accounts Receivable (AR)**
 
-  - Priority: MUST | Risk: High  
+  - Priority: MUST | Risk: High
   - Acceptance:
     - Customer invoicing, payment tracking, aging reports, credit management, integration с sales module.
   - Verification: OQ

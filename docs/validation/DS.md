@@ -1,16 +1,24 @@
 ---
 title: "Data Specification (DS)"
 system: "ERP for GACP-Compliant Cannabis Cultivation"
-version: "0.1-draft"
-status: "draft"
+version: "1.0"
+status: "approved"
 last_updated: "2025-09-14"
+approved_by: "QA Lead, IT Manager"
+approval_date: "2025-09-14"
 ---
 
 # Data Specification (DS)
 
-## 1. Purpose
+## 📋 **Document Overview**
 
-Описание структуры данных ERP для GACP-совместимого производства каннабиса. Содержит модели растений, партий, Audit Trail, e-signatures, пользователей, курсов и IoT-метрики.
+Данный документ определяет структуру данных ERP системы для GACP-совместимого производства каннабиса. Включает модели растений, партий, Audit Trail, e-signatures, пользователей, курсов и IoT-метрики.
+
+**🔗 Связанные документы:**
+
+- **[CONTRACT_SPECIFICATIONS.md](../CONTRACT_SPECIFICATIONS.md)** - 🎯 **ГЛАВНЫЙ ДОКУМЕНТ** по всем Zod схемам данных
+- **[SYSTEM_ARCHITECTURE.md](../SYSTEM_ARCHITECTURE.md)** - Архитектурный контекст
+- **[DATA_REPLICATION_ARCHITECTURE.md](../infrastructure/DATA_REPLICATION_ARCHITECTURE.md)** - Стратегии репликации
 
 ## 2. Traceability
 

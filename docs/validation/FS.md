@@ -1,22 +1,32 @@
 ---
 title: "Functional Specification (FS)"
 system: "ERP for GACP-Compliant Cannabis Cultivation"
-version: "1.0-enhanced"
-status: "draft"
-last_updated: "2025-09-13"
+version: "1.0"
+status: "approved"
+last_updated: "2025-09-14"
+approved_by: "QA Lead, Business Analyst"
+approval_date: "2025-09-14"
 ---
 
 # Functional Specification (FS) - GACP ERP System
 
-## 1. Purpose
+## 📋 **Document Overview**
 
 This document describes the functional requirements for the ERP system managing cannabis production with full GACP/GxP compliance. FS is a direct continuation of URS and details how each URS requirement is implemented in functionality.
+
+**🔗 Связанные документы:**
+
+- **[URS.md](./URS.md)** - User Requirements Specification
+- **[DS.md](./DS.md)** - Data Specification
+- **[CONTRACT_SPECIFICATIONS.md](../CONTRACT_SPECIFICATIONS.md)** - 🎯 **ГЛАВНЫЙ ДОКУМЕНТ** по всем Zod схемам и API контрактам
+- **[SYSTEM_ARCHITECTURE.md](../SYSTEM_ARCHITECTURE.md)** - Техническая архитектура
 
 ## 2. Traceability
 
 Each URS requirement has its FS equivalent with full traceability:
 
 ### Core Modules:
+
 - URS-DI-001 → FS-DI-001 (Data Integrity)
 - URS-AUTH-001 → FS-AUTH-001 (Authentication)
 - URS-ES-001 → FS-ES-001 (Electronic Signatures)
@@ -25,6 +35,7 @@ Each URS requirement has its FS equivalent with full traceability:
 - URS-DR-001 → FS-DR-001 (Disaster Recovery)
 
 ### Financial & Advanced Modules:
+
 - URS-FIN-001 → FS-FIN-001 (Financial Module)
 - URS-WF-001 → FS-WF-001 (Workforce Management)
 - URS-SP-001 → FS-SP-001 (Spatial Planning)
@@ -36,6 +47,7 @@ Each URS requirement has its FS equivalent with full traceability:
 - URS-AUD-GO-001 → FS-AUD-GO-001 (Go Audit Consumer)
 
 ### Additional Functionalities:
+
 - URS-ES-002 → FS-ES-004 (PKI Infrastructure)
 - URS-ES-003 → FS-ES-005 (Document Workflow)
 
@@ -46,48 +58,53 @@ Each URS requirement has its FS equivalent with full traceability:
 #### 3.1.1 Accounts Payable (AP) - FS-FIN-001
 
 **Business Logic**:
+
 - **Three-Way Matching**: Automatic comparison of Purchase Order, Receiving Document, and Supplier Invoice
 - **Exception Handling**: Discrepancy workflows with tolerance settings and approval requirements
 - **Payment Processing**: Automated payment scheduling with bank integration and cash flow optimization
 - **Vendor Management**: Performance tracking, payment terms negotiation, and vendor scoring
 
 **Technical Implementation**:
+
 ```typescript
 // Example ts-rest contract for AP operations
 const apContract = c.router({
   createInvoice: {
-    method: 'POST',
-    path: '/ap/invoices',
+    method: "POST",
+    path: "/ap/invoices",
     body: z.object({
       supplierId: z.string(),
       purchaseOrderId: z.string(),
       receivingId: z.string(),
       invoiceNumber: z.string(),
       totalAmount: z.number(),
-      lineItems: z.array(z.object({
-        itemId: z.string(),
-        quantity: z.number(),
-        unitPrice: z.number(),
-        glAccount: z.string()
-      }))
+      lineItems: z.array(
+        z.object({
+          itemId: z.string(),
+          quantity: z.number(),
+          unitPrice: z.number(),
+          glAccount: z.string(),
+        })
+      ),
     }),
     responses: {
       201: invoiceSchema,
-      400: errorSchema
-    }
+      400: errorSchema,
+    },
   },
   processPayment: {
-    method: 'POST',
-    path: '/ap/payments',
+    method: "POST",
+    path: "/ap/payments",
     body: paymentRequestSchema,
     responses: {
-      200: paymentConfirmationSchema
-    }
-  }
+      200: paymentConfirmationSchema,
+    },
+  },
 });
 ```
 
 **Integration Points**:
+
 - **Procurement Module**: Automatic invoice creation from received goods
 - **GL Module**: Real-time posting of AP transactions
 - **Cash Management**: Integration with bank systems for payment processing
@@ -96,24 +113,26 @@ const apContract = c.router({
 #### 3.1.2 Biological Assets Accounting - FS-FIN-004
 
 **Asset Lifecycle Management**:
+
 - **Seed/Clone Stage**: Materials inventory with acquisition costs
 - **Vegetative Stage**: WIP with accumulated costs (labor, materials, overhead)
 - **Flowering Stage**: Biological asset fair value adjustments
 - **Harvest Stage**: Transfer to finished goods inventory
 
 **Cost Accumulation Model**:
+
 ```typescript
 interface BiologicalAsset {
   batchId: string;
   plantCount: number;
-  stage: 'seed' | 'vegetative' | 'flowering' | 'harvest';
+  stage: "seed" | "vegetative" | "flowering" | "harvest";
   costComponents: {
-    materialCosts: number;      // Seeds, nutrients, media
-    laborCosts: number;         // Direct labor hours * rates
-    overheadCosts: number;      // Utilities, depreciation, indirect
-    totalAccumulated: number;   // Sum of all costs
+    materialCosts: number; // Seeds, nutrients, media
+    laborCosts: number; // Direct labor hours * rates
+    overheadCosts: number; // Utilities, depreciation, indirect
+    totalAccumulated: number; // Sum of all costs
   };
-  fairValue?: number;           // Market-based valuation
+  fairValue?: number; // Market-based valuation
   harvestMetrics?: {
     projectedYield: number;
     qualityGrade: string;
@@ -123,6 +142,7 @@ interface BiologicalAsset {
 ```
 
 **GACP Compliance Features**:
+
 - **Traceability**: Complete cost trail from seed to sale
 - **Valuation Methods**: IAS 41 biological asset standards
 - **Audit Trail**: Immutable cost recording via Kafka events
@@ -131,17 +151,19 @@ interface BiologicalAsset {
 #### 3.1.3 Cost Accounting Integration - FS-FIN-005
 
 **Multi-Level Cost Allocation**:
+
 - **Direct Costs**: Materials and labor directly traceable to batches
 - **Indirect Costs**: Utilities, facility costs allocated by driver (square footage, plant count)
 - **Quality Costs**: Testing, rework, compliance activities
 - **Standard vs. Actual**: Variance analysis for continuous improvement
 
 **Integration with Operational Systems**:
+
 ```typescript
 // Cost allocation workflow
 interface CostAllocationRule {
   costCenter: string;
-  allocationBase: 'plant_count' | 'square_footage' | 'direct_labor_hours';
+  allocationBase: "plant_count" | "square_footage" | "direct_labor_hours";
   rate: number;
   effectiveDate: Date;
 }
@@ -149,13 +171,13 @@ interface CostAllocationRule {
 // Real-time cost accumulation
 const accumulateCosts = (batchId: string, event: OperationalEvent) => {
   switch (event.type) {
-    case 'MATERIAL_USAGE':
+    case "MATERIAL_USAGE":
       allocateDirectCost(batchId, event.amount);
       break;
-    case 'LABOR_HOURS':
+    case "LABOR_HOURS":
       allocateLaborCost(batchId, event.hours * event.rate);
       break;
-    case 'UTILITY_CONSUMPTION':
+    case "UTILITY_CONSUMPTION":
       allocateOverheadCost(batchId, event.consumption);
       break;
   }
@@ -166,12 +188,14 @@ const accumulateCosts = (batchId: string, event: OperationalEvent) => {
 ### 3.2 Go Audit Consumer Functional Specification - FS-AUD-GO-001
 
 **High-Performance Event Processing**:
+
 - **Batch Processing**: Accumulate 100-1000 events before processing for optimal throughput
 - **Parallel Processing**: Multiple Go routines for concurrent batch processing
 - **Memory Management**: Efficient memory usage with configurable buffer sizes
 - **Backpressure Handling**: Dynamic throttling based on downstream system capacity
 
 **Event Processing Logic**:
+
 ```go
 type EventProcessor struct {
     batchSize    int
@@ -187,23 +211,24 @@ func (ep *EventProcessor) ProcessEvents(events []AuditEvent) error {
             return fmt.Errorf("invalid event %s: %w", event.EventID, err)
         }
     }
-    
+
     // Store to immudb (primary)
     if err := ep.storeToImmuDB(events); err != nil {
         return fmt.Errorf("immudb storage failed: %w", err)
     }
-    
+
     // Store to PostgreSQL (replica)
     if err := ep.storeToPostgres(events); err != nil {
         // Log error but don't fail - immudb is source of truth
         ep.logger.Warn("postgres storage failed", "error", err)
     }
-    
+
     return nil
 }
 ```
 
 **Reliability Features**:
+
 - **Circuit Breaker**: Protect downstream systems from cascading failures
 - **Retry Logic**: Exponential backoff with jitter for transient failures
 - **Dead Letter Queue**: Store permanently failed events for manual investigation
@@ -212,12 +237,14 @@ func (ep *EventProcessor) ProcessEvents(events []AuditEvent) error {
 ### 3.3 Workforce Management Advanced Features - FS-WF-001
 
 **Competency-Based Task Assignment**:
+
 - **Skill Matrix**: Define required competencies for each SOP/task
 - **Automatic Validation**: Block task assignment if employee lacks required certifications
 - **Training Integration**: Automatic enrollment in training when competency gaps identified
 - **Performance Tracking**: Measure task completion quality and speed
 
 **Android Terminal Integration**:
+
 ```typescript
 interface TaskAssignment {
   taskId: string;
@@ -225,7 +252,7 @@ interface TaskAssignment {
   sopId: string;
   requiredCompetencies: string[];
   estimatedDuration: number;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   equipment: string[];
   location: {
     zone: string;
@@ -238,12 +265,13 @@ interface TaskAssignment {
 interface OfflineSync {
   localChanges: TaskCompletion[];
   serverChanges: TaskCompletion[];
-  conflictResolution: 'server_wins' | 'client_wins' | 'manual_merge';
+  conflictResolution: "server_wins" | "client_wins" | "manual_merge";
   syncTimestamp: Date;
 }
 ```
 
 **Real-Time Performance Analytics**:
+
 - **Productivity Metrics**: Tasks per hour, quality scores, SOP compliance rates
 - **Resource Utilization**: Equipment usage, zone efficiency, workforce allocation
 - **Predictive Analytics**: Forecast labor needs based on production schedules
@@ -252,22 +280,24 @@ interface OfflineSync {
 ### 3.4 Spatial Planning Optimization - FS-SP-001
 
 **Zone Management Logic**:
+
 - **Dynamic Layout Optimization**: AI-powered space allocation based on plant growth predictions
 - **Environmental Zone Control**: Independent climate control for propagation, vegetative, and flowering zones
 - **Capacity Planning**: Real-time calculation of optimal plant density per growth stage
 - **Resource Allocation**: Automated distribution of lighting, HVAC, and irrigation resources
 
 **3D Visualization Integration**:
+
 ```typescript
 interface SpatialZone {
   zoneId: string;
-  zoneType: 'propagation' | 'vegetative' | 'flowering' | 'drying' | 'storage';
+  zoneType: "propagation" | "vegetative" | "flowering" | "drying" | "storage";
   dimensions: {
-    length: number;    // meters
-    width: number;     // meters
-    height: number;    // meters
-    area: number;      // calculated m²
-    volume: number;    // calculated m³
+    length: number; // meters
+    width: number; // meters
+    height: number; // meters
+    area: number; // calculated m²
+    volume: number; // calculated m³
   };
   environmentalControls: {
     hvacZone: string;
@@ -277,7 +307,7 @@ interface SpatialZone {
   };
   currentOccupancy: {
     plantCount: number;
-    density: number;        // plants per m²
+    density: number; // plants per m²
     utilizationPercent: number;
   };
   optimalConfiguration: {
@@ -289,6 +319,7 @@ interface SpatialZone {
 ```
 
 **Real-Time Optimization**:
+
 - **Energy Efficiency**: Minimize HVAC and lighting costs while maintaining optimal conditions
 - **Workflow Optimization**: Reduce staff movement between zones through intelligent layout
 - **Equipment Utilization**: Maximize ROI on lighting, HVAC, and monitoring equipment
@@ -297,32 +328,38 @@ interface SpatialZone {
 ### 3.5 Forecasting & Analytics Engine - FS-FC-001
 
 **Machine Learning Pipeline**:
+
 - **Yield Prediction Models**: Random Forest and Neural Network models for yield forecasting
 - **Resource Demand Forecasting**: Time series analysis for materials, labor, and utility planning
 - **Market Analysis Integration**: External data feeds for pricing and demand trends
 - **Scenario Planning**: Monte Carlo simulations for risk assessment
 
 **Predictive Analytics Framework**:
+
 ```typescript
 interface ForecastModel {
   modelId: string;
-  modelType: 'yield_prediction' | 'resource_demand' | 'financial_forecast';
-  algorithm: 'linear_regression' | 'random_forest' | 'neural_network' | 'time_series';
+  modelType: "yield_prediction" | "resource_demand" | "financial_forecast";
+  algorithm:
+    | "linear_regression"
+    | "random_forest"
+    | "neural_network"
+    | "time_series";
   trainingData: {
-    features: string[];        // Input variables
-    targetVariable: string;    // What we're predicting
-    dataQuality: number;       // 0-1 score
+    features: string[]; // Input variables
+    targetVariable: string; // What we're predicting
+    dataQuality: number; // 0-1 score
     lastTrained: Date;
   };
   performance: {
-    accuracy: number;          // MAPE score
-    confidence: number;        // Model confidence
+    accuracy: number; // MAPE score
+    confidence: number; // Model confidence
     validationResults: ValidationMetrics;
   };
   predictions: {
-    shortTerm: Prediction[];   // Next 30 days
+    shortTerm: Prediction[]; // Next 30 days
     mediumTerm: Prediction[]; // Next 90 days
-    longTerm: Prediction[];   // Next 365 days
+    longTerm: Prediction[]; // Next 365 days
   };
 }
 
@@ -338,6 +375,7 @@ interface Prediction {
 ```
 
 **Real-Time Analytics Dashboard**:
+
 - **Performance KPIs**: Live tracking of yield, quality, and efficiency metrics
 - **Predictive Alerts**: Early warning system for potential issues
 - **Resource Optimization**: Recommendations for optimal resource allocation

@@ -1,13 +1,15 @@
 ---
-title: "SOP: Pest Control"
+title: "SOP: Integrated Pest Management"
 module: "Cultivation Management"
-version: "0.2"
-status: "draft"
-last_updated: "2025-09-02"
+version: "1.0"
+status: "approved"
+last_updated: "2025-09-15"
 author: "Plant Protection Specialist"
 approver: "Cultivation Manager"
-effective_date: "TBD"
-review_date: "2026-09-02"
+effective_date: "2025-09-16"
+review_date: "2026-09-15"
+gacp_compliance: "WHO GACP Section 5.5 - Pest Control"
+cfr_compliance: "21 CFR Part 111 - Current Good Manufacturing Practice"
 ---
 
 ## SOP: Pest Control

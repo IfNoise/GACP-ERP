@@ -1,13 +1,15 @@
 ---
-title: "SOP: Water System"
+title: "SOP: Water System Management"
 module: "Facility Management"
-version: "0.2"
-status: "draft"
-last_updated: "2025-09-02"
+version: "1.0"
+status: "approved"
+last_updated: "2025-09-15"
 author: "Facilities Engineer"
 approver: "Quality Manager"
-effective_date: "TBD"
-review_date: "2026-09-02"
+effective_date: "2025-09-16"
+review_date: "2026-09-15"
+gacp_compliance: "WHO GACP Section 5.2 - Water Quality"
+cfr_compliance: "21 CFR Part 111 - Current Good Manufacturing Practice"
 ---
 
 ## SOP: Water System
@@ -784,10 +786,11 @@ Efficiency_Metrics:
 
 ### 16. Revision History
 
-| Version | Date       | Description                           | Author              |
-| ------- | ---------- | ------------------------------------- | ------------------- |
-| 0.1     | 2025-09-01 | Initial template                      | System              |
-| 0.2     | 2025-09-02 | Comprehensive water system procedures | Facilities Engineer |
+| Version | Date       | Description                                                                                                      | Author              |
+| ------- | ---------- | ---------------------------------------------------------------------------------------------------------------- | ------------------- |
+| 0.1     | 2025-09-01 | Initial template                                                                                                 | System              |
+| 0.2     | 2025-09-02 | Comprehensive water system procedures                                                                            | Facilities Engineer |
+| 1.0     | 2025-09-15 | Approved version with full GACP compliance, enhanced monitoring protocols, and automated quality control systems | Facilities Engineer |
 
 ### 17. Attachments
 
