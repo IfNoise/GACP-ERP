@@ -102,7 +102,7 @@
 ┌─────────────────────────────────────────────────────────────────────┐
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
 │ │Kubernetes   │ │Apache Kafka │ │MQTT Broker  │ │Keycloak     │   │
-│ │(Container   │ │(Events)     │ │(IoT)        │ │(Auth)       │   │
+│ │(Container   │ │(Events)     │ │EMQX (IoT)   │ │(Auth)       │   │
 │ │Orchestration│ │             │ │             │ │             │   │
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
@@ -119,21 +119,29 @@
 
 ### 2.2 Архитектурные принципы
 
-#### 2.2.1 Domain-Driven Design (DDD)
+#### 2.2.1 NX Monorepo Architecture
+
+- **Project Structure**: NX Workspace для организации всех модулей и библиотек
+- **Code Generation**: Автоматическое создание сервисов, библиотек и приложений
+- **Affected Commands**: Интеллектуальная сборка только измененных проектов
+- **Build Optimization**: Распределенная сборка и кэширование
+- **Dependency Graph**: Визуализация и валидация зависимостей между проектами
+
+#### 2.2.2 Domain-Driven Design (DDD)
 
 - **Bounded Contexts**: Четкое разделение доменов
 - **Aggregates**: Consistency boundaries
 - **Domain Events**: Loose coupling между модулями
 - **Ubiquitous Language**: Единый язык предметной области
 
-#### 2.2.2 Event-Driven Architecture (EDA)
+#### 2.2.3 Event-Driven Architecture (EDA)
 
 - **Event Sourcing**: Для audit trail и compliance
 - **CQRS**: Разделение команд и запросов
 - **Eventual Consistency**: Между microservices
 - **Saga Pattern**: Для distributed transactions
 
-#### 2.2.3 Microservices Patterns
+#### 2.2.4 Microservices Patterns
 
 - **API Gateway**: Единая точка входа
 - **Service Discovery**: Автоматическое обнаружение сервисов

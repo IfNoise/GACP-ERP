@@ -18,7 +18,7 @@ GxP-совместимых систем для фармацевтической 
 
 КРИТИЧЕСКИ ВАЖНО: Перед началом любой работы изучи систему инструкций Copilot:
 
-- /COPILOT_INSTRUCTIONS.md - основной документ с полными инструкциями
+- /.github/instructions/copilot.instructions.md - основной документ с полными инструкциями
 - /docs/DOCUMENTATION_NAVIGATION_MATRIX.md - навигация по всей документации
 - /docs/DEVELOPMENT_WORKFLOW_GUIDE.md - детальные workflow паттерны
 - /README_COPILOT_INTEGRATION.md - обзор и быстрый старт
@@ -31,7 +31,7 @@ GxP-совместимых систем для фармацевтической 
 
 СТРОГИЕ ПРАВИЛА:
 
-1. ВСЕГДА следуй инструкциям из COPILOT_INSTRUCTIONS.md
+1. ВСЕГДА следуй инструкциям из .github/instructions/copilot.instructions.md
 2. Используй workflow паттерны из DEVELOPMENT_WORKFLOW_GUIDE.md
 3. Применяй современный observability стек (VictoriaMetrics dual clusters, EMQX, Tempo, Loki, OTEL)
 4. Обеспечивай ALCOA+ compliance для всех данных
@@ -53,6 +53,7 @@ GxP-совместимых систем для фармацевтической 
 - GAMP 5 (2nd ed., 2022) (валидация систем)
 
 ОБЯЗАТЕЛЬНЫЕ ТЕХНОЛОГИИ:
+Project Structure: NX Workspace (TypeScript-first monorepo with multi-language support)
 ZOD one source of truth! All types from Zod schemas
 Backend: NestJS 10+ с TypeScript
 Frontend: Next.js 15+ App Router с TypeScript
@@ -83,7 +84,7 @@ Visualization: Grafana (дашборды и алерты)
 
 АРХИТЕКТУРНЫЕ ПРИНЦИПЫ:
 
-1. Documentation-First Development (следуй COPILOT_INSTRUCTIONS.md)
+1. Documentation-First Development (следуй .github/instructions/copilot.instructions.md)
 2. Contract-First Development (ts-rest + Zod schemas)
 3. Event-Driven Architecture (Kafka events)
 4. Risk-Based Approach (high/medium/low risk компоненты)
@@ -184,6 +185,7 @@ Visualization: Grafana (дашборды и алерты)
 - Предложения без error handling
 - Решения без валидации
 - Архитектуры без disaster recovery
+- Упрощения при исправлении ошибок
 
 ВАЛИДАЦИЯ И ТЕСТИРОВАНИЕ:
 
@@ -382,7 +384,7 @@ export const MetricsSchema = z.object({
 
 ### Copilot Instruction System
 
-- `/COPILOT_INSTRUCTIONS.md` - Главный документ инструкций для GitHub Copilot
+- `/.github/instructions/copilot.instructions.md` - Главный документ инструкций для GitHub Copilot
 - `/docs/DOCUMENTATION_NAVIGATION_MATRIX.md` - Навигационная матрица всех документов
 - `/docs/DEVELOPMENT_WORKFLOW_GUIDE.md` - Детальные workflow паттерны
 - `/README_COPILOT_INTEGRATION.md` - Обзор и быстрый старт

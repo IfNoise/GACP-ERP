@@ -21,9 +21,9 @@ This guide provides GitHub Copilot with comprehensive instructions for developin
 
 ## 📚 CORE INSTRUCTION DOCUMENTS
 
-### 1. Primary Reference: COPILOT_INSTRUCTIONS.md
+### 1. Primary Reference: .github/instructions/copilot.instructions.md
 
-**Path**: `/COPILOT_INSTRUCTIONS.md`  
+**Path**: `/.github/instructions/copilot.instructions.md`  
 **Purpose**: Master instruction document containing:
 
 - Project overview and mission
@@ -232,7 +232,7 @@ VictoriaMetrics IoT Cluster:
 
 Before beginning any development work:
 
-- [ ] Read `COPILOT_INSTRUCTIONS.md` completely
+- [ ] Read `.github/instructions/copilot.instructions.md` completely
 - [ ] Review `DOCUMENTATION_NAVIGATION_MATRIX.md` for relevant documents
 - [ ] Select appropriate workflow from `DEVELOPMENT_WORKFLOW_GUIDE.md`
 - [ ] Understand regulatory requirements for your feature area
@@ -251,7 +251,7 @@ Before beginning any development work:
 
 ### Quality Assurance Support
 
-- **Code Reviews**: Use checklists in `COPILOT_INSTRUCTIONS.md`
+- **Code Reviews**: Use checklists in `.github/instructions/copilot.instructions.md`
 - **Compliance Verification**: Reference `ComplianceChecklist.md`
 - **Documentation Updates**: Maintain `TraceabilityMatrix.md`
 - **Risk Management**: Update `RA.md` for significant changes
@@ -277,7 +277,7 @@ Before beginning any development work:
 ## 🎯 QUICK START SUMMARY
 
 1. **Read This Guide**: Understanding the regulatory context is crucial
-2. **Follow COPILOT_INSTRUCTIONS.md**: Your primary development reference
+2. **Follow .github/instructions/copilot.instructions.md**: Your primary development reference
 3. **Navigate with DOCUMENTATION_NAVIGATION_MATRIX.md**: Find relevant documents quickly
 4. **Execute DEVELOPMENT_WORKFLOW_GUIDE.md**: Use appropriate workflow patterns
 5. **Never Skip Validation**: Patient safety depends on our thoroughness

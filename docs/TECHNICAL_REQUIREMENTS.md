@@ -80,6 +80,13 @@
 
 ### 2.2 Технологический стек
 
+#### Project Structure
+
+- **Monorepo**: NX Workspace
+- **Code Organization**: Apps, libraries, shared packages
+- **Build System**: NX affected, distributed task execution
+- **Code Generation**: NX generators for consistency
+
 #### Frontend
 
 - **Framework**: Next.js 15+ (App Router)

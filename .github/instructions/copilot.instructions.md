@@ -28,6 +28,13 @@ Before starting ANY development task, Copilot MUST:
 ### Technology Stack (MANDATORY)
 
 ```yaml
+# Project Structure & Build System
+Monorepo: NX Workspace (TypeScript-first, multi-language support)
+Frontend: Next.js 15+ App Router (TypeScript)
+Backend: NestJS 10+ (TypeScript)
+Shared Libraries: NX libraries for common code
+Build System: NX targets and dependency graph
+
 # Observability & Monitoring (CRITICAL - Medical Cannabis Compliance)
 Metrics:
   - VictoriaMetrics Cluster (Application Metrics)
@@ -357,7 +364,7 @@ When encountering:
 
 ### Primary Instruction Documents
 
-1. **This Document**: `COPILOT_INSTRUCTIONS.md` - Master instruction reference
+1. **This Document**: `.github/instructions/copilot.instructions.md` - Master instruction reference
 2. **Navigation Guide**: `docs/DOCUMENTATION_NAVIGATION_MATRIX.md` - Complete document inventory and navigation
 3. **Workflow Guide**: `docs/DEVELOPMENT_WORKFLOW_GUIDE.md` - Detailed workflow patterns and procedures
 4. **Integration Overview**: `README_COPILOT_INTEGRATION.md` - Quick start and overview guide

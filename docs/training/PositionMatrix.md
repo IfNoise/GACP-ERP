@@ -8,18 +8,6 @@ approved_by: "HR Manager, Compliance Officer"
 regulatory_scope: "GACP Guidelines, 21 CFR Part 11, EU GMP Annex 11"
 ---
 
----
-
-title: "GACP-ERP Position Training Matrix"
-module: "Training & Competency Management"
-version: "1.0"
-status: "approved"
-last_updated: "2025-09-15"
-approved_by: "HR Manager, Compliance Officer"
-regulatory_scope: "GACP Guidelines, 21 CFR Part 11, EU GMP Annex 11"
-
----
-
 # GACP-ERP Position Training Matrix
 
 Данная матрица определяет обязательные тренинги, экзамены и компетенции для каждой должности в системе GACP-ERP, обеспечивая соответствие регулятивным требованиям и операционным стандартам.

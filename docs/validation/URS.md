@@ -89,18 +89,18 @@ localization:
   time_format: "ISO8601 + TZ"
 ---
 
-# 1. Overview
+## 1. Overview
 
 Этот документ описывает пользовательские требования (URS) к ERP-системе для GACP фермы, включая функции, соответствие регуляторным требованиям, интеграции, производительность, безопасность и требования к эксплуатации/восстановлению.
 
-# 2. Acceptance and Verification Legend
+## 2. Acceptance and Verification Legend
 
 - **Priority**: MUST | SHOULD | NICE
 - **Risk**: High | Medium | Low
 - **Verification**: IQ (Install Qual), OQ (Operational Qual), PQ (Performance/UAT), DR (Doc Review), SR (Security Review)
 - **Trace**: связь с FS/DS/TestCases будет заполнена в матрице трассируемости
 
-# 3. User Requirements
+## 3. User Requirements
 
 ## 3.1 Безопасность и идентификация (Security & Identity)
 
