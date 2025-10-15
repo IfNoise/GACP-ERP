@@ -34,7 +34,7 @@ approval: "System Architect"
 
 ### 2.2 Event-Driven Architecture
 
-```
+```plaintext
 [ERP Monolith/Microservices] → [Kafka Broker] → [Go Audit Consumer] → [immudb Storage]
                                       ↓
                              [Other Consumers] (analytics, notifications)

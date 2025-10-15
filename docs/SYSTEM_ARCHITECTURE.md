@@ -1587,6 +1587,37 @@ export class PlantsController {
 }
 ```
 
+### 7.2 Auditor Roles
+
+Аудиторы - это обычные пользователи с расширенными правами на чтение:
+
+```typescript
+// Аудиторские роли в системе RBAC
+const AUDITOR_ROLES = {
+  EXTERNAL_AUDITOR: "external_auditor", // Регулятивные органы
+  INTERNAL_AUDITOR: "internal_auditor", // Внутренний QA
+  THIRD_PARTY_AUDITOR: "third_party_auditor", // Сертификационные органы
+};
+
+// Права аудиторов - только чтение + просмотр audit trail
+const AUDITOR_PERMISSIONS = [
+  "plants:read",
+  "facilities:read",
+  "documents:read",
+  "audit_trail:read",
+  "compliance:read",
+  "reports:generate", // Могут генерировать отчеты для экспорта
+];
+
+// Ограничения для аудиторов
+const AUDITOR_RESTRICTIONS = {
+  readOnly: true, // Никаких прав на запись
+  temporaryAccess: true, // Временные учетные записи
+  auditActivity: true, // Вся активность логируется
+  watermarkedExports: true, // Экспорты с водяными знаками
+};
+```
+
 ---
 
 ## 📚 **СВЯЗАННАЯ ДОКУМЕНТАЦИЯ**

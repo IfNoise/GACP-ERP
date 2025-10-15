@@ -1,13 +1,14 @@
 ---
-title: "SOP: Deviation Management"
+title: "SOP: Deviation Management and CAPA System"
 module: "Quality Management System"
-version: "0.2"
-status: "draft"
-last_updated: "2025-09-02"
+version: "1.0"
+status: "active"
+last_updated: "2025-10-15"
 author: "Quality Manager"
 approver: "Quality Director"
-effective_date: "TBD"
-review_date: "2026-09-02"
+effective_date: "2025-10-15"
+review_date: "2026-10-15"
+regulatory_basis: "ICH Q9/Q10, FDA OOS Guidance, EU GMP, WHO GACP"
 ---
 
 ## SOP: Deviation Management
@@ -663,17 +664,49 @@ Risk_Mitigation:
 - EMA Guideline on Good Manufacturing Practice
 - USP <1206>: Sterility Testing
 
-### 15. Revision History
+### 15. Glossary
 
-| Version | Date       | Description                        | Author          |
-| ------- | ---------- | ---------------------------------- | --------------- |
-| 0.1     | 2025-09-01 | Initial template                   | System          |
-| 0.2     | 2025-09-02 | Comprehensive deviation management | Quality Manager |
+| Term | Definition |
+|------|------------|
+| **OOS** | Out-of-Specification - результат, выходящий за установленные пределы |
+| **OOT** | Out-of-Trend - результат, отклоняющийся от исторической тенденции |
+| **CAPA** | Corrective and Preventive Actions |
+| **RCA** | Root Cause Analysis - анализ первопричин |
+| **FTA** | Fault Tree Analysis - анализ дерева отказов |
+| **FMEA** | Failure Mode and Effects Analysis |
+| **5 Why** | Методология последовательного углубления в причины |
 
-### 16. Attachments
+### 16. Revision History
 
-- Attachment A: Deviation Report Form Template
-- Attachment B: Investigation Checklist
-- Attachment C: Root Cause Analysis Tools
-- Attachment D: CAPA Development Worksheet
-- Attachment E: Trend Analysis Templates
+| Version | Date | Description | Author | Approved By |
+|---------|------|-------------|--------|-------------|
+| 0.1 | 2025-09-01 | Initial template | System | - |
+| 0.2 | 2025-09-02 | Comprehensive deviation management | Quality Manager | - |
+| 1.0 | 2025-10-15 | Finalized with full CAPA integration, risk management, regulatory compliance | Quality Manager | Quality Director |
+
+### 17. Approvals
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | Quality Manager | _________________ | __________ |
+| **Technical Reviewer** | Production Manager | _________________ | __________ |
+| **Quality Reviewer** | Compliance Officer | _________________ | __________ |
+| **Final Approver** | Quality Director | _________________ | __________ |
+
+---
+
+**Document Control:**
+- Document ID: SOP-QMS-002
+- Location: /docs/sop/SOP_DeviationManagement.md
+- Classification: Internal - Restricted
+- Next Review Date: 2026-10-15
+
+### 18. Attachments
+
+- **Attachment A**: Deviation Report Form Template (FORM-DEV-001)
+- **Attachment B**: Investigation Checklist (CHECK-DEV-001)
+- **Attachment C**: Root Cause Analysis Tools Guide (GUIDE-DEV-001)
+- **Attachment D**: CAPA Development Worksheet (FORM-DEV-002)
+- **Attachment E**: Trend Analysis Templates (TEMPLATE-DEV-001)
+- **Attachment F**: Risk Assessment Matrix (TOOL-DEV-001)
+- **Attachment G**: Batch Disposition Decision Tree (FLOW-DEV-001)

@@ -1,13 +1,14 @@
 ---
-title: "SOP: Access Control"
-module: "ERP Security"
-version: "0.2"
-status: "draft"
-last_updated: "2025-09-01"
+title: "SOP: Access Control and Authentication Management"
+module: "ERP Security & Compliance"
+version: "1.0"
+status: "active"
+last_updated: "2025-10-15"
 author: "IT Security Officer"
 approver: "General Manager"
-effective_date: "TBD"
-review_date: "2026-09-01"
+effective_date: "2025-10-15"
+review_date: "2026-10-15"
+regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, ISO 27001, NIST SP 800-63"
 ---
 
 # SOP: Access Control
@@ -339,17 +340,307 @@ API_Security:
 - NIST SP 800-63: Digital Identity Guidelines
 - ISO 27001: Information Security Management
 
-## 16. Revision History
+## 16. Incident Response
 
-| Version | Date       | Description                            | Author              |
-| ------- | ---------- | -------------------------------------- | ------------------- |
-| 0.1     | 2025-09-01 | Initial draft                          | IT Security Officer |
-| 0.2     | 2025-09-01 | Comprehensive update with RBAC details | IT Security Officer |
+### 16.1 Unauthorized Access Detection
 
-## 17. Attachments
+**Immediate Actions:**
+1. Автоматическое блокирование подозрительной учетной записи
+2. Уведомление IT Security Officer (email + SMS)
+3. Логирование деталей инцидента в Audit Trail
+4. Запуск процедуры расследования
 
-- Attachment A: Access Request Form Template
-- Attachment B: Position Matrix (Role-Permission Mapping)
-- Attachment C: Emergency Access Procedures
-- Attachment D: MFA Setup Guide
-- Attachment E: Password Policy Configuration
+**Investigation Steps:**
+```yaml
+Investigation_Procedure:
+  1_Containment:
+    - Изоляция скомпрометированного аккаунта
+    - Ревокация всех активных сессий
+    - Блокировка связанных API токенов
+    
+  2_Analysis:
+    - Просмотр audit logs за последние 30 дней
+    - Идентификация затронутых данных
+    - Определение метода компрометации
+    
+  3_Recovery:
+    - Принудительный сброс пароля
+    - Ре-конфигурация MFA
+    - Верификация личности пользователя
+    
+  4_Post_Incident:
+    - Документирование инцидента (Incident Report)
+    - Уведомление Compliance Officer
+    - Внедрение дополнительных контролей
+```
+
+### 16.2 Brute Force Attack Mitigation
+
+**Detection Criteria:**
+- > 5 failed login attempts за 5 минут
+- > 10 failed attempts с одного IP за 15 минут
+- > 20 failed attempts для одного username за 1 час
+
+**Automated Response:**
+```
+1. IP блокировка на 1 час (firewall-level)
+2. Account временная блокировка (30 минут)
+3. CAPTCHA challenge для всех последующих попыток
+4. Alert IT Security + SOC
+```
+
+### 16.3 Privilege Escalation Detection
+
+**Monitoring Rules:**
+- Доступ к admin endpoints без admin роли
+- Модификация прав без Change Request
+- Использование deprecated/backdoor endpoints
+- SQL injection attempts в параметрах
+
+**Response:**
+```
+1. Немедленное прекращение сессии
+2. Блокировка аккаунта до расследования
+3. Автоматический Incident Report
+4. Escalation to CTO + Compliance Officer
+```
+
+## 17. Compliance Validation
+
+### 17.1 FDA 21 CFR Part 11 Requirements
+
+| Requirement | Implementation | Validation Method |
+|------------|----------------|-------------------|
+| **§11.10(d)** Limiting system access to authorized individuals | RBAC + MFA | Quarterly access review |
+| **§11.10(g)** Use of authority checks | Role-based permissions | Automated testing |
+| **§11.30** Controls for open systems | Encryption + VPN | Security audit |
+| **§11.300(b)** Use of identification codes | Unique user accounts | Account provisioning logs |
+| **§11.300(d)** Loss management procedures | Account recovery SOP | Annual validation |
+
+### 17.2 EU GMP Annex 11 Compliance
+
+**System Access (Clause 12.1):**
+- ✅ Physical and/or logical controls для ограничения доступа
+- ✅ Methods для предотвращения unauthorized entry
+- ✅ Процедуры для выдачи, cancellation, modification доступа
+
+**Audit Trail (Clause 12.4):**
+- ✅ Independent and computer-generated audit trail
+- ✅ Recording of identity для создания/изменения данных
+- ✅ No deleting or altering audit trails
+
+### 17.3 ISO 27001 Controls Mapping
+
+```yaml
+ISO_27001_Controls:
+  A.9.1_Business_Requirements:
+    - Access control policy implemented
+    - Regular access reviews conducted
+    
+  A.9.2_User_Access_Management:
+    - Formal user registration процедура
+    - Privileged access управление
+    - Access rights review
+    
+  A.9.3_User_Responsibilities:
+    - Password use policy
+    - Unattended user equipment protection
+    
+  A.9.4_System_Access_Control:
+    - Secure log-on procedures (MFA)
+    - Password management system
+    - Use of privileged utility programs
+```
+
+## 18. Change Control Integration
+
+### 18.1 Changes Requiring Validation
+
+**Critical Changes (Full Validation Required):**
+- Модификация RBAC matrix
+- Изменение authentication механизмов
+- Обновление MFA configuration
+- Новые privileged roles
+
+**Standard Changes (Testing Only):**
+- Добавление стандартных пользователей
+- Изменение password expiration
+- Обновление access request forms
+
+### 18.2 Change Approval Matrix
+
+| Change Type | Initiator | Reviewer | Approver | Testing Required |
+|------------|-----------|----------|----------|-----------------|
+| Role modification | Department Head | IT Security | General Manager | Yes |
+| New user role | IT Security | Compliance | Quality Manager | Yes |
+| Password policy | IT Security | IT Security | CTO | No |
+| Individual access grant | Line Manager | IT Security | Department Head | No |
+
+## 19. Continuous Improvement
+
+### 19.1 Metrics Dashboard
+
+**Weekly Metrics:**
+- Failed login attempts trend
+- Average account provisioning time
+- Active sessions по времени суток
+- Anomaly detection alerts
+
+**Monthly Metrics:**
+- MFA adoption rate
+- Password compliance rate
+- Access review completion %
+- Incident response time
+
+**Quarterly Metrics:**
+- User satisfaction survey
+- Security training completion
+- Audit findings trend
+- Compliance score
+
+### 19.2 Review and Update Cycle
+
+```yaml
+SOP_Maintenance:
+  Quarterly_Review:
+    - Performance metrics analysis
+    - Incident trends review
+    - Technology updates assessment
+    
+  Annual_Validation:
+    - Full compliance audit
+    - Regulatory requirements review
+    - Technology stack evaluation
+    
+  Continuous:
+    - Security patches application
+    - Threat intelligence monitoring
+    - Best practices adoption
+```
+
+## 20. Disaster Recovery Integration
+
+### 20.1 Access Control Failover
+
+**Scenario: Primary Keycloak Instance Failure**
+```
+1. Automatic failover к secondary instance (< 30 seconds)
+2. Verification целостности user database
+3. Validation активных сессий
+4. Communication to users (если требуется)
+```
+
+**Scenario: Complete Identity Provider Outage**
+```
+1. Activation emergency access procedure
+2. Break-glass accounts для критического персонала
+3. Временная миграция на backup authentication
+4. Post-recovery audit всех emergency access actions
+```
+
+### 20.2 Business Continuity
+
+**RTO (Recovery Time Objective):** 1 hour  
+**RPO (Recovery Point Objective):** 15 minutes
+
+**Critical Functions Priority:**
+1. Quality Manager access (compliance operations)
+2. Production Manager access (production continuation)
+3. System Administrator access (recovery operations)
+4. Standard users (business as usual)
+
+## 21. Integration Testing Procedures
+
+### 21.1 User Acceptance Testing (UAT)
+
+**Test Scenarios:**
+1. ✅ New user account creation E2E
+2. ✅ MFA enrollment and login
+3. ✅ Password reset flow
+4. ✅ Role modification impact
+5. ✅ Session timeout validation
+6. ✅ Concurrent sessions limit
+7. ✅ Emergency access activation
+8. ✅ Account deactivation process
+
+**Success Criteria:**
+- 100% test cases passed
+- No security vulnerabilities detected
+- Audit trail completeness verified
+- Performance benchmarks met
+
+### 21.2 Regression Testing
+
+**Automated Test Suite:**
+```typescript
+describe('Access Control Validation', () => {
+  test('RBAC permissions correctly enforced', async () => {
+    // Test role-based access restrictions
+  });
+  
+  test('MFA required for critical operations', async () => {
+    // Verify MFA enforcement
+  });
+  
+  test('Session timeout after inactivity', async () => {
+    // Validate session management
+  });
+  
+  test('Audit trail records all access events', async () => {
+    // Verify audit completeness
+  });
+});
+```
+
+**Execution Frequency:**
+- Pre-production deployment: Always
+- Weekly: Smoke tests
+- Monthly: Full regression suite
+- Post-incident: Targeted tests
+
+## 22. Glossary
+
+| Term | Definition |
+|------|------------|
+| **RBAC** | Role-Based Access Control - метод управления доступом на основе ролей |
+| **MFA** | Multi-Factor Authentication - многофакторная аутентификация |
+| **SSO** | Single Sign-On - единая точка входа |
+| **JIT** | Just-in-Time - предоставление доступа точно в момент необходимости |
+| **SOD** | Segregation of Duties - разделение обязанностей |
+| **PAM** | Privileged Access Management - управление привилегированным доступом |
+| **SCUD** | System Configuration and User Database - модуль управления пользователями |
+
+## 23. Revision History
+
+| Version | Date       | Description | Author | Approved By |
+|---------|------------|-------------|--------|-------------|
+| 0.1 | 2025-09-01 | Initial draft | IT Security Officer | - |
+| 0.2 | 2025-09-01 | Comprehensive RBAC details | IT Security Officer | - |
+| 1.0 | 2025-10-15 | Finalized with compliance mapping, incident response, DR integration | IT Security Officer | General Manager |
+
+## 24. Approvals
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | IT Security Officer | _________________ | __________ |
+| **Reviewer** | Compliance Officer | _________________ | __________ |
+| **Approver** | General Manager | _________________ | __________ |
+| **QA Verification** | Quality Manager | _________________ | __________ |
+
+---
+
+**Document Control:**
+- Document ID: SOP-SEC-001
+- Location: /docs/sop/SOP_AccessControl.md
+- Classification: Internal - Restricted
+- Next Review Date: 2026-10-15
+
+## 25. Attachments
+
+- **Attachment A**: Access Request Form Template (FORM-SEC-001)
+- **Attachment B**: Position Matrix - Role-Permission Mapping (DOC-SEC-002)
+- **Attachment C**: Emergency Access Procedures (SOP-SEC-002)
+- **Attachment D**: MFA Setup Guide (GUIDE-SEC-001)
+- **Attachment E**: Password Policy Configuration (CONFIG-SEC-001)
+- **Attachment F**: Incident Response Playbook (PLAY-SEC-001)
+- **Attachment G**: Access Audit Report Template (REPORT-SEC-001)

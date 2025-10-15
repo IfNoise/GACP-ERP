@@ -17,6 +17,9 @@ regulatory_scope: "GACP Guidelines, 21 CFR Part 11, EU GMP Annex 11"
 ### Covered Positions
 
 - **Production Staff**: Cultivation Technician, Quality Control Analyst, Harvest Operator
+- **Management**: Production Manager, Quality Control Manager, Compliance Officer
+- **Administrative**: Laboratory Technician, Security Officer, System Administrator
+- **Auditing**: External Auditor, Internal Auditor, Third-party Auditor
 
 ## Comprehensive Position Training Matrix
 
@@ -235,6 +238,133 @@ Monitor in GACP-ERP Training Module:
 | **Proficient**   | 85-94%      | ✅ Competent           | Continue current training             |
 | **Developing**   | 70-84%      | ⚠️ Additional Training | Remedial training required            |
 | **Insufficient** | <70%        | ❌ Not Competent       | Immediate retraining and reassessment |
+
+## Auditing Positions
+
+### External Auditor (Regulatory Inspectors)
+
+**Purpose**: Regulatory compliance inspections by FDA, Health Canada, state regulators
+
+| Category          | Requirement                   | Course ID | Exam ID | Frequency | Status Tracking        |
+| ----------------- | ----------------------------- | --------- | ------- | --------- | ---------------------- |
+| **Orientation**   | Facility Safety & Access      | CUR-031   | N/A     | Per Visit | ☐ Required ☐ Completed |
+| **System Access** | ERP Read-only Navigation      | CUR-032   | N/A     | Per Visit | ☐ Required ☐ Completed |
+| **Documentation** | Document Location & Structure | CUR-033   | N/A     | Initial   | ☐ Required ☐ Completed |
+| **Emergency**     | Emergency Procedures Overview | CUR-034   | N/A     | Per Visit | ☐ Required ☐ Completed |
+
+**Access Permissions**:
+
+- ✅ Read-only access to all compliance data
+- ✅ Full audit trail viewing
+- ✅ Document export and printing
+- ✅ Report generation capabilities
+- ❌ No modification rights
+- ❌ No system configuration access
+
+**Account Management**:
+
+- **Duration**: Maximum 30 days per audit cycle
+- **Approval**: Compliance Officer + IT Administrator
+- **Monitoring**: All activities logged and monitored
+- **Escort Requirements**: Supervised access for sensitive areas
+
+---
+
+### Internal Auditor (Quality Assurance)
+
+**Purpose**: Internal quality audits, compliance verification, process improvement
+
+| Category            | Requirement                | Course ID | Exam ID | Frequency          | Status Tracking        |
+| ------------------- | -------------------------- | --------- | ------- | ------------------ | ---------------------- |
+| **Foundation**      | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**      | Audit Trail & e-Signatures | CUR-003   | EX-003  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Auditing**        | Internal Audit Procedures  | CUR-030   | EX-030  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Quality Systems** | Quality Management Systems | CUR-035   | EX-035  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Risk Management** | Risk Assessment & CAPA     | CUR-036   | EX-036  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Data Integrity**  | Data Integrity & ALCOA+    | CUR-037   | EX-037  | Initial + Annual   | ☐ Required ☐ Completed |
+| **System**          | ERP Advanced Operations    | CUR-038   | EX-038  | Initial + Biannual | ☐ Required ☐ Completed |
+
+**Competency Requirements**:
+
+- Bachelor's degree in relevant field OR 5+ years QA experience
+- Internal auditor certification (e.g., ASQ CIA)
+- Knowledge of pharmaceutical/cannabis regulations
+- Clean background check and confidentiality agreement
+
+**Access Permissions**:
+
+- ✅ Read access to all operational data
+- ✅ Full audit trail and compliance data access
+- ✅ CAPA creation and management
+- ✅ Risk assessment tools
+- ✅ Report generation and analysis
+- ⚠️ Limited modification rights (audit findings only)
+- ❌ No production data modification
+
+---
+
+### Third-party Auditor (Certification Bodies)
+
+**Purpose**: ISO certifications, third-party compliance audits, customer audits
+
+| Category            | Requirement                 | Course ID | Exam ID | Frequency      | Status Tracking        |
+| ------------------- | --------------------------- | --------- | ------- | -------------- | ---------------------- |
+| **Orientation**     | Company Overview & Policies | CUR-039   | N/A     | Per Engagement | ☐ Required ☐ Completed |
+| **System Access**   | ERP Auditor Interface       | CUR-040   | N/A     | Per Engagement | ☐ Required ☐ Completed |
+| **Quality Systems** | Quality Standards Overview  | CUR-041   | N/A     | Initial        | ☐ Required ☐ Completed |
+| **Confidentiality** | NDA & Data Protection       | CUR-042   | N/A     | Per Engagement | ☐ Required ☐ Completed |
+
+**Pre-requisites**:
+
+- Valid third-party auditor certification
+- Signed NDA and confidentiality agreement
+- Background verification completed
+- Insurance and liability coverage confirmed
+
+**Access Permissions**:
+
+- ✅ Read-only access to relevant scope data
+- ✅ Audit trail viewing for assigned areas
+- ✅ Document review and export (watermarked)
+- ✅ Interview scheduling and reporting tools
+- ❌ No system modification rights
+- ❌ No access to proprietary formulations
+- ❌ Limited to audit scope areas only
+
+**Account Management**:
+
+- **Duration**: Project-based, typically 5-10 days
+- **Approval**: Quality Manager + Legal Department
+- **Supervision**: Assigned internal escort required
+- **Data Handling**: All exports logged and tracked
+
+---
+
+## Special Auditor Requirements
+
+### Temporary Account Provisioning
+
+**Standard Process**:
+
+1. **Request Submission**: 48 hours advance notice required
+2. **Approval Workflow**: Compliance Officer → IT Administrator → Quality Manager
+3. **Account Setup**: Role-based provisioning with time limits
+4. **Orientation**: Mandatory safety and system briefing
+5. **Monitoring**: Real-time activity logging and alerts
+6. **Deprovisioning**: Automatic account expiration and data archival
+
+### Emergency Audit Access
+
+**Regulatory Emergency Process**:
+
+- **Same-day access**: Available for regulatory emergencies
+- **Approval**: Compliance Officer or designee
+- **Enhanced monitoring**: Continuous supervision required
+- **Documentation**: All activities recorded and reported
+
+---
+
+| **Insufficient** | <70% | ❌ Not Competent | Immediate retraining and reassessment |
 
 ## Approval and Maintenance
 

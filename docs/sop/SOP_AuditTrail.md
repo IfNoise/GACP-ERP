@@ -1,13 +1,14 @@
 ---
-title: "SOP: Audit Trail"
+title: "SOP: Audit Trail Management and Data Integrity"
 module: "Compliance & Data Integrity"
-version: "0.2"
-status: "draft"
-last_updated: "2025-09-01"
+version: "1.0"
+status: "active"
+last_updated: "2025-10-15"
 author: "Compliance Officer"
 approver: "Quality Manager"
-effective_date: "TBD"
-review_date: "2026-09-01"
+effective_date: "2025-10-15"
+review_date: "2026-10-15"
+regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, MHRA Data Integrity, WHO GACP"
 ---
 
 # SOP: Audit Trail
@@ -430,17 +431,361 @@ graph TD
 - GACP Guidelines (WHO, EMA)
 - ISPE GAMP 5: Risk-Based Approach to Compliant GxP Computerized Systems
 
-## 17. Revision History
+## 17. Troubleshooting and Issue Resolution
 
-| Version | Date       | Description                         | Author             |
-| ------- | ---------- | ----------------------------------- | ------------------ |
-| 0.1     | 2025-09-01 | Initial draft                       | Compliance Officer |
-| 0.2     | 2025-09-01 | Comprehensive ALCOA+ implementation | Compliance Officer |
+### 17.1 Common Issues
 
-## 18. Attachments
+#### 17.1.1 Missing Audit Entries
 
-- Attachment A: Event Type Classification Matrix
-- Attachment B: Audit Trail Search Guide
-- Attachment C: Data Integrity Validation Procedures
-- Attachment D: Emergency Access Audit Trail Template
-- Attachment E: Regulatory Mapping Document
+**Symptoms:**
+- Expected events not appearing in audit trail
+- Time gaps in audit log
+- Incomplete transaction records
+
+**Root Causes:**
+```yaml
+Possible_Causes:
+  Application_Level:
+    - Event hook not triggered
+    - Exception during logging
+    - Network connectivity issues
+    
+  System_Level:
+    - Kafka queue full/unavailable
+    - ImmuDB storage issues
+    - Elasticsearch indexing lag
+    
+  Configuration:
+    - Event type not configured for logging
+    - Permission issues
+    - Incorrect routing rules
+```
+
+**Resolution Steps:**
+```
+1. Check application logs for exceptions
+2. Verify Kafka topic health and lag
+3. Confirm ImmuDB storage capacity
+4. Review event configuration settings
+5. Recreate missing entries from backup (if available)
+6. Document incident in CAPA system
+```
+
+#### 17.1.2 Hash Mismatch / Integrity Violation
+
+**Immediate Actions:**
+```
+CRITICAL INCIDENT - Follow escalation procedure:
+
+1. ISOLATE
+   - Quarantine affected records
+   - Block access to suspicious data
+   - Preserve evidence for forensic analysis
+
+2. NOTIFY
+   - Alert Compliance Officer (immediate)
+   - Inform Quality Manager
+   - Contact IT Security team
+   - Log incident in security system
+
+3. INVESTIGATE
+   - Compare with backup records
+   - Review access logs for anomalies
+   - Identify scope of compromise
+   - Determine root cause
+
+4. REMEDIATE
+   - Restore from verified backup (if applicable)
+   - Apply security patches
+   - Update access controls
+   - Implement additional monitoring
+
+5. DOCUMENT
+   - Complete Incident Report (SOP-INC-001)
+   - Perform root cause analysis
+   - Initiate CAPA process
+   - Regulatory notification (if required)
+```
+
+### 17.2 Performance Optimization
+
+**Slow Query Performance:**
+```sql
+-- Optimize common audit trail queries
+CREATE INDEX idx_audit_timestamp ON audit_trail(timestamp DESC);
+CREATE INDEX idx_audit_user ON audit_trail(user_id, timestamp);
+CREATE INDEX idx_audit_object ON audit_trail(object_type, object_id);
+CREATE INDEX idx_audit_event_type ON audit_trail(event_type, severity);
+
+-- Partition strategy for large tables
+PARTITION BY RANGE (timestamp) (
+  PARTITION p2024 VALUES LESS THAN ('2025-01-01'),
+  PARTITION p2025 VALUES LESS THAN ('2026-01-01'),
+  PARTITION p2026 VALUES LESS THAN ('2027-01-01')
+);
+```
+
+**Storage Management:**
+```yaml
+Storage_Optimization:
+  Compression:
+    - Algorithm: "zstd (level 3)"
+    - Space_Saving: "60-70%"
+    - Decompression_Speed: "< 10ms"
+    
+  Archival:
+    - Move_to_Archive: "After 3 years"
+    - Archive_Format: "Parquet (columnar)"
+    - Compression: "Snappy"
+    
+  Cleanup:
+    - Delete_Non_Critical: "After retention period"
+    - Keep_Metadata: "Permanent"
+    - Purge_Schedule: "Monthly"
+```
+
+## 18. Integration with Other Systems
+
+### 18.1 SCUD Module Integration
+
+**User Lifecycle Tracking:**
+- User creation → Audit entry with full justification
+- Permission change → Before/after comparison
+- User deactivation → Complete audit trail preservation
+
+**Sync Mechanism:**
+```typescript
+// Real-time event streaming from SCUD
+scudService.on('userModified', async (event) => {
+  await auditTrail.log({
+    eventType: 'USER_MANAGEMENT',
+    action: 'USER_MODIFIED',
+    userId: event.modifiedBy,
+    objectId: event.userId,
+    oldValues: event.previousState,
+    newValues: event.currentState,
+    reason: event.justification
+  });
+});
+```
+
+### 18.2 Go Audit Consumer
+
+**Event Ingestion:**
+```go
+// Go service consuming Kafka events
+func (c *AuditConsumer) ConsumeEvents() {
+    for msg := range c.kafkaConsumer.Messages() {
+        event := parseAuditEvent(msg.Value)
+        
+        // Validate event structure
+        if err := c.validator.Validate(event); err != nil {
+            c.handleInvalidEvent(event, err)
+            continue
+        }
+        
+        // Store in ImmuDB
+        if err := c.immudb.Store(event); err != nil {
+            c.handleStorageFailure(event, err)
+            continue
+        }
+        
+        // Index in Elasticsearch
+        c.elasticsearch.Index(event)
+        
+        // Check for alerts
+        c.alertEngine.Process(event)
+    }
+}
+```
+
+### 18.3 Quality Management Integration
+
+**QC/QA Actions Tracking:**
+- Test result entry → Complete test data in audit
+- Batch approval → E-signature linked to audit record
+- Deviation → Full investigation trail
+- CAPA → Lifecycle tracking from initiation to closure
+
+## 19. Regulatory Inspection Readiness
+
+### 19.1 Inspection Preparation
+
+**Pre-Inspection Checklist:**
+```markdown
+✅ Audit Trail System Validation Documents
+  - IQ/OQ/PQ protocols and reports
+  - Periodic review records
+  - Change control documentation
+  
+✅ Data Integrity Evidence
+  - ALCOA+ compliance demonstration
+  - Hash verification results
+  - Backup and recovery test results
+  
+✅ Standard Reports
+  - User activity summaries
+  - Security incident logs
+  - Data integrity reports
+  - System availability metrics
+  
+✅ Training Records
+  - Personnel training on data integrity
+  - System administrator certifications
+  - Audit procedures training
+  
+✅ Policies and Procedures
+  - This SOP (current version)
+  - Related SOPs (access control, backup, etc.)
+  - Data governance policies
+```
+
+### 19.2 Inspector Queries - Quick Response Guide
+
+| Common Question | Where to Find Evidence | Response Time |
+|----------------|----------------------|---------------|
+| "Show me audit trail for batch X" | Batch Lifecycle Report | < 5 minutes |
+| "Demonstrate data cannot be modified" | ImmuDB verification demo | < 10 minutes |
+| "Show failed login attempts" | Security Event Report | < 2 minutes |
+| "Prove audit trail completeness" | Coverage Report + Hash verification | < 15 minutes |
+| "Show user access history" | User Activity Report | < 5 minutes |
+
+### 19.3 Demonstration Scripts
+
+**Script 1: Immutability Demonstration**
+```bash
+#!/bin/bash
+# Demonstrate audit trail cannot be tampered with
+
+echo "1. Create test audit entry..."
+ENTRY_ID=$(create_audit_entry "TEST_EVENT" "Demo for inspector")
+
+echo "2. Retrieve entry and calculate hash..."
+ORIGINAL_HASH=$(get_entry_hash $ENTRY_ID)
+
+echo "3. Attempt to modify entry in database (will fail)..."
+attempt_modify_entry $ENTRY_ID "TAMPERED_DATA" || echo "Modification blocked by ImmuDB"
+
+echo "4. Verify hash remains unchanged..."
+CURRENT_HASH=$(get_entry_hash $ENTRY_ID)
+
+if [ "$ORIGINAL_HASH" == "$CURRENT_HASH" ]; then
+  echo "✅ Immutability confirmed"
+else
+  echo "❌ CRITICAL: Hash mismatch!"
+fi
+```
+
+**Script 2: ALCOA+ Compliance Check**
+```typescript
+// Automated ALCOA+ validation
+async function validateALCOACompliance(auditEntryId: string) {
+  const entry = await auditTrail.getEntry(auditEntryId);
+  
+  const results = {
+    attributable: validateAttributable(entry), // User ID, name, role present
+    legible: validateLegible(entry),           // Human-readable format
+    contemporaneous: validateContempor(entry), // Timestamp within 5 sec
+    original: validateOriginal(entry),         // Direct from source
+    accurate: validateAccurate(entry),         // Data validation passed
+    complete: validateComplete(entry),         // All required fields
+    consistent: validateConsistent(entry),     // Follows standards
+    enduring: validateEnduring(entry),         // Immutable storage
+    available: validateAvailable(entry)        // Retrievable on demand
+  };
+  
+  return {
+    compliant: Object.values(results).every(r => r.passed),
+    details: results
+  };
+}
+```
+
+## 20. Continuous Improvement Program
+
+### 20.1 Metrics Review Cycle
+
+**Weekly Reviews:**
+- System performance metrics
+- Storage capacity trends
+- Alert volume and types
+- Failed logging attempts
+
+**Monthly Quality Meetings:**
+- Data integrity metrics
+- Compliance KPIs
+- Training effectiveness
+- Incident trends
+
+**Quarterly Management Review:**
+- Regulatory compliance status
+- System enhancement roadmap
+- Resource requirements
+- Risk assessment updates
+
+### 20.2 Enhancement Tracking
+
+```yaml
+Improvement_Pipeline:
+  Q4_2025:
+    - Machine learning for anomaly detection
+    - Enhanced visualization dashboards
+    - Mobile app for audit review
+    
+  Q1_2026:
+    - Blockchain integration for extra verification
+    - AI-powered root cause analysis
+    - Predictive alerting system
+    
+  Q2_2026:
+    - Cross-system correlation engine
+    - Automated compliance reporting
+    - Natural language query interface
+```
+
+## 21. Glossary
+
+| Term | Definition |
+|------|------------|
+| **ALCOA+** | Attributable, Legible, Contemporaneous, Original, Accurate + Complete, Consistent, Enduring, Available |
+| **ImmuDB** | Immutable database system preventing tampering |
+| **CDC** | Change Data Capture - database-level change tracking |
+| **WORM** | Write Once Read Many - immutable storage principle |
+| **Hash** | Cryptographic fingerprint ensuring data integrity |
+| **Kafka** | Distributed event streaming platform |
+| **NTP** | Network Time Protocol - time synchronization |
+
+## 22. Revision History
+
+| Version | Date | Description | Author | Approved By |
+|---------|------|-------------|--------|-------------|
+| 0.1 | 2025-09-01 | Initial draft | Compliance Officer | - |
+| 0.2 | 2025-09-01 | ALCOA+ implementation | Compliance Officer | - |
+| 1.0 | 2025-10-15 | Finalized with troubleshooting, inspector readiness, integration details | Compliance Officer | Quality Manager |
+
+## 23. Approvals
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| **Author** | Compliance Officer | _________________ | __________ |
+| **Technical Reviewer** | IT Administrator | _________________ | __________ |
+| **Quality Reviewer** | Quality Manager | _________________ | __________ |
+| **Final Approver** | General Manager | _________________ | __________ |
+
+---
+
+**Document Control:**
+- Document ID: SOP-COMP-001
+- Location: /docs/sop/SOP_AuditTrail.md
+- Classification: Internal - Restricted
+- Next Review Date: 2026-10-15
+
+## 24. Attachments
+
+- **Attachment A**: Event Type Classification Matrix (DOC-AUD-001)
+- **Attachment B**: Audit Trail Search Guide (GUIDE-AUD-001)
+- **Attachment C**: Data Integrity Validation Procedures (SOP-AUD-002)
+- **Attachment D**: Emergency Access Audit Trail Template (FORM-AUD-001)
+- **Attachment E**: Regulatory Mapping Document (DOC-AUD-002)
+- **Attachment F**: Inspector Demonstration Scripts (SCRIPT-AUD-001)
+- **Attachment G**: ALCOA+ Compliance Checklist (CHECK-AUD-001)

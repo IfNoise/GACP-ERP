@@ -125,9 +125,37 @@ localization:
 - **URS-SEC-003** — **RBAC по ролям/областям (room/batch/strain)**
 
   - Priority: MUST | Risk: High
+  - Rationale: 21 CFR Part 11 §11.10(d), EU GMP Annex 11 Ch. 12
   - Acceptance:
     - Разрешения на CRUD зависят от роли и контекста (помещение/партия).
-    - Auditor — только чтение + экспорт.
+    - **External Auditor** — read-only доступ ко всем compliance данным + экспорт отчетов.
+    - **Internal Auditor** — read доступ + создание audit findings + CAPA management.
+    - **Third-party Auditor** — ограниченный read-only доступ по области аудита.
+    - Временные аудиторские аккаунты с автоматическим истечением срока.
+  - Verification: OQ, SR
+
+- **URS-SEC-003A** — **Аудиторский доступ и мониторинг**
+
+  - Priority: MUST | Risk: High
+  - Rationale: Regulatory inspection requirements, data integrity
+  - Acceptance:
+    - Система предоставляет специализированные интерфейсы для каждого типа аудитора.
+    - Все действия аудиторов логируются с enhanced detail level.
+    - Read-only режим предотвращает любые модификации данных.
+    - Audit trail доступен аудиторам в режиме просмотра и экспорта.
+    - Watermarked документы и отчеты для external auditors.
+  - Verification: OQ, PQ, SR
+
+- **URS-SEC-003B** — **Временные аудиторские аккаунты**
+
+  - Priority: MUST | Risk: Medium
+  - Rationale: Security best practices, access control
+  - Acceptance:
+    - Аккаунты создаются по запросу с approval workflow.
+    - Максимальная длительность аккаунта: 30 дней для external, 90 дней для third-party.
+    - Автоматическая деактивация по истечении срока.
+    - Mandatory orientation training перед предоставлением доступа.
+    - Escort requirements для физического доступа в sensitive зоны.
   - Verification: OQ, SR
 
 - **URS-SEC-004** — **Сессии и тайм-ауты**

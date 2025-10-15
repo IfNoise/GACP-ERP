@@ -162,7 +162,7 @@ This Validation Master Plan establishes the comprehensive framework for validati
 
 ### 4.1 V-Model Implementation
 
-```
+```text
 Requirements (URS) ←→ Performance Qualification (PQ)
         ↓                        ↑
 Functional Specs (FS) ←→ Operational Qualification (OQ)

@@ -695,9 +695,15 @@ approval_date: "2025-09-14"
 - employee_id: varchar(50), номер сотрудника
 - department: varchar(100), отдел
 - position: varchar(100), должность
+- user_type: enum (internal, external_auditor, internal_auditor, third_party_auditor), тип пользователя
+- auditor_certification: varchar(200), сертификация аудитора (если применимо)
+- organization: varchar(200), организация (для внешних пользователей)
 - hire_date: date, дата найма
 - termination_date: date, дата увольнения
+- account_expiry_date: date, дата истечения аккаунта (для временных)
 - active: boolean, активность аккаунта
+- temporary_account: boolean, временная учетная запись
+- supervisor_required: boolean, требуется сопровождение
 - last_login: timestamp, последний вход
 - failed_login_attempts: integer, неудачные попытки входа
 - password_last_changed: timestamp, последняя смена пароля
@@ -705,6 +711,9 @@ approval_date: "2025-09-14"
 - preferred_language: varchar(10), предпочитаемый язык
 - timezone: varchar(50), часовой пояс
 - mobile_device_ids: UUID[], привязанные мобильные устройства
+- nda_signed: boolean, подписано ли соглашение о неразглашении
+- background_check_status: enum (pending, approved, rejected), статус проверки
+- access_areas: varchar(100)[], разрешенные области доступа
 
 ### 3.20 Roles (DS-AUTH-002)
 
@@ -712,17 +721,45 @@ approval_date: "2025-09-14"
 
 - role_id: UUID, Primary Key
 - role_name: varchar(100), название роли
+- role_category: enum (production, management, auditing, system), категория роли
 - description: text, описание роли
 - permissions: JSONB, права доступа
 - plant_access_level: enum (none, read, write, admin), доступ к растениям
 - batch_access_level: enum (none, read, write, admin), доступ к партиям
 - financial_access_level: enum (none, read, write, admin), доступ к финансам
 - reporting_access_level: enum (none, read, write, admin), доступ к отчётам
+- audit_trail_access: boolean, доступ к audit trail
+- data_export_allowed: boolean, разрешен экспорт данных
+- document_print_allowed: boolean, разрешена печать документов
+- system_config_access: boolean, доступ к настройкам системы
+- capa_management: boolean, управление CAPA
+- watermark_required: boolean, требуется watermark для документов
+- session_timeout_minutes: integer, таймаут сессии в минутах
+- max_concurrent_sessions: integer, максимальное количество одновременных сессий
 - system_admin: boolean, системный администратор
 - can_approve_batches: boolean, может утверждать партии
 - can_sign_documents: boolean, может подписывать документы
 - max_transaction_limit: decimal(15,2), лимит на транзакции
 - zone_restrictions: UUID[], ограничения по зонам
+
+**Предопределенные роли аудиторов**:
+
+```sql
+-- External Auditor (Regulatory)
+INSERT INTO roles (role_name, role_category, audit_trail_access, data_export_allowed,
+                   watermark_required, session_timeout_minutes, max_concurrent_sessions)
+VALUES ('external_auditor', 'auditing', true, true, true, 120, 1);
+
+-- Internal Auditor (QA)
+INSERT INTO roles (role_name, role_category, audit_trail_access, data_export_allowed,
+                   capa_management, session_timeout_minutes, max_concurrent_sessions)
+VALUES ('internal_auditor', 'auditing', true, true, true, 240, 2);
+
+-- Third-party Auditor (Certification)
+INSERT INTO roles (role_name, role_category, audit_trail_access, data_export_allowed,
+                   watermark_required, session_timeout_minutes, max_concurrent_sessions)
+VALUES ('third_party_auditor', 'auditing', true, true, true, 180, 1);
+```
 
 ### 3.21 Training Courses (DS-TRAIN-001)
 
