@@ -29,8 +29,17 @@ last_updated: "2025-09-01"
 
 ## 5. References
 
-- [URS-XXX-001, FS-XXX-001]
-- [Нормативные документы]
+### Validation Documents
+
+- [User Requirements Specification (URS)](../validation/URS.md) - Section 3.2 Plant Lifecycle Management
+- [Functional Specification (FS)](../validation/FS.md) - Waste Management Module
+- [Design Specification (DS)](../validation/DS.md) - Waste Tracking System
+
+### Regulatory Documents
+
+- [WHO GACP](../compliance/WHO_GACP.md) - Waste Management Requirements
+- [EU GMP Annex 11](../compliance/EU_GMP_Annex11.md) - Computerized System Controls
+- [ALCOA+ Principles](../compliance/ALCOA+.md) - Data Integrity
 
 ## 6. Notes
 

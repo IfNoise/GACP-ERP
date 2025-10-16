@@ -776,14 +776,39 @@ review_procedures:
 **Document Control:**
 
 - Created: 2025-09-02
-- Last Modified: 2025-09-02
+- Last Modified: 2025-10-16
 - Next Review: 2026-09-02
 - Document Owner: Post-Harvest Manager
 - Approved By: Production Director
 
-- [URS-XXX-001, FS-XXX-001]
-- [Нормативные документы]
+---
 
-## 6. Notes
+## References
 
-- [Дополнительные примечания]
+### Validation Documents
+
+- [User Requirements Specification (URS)](../validation/URS.md) - Section 3.2 Plant Lifecycle Management
+- [Functional Specification (FS)](../validation/FS.md) - Post-Harvest Processing Module
+- [Design Specification (DS)](../validation/DS.md) - Trimming Workflow System
+- [Traceability Matrix](../validation/TraceabilityMatrix.md) - PLM Module Requirements
+
+### Related SOPs
+
+- [SOP_Harvest.md](./SOP_Harvest.md) - Harvesting Procedures
+- [SOP_DryingCuring.md](./SOP_DryingCuring.md) - Drying and Curing Procedures
+- [SOP_WastePlantMaterial.md](./SOP_WastePlantMaterial.md) - Waste Management
+
+### Regulatory Documents
+
+- [WHO GACP](../compliance/WHO_GACP.md) - Post-Harvest Handling Requirements
+- [EU GMP Annex 11](../compliance/EU_GMP_Annex11.md) - Computerized System Controls
+- [ALCOA+ Principles](../compliance/ALCOA+.md) - Data Integrity in Manufacturing
+
+---
+
+## Notes
+
+- Trimming operations must maintain chain of custody at all times
+- All deviations from standard procedure must be documented in the ERP system
+- Training records must be current for all personnel performing trimming operations
+- Environmental conditions should be monitored and logged during trimming activities

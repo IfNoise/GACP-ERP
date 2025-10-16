@@ -29,8 +29,18 @@ last_updated: "2025-09-01"
 
 ## 5. References
 
-- [URS-XXX-001, FS-XXX-001]
-- [Нормативные документы]
+### Validation Documents
+
+- [User Requirements Specification (URS)](../validation/URS.md)
+- [Functional Specification (FS)](../validation/FS.md)
+- [Design Specification (DS)](../validation/DS.md)
+- [Traceability Matrix](../validation/TraceabilityMatrix.md)
+
+### Regulatory Documents
+
+- [WHO GACP](../compliance/WHO_GACP.md)
+- [EU GMP Annex 11](../compliance/EU_GMP_Annex11.md)
+- [ALCOA+ Principles](../compliance/ALCOA+.md)
 
 ## 6. Notes
 

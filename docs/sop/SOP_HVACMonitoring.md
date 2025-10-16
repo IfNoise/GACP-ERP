@@ -660,14 +660,38 @@ change_control:
 **Document Control:**
 
 - Created: 2025-09-01
-- Last Modified: 2025-09-01
+- Last Modified: 2025-10-16
 - Next Review: 2026-09-01
 - Document Owner: Facility Manager
 - Approved By: Operations Director
 
-- [URS-XXX-001, FS-XXX-001]
-- [Нормативные документы]
+---
 
-## 6. Notes
+## References
 
-- [Дополнительные примечания]
+### Validation Documents
+
+- [User Requirements Specification (URS)](../validation/URS.md) - Section 3.8 IoT & Environmental Monitoring
+- [Functional Specification (FS)](../validation/FS.md) - HVAC Monitoring Module
+- [Design Specification (DS)](../validation/DS.md) - Environmental Control Systems
+- [Traceability Matrix](../validation/TraceabilityMatrix.md) - IoT Module Requirements
+
+### Related SOPs
+
+- [SOP_UtilitiesMonitoring.md](./SOP_UtilitiesMonitoring.md) - Utilities Monitoring
+- [SOP_EquipmentMaintenance.md](./SOP_EquipmentMaintenance.md) - Equipment Maintenance
+
+### Regulatory Documents
+
+- [WHO GACP](../compliance/WHO_GACP.md) - Environmental Control Requirements
+- [EU GMP Annex 11](../compliance/EU_GMP_Annex11.md) - Computerized System Controls
+- [MHRA Data Integrity](../compliance/MHRA_DataIntegrity.md) - Automated Data Collection
+
+---
+
+## Notes
+
+- HVAC system monitoring must be continuous with automated alerting
+- All deviations from environmental specifications must be investigated
+- Calibration records for sensors must be maintained and readily available
+- System alarms and alerts must be addressed promptly and documented
