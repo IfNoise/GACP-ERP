@@ -10,6 +10,8 @@ approved_by: "Michael Johnson, Security Director"
 review_date: "2024-04-15"
 next_review: "2024-07-15"
 last_updated: "2025-01-15"
+regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, WHO GACP Section 8 (Security), ISO 27001:2013"
+data_integrity: "ALCOA+ principles for surveillance data and security events"
 references:
   - "CONTRACT_SPECIFICATIONS.md#SecurityEventSchema"
   - "CONTRACT_SPECIFICATIONS.md#SurveillanceSchema"

@@ -10,6 +10,8 @@ effective_date: "2025-09-16"
 review_date: "2026-09-15"
 gacp_compliance: "WHO GACP Section 5.2 - Water Quality"
 cfr_compliance: "21 CFR Part 111 - Current Good Manufacturing Practice"
+regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, WHO GACP Section 5.2, USP Water Standards"
+data_integrity: "ALCOA+ principles for water quality monitoring and documentation"
 ---
 
 ## SOP: Water System

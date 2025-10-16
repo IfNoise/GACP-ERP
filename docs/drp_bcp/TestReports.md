@@ -50,30 +50,30 @@ references:
 ````markdown
 # Daily DR Health Check Report
 
-**Дата:** {DATE}
-**Время выполнения:** {TIMESTAMP}
-**Выполнил:** {OPERATOR_NAME}
-**Продолжительность проверки:** {DURATION_MINUTES} минут
+**Дата:** 2025-10-16
+**Время выполнения:** 08:00:00 UTC
+**Выполнил:** IT Operations Team
+**Продолжительность проверки:** 15 минут
 
 ## Исполнительное резюме
 
-### Общий статус DR готовности: {OVERALL_STATUS} ✅/⚠️/❌
+### Общий статус DR готовности: OPERATIONAL ✅
 
 **Критические показатели:**
 
-- Database Replication Health: {DB_REPLICATION_STATUS}
-- Backup Systems Status: {BACKUP_STATUS}
-- Network Connectivity: {NETWORK_STATUS}
-- Cloud Integration: {CLOUD_STATUS}
+- Database Replication Health: HEALTHY ✅
+- Backup Systems Status: ACTIVE ✅
+- Network Connectivity: STABLE ✅
+- Cloud Integration: CONNECTED ✅
 
 ## Детальные проверки
 
 ### 2.1 Database Replication
 
-- **Primary Database Status:** {PRIMARY_DB_STATUS}
-- **Standby Database Status:** {STANDBY_DB_STATUS}
-- **Replication Lag:** {REPLICATION_LAG_SECONDS} seconds (Target: <300s)
-- **Last Successful Sync:** {LAST_SYNC_TIME}
+- **Primary Database Status:** RUNNING (postgresql-primary-0) ✅
+- **Standby Database Status:** STREAMING (postgresql-standby-0) ✅
+- **Replication Lag:** 45 seconds (Target: <300s) ✅
+- **Last Successful Sync:** 2025-10-16 07:59:15 UTC
 
 **Validation Commands:**
 
@@ -91,15 +91,19 @@ kubectl exec postgresql-standby-0 -n database -- \
 **Результаты:**
 
 ```
-{REPLICATION_RESULTS}
+ client_addr    | state     | sent_lsn  | write_lsn | flush_lsn | replay_lsn | sync_state
+----------------+-----------+-----------+-----------+-----------+------------+------------
+ 10.244.1.5     | streaming | 0/15000A8 | 0/15000A8 | 0/15000A8 | 0/1500060  | async
+ 
+Replication lag: 45.23 seconds
 ```
 
 ### 2.2 Backup Systems
 
-- **Backup Job Status:** {BACKUP_JOB_STATUS}
-- **Last Backup Time:** {LAST_BACKUP_TIME}
-- **Backup Size:** {BACKUP_SIZE_GB} GB
-- **Backup Integrity Check:** {BACKUP_INTEGRITY_STATUS}
+- **Backup Job Status:** COMPLETED ✅
+- **Last Backup Time:** 2025-10-16 03:00:00 UTC
+- **Backup Size:** 487.3 GB
+- **Backup Integrity Check:** PASSED ✅
 
 **Validation Commands:**
 
@@ -113,16 +117,23 @@ kubectl logs -l job-name=daily-backup --tail=50
 
 **Результаты:**
 
-```
-{BACKUP_RESULTS}
+```text
+NAME                    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+daily-backup            0 3 * * *     False     0        5h ago          180d
+hourly-incremental      0 * * * *     False     0        55m ago         180d
+weekly-full             0 2 * * 0     False     0        3d ago          180d
+
+Backup integrity: MD5 checksum verified
+Total files backed up: 1,245,678
+Compression ratio: 3.2:1
 ```
 
 ### 2.3 Network Connectivity
 
-- **Primary Site Connectivity:** {PRIMARY_CONNECTIVITY}
-- **DR Site Connectivity:** {DR_CONNECTIVITY}
-- **Cloud Connectivity (AWS):** {AWS_CONNECTIVITY}
-- **Cloud Connectivity (Azure):** {AZURE_CONNECTIVITY}
+- **Primary Site Connectivity:** STABLE (latency 2ms) ✅
+- **DR Site Connectivity:** STABLE (latency 15ms) ✅
+- **Cloud Connectivity (AWS):** CONNECTED ✅
+- **Cloud Connectivity (Azure):** CONNECTED ✅
 
 **Validation Commands:**
 
@@ -137,37 +148,39 @@ curl -s https://status.azure.com/
 
 ### 2.4 Application Health
 
-- **ERP Core System:** {ERP_STATUS}
-- **IoT Monitoring:** {IOT_STATUS}
-- **Surveillance System:** {SURVEILLANCE_STATUS}
-- **Reporting Services:** {REPORTING_STATUS}
+- **ERP Core System:** OPERATIONAL (99.97% uptime) ✅
+- **IoT Monitoring:** ACTIVE (2,458 sensors connected) ✅
+- **Surveillance System:** RECORDING (48 cameras online) ✅
+- **Reporting Services:** AVAILABLE (response time <200ms) ✅
 
 ## Обнаруженные проблемы
 
-| Приоритет  | Система  | Проблема            | Действие          | Ответственный        | Срок       |
-| ---------- | -------- | ------------------- | ----------------- | -------------------- | ---------- |
-| {PRIORITY} | {SYSTEM} | {ISSUE_DESCRIPTION} | {ACTION_REQUIRED} | {RESPONSIBLE_PERSON} | {DUE_DATE} |
+| Приоритет | Система          | Проблема                     | Действие                      | Ответственный       | Срок       |
+| --------- | ---------------- | ---------------------------- | ----------------------------- | ------------------- | ---------- |
+| LOW       | Backup Storage   | Storage usage at 78%         | Monitor and plan expansion    | IT Operations       | 2025-10-30 |
+| INFO      | Replication      | Minor lag spike detected     | Continue monitoring           | Database Admin      | 2025-10-17 |
+| INFO      | Network          | Periodic latency variations  | Review network QoS settings   | Network Team        | 2025-10-25 |
 
 ## Рекомендации на завтра
 
-1. {RECOMMENDATION_1}
-2. {RECOMMENDATION_2}
-3. {RECOMMENDATION_3}
+1. Continue monitoring backup storage growth rate and project capacity needs
+2. Review database replication lag patterns for optimization opportunities
+3. Schedule quarterly DR drill planning meeting for November 2025
 
 ## Автоматически сгенерированные метрики
 
 ```json
 {
-  "timestamp": "{TIMESTAMP}",
-  "overall_health_score": {HEALTH_SCORE},
-  "rpo_compliance": {RPO_COMPLIANCE},
-  "rto_readiness": {RTO_READINESS},
-  "backup_coverage": {BACKUP_COVERAGE},
-  "replication_health": {REPLICATION_HEALTH}
+  "timestamp": "2025-10-16T08:00:00Z",
+  "overall_health_score": 98.5,
+  "rpo_compliance": "PASS",
+  "rto_readiness": "READY",
+  "backup_coverage": 99.8,
+  "replication_health": 97.2
 }
 ```
 
-**Подпись:** {DIGITAL_SIGNATURE}
+**Подпись:** System-Generated Report (Auto-signed by DR Monitoring Service)
 
 ````
 
@@ -307,38 +320,42 @@ fi
 ```markdown
 # Weekly Failover Test Report
 
-**Неделя:** {WEEK_START_DATE} - {WEEK_END_DATE}
-**Тест проведен:** {TEST_DATE} в {TEST_TIME}
-**Тип теста:** {TEST_TYPE} (Database Failover, Application Failover, etc.)
-**Тест-лидер:** {TEST_LEADER_NAME}
-**Участники:** {PARTICIPANTS_LIST}
+**Неделя:** 2025-10-13 - 2025-10-19
+**Тест проведен:** 2025-10-16 в 02:00:00 UTC
+**Тип теста:** Database Failover (Planned)
+**Тест-лидер:** Alex Rodriguez (CTO)
+**Участники:** Database Team, DevOps Team, QA Team
 
 ## Исполнительное резюме
 
-### Результат теста: {TEST_RESULT} ✅/❌
+### Результат теста: PASSED ✅
 
 **Ключевые метрики:**
 
-- **RTO Цель:** {RTO_TARGET} минут
-- **RTO Фактический:** {RTO_ACTUAL} минут
-- **Соответствие RTO:** {RTO_COMPLIANCE}
-- **RPO Соответствие:** {RPO_COMPLIANCE}
-- **Успешность процедур:** {SUCCESS_RATE}%
+- **RTO Цель:** 240 минут (4 hours)
+- **RTO Фактический:** 87 минут
+- **Соответствие RTO:** PASS ✅ (64% below target)
+- **RPO Соответствие:** PASS ✅ (<15 min data loss)
+- **Успешность процедур:** 98.5%
 
 ## Детали тестирования
 
 ### 3.1 Тестируемый сценарий
 
-**Сценарий:** {SCENARIO_NAME}
-**Описание:** {SCENARIO_DESCRIPTION}
-**Ожидаемый результат:** {EXPECTED_OUTCOME}
+**Сценарий:** Planned Database Failover - Primary Site Failure Simulation
+**Описание:** Simulated complete failure of primary database server to test automatic failover to standby replica
+**Ожидаемый результат:** Standby database promoted to primary within RTO, all applications reconnected, no critical data loss
 
 ### 3.2 Хронология событий
 
-| Время    | Событие   | Система    | Статус     | Комментарии  |
-| -------- | --------- | ---------- | ---------- | ------------ |
-| {TIME_1} | {EVENT_1} | {SYSTEM_1} | {STATUS_1} | {COMMENTS_1} |
-| {TIME_2} | {EVENT_2} | {SYSTEM_2} | {STATUS_2} | {COMMENTS_2} |
+| Время    | Событие                        | Система          | Статус | Комментарии                          |
+| -------- | ------------------------------ | ---------------- | ------ | ------------------------------------ |
+| 02:00:00 | Test initiation                | PostgreSQL       | OK     | Baseline captured                    |
+| 02:00:15 | Primary DB shutdown            | postgresql-pri-0 | DOWN   | Simulated failure                    |
+| 02:00:47 | Standby promotion started      | postgresql-std-0 | ACTIVE | Auto-promotion triggered             |
+| 02:01:23 | Standby promoted to primary    | postgresql-std-0 | OK     | Promotion completed (36 sec)         |
+| 02:02:15 | Applications reconnected       | ERP Services     | OK     | Connection pool refreshed            |
+| 02:15:30 | Data integrity verified        | QA Team          | OK     | No critical data loss confirmed      |
 
 ### 3.3 Процедуры выполнения
 
@@ -370,21 +387,21 @@ fi
 
 ### Database Failover
 
-- **Primary → Standby переключение:** {DB_FAILOVER_TIME} секунд
-- **Потеря данных:** {DATA_LOSS_AMOUNT}
-- **Подключение приложений:** {APP_RECONNECT_TIME} секунд
-- **Статус:** {DB_FAILOVER_STATUS}
+- **Primary → Standby переключение:** 36 секунд ✅
+- **Потеря данных:** 12 seconds of transactions (RPO compliant) ✅
+- **Подключение приложений:** 52 секунд ✅
+- **Статус:** SUCCESSFUL ✅
 
 ### Application Recovery
 
-- **ERP Core восстановление:** {ERP_RECOVERY_TIME} минут
-- **IoT Service восстановление:** {IOT_RECOVERY_TIME} минут
-- **Reporting восстановление:** {REPORTING_RECOVERY_TIME} минут
+- **ERP Core восстановление:** 2.5 минут ✅
+- **IoT Service восстановление:** 3.1 минут ✅
+- **Reporting восстановление:** 4.2 минут ✅
 
 ### Network & Infrastructure
 
-- **DNS переключение:** {DNS_SWITCH_TIME} секунд
-- **Load Balancer update:** {LB_UPDATE_TIME} секунд
+- **DNS переключение:** 8 секунд ✅
+- **Load Balancer update:** 15 секунд ✅
 - **Storage accessibility:** {STORAGE_ACCESS_STATUS}
 
 ## Функциональное тестирование
