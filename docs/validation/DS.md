@@ -1,24 +1,45 @@
 ---
 title: "Data Specification (DS)"
 system: "ERP for GACP-Compliant Cannabis Cultivation"
-version: "1.0"
-status: "approved"
-last_updated: "2025-09-14"
-approved_by: "QA Lead, IT Manager"
-approval_date: "2025-09-14"
+version: "2.0"
+status: "draft"
+last_updated: "2025-10-16"
+approved_by: "Pending QA Review"
+approval_date: "Pending"
+previous_version: "1.0 (2025-09-14)"
+compliance_reviewed_against: 
+  - "FDA 21 CFR Part 11"
+  - "EU GMP Annex 11"
+  - "ALCOA+ Principles"
+compliance_status: "In Progress - Target 95%+"
+validation_status: "Pending validation after approval"
 ---
 
-# Data Specification (DS)
+# Data Specification (DS) v2.0
 
 ## 📋 **Document Overview**
 
-Данный документ определяет структуру данных ERP системы для GACP-совместимого производства каннабиса. Включает модели растений, партий, Audit Trail, e-signatures, пользователей, курсов и IoT-метрики.
+Данный документ определяет структуру данных ERP системы для GACP-совместимого производства каннабиса. Версия 2.0 включает критические дополнения для полного соответствия FDA 21 CFR Part 11 и EU GMP Annex 11.
+
+**🚨 Критические изменения в v2.0:**
+
+- ✅ Добавлены модули Change Control, Deviation Management, CAPA
+- ✅ Добавлены структуры Validation Management
+- ✅ Дополнены Electronic Signatures для FDA § 11.50/11.70
+- ✅ Расширен Audit Trail для retention management
+- ✅ Добавлены Data Retention и Workflow Management структуры
+- ✅ Добавлен Document Control System
+- ✅ Все GxP-critical tables получили validation metadata
 
 **🔗 Связанные документы:**
 
 - **[CONTRACT_SPECIFICATIONS.md](../CONTRACT_SPECIFICATIONS.md)** - 🎯 **ГЛАВНЫЙ ДОКУМЕНТ** по всем Zod схемам данных
 - **[SYSTEM_ARCHITECTURE.md](../SYSTEM_ARCHITECTURE.md)** - Архитектурный контекст
 - **[DATA_REPLICATION_ARCHITECTURE.md](../infrastructure/DATA_REPLICATION_ARCHITECTURE.md)** - Стратегии репликации
+- **[DATA_DICTIONARY_COMPLIANCE_AUDIT.md](../reports/DATA_DICTIONARY_COMPLIANCE_AUDIT.md)** - Audit report обосновывающий v2.0
+- **[DS_COMPLIANCE_MATRIX.md](../reports/DS_COMPLIANCE_MATRIX.md)** - Матрица соответствия регуляторным требованиям
+- **[FDA_21CFR_Part11.md](../compliance/FDA_21CFR_Part11.md)** - FDA требования
+- **[EU_GMP_Annex11.md](../compliance/EU_GMP_Annex11.md)** - EU GMP требования
 
 ## 2. Traceability
 
@@ -51,6 +72,8 @@ approval_date: "2025-09-14"
 
 **Основная сущность для жизненного цикла растений**
 
+**Compliance**: EU GMP Annex 11 Clause 4, GACP
+
 - plant_id: UUID, Primary Key
 - batch_id: UUID, Foreign Key к batches
 - source_type: enum (seed, clone)
@@ -63,6 +86,13 @@ approval_date: "2025-09-14"
 - cost_allocation_id: UUID, Foreign Key к cost allocations
 - created_at, updated_at: timestamps
 - version: integer, для версионирования
+- validation_status: varchar(20), DEFAULT 'unvalidated', статус валидации (unvalidated, validated, under_review, superseded)
+- validation_protocol_id: UUID, Foreign Key → validation_protocols, протокол валидации структуры данных
+- last_validated_at: timestamp, дата последней валидации
+- next_review_date: date, дата следующего periodic review
+- change_control_id: UUID, Foreign Key → change_requests, если структура изменялась через change control
+- retention_policy_id: UUID, Foreign Key → data_retention_policies, политика хранения
+- audit_trail_id: UUID, Foreign Key → audit_trail
 
 ### 3.2 Plant Events (DS-PLM-002)
 
@@ -83,6 +113,8 @@ approval_date: "2025-09-14"
 
 **Партии растений**
 
+**Compliance**: EU GMP Chapter 6, GACP
+
 - batch_id: UUID, Primary Key
 - parent_batch_id: UUID, опциональная ссылка на родительскую партию
 - strain: varchar(255)
@@ -94,10 +126,19 @@ approval_date: "2025-09-14"
 - revenue_potential: decimal(15,2), потенциальная выручка
 - created_at, updated_at: timestamps
 - compliance_status: enum (pending, approved, rejected)
+- validation_status: varchar(20), DEFAULT 'unvalidated', статус валидации структуры данных
+- validation_protocol_id: UUID, Foreign Key → validation_protocols
+- last_validated_at: timestamp, дата последней валидации
+- next_review_date: date, дата следующего periodic review
+- change_control_id: UUID, Foreign Key → change_requests
+- retention_policy_id: UUID, Foreign Key → data_retention_policies
+- audit_trail_id: UUID, Foreign Key → audit_trail
 
 ### 3.4 Financial Transactions (DS-FIN-001)
 
 **Финансовые транзакции системы**
+
+**Compliance**: IAS 41, SOX, Tax regulations
 
 - transaction_id: UUID, Primary Key
 - transaction_type: enum (revenue, expense, asset_transfer, depreciation)
@@ -113,15 +154,30 @@ approval_date: "2025-09-14"
 - created_by: UUID, пользователь создавший транзакцию
 - approved_by: UUID, пользователь утвердивший
 - audit_trail_id: UUID, Foreign Key к audit trail
+- validation_status: varchar(20), DEFAULT 'unvalidated', статус валидации структуры данных
+- validation_protocol_id: UUID, Foreign Key → validation_protocols
+- last_validated_at: timestamp, дата последней валидации
+- next_review_date: date, дата следующего periodic review
+- change_control_id: UUID, Foreign Key → change_requests
+- retention_policy_id: UUID, Foreign Key → data_retention_policies
 
 ### 3.5 General Ledger (DS-FIN-002)
 
 **Главная книга - append-only структура**
 
+**Compliance**: GAAP, IFRS, SOX
+
 - ledger_entry_id: UUID, Primary Key
 - account_code: varchar(20), код счёта
 - account_name: varchar(255), название счёта
 - debit_amount: decimal(15,2), дебетовая сумма
+- validation_status: varchar(20), DEFAULT 'unvalidated', статус валидации структуры данных
+- validation_protocol_id: UUID, Foreign Key → validation_protocols
+- last_validated_at: timestamp, дата последней валидации
+- next_review_date: date, дата следующего periodic review
+- change_control_id: UUID, Foreign Key → change_requests
+- retention_policy_id: UUID, Foreign Key → data_retention_policies
+- audit_trail_id: UUID, Foreign Key → audit_trail
 - credit_amount: decimal(15,2), кредитовая сумма
 - transaction_id: UUID, Foreign Key к transactions
 - posting_date: date, дата проводки
@@ -638,21 +694,41 @@ approval_date: "2025-09-14"
 
 **Неизменяемый журнал всех действий в системе**
 
+**Compliance**: FDA 21 CFR Part 11 § 11.10(e), EU GMP Annex 11 Clause 9
+
 - audit_id: UUID, Primary Key
-- entity_type: varchar(50), тип сущности
-- entity_id: UUID, идентификатор сущности
-- action: varchar(50), тип действия (CREATE, UPDATE, DELETE, SIGN)
+- entity_type: varchar(50), NOT NULL, тип сущности
+- entity_id: UUID, NOT NULL, идентификатор сущности
+- action: varchar(50), NOT NULL, тип действия (CREATE, UPDATE, DELETE, SIGN, APPROVE, REVIEW, ARCHIVE)
 - old_value: JSONB, значение до изменения
 - new_value: JSONB, значение после изменения
-- performed_by: UUID, пользователь
-- performed_at: timestamp
-- reason: text, причина изменения
-- signature_id: UUID, связь с электронной подписью
+- field_changes: JSONB, детальные изменения полей для audit queries
+- performed_by: UUID, NOT NULL, Foreign Key → users, пользователь
+- performed_at: timestamp, DEFAULT now(), время действия
+- reason: text, причина изменения (обязательно для GxP-критичных изменений)
+- signature_id: UUID, Foreign Key → electronic_signatures, связь с электронной подписью
 - session_id: UUID, идентификатор сессии
 - correlation_id: UUID, связь с business transaction
-- source_system: varchar(50), источник изменения (web, mobile, api)
+- source_system: varchar(50), NOT NULL, источник изменения (web, mobile, api, batch_job)
 - ip_address: inet, IP адрес пользователя
 - user_agent: text, информация о браузере/устройстве
+- geolocation: point, координаты (для mobile actions)
+- gxp_critical: boolean, DEFAULT false, критичность для GxP
+- validation_status: varchar(20), статус валидации записи (unvalidated, validated, reviewed)
+- review_status: varchar(20), статус проверки аудитором (pending_review, reviewed, flagged)
+- reviewed_by: UUID, Foreign Key → users, кто проверил запись
+- reviewed_at: timestamp, дата проверки
+- review_comment: text, комментарий аудитора
+- retention_category: varchar(50), NOT NULL, категория хранения (gxp_critical, financial, operational, system)
+- retention_policy_id: UUID, Foreign Key → data_retention_policies, связь с политикой хранения
+- retention_expiry: date, дата истечения хранения (computed from policy)
+- archive_status: varchar(20), DEFAULT 'active', статус архивирования (active, scheduled_for_archive, archived, scheduled_for_deletion)
+- archived_at: timestamp, дата архивирования
+- kafka_offset: bigint, offset в Kafka topic для replay capability
+- kafka_partition: integer, partition Kafka
+- kafka_topic: varchar(100), название Kafka topic
+- immudb_tx_id: bigint, transaction ID в immudb для cryptographic proof
+- checksum: varchar(64), NOT NULL, SHA-256 хэш записи для integrity verification
 
 **Go Audit Consumer Architecture:**
 
@@ -663,57 +739,130 @@ approval_date: "2025-09-14"
 - Health checks и метрики для Prometheus
 - Dead letter queue для failed events
 - Партиционирование Kafka по entity_type для optimal performance
+- Cryptographic linking между audit records (blockchain-like chain)
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: performed_by, ip_address, user_agent, geolocation
+- **Legible**: field_changes with human-readable diffs
+- **Contemporaneous**: performed_at captures exact time
+- **Original**: Immutable storage in immudb, checksum ensures integrity
+- **Accurate**: old_value/new_value validation, immudb_tx_id for cryptographic proof
+- **Complete**: All CRUD operations logged, reason mandatory for GxP
+- **Consistent**: Uniform schema, kafka_offset for replay
+- **Enduring**: Permanent retention per retention_category, archive_status tracking
+- **Available**: Indexed for query performance, review_status for auditor workflow
 
 ### 3.18 Electronic Signatures (DS-ES-001)
 
 **Электронные подписи по 21 CFR Part 11**
 
+**Compliance**: FDA 21 CFR Part 11 § 11.50, § 11.70, § 11.100, EU GMP Annex 11 Clause 12
+
 - signature_id: UUID, Primary Key
-- user_id: UUID, пользователь
-- signed_at: timestamp
-- reason: text, причина подписания
-- method: enum (password_2fa, qr_badge, hardware_token, pki_certificate)
-- auth_time: timestamp, время последней аутентификации
-- signature_hash: varchar, хэш подписи
-- certificate_serial: varchar, серийный номер сертификата (для PKI)
-- certificate_issuer: varchar, издатель сертификата
-- biometric_hash: varchar, хэш биометрических данных (опционально)
-- valid: boolean, статус валидности
+- user_id: UUID, NOT NULL, Foreign Key → users, пользователь
+- signed_at: timestamp, DEFAULT now(), время подписания
+- reason: text, NOT NULL, причина подписания
+- meaning: varchar(100), NOT NULL, значение подписи (FDA § 11.50) - "Reviewed by", "Approved by", "Verified by", "Performed by"
+- method: enum (password_2fa, qr_badge, hardware_token, pki_certificate), метод подписания
+- auth_time: timestamp, NOT NULL, время последней аутентификации перед подписанием
+- auth_method: varchar(50), метод аутентификации (password+2FA, biometric+PIN)
+- ip_address: inet, IP адрес откуда поставлена подпись
+- device_info: JSONB, информация об устройстве (browser, OS, mobile)
+- geolocation: point, координаты места подписания (опционально для mobile)
+- signature_hash: varchar(64), NOT NULL, хэш подписи (SHA-256)
+- certificate_serial: varchar(100), серийный номер сертификата (для PKI)
+- certificate_issuer: varchar(255), издатель сертификата
+- certificate_valid_until: timestamp, срок действия сертификата
+- biometric_hash: varchar(64), хэш биометрических данных (опционально)
+- biometric_type: enum (fingerprint, facial_recognition, voice), тип биометрии
+- valid: boolean, DEFAULT true, статус валидности
 - revoked_at: timestamp, время аннулирования
-- document_hash: varchar, хэш подписанного документа
-- signature_format: enum (pkcs7, xades, cades), формат подписи
+- revoked_by: UUID, Foreign Key → users, кто аннулировал
+- revocation_reason: text, причина аннулирования
+- signed_entity_type: varchar(50), NOT NULL, тип подписанной сущности (FDA § 11.70) - "batch", "deviation", "change_request"
+- signed_entity_id: UUID, NOT NULL, ID подписанной сущности
+- signed_entity_version: varchar(20), версия сущности на момент подписания
+- linked_record_hash: varchar(64), NOT NULL, хэш связанной записи для верификации целостности
+- document_hash: varchar(64), хэш подписанного документа (если применимо)
+- signature_format: enum (pkcs7, xades, cades, simple), формат подписи
+- witness_required: boolean, DEFAULT false, требуется ли свидетель для критичных операций
+- witness_signature_id: UUID, Foreign Key → electronic_signatures, подпись свидетеля
+- parent_signature_id: UUID, Foreign Key → electronic_signatures, родительская подпись (для иерархии approvals)
+- signature_level: integer, DEFAULT 1, уровень подписи в цепочке утверждений
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: user_id, ip_address, device_info, geolocation
+- **Legible**: reason, meaning clearly documented
+- **Contemporaneous**: signed_at, auth_time
+- **Original**: signature_hash, linked_record_hash ensure integrity
+- **Accurate**: Cryptographic validation via hashes
+- **Complete**: Full context (meaning, entity_type, entity_id) per FDA § 11.50/11.70
+- **Consistent**: Standard signature schema
+- **Enduring**: Permanent retention
+- **Available**: Linked to audit_trail
 
 ### 3.19 Users (DS-AUTH-001)
 
 **Пользователи системы**
 
+**Compliance**: EU GMP Chapter 2 (Personnel), ISO 13485 Clause 6.2
+
 - user_id: UUID, Primary Key
-- username: varchar(100), уникальное имя пользователя
-- email: varchar(255), email адрес
-- first_name: varchar(100), имя
-- last_name: varchar(100), фамилия
-- employee_id: varchar(50), номер сотрудника
+- username: varchar(100), UNIQUE NOT NULL, уникальное имя пользователя
+- email: varchar(255), UNIQUE NOT NULL, email адрес
+- first_name: varchar(100), NOT NULL, имя
+- last_name: varchar(100), NOT NULL, фамилия
+- employee_id: varchar(50), UNIQUE, номер сотрудника
 - department: varchar(100), отдел
 - position: varchar(100), должность
-- user_type: enum (internal, external_auditor, internal_auditor, third_party_auditor), тип пользователя
+- user_type: enum (internal, external_auditor, internal_auditor, third_party_auditor, contractor), тип пользователя
 - auditor_certification: varchar(200), сертификация аудитора (если применимо)
 - organization: varchar(200), организация (для внешних пользователей)
 - hire_date: date, дата найма
 - termination_date: date, дата увольнения
 - account_expiry_date: date, дата истечения аккаунта (для временных)
-- active: boolean, активность аккаунта
-- temporary_account: boolean, временная учетная запись
-- supervisor_required: boolean, требуется сопровождение
+- active: boolean, DEFAULT true, активность аккаунта
+- temporary_account: boolean, DEFAULT false, временная учетная запись
+- supervisor_required: boolean, DEFAULT false, требуется сопровождение
 - last_login: timestamp, последний вход
-- failed_login_attempts: integer, неудачные попытки входа
+- failed_login_attempts: integer, DEFAULT 0, неудачные попытки входа
 - password_last_changed: timestamp, последняя смена пароля
-- two_factor_enabled: boolean, включена ли 2FA
-- preferred_language: varchar(10), предпочитаемый язык
-- timezone: varchar(50), часовой пояс
+- two_factor_enabled: boolean, DEFAULT false, включена ли 2FA
+- preferred_language: varchar(10), DEFAULT 'en', предпочитаемый язык
+- timezone: varchar(50), DEFAULT 'UTC', часовой пояс
 - mobile_device_ids: UUID[], привязанные мобильные устройства
-- nda_signed: boolean, подписано ли соглашение о неразглашении
+- nda_signed: boolean, DEFAULT false, подписано ли соглашение о неразглашении
 - background_check_status: enum (pending, approved, rejected), статус проверки
 - access_areas: varchar(100)[], разрешенные области доступа
+- training_current_status: varchar(20), DEFAULT 'incomplete', текущий статус обучения (complete, incomplete, overdue)
+- training_compliance_percent: integer, DEFAULT 0, процент завершенных обязательных курсов
+- mandatory_training_completed: boolean, DEFAULT false, завершено ли обязательное обучение
+- gxp_training_required: boolean, DEFAULT false, требуется ли GxP обучение
+- gxp_training_current: boolean, DEFAULT false, актуально ли GxP обучение
+- gxp_training_expiry: date, дата истечения GxP обучения
+- next_training_due: date, дата следующего обязательного обучения
+- qualification_status: varchar(20), статус квалификации (unqualified, in_training, qualified, requalification_needed)
+- qualification_date: date, дата квалификации
+- qualification_valid_until: date, срок действия квалификации
+- qualified_for_roles: varchar(100)[], роли для которых квалифицирован (QA Inspector, Batch Record Reviewer, etc.)
+- last_training_assessment_date: date, дата последней оценки обучения
+- last_training_assessment_score: integer, оценка последней аттестации
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: employee_id, username uniquely identify user
+- **Legible**: Clear qualification and training status
+- **Contemporaneous**: last_login, training dates tracked
+- **Original**: Immutable user creation
+- **Accurate**: training_compliance_percent calculated from training_records
+- **Complete**: Full employment and training lifecycle
+- **Consistent**: Standard user schema
+- **Enduring**: Retained per HR policy
+- **Available**: Linkable to training_records, audit_trail
 
 ### 3.20 Roles (DS-AUTH-002)
 
@@ -862,6 +1011,608 @@ VALUES ('third_party_auditor', 'auditing', true, true, true, 180, 1);
 - timestamp: timestamp, время запроса
 - user_id: UUID, пользователь инициировавший запрос
 
+---
+
+## 3.26 Change Control System (NEW in v2.0)
+
+### 3.26.1 Change Requests (DS-CHG-001)
+
+**Управление изменениями в системе**
+
+**Compliance**: EU GMP Annex 11 Clause 12, FDA 21 CFR Part 11 § 11.10(k)
+
+- change_id: UUID, Primary Key
+- change_number: varchar(50), UNIQUE NOT NULL, номер изменения (CR-2025-001)
+- title: varchar(255), NOT NULL, краткое описание изменения
+- description: text, NOT NULL, детальное описание
+- change_type: enum (configuration, code, procedure, infrastructure, data), тип изменения
+- requested_by: UUID, Foreign Key → users, инициатор
+- requested_at: timestamp, DEFAULT now(), дата запроса
+- department: varchar(100), отдел инициатора
+- gxp_impact: enum (none, low, medium, high, critical), влияние на GxP
+- affected_systems: text[], массив затронутых систем
+- affected_sops: text[], массив затронутых SOP
+- risk_assessment: text, оценка рисков
+- impact_analysis: JSONB, детальный анализ влияния
+- business_justification: text, NOT NULL, бизнес-обоснование
+- regulatory_driver: varchar(100), регуляторный драйвер
+- urgency: enum (routine, high, urgent, emergency), срочность
+- status: enum (draft, submitted, under_review, approved, rejected, in_progress, testing, implemented, closed, cancelled), статус
+- reviewed_by: UUID, рецензент
+- reviewed_at: timestamp, дата рецензирования
+- review_signature_id: UUID, Foreign Key → electronic_signatures
+- approved_by: UUID, утверждающий
+- approved_at: timestamp, дата утверждения
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- implementation_plan: text, план внедрения
+- implementation_date: date, дата внедрения
+- implemented_by: UUID, исполнитель
+- test_plan_required: boolean, DEFAULT false, требуется ли тест-план
+- test_plan_id: UUID, ссылка на тест-план
+- test_results: JSONB, результаты тестирования
+- validation_required: boolean, DEFAULT false, требуется ли валидация
+- validation_protocol_id: UUID, Foreign Key → validation_protocols
+- validation_status: varchar(20), статус валидации
+- rollback_plan: text, план отката
+- rollback_tested: boolean, DEFAULT false, протестирован ли откат
+- training_required: boolean, DEFAULT false, требуется ли обучение
+- communication_sent: boolean, DEFAULT false, отправлено ли уведомление
+- closed_by: UUID, кто закрыл
+- closed_at: timestamp, дата закрытия
+- effectiveness_check: text, проверка эффективности
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: requested_by, approved_by, implemented_by
+- **Legible**: Structured text fields, UTF-8
+- **Contemporaneous**: requested_at, approved_at with DEFAULT now()
+- **Original**: Immutable storage in ImmuDB
+- **Accurate**: Zod validation, enum constraints
+- **Complete**: All required fields NOT NULL
+- **Consistent**: Uniform schema across change records
+- **Enduring**: Permanent retention (never deleted)
+- **Available**: Indexed for audit queries
+
+### 3.26.2 Change Approvals (DS-CHG-002)
+
+**Утверждения изменений**
+
+**Compliance**: EU GMP Annex 11 Clause 12, FDA 21 CFR Part 11 § 11.10(g)
+
+- approval_id: UUID, Primary Key
+- change_id: UUID, NOT NULL, Foreign Key → change_requests
+- approver_role: varchar(50), NOT NULL, роль утверждающего (qa_manager, it_manager, process_owner)
+- required: boolean, DEFAULT true, обязательно ли утверждение
+- approver_id: UUID, Foreign Key → users, кто утверждает
+- approval_status: enum (pending, approved, rejected, conditional), статус утверждения
+- approved_at: timestamp, дата утверждения
+- signature_id: UUID, Foreign Key → electronic_signatures, подпись утверждения
+- comments: text, комментарии утверждающего
+- conditions: text, условия (для conditional approvals)
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+### 3.26.3 Change Implementation History (DS-CHG-003)
+
+**История внедрения изменений**
+
+**Compliance**: EU GMP Annex 11 Clause 12, FDA 21 CFR Part 11 § 11.10(e)
+
+- history_id: UUID, Primary Key
+- change_id: UUID, NOT NULL, Foreign Key → change_requests
+- step_number: integer, NOT NULL, номер шага
+- step_description: text, NOT NULL, описание шага
+- performed_by: UUID, NOT NULL, Foreign Key → users, исполнитель
+- performed_at: timestamp, DEFAULT now(), время выполнения
+- status: enum (pending, completed, failed, skipped), статус шага
+- evidence: JSONB, доказательства (screenshots, logs, test results)
+- issues_encountered: text, встреченные проблемы
+- rollback_performed: boolean, DEFAULT false, был ли выполнен откат
+- signature_id: UUID, Foreign Key → electronic_signatures
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+---
+
+## 3.27 Deviation Management System (NEW in v2.0)
+
+### 3.27.1 Deviations (DS-DEV-001)
+
+**Управление отклонениями и нарушениями**
+
+**Compliance**: EU GMP Annex 11 Clause 13, ICH Q10
+
+- deviation_id: UUID, Primary Key
+- deviation_number: varchar(50), UNIQUE NOT NULL, номер отклонения (DEV-2025-001)
+- title: varchar(255), NOT NULL, краткое описание
+- description: text, NOT NULL, детальное описание отклонения
+- deviation_type: enum (procedure, specification, system, environmental, equipment), тип отклонения
+- detected_at: timestamp, NOT NULL, время обнаружения
+- detected_by: UUID, NOT NULL, Foreign Key → users, кто обнаружил
+- detection_method: enum (inspection, audit, monitoring, complaint), метод обнаружения
+- severity: enum (minor, major, critical), серьезность
+- gxp_impact: enum (none, potential, actual), влияние на GxP
+- patient_safety_impact: boolean, DEFAULT false, влияние на безопасность пациента
+- product_quality_impact: boolean, DEFAULT false, влияние на качество продукта
+- batch_id: UUID, Foreign Key → batches, связанная партия
+- plant_id: UUID, Foreign Key → plants, связанное растение
+- equipment_id: UUID, Foreign Key → equipment, связанное оборудование
+- sop_id: varchar(50), нарушенная SOP
+- zone_id: UUID, Foreign Key → zones, зона где произошло
+- immediate_action_taken: text, предпринятые немедленные действия
+- immediate_action_by: UUID, Foreign Key → users, кто предпринял действия
+- immediate_action_at: timestamp, время предпринятия действий
+- investigation_required: boolean, DEFAULT true, требуется ли расследование
+- investigation_id: UUID, Foreign Key → root_cause_analyses, ID расследования
+- investigation_deadline: date, крайний срок расследования
+- investigation_status: enum (pending, in_progress, completed), статус расследования
+- root_cause: text, найденная root cause
+- root_cause_identified_at: timestamp, когда найдена root cause
+- capa_required: boolean, DEFAULT true, требуется ли CAPA
+- capa_id: UUID, Foreign Key → capa_records, ID CAPA
+- status: enum (open, under_investigation, capa_pending, capa_in_progress, effectiveness_check, closed, cancelled), статус отклонения
+- reviewed_by: UUID, Foreign Key → users, рецензент
+- reviewed_at: timestamp, дата рецензирования
+- review_signature_id: UUID, Foreign Key → electronic_signatures
+- approved_by: UUID, Foreign Key → users, утверждающий
+- approved_at: timestamp, дата утверждения
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- closed_by: UUID, кто закрыл
+- closed_at: timestamp, дата закрытия
+- closure_signature_id: UUID, Foreign Key → electronic_signatures
+- effectiveness_verified: boolean, подтверждена ли эффективность
+- recurring_issue: boolean, DEFAULT false, повторяющаяся ли проблема
+- related_deviations: UUID[], массив связанных отклонений
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: detected_by, immediate_action_by, reviewed_by, approved_by
+- **Legible**: Structured fields, clear descriptions
+- **Contemporaneous**: detected_at, immediate_action_at with real-time capture
+- **Original**: Immutable storage in ImmuDB
+- **Accurate**: Zod validation, severity/impact enums
+- **Complete**: All required fields enforced
+- **Consistent**: Uniform schema for all deviation types
+- **Enduring**: Permanent retention for GxP records
+- **Available**: Indexed for trending and audit queries
+
+### 3.27.2 Root Cause Analysis (DS-DEV-002)
+
+**Анализ первопричин отклонений**
+
+**Compliance**: EU GMP Annex 11 Clause 13, ICH Q10
+
+- rca_id: UUID, Primary Key
+- deviation_id: UUID, NOT NULL, Foreign Key → deviations
+- method: enum (5_whys, fishbone, fault_tree, pareto), метод анализа
+- analysis_data: JSONB, NOT NULL, данные специфичные для метода
+- root_causes: JSONB, NOT NULL, массив найденных первопричин с категориями
+- contributing_factors: JSONB, содействующие факторы
+- performed_by: UUID, NOT NULL, Foreign Key → users, кто провел анализ
+- performed_at: timestamp, DEFAULT now(), дата проведения
+- reviewed_by: UUID, рецензент
+- review_signature_id: UUID, Foreign Key → electronic_signatures
+- evidence: JSONB, доказательства (ссылки на документы, фото, данные)
+- analysis_report: text, отчет по анализу
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+---
+
+## 3.28 CAPA System (NEW in v2.0)
+
+### 3.28.1 CAPA Records (DS-CAPA-001)
+
+**Corrective and Preventive Actions (CAPA)**
+
+**Compliance**: ICH Q10, FDA 21 CFR Part 11
+
+- capa_id: UUID, Primary Key
+- capa_number: varchar(50), UNIQUE NOT NULL, номер CAPA (CAPA-2025-001)
+- source_type: enum (deviation, audit, complaint, trend, risk_assessment), источник CAPA
+- source_id: UUID, ID источника (deviation_id, audit_id, etc.)
+- action_type: enum (corrective, preventive, both), тип действия
+- problem_statement: text, NOT NULL, формулировка проблемы
+- root_cause: text, NOT NULL, первопричина
+- action_plan: text, NOT NULL, план действий
+- actions: JSONB, NOT NULL, массив конкретных действий с шагами
+- responsible_person: UUID, NOT NULL, Foreign Key → users, ответственный
+- backup_person: UUID, Foreign Key → users, замена ответственного
+- target_completion_date: date, NOT NULL, плановая дата завершения
+- actual_completion_date: date, фактическая дата завершения
+- implementation_status: enum (pending, in_progress, completed, overdue), статус внедрения
+- implementation_evidence: JSONB, доказательства внедрения
+- effectiveness_check_required: boolean, DEFAULT true, требуется ли проверка эффективности
+- effectiveness_check_date: date, дата проверки эффективности
+- effectiveness_check_result: enum (effective, not_effective, pending), результат проверки
+- effectiveness_check_by: UUID, Foreign Key → users, кто проверил
+- effectiveness_check_notes: text, заметки по проверке
+- status: enum (open, in_progress, pending_verification, closed, extended), статус CAPA
+- closed_by: UUID, кто закрыл
+- closed_at: timestamp, дата закрытия
+- closure_signature_id: UUID, Foreign Key → electronic_signatures
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: responsible_person, effectiveness_check_by, closed_by
+- **Legible**: Clear action plans, structured JSONB
+- **Contemporaneous**: Timestamps for each milestone
+- **Original**: Immutable storage
+- **Accurate**: Validation of action completion
+- **Complete**: All phases documented
+- **Consistent**: Uniform CAPA process
+- **Enduring**: Permanent retention
+- **Available**: Queryable for effectiveness trending
+
+---
+
+## 3.29 Validation Management System (NEW in v2.0)
+
+### 3.29.1 Validation Protocols (DS-VAL-001)
+
+**Протоколы валидации системы**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(a), EU GMP Annex 11 Clause 4
+
+- protocol_id: UUID, Primary Key
+- protocol_number: varchar(50), UNIQUE NOT NULL, номер протокола (IQ-001, OQ-002, PQ-003)
+- protocol_type: enum (IQ, OQ, PQ, revalidation, partial), тип протокола
+- system_name: varchar(255), NOT NULL, название системы
+- system_version: varchar(50), версия системы
+- gamp_category: enum (category_3, category_4, category_5), категория GAMP
+- gxp_impact: enum (none, low, medium, high, critical), влияние на GxP
+- title: varchar(255), NOT NULL, заголовок протокола
+- purpose: text, NOT NULL, цель валидации
+- scope: text, NOT NULL, область валидации
+- acceptance_criteria: text, NOT NULL, критерии приемки
+- urs_reference: varchar(100), ссылка на URS
+- fs_reference: varchar(100), ссылка на FS
+- ds_reference: varchar(100), ссылка на DS
+- risk_assessment_ref: varchar(100), ссылка на risk assessment
+- author: UUID, NOT NULL, Foreign Key → users, автор
+- author_signature_id: UUID, Foreign Key → electronic_signatures
+- authored_at: timestamp, дата авторства
+- reviewer: UUID, Foreign Key → users, рецензент
+- reviewer_signature_id: UUID, Foreign Key → electronic_signatures
+- reviewed_at: timestamp, дата рецензирования
+- approver: UUID, Foreign Key → users, утверждающий
+- approver_signature_id: UUID, Foreign Key → electronic_signatures
+- approved_at: timestamp, дата утверждения
+- status: enum (draft, approved, in_execution, completed, failed, superseded), статус протокола
+- execution_start_date: date, дата начала выполнения
+- execution_end_date: date, дата окончания выполнения
+- executed_by: UUID, Foreign Key → users, исполнитель
+- test_cases_total: integer, всего тест-кейсов
+- test_cases_passed: integer, пройдено тест-кейсов
+- test_cases_failed: integer, провалено тест-кейсов
+- test_cases_blocked: integer, заблокировано тест-кейсов
+- overall_result: enum (pass, fail, pass_with_deviations), общий результат
+- report_id: UUID, ID отчета валидации
+- report_signature_id: UUID, подпись отчета
+- next_review_date: date, дата следующего periodic review
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: author, reviewer, approver, executed_by
+- **Legible**: Structured protocol documentation
+- **Contemporaneous**: Timestamps for each lifecycle phase
+- **Original**: Immutable protocol versions
+- **Accurate**: Test results validated and signed
+- **Complete**: All protocol phases documented
+- **Consistent**: Standard protocol template
+- **Enduring**: Permanent retention as GxP record
+- **Available**: Queryable for regulatory inspection
+
+### 3.29.2 Validation Test Cases (DS-VAL-002)
+
+**Тест-кейсы валидации**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(a), EU GMP Annex 11 Clause 4
+
+- test_case_id: UUID, Primary Key
+- protocol_id: UUID, NOT NULL, Foreign Key → validation_protocols
+- test_case_number: varchar(50), NOT NULL, номер тест-кейса (TC-001, TC-002)
+- requirement_id: varchar(100), ссылка на требование URS/FS
+- test_objective: text, NOT NULL, цель теста
+- prerequisites: text, предварительные условия
+- test_steps: JSONB, NOT NULL, шаги теста с ожидаемыми результатами
+- expected_result: text, NOT NULL, ожидаемый результат
+- execution_date: date, дата выполнения
+- executed_by: UUID, Foreign Key → users, исполнитель
+- actual_result: text, фактический результат
+- status: enum (not_executed, pass, fail, blocked, skipped), статус выполнения
+- evidence_attachments: JSONB, приложения (screenshots, logs, data files)
+- deviation_id: UUID, Foreign Key → deviations, если тест провален
+- comments: text, комментарии
+- signature_id: UUID, Foreign Key → electronic_signatures
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+### 3.29.3 Periodic Reviews (DS-VAL-003)
+
+**Периодические проверки валидации**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(a), EU GMP Annex 11 Clause 11
+
+- review_id: UUID, Primary Key
+- review_type: enum (annual, post_change, post_deviation, triggered), тип проверки
+- system_name: varchar(255), NOT NULL, название системы
+- system_version: varchar(50), версия системы
+- review_period_start: date, NOT NULL, начало периода проверки
+- review_period_end: date, NOT NULL, конец периода проверки
+- validation_status: enum (remains_valid, revalidation_required), статус валидности
+- changes_since_last_review: JSONB, изменения с последней проверки
+- deviations_summary: JSONB, сводка по отклонениям
+- incidents_summary: JSONB, сводка по инцидентам
+- findings: JSONB, находки проверки
+- actions_required: JSONB, требуемые действия
+- reviewed_by: UUID, NOT NULL, Foreign Key → users, кто проводил проверку
+- reviewed_at: timestamp, DEFAULT now(), дата проверки
+- review_signature_id: UUID, Foreign Key → electronic_signatures
+- approved_by: UUID, Foreign Key → users, утверждающий
+- approved_at: timestamp, дата утверждения
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- next_review_date: date, NOT NULL, дата следующей проверки
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+---
+
+## 3.30 Document Control System (NEW in v2.0)
+
+### 3.30.1 Controlled Documents (DS-DOC-001)
+
+**Управление контролируемыми документами**
+
+**Compliance**: EU GMP Annex 11 Clause 7, ISO 13485
+
+- document_id: UUID, Primary Key
+- document_number: varchar(50), UNIQUE NOT NULL, номер документа (SOP-001, FORM-002)
+- document_type: enum (SOP, form, policy, protocol, report, specification), тип документа
+- title: varchar(255), NOT NULL, название документа
+- description: text, описание
+- gxp_critical: boolean, DEFAULT false, GxP-критический документ
+- confidentiality_level: enum (public, internal, confidential, restricted), уровень конфиденциальности
+- current_version: varchar(20), NOT NULL, текущая версия
+- status: enum (draft, under_review, approved, effective, obsolete, archived), статус документа
+- created_at: timestamp, DEFAULT now(), дата создания
+- created_by: UUID, NOT NULL, Foreign Key → users, создатель
+- effective_date: date, дата вступления в силу
+- review_date: date, дата последнего review
+- next_review_date: date, дата следующего review
+- retirement_date: date, дата выбытия
+- author: UUID, Foreign Key → users, автор
+- author_signature_id: UUID, Foreign Key → electronic_signatures
+- reviewer: UUID, Foreign Key → users, рецензент
+- reviewer_signature_id: UUID, Foreign Key → electronic_signatures
+- approver: UUID, Foreign Key → users, утверждающий
+- approver_signature_id: UUID, Foreign Key → electronic_signatures
+- training_required: boolean, DEFAULT false, требуется ли обучение
+- training_course_id: UUID, Foreign Key → training_courses
+- distribution_list: UUID[], массив user/role IDs кто должен прочитать
+- read_acknowledgement_required: boolean, DEFAULT false, требуется ли подтверждение прочтения
+- file_path: varchar(500), путь к файлу
+- file_checksum: varchar(64), SHA-256 checksum файла
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: created_by, author, reviewer, approver
+- **Legible**: Document metadata clearly structured
+- **Contemporaneous**: Version timestamps
+- **Original**: File checksum ensures integrity
+- **Accurate**: Approval workflow validated
+- **Complete**: Full document lifecycle tracked
+- **Consistent**: Standard document numbering
+- **Enduring**: Retention per document type
+- **Available**: Searchable document repository
+
+### 3.30.2 Document Versions (DS-DOC-002)
+
+**Версии контролируемых документов**
+
+**Compliance**: EU GMP Annex 11 Clause 7, FDA 21 CFR Part 11 § 11.10(e)
+
+- version_id: UUID, Primary Key
+- document_id: UUID, NOT NULL, Foreign Key → controlled_documents
+- version_number: varchar(20), NOT NULL, номер версии
+- change_description: text, NOT NULL, описание изменений
+- change_reason: text, причина изменений
+- change_request_id: UUID, Foreign Key → change_requests, связанное change control
+- file_path: varchar(500), NOT NULL, путь к файлу версии
+- file_checksum: varchar(64), NOT NULL, SHA-256 checksum
+- file_size_bytes: bigint, размер файла
+- created_at: timestamp, DEFAULT now(), дата создания версии
+- created_by: UUID, NOT NULL, Foreign Key → users, создатель
+- superseded_at: timestamp, дата замены
+- superseded_by: UUID, Foreign Key → document_versions, следующая версия
+- approved_at: timestamp, дата утверждения
+- approved_by: UUID, Foreign Key → users, утверждающий
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- audit_trail_id: UUID, Foreign Key → audit_trail
+- UNIQUE(document_id, version_number)
+
+### 3.30.3 Document Acknowledgements (DS-DOC-003)
+
+**Подтверждения прочтения документов**
+
+**Compliance**: EU GMP Annex 11 Clause 2, ISO 13485
+
+- acknowledgement_id: UUID, Primary Key
+- document_id: UUID, NOT NULL, Foreign Key → controlled_documents
+- version_id: UUID, NOT NULL, Foreign Key → document_versions
+- user_id: UUID, NOT NULL, Foreign Key → users, кто прочитал
+- acknowledged_at: timestamp, DEFAULT now(), дата подтверждения
+- signature_id: UUID, Foreign Key → electronic_signatures
+- test_taken: boolean, DEFAULT false, пройден ли тест на понимание
+- test_score: integer, оценка теста
+- test_passed: boolean, пройден ли тест
+- audit_trail_id: UUID, Foreign Key → audit_trail
+- UNIQUE(document_id, version_id, user_id)
+
+---
+
+## 3.31 Quality Events System (NEW in v2.0)
+
+### 3.31.1 Quality Events (DS-QE-001)
+
+**Управление качественными событиями**
+
+**Compliance**: EU GMP Chapter 8, ICH Q10
+
+- event_id: UUID, Primary Key
+- event_number: varchar(50), UNIQUE NOT NULL, номер события (QE-2025-001)
+- event_type: enum (oos, oot, product_complaint, equipment_failure, environmental_excursion, contamination, labeling_error), тип события
+- detected_at: timestamp, NOT NULL, время обнаружения
+- detected_by: UUID, NOT NULL, Foreign Key → users, кто обнаружил
+- description: text, NOT NULL, описание события
+- severity: enum (minor, major, critical), серьезность
+- patient_safety_risk: boolean, DEFAULT false, риск для безопасности пациента
+- product_quality_impact: boolean, DEFAULT false, влияние на качество продукта
+- reportable_event: boolean, DEFAULT false, требуется ли сообщать в органы
+- batch_id: UUID, Foreign Key → batches, затронутая партия
+- product_id: UUID, затронутый продукт
+- equipment_id: UUID, Foreign Key → equipment, затронутое оборудование
+- zone_id: UUID, Foreign Key → zones, зона события
+- investigation_required: boolean, DEFAULT true, требуется ли расследование
+- investigation_id: UUID, Foreign Key → root_cause_analyses, ID расследования
+- affected_batches: UUID[], массив затронутых партий
+- affected_products: UUID[], массив затронутых продуктов
+- quarantine_required: boolean, DEFAULT false, требуется ли карантин
+- recall_required: boolean, DEFAULT false, требуется ли отзыв
+- capa_required: boolean, DEFAULT true, требуется ли CAPA
+- capa_id: UUID, Foreign Key → capa_records, ID CAPA
+- status: enum (open, under_investigation, pending_capa, pending_closure, closed), статус
+- closed_by: UUID, кто закрыл
+- closed_at: timestamp, дата закрытия
+- closure_signature_id: UUID, Foreign Key → electronic_signatures
+- regulatory_notification_required: boolean, DEFAULT false, требуется ли уведомление регулятора
+- notification_sent_at: timestamp, дата отправки уведомления
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: detected_by, closed_by
+- **Legible**: Clear event descriptions
+- **Contemporaneous**: detected_at captures real-time
+- **Original**: Immutable event records
+- **Accurate**: Severity validated against criteria
+- **Complete**: Full investigation tracked
+- **Consistent**: Uniform event classification
+- **Enduring**: Permanent retention
+- **Available**: Trending and analysis queries
+
+---
+
+## 3.32 Data Retention & Archive Management (NEW in v2.0)
+
+### 3.32.1 Data Retention Policies (DS-DI-004)
+
+**Политики хранения данных**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(c)
+
+- policy_id: UUID, Primary Key
+- entity_type: varchar(50), NOT NULL, тип сущности (plants, batches, audit_trail)
+- retention_period: interval, NOT NULL, период хранения (7 years, 25 years)
+- retention_basis: varchar(100), основание (FDA, EU GMP, Tax Law)
+- archive_after: interval, когда архивировать (переместить в cold storage)
+- destruction_allowed: boolean, DEFAULT false, разрешено ли уничтожение
+- legal_hold_override: boolean, DEFAULT false, может ли legal hold переопределить
+- created_at: timestamp, DEFAULT now()
+- approved_by: UUID, NOT NULL, Foreign Key → users, утверждающий
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- effective_date: date, NOT NULL, дата вступления в силу
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+### 3.32.2 Archived Records (DS-DI-005)
+
+**Архивированные записи**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(c)
+
+- archive_id: UUID, Primary Key
+- entity_type: varchar(50), NOT NULL, тип сущности
+- entity_id: UUID, NOT NULL, ID сущности
+- archived_at: timestamp, DEFAULT now(), дата архивирования
+- archived_by: UUID, NOT NULL, Foreign Key → users, кто архивировал
+- retention_expiry: date, NOT NULL, дата истечения хранения
+- archive_location: varchar(255), расположение в хранилище (storage path/URL)
+- archive_format: enum (json, parquet, pdf), формат архива
+- archive_checksum: varchar(64), SHA-256 checksum архива
+- retrieval_time_estimate: interval, оценка времени на восстановление (SLA)
+- legal_hold: boolean, DEFAULT false, под legal hold
+- destruction_date: date, дата уничтожения
+- destruction_by: UUID, Foreign Key → users, кто уничтожил
+- destruction_signature_id: UUID, Foreign Key → electronic_signatures
+- destruction_certificate: varchar(500), путь к certificate of destruction
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+---
+
+## 3.33 Workflow Management System (NEW in v2.0)
+
+### 3.33.1 Workflow Definitions (DS-WF-004)
+
+**Определения workflow процессов**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(f)
+
+- workflow_id: UUID, Primary Key
+- workflow_name: varchar(100), NOT NULL, название workflow
+- entity_type: varchar(50), NOT NULL, тип сущности (batch, deviation, change)
+- workflow_type: varchar(50), тип workflow (approval, review, release)
+- version: varchar(20), NOT NULL, версия workflow
+- status: enum (active, draft, retired), статус
+- states: JSONB, NOT NULL, массив допустимых состояний
+- transitions: JSONB, NOT NULL, допустимые переходы между состояниями
+- transition_rules: JSONB, бизнес-правила для переходов
+- approval_requirements: JSONB, требования к утверждению на каждом шаге
+- sla_timings: JSONB, ожидаемое время на каждый шаг
+- created_at: timestamp, DEFAULT now()
+- created_by: UUID, NOT NULL, Foreign Key → users, создатель
+- approved_by: UUID, Foreign Key → users, утверждающий
+- approval_signature_id: UUID, Foreign Key → electronic_signatures
+- effective_date: date, NOT NULL, дата вступления в силу
+- retirement_date: date, дата выбытия
+- audit_trail_id: UUID, Foreign Key → audit_trail
+
+**ALCOA+ Compliance**:
+
+- **Attributable**: created_by, approved_by
+- **Legible**: Structured workflow definitions
+- **Contemporaneous**: Version timestamps
+- **Original**: Immutable workflow versions
+- **Accurate**: Transition rules validated
+- **Complete**: All states and transitions defined
+- **Consistent**: Standard workflow schema
+- **Enduring**: Historical workflows retained
+- **Available**: Workflow audit queries
+
+### 3.33.2 Workflow Execution Logs (DS-WF-005)
+
+**Логи выполнения workflow**
+
+**Compliance**: FDA 21 CFR Part 11 § 11.10(f)
+
+- execution_id: UUID, Primary Key
+- workflow_id: UUID, NOT NULL, Foreign Key → workflow_definitions
+- entity_type: varchar(50), NOT NULL, тип сущности
+- entity_id: UUID, NOT NULL, ID сущности
+- current_state: varchar(50), NOT NULL, текущее состояние
+- previous_state: varchar(50), предыдущее состояние
+- started_at: timestamp, DEFAULT now(), время начала
+- completed_at: timestamp, время завершения
+- status: enum (in_progress, completed, failed), статус выполнения
+- assigned_to: UUID, Foreign Key → users, кому назначено
+- assigned_at: timestamp, время назначения
+- transition_valid: boolean, DEFAULT true, валиден ли переход
+- validation_errors: JSONB, ошибки валидации
+- audit_trail_id: UUID, Foreign Key → audit_trail
+- signature_required: boolean, требуется ли подпись
+- signature_id: UUID, Foreign Key → electronic_signatures
+
+---
+
 ## 4. Data Relationships
 
 ### 4.1 Primary Relationships
@@ -887,6 +1638,26 @@ VALUES ('third_party_auditor', 'auditing', true, true, true, 180, 1);
 - All entities → Audit_Trail (One-to-Many)
 - Electronic_Signatures → Audit_Trail (One-to-One)
 - Documents → Electronic_Signatures (One-to-Many)
+
+**Compliance & Quality Relationships (NEW in v2.0):**
+
+- All GxP entities → Change_Requests (Many-to-Many) - любое изменение GxP-критичной записи требует change control
+- Change_Requests → Change_Approvals (One-to-Many) - multi-level approval workflow
+- Change_Requests → Change_Implementation_History (One-to-Many) - история реализации изменений
+- Quality_Events → Deviations → Root_Cause_Analyses (One-to-One) - расследование отклонений
+- Deviations/Quality_Events → CAPA_Records (Many-to-One) - корректирующие действия
+- System_Components → Validation_Protocols (One-to-Many) - валидация систем
+- Validation_Protocols → Validation_Test_Cases (One-to-Many) - тест-кейсы валидации
+- Validation_Protocols → Periodic_Reviews (One-to-Many) - периодические пере-валидации
+- Controlled_Documents → Document_Versions (One-to-Many) - версионирование документов
+- Controlled_Documents → Document_Acknowledgements (Many-to-Many через version) - подтверждения прочтения
+- Controlled_Documents → Training_Courses (One-to-Many) - связь документов с обучением
+- Batches/Equipment/Zones → Quality_Events (One-to-Many) - качественные события
+- All entity_types → Data_Retention_Policies (Many-to-One) - политики хранения
+- All entity_types → Archived_Records (One-to-Many) - архивирование записей
+- Workflow_Definitions → Workflow_Execution_Logs (One-to-Many) - выполнение workflows
+- All approval processes → Electronic_Signatures (One-to-Many) - электронные подписи
+- All compliance entities → Audit_Trail (One-to-Many) - полная аудит-трейл прослеживаемость
 
 ### 4.2 Data Flow Patterns
 
