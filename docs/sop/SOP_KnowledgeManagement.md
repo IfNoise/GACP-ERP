@@ -29,6 +29,7 @@ Establish procedures for comprehensive knowledge management, document control, t
 ## 2. Scope
 
 This SOP covers:
+
 - Centralized knowledge base management
 - Document version control and lifecycle management
 - Training content creation and delivery
@@ -53,7 +54,9 @@ This SOP covers:
 ### 4.1 Information Architecture
 
 #### 4.1.1 Content Categories
+
 **Primary Knowledge Domains**:
+
 - **Standard Operating Procedures (SOPs)**: Detailed operational procedures
 - **Technical Documentation**: Equipment manuals, specifications, troubleshooting guides
 - **Regulatory Guidance**: GACP requirements, compliance checklists, audit preparations
@@ -62,6 +65,7 @@ This SOP covers:
 - **Forms and Templates**: Standardized documents, checklists, report templates
 
 **Content Classification**:
+
 ```yaml
 Content_Types:
   regulatory_critical:
@@ -90,6 +94,7 @@ Content_Types:
 ```
 
 #### 4.1.2 Metadata Standards
+
 ```typescript
 interface DocumentMetadata {
   // Core Identification
@@ -133,7 +138,9 @@ interface DocumentMetadata {
 ### 4.2 Content Management System
 
 #### 4.2.1 Wiki.js Integration
+
 **Core Features**:
+
 - **Collaborative Editing**: Real-time collaborative document editing
 - **Version History**: Complete audit trail of document changes
 - **Access Control**: Role-based permissions and content restrictions
@@ -141,6 +148,7 @@ interface DocumentMetadata {
 - **Mobile Optimization**: Responsive design for mobile access
 
 **Configuration**:
+
 ```yaml
 Wiki_Configuration:
   storage:
@@ -165,12 +173,15 @@ Wiki_Configuration:
 ```
 
 #### 4.2.2 Document Lifecycle Management
+
 **Creation and Approval Workflow**:
+
 ```
 Draft Creation → SME Review → QA Review → Management Approval → Publication → Distribution → Scheduled Review
 ```
 
 **Version Control Process**:
+
 1. **Minor Updates** (v1.1):
    - Typographical corrections
    - Clarifications without process changes
@@ -191,7 +202,9 @@ Draft Creation → SME Review → QA Review → Management Approval → Publicat
 ### 5.1 Learning Management System (LMS)
 
 #### 5.1.1 Content Development Framework
+
 **Training Module Structure**:
+
 ```typescript
 interface TrainingModule {
   moduleId: string;
@@ -236,13 +249,16 @@ interface TrainingSection {
 ```
 
 #### 5.1.2 Mobile Learning Integration
+
 **Android Terminal Learning Features**:
+
 - **Offline Content**: Download courses for offline completion
 - **Microlearning**: Bite-sized content modules (5-10 minutes)
 - **Just-in-Time Learning**: Context-aware content delivery during work
 - **Progress Tracking**: Automatic synchronization with central LMS
 
 **Content Delivery Optimization**:
+
 ```typescript
 interface MobileLearningConfig {
   contentSync: {
@@ -270,7 +286,9 @@ interface MobileLearningConfig {
 ### 5.2 Content Creation and Quality Assurance
 
 #### 5.2.1 Content Development Process
+
 **Standard Operating Procedure for Content Creation**:
+
 1. **Needs Assessment**:
    - Identify knowledge gaps through performance analysis
    - Review regulatory requirements and updates
@@ -295,7 +313,9 @@ interface MobileLearningConfig {
    - User testing with target audience
 
 #### 5.2.2 Content Quality Standards
+
 **Quality Criteria**:
+
 - **Accuracy**: 100% technical accuracy verified by SMEs
 - **Completeness**: All learning objectives covered
 - **Clarity**: Language appropriate for target audience
@@ -304,6 +324,7 @@ interface MobileLearningConfig {
 - **Mobile Compatibility**: Optimized for mobile devices
 
 **Quality Metrics**:
+
 ```sql
 -- Content effectiveness metrics
 SELECT 
@@ -325,7 +346,9 @@ ORDER BY satisfaction DESC;
 ### 6.1 Advanced Search Capabilities
 
 #### 6.1.1 Search Engine Features
+
 **Search Functionality**:
+
 - **Full-Text Search**: Content indexing across all document types
 - **Faceted Search**: Filter by department, document type, date, author
 - **Semantic Search**: AI-powered contextual search results
@@ -333,6 +356,7 @@ ORDER BY satisfaction DESC;
 - **Voice Search**: Audio query support for mobile users
 
 **Search Interface**:
+
 ```typescript
 interface SearchQuery {
   query: string;
@@ -366,7 +390,9 @@ interface SearchResult {
 ```
 
 #### 6.1.2 AI-Powered Recommendations
+
 **Recommendation Engine**:
+
 - **Content-Based**: Suggest documents based on current viewing
 - **Collaborative Filtering**: Recommend based on similar user patterns
 - **Context-Aware**: Suggest relevant content based on current task/SOP
@@ -377,20 +403,25 @@ interface SearchResult {
 ### 7.1 Community Features
 
 #### 7.1.1 Discussion Forums
+
 **Forum Structure**:
+
 - **Department Forums**: Organized by functional areas
 - **Topic-Based Discussions**: Technical subjects and best practices
 - **Q&A Sections**: Expert answers to operational questions
 - **Innovation Hub**: Ideas and improvement suggestions
 
 **Moderation and Quality Control**:
+
 - **Expert Moderation**: SMEs monitor and validate technical discussions
 - **Community Guidelines**: Clear rules for professional discourse
 - **Content Curation**: Promote high-quality contributions
 - **Recognition System**: Badges and points for valuable contributions
 
 #### 7.1.2 Knowledge Capture Processes
+
 **Lessons Learned Documentation**:
+
 ```typescript
 interface LessonLearned {
   lessonId: string;
@@ -421,13 +452,16 @@ interface LessonLearned {
 ### 7.2 Expert Networks
 
 #### 7.2.1 Subject Matter Expert (SME) Management
+
 **SME Directory**:
+
 - **Expertise Mapping**: Define areas of specialization
 - **Availability Status**: Current availability for consultation
 - **Contact Preferences**: Preferred communication methods
 - **Recent Contributions**: Track knowledge sharing activities
 
 **Expert Consultation Process**:
+
 1. **Request Submission**: Staff submit questions through knowledge portal
 2. **Expert Assignment**: Automatic routing to appropriate SME
 3. **Response and Documentation**: Expert provides answer and documents solution
@@ -438,13 +472,16 @@ interface LessonLearned {
 ### 8.1 ERP System Integration
 
 #### 8.1.1 Workflow Integration
+
 **Context-Aware Content Delivery**:
+
 - **SOP Integration**: Link procedures directly to work tasks
 - **Equipment Manuals**: Access documentation from equipment records
 - **Training Reminders**: Automatic notifications for required training
 - **Compliance Checklists**: Embedded guidance in audit processes
 
 **Real-Time Updates**:
+
 ```typescript
 interface ContentIntegration {
   systemSource: 'ERP' | 'LMS' | 'Wiki' | 'Mobile';
@@ -467,7 +504,9 @@ interface ContentIntegration {
 ```
 
 #### 8.1.2 Data Synchronization
+
 **Bidirectional Data Flow**:
+
 - **Employee Records**: Sync training completion and competencies
 - **Document References**: Update SOP versions in work instructions
 - **Audit Trail**: Track document access and usage patterns
@@ -476,13 +515,16 @@ interface ContentIntegration {
 ### 8.2 Mobile Platform Integration
 
 #### 8.2.1 Android Terminal Features
+
 **Offline Knowledge Access**:
+
 - **Cached Content**: Priority documents stored locally
 - **Search Functionality**: Offline search of cached content
 - **Sync Management**: Automatic updates when connectivity available
 - **Storage Optimization**: Intelligent content priority and cleanup
 
 **Workflow Integration**:
+
 - **SOP Guidance**: Step-by-step procedures with embedded help
 - **Quick Reference**: Context-sensitive information display
 - **Training Modules**: Just-in-time learning during task execution
@@ -493,7 +535,9 @@ interface ContentIntegration {
 ### 9.1 Usage Analytics
 
 #### 9.1.1 Content Performance Metrics
+
 **Key Performance Indicators**:
+
 ```typescript
 interface ContentMetrics {
   contentId: string;
@@ -524,7 +568,9 @@ interface ContentMetrics {
 ```
 
 #### 9.1.2 Learning Effectiveness Analytics
+
 **Training Impact Assessment**:
+
 - **Knowledge Retention**: Long-term assessment scores
 - **Performance Correlation**: Link training to operational performance
 - **Competency Development**: Track skill progression over time
@@ -533,14 +579,17 @@ interface ContentMetrics {
 ### 9.2 Continuous Improvement
 
 #### 9.2.1 Feedback and Optimization
+
 **User Feedback Collection**:
+
 - **Content Ratings**: Star ratings and qualitative feedback
 - **Usability Surveys**: Periodic system usability assessments
 - **Focus Groups**: In-depth feedback from key user groups
 - **Usage Pattern Analysis**: Identify content gaps and optimization opportunities
 
 **Optimization Cycle**:
-```
+
+```text
 Analytics Review → Gap Identification → Content Updates → User Testing → Deployment → Performance Monitoring
 ```
 
@@ -549,13 +598,16 @@ Analytics Review → Gap Identification → Content Updates → User Testing →
 ### 10.1 GACP Compliance Management
 
 #### 10.1.1 Regulatory Content Management
+
 **Compliance Documentation**:
+
 - **Regulatory Updates**: Automatic tracking of guideline changes
 - **Impact Assessment**: Analysis of regulatory changes on operations
 - **Implementation Planning**: Structured approach to compliance updates
 - **Audit Preparation**: Centralized audit documentation and evidence
 
 **Content Validation**:
+
 ```yaml
 Compliance_Validation:
   regulatory_alignment:
@@ -572,7 +624,9 @@ Compliance_Validation:
 ```
 
 #### 10.1.2 Audit Trail and Documentation
+
 **Comprehensive Audit Trail**:
+
 - **Content Access**: Who accessed what content when
 - **Document Changes**: Complete history of content modifications
 - **Training Completion**: Detailed records of learning activities
@@ -583,15 +637,18 @@ Compliance_Validation:
 ### 11.1 Information Security
 
 #### 11.1.1 Access Control Matrix
-| Content Type | Public | Internal | Restricted | Confidential |
-|--------------|--------|----------|------------|--------------|
-| General Procedures | ✓ | ✓ | ✓ | ✓ |
-| SOPs | | ✓ | ✓ | ✓ |
-| Regulatory Docs | | | ✓ | ✓ |
-| Financial Info | | | | ✓ |
+
+| Content Type        | Public | Internal | Restricted | Confidential |
+|---------------------|--------|----------|------------|--------------|
+| General Procedures  | ✓      | ✓        | ✓          | ✓            |
+| SOPs                |        | ✓        | ✓          | ✓            |
+| Regulatory Docs     |        |          | ✓          | ✓            |
+| Financial Info      |        |          |            | ✓            |
 
 #### 11.1.2 Data Protection
+
 **Security Measures**:
+
 - **Encryption**: AES-256 encryption for sensitive content
 - **Access Logging**: Complete audit trail of content access
 - **Backup Security**: Encrypted backups with access controls
@@ -602,14 +659,18 @@ Compliance_Validation:
 ### 12.1 System Resilience
 
 #### 12.1.1 Backup and Recovery
+
 **Backup Strategy**:
+
 - **Real-time Replication**: Primary to secondary data centers
 - **Incremental Backups**: Daily incremental with weekly full backups
 - **Cloud Backup**: Encrypted offsite backup to cloud storage
 - **Recovery Testing**: Monthly recovery drills and validation
 
 #### 12.1.2 Content Preservation
+
 **Long-term Preservation**:
+
 - **Format Migration**: Proactive conversion to current formats
 - **Metadata Preservation**: Maintain complete document context
 - **Version Archaeology**: Ability to recover any historical version
@@ -620,19 +681,23 @@ Compliance_Validation:
 ### 13.1 User Training Program
 
 #### 13.1.1 Role-Based Training
+
 **Content Creators** (4 hours):
+
 - Content development standards and templates
 - Collaboration tools and workflow processes
 - Quality assurance and review procedures
 - Version control and publication processes
 
 **Content Consumers** (2 hours):
+
 - Search and discovery techniques
 - Mobile platform usage
 - Feedback and rating procedures
 - Integration with daily workflows
 
 **System Administrators** (8 hours):
+
 - System configuration and maintenance
 - User management and access controls
 - Analytics and performance monitoring
@@ -641,7 +706,9 @@ Compliance_Validation:
 ### 13.2 Ongoing Support
 
 #### 13.2.1 Help Desk and Support
+
 **Support Channels**:
+
 - **Online Help**: Contextual help within applications
 - **Video Tutorials**: Step-by-step guidance for common tasks
 - **Peer Support**: Community forums and expert networks
@@ -652,12 +719,14 @@ Compliance_Validation:
 ### 14.1 System Performance
 
 #### 14.1.1 Technical Metrics
+
 - **System Uptime**: Target 99.9% availability
 - **Response Time**: <2 seconds for search queries
 - **Mobile Performance**: <3 seconds page load on mobile
 - **Storage Efficiency**: Optimal use of storage resources
 
 #### 14.1.2 User Adoption Metrics
+
 - **Active Users**: Monthly and daily active user counts
 - **Content Creation**: Number of new documents per month
 - **Search Success**: Percentage of successful search sessions
@@ -666,6 +735,7 @@ Compliance_Validation:
 ### 14.2 Business Impact
 
 #### 14.2.1 Operational Metrics
+
 ```sql
 -- Knowledge impact on operational performance
 SELECT 
@@ -682,9 +752,9 @@ ORDER BY efficiency_improvement DESC;
 
 ## 15. Revision History
 
-| Version | Date | Description | Author |
-|---------|------|-------------|---------|
-| 1.0 | 2025-09-13 | Initial SOP creation | QA Manager |
+| Version | Date       | Description            | Author      |
+|---------|------------|------------------------|-------------|
+| 1.0     | 2025-09-13 | Initial SOP creation   | QA Manager  |
 
 ---
 

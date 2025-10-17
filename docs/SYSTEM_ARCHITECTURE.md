@@ -79,13 +79,13 @@ ai_status: draft
 │  │ │Monitoring   │ │Competency   │ │Management   │ │& Forecast │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
-│  │ │Authentication│ │Audit Trail  │ │Document Mgmt│ │PDF Report │ ││
+│  │ │Authorization│ │Audit Trail  │ │Document Mgmt│ │PDF Report │ ││
 │  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Generator  │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
-│  │ │Internal     │ │Database     │ │Knowledge    │ │External   │ ││
+│  │ │Internal      ││Database    │ │Knowledge    │ │External   │ ││
 │  │ │Communications│ │Replication  │ │Management   │ │Integration│ ││
-│  │ │(Jitsi Stack)│ │& WORM       │ │(Wiki.js)    │ │& APIs     │ ││
+│  │ │(Jitsi Stack) │ │& WORM       │ │(Wiki.js)    │ │& APIs     │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  └─────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────┘
