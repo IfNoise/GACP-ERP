@@ -1,19 +1,30 @@
 ---
 title: "SOP: Deviation Management and CAPA System"
 module: "Quality Management System"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-10-15"
+last_updated: "2025-10-17"
 author: "Quality Manager"
 approver: "Quality Director"
-effective_date: "2025-10-15"
-review_date: "2026-10-15"
+effective_date: "2025-10-17"
+review_date: "2026-10-17"
 regulatory_basis: "ICH Q9/Q10, FDA OOS Guidance, EU GMP, WHO GACP"
+data_structures:
+  - "DeviationZodSchema (CONTRACT_SPECIFICATIONS v2.0)"
+  - "DeviationReportedEvent (EVENT_ARCHITECTURE v2.0 Section 11)"
+  - "DeviationClassifiedEvent, DeviationInvestigationCompletedEvent, DeviationClosedEvent"
+training_requirements:
+  - "CUR-011: Deviation Management (Curriculum v2.0)"
+related_sops:
+  - SOP_CAPA.md
+  - SOP_ChangeControl.md
+  - SOP_DocumentControl.md
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
 ai_status: draft
+change_summary: "Updated to v2.0: Added DS v2.0 data structures references, training requirements (CUR-011), cross-references to EVENT_ARCHITECTURE v2.0 Section 11 (Deviation Events)"
 ---
 
 ## SOP: Deviation Management

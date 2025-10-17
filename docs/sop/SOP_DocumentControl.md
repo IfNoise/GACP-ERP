@@ -1,18 +1,20 @@
 ---
 title: "SOP: Document Control and Management"
 module: "Quality Management System"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-09-14"
+last_updated: "2025-10-17"
 author: "Document Controller"
 approver: "Quality Manager"
-effective_date: "2025-09-14"
-review_date: "2026-09-14"
+effective_date: "2025-10-17"
+review_date: "2026-10-17"
 related_sops:
   - SOP_ChangeControl.md
   - SOP_AuditTrail.md
   - SOP_Training.md
   - SOP_QMS_Governance.md
+  - SOP_CAPA.md
+  - SOP_DeviationManagement.md
 related_modules:
   - DocumentManagement
   - MayanEDMS
@@ -23,11 +25,18 @@ compliance_standards:
   - "EU GMP Annex 11"
   - "ISO 9001:2015"
   - "ALCOA+ principles"
+data_structures:
+  - "DocumentZodSchema (CONTRACT_SPECIFICATIONS v2.0)"
+  - "DocumentCreatedEvent (EVENT_ARCHITECTURE v2.0 Section 15)"
+  - "DocumentApprovedEvent, DocumentArchivedEvent"
+training_requirements:
+  - "CUR-015: Document Control & Management (Curriculum v2.0)"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
 ai_status: draft
+change_summary: "Updated to v2.0: Added DS v2.0 data structures references, training requirements (CUR-015), cross-references to EVENT_ARCHITECTURE v2.0 Section 15 (Document Events)"
 ---
 
 # SOP: Document Control and Management

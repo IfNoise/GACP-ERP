@@ -1,19 +1,31 @@
 ---
 title: "SOP: Audit Trail Management and Data Integrity"
 module: "Compliance & Data Integrity"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-10-15"
+last_updated: "2025-10-17"
 author: "Compliance Officer"
 approver: "Quality Manager"
-effective_date: "2025-10-15"
-review_date: "2026-10-15"
+effective_date: "2025-10-17"
+review_date: "2026-10-17"
 regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, MHRA Data Integrity, WHO GACP"
+data_structures:
+  - "AuditTrailZodSchema (CONTRACT_SPECIFICATIONS v2.0 - Enhanced)"
+  - "ElectronicSignatureZodSchema (CONTRACT_SPECIFICATIONS v2.0 - Enhanced)"
+related_sops:
+  - SOP_ChangeControl.md
+  - SOP_CAPA.md
+  - SOP_DeviationManagement.md
+  - SOP_DocumentControl.md
+  - SOP_Validation.md
+training_requirements:
+  - "CUR-003: Audit Trail & e-Signatures (Curriculum v2.0)"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
 ai_status: draft
+change_summary: "Updated to v2.0: Added DS v2.0 enhanced data structures references (AuditTrailZodSchema, ElectronicSignatureZodSchema), cross-references to compliance SOPs"
 ---
 
 # SOP: Audit Trail
