@@ -312,5 +312,148 @@
 
 ---
 
-**Последнее обновление**: 2025-09-16  
-**Источники**: Анализ всей документации GACP-ERP системы
+## 📋 Compliance & Quality Constants (DS v2.0)
+
+### ID Format Patterns
+
+**Описание**: Форматы идентификаторов compliance модулей  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0`
+
+| Модуль              | Формат               | Regex Pattern                      | Пример            |
+|---------------------|----------------------|------------------------------------|-------------------|
+| Change Control      | `CR-YYYY-NNNN`       | `/^CR-\d{4}-\d{4}$/`               | CR-2025-0001      |
+| CAPA                | `CAPA-YYYY-NNNN`     | `/^CAPA-\d{4}-\d{4}$/`             | CAPA-2025-0042    |
+| Deviation           | `DEV-YYYY-NNNN`      | `/^DEV-\d{4}-\d{4}$/`              | DEV-2025-0015     |
+| Validation          | `VAL-YYYY-NNNN`      | `/^VAL-\d{4}-\d{4}$/`              | VAL-2025-0003     |
+| Quality Event       | `QE-YYYY-NNNN`       | `/^QE-\d{4}-\d{4}$/`               | QE-2025-0087      |
+| Training            | `TRN-YYYY-NNNN`      | `/^TRN-\d{4}-\d{4}$/`              | TRN-2025-1234     |
+| Document            | `DOC-XXX-YYYY-NNNN`  | `/^DOC-[A-Z]{3}-\d{4}-\d{4}$/`     | DOC-SOP-2025-0010 |
+| Course              | `CUR-NNN`            | `/^CUR-\d{3}$/`                    | CUR-009           |
+
+### Workflow Timeouts
+
+**Описание**: SLA и таймауты для compliance workflows  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0`, `SOP_*.md`
+
+| Workflow Step             | Standard SLA | Critical SLA | Escalation After | Комментарий               |
+|---------------------------|--------------|--------------|------------------|---------------------------|
+| **Change Control**        |              |              |                  |                           |
+| Impact Assessment         | 5 дней       | 2 дня        | +2 дня           | Assessment completion     |
+| Management Review         | 3 дня        | 1 день       | +1 день          | Review and approval       |
+| Implementation Deadline   | 30 дней      | 7 дней       | +7 дней          | Post-approval             |
+| Verification              | 5 дней       | 2 дня        | +2 дня           | Post-implementation       |
+| **CAPA**                  |              |              |                  |                           |
+| Investigation Start       | 3 дня        | 1 день       | +1 день          | After initiation          |
+| Root Cause Analysis       | 14 дней      | 7 дней       | +3 дня           | Investigation phase       |
+| Action Plan Development   | 7 дней       | 3 дня        | +2 дня           | Post-RCA                  |
+| Implementation            | 30 дней      | 14 дней      | +7 дней          | Varies by action          |
+| Effectiveness Check       | 90 дней      | 30 дней      | +14 дней         | Post-implementation       |
+| **Deviation**             |              |              |                  |                           |
+| Classification            | 24 часа      | 4 часа       | +12 часов        | Immediate after report    |
+| Investigation             | 7 дней       | 3 дня        | +2 дня           | Based on classification   |
+| Impact Assessment         | 5 дней       | 2 дня        | +2 дня           | Critical analysis         |
+| **Validation**            |              |              |                  |                           |
+| Protocol Approval         | 10 дней      | 5 дней       | +3 дня           | Review cycle              |
+| Test Execution            | 30 дней      | 14 дней      | +7 дней          | Per protocol              |
+| Report Approval           | 14 дней      | 7 дней       | +3 дня           | Final review              |
+| **Training**              |              |              |                  |                           |
+| Course Completion         | 30 дней      | 14 дней      | +7 дней          | From enrollment           |
+| Certification Renewal     | 365 дней     | 365 дней     | -30 дней (alert) | Annual recertification    |
+
+### Review Periods
+
+**Описание**: Периодичность пересмотра документов  
+**Источник**: `SOP_DocumentControl.md`, `CONTRACT_SPECIFICATIONS.md v2.0`
+
+| Тип документа | Периодичность  | Grace Period | Комментарий                      |
+|---------------|----------------|--------------|----------------------------------|
+| SOP           | 24 месяца      | 1 месяц      | Standard Operating Procedures    |
+| Protocol (IQ) | Одноразовый    | н/д          | Per validation cycle             |
+| Protocol (OQ) | Одноразовый    | н/д          | Per validation cycle             |
+| Protocol (PQ) | Одноразовый    | н/д          | Per validation cycle             |
+| Policy        | 36 месяцев     | 2 месяца     | Company policies                 |
+| Form          | 12 месяцев     | 1 месяц      | Templates and forms              |
+| Report        | н/д            | н/д          | Historical record                |
+| Training Mat. | 12 месяцев     | 1 месяц      | Course materials                 |
+
+### Regulatory References
+
+**Описание**: Ссылки на регуляторные требования  
+**Источник**: `compliance/*.md`
+
+| Стандарт        | Полное название                                  | Version/Date | Jurisdiction |
+|-----------------|--------------------------------------------------|--------------|--------------|
+| FDA_21CFR11     | 21 CFR Part 11 - Electronic Records & Signatures | Current      | USA          |
+| EU_GMP_ANNEX11  | EudraLex Vol 4, Annex 11 - Computerised Systems  | 2011         | EU           |
+| WHO_GACP        | WHO Guidelines on Good Agricultural and Collection Practices | 2003 | Global |
+| EMA_GACP        | EMA Guidelines on GACP for Starting Materials    | 2006         | EU           |
+| GAMP5           | ISPE GAMP 5 - Risk-Based Approach to Validation  | 2nd Ed, 2022 | Global       |
+| ALCOA_PLUS      | ALCOA+ Data Integrity Principles                 | MHRA 2018    | Global       |
+| ISO_9001        | Quality Management Systems                       | 2015         | Global       |
+| ISO_13485       | Medical Devices - QMS                            | 2016         | Global       |
+
+### Data Integrity
+
+**Описание**: Константы для обеспечения data integrity  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0`, `ALCOA+.md`
+
+| Константа                    | Значение        | Описание                             |
+|------------------------------|-----------------|--------------------------------------|
+| `HASH_ALGORITHM`             | `SHA-256`       | Алгоритм хеширования для audit trail |
+| `SIGNATURE_ALGORITHM`        | `RSA-2048`      | Электронная подпись                  |
+| `AUDIT_RETENTION_YEARS`      | `10`            | Срок хранения audit records          |
+| `BACKUP_RETENTION_YEARS`     | `7`             | Срок хранения backup данных          |
+| `ARCHIVE_RETENTION_YEARS`    | `25`            | Архивное хранение (GxP critical)     |
+| `MAX_EDIT_REASON_LENGTH`     | `500`           | Максимальная длина обоснования       |
+| `MIN_PASSWORD_COMPLEXITY`    | `8 chars + mix` | Требования к паролю (21 CFR Part 11) |
+| `SESSION_TIMEOUT_MINUTES`    | `30`            | Таймаут сессии                       |
+| `MFA_REQUIRED_FOR_CRITICAL`  | `true`          | MFA для критичных операций           |
+
+### Approval Chain Limits
+
+**Описание**: Лимиты для approval workflows  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0`
+
+| Параметр                      | Значение | Применение                |
+|-------------------------------|----------|---------------------------|
+| `MAX_APPROVAL_LEVELS`         | `5`      | Максимум уровней approval |
+| `MIN_APPROVERS_CRITICAL`      | `2`      | Критичные изменения       |
+| `MIN_APPROVERS_MAJOR`         | `1`      | Крупные изменения         |
+| `MIN_APPROVERS_MINOR`         | `1`      | Незначительные изменения  |
+| `MAX_PARALLEL_APPROVERS`      | `3`      | Параллельные approval     |
+| `APPROVAL_EXPIRY_DAYS`        | `90`     | Истечение approval        |
+
+### Analytics & Reporting
+
+**Описание**: Константы для аналитики compliance  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AnalyticsZodSchema`
+
+| Метрика                       | Период      | Threshold (Alarm) | Комментарий                   |
+|-------------------------------|-------------|-------------------|-------------------------------|
+| `CAPA_OVERDUE_RATE`           | Monthly     | > 10%             | Просроченные CAPA             |
+| `DEVIATION_REPEAT_RATE`       | Quarterly   | > 5%              | Повторяющиеся отклонения      |
+| `CHANGE_APPROVAL_TIME_AVG`    | Monthly     | > 7 days          | Среднее время утверждения     |
+| `TRAINING_COMPLETION_RATE`    | Monthly     | < 95%             | Процент завершения обучения   |
+| `VALIDATION_ON_TIME_RATE`     | Quarterly   | < 90%             | Валидации в срок              |
+| `DOCUMENT_REVIEW_OVERDUE`     | Monthly     | > 5%              | Просроченные review документов|
+| `AUDIT_TRAIL_COMPLETENESS`    | Daily       | < 100%            | Полнота audit trail           |
+
+### Electronic Signature Requirements
+
+**Описание**: Требования к электронным подписям (21 CFR Part 11)  
+**Источник**: `FDA_21CFR_Part11.md`, `CONTRACT_SPECIFICATIONS.md v2.0`
+
+| Требование                    | Значение            | Обязательно | Комментарий                     |
+|-------------------------------|---------------------|-------------|---------------------------------|
+| `SIGNATURE_REASON_REQUIRED`   | `true`              | ✅          | Обязательное обоснование        |
+| `SIGNATURE_AUTHENTICATION`    | `password` or `mfa` | ✅          | Метод аутентификации            |
+| `SIGNATURE_TIMESTAMP_FORMAT`  | `ISO 8601 UTC`      | ✅          | Формат временной метки          |
+| `SIGNATURE_IP_LOGGING`        | `true`              | ✅          | Логирование IP адреса           |
+| `SIGNATURE_NONREPUDIATION`    | `true`              | ✅          | Невозможность отказа            |
+| `SIGNATURE_AUDIT_TRAIL`       | `true`              | ✅          | Запись в audit trail            |
+
+---
+
+**Последнее обновление**: 2025-10-17  
+**Версия**: 2.0 - Aligned with DS v2.0 compliance modules  
+**Источники**: CONTRACT_SPECIFICATIONS.md v2.0, SOP_*.md, compliance/*.md
