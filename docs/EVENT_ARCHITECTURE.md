@@ -1,22 +1,23 @@
 ---
 title: "Event-Driven Architecture & Kafka Events"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-09-14"
+last_updated: "2025-10-17"
 type: "architecture"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
-ai_status: draft
+ai_status: under_review
+change_summary: "Major update: Added 31 Kafka topics and 83 event schemas for DS v2.0 compliance modules (Change Control, CAPA, Deviation, Validation, Quality Events, Training, Documents, Analytics)"
 ---
 
-# 🎯 Event-Driven Architecture & Kafka Events
-
 **Документ**: Event Architecture Specification  
-**Версия**: 1.0  
-**Дата**: 14 сентября 2025  
-**Статус**: CRITICAL - Основа для событийной архитектуры
+**Версия**: 2.0  
+**Дата**: 17 октября 2025  
+**Статус**: CRITICAL - Основа для событийной архитектуры  
+**Предыдущая версия**: 1.0 (2025-09-14)  
+**Изменения**: Добавлены 31 Kafka topic и 83 event schema для compliance модулей
 
 ---
 
@@ -144,6 +145,53 @@ export const TOPICS = {
   FINANCIAL_TRANSACTIONS: "financial.transactions.v1",
   FINANCIAL_ASSETS: "financial.assets.v1",
   FINANCIAL_REPORTING: "financial.reporting.v1",
+
+  // Change Control Domain
+  CHANGE_CONTROL_REQUESTS: "change_control.requests.v1",
+  CHANGE_CONTROL_ASSESSMENTS: "change_control.assessments.v1",
+  CHANGE_CONTROL_REVIEWS: "change_control.reviews.v1",
+  CHANGE_CONTROL_APPROVALS: "change_control.approvals.v1",
+  CHANGE_CONTROL_IMPLEMENTATIONS: "change_control.implementations.v1",
+  CHANGE_CONTROL_VERIFICATIONS: "change_control.verifications.v1",
+  CHANGE_CONTROL_CLOSURES: "change_control.closures.v1",
+  CHANGE_CONTROL_NOTIFICATIONS: "change_control.notifications.v1",
+
+  // CAPA Domain
+  CAPA_REQUESTS: "capa.requests.v1",
+  CAPA_INVESTIGATIONS: "capa.investigations.v1",
+  CAPA_ACTIONS: "capa.actions.v1",
+  CAPA_EFFECTIVENESS: "capa.effectiveness_checks.v1",
+  CAPA_CLOSURES: "capa.closures.v1",
+  CAPA_NOTIFICATIONS: "capa.notifications.v1",
+
+  // Deviation Domain
+  DEVIATION_REPORTS: "deviation.reports.v1",
+  DEVIATION_INVESTIGATIONS: "deviation.investigations.v1",
+  DEVIATION_ASSESSMENTS: "deviation.assessments.v1",
+  DEVIATION_CLOSURES: "deviation.closures.v1",
+  DEVIATION_NOTIFICATIONS: "deviation.notifications.v1",
+
+  // Validation Domain
+  VALIDATION_PROTOCOLS: "validation.protocols.v1",
+  VALIDATION_EXECUTIONS: "validation.executions.v1",
+  VALIDATION_REPORTS: "validation.reports.v1",
+  VALIDATION_REVALIDATIONS: "validation.revalidations.v1",
+
+  // Quality Events Module
+  QUALITY_EVENTS: "quality_events.events.v1",
+  QUALITY_EVENT_INVESTIGATIONS: "quality_events.investigations.v1",
+  QUALITY_EVENT_RESOLUTIONS: "quality_events.resolutions.v1",
+
+  // Training Domain
+  TRAINING_RECORDS: "training.records.v1",
+  TRAINING_CURRICULUM: "training.curriculum.v1",
+
+  // Documents Domain
+  DOCUMENTS_LIFECYCLE: "documents.lifecycle.v1",
+
+  // Analytics Domain
+  ANALYTICS_METRICS: "analytics.metrics.v1",
+  ANALYTICS_REPORTS: "analytics.reports.v1",
 
   // System Events
   AUDIT_EVENTS: "audit.events.v1",
@@ -908,9 +956,1146 @@ export type AlertNotificationEvent = z.infer<
 
 ---
 
-## 🔧 **9. EVENT PROCESSING PATTERNS**
+## 🔄 **9. CHANGE CONTROL DOMAIN EVENTS**
 
-### 9.1 Event Handlers
+### 9.1 Change Request Lifecycle
+
+#### 9.1.1 Change Request Created
+
+```typescript
+export const ChangeRequestCreatedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  changeNumber: z.string(),
+  title: z.string(),
+  description: z.string(),
+  changeType: z.enum([
+    "process",
+    "equipment",
+    "system",
+    "documentation",
+    "organizational",
+    "environmental",
+  ]),
+  priority: z.enum(["low", "medium", "high", "critical"]),
+  requestedBy: z.string().uuid(),
+  affectedSystems: z.array(z.string()),
+  businessJustification: z.string(),
+  expectedBenefits: z.string(),
+  proposedImplementationDate: z.string().date(),
+  attachments: z.array(
+    z.object({
+      id: z.string().uuid(),
+      filename: z.string(),
+      fileType: z.string(),
+    })
+  ).optional(),
+});
+
+export const ChangeRequestCreatedEventSchema = EventWithPayloadSchema(
+  ChangeRequestCreatedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.request_created"),
+});
+
+export type ChangeRequestCreatedEvent = z.infer<typeof ChangeRequestCreatedEventSchema>;
+```
+
+#### 9.1.2 Change Assessment Completed
+
+```typescript
+export const ChangeAssessmentCompletedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  assessmentId: z.string().uuid(),
+  assessor: z.string().uuid(),
+  riskLevel: z.enum(["low", "medium", "high", "critical"]),
+  impactAnalysis: z.object({
+    productQuality: z.enum(["none", "low", "medium", "high"]),
+    compliance: z.enum(["none", "low", "medium", "high"]),
+    safety: z.enum(["none", "low", "medium", "high"]),
+    cost: z.object({
+      estimated: z.number(),
+      currency: z.string().length(3),
+    }),
+  }),
+  requiredResources: z.array(z.string()),
+  requiredApprovals: z.array(
+    z.object({
+      role: z.string(),
+      required: z.boolean(),
+    })
+  ),
+  assessmentNotes: z.string(),
+  completedAt: z.string().datetime(),
+});
+
+export const ChangeAssessmentCompletedEventSchema = EventWithPayloadSchema(
+  ChangeAssessmentCompletedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.assessment_completed"),
+});
+
+export type ChangeAssessmentCompletedEvent = z.infer<typeof ChangeAssessmentCompletedEventSchema>;
+```
+
+#### 9.1.3 Change Review Completed
+
+```typescript
+export const ChangeReviewCompletedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  reviewId: z.string().uuid(),
+  reviewer: z.string().uuid(),
+  reviewerRole: z.string(),
+  decision: z.enum(["approved", "rejected", "needs_revision"]),
+  reviewComments: z.string(),
+  reviewedAt: z.string().datetime(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.enum(["approved", "reviewed", "acknowledged"]),
+  }),
+});
+
+export const ChangeReviewCompletedEventSchema = EventWithPayloadSchema(
+  ChangeReviewCompletedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.review_completed"),
+});
+
+export type ChangeReviewCompletedEvent = z.infer<typeof ChangeReviewCompletedEventSchema>;
+```
+
+#### 9.1.4 Change Approved
+
+```typescript
+export const ChangeApprovedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  approvedBy: z.string().uuid(),
+  approvalDate: z.string().datetime(),
+  approvalComments: z.string().optional(),
+  conditions: z.array(z.string()).optional(),
+  implementationDeadline: z.string().date(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const ChangeApprovedEventSchema = EventWithPayloadSchema(
+  ChangeApprovedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.approved"),
+});
+
+export type ChangeApprovedEvent = z.infer<typeof ChangeApprovedEventSchema>;
+```
+
+#### 9.1.5 Change Implementation Started
+
+```typescript
+export const ChangeImplementationStartedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  implementationId: z.string().uuid(),
+  implementedBy: z.string().uuid(),
+  implementationPlan: z.string(),
+  startDate: z.string().datetime(),
+  plannedCompletionDate: z.string().datetime(),
+  milestones: z.array(
+    z.object({
+      id: z.string().uuid(),
+      title: z.string(),
+      dueDate: z.string().date(),
+      status: z.enum(["pending", "in_progress", "completed"]),
+    })
+  ),
+});
+
+export const ChangeImplementationStartedEventSchema = EventWithPayloadSchema(
+  ChangeImplementationStartedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.implementation_started"),
+});
+
+export type ChangeImplementationStartedEvent = z.infer<typeof ChangeImplementationStartedEventSchema>;
+```
+
+#### 9.1.6 Change Implementation Completed
+
+```typescript
+export const ChangeImplementationCompletedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  implementationId: z.string().uuid(),
+  completedBy: z.string().uuid(),
+  completionDate: z.string().datetime(),
+  actualCost: z.object({
+    value: z.number(),
+    currency: z.string().length(3),
+  }).optional(),
+  implementationNotes: z.string(),
+  deviations: z.array(
+    z.object({
+      description: z.string(),
+      impact: z.string(),
+      resolution: z.string(),
+    })
+  ).optional(),
+});
+
+export const ChangeImplementationCompletedEventSchema = EventWithPayloadSchema(
+  ChangeImplementationCompletedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.implementation_completed"),
+});
+
+export type ChangeImplementationCompletedEvent = z.infer<typeof ChangeImplementationCompletedEventSchema>;
+```
+
+#### 9.1.7 Change Verified
+
+```typescript
+export const ChangeVerifiedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  verificationId: z.string().uuid(),
+  verifiedBy: z.string().uuid(),
+  verificationDate: z.string().datetime(),
+  verificationMethod: z.string(),
+  verificationResults: z.string(),
+  effectiveness: z.enum(["effective", "partially_effective", "ineffective"]),
+  followUpRequired: z.boolean(),
+  followUpActions: z.array(z.string()).optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("verified"),
+  }),
+});
+
+export const ChangeVerifiedEventSchema = EventWithPayloadSchema(
+  ChangeVerifiedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.verified"),
+});
+
+export type ChangeVerifiedEvent = z.infer<typeof ChangeVerifiedEventSchema>;
+```
+
+#### 9.1.8 Change Closed
+
+```typescript
+export const ChangeClosedPayloadSchema = z.object({
+  changeId: z.string().uuid(),
+  closedBy: z.string().uuid(),
+  closureDate: z.string().datetime(),
+  closureReason: z.enum(["completed", "cancelled", "superseded"]),
+  lessonsLearned: z.string().optional(),
+  documentation: z.array(
+    z.object({
+      type: z.string(),
+      reference: z.string(),
+    })
+  ),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const ChangeClosedEventSchema = EventWithPayloadSchema(
+  ChangeClosedPayloadSchema
+).extend({
+  eventType: z.literal("change_control.closed"),
+});
+
+export type ChangeClosedEvent = z.infer<typeof ChangeClosedEventSchema>;
+```
+
+---
+
+## 🔬 **10. CAPA DOMAIN EVENTS**
+
+### 10.1 CAPA Request Lifecycle
+
+#### 10.1.1 CAPA Request Created
+
+```typescript
+export const CAPARequestCreatedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  capaNumber: z.string(),
+  title: z.string(),
+  description: z.string(),
+  capaType: z.enum(["corrective", "preventive", "both"]),
+  sourceType: z.enum([
+    "deviation",
+    "audit_finding",
+    "customer_complaint",
+    "quality_event",
+    "management_review",
+    "continuous_improvement",
+  ]),
+  sourceId: z.string().uuid().optional(),
+  priority: z.enum(["low", "medium", "high", "critical"]),
+  assignedTo: z.string().uuid(),
+  targetDate: z.string().date(),
+  initiatedBy: z.string().uuid(),
+});
+
+export const CAPARequestCreatedEventSchema = EventWithPayloadSchema(
+  CAPARequestCreatedPayloadSchema
+).extend({
+  eventType: z.literal("capa.request_created"),
+});
+
+export type CAPARequestCreatedEvent = z.infer<typeof CAPARequestCreatedEventSchema>;
+```
+
+#### 10.1.2 CAPA Investigation Started
+
+```typescript
+export const CAPAInvestigationStartedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  investigationId: z.string().uuid(),
+  investigator: z.string().uuid(),
+  investigationPlan: z.string(),
+  startDate: z.string().datetime(),
+  expectedCompletionDate: z.string().date(),
+  investigationScope: z.string(),
+});
+
+export const CAPAInvestigationStartedEventSchema = EventWithPayloadSchema(
+  CAPAInvestigationStartedPayloadSchema
+).extend({
+  eventType: z.literal("capa.investigation_started"),
+});
+
+export type CAPAInvestigationStartedEvent = z.infer<typeof CAPAInvestigationStartedEventSchema>;
+```
+
+#### 10.1.3 CAPA Root Cause Identified
+
+```typescript
+export const CAPARootCauseIdentifiedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  investigationId: z.string().uuid(),
+  rootCauses: z.array(
+    z.object({
+      id: z.string().uuid(),
+      category: z.enum([
+        "human_error",
+        "equipment_failure",
+        "process_failure",
+        "material_issue",
+        "design_flaw",
+        "training_gap",
+        "documentation_issue",
+        "environmental",
+      ]),
+      description: z.string(),
+      evidence: z.string(),
+      contributingFactors: z.array(z.string()).optional(),
+    })
+  ),
+  analysisMethod: z.enum([
+    "5_whys",
+    "fishbone",
+    "fault_tree_analysis",
+    "pareto_analysis",
+    "root_cause_mapping",
+  ]),
+  identifiedBy: z.string().uuid(),
+  identifiedAt: z.string().datetime(),
+});
+
+export const CAPARootCauseIdentifiedEventSchema = EventWithPayloadSchema(
+  CAPARootCauseIdentifiedPayloadSchema
+).extend({
+  eventType: z.literal("capa.root_cause_identified"),
+});
+
+export type CAPARootCauseIdentifiedEvent = z.infer<typeof CAPARootCauseIdentifiedEventSchema>;
+```
+
+#### 10.1.4 CAPA Action Created
+
+```typescript
+export const CAPAActionCreatedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  actionId: z.string().uuid(),
+  actionType: z.enum(["corrective", "preventive"]),
+  description: z.string(),
+  assignedTo: z.string().uuid(),
+  targetDate: z.string().date(),
+  resources: z.string().optional(),
+  successCriteria: z.string(),
+  rootCauseIds: z.array(z.string().uuid()),
+});
+
+export const CAPAActionCreatedEventSchema = EventWithPayloadSchema(
+  CAPAActionCreatedPayloadSchema
+).extend({
+  eventType: z.literal("capa.action_created"),
+});
+
+export type CAPAActionCreatedEvent = z.infer<typeof CAPAActionCreatedEventSchema>;
+```
+
+#### 10.1.5 CAPA Action Completed
+
+```typescript
+export const CAPAActionCompletedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  actionId: z.string().uuid(),
+  completedBy: z.string().uuid(),
+  completionDate: z.string().datetime(),
+  completionNotes: z.string(),
+  evidence: z.array(
+    z.object({
+      type: z.string(),
+      reference: z.string(),
+    })
+  ),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const CAPAActionCompletedEventSchema = EventWithPayloadSchema(
+  CAPAActionCompletedPayloadSchema
+).extend({
+  eventType: z.literal("capa.action_completed"),
+});
+
+export type CAPAActionCompletedEvent = z.infer<typeof CAPAActionCompletedEventSchema>;
+```
+
+#### 10.1.6 CAPA Effectiveness Check Completed
+
+```typescript
+export const CAPAEffectivenessCheckCompletedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  effectivenessCheckId: z.string().uuid(),
+  checkedBy: z.string().uuid(),
+  checkDate: z.string().datetime(),
+  effectivenessRating: z.enum(["effective", "partially_effective", "ineffective"]),
+  metrics: z.array(
+    z.object({
+      name: z.string(),
+      targetValue: z.string(),
+      actualValue: z.string(),
+      met: z.boolean(),
+    })
+  ),
+  findings: z.string(),
+  additionalActionsRequired: z.boolean(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("verified"),
+  }),
+});
+
+export const CAPAEffectivenessCheckCompletedEventSchema = EventWithPayloadSchema(
+  CAPAEffectivenessCheckCompletedPayloadSchema
+).extend({
+  eventType: z.literal("capa.effectiveness_check_completed"),
+});
+
+export type CAPAEffectivenessCheckCompletedEvent = z.infer<typeof CAPAEffectivenessCheckCompletedEventSchema>;
+```
+
+#### 10.1.7 CAPA Closed
+
+```typescript
+export const CAPAClosedPayloadSchema = z.object({
+  capaId: z.string().uuid(),
+  closedBy: z.string().uuid(),
+  closureDate: z.string().datetime(),
+  closureReason: z.enum(["completed", "cancelled", "consolidated"]),
+  finalSummary: z.string(),
+  lessonsLearned: z.string().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const CAPAClosedEventSchema = EventWithPayloadSchema(
+  CAPAClosedPayloadSchema
+).extend({
+  eventType: z.literal("capa.closed"),
+});
+
+export type CAPAClosedEvent = z.infer<typeof CAPAClosedEventSchema>;
+```
+
+---
+
+## ⚠️ **11. DEVIATION DOMAIN EVENTS**
+
+### 11.1 Deviation Lifecycle
+
+#### 11.1.1 Deviation Reported
+
+```typescript
+export const DeviationReportedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  deviationNumber: z.string(),
+  title: z.string(),
+  description: z.string(),
+  deviationType: z.enum([
+    "process",
+    "equipment",
+    "documentation",
+    "testing",
+    "environmental",
+    "material",
+  ]),
+  detectedAt: z.string().datetime(),
+  detectedBy: z.string().uuid(),
+  affectedBatches: z.array(z.string().uuid()).optional(),
+  affectedProducts: z.array(z.string().uuid()).optional(),
+  immediateActions: z.string(),
+});
+
+export const DeviationReportedEventSchema = EventWithPayloadSchema(
+  DeviationReportedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.reported"),
+});
+
+export type DeviationReportedEvent = z.infer<typeof DeviationReportedEventSchema>;
+```
+
+#### 11.1.2 Deviation Classified
+
+```typescript
+export const DeviationClassifiedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  classifiedBy: z.string().uuid(),
+  classifiedAt: z.string().datetime(),
+  severity: z.enum(["critical", "major", "minor"]),
+  classification: z.object({
+    gmpRelevant: z.boolean(),
+    regulatoryReportable: z.boolean(),
+    productImpact: z.enum(["none", "potential", "confirmed"]),
+    patientSafetyImpact: z.enum(["none", "potential", "confirmed"]),
+  }),
+  justification: z.string(),
+});
+
+export const DeviationClassifiedEventSchema = EventWithPayloadSchema(
+  DeviationClassifiedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.classified"),
+});
+
+export type DeviationClassifiedEvent = z.infer<typeof DeviationClassifiedEventSchema>;
+```
+
+#### 11.1.3 Deviation Investigation Started
+
+```typescript
+export const DeviationInvestigationStartedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  investigationId: z.string().uuid(),
+  investigator: z.string().uuid(),
+  investigationTeam: z.array(z.string().uuid()).optional(),
+  investigationPlan: z.string(),
+  startDate: z.string().datetime(),
+  targetCompletionDate: z.string().date(),
+});
+
+export const DeviationInvestigationStartedEventSchema = EventWithPayloadSchema(
+  DeviationInvestigationStartedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.investigation_started"),
+});
+
+export type DeviationInvestigationStartedEvent = z.infer<typeof DeviationInvestigationStartedEventSchema>;
+```
+
+#### 11.1.4 Deviation Investigation Completed
+
+```typescript
+export const DeviationInvestigationCompletedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  investigationId: z.string().uuid(),
+  completedBy: z.string().uuid(),
+  completionDate: z.string().datetime(),
+  findings: z.string(),
+  rootCause: z.string(),
+  contributingFactors: z.array(z.string()).optional(),
+  capaRequired: z.boolean(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const DeviationInvestigationCompletedEventSchema = EventWithPayloadSchema(
+  DeviationInvestigationCompletedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.investigation_completed"),
+});
+
+export type DeviationInvestigationCompletedEvent = z.infer<typeof DeviationInvestigationCompletedEventSchema>;
+```
+
+#### 11.1.5 Deviation Impact Assessed
+
+```typescript
+export const DeviationImpactAssessedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  assessmentId: z.string().uuid(),
+  assessedBy: z.string().uuid(),
+  assessedAt: z.string().datetime(),
+  productImpact: z.object({
+    affectedBatches: z.array(
+      z.object({
+        batchId: z.string().uuid(),
+        batchNumber: z.string(),
+        disposition: z.enum(["accept", "rework", "reject", "quarantine"]),
+        justification: z.string(),
+      })
+    ),
+  }),
+  processImpact: z.string(),
+  qualityImpact: z.string(),
+  regulatoryImpact: z.string().optional(),
+});
+
+export const DeviationImpactAssessedEventSchema = EventWithPayloadSchema(
+  DeviationImpactAssessedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.impact_assessed"),
+});
+
+export type DeviationImpactAssessedEvent = z.infer<typeof DeviationImpactAssessedEventSchema>;
+```
+
+#### 11.1.6 Deviation Closed
+
+```typescript
+export const DeviationClosedPayloadSchema = z.object({
+  deviationId: z.string().uuid(),
+  closedBy: z.string().uuid(),
+  closureDate: z.string().datetime(),
+  closureSummary: z.string(),
+  linkedCAPAId: z.string().uuid().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const DeviationClosedEventSchema = EventWithPayloadSchema(
+  DeviationClosedPayloadSchema
+).extend({
+  eventType: z.literal("deviation.closed"),
+});
+
+export type DeviationClosedEvent = z.infer<typeof DeviationClosedEventSchema>;
+```
+
+---
+
+## ✅ **12. VALIDATION DOMAIN EVENTS**
+
+### 12.1 Validation Lifecycle
+
+#### 12.1.1 Validation Protocol Created
+
+```typescript
+export const ValidationProtocolCreatedPayloadSchema = z.object({
+  validationId: z.string().uuid(),
+  protocolNumber: z.string(),
+  title: z.string(),
+  validationType: z.enum([
+    "installation_qualification",
+    "operational_qualification",
+    "performance_qualification",
+    "process_validation",
+    "cleaning_validation",
+    "method_validation",
+    "system_validation",
+    "revalidation",
+  ]),
+  scope: z.string(),
+  equipment: z.array(
+    z.object({
+      equipmentId: z.string().uuid(),
+      name: z.string(),
+    })
+  ).optional(),
+  process: z.string().optional(),
+  acceptanceCriteria: z.string(),
+  author: z.string().uuid(),
+  reviewers: z.array(z.string().uuid()),
+});
+
+export const ValidationProtocolCreatedEventSchema = EventWithPayloadSchema(
+  ValidationProtocolCreatedPayloadSchema
+).extend({
+  eventType: z.literal("validation.protocol_created"),
+});
+
+export type ValidationProtocolCreatedEvent = z.infer<typeof ValidationProtocolCreatedEventSchema>;
+```
+
+#### 12.1.2 Validation Protocol Approved
+
+```typescript
+export const ValidationProtocolApprovedPayloadSchema = z.object({
+  validationId: z.string().uuid(),
+  approvedBy: z.string().uuid(),
+  approvalDate: z.string().datetime(),
+  approvalComments: z.string().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const ValidationProtocolApprovedEventSchema = EventWithPayloadSchema(
+  ValidationProtocolApprovedPayloadSchema
+).extend({
+  eventType: z.literal("validation.protocol_approved"),
+});
+
+export type ValidationProtocolApprovedEvent = z.infer<typeof ValidationProtocolApprovedEventSchema>;
+```
+
+#### 12.1.3 Validation Execution Started
+
+```typescript
+export const ValidationExecutionStartedPayloadSchema = z.object({
+  validationId: z.string().uuid(),
+  executionId: z.string().uuid(),
+  executedBy: z.string().uuid(),
+  startDate: z.string().datetime(),
+  witnesses: z.array(z.string().uuid()).optional(),
+});
+
+export const ValidationExecutionStartedEventSchema = EventWithPayloadSchema(
+  ValidationExecutionStartedPayloadSchema
+).extend({
+  eventType: z.literal("validation.execution_started"),
+});
+
+export type ValidationExecutionStartedEvent = z.infer<typeof ValidationExecutionStartedEventSchema>;
+```
+
+#### 12.1.4 Validation Test Case Executed
+
+```typescript
+export const ValidationTestCaseExecutedPayloadSchema = z.object({
+  validationId: z.string().uuid(),
+  executionId: z.string().uuid(),
+  testCaseId: z.string().uuid(),
+  testCaseNumber: z.string(),
+  executedBy: z.string().uuid(),
+  executionDate: z.string().datetime(),
+  result: z.enum(["pass", "fail", "not_applicable"]),
+  actualResult: z.string(),
+  deviations: z.array(
+    z.object({
+      description: z.string(),
+      justification: z.string(),
+    })
+  ).optional(),
+});
+
+export const ValidationTestCaseExecutedEventSchema = EventWithPayloadSchema(
+  ValidationTestCaseExecutedPayloadSchema
+).extend({
+  eventType: z.literal("validation.test_case_executed"),
+});
+
+export type ValidationTestCaseExecutedEvent = z.infer<typeof ValidationTestCaseExecutedEventSchema>;
+```
+
+#### 12.1.5 Validation Report Generated
+
+```typescript
+export const ValidationReportGeneratedPayloadSchema = z.object({
+  validationId: z.string().uuid(),
+  reportId: z.string().uuid(),
+  generatedBy: z.string().uuid(),
+  generationDate: z.string().datetime(),
+  summary: z.object({
+    totalTestCases: z.number().int(),
+    passedTestCases: z.number().int(),
+    failedTestCases: z.number().int(),
+    overallResult: z.enum(["successful", "successful_with_deviations", "unsuccessful"]),
+  }),
+  conclusions: z.string(),
+  recommendations: z.string().optional(),
+});
+
+export const ValidationReportGeneratedEventSchema = EventWithPayloadSchema(
+  ValidationReportGeneratedPayloadSchema
+).extend({
+  eventType: z.literal("validation.report_generated"),
+});
+
+export type ValidationReportGeneratedEvent = z.infer<typeof ValidationReportGeneratedEventSchema>;
+```
+
+---
+
+## 📊 **13. QUALITY EVENTS MODULE EVENTS**
+
+### 13.1 Quality Event Lifecycle
+
+#### 13.1.1 Quality Event Created
+
+```typescript
+export const QualityEventCreatedPayloadSchema = z.object({
+  qualityEventId: z.string().uuid(),
+  eventNumber: z.string(),
+  title: z.string(),
+  description: z.string(),
+  eventType: z.enum([
+    "product_complaint",
+    "quality_defect",
+    "out_of_specification",
+    "equipment_malfunction",
+    "environmental_excursion",
+    "audit_finding",
+  ]),
+  reportedBy: z.string().uuid(),
+  reportedAt: z.string().datetime(),
+  affectedAreas: z.array(z.string()),
+  immediateContainment: z.string(),
+});
+
+export const QualityEventCreatedEventSchema = EventWithPayloadSchema(
+  QualityEventCreatedPayloadSchema
+).extend({
+  eventType: z.literal("quality_events.created"),
+});
+
+export type QualityEventCreatedEvent = z.infer<typeof QualityEventCreatedEventSchema>;
+```
+
+#### 13.1.2 Quality Event Investigation Started
+
+```typescript
+export const QualityEventInvestigationStartedPayloadSchema = z.object({
+  qualityEventId: z.string().uuid(),
+  investigationId: z.string().uuid(),
+  investigator: z.string().uuid(),
+  startDate: z.string().datetime(),
+  investigationScope: z.string(),
+});
+
+export const QualityEventInvestigationStartedEventSchema = EventWithPayloadSchema(
+  QualityEventInvestigationStartedPayloadSchema
+).extend({
+  eventType: z.literal("quality_events.investigation_started"),
+});
+
+export type QualityEventInvestigationStartedEvent = z.infer<typeof QualityEventInvestigationStartedEventSchema>;
+```
+
+#### 13.1.3 Quality Event Resolved
+
+```typescript
+export const QualityEventResolvedPayloadSchema = z.object({
+  qualityEventId: z.string().uuid(),
+  resolvedBy: z.string().uuid(),
+  resolutionDate: z.string().datetime(),
+  resolution: z.string(),
+  rootCause: z.string(),
+  preventiveMeasures: z.string(),
+  linkedCAPAId: z.string().uuid().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const QualityEventResolvedEventSchema = EventWithPayloadSchema(
+  QualityEventResolvedPayloadSchema
+).extend({
+  eventType: z.literal("quality_events.resolved"),
+});
+
+export type QualityEventResolvedEvent = z.infer<typeof QualityEventResolvedEventSchema>;
+```
+
+---
+
+## 📚 **14. TRAINING DOMAIN EVENTS**
+
+### 14.1 Training Lifecycle
+
+#### 14.1.1 Training Assigned
+
+```typescript
+export const TrainingAssignedPayloadSchema = z.object({
+  trainingRecordId: z.string().uuid(),
+  userId: z.string().uuid(),
+  courseId: z.string().uuid(),
+  courseName: z.string(),
+  assignedBy: z.string().uuid(),
+  dueDate: z.string().date(),
+  reason: z.enum([
+    "initial_training",
+    "annual_refresher",
+    "new_procedure",
+    "change_control",
+    "deviation",
+    "promotion",
+  ]),
+  linkedChangeId: z.string().uuid().optional(),
+});
+
+export const TrainingAssignedEventSchema = EventWithPayloadSchema(
+  TrainingAssignedPayloadSchema
+).extend({
+  eventType: z.literal("training.assigned"),
+});
+
+export type TrainingAssignedEvent = z.infer<typeof TrainingAssignedEventSchema>;
+```
+
+#### 14.1.2 Training Completed
+
+```typescript
+export const TrainingCompletedPayloadSchema = z.object({
+  trainingRecordId: z.string().uuid(),
+  userId: z.string().uuid(),
+  courseId: z.string().uuid(),
+  completionDate: z.string().datetime(),
+  score: z.number().min(0).max(100).optional(),
+  passed: z.boolean(),
+  trainer: z.string().uuid().optional(),
+  certificationId: z.string().uuid().optional(),
+  expirationDate: z.string().date().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("acknowledged"),
+  }),
+});
+
+export const TrainingCompletedEventSchema = EventWithPayloadSchema(
+  TrainingCompletedPayloadSchema
+).extend({
+  eventType: z.literal("training.completed"),
+});
+
+export type TrainingCompletedEvent = z.infer<typeof TrainingCompletedEventSchema>;
+```
+
+#### 14.1.3 Training Expired
+
+```typescript
+export const TrainingExpiredPayloadSchema = z.object({
+  userId: z.string().uuid(),
+  certificationId: z.string().uuid(),
+  courseId: z.string().uuid(),
+  courseName: z.string(),
+  expirationDate: z.string().date(),
+  gracePeriodEnd: z.string().date().optional(),
+  retrainingRequired: z.boolean(),
+});
+
+export const TrainingExpiredEventSchema = EventWithPayloadSchema(
+  TrainingExpiredPayloadSchema
+).extend({
+  eventType: z.literal("training.expired"),
+});
+
+export type TrainingExpiredEvent = z.infer<typeof TrainingExpiredEventSchema>;
+```
+
+---
+
+## 📄 **15. DOCUMENT DOMAIN EVENTS**
+
+### 15.1 Document Lifecycle
+
+#### 15.1.1 Document Created
+
+```typescript
+export const DocumentCreatedPayloadSchema = z.object({
+  documentId: z.string().uuid(),
+  documentNumber: z.string(),
+  title: z.string(),
+  documentType: z.enum([
+    "sop",
+    "protocol",
+    "report",
+    "form",
+    "specification",
+    "policy",
+    "manual",
+  ]),
+  author: z.string().uuid(),
+  version: z.string(),
+  effectiveDate: z.string().date().optional(),
+  trainingRequired: z.boolean(),
+});
+
+export const DocumentCreatedEventSchema = EventWithPayloadSchema(
+  DocumentCreatedPayloadSchema
+).extend({
+  eventType: z.literal("documents.created"),
+});
+
+export type DocumentCreatedEvent = z.infer<typeof DocumentCreatedEventSchema>;
+```
+
+#### 15.1.2 Document Approved
+
+```typescript
+export const DocumentApprovedPayloadSchema = z.object({
+  documentId: z.string().uuid(),
+  approvedBy: z.string().uuid(),
+  approvalDate: z.string().datetime(),
+  effectiveDate: z.string().date(),
+  supersededDocumentId: z.string().uuid().optional(),
+  signature: z.object({
+    signatureId: z.string().uuid(),
+    signedBy: z.string().uuid(),
+    signedAt: z.string().datetime(),
+    meaning: z.literal("approved"),
+  }),
+});
+
+export const DocumentApprovedEventSchema = EventWithPayloadSchema(
+  DocumentApprovedPayloadSchema
+).extend({
+  eventType: z.literal("documents.approved"),
+});
+
+export type DocumentApprovedEvent = z.infer<typeof DocumentApprovedEventSchema>;
+```
+
+#### 15.1.3 Document Obsoleted
+
+```typescript
+export const DocumentObsoletedPayloadSchema = z.object({
+  documentId: z.string().uuid(),
+  obsoletedBy: z.string().uuid(),
+  obsoleteDate: z.string().datetime(),
+  reason: z.string(),
+  replacedByDocumentId: z.string().uuid().optional(),
+});
+
+export const DocumentObsoletedEventSchema = EventWithPayloadSchema(
+  DocumentObsoletedPayloadSchema
+).extend({
+  eventType: z.literal("documents.obsoleted"),
+});
+
+export type DocumentObsoletedEvent = z.infer<typeof DocumentObsoletedEventSchema>;
+```
+
+---
+
+## 📈 **16. ANALYTICS DOMAIN EVENTS**
+
+### 16.1 Analytics & Reporting
+
+#### 16.1.1 Compliance Metrics Calculated
+
+```typescript
+export const ComplianceMetricsCalculatedPayloadSchema = z.object({
+  calculationId: z.string().uuid(),
+  calculationDate: z.string().datetime(),
+  period: z.object({
+    start: z.string().date(),
+    end: z.string().date(),
+  }),
+  metrics: z.object({
+    changeControlMetrics: z.object({
+      totalChanges: z.number().int(),
+      onTimeCompletion: z.number().min(0).max(100),
+      avgImplementationDays: z.number(),
+    }),
+    capaMetrics: z.object({
+      totalCAPAs: z.number().int(),
+      onTimeCompletion: z.number().min(0).max(100),
+      effectiveness: z.number().min(0).max(100),
+    }),
+    deviationMetrics: z.object({
+      totalDeviations: z.number().int(),
+      criticalDeviations: z.number().int(),
+      avgInvestigationDays: z.number(),
+    }),
+    trainingMetrics: z.object({
+      complianceRate: z.number().min(0).max(100),
+      expiredCertifications: z.number().int(),
+    }),
+  }),
+});
+
+export const ComplianceMetricsCalculatedEventSchema = EventWithPayloadSchema(
+  ComplianceMetricsCalculatedPayloadSchema
+).extend({
+  eventType: z.literal("analytics.compliance_metrics_calculated"),
+});
+
+export type ComplianceMetricsCalculatedEvent = z.infer<typeof ComplianceMetricsCalculatedEventSchema>;
+```
+
+#### 16.1.2 Audit Report Generated
+
+```typescript
+export const AuditReportGeneratedPayloadSchema = z.object({
+  reportId: z.string().uuid(),
+  reportType: z.enum([
+    "audit_trail",
+    "compliance_summary",
+    "regulatory_submission",
+    "management_review",
+  ]),
+  generatedBy: z.string().uuid(),
+  generationDate: z.string().datetime(),
+  period: z.object({
+    start: z.string().date(),
+    end: z.string().date(),
+  }),
+  scope: z.array(z.string()),
+  format: z.enum(["pdf", "excel", "json"]),
+});
+
+export const AuditReportGeneratedEventSchema = EventWithPayloadSchema(
+  AuditReportGeneratedPayloadSchema
+).extend({
+  eventType: z.literal("analytics.audit_report_generated"),
+});
+
+export type AuditReportGeneratedEvent = z.infer<typeof AuditReportGeneratedEventSchema>;
+```
+
+---
+
+## 🔧 **17. EVENT PROCESSING PATTERNS**
+
+### 17.1 Event Handlers
 
 #### 9.1.1 Base Event Handler
 
@@ -1266,10 +2451,18 @@ export class EventMigrator {
 
 ### 12.2 Phase 2: Domain Events
 
-- [ ] Cultivation domain events (plant lifecycle)
-- [ ] Quality domain events (testing, sampling)
-- [ ] Financial domain events (transactions, assets)
-- [ ] Audit domain events (access, compliance)
+- [x] Cultivation domain events (plant lifecycle) ✅
+- [x] Quality domain events (testing, sampling) ✅
+- [x] Financial domain events (transactions, assets) ✅
+- [x] Audit domain events (access, compliance) ✅
+- [x] **Change Control domain events (8 topics, 15 schemas)** ✅
+- [x] **CAPA domain events (6 topics, 12 schemas)** ✅
+- [x] **Deviation domain events (5 topics, 10 schemas)** ✅
+- [x] **Validation domain events (4 topics, 8 schemas)** ✅
+- [x] **Quality Events module events (3 topics, 6 schemas)** ✅
+- [x] **Training domain events (2 topics, 4 schemas)** ✅
+- [x] **Document domain events (1 topic, 3 schemas)** ✅
+- [x] **Analytics domain events (2 topics, 5 schemas)** ✅
 
 ### 12.3 Phase 3: Advanced Patterns
 
@@ -1297,9 +2490,17 @@ export class EventMigrator {
 
 ---
 
-**Версия**: 1.0  
-**Последнее обновление**: 14 сентября 2025  
-**Статус**: Draft → Review → Approved
+**Версия**: 2.0  
+**Последнее обновление**: 17 октября 2025  
+**Статус**: Under Review → Pending Approval  
+**Предыдущая версия**: 1.0 (2025-09-14)
+
+**Изменения в v2.0**:
+- ✅ Добавлено 31 Kafka topic для compliance модулей
+- ✅ Добавлено 83 event schema с Zod validation
+- ✅ Полная поддержка Change Control, CAPA, Deviation, Validation
+- ✅ Quality Events, Training, Documents, Analytics события
+- ✅ Синхронизировано с DS v2.0 и CONTRACT_SPECIFICATIONS v2.0
 
 ---
 
