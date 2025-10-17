@@ -1,11 +1,12 @@
 ---
 title: "GACP-ERP Position Training Matrix"
 module: "Training & Competency Management"
-version: "1.0"
-status: "draft"  # Changed from approved - requires re-verification per AI_Assisted_Documentation_Policy.md
-last_updated: "2025-09-15"
+version: "2.0"
+status: "draft"
+last_updated: "2025-10-17"
 approved_by: "HR Manager, Compliance Officer"
 regulatory_scope: "GACP Guidelines, 21 CFR Part 11, EU GMP Annex 11"
+change_summary: "Major update: Added compliance management training requirements for all positions (Change Control, CAPA, Deviation, Validation, Quality Events, Training Management, Document Control)"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_assisted: true
 ai_tool: "GitHub Copilot (GPT-4)"
@@ -49,26 +50,17 @@ controlled_copy: false  # Must be false until QA approval
 
 #### Cultivation Technician
 
-| Category        | Requirement                | Course ID | Exam ID | Frequency          | Status Tracking        |
-| --------------- | -------------------------- | --------- | ------- | ------------------ | ---------------------- |
-| **Foundation**  | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Core Skills** | Plant Lifecycle Management | CUR-002   | EX-002  | Initial + Biannual | ☐ Required ☐ Completed |
-| **Technical**   | Environmental Monitoring   | CUR-004   | EX-004  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Technical**   | Growth Stage Management    | CUR-009   | EX-009  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Compliance**  | SOPs & Change Control      | CUR-005   | EX-005  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Safety**      | Personal Hygiene & Safety  | CUR-010   | EX-010  | Initial + Annual   | ☐ Required ☐ Completed |
-| **System**      | ERP Basic Operations       | CUR-011   | EX-011  | Initial + Biannual | ☐ Required ☐ Completed |
-
-**Competency Requirements**:
-
-- Minimum 2 years relevant experience OR completion of certified cultivation program
-- Annual competency assessment score ≥85%
-- Clean background check and drug screeningent | CUR-002 | EX-002 | Initial + Biannual | ☐ Required ☐ Completed |
-  | **Technical** | Environmental Monitoring | CUR-004 | EX-004 | Initial + Annual | ☐ Required ☐ Completed |
-  | **Technical** | Growth Stage Management | CUR-009 | EX-009 | Initial + Annual | ☐ Required ☐ Completed |
-  | **Compliance** | SOPs & Change Control | CUR-005 | EX-005 | Initial + Annual | ☐ Required ☐ Completed |
-  | **Safety** | Personal Hygiene & Safety | CUR-010 | EX-010 | Initial + Annual | ☐ Required ☐ Completed |
-  | **System** | ERP Basic Operations | CUR-011 | EX-011 | Initial + Biannual | ☐ Required ☐ Completed |
+| Category        | Requirement                   | Course ID | Exam ID | Frequency          | Status Tracking        |
+| --------------- | ----------------------------- | --------- | ------- | ------------------ | ---------------------- |
+| **Foundation**  | GACP Fundamentals             | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Core Skills** | Plant Lifecycle Management    | CUR-002   | EX-002  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Technical**   | Environmental Monitoring      | CUR-004   | EX-004  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Technical**   | Growth Stage Management       | CUR-009   | EX-009  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**  | SOPs & Change Control         | CUR-005   | EX-005  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Safety**      | Personal Hygiene & Safety     | CUR-010   | EX-010  | Initial + Annual   | ☐ Required ☐ Completed |
+| **System**      | ERP Basic Operations          | CUR-011   | EX-011  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Compliance**  | Deviation Management          | CUR-011   | EX-011  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**  | Document Control & Management | CUR-015   | EX-015  | Initial + Annual   | ☐ Required ☐ Completed |
 
 **Competency Requirements**:
 
@@ -78,95 +70,120 @@ controlled_copy: false  # Must be false until QA approval
 
 #### Quality Control Analyst
 
-| Category          | Requirement                   | Course ID | Exam ID | Frequency        | Status Tracking        |
-| ----------------- | ----------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation**    | GACP Fundamentals             | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**     | Analytical Methods            | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**     | Sampling Procedures           | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance**    | Out-of-Specification Handling | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
-| **Documentation** | Laboratory Data Integrity     | CUR-014   | EX-014  | Initial + Annual | ☐ Required ☐ Completed |
-| **System**        | LIMS Integration              | CUR-015   | EX-015  | Initial + Annual | ☐ Required ☐ Completed |
+| Category          | Requirement                     | Course ID | Exam ID | Frequency        | Status Tracking        |
+| ----------------- | ------------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation**    | GACP Fundamentals               | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**     | Analytical Methods              | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**     | Sampling Procedures             | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Out-of-Specification Handling   | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
+| **Documentation** | Laboratory Data Integrity       | CUR-014   | EX-014  | Initial + Annual | ☐ Required ☐ Completed |
+| **System**        | LIMS Integration                | CUR-015   | EX-015  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Deviation Management            | CUR-011   | EX-011  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | CAPA Management                 | CUR-010   | EX-010  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Validation Lifecycle Management | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Quality Events Management       | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
 
 #### Harvest Operator
 
-| Category          | Requirement             | Course ID | Exam ID | Frequency          | Status Tracking        |
-| ----------------- | ----------------------- | --------- | ------- | ------------------ | ---------------------- |
-| **Foundation**    | GACP Fundamentals       | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Core Skills**   | Harvest Procedures      | CUR-016   | EX-016  | Initial + Biannual | ☐ Required ☐ Completed |
-| **Technical**     | Post-Harvest Processing | CUR-017   | EX-017  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Safety**        | Equipment Safety        | CUR-018   | EX-018  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Documentation** | Batch Record Management | CUR-019   | EX-019  | Initial + Annual   | ☐ Required ☐ Completed |
+| Category          | Requirement                   | Course ID | Exam ID | Frequency          | Status Tracking        |
+| ----------------- | ----------------------------- | --------- | ------- | ------------------ | ---------------------- |
+| **Foundation**    | GACP Fundamentals             | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Core Skills**   | Harvest Procedures            | CUR-016   | EX-016  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Technical**     | Post-Harvest Processing       | CUR-017   | EX-017  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Safety**        | Equipment Safety              | CUR-018   | EX-018  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Documentation** | Batch Record Management       | CUR-019   | EX-019  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**    | Deviation Management          | CUR-011   | EX-011  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**    | Document Control & Management | CUR-015   | EX-015  | Initial + Annual   | ☐ Required ☐ Completed |
 
 ### Management Positions
 
 #### Farm Manager
 
-| Category       | Requirement                 | Course ID | Exam ID | Frequency          | Status Tracking        |
-| -------------- | --------------------------- | --------- | ------- | ------------------ | ---------------------- |
-| **Foundation** | GACP Fundamentals           | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Leadership** | Personnel Management        | CUR-020   | EX-020  | Initial + Biannual | ☐ Required ☐ Completed |
-| **Operations** | Farm Operations Management  | CUR-021   | EX-021  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Compliance** | Regulatory Compliance       | CUR-022   | EX-022  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Business**   | Disaster Recovery & BCP     | CUR-006   | EX-006  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Financial**  | Cost Management & Budgeting | CUR-023   | EX-023  | Initial + Annual   | ☐ Required ☐ Completed |
-| **System**     | ERP Management Dashboard    | CUR-024   | EX-024  | Initial + Annual   | ☐ Required ☐ Completed |
+| Category       | Requirement                   | Course ID | Exam ID | Frequency          | Status Tracking        |
+| -------------- | ----------------------------- | --------- | ------- | ------------------ | ---------------------- |
+| **Foundation** | GACP Fundamentals             | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Leadership** | Personnel Management          | CUR-020   | EX-020  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Operations** | Farm Operations Management    | CUR-021   | EX-021  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance** | Regulatory Compliance         | CUR-022   | EX-022  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Business**   | Disaster Recovery & BCP       | CUR-006   | EX-006  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Financial**  | Cost Management & Budgeting   | CUR-023   | EX-023  | Initial + Annual   | ☐ Required ☐ Completed |
+| **System**     | ERP Management Dashboard      | CUR-024   | EX-024  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance** | Change Control Management     | CUR-009   | EX-009  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance** | Deviation Management          | CUR-011   | EX-011  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance** | Quality Events Management     | CUR-013   | EX-013  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance** | Document Control & Management | CUR-015   | EX-015  | Initial + Annual   | ☐ Required ☐ Completed |
 
 #### Production Manager
 
-| Category       | Requirement                | Course ID | Exam ID | Frequency        | Status Tracking        |
-| -------------- | -------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation** | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Operations** | Production Planning        | CUR-025   | EX-025  | Initial + Annual | ☐ Required ☐ Completed |
-| **Quality**    | Quality Management Systems | CUR-026   | EX-026  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**  | Yield Optimization         | CUR-027   | EX-027  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance** | Change Control Management  | CUR-005   | EX-005  | Initial + Annual | ☐ Required ☐ Completed |
+| Category       | Requirement                   | Course ID | Exam ID | Frequency        | Status Tracking        |
+| -------------- | ----------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation** | GACP Fundamentals             | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Operations** | Production Planning           | CUR-025   | EX-025  | Initial + Annual | ☐ Required ☐ Completed |
+| **Quality**    | Quality Management Systems    | CUR-026   | EX-026  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**  | Yield Optimization            | CUR-027   | EX-027  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Change Control Management     | CUR-009   | EX-009  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Deviation Management          | CUR-011   | EX-011  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Quality Events Management     | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Document Control & Management | CUR-015   | EX-015  | Initial + Annual | ☐ Required ☐ Completed |
 
 #### QA Manager
 
-| Category          | Requirement                | Course ID | Exam ID | Frequency        | Status Tracking        |
-| ----------------- | -------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation**    | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Quality**       | Quality Assurance Systems  | CUR-028   | EX-028  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance**    | Audit Trail & e-Signatures | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance**    | CAPA Management            | CUR-029   | EX-029  | Initial + Annual | ☐ Required ☐ Completed |
-| **Auditing**      | Internal Audit Procedures  | CUR-030   | EX-030  | Initial + Annual | ☐ Required ☐ Completed |
-| **Documentation** | Document Control           | CUR-031   | EX-031  | Initial + Annual | ☐ Required ☐ Completed |
+| Category          | Requirement                     | Course ID | Exam ID | Frequency        | Status Tracking        |
+| ----------------- | ------------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation**    | GACP Fundamentals               | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Quality**       | Quality Assurance Systems       | CUR-028   | EX-028  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Audit Trail & e-Signatures      | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Change Control Management       | CUR-009   | EX-009  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | CAPA Management                 | CUR-010   | EX-010  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Deviation Management            | CUR-011   | EX-011  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Validation Lifecycle Management | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance**    | Quality Events Management       | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
+| **Documentation** | Document Control & Management   | CUR-015   | EX-015  | Initial + Annual | ☐ Required ☐ Completed |
+| **Auditing**      | Internal Audit Procedures       | CUR-030   | EX-030  | Initial + Annual | ☐ Required ☐ Completed |
 
 ### Support Function Positions
 
 #### IT Administrator
 
-| Category           | Requirement                | Course ID | Exam ID | Frequency          | Status Tracking        |
-| ------------------ | -------------------------- | --------- | ------- | ------------------ | ---------------------- |
-| **Foundation**     | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Technical**      | ERP System Administration  | CUR-032   | EX-032  | Initial + Biannual | ☐ Required ☐ Completed |
-| **Security**       | Security & Access Control  | CUR-007   | EX-007  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Infrastructure** | VictoriaMetrics Management | CUR-033   | EX-033  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Infrastructure** | EMQX IoT Management        | CUR-034   | EX-034  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Business**       | Disaster Recovery & BCP    | CUR-006   | EX-006  | Initial + Annual   | ☐ Required ☐ Completed |
-| **Compliance**     | 21 CFR Part 11 Systems     | CUR-035   | EX-035  | Initial + Annual   | ☐ Required ☐ Completed |
+| Category           | Requirement                     | Course ID | Exam ID | Frequency          | Status Tracking        |
+| ------------------ | ------------------------------- | --------- | ------- | ------------------ | ---------------------- |
+| **Foundation**     | GACP Fundamentals               | CUR-001   | EX-001  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Technical**      | ERP System Administration       | CUR-032   | EX-032  | Initial + Biannual | ☐ Required ☐ Completed |
+| **Security**       | Security & Access Control       | CUR-007   | EX-007  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Infrastructure** | VictoriaMetrics Management      | CUR-033   | EX-033  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Infrastructure** | EMQX IoT Management             | CUR-034   | EX-034  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Business**       | Disaster Recovery & BCP         | CUR-006   | EX-006  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**     | 21 CFR Part 11 Systems          | CUR-035   | EX-035  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**     | Validation Lifecycle Management | CUR-012   | EX-012  | Initial + Annual   | ☐ Required ☐ Completed |
+| **Compliance**     | Change Control Management       | CUR-009   | EX-009  | Initial + Annual   | ☐ Required ☐ Completed |
 
 #### Compliance Officer
 
-| Category       | Requirement                | Course ID | Exam ID | Frequency        | Status Tracking        |
-| -------------- | -------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation** | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Regulatory** | FDA 21 CFR Part 11         | CUR-036   | EX-036  | Initial + Annual | ☐ Required ☐ Completed |
-| **Regulatory** | EU GMP Annex 11            | CUR-037   | EX-037  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**  | Audit Trail & e-Signatures | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
-| **Quality**    | Data Integrity (ALCOA+)    | CUR-038   | EX-038  | Initial + Annual | ☐ Required ☐ Completed |
-| **Process**    | Deviation Management       | CUR-039   | EX-039  | Initial + Annual | ☐ Required ☐ Completed |
-| **Auditing**   | Compliance Monitoring      | CUR-040   | EX-040  | Initial + Annual | ☐ Required ☐ Completed |
+| Category       | Requirement                     | Course ID | Exam ID | Frequency        | Status Tracking        |
+| -------------- | ------------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation** | GACP Fundamentals               | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Regulatory** | FDA 21 CFR Part 11              | CUR-036   | EX-036  | Initial + Annual | ☐ Required ☐ Completed |
+| **Regulatory** | EU GMP Annex 11                 | CUR-037   | EX-037  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**  | Audit Trail & e-Signatures      | CUR-003   | EX-003  | Initial + Annual | ☐ Required ☐ Completed |
+| **Quality**    | Data Integrity (ALCOA+)         | CUR-038   | EX-038  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Change Control Management       | CUR-009   | EX-009  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | CAPA Management                 | CUR-010   | EX-010  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Deviation Management            | CUR-011   | EX-011  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Validation Lifecycle Management | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Quality Events Management       | CUR-013   | EX-013  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Document Control & Management   | CUR-015   | EX-015  | Initial + Annual | ☐ Required ☐ Completed |
+| **Auditing**   | Compliance Monitoring           | CUR-040   | EX-040  | Initial + Annual | ☐ Required ☐ Completed |
 
 #### HR Manager
 
-| Category       | Requirement                 | Course ID | Exam ID | Frequency        | Status Tracking        |
-| -------------- | --------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation** | GACP Fundamentals           | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Process**    | Training Management         | CUR-041   | EX-041  | Initial + Annual | ☐ Required ☐ Completed |
-| **Process**    | Incident Management         | CUR-008   | EX-008  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance** | Personnel Qualification     | CUR-042   | EX-042  | Initial + Annual | ☐ Required ☐ Completed |
-| **System**     | Training Records Management | CUR-043   | EX-043  | Initial + Annual | ☐ Required ☐ Completed |
+| Category       | Requirement                       | Course ID | Exam ID | Frequency        | Status Tracking        |
+| -------------- | --------------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation** | GACP Fundamentals                 | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Process**    | Training Management & Compliance  | CUR-014   | EX-014  | Initial + Annual | ☐ Required ☐ Completed |
+| **Process**    | Incident Management               | CUR-008   | EX-008  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Personnel Qualification           | CUR-042   | EX-042  | Initial + Annual | ☐ Required ☐ Completed |
+| **System**     | Training Records Management       | CUR-043   | EX-043  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Change Control Management         | CUR-009   | EX-009  | Initial + Annual | ☐ Required ☐ Completed |
 
 ### 3.4 Specialized Positions
 
@@ -182,13 +199,16 @@ controlled_copy: false  # Must be false until QA approval
 
 #### Laboratory Technician
 
-| Category       | Requirement                | Course ID | Exam ID | Frequency        | Status Tracking        |
-| -------------- | -------------------------- | --------- | ------- | ---------------- | ---------------------- |
-| **Foundation** | GACP Fundamentals          | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**  | Laboratory Procedures      | CUR-048   | EX-048  | Initial + Annual | ☐ Required ☐ Completed |
-| **Technical**  | Analytical Instrumentation | CUR-049   | EX-049  | Initial + Annual | ☐ Required ☐ Completed |
-| **Compliance** | Good Laboratory Practices  | CUR-050   | EX-050  | Initial + Annual | ☐ Required ☐ Completed |
-| **Safety**     | Laboratory Safety          | CUR-051   | EX-051  | Initial + Annual | ☐ Required ☐ Completed |
+| Category       | Requirement                     | Course ID | Exam ID | Frequency        | Status Tracking        |
+| -------------- | ------------------------------- | --------- | ------- | ---------------- | ---------------------- |
+| **Foundation** | GACP Fundamentals               | CUR-001   | EX-001  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**  | Laboratory Procedures           | CUR-048   | EX-048  | Initial + Annual | ☐ Required ☐ Completed |
+| **Technical**  | Analytical Instrumentation      | CUR-049   | EX-049  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Good Laboratory Practices       | CUR-050   | EX-050  | Initial + Annual | ☐ Required ☐ Completed |
+| **Safety**     | Laboratory Safety               | CUR-051   | EX-051  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Deviation Management            | CUR-011   | EX-011  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | CAPA Management                 | CUR-010   | EX-010  | Initial + Annual | ☐ Required ☐ Completed |
+| **Compliance** | Validation Lifecycle Management | CUR-012   | EX-012  | Initial + Annual | ☐ Required ☐ Completed |
 
 ## Training Progress Tracking
 

@@ -1,11 +1,12 @@
 ---
 title: "GACP-ERP Training Curriculum"
 module: "Training & Competency Management"
-version: "1.0"
+version: "2.0"
 status: "draft"  # Changed from approved - requires re-verification per AI_Assisted_Documentation_Policy.md
-last_updated: "2025-09-15"
+last_updated: "2025-10-17"
 approved_by: "HR Manager, Compliance Officer, Farm Manager"
 regulatory_scope: "GACP Guidelines, 21 CFR Part 11, EU GMP Annex 11"
+change_summary: "Major update: Added 7 new compliance courses (Change Control, CAPA, Deviation, Validation, Quality Events, Training Management, Document Control) aligned with DS v2.0"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_assisted: true
 ai_tool: "GitHub Copilot (GPT-4)"
@@ -368,6 +369,378 @@ controlled_copy: false  # Must be false until QA approval
 **Prerequisites**: CUR-001
 **Certification Valid**: 12 months
 
+---
+
+## Compliance Management Courses
+
+### CUR-009: Change Control Management
+
+**Duration**: 4 hours | **Target Audience**: QA, Management, Process Owners | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Understand change control process requirements
+- Initiate and manage change requests
+- Conduct impact assessments
+- Execute change implementation and verification
+
+**Course Content**:
+
+1. **Change Control Fundamentals** (60 min)
+
+   - Change control methodology
+   - Regulatory requirements (EU GMP Annex 11, 21 CFR Part 11)
+   - Risk-based approach
+   - Change classification (critical, major, minor)
+
+2. **Change Request Process** (60 min)
+
+   - Initiating change requests in GACP-ERP
+   - Impact assessment procedures
+   - Risk analysis techniques
+   - Business justification requirements
+
+3. **Review and Approval Workflow** (45 min)
+
+   - Multi-level review process
+   - Stakeholder identification
+   - Approval matrix
+   - Electronic signature requirements
+
+4. **Implementation and Verification** (60 min)
+
+   - Implementation planning
+   - Testing and validation
+   - Verification procedures
+   - Change closure and documentation
+
+5. **Practical Workshop** (15 min)
+   - GACP-ERP system demonstration
+   - Change request submission exercise
+   - Review and approval simulation
+
+**Assessment**: EX-009 (85% passing score)
+**Prerequisites**: CUR-001, CUR-005
+**Certification Valid**: 12 months
+
+---
+
+### CUR-010: CAPA Management
+
+**Duration**: 5 hours | **Target Audience**: QA, Management, Investigation Teams | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Understand CAPA methodology
+- Conduct root cause analysis
+- Develop corrective and preventive actions
+- Verify CAPA effectiveness
+
+**Course Content**:
+
+1. **CAPA Fundamentals** (45 min)
+
+   - CAPA definition and purpose
+   - Regulatory requirements (WHO GACP, EU GMP)
+   - CAPA triggers (deviations, audits, complaints)
+   - CAPA vs. Deviation management
+
+2. **Root Cause Analysis** (90 min)
+
+   - 5 Whys technique
+   - Fishbone (Ishikawa) diagrams
+   - Fault tree analysis
+   - Pareto analysis
+   - Root cause mapping
+
+3. **CAPA Development** (60 min)
+
+   - Corrective action planning
+   - Preventive action identification
+   - SMART objectives
+   - Resource allocation
+   - Timeline development
+
+4. **CAPA Implementation** (45 min)
+
+   - Action assignment and tracking
+   - Progress monitoring
+   - Documentation requirements
+   - Cross-functional coordination
+
+5. **Effectiveness Verification** (60 min)
+
+   - Effectiveness check planning
+   - Metrics definition
+   - Verification procedures
+   - Re-occurrence monitoring
+   - CAPA closure criteria
+
+6. **GACP-ERP CAPA Module** (30 min)
+   - System navigation
+   - CAPA workflow demonstration
+   - Reporting and metrics
+
+**Assessment**: EX-010 (85% passing score)
+**Prerequisites**: CUR-001, CUR-005
+**Certification Valid**: 12 months
+
+---
+
+### CUR-011: Deviation Management
+
+**Duration**: 4 hours | **Target Audience**: QA, Production, Investigation Teams | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Identify and classify deviations
+- Conduct deviation investigations
+- Assess product impact
+- Link deviations to CAPA
+
+**Course Content**:
+
+1. **Deviation Fundamentals** (45 min)
+
+   - Deviation definition
+   - Types of deviations (process, equipment, documentation)
+   - Severity classification (critical, major, minor)
+   - Regulatory expectations
+
+2. **Deviation Reporting** (45 min)
+
+   - Immediate containment actions
+   - Deviation documentation
+   - GACP-ERP deviation module
+   - Reporting timelines
+
+3. **Deviation Investigation** (60 min)
+
+   - Investigation planning
+   - Evidence collection
+   - Root cause determination
+   - Contributing factors analysis
+
+4. **Impact Assessment** (45 min)
+
+   - Product quality impact
+   - Batch disposition decisions
+   - Process impact evaluation
+   - Regulatory reportability
+
+5. **CAPA Linkage and Closure** (45 min)
+   - When CAPA is required
+   - Linking deviations to CAPA
+   - Closure criteria
+   - Lessons learned
+
+**Assessment**: EX-011 (85% passing score)
+**Prerequisites**: CUR-001, CUR-005
+**Certification Valid**: 12 months
+
+---
+
+### CUR-012: Validation Lifecycle Management
+
+**Duration**: 6 hours | **Target Audience**: Validation Team, QA, IT | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Understand validation principles
+- Develop validation protocols
+- Execute validation studies
+- Maintain validated state
+
+**Course Content**:
+
+1. **Validation Fundamentals** (60 min)
+
+   - GAMP 5 principles
+   - Validation types (IQ, OQ, PQ)
+   - Risk-based validation
+   - Computer system validation
+
+2. **Protocol Development** (90 min)
+
+   - Protocol structure and content
+   - Test case design
+   - Acceptance criteria definition
+   - Protocol approval process
+
+3. **Validation Execution** (90 min)
+
+   - Test execution procedures
+   - Data collection and documentation
+   - Deviation handling
+   - Witness requirements
+
+4. **Validation Reporting** (45 min)
+
+   - Report structure
+   - Results summarization
+   - Conclusions and recommendations
+   - Report approval
+
+5. **Maintaining Validated State** (60 min)
+
+   - Change control and revalidation
+   - Periodic review requirements
+   - Continuous process verification
+   - Validation maintenance
+
+6. **GACP-ERP Validation Module** (15 min)
+   - System demonstration
+   - Protocol templates
+   - Workflow overview
+
+**Assessment**: EX-012 (90% passing score)
+**Prerequisites**: CUR-001, CUR-003
+**Certification Valid**: 12 months
+
+---
+
+### CUR-013: Quality Events Management
+
+**Duration**: 3 hours | **Target Audience**: QA, Production, Management | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Identify and report quality events
+- Manage quality event investigations
+- Implement corrective measures
+- Track quality metrics
+
+**Course Content**:
+
+1. **Quality Events Overview** (45 min)
+
+   - Quality event definition
+   - Types of quality events (complaints, defects, OOS)
+   - Difference from deviations
+   - Regulatory expectations
+
+2. **Event Reporting and Investigation** (60 min)
+
+   - Immediate containment
+   - Event classification
+   - Investigation procedures
+   - Root cause identification
+
+3. **Resolution and Closure** (45 min)
+
+   - Corrective actions
+   - Preventive measures
+   - CAPA linkage
+   - Event closure
+
+4. **GACP-ERP Quality Events Module** (30 min)
+   - System navigation
+   - Event workflow
+   - Reporting and trending
+
+**Assessment**: EX-013 (85% passing score)
+**Prerequisites**: CUR-001
+**Certification Valid**: 12 months
+
+---
+
+### CUR-014: Training Management & Compliance
+
+**Duration**: 3 hours | **Target Audience**: HR, Training Coordinators, Managers | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Manage training programs
+- Track training compliance
+- Ensure GxP training requirements
+- Use GACP-ERP training module
+
+**Course Content**:
+
+1. **GxP Training Requirements** (45 min)
+
+   - Regulatory expectations
+   - Training before task execution
+   - Retraining requirements
+   - Training effectiveness evaluation
+
+2. **Training Program Management** (60 min)
+
+   - Curriculum development
+   - Training needs assessment
+   - Competency evaluation
+   - Certification management
+
+3. **Training Records and Compliance** (45 min)
+
+   - Training documentation
+   - Record retention
+   - Compliance tracking
+   - Audit readiness
+
+4. **GACP-ERP Training Module** (30 min)
+   - Training assignment
+   - Completion tracking
+   - Certification management
+   - Compliance reporting
+
+**Assessment**: EX-014 (85% passing score)
+**Prerequisites**: CUR-001
+**Certification Valid**: 12 months
+
+---
+
+### CUR-015: Document Control & Management
+
+**Duration**: 4 hours | **Target Audience**: QA, Document Controllers, Authors | **Frequency**: Annual
+
+**Learning Objectives**:
+
+- Understand document control principles
+- Create and revise GxP documents
+- Manage document approval workflow
+- Maintain document repositories
+
+**Course Content**:
+
+1. **Document Control Fundamentals** (60 min)
+
+   - Document hierarchy (policies, SOPs, forms)
+   - Document lifecycle
+   - Version control
+   - Obsolescence management
+
+2. **Document Creation and Revision** (60 min)
+
+   - Document templates
+   - Writing standards
+   - Revision procedures
+   - Change justification
+
+3. **Approval and Distribution** (45 min)
+
+   - Review and approval workflow
+   - Electronic signatures
+   - Controlled distribution
+   - Training on new documents
+
+4. **Mayan-EDMS Integration** (60 min)
+
+   - Document repository structure
+   - Document upload and retrieval
+   - Metadata management
+   - Search and reporting
+
+5. **GACP-ERP Document Module** (15 min)
+   - System demonstration
+   - Workflow overview
+
+**Assessment**: EX-015 (85% passing score)
+**Prerequisites**: CUR-001, CUR-003
+**Certification Valid**: 12 months
+
+---
+
 ## Specialized Courses
 
 ### CUR-008: Incident Management
@@ -428,6 +801,13 @@ controlled_copy: false  # Must be false until QA approval
 | CUR-006 | EX-006  | 40        | 60 min   | 90%           | 48 hrs wait   |
 | CUR-007 | EX-007  | 40        | 60 min   | 85%           | 24 hrs wait   |
 | CUR-008 | EX-008  | 30        | 45 min   | 85%           | 24 hrs wait   |
+| **CUR-009** | **EX-009** | **40** | **60 min** | **85%** | **24 hrs wait** |
+| **CUR-010** | **EX-010** | **50** | **75 min** | **85%** | **48 hrs wait** |
+| **CUR-011** | **EX-011** | **40** | **60 min** | **85%** | **24 hrs wait** |
+| **CUR-012** | **EX-012** | **50** | **75 min** | **90%** | **48 hrs wait** |
+| **CUR-013** | **EX-013** | **35** | **45 min** | **85%** | **24 hrs wait** |
+| **CUR-014** | **EX-014** | **35** | **45 min** | **85%** | **24 hrs wait** |
+| **CUR-015** | **EX-015** | **40** | **60 min** | **85%** | **24 hrs wait** |
 
 ### Certification Management
 
