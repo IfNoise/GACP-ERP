@@ -899,7 +899,536 @@ export type ComplianceReportResponse = ApiResponse<ReportJob>;
 
 ---
 
-## 📝 Статус конвертации
+## � Compliance & Quality Management DTOs (DS v2.0)
+
+### Change Control DTOs
+
+**Описание**: DTO для управления изменениями  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ChangeControlZodSchema`
+
+```typescript
+import { z } from 'zod';
+
+// Base schemas
+const ChangeClassificationSchema = z.enum(['critical', 'major', 'minor', 'emergency']);
+const ChangeStatusSchema = z.enum([
+  'draft', 'submitted', 'assessment', 'review', 'approved', 
+  'rejected', 'implementation', 'verification', 'closed'
+]);
+
+const ImpactAnalysisSchema = z.object({
+  affectedSystems: z.array(z.string()),
+  affectedProcesses: z.array(z.string()),
+  riskLevel: z.enum(['low', 'medium', 'high', 'critical']),
+  mitigationPlan: z.string(),
+  regulatoryImpact: z.boolean(),
+  validationRequired: z.boolean()
+});
+
+const ApprovalRecordSchema = z.object({
+  level: z.number().min(1).max(5),
+  approverUserId: z.string().uuid(),
+  approverName: z.string(),
+  approverRole: z.string(),
+  status: z.enum(['pending', 'approved', 'rejected']),
+  comments: z.string().optional(),
+  electronicSignature: z.lazy(() => ElectronicSignatureSchema),
+  timestamp: z.string().datetime()
+});
+
+// Main DTO
+const ChangeControlDTOSchema = z.object({
+  id: z.string().uuid(),
+  requestId: z.string().regex(/^CR-\d{4}-\d{4}$/),
+  title: z.string().min(10).max(200),
+  description: z.string().min(50),
+  classification: ChangeClassificationSchema,
+  status: ChangeStatusSchema,
+  requestedBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string(),
+    role: z.string()
+  }),
+  impactAnalysis: ImpactAnalysisSchema,
+  approvals: z.array(ApprovalRecordSchema),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+// Create/Update DTOs
+const CreateChangeControlDTOSchema = ChangeControlDTOSchema.omit({
+  id: true,
+  requestId: true,
+  status: true,
+  approvals: true,
+  electronicSignatures: true,
+  auditTrail: true,
+  createdAt: true,
+  updatedAt: true
+});
+
+const UpdateChangeControlDTOSchema = ChangeControlDTOSchema.partial().required({ id: true });
+
+// TypeScript types
+export type ChangeControlDTO = z.infer<typeof ChangeControlDTOSchema>;
+export type CreateChangeControlDTO = z.infer<typeof CreateChangeControlDTOSchema>;
+export type UpdateChangeControlDTO = z.infer<typeof UpdateChangeControlDTOSchema>;
+```
+
+### CAPA DTOs
+
+**Описание**: DTO для корректирующих и предупреждающих действий  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - CAPAZodSchema`
+
+```typescript
+const CAPATypeSchema = z.enum(['corrective', 'preventive']);
+const CAPAStatusSchema = z.enum([
+  'initiated', 'investigation', 'root_cause_identified', 
+  'action_plan', 'implementation', 'effectiveness_check', 'closed'
+]);
+
+const RootCauseAnalysisSchema = z.object({
+  method: z.enum(['5_why', 'fishbone', 'fault_tree', 'pareto']),
+  findings: z.string().min(100),
+  rootCause: z.string().min(50),
+  contributingFactors: z.array(z.string()),
+  evidence: z.array(z.string()) // Document IDs
+});
+
+const CAPAActionSchema = z.object({
+  actionId: z.string(),
+  description: z.string().min(20),
+  assignedTo: z.string().uuid(),
+  dueDate: z.string().datetime(),
+  status: z.enum(['pending', 'in_progress', 'completed', 'overdue']),
+  completionDate: z.string().datetime().optional(),
+  evidence: z.array(z.string()).optional()
+});
+
+const EffectivenessCheckSchema = z.object({
+  scheduledDate: z.string().datetime(),
+  completedDate: z.string().datetime().optional(),
+  method: z.string(),
+  result: z.enum(['effective', 'partially_effective', 'ineffective']).optional(),
+  findings: z.string().optional(),
+  followUpRequired: z.boolean()
+});
+
+const CAPADTOSchema = z.object({
+  id: z.string().uuid(),
+  capaId: z.string().regex(/^CAPA-\d{4}-\d{4}$/),
+  type: CAPATypeSchema,
+  title: z.string().min(10).max(200),
+  description: z.string().min(50),
+  status: CAPAStatusSchema,
+  priority: z.enum(['low', 'medium', 'high', 'critical']),
+  sourceType: z.string(),
+  sourceId: z.string().uuid().optional(),
+  rootCauseAnalysis: RootCauseAnalysisSchema.optional(),
+  actions: z.array(CAPAActionSchema),
+  effectivenessCheck: EffectivenessCheckSchema.optional(),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+export type CAPADTO = z.infer<typeof CAPADTOSchema>;
+export type CreateCAPADTO = z.infer<typeof CAPADTOSchema.omit({ 
+  id: true, capaId: true, electronicSignatures: true, 
+  auditTrail: true, createdAt: true, updatedAt: true 
+})>;
+```
+
+### Deviation DTOs
+
+**Описание**: DTO для управления отклонениями  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DeviationZodSchema`
+
+```typescript
+const DeviationClassificationSchema = z.enum(['critical', 'major', 'minor']);
+const DeviationStatusSchema = z.enum([
+  'reported', 'classified', 'investigation', 'impact_assessment', 'closed'
+]);
+
+const InvestigationSchema = z.object({
+  investigator: z.string().uuid(),
+  startDate: z.string().datetime(),
+  completionDate: z.string().datetime().optional(),
+  findings: z.string().min(100).optional(),
+  rootCause: z.string().optional(),
+  evidence: z.array(z.string()).optional()
+});
+
+const ImpactAssessmentSchema = z.object({
+  qualityImpact: z.enum(['none', 'low', 'medium', 'high']),
+  productImpact: z.boolean(),
+  affectedBatches: z.array(z.string()).optional(),
+  regulatoryReportingRequired: z.boolean(),
+  customerNotificationRequired: z.boolean(),
+  assessmentDate: z.string().datetime(),
+  assessedBy: z.string().uuid()
+});
+
+const DeviationDTOSchema = z.object({
+  id: z.string().uuid(),
+  deviationId: z.string().regex(/^DEV-\d{4}-\d{4}$/),
+  title: z.string().min(10).max(200),
+  description: z.string().min(50),
+  classification: DeviationClassificationSchema,
+  status: DeviationStatusSchema,
+  reportedBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string(),
+    role: z.string()
+  }),
+  reportedDate: z.string().datetime(),
+  affectedProcess: z.string(),
+  affectedProducts: z.array(z.string()).optional(),
+  immediateActions: z.string(),
+  investigation: InvestigationSchema.optional(),
+  impactAssessment: ImpactAssessmentSchema,
+  capaRequired: z.boolean(),
+  capaId: z.string().uuid().optional(),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+export type DeviationDTO = z.infer<typeof DeviationDTOSchema>;
+export type CreateDeviationDTO = z.infer<typeof DeviationDTOSchema.omit({
+  id: true, deviationId: true, electronicSignatures: true,
+  auditTrail: true, createdAt: true, updatedAt: true
+})>;
+```
+
+### Validation DTOs
+
+**Описание**: DTO для lifecycle управления валидацией (GAMP 5)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ValidationZodSchema`
+
+```typescript
+const ValidationTypeSchema = z.enum(['IQ', 'OQ', 'PQ', 'revalidation']);
+const ValidationStatusSchema = z.enum([
+  'planning', 'protocol_draft', 'protocol_approved', 'execution',
+  'report_draft', 'report_approved', 'closed'
+]);
+const GAMPCategorySchema = z.enum(['1', '3', '4', '5']);
+
+const ValidationProtocolSchema = z.object({
+  protocolNumber: z.string(),
+  version: z.string(),
+  approvedBy: z.string().uuid(),
+  approvalDate: z.string().datetime(),
+  documentId: z.string() // Link to Mayan-EDMS
+});
+
+const ValidationTestCaseSchema = z.object({
+  testCaseId: z.string(),
+  description: z.string(),
+  acceptanceCriteria: z.string(),
+  status: z.enum(['pending', 'passed', 'failed', 'na']),
+  executedBy: z.string().uuid().optional(),
+  executionDate: z.string().datetime().optional(),
+  result: z.string().optional(),
+  evidence: z.array(z.string()).optional()
+});
+
+const ValidationResultSchema = z.object({
+  testCaseId: z.string(),
+  result: z.enum(['passed', 'failed']),
+  executedBy: z.string().uuid(),
+  executionDate: z.string().datetime(),
+  notes: z.string().optional(),
+  evidence: z.array(z.string())
+});
+
+const ValidationDeviationSchema = z.object({
+  deviationNumber: z.string(),
+  description: z.string(),
+  impact: z.enum(['none', 'low', 'medium', 'high']),
+  resolution: z.string().optional()
+});
+
+const ValidationReportSchema = z.object({
+  reportNumber: z.string(),
+  summary: z.string(),
+  conclusion: z.enum(['validated', 'partially_validated', 'failed']),
+  approvedBy: z.string().uuid(),
+  approvalDate: z.string().datetime(),
+  documentId: z.string()
+});
+
+const ValidationDTOSchema = z.object({
+  id: z.string().uuid(),
+  validationId: z.string().regex(/^VAL-\d{4}-\d{4}$/),
+  title: z.string().min(10).max(200),
+  type: ValidationTypeSchema,
+  system: z.string(),
+  gampCategory: GAMPCategorySchema,
+  status: ValidationStatusSchema,
+  protocol: ValidationProtocolSchema.optional(),
+  testCases: z.array(ValidationTestCaseSchema),
+  executionResults: z.array(ValidationResultSchema).optional(),
+  deviations: z.array(ValidationDeviationSchema).optional(),
+  report: ValidationReportSchema.optional(),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+export type ValidationDTO = z.infer<typeof ValidationDTOSchema>;
+export type CreateValidationDTO = z.infer<typeof ValidationDTOSchema.omit({
+  id: true, validationId: true, electronicSignatures: true,
+  auditTrail: true, createdAt: true, updatedAt: true
+})>;
+```
+
+### Quality Event DTOs
+
+**Описание**: DTO для управления качественными событиями  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - QualityEventZodSchema`
+
+```typescript
+const QualityEventTypeSchema = z.enum([
+  'complaint', 'audit_finding', 'inspection_observation', 'quality_issue'
+]);
+const QualityEventStatusSchema = z.enum([
+  'reported', 'investigation', 'action_plan', 'closed'
+]);
+
+const LinkedRecordSchema = z.object({
+  recordType: z.enum(['capa', 'deviation', 'change_control']),
+  recordId: z.string().uuid(),
+  recordNumber: z.string(),
+  relationship: z.string()
+});
+
+const QualityEventDTOSchema = z.object({
+  id: z.string().uuid(),
+  eventId: z.string().regex(/^QE-\d{4}-\d{4}$/),
+  type: QualityEventTypeSchema,
+  title: z.string().min(10).max(200),
+  description: z.string().min(50),
+  severity: z.enum(['low', 'medium', 'high', 'critical']),
+  status: QualityEventStatusSchema,
+  reportedBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string(),
+    role: z.string()
+  }),
+  reportedDate: z.string().datetime(),
+  affectedAreas: z.array(z.string()),
+  investigation: InvestigationSchema.optional(),
+  linkedRecords: z.array(LinkedRecordSchema).optional(),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+export type QualityEventDTO = z.infer<typeof QualityEventDTOSchema>;
+export type CreateQualityEventDTO = z.infer<typeof QualityEventDTOSchema.omit({
+  id: true, eventId: true, electronicSignatures: true,
+  auditTrail: true, createdAt: true, updatedAt: true
+})>;
+```
+
+### Training DTOs
+
+**Описание**: DTO для управления обучением и компетенциями  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - TrainingZodSchema`
+
+```typescript
+const TrainingStatusSchema = z.enum(['enrolled', 'in_progress', 'completed', 'expired']);
+
+const TrainingDTOSchema = z.object({
+  id: z.string().uuid(),
+  trainingId: z.string().regex(/^TRN-\d{4}-\d{4}$/),
+  courseId: z.string().regex(/^CUR-\d{3}$/),
+  userId: z.string().uuid(),
+  status: TrainingStatusSchema,
+  startDate: z.string().datetime(),
+  completionDate: z.string().datetime().optional(),
+  expirationDate: z.string().datetime().optional(),
+  score: z.number().min(0).max(100).optional(),
+  passingScore: z.number().min(0).max(100),
+  attempts: z.number().min(0).default(0),
+  certificateIssued: z.boolean().default(false),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+const CourseDetailsDTOSchema = z.object({
+  courseId: z.string().regex(/^CUR-\d{3}$/),
+  title: z.string(),
+  description: z.string(),
+  durationHours: z.number().positive(),
+  requiredForPositions: z.array(z.string()),
+  recertificationPeriodDays: z.number().positive().optional(),
+  passingScore: z.number().min(0).max(100)
+});
+
+export type TrainingDTO = z.infer<typeof TrainingDTOSchema>;
+export type CreateTrainingDTO = z.infer<typeof TrainingDTOSchema.omit({
+  id: true, trainingId: true, electronicSignatures: true,
+  auditTrail: true, createdAt: true, updatedAt: true
+})>;
+export type CourseDetailsDTO = z.infer<typeof CourseDetailsDTOSchema>;
+```
+
+### Document DTOs
+
+**Описание**: DTO для контроля документов с версионированием  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DocumentZodSchema`
+
+```typescript
+const DocumentTypeSchema = z.enum(['SOP', 'protocol', 'report', 'form', 'policy']);
+const DocumentStatusSchema = z.enum(['draft', 'review', 'approved', 'obsolete', 'archived']);
+
+const DocumentDTOSchema = z.object({
+  id: z.string().uuid(),
+  documentId: z.string().regex(/^DOC-[A-Z]{3}-\d{4}-\d{4}$/),
+  title: z.string().min(10).max(200),
+  type: DocumentTypeSchema,
+  version: z.string().regex(/^\d+\.\d+$/),
+  status: DocumentStatusSchema,
+  author: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string(),
+    role: z.string()
+  }),
+  approver: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string(),
+    role: z.string()
+  }).optional(),
+  effectiveDate: z.string().datetime().optional(),
+  reviewDate: z.string().datetime().optional(),
+  edmsDocumentId: z.string(), // Mayan-EDMS integration
+  changeControlId: z.string().uuid().optional(),
+  electronicSignatures: z.array(ElectronicSignatureSchema),
+  auditTrail: AuditTrailMetadataSchema,
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime()
+});
+
+export type DocumentDTO = z.infer<typeof DocumentDTOSchema>;
+export type CreateDocumentDTO = z.infer<typeof DocumentDTOSchema.omit({
+  id: true, documentId: true, electronicSignatures: true,
+  auditTrail: true, createdAt: true, updatedAt: true
+})>;
+```
+
+### Analytics DTOs
+
+**Описание**: DTO для аналитики и метрик compliance модулей  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AnalyticsZodSchema`
+
+```typescript
+const AnalyticsPeriodSchema = z.enum(['daily', 'weekly', 'monthly', 'quarterly', 'yearly']);
+const AnalyticsModuleSchema = z.enum([
+  'change_control', 'capa', 'deviation', 'validation', 
+  'quality_event', 'training', 'document'
+]);
+
+const TrendDataSchema = z.object({
+  timestamp: z.string().datetime(),
+  value: z.number(),
+  label: z.string().optional()
+});
+
+const AnalyticsDTOSchema = z.object({
+  id: z.string().uuid(),
+  metricType: z.string(),
+  period: AnalyticsPeriodSchema,
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime(),
+  module: AnalyticsModuleSchema,
+  metrics: z.record(z.number()),
+  trends: z.array(TrendDataSchema).optional(),
+  generatedBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string()
+  }),
+  generatedAt: z.string().datetime()
+});
+
+// Specific metric DTOs
+const ComplianceMetricsDTOSchema = z.object({
+  capaOverdueRate: z.number().min(0).max(100),
+  deviationRepeatRate: z.number().min(0).max(100),
+  changeApprovalTimeAvg: z.number().positive(),
+  trainingCompletionRate: z.number().min(0).max(100),
+  validationOnTimeRate: z.number().min(0).max(100),
+  documentReviewOverdue: z.number().min(0).max(100),
+  auditTrailCompleteness: z.number().min(0).max(100)
+});
+
+export type AnalyticsDTO = z.infer<typeof AnalyticsDTOSchema>;
+export type ComplianceMetricsDTO = z.infer<typeof ComplianceMetricsDTOSchema>;
+```
+
+### Common Enhanced Structures
+
+**Описание**: Общие структуры для всех compliance DTOs  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - Enhanced Schemas`
+
+```typescript
+// Electronic Signature (21 CFR Part 11)
+const ElectronicSignatureSchema = z.object({
+  userId: z.string().uuid(),
+  fullName: z.string(),
+  role: z.string(),
+  action: z.string(),
+  reason: z.string().min(10), // Mandatory per 21 CFR Part 11
+  timestamp: z.string().datetime(),
+  ipAddress: z.string().ip(),
+  authenticationMethod: z.enum(['password', 'mfa', 'certificate'])
+});
+
+// ALCOA+ Audit Trail Metadata
+const AuditTrailMetadataSchema = z.object({
+  createdBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string()
+  }),
+  createdAt: z.string().datetime(),
+  lastModifiedBy: z.object({
+    userId: z.string().uuid(),
+    fullName: z.string()
+  }).optional(),
+  lastModifiedAt: z.string().datetime().optional(),
+  changeReason: z.string().optional(),
+  version: z.number().int().positive(),
+  dataIntegrityHash: z.string() // SHA-256
+});
+
+// GxP Validation Fields (Mixin)
+const GxPValidationFieldsSchema = z.object({
+  gxpCritical: z.boolean(),
+  validationStatus: z.enum(['validated', 'pending', 'failed', 'na']),
+  regulatoryRelevance: z.array(z.string()),
+  dataIntegrityLevel: z.enum([
+    'attributable', 'legible', 'contemporaneous', 'original', 
+    'accurate', 'complete', 'consistent', 'enduring', 'available'
+  ])
+});
+
+export type ElectronicSignature = z.infer<typeof ElectronicSignatureSchema>;
+export type AuditTrailMetadata = z.infer<typeof AuditTrailMetadataSchema>;
+export type GxPValidationFields = z.infer<typeof GxPValidationFieldsSchema>;
+```
+
+---
+
+## �📝 Статус конвертации
 
 ✅ **Полная конвертация завершена (100% Zod)**:
 
@@ -910,12 +1439,24 @@ export type ComplianceReportResponse = ApiResponse<ReportJob>;
 - Financial API (Transactions, Biological Assets)
 - Workforce API (Tasks, Assignments)
 - Audit & Compliance (Audit Trail, Reports)
+- **DS v2.0 Compliance DTOs** (8 modules):
+  - ✅ Change Control (ChangeControlDTO, CreateChangeControlDTO, UpdateChangeControlDTO)
+  - ✅ CAPA (CAPADTO, CreateCAPADTO)
+  - ✅ Deviation (DeviationDTO, CreateDeviationDTO)
+  - ✅ Validation (ValidationDTO, CreateValidationDTO)
+  - ✅ Quality Event (QualityEventDTO, CreateQualityEventDTO)
+  - ✅ Training (TrainingDTO, CreateTrainingDTO, CourseDetailsDTO)
+  - ✅ Document (DocumentDTO, CreateDocumentDTO)
+  - ✅ Analytics (AnalyticsDTO, ComplianceMetricsDTO)
+  - ✅ Common Enhanced Structures (ElectronicSignature, AuditTrailMetadata, GxPValidationFields)
 
 > ✅ **Все интерфейсы заменены на Zod-схемы**
 > 🎯 **Schema-first API design** полностью внедрён
 > 🛡️ **Runtime validation** из коробки для всех DTO
+> 🔐 **21 CFR Part 11, ALCOA+, GAMP 5** compliance встроен
 
 ---
 
-**Последнее обновление**: 2025-10-15  
-**Источники**: docs/CONTRACT_SPECIFICATIONS.md, docs/validation/DS.md, docs/services/spatial-addressing-service-v2.md
+**Последнее обновление**: 2025-10-17  
+**Версия**: 2.0 - Aligned with DS v2.0 compliance modules  
+**Источники**: CONTRACT_SPECIFICATIONS.md v2.0, EVENT_ARCHITECTURE.md v2.0, DS.md v2.0

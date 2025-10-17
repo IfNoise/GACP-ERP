@@ -938,5 +938,770 @@ const ReportRequestSchema = z.object({
 
 ---
 
-**Последнее обновление**: 2025-09-16  
-**Источники**: Анализ контрактов API, схем валидации и SOP документов GACP-ERP
+## 📋 Compliance & Quality Validation Schemas (DS v2.0)
+
+### Change Control Validation
+
+**Описание**: Валидация change request с GxP compliance  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ChangeControlZodSchema`
+
+```typescript
+import { z } from 'zod';
+
+const ChangeControlValidationSchema = z.object({
+  requestId: z
+    .string()
+    .regex(/^CR-\d{4}-\d{4}$/, "Формат: CR-YYYY-NNNN")
+    .describe("Уникальный номер change request"),
+
+  title: z
+    .string()
+    .min(10, "Заголовок минимум 10 символов")
+    .max(200, "Заголовок максимум 200 символов")
+    .describe("Краткое описание изменения"),
+
+  description: z
+    .string()
+    .min(50, "Описание минимум 50 символов")
+    .describe("Детальное описание необходимости изменения"),
+
+  classification: z
+    .enum(["critical", "major", "minor", "emergency"])
+    .describe("Классификация по влиянию на качество/безопасность"),
+
+  impactAnalysis: z.object({
+    affectedSystems: z
+      .array(z.string())
+      .min(1, "Укажите хотя бы одну затронутую систему"),
+
+    affectedProcesses: z
+      .array(z.string())
+      .min(1, "Укажите хотя бы один затронутый процесс"),
+
+    riskLevel: z.enum(["low", "medium", "high", "critical"]),
+
+    mitigationPlan: z
+      .string()
+      .min(50, "План митигации минимум 50 символов"),
+
+    regulatoryImpact: z.boolean(),
+
+    validationRequired: z.boolean(),
+  }).describe("Анализ влияния изменения"),
+
+  electronicSignature: z.object({
+    userId: z.string().uuid("Неверный UUID пользователя"),
+    reason: z
+      .string()
+      .min(10, "Обоснование подписи минимум 10 символов (21 CFR Part 11)"),
+    authenticationMethod: z.enum(["password", "mfa", "certificate"]),
+  }).describe("Электронная подпись (21 CFR Part 11)"),
+});
+
+// Refinements для бизнес-правил
+const ChangeControlRefinedSchema = ChangeControlValidationSchema.refine(
+  (data) => {
+    if (data.classification === "critical") {
+      return data.impactAnalysis.validationRequired === true;
+    }
+    return true;
+  },
+  {
+    message: "Критичные изменения требуют валидации",
+    path: ["impactAnalysis", "validationRequired"],
+  }
+).refine(
+  (data) => {
+    if (data.impactAnalysis.regulatoryImpact) {
+      return data.impactAnalysis.riskLevel !== "low";
+    }
+    return true;
+  },
+  {
+    message: "Изменения с регуляторным влиянием не могут иметь низкий риск",
+    path: ["impactAnalysis", "riskLevel"],
+  }
+);
+```
+
+### CAPA Validation
+
+**Описание**: Валидация CAPA с root cause analysis  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - CAPAZodSchema`
+
+```typescript
+const CAPAValidationSchema = z.object({
+  capaId: z
+    .string()
+    .regex(/^CAPA-\d{4}-\d{4}$/, "Формат: CAPA-YYYY-NNNN"),
+
+  type: z
+    .enum(["corrective", "preventive"])
+    .describe("Тип: корректирующее или предупреждающее"),
+
+  title: z
+    .string()
+    .min(10, "Заголовок минимум 10 символов")
+    .max(200, "Заголовок максимум 200 символов"),
+
+  description: z
+    .string()
+    .min(50, "Описание проблемы минимум 50 символов"),
+
+  priority: z
+    .enum(["low", "medium", "high", "critical"])
+    .describe("Приоритет CAPA"),
+
+  rootCauseAnalysis: z.object({
+    method: z.enum(["5_why", "fishbone", "fault_tree", "pareto"]),
+
+    findings: z
+      .string()
+      .min(100, "Результаты анализа минимум 100 символов"),
+
+    rootCause: z
+      .string()
+      .min(50, "Описание первопричины минимум 50 символов"),
+
+    contributingFactors: z
+      .array(z.string())
+      .min(1, "Укажите хотя бы один способствующий фактор"),
+
+    evidence: z
+      .array(z.string())
+      .min(1, "Приложите хотя бы один документ-доказательство"),
+  }).describe("Анализ первопричины (RCA)"),
+
+  actions: z
+    .array(
+      z.object({
+        description: z
+          .string()
+          .min(20, "Описание действия минимум 20 символов"),
+
+        assignedTo: z.string().uuid("Неверный UUID ответственного"),
+
+        dueDate: z
+          .string()
+          .datetime()
+          .refine(
+            (date) => new Date(date) > new Date(),
+            "Дата выполнения должна быть в будущем"
+          ),
+
+        status: z.enum(["pending", "in_progress", "completed", "overdue"]),
+      })
+    )
+    .min(1, "Добавьте хотя бы одно корректирующее действие"),
+
+  effectivenessCheck: z.object({
+    scheduledDate: z
+      .string()
+      .datetime()
+      .refine(
+        (date) => new Date(date) > new Date(),
+        "Дата проверки эффективности должна быть в будущем"
+      ),
+
+    method: z
+      .string()
+      .min(20, "Опишите метод проверки эффективности"),
+
+    followUpRequired: z.boolean(),
+  }).optional(),
+});
+
+// Refinement: Критичные CAPA требуют effectiveness check
+const CAPARefinedSchema = CAPAValidationSchema.refine(
+  (data) => {
+    if (data.priority === "critical" || data.priority === "high") {
+      return data.effectivenessCheck !== undefined;
+    }
+    return true;
+  },
+  {
+    message: "Критичные и высокоприоритетные CAPA требуют проверки эффективности",
+    path: ["effectivenessCheck"],
+  }
+);
+```
+
+### Deviation Validation
+
+**Описание**: Валидация отклонений с impact assessment  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DeviationZodSchema`
+
+```typescript
+const DeviationValidationSchema = z.object({
+  deviationId: z
+    .string()
+    .regex(/^DEV-\d{4}-\d{4}$/, "Формат: DEV-YYYY-NNNN"),
+
+  title: z
+    .string()
+    .min(10, "Заголовок минимум 10 символов")
+    .max(200, "Заголовок максимум 200 символов"),
+
+  description: z
+    .string()
+    .min(50, "Описание отклонения минимум 50 символов"),
+
+  classification: z
+    .enum(["critical", "major", "minor"])
+    .describe("Классификация отклонения"),
+
+  affectedProcess: z
+    .string()
+    .min(5, "Укажите затронутый процесс"),
+
+  immediateActions: z
+    .string()
+    .min(30, "Опишите немедленные действия минимум 30 символов")
+    .describe("Действия, предпринятые сразу после выявления"),
+
+  impactAssessment: z.object({
+    qualityImpact: z.enum(["none", "low", "medium", "high"]),
+
+    productImpact: z.boolean().describe("Влияние на продукцию"),
+
+    affectedBatches: z
+      .array(z.string())
+      .optional()
+      .describe("Затронутые партии продукции"),
+
+    regulatoryReportingRequired: z
+      .boolean()
+      .describe("Требуется ли уведомление регуляторов"),
+
+    customerNotificationRequired: z
+      .boolean()
+      .describe("Требуется ли уведомление клиентов"),
+  }).describe("Оценка влияния на качество и продукцию"),
+
+  capaRequired: z
+    .boolean()
+    .describe("Требуется ли открыть CAPA"),
+});
+
+// Refinements
+const DeviationRefinedSchema = DeviationValidationSchema
+  .refine(
+    (data) => {
+      if (data.classification === "critical") {
+        return data.capaRequired === true;
+      }
+      return true;
+    },
+    {
+      message: "Критичные отклонения всегда требуют CAPA",
+      path: ["capaRequired"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.impactAssessment.productImpact) {
+        return (
+          data.impactAssessment.affectedBatches &&
+          data.impactAssessment.affectedBatches.length > 0
+        );
+      }
+      return true;
+    },
+    {
+      message: "При влиянии на продукцию укажите затронутые партии",
+      path: ["impactAssessment", "affectedBatches"],
+    }
+  );
+```
+
+### Validation Lifecycle Schema
+
+**Описание**: Валидация протоколов IQ/OQ/PQ (GAMP 5)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ValidationZodSchema`
+
+```typescript
+const ValidationLifecycleSchema = z.object({
+  validationId: z
+    .string()
+    .regex(/^VAL-\d{4}-\d{4}$/, "Формат: VAL-YYYY-NNNN"),
+
+  title: z
+    .string()
+    .min(10, "Название валидации минимум 10 символов")
+    .max(200, "Название максимум 200 символов"),
+
+  type: z
+    .enum(["IQ", "OQ", "PQ", "revalidation"])
+    .describe("Тип валидации согласно GAMP 5"),
+
+  system: z
+    .string()
+    .min(3, "Название валидируемой системы минимум 3 символа"),
+
+  gampCategory: z
+    .enum(["1", "3", "4", "5"])
+    .describe("GAMP 5 категория программного обеспечения"),
+
+  protocol: z.object({
+    protocolNumber: z
+      .string()
+      .regex(/^VP-\d{4}-\d{4}$/, "Формат протокола: VP-YYYY-NNNN"),
+
+    version: z
+      .string()
+      .regex(/^\d+\.\d+$/, "Версия формата: X.Y"),
+
+    approvedBy: z.string().uuid("Неверный UUID утверждающего"),
+
+    approvalDate: z.string().datetime(),
+
+    documentId: z.string().describe("ID документа в Mayan-EDMS"),
+  }).optional(),
+
+  testCases: z
+    .array(
+      z.object({
+        testCaseId: z
+          .string()
+          .regex(/^TC-\d{3}$/, "Формат test case: TC-NNN"),
+
+        description: z
+          .string()
+          .min(20, "Описание теста минимум 20 символов"),
+
+        acceptanceCriteria: z
+          .string()
+          .min(20, "Критерии приёмки минимум 20 символов"),
+
+        status: z.enum(["pending", "passed", "failed", "na"]),
+      })
+    )
+    .min(1, "Добавьте хотя бы один тест-кейс"),
+});
+
+// Refinement: IQ/OQ/PQ требуют минимум определённого количества тестов
+const ValidationRefinedSchema = ValidationLifecycleSchema.refine(
+  (data) => {
+    const minTests = {
+      IQ: 5,
+      OQ: 10,
+      PQ: 15,
+      revalidation: 5,
+    };
+    return data.testCases.length >= minTests[data.type];
+  },
+  (data) => ({
+    message: `Валидация типа ${data.type} требует минимум ${
+      { IQ: 5, OQ: 10, PQ: 15, revalidation: 5 }[data.type]
+    } тест-кейсов`,
+    path: ["testCases"],
+  })
+);
+```
+
+### Training Validation
+
+**Описание**: Валидация обучения и компетенций  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - TrainingZodSchema`
+
+```typescript
+const TrainingValidationSchema = z.object({
+  trainingId: z
+    .string()
+    .regex(/^TRN-\d{4}-\d{4}$/, "Формат: TRN-YYYY-NNNN"),
+
+  courseId: z
+    .string()
+    .regex(/^CUR-\d{3}$/, "Формат курса: CUR-NNN"),
+
+  userId: z.string().uuid("Неверный UUID пользователя"),
+
+  status: z.enum(["enrolled", "in_progress", "completed", "expired"]),
+
+  startDate: z
+    .string()
+    .datetime()
+    .refine(
+      (date) => new Date(date) <= new Date(),
+      "Дата начала не может быть в будущем"
+    ),
+
+  completionDate: z
+    .string()
+    .datetime()
+    .optional()
+    .refine(
+      (date) => !date || new Date(date) <= new Date(),
+      "Дата завершения не может быть в будущем"
+    ),
+
+  score: z
+    .number()
+    .min(0, "Оценка минимум 0")
+    .max(100, "Оценка максимум 100")
+    .optional(),
+
+  passingScore: z
+    .number()
+    .min(0, "Проходной балл минимум 0")
+    .max(100, "Проходной балл максимум 100"),
+
+  attempts: z
+    .number()
+    .min(0, "Количество попыток не может быть отрицательным")
+    .max(3, "Максимум 3 попытки")
+    .default(0),
+});
+
+// Refinements
+const TrainingRefinedSchema = TrainingValidationSchema
+  .refine(
+    (data) => {
+      if (data.status === "completed") {
+        return data.completionDate !== undefined && data.score !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Завершённое обучение требует даты завершения и оценки",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.score !== undefined) {
+        return data.score >= data.passingScore;
+      }
+      return true;
+    },
+    {
+      message: "Оценка должна быть не ниже проходного балла",
+      path: ["score"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.completionDate && data.startDate) {
+        return new Date(data.completionDate) >= new Date(data.startDate);
+      }
+      return true;
+    },
+    {
+      message: "Дата завершения должна быть после даты начала",
+      path: ["completionDate"],
+    }
+  );
+```
+
+### Document Control Validation
+
+**Описание**: Валидация документов с версионированием  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DocumentZodSchema`
+
+```typescript
+const DocumentValidationSchema = z.object({
+  documentId: z
+    .string()
+    .regex(/^DOC-[A-Z]{3}-\d{4}-\d{4}$/, "Формат: DOC-XXX-YYYY-NNNN"),
+
+  title: z
+    .string()
+    .min(10, "Название документа минимум 10 символов")
+    .max(200, "Название максимум 200 символов"),
+
+  type: z
+    .enum(["SOP", "protocol", "report", "form", "policy"])
+    .describe("Тип документа"),
+
+  version: z
+    .string()
+    .regex(/^\d+\.\d+$/, "Версия формата: X.Y (например, 1.0, 2.1)"),
+
+  status: z
+    .enum(["draft", "review", "approved", "obsolete", "archived"])
+    .describe("Статус документа в lifecycle"),
+
+  effectiveDate: z
+    .string()
+    .datetime()
+    .optional()
+    .refine(
+      (date) => !date || new Date(date) >= new Date(),
+      "Дата вступления в силу не может быть в прошлом"
+    ),
+
+  reviewDate: z
+    .string()
+    .datetime()
+    .optional()
+    .describe("Дата следующего периодического пересмотра"),
+
+  edmsDocumentId: z
+    .string()
+    .min(1, "ID документа в Mayan-EDMS обязателен"),
+
+  changeControlId: z
+    .string()
+    .uuid()
+    .optional()
+    .describe("Ссылка на Change Control (если применимо)"),
+});
+
+// Refinements
+const DocumentRefinedSchema = DocumentValidationSchema
+  .refine(
+    (data) => {
+      const requiresApprover = ["SOP", "protocol", "policy"];
+      if (requiresApprover.includes(data.type) && data.status === "approved") {
+        return data.effectiveDate !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Утверждённые SOP/протоколы/политики требуют даты вступления в силу",
+      path: ["effectiveDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.reviewDate && data.effectiveDate) {
+        return new Date(data.reviewDate) > new Date(data.effectiveDate);
+      }
+      return true;
+    },
+    {
+      message: "Дата пересмотра должна быть после даты вступления в силу",
+      path: ["reviewDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      const majorChange = parseFloat(data.version) >= 2.0;
+      if (majorChange && data.status === "approved") {
+        return data.changeControlId !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Крупные изменения документа (версия ≥2.0) требуют Change Control",
+      path: ["changeControlId"],
+    }
+  );
+```
+
+### Electronic Signature Validation
+
+**Описание**: Валидация электронных подписей (21 CFR Part 11)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ElectronicSignatureZodSchema`
+
+```typescript
+const ElectronicSignatureValidationSchema = z.object({
+  userId: z.string().uuid("Неверный UUID пользователя"),
+
+  fullName: z
+    .string()
+    .min(3, "Полное имя минимум 3 символа")
+    .max(100, "Полное имя максимум 100 символов"),
+
+  role: z
+    .string()
+    .min(3, "Роль минимум 3 символа")
+    .describe("Роль пользователя в системе"),
+
+  action: z
+    .string()
+    .min(3, "Действие минимум 3 символа")
+    .describe("Действие: approved, reviewed, implemented, etc."),
+
+  reason: z
+    .string()
+    .min(10, "Обоснование минимум 10 символов (требование 21 CFR Part 11)")
+    .max(500, "Обоснование максимум 500 символов")
+    .describe("Обязательное обоснование подписи"),
+
+  timestamp: z
+    .string()
+    .datetime()
+    .refine(
+      (date) => new Date(date) <= new Date(),
+      "Временная метка не может быть в будущем"
+    ),
+
+  ipAddress: z
+    .string()
+    .ip({ version: "v4" })
+    .or(z.string().ip({ version: "v6" }))
+    .describe("IP адрес пользователя"),
+
+  authenticationMethod: z
+    .enum(["password", "mfa", "certificate"])
+    .describe("Метод аутентификации (password для тестовых систем, mfa/certificate для production)"),
+});
+
+// Refinement: Критичные операции требуют MFA или сертификат
+const ElectronicSignatureRefinedSchema = ElectronicSignatureValidationSchema.refine(
+  (data) => {
+    const criticalActions = ["approved", "closed", "archived", "signed"];
+    if (criticalActions.includes(data.action.toLowerCase())) {
+      return data.authenticationMethod !== "password";
+    }
+    return true;
+  },
+  {
+    message: "Критичные операции требуют MFA или certificate authentication",
+    path: ["authenticationMethod"],
+  }
+);
+```
+
+### Audit Trail Metadata Validation
+
+**Описание**: Валидация ALCOA+ audit trail метаданных  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AuditTrailZodSchema`
+
+```typescript
+const AuditTrailMetadataValidationSchema = z.object({
+  createdBy: z.object({
+    userId: z.string().uuid("Неверный UUID создателя"),
+    fullName: z.string().min(3, "Имя создателя минимум 3 символа"),
+  }),
+
+  createdAt: z
+    .string()
+    .datetime()
+    .refine(
+      (date) => new Date(date) <= new Date(),
+      "Дата создания не может быть в будущем"
+    ),
+
+  lastModifiedBy: z
+    .object({
+      userId: z.string().uuid("Неверный UUID изменившего"),
+      fullName: z.string().min(3, "Имя изменившего минимум 3 символа"),
+    })
+    .optional(),
+
+  lastModifiedAt: z
+    .string()
+    .datetime()
+    .optional()
+    .refine(
+      (date) => !date || new Date(date) <= new Date(),
+      "Дата изменения не может быть в будущем"
+    ),
+
+  changeReason: z
+    .string()
+    .min(10, "Причина изменения минимум 10 символов")
+    .max(500, "Причина изменения максимум 500 символов")
+    .optional()
+    .describe("Обоснование изменения (ALCOA+ requirement)"),
+
+  version: z
+    .number()
+    .int()
+    .positive("Версия должна быть положительным числом")
+    .describe("Версия записи (автоинкремент)"),
+
+  dataIntegrityHash: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/, "Неверный формат SHA-256 хеша")
+    .describe("SHA-256 хеш для проверки целостности данных"),
+});
+
+// Refinement: При изменении обязательны lastModifiedBy, lastModifiedAt, changeReason
+const AuditTrailRefinedSchema = AuditTrailMetadataValidationSchema.refine(
+  (data) => {
+    if (data.version > 1) {
+      return (
+        data.lastModifiedBy !== undefined &&
+        data.lastModifiedAt !== undefined &&
+        data.changeReason !== undefined
+      );
+    }
+    return true;
+  },
+  {
+    message: "Изменённые записи (version > 1) требуют lastModifiedBy, lastModifiedAt, changeReason",
+    path: ["version"],
+  }
+).refine(
+  (data) => {
+    if (data.lastModifiedAt && data.createdAt) {
+      return new Date(data.lastModifiedAt) >= new Date(data.createdAt);
+    }
+    return true;
+  },
+  {
+    message: "Дата изменения должна быть после даты создания",
+    path: ["lastModifiedAt"],
+  }
+);
+```
+
+### GxP Validation Fields Schema
+
+**Описание**: Валидация GxP полей (mixin для всех критичных сущностей)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - GxPValidationFieldsSchema`
+
+```typescript
+const GxPValidationFieldsSchema = z.object({
+  gxpCritical: z
+    .boolean()
+    .describe("Является ли запись критичной для GxP"),
+
+  validationStatus: z
+    .enum(["validated", "pending", "failed", "na"])
+    .describe("Статус валидации записи"),
+
+  regulatoryRelevance: z
+    .array(
+      z.enum([
+        "FDA_21CFR11",
+        "EU_GMP_ANNEX11",
+        "WHO_GACP",
+        "EMA_GACP",
+        "GAMP5",
+        "ALCOA_PLUS",
+        "ISO_9001",
+        "ISO_13485",
+      ])
+    )
+    .min(1, "Укажите хотя бы один применимый регуляторный стандарт")
+    .describe("Применимые регуляторные требования"),
+
+  dataIntegrityLevel: z
+    .enum([
+      "attributable",
+      "legible",
+      "contemporaneous",
+      "original",
+      "accurate",
+      "complete",
+      "consistent",
+      "enduring",
+      "available",
+    ])
+    .describe("ALCOA+ уровень data integrity"),
+});
+
+// Refinement: GxP critical записи должны быть validated
+const GxPValidationRefinedSchema = GxPValidationFieldsSchema.refine(
+  (data) => {
+    if (data.gxpCritical) {
+      return data.validationStatus === "validated" || data.validationStatus === "pending";
+    }
+    return true;
+  },
+  {
+    message: "GxP критичные записи должны быть validated или pending",
+    path: ["validationStatus"],
+  }
+);
+```
+
+---
+
+**Последнее обновление**: 2025-10-17  
+**Версия**: 2.0 - Aligned with DS v2.0 compliance modules  
+**Источники**: CONTRACT_SPECIFICATIONS.md v2.0, FDA_21CFR_Part11.md, ALCOA+.md, GAMP5.md
