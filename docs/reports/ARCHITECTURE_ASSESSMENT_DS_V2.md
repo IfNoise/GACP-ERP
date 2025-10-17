@@ -17,6 +17,7 @@
 **Gap**: 1 месяц устаревания, 17 новых модулей не описаны
 
 **Key Findings**:
+
 - ✅ Базовая архитектура соответствует microservices pattern
 - ✅ Event-driven architecture описана корректно
 - ⚠️ Compliance модули описаны только на high-level
@@ -60,6 +61,7 @@
 ### 1. Change Control Module - MISSING ❌
 
 **Required Components**:
+
 - Change Request workflow engine
 - Risk assessment service
 - Impact analysis service
@@ -68,6 +70,7 @@
 - Effectiveness verification
 
 **Database Tables Needed**:
+
 ```sql
 -- change_controls (DS-CHG-001)
 -- change_control_reviews (DS-CHG-002)
@@ -75,10 +78,12 @@
 ```
 
 **API Endpoints Needed**:
+
 - 8 REST endpoints (documented in CONTRACT_SPECIFICATIONS v2.0)
 - 6 Kafka events for change control workflow
 
 **Integration Points**:
+
 - Audit Trail service (for compliance tracking)
 - Electronic Signature service (for approvals)
 - Training service (for training requirements)
@@ -89,6 +94,7 @@
 ### 2. CAPA Management Module - MISSING ❌
 
 **Required Components**:
+
 - CAPA initiation workflow
 - Root cause analysis tools
 - Action plan management
@@ -97,6 +103,7 @@
 - Recurring CAPA prevention
 
 **Database Tables Needed**:
+
 ```sql
 -- capas (DS-CAPA-001)
 -- capa_actions (DS-CAPA-002)
@@ -104,10 +111,12 @@
 ```
 
 **API Endpoints Needed**:
+
 - 6 REST endpoints
 - 7 Kafka events for CAPA lifecycle
 
 **Integration Points**:
+
 - Deviation Management (CAPA from deviations)
 - Quality Events (CAPA from complaints)
 - Audit Trail (for investigation tracking)
@@ -118,6 +127,7 @@
 ### 3. Deviation Management Module - MISSING ❌
 
 **Required Components**:
+
 - Deviation reporting interface
 - Investigation workflow engine
 - Impact assessment tools
@@ -126,6 +136,7 @@
 - Regulatory reporting triggers
 
 **Database Tables Needed**:
+
 ```sql
 -- deviations (DS-DEV-001)
 -- deviation_investigations (DS-DEV-002)
@@ -133,10 +144,12 @@
 ```
 
 **API Endpoints Needed**:
+
 - 6 REST endpoints
 - 5 Kafka events for deviation workflow
 
 **Integration Points**:
+
 - CAPA Management (automatic CAPA creation)
 - Quality Events (for quality impact)
 - Batch Management (for batch disposition)
@@ -147,6 +160,7 @@
 ### 4. Validation Management Module - MISSING ❌
 
 **Required Components**:
+
 - Protocol creation and management
 - Test case execution engine
 - Evidence collection system
@@ -155,16 +169,19 @@
 - Revalidation scheduler
 
 **Database Tables Needed**:
+
 ```sql
 -- validation_protocols (DS-VAL-001)
 -- validation_test_cases (DS-VAL-002)
 ```
 
 **API Endpoints Needed**:
+
 - 6 REST endpoints
 - 4 Kafka events for validation workflow
 
 **Integration Points**:
+
 - Change Control (revalidation triggers)
 - Deviation Management (test failures)
 - Document Management (protocol storage)
@@ -175,6 +192,7 @@
 ### 5. Quality Events Module - MISSING ❌
 
 **Required Components**:
+
 - Event reporting system
 - Complaint handling workflow
 - Adverse event tracking
@@ -182,15 +200,18 @@
 - Trend analysis tools
 
 **Database Tables Needed**:
+
 ```sql
 -- quality_events (DS-QE-001)
 ```
 
 **API Endpoints Needed**:
+
 - Part of existing Quality module (needs expansion)
 - 2 Kafka events
 
 **Integration Points**:
+
 - CAPA Management
 - Deviation Management
 - Customer Management
@@ -203,6 +224,7 @@
 **Current State**: Basic training records in Workforce module
 
 **Gaps**:
+
 - GxP-specific training requirements
 - Training effectiveness evaluation
 - Certificate management with expiry
@@ -211,6 +233,7 @@
 - Retraining scheduler
 
 **Enhancement Needed**:
+
 ```typescript
 // Enhance existing TrainingRecordSchema with:
 - assessment_required: boolean
@@ -227,6 +250,7 @@
 **Current State**: Basic reporting in PDF Generator
 
 **Gaps**:
+
 - Compliance dashboard metrics
 - KPI tracking and visualization
 - Audit report generation
@@ -234,6 +258,7 @@
 - Regulatory submission reports
 
 **Enhancement Needed**:
+
 - ComplianceMetricsSchema implementation
 - AuditReportSchema implementation  
 - KPIDashboardSchema implementation
@@ -247,6 +272,7 @@
 ### 1. Microservices Architecture
 
 **New Services Required**:
+
 ```
 apps/
   ├── compliance-service/          # NEW - Change Control, CAPA, Deviation
@@ -256,6 +282,7 @@ apps/
 ```
 
 **Service Dependencies**:
+
 ```mermaid
 graph LR
     A[Compliance Service] --> B[Audit Trail]
@@ -275,6 +302,7 @@ graph LR
 **Enhanced Tables**: 3 tables (users, audit_trail, documents)
 
 **Estimated Database Growth**:
+
 - Change Controls: ~500 records/year
 - CAPAs: ~200 records/year
 - Deviations: ~300 records/year
@@ -284,6 +312,7 @@ graph LR
 ### 3. Event Architecture
 
 **New Kafka Topics**:
+
 ```
 gacp.compliance.change-control.*
 gacp.compliance.capa.*
@@ -293,12 +322,14 @@ gacp.quality-events.*
 ```
 
 **Estimated Event Volume**:
+
 - 5,000-10,000 compliance events/year
 - Peak: 50 events/day during audits
 
 ### 4. API Gateway
 
 **New Route Groups**:
+
 ```typescript
 /api/v1/change-controls/*
 /api/v1/capas/*
@@ -316,9 +347,11 @@ gacp.quality-events.*
 ### Priority 1 - CRITICAL (Week 2-3)
 
 #### 1.1 Add Compliance Modules Section
+
 **Location**: Section 3.1 (after existing modules)
 
 **Content**:
+
 ```markdown
 #### 3.1.8 Compliance Management Module
 
@@ -328,9 +361,11 @@ gacp.quality-events.*
 ```
 
 #### 1.2 Add Validation Module Section
+
 **Location**: Section 3.1
 
 **Content**:
+
 ```markdown
 #### 3.1.9 Validation Management Module
 
@@ -340,9 +375,11 @@ gacp.quality-events.*
 ```
 
 #### 1.3 Add Quality Events Module Section
+
 **Location**: Section 3.1
 
 **Content**:
+
 ```markdown
 #### 3.1.10 Quality Events Management Module
 
@@ -352,15 +389,18 @@ gacp.quality-events.*
 ```
 
 #### 1.4 Update Section 2.1 - High-Level Architecture Diagram
+
 **Change**: Add new microservices to diagram
 
 **Before**:
+
 ```
 │  │ │Audit Trail  │ │Document Mgmt│ │PDF Report │ ││
 │  │ │& Compliance │ │(Mayan EDMS) │ │Generator  │ ││
 ```
 
 **After**:
+
 ```
 │  │ │Audit Trail  │ │Compliance   │ │Validation │ ││
 │  │ │Service      │ │Management   │ │Management │ ││
@@ -369,10 +409,12 @@ gacp.quality-events.*
 ```
 
 #### 1.5 Update Section 4 - Database Architecture
+
 **Add**: 10 new table schemas with full DDL
 **Update**: Enhanced schemas for users, audit_trail, documents
 
 #### 1.6 Update Section 5 - API Architecture
+
 **Add**: Complete API specifications for all new endpoints
 **Update**: ts-rest contract examples
 
@@ -381,16 +423,20 @@ gacp.quality-events.*
 ### Priority 2 - HIGH (Week 3)
 
 #### 2.1 Update Section 6 - Event Architecture
+
 **Add**: Kafka topic specifications for compliance events
 **Add**: Event schema definitions
 **Add**: Consumer group specifications
 
 #### 2.2 Update Section 7 - Integration Architecture
+
 **Add**: Integration patterns for compliance workflows
 **Update**: Mayan-EDMS integration for validation documents
 
 #### 2.3 Add Compliance Workflow Diagrams
+
 **New Section**: 3.3 Compliance Workflows
+
 - Change Control approval workflow
 - CAPA lifecycle workflow
 - Deviation investigation workflow
@@ -401,15 +447,18 @@ gacp.quality-events.*
 ### Priority 3 - MEDIUM (Week 3-4)
 
 #### 3.1 Update Security Architecture
+
 **Add**: Electronic signature authentication flows
 **Add**: Audit trail encryption and immutability
 **Add**: Role-based access control for compliance functions
 
 #### 3.2 Update Deployment Architecture
+
 **Add**: Compliance service deployment configuration
 **Update**: Resource requirements and scaling policies
 
 #### 3.3 Update Monitoring & Observability
+
 **Add**: Compliance metrics and KPIs
 **Add**: Alerting for regulatory-critical events
 
@@ -468,6 +517,7 @@ async approveChangeControl(id: string, approval: Approval): Promise<void> {
 ### Immediate Actions (Week 2)
 
 1. ✅ **Update metadata**:
+
    ```yaml
    version: "2.0"
    last_updated: "2025-10-17"
@@ -502,16 +552,19 @@ async approveChangeControl(id: string, approval: Approval): Promise<void> {
 ## 📊 Impact Assessment
 
 ### Development Impact
+
 - **Estimated Effort**: 40-60 developer-days for architecture documentation
 - **Team Size**: 1 technical architect + 1 senior developer
 - **Duration**: 3 weeks (with reviews)
 
 ### Documentation Impact
+
 - **Pages to Add**: ~30 new pages
 - **Diagrams to Create**: 8-10 new diagrams
 - **Code Examples**: 20-25 new examples
 
 ### Downstream Impact
+
 - Frontend team: Needs updated architecture for UI design
 - Backend team: Can start implementation immediately after doc update
 - QA team: Needs architecture for test planning
@@ -596,6 +649,7 @@ SYSTEM_ARCHITECTURE.md v2.0
 ### Appendix B: Related Documents
 
 **Must be updated in parallel**:
+
 - ✅ CONTRACT_SPECIFICATIONS.md v2.0 (DONE)
 - ⏳ SYSTEM_ARCHITECTURE.md v2.0 (IN PROGRESS)
 - 📋 TECHNICAL_REQUIREMENTS.md (assess next)
@@ -603,6 +657,7 @@ SYSTEM_ARCHITECTURE.md v2.0
 - 📋 API documentation (OpenAPI specs)
 
 **Dependencies**:
+
 - DS.md v2.0 (source of truth)
 - CONTRACT_SPECIFICATIONS.md v2.0 (Zod schemas)
 
