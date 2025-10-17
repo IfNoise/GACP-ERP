@@ -1,27 +1,40 @@
-# GACP-ERP Data | Файл | Описание | Статус |
+# GACP-ERP Data Dictionary
 
-|------|----------|---------|
-| **[plant_data_definitions.md](plant_data_definitions.md)** | Все структуры данных растений | ✅ Активно |
+**Version**: 2.0  
+**Last Updated**: 2025-10-17  
+**Next Review**: 2026-01-17  
+**Status**: Active - Aligned with DS v2.0
 
-### 📊 Implementation Files (Использование данных)
+## 🎯 DS v2.0 Compliance Structures
 
-| Файл                                               | Описание            | Ссылается на              |
-| -------------------------------------------------- | ------------------- | ------------------------- | --- |
-| **[entities.md](entities.md)**                     | Бизнес-сущности     | plant_data_definitions.md |
-| **[database_tables.md](database_tables.md)**       | SQL схемы           | plant_data_definitions.md |
-| **[api_dtos.md](api_dtos.md)**                     | API структуры       | plant_data_definitions.md |
-| **[enums.md](enums.md)**                           | Перечисления        | Автономный                |
-| **[validation_schemas.md](validation_schemas.md)** | Zod схемы валидации | Автономный                | ary |
+This data dictionary is fully synchronized with **Data Specification (DS) v2.0**, which introduces 7 new compliance management modules:
 
-## 📋 Overview
+### � Compliance Modules (DS v2.0)
 
-Справочник структур данных в GACP-ERP системе с простым подходом **Single Source of Truth**.
+| Module | Zod Schema | Events (Kafka) | REST API | Description |
+|--------|-----------|----------------|----------|-------------|
+| **Change Control** | `ChangeControlZodSchema` | Section 9 (8 topics, 15 events) | 26 endpoints | Управление изменениями с GxP compliance |
+| **CAPA** | `CAPAZodSchema` | Section 10 (6 topics, 12 events) | 26 endpoints | Corrective & Preventive Actions |
+| **Deviation** | `DeviationZodSchema` | Section 11 (5 topics, 10 events) | 26 endpoints | Управление отклонениями |
+| **Validation** | `ValidationZodSchema` | Section 12 (4 topics, 8 events) | 26 endpoints | Lifecycle валидации (GAMP 5) |
+| **Quality Events** | `QualityEventZodSchema` | Section 13 (3 topics, 6 events) | 26 endpoints | Управление качественными событиями |
+| **Training** | `TrainingZodSchema` | Section 14 (2 topics, 4 events) | 26 endpoints | Обучение и компетенции |
+| **Documents** | `DocumentZodSchema` | Section 15 (1 topic, 3 events) | 26 endpoints | Контроль документов |
+| **Analytics** | `AnalyticsZodSchema` | Section 16 (2 topics, 5 events) | N/A | Аналитика и отчётность |
 
-### 🎯 Простой SSOT подход
+**Enhanced Structures (DS v2.0)**:
+- `ElectronicSignatureZodSchema` - 21 CFR Part 11 compliant signatures
+- `AuditTrailZodSchema` - ALCOA+ compliant audit trail
+- `UserZodSchema` - Enhanced with GxP roles and competencies
+- `GxPValidationFieldsSchema` - Mixin for all GxP-critical entities
 
-- **`plant_data_definitions.md`** - единый источник для всех данных растений
-- **Остальные файлы ссылаются** на определения вместо дублирования
-- **Изменения только в definitions** - автоматически распространяются
+### 📚 Primary References
+
+- **[CONTRACT_SPECIFICATIONS v2.0](../CONTRACT_SPECIFICATIONS.md)** - Zod schemas, API contracts, Kafka events
+- **[EVENT_ARCHITECTURE v2.0](../EVENT_ARCHITECTURE.md)** - 42 Kafka topics, 83+ event schemas
+- **[Data Specification (DS) v2.0](../validation/DS.md)** - Technical data specification
+
+---
 
 ## 📂 Structure
 
@@ -37,13 +50,14 @@
 
 ### 👀 Views (Представления)
 
-| Файл                                               | Описание                                       | Ссылается на            |
-| -------------------------------------------------- | ---------------------------------------------- | ----------------------- |
-| [`views/entities.md`](./views/entities.md)         | Бизнес-ориентированное представление сущностей | `_definitions/*`        |
-| [`database_tables.md`](./database_tables.md)       | Схемы таблиц БД                                | `_definitions/*`        |
-| [`api_dtos.md`](./api_dtos.md)                     | Интерфейсы API                                 | `_definitions/*`        |
-| [`validation_schemas.md`](./validation_schemas.md) | Схемы валидации Zod                            | `_definitions/*`        |
-| [`validation_schemas.md`](./validation_schemas.md) | Схемы валидации Zod                            | Правила проверки данных |
+| Файл                                               | Описание                                       | Ссылается на     |
+| -------------------------------------------------- | ---------------------------------------------- | ---------------- |
+| [`entities.md`](./entities.md)                     | Бизнес-сущности (включая compliance модули)    | `CONTRACT_SPECIFICATIONS.md v2.0` |
+| [`database_tables.md`](./database_tables.md)       | Схемы таблиц БД (PostgreSQL, MongoDB)         | `_definitions/*` |
+| [`api_dtos.md`](./api_dtos.md)                     | API DTO структуры (ts-rest contracts)          | `CONTRACT_SPECIFICATIONS.md v2.0` |
+| [`validation_schemas.md`](./validation_schemas.md) | Схемы валидации Zod                            | `CONTRACT_SPECIFICATIONS.md v2.0` |
+| [`enums.md`](./enums.md)                           | Перечисления и константы                       | `_definitions/*` |
+| [`constants.md`](./constants.md)                   | Системные константы                            | `DS.md v2.0`     |
 
 ### Specialized Categories
 
@@ -128,17 +142,41 @@
 
 ## 🔗 Related Documentation
 
-- **[Data Specification (DS)](../validation/DS.md)** - Техническая спецификация данных
-- **[Contract Specifications](../CONTRACT_SPECIFICATIONS.md)** - Схемы и контракты API
-- **[System Architecture](../SYSTEM_ARCHITECTURE.md)** - Архитектурный контекст
-- **[Event Architecture](../EVENT_ARCHITECTURE.md)** - События и сообщения
+### Core Specifications (v2.0)
+- **[Data Specification (DS) v2.0](../validation/DS.md)** - Technical data specification with compliance modules
+- **[Contract Specifications v2.0](../CONTRACT_SPECIFICATIONS.md)** - Zod schemas, API contracts (ts-rest), Kafka events
+- **[Event Architecture v2.0](../EVENT_ARCHITECTURE.md)** - 42 Kafka topics, 83+ event schemas
+- **[System Architecture](../SYSTEM_ARCHITECTURE.md)** - Architectural context and patterns
+
+### Assessment Reports (DS v2.0)
+- **[Architecture Assessment](../reports/ARCHITECTURE_ASSESSMENT_DS_V2.md)** - Gap analysis: 7 missing modules, 40-60 dev-days
+- **[Requirements Gap Analysis](../reports/REQUIREMENTS_GAP_ANALYSIS_DS_V2.md)** - ~350 missing functional requirements
+- **[Event Architecture Assessment](../reports/EVENT_ARCHITECTURE_ASSESSMENT_DS_V2.md)** - 31 missing topics, 83 missing schemas
+- **[API Contracts Assessment](../reports/API_CONTRACTS_ASSESSMENT_DS_V2.md)** - 95% alignment, Grade A
+
+### Training & Compliance
+- **[Curriculum v2.0](../training/Curriculum.md)** - 15 courses including 7 new compliance courses (CUR-009 to CUR-015)
+- **[Position Matrix v2.0](../training/PositionMatrix.md)** - Training requirements by role
+- **[SOPs](../sop/)** - 5 updated SOPs with DS v2.0 references (Change Control, CAPA, Deviation, Document Control, Audit Trail)
+
+### Compliance Standards
+- **[FDA 21 CFR Part 11](../compliance/FDA_21CFR_Part11.md)** - Electronic Records and Signatures
+- **[EU GMP Annex 11](../compliance/EU_GMP_Annex11.md)** - Computerised Systems
+- **[ALCOA+](../compliance/ALCOA+.md)** - Data Integrity Principles
+- **[GAMP 5](../compliance/GAMP5.md)** - Validation of Automated Systems
 
 ## 🏷️ Versioning
 
-**Version**: 1.0  
-**Last Updated**: 2025-09-16  
-**Next Review**: 2025-10-16
+**Version**: 2.0  
+**Last Updated**: 2025-10-17  
+**Next Review**: 2026-01-17  
+**Changes in v2.0**:
+- Added DS v2.0 compliance modules section (8 new modules)
+- Updated references to CONTRACT_SPECIFICATIONS v2.0 and EVENT_ARCHITECTURE v2.0
+- Added links to assessment reports and training materials
+- Enhanced with GxP compliance structures (ElectronicSignature, AuditTrail, GxPValidationFields)
+- Aligned with POST_DS_V2_ACTION_PLAN.md completion
 
 ---
 
-💡 **Tip**: Используйте Ctrl+F для быстрого поиска по типам данных
+💡 **Tip**: Используйте Ctrl+F для быстрого поиска по типам данных или начните с CONTRACT_SPECIFICATIONS.md для Zod schemas
