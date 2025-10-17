@@ -418,5 +418,306 @@
 
 ---
 
-**Последнее обновление**: 2025-09-16  
-**Источники**: docs/validation/DS.md, docs/services/spatial-addressing-service-v2.md
+## 📋 Compliance & Quality Tables (DS v2.0)
+
+### change_control (CR)
+
+**Описание**: Управление изменениями (Change Control)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ChangeControlZodSchema`
+
+| Поле                      | SQL Тип      | Ограничения                                 | Описание                       |
+|---------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                      | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `request_id`              | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^CR-\d{4}-\d{4}$` | Номер change request           |
+| `title`                   | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Заголовок изменения            |
+| `description`             | TEXT         | NOT NULL, MIN 50 chars                      | Описание необходимости         |
+| `classification`          | ENUM         | (critical, major, minor, emergency)         | Классификация                  |
+| `status`                  | ENUM         | (draft, submitted, assessment, review, approved, rejected, implementation, verification, closed) | Статус в workflow |
+| `requested_by_user_id`    | UUID         | FOREIGN KEY → users, NOT NULL               | Инициатор изменения            |
+| `impact_analysis`         | JSONB        | NOT NULL                                    | Анализ влияния                 |
+| `approvals`               | JSONB ARRAY  | NOT NULL                                    | Цепочка согласований           |
+| `electronic_signatures`   | JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata`    | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`              | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`              | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_change_control_request_id` UNIQUE ON (request_id)
+- `idx_change_control_status` ON (status)
+- `idx_change_control_classification` ON (classification)
+
+**JSONB Схемы**:
+- `impact_analysis`: { affectedSystems[], affectedProcesses[], riskLevel, mitigationPlan, regulatoryImpact, validationRequired }
+- `approvals[]`: { level, approverUserId, approverName, approverRole, status, comments, electronicSignature, timestamp }
+- `audit_trail_metadata`: { createdBy, createdAt, lastModifiedBy, lastModifiedAt, changeReason, version, dataIntegrityHash }
+
+---
+
+### capa (CAPA)
+
+**Описание**: Корректирующие и предупреждающие действия  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - CAPAZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `capa_id`              | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^CAPA-\d{4}-\d{4}$` | Номер CAPA                   |
+| `type`                 | ENUM         | (corrective, preventive)                    | Тип CAPA                       |
+| `title`                | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Заголовок                      |
+| `description`          | TEXT         | NOT NULL, MIN 50 chars                      | Описание проблемы              |
+| `status`               | ENUM         | (initiated, investigation, root_cause_identified, action_plan, implementation, effectiveness_check, closed) | Статус lifecycle |
+| `priority`             | ENUM         | (low, medium, high, critical)               | Приоритет                      |
+| `source_type`          | VARCHAR(50)  | NOT NULL                                    | Источник (deviation, audit_finding, etc.) |
+| `source_id`            | UUID         | NULLABLE                                    | ID источника                   |
+| `root_cause_analysis`  | JSONB        | NULLABLE                                    | RCA (5_why, fishbone, etc.)    |
+| `actions`              | JSONB ARRAY  | NOT NULL                                    | Корректирующие действия        |
+| `effectiveness_check`  | JSONB        | NULLABLE                                    | Проверка эффективности         |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_capa_capa_id` UNIQUE ON (capa_id)
+- `idx_capa_status` ON (status)
+- `idx_capa_priority` ON (priority)
+- `idx_capa_source` ON (source_type, source_id)
+
+**JSONB Схемы**:
+- `root_cause_analysis`: { method, findings, rootCause, contributingFactors[], evidence[] }
+- `actions[]`: { actionId, description, assignedTo, dueDate, status, completionDate, evidence[] }
+- `effectiveness_check`: { scheduledDate, completedDate, method, result, findings, followUpRequired }
+
+---
+
+### deviation (DEV)
+
+**Описание**: Отклонения от стандартов  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DeviationZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `deviation_id`         | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^DEV-\d{4}-\d{4}$` | Номер отклонения             |
+| `title`                | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Заголовок                      |
+| `description`          | TEXT         | NOT NULL, MIN 50 chars                      | Описание отклонения            |
+| `classification`       | ENUM         | (critical, major, minor)                    | Классификация                  |
+| `status`               | ENUM         | (reported, classified, investigation, impact_assessment, closed) | Статус workflow |
+| `reported_by_user_id`  | UUID         | FOREIGN KEY → users, NOT NULL               | Кто сообщил                    |
+| `reported_date`        | TIMESTAMP    | NOT NULL                                    | Дата сообщения                 |
+| `affected_process`     | VARCHAR(100) | NOT NULL                                    | Затронутый процесс             |
+| `affected_products`    | VARCHAR[] ARRAY | NULLABLE                                 | Затронутые продукты            |
+| `immediate_actions`    | TEXT         | NOT NULL, MIN 30 chars                      | Немедленные действия           |
+| `investigation`        | JSONB        | NULLABLE                                    | Расследование                  |
+| `impact_assessment`    | JSONB        | NOT NULL                                    | Оценка влияния                 |
+| `capa_required`        | BOOLEAN      | NOT NULL                                    | Требуется ли CAPA              |
+| `capa_id`              | UUID         | FOREIGN KEY → capa, NULLABLE                | Связанный CAPA                 |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_deviation_deviation_id` UNIQUE ON (deviation_id)
+- `idx_deviation_status` ON (status)
+- `idx_deviation_classification` ON (classification)
+- `idx_deviation_capa` ON (capa_id)
+
+**JSONB Схемы**:
+- `investigation`: { investigator, startDate, completionDate, findings, rootCause, evidence[] }
+- `impact_assessment`: { qualityImpact, productImpact, affectedBatches[], regulatoryReportingRequired, customerNotificationRequired, assessmentDate, assessedBy }
+
+---
+
+### validation (VAL)
+
+**Описание**: Валидация систем и процессов (GAMP 5)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ValidationZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `validation_id`        | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^VAL-\d{4}-\d{4}$` | Номер валидации              |
+| `title`                | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Название валидации             |
+| `type`                 | ENUM         | (IQ, OQ, PQ, revalidation)                  | Тип валидации (GAMP 5)         |
+| `system`               | VARCHAR(100) | NOT NULL                                    | Валидируемая система           |
+| `gamp_category`        | ENUM         | (1, 3, 4, 5)                                | GAMP 5 категория               |
+| `status`               | ENUM         | (planning, protocol_draft, protocol_approved, execution, report_draft, report_approved, closed) | Статус lifecycle |
+| `protocol`             | JSONB        | NULLABLE                                    | Протокол валидации             |
+| `test_cases`           | JSONB ARRAY  | NOT NULL                                    | Тест-кейсы                     |
+| `execution_results`    | JSONB ARRAY  | NULLABLE                                    | Результаты выполнения          |
+| `deviations`           | JSONB ARRAY  | NULLABLE                                    | Отклонения от протокола        |
+| `report`               | JSONB        | NULLABLE                                    | Отчёт валидации                |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_validation_validation_id` UNIQUE ON (validation_id)
+- `idx_validation_status` ON (status)
+- `idx_validation_type` ON (type)
+- `idx_validation_gamp` ON (gamp_category)
+
+**JSONB Схемы**:
+- `protocol`: { protocolNumber, version, approvedBy, approvalDate, documentId }
+- `test_cases[]`: { testCaseId, description, acceptanceCriteria, status, executedBy, executionDate, result, evidence[] }
+- `execution_results[]`: { testCaseId, result, executedBy, executionDate, notes, evidence[] }
+- `deviations[]`: { deviationNumber, description, impact, resolution }
+- `report`: { reportNumber, summary, conclusion, approvedBy, approvalDate, documentId }
+
+---
+
+### quality_event (QE)
+
+**Описание**: Качественные события (жалобы, аудиты, инспекции)  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - QualityEventZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `event_id`             | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^QE-\d{4}-\d{4}$` | Номер события                  |
+| `type`                 | ENUM         | (complaint, audit_finding, inspection_observation, quality_issue) | Тип события |
+| `title`                | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Заголовок                      |
+| `description`          | TEXT         | NOT NULL, MIN 50 chars                      | Описание события               |
+| `severity`             | ENUM         | (low, medium, high, critical)               | Критичность                    |
+| `status`               | ENUM         | (reported, investigation, action_plan, closed) | Статус                      |
+| `reported_by_user_id`  | UUID         | FOREIGN KEY → users, NOT NULL               | Кто сообщил                    |
+| `reported_date`        | TIMESTAMP    | NOT NULL                                    | Дата сообщения                 |
+| `affected_areas`       | VARCHAR[] ARRAY | NOT NULL                                 | Затронутые области             |
+| `investigation`        | JSONB        | NULLABLE                                    | Расследование                  |
+| `linked_records`       | JSONB ARRAY  | NULLABLE                                    | Связанные записи (CAPA, DEV)   |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_quality_event_event_id` UNIQUE ON (event_id)
+- `idx_quality_event_status` ON (status)
+- `idx_quality_event_severity` ON (severity)
+
+**JSONB Схемы**:
+- `investigation`: { investigator, startDate, completionDate, findings, rootCause, evidence[] }
+- `linked_records[]`: { recordType, recordId, recordNumber, relationship }
+
+---
+
+### training (TRN)
+
+**Описание**: Обучение и компетенции сотрудников  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - TrainingZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `training_id`          | VARCHAR(15)  | UNIQUE NOT NULL, REGEX: `^TRN-\d{4}-\d{4}$` | Номер обучения               |
+| `course_id`            | VARCHAR(7)   | NOT NULL, REGEX: `^CUR-\d{3}$`              | ID курса                       |
+| `user_id`              | UUID         | FOREIGN KEY → users, NOT NULL               | Обучающийся                    |
+| `status`               | ENUM         | (enrolled, in_progress, completed, expired) | Статус                         |
+| `start_date`           | TIMESTAMP    | NOT NULL                                    | Дата начала                    |
+| `completion_date`      | TIMESTAMP    | NULLABLE                                    | Дата завершения                |
+| `expiration_date`      | TIMESTAMP    | NULLABLE                                    | Дата истечения                 |
+| `score`                | INTEGER      | CHECK 0-100, NULLABLE                       | Оценка                         |
+| `passing_score`        | INTEGER      | CHECK 0-100, NOT NULL                       | Проходной балл                 |
+| `attempts`             | INTEGER      | DEFAULT 0, CHECK 0-3                        | Количество попыток             |
+| `certificate_issued`   | BOOLEAN      | DEFAULT false                               | Выдан ли сертификат            |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_training_training_id` UNIQUE ON (training_id)
+- `idx_training_user_id` ON (user_id)
+- `idx_training_status` ON (status)
+- `idx_training_course_id` ON (course_id)
+
+---
+
+### training_course (CUR)
+
+**Описание**: Курсы обучения  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - CourseDetailsDTOSchema`
+
+| Поле                           | SQL Тип      | Ограничения                   | Описание                       |
+|--------------------------------|--------------|-------------------------------|--------------------------------|
+| `id`                           | UUID         | PRIMARY KEY                   | Уникальный идентификатор       |
+| `course_id`                    | VARCHAR(7)   | UNIQUE NOT NULL, REGEX: `^CUR-\d{3}$` | ID курса                |
+| `title`                        | VARCHAR(200) | NOT NULL                      | Название курса                 |
+| `description`                  | TEXT         | NOT NULL                      | Описание                       |
+| `duration_hours`               | INTEGER      | > 0, NOT NULL                 | Длительность (часы)            |
+| `required_for_positions`       | VARCHAR[] ARRAY | NOT NULL                   | Обязательные должности         |
+| `recertification_period_days`  | INTEGER      | > 0, NULLABLE                 | Период переаттестации (дни)    |
+| `passing_score`                | INTEGER      | CHECK 0-100, NOT NULL         | Проходной балл                 |
+| `created_at`                   | TIMESTAMP    | DEFAULT now(), NOT NULL       | Дата создания                  |
+| `updated_at`                   | TIMESTAMP    | AUTO UPDATE, NOT NULL         | Дата изменения                 |
+
+**Индексы**:
+- `idx_training_course_course_id` UNIQUE ON (course_id)
+
+---
+
+### document_control (DOC)
+
+**Описание**: Контроль документов с версионированием  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DocumentZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `document_id`          | VARCHAR(22)  | UNIQUE NOT NULL, REGEX: `^DOC-[A-Z]{3}-\d{4}-\d{4}$` | Номер документа     |
+| `title`                | VARCHAR(200) | NOT NULL, LENGTH 10-200                     | Название документа             |
+| `type`                 | ENUM         | (SOP, protocol, report, form, policy)       | Тип документа                  |
+| `version`              | VARCHAR(10)  | NOT NULL, REGEX: `^\d+\.\d+$`               | Версия (X.Y)                   |
+| `status`               | ENUM         | (draft, review, approved, obsolete, archived) | Статус lifecycle            |
+| `author_user_id`       | UUID         | FOREIGN KEY → users, NOT NULL               | Автор                          |
+| `approver_user_id`     | UUID         | FOREIGN KEY → users, NULLABLE               | Утверждающий                   |
+| `effective_date`       | TIMESTAMP    | NULLABLE                                    | Дата вступления в силу         |
+| `review_date`          | TIMESTAMP    | NULLABLE                                    | Дата следующего пересмотра     |
+| `edms_document_id`     | VARCHAR(100) | NOT NULL                                    | ID в Mayan-EDMS                |
+| `change_control_id`    | UUID         | FOREIGN KEY → change_control, NULLABLE      | Связанный Change Control       |
+| `electronic_signatures`| JSONB ARRAY  | NOT NULL                                    | Электронные подписи            |
+| `audit_trail_metadata` | JSONB        | NOT NULL                                    | ALCOA+ метаданные              |
+| `created_at`           | TIMESTAMP    | DEFAULT now(), NOT NULL                     | Дата создания                  |
+| `updated_at`           | TIMESTAMP    | AUTO UPDATE, NOT NULL                       | Дата изменения                 |
+
+**Индексы**:
+- `idx_document_control_document_id` UNIQUE ON (document_id)
+- `idx_document_control_status` ON (status)
+- `idx_document_control_type` ON (type)
+- `idx_document_control_edms` ON (edms_document_id)
+
+---
+
+### analytics_snapshot (ANALYTICS)
+
+**Описание**: Снимки аналитических метрик compliance модулей  
+**Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AnalyticsZodSchema`
+
+| Поле                   | SQL Тип      | Ограничения                                 | Описание                       |
+|------------------------|--------------|---------------------------------------------|--------------------------------|
+| `id`                   | UUID         | PRIMARY KEY                                 | Уникальный идентификатор       |
+| `metric_type`          | VARCHAR(100) | NOT NULL                                    | Тип метрики                    |
+| `period`               | ENUM         | (daily, weekly, monthly, quarterly, yearly) | Период агрегации               |
+| `start_date`           | TIMESTAMP    | NOT NULL                                    | Начало периода                 |
+| `end_date`             | TIMESTAMP    | NOT NULL                                    | Конец периода                  |
+| `module`               | ENUM         | (change_control, capa, deviation, validation, quality_event, training, document) | Модуль |
+| `metrics`              | JSONB        | NOT NULL                                    | Собранные метрики              |
+| `trends`               | JSONB ARRAY  | NULLABLE                                    | Трендовые данные               |
+| `generated_by_user_id` | UUID         | FOREIGN KEY → users, NOT NULL               | Кто сгенерировал               |
+| `generated_at`         | TIMESTAMP    | NOT NULL                                    | Дата генерации                 |
+
+**Индексы**:
+- `idx_analytics_period` ON (period, start_date, end_date)
+- `idx_analytics_module` ON (module)
+
+**JSONB Схемы**:
+- `metrics`: { capaOverdueRate, deviationRepeatRate, changeApprovalTimeAvg, trainingCompletionRate, validationOnTimeRate, documentReviewOverdue, auditTrailCompleteness }
+- `trends[]`: { timestamp, value, label }
+
+---
+
+**Последнее обновление**: 2025-10-17  
+**Версия**: 2.0 - Aligned with DS v2.0 compliance modules  
+**Источники**: CONTRACT_SPECIFICATIONS.md v2.0, DS.md, spatial-addressing-service-v2.md
