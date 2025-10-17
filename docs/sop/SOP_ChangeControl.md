@@ -1,19 +1,20 @@
 ---
 title: "SOP: Change Control Management"
 module: "Quality Management System"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-09-14"
+last_updated: "2025-10-17"
 author: "Quality Manager"
 approver: "General Manager"
-effective_date: "2025-09-14"
-review_date: "2026-09-14"
+effective_date: "2025-10-17"
+review_date: "2026-10-17"
 related_sops:
   - SOP_DocumentControl.md
   - SOP_DeviationManagement.md
   - SOP_CAPA.md
   - SOP_InternalAudits.md
   - SOP_Training.md
+  - SOP_Validation.md
 related_modules:
   - ChangeControlModule
   - QualityModule
@@ -26,11 +27,18 @@ compliance_standards:
   - "ICH Q9/Q10"
   - "GAMP 5"
   - "ALCOA+ principles"
+data_structures:
+  - "ChangeControlZodSchema (CONTRACT_SPECIFICATIONS v2.0)"
+  - "ChangeRequestCreatedEvent (EVENT_ARCHITECTURE v2.0 Section 9)"
+  - "ChangeApprovedEvent, ChangeImplementationCompletedEvent, ChangeVerifiedEvent"
+training_requirements:
+  - "CUR-009: Change Control Management (Curriculum v2.0)"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
 ai_status: draft
+change_summary: "Updated to v2.0: Added DS v2.0 data structures references, training requirements (CUR-009), cross-references to EVENT_ARCHITECTURE v2.0 Section 9 (Change Control Events)"
 ---
 
 # SOP: Change Control Management

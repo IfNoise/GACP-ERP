@@ -1,13 +1,13 @@
 ---
 title: "SOP: CAPA (Corrective and Preventive Actions)"
 module: "Quality Management System"
-version: "1.0"
+version: "2.0"
 status: "active"
-last_updated: "2025-09-14"
+last_updated: "2025-10-17"
 author: "Quality Manager"
 approver: "General Manager"
-effective_date: "2025-09-14"
-review_date: "2026-09-14"
+effective_date: "2025-10-17"
+review_date: "2026-10-17"
 related_sops:
   - SOP_DeviationManagement.md
   - SOP_ChangeControl.md
@@ -15,6 +15,7 @@ related_sops:
   - SOP_OutOfSpecification.md
   - SOP_Training.md
   - SOP_DocumentControl.md
+  - SOP_Validation.md
 related_modules:
   - CAPAModule
   - QualityModule
@@ -29,11 +30,18 @@ compliance_standards:
   - "ICH Q10 Pharmaceutical Quality System"
   - "ALCOA+ principles"
   - "ISO 9001:2015"
+data_structures:
+  - "CAPAZodSchema (CONTRACT_SPECIFICATIONS v2.0)"
+  - "CAPARequestCreatedEvent (EVENT_ARCHITECTURE v2.0 Section 10)"
+  - "CAPAInvestigationStartedEvent, CAPARootCauseIdentifiedEvent, CAPAActionCompletedEvent, CAPAEffectivenessCheckCompletedEvent"
+training_requirements:
+  - "CUR-010: CAPA Management (Curriculum v2.0)"
 # AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
 ai_generated: true
 author_verified: false
 qa_approved: false
 ai_status: draft
+change_summary: "Updated to v2.0: Added DS v2.0 data structures references, training requirements (CUR-010), cross-references to EVENT_ARCHITECTURE v2.0 Section 10 (CAPA Events)"
 ---
 
 # SOP: CAPA (Corrective and Preventive Actions)
