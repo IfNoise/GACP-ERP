@@ -6,6 +6,11 @@ last_updated: "2025-10-15"
 regulatory_authority: "World Health Organization (WHO)"
 scope: "Cultivation, collection, and primary processing of medicinal plants"
 related_standards: "EU GMP Annex 11, EMA GACP, ISO 22000, ISO 22716"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # WHO Guidelines on Good Agricultural and Collection Practices (GACP)

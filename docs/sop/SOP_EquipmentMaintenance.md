@@ -26,6 +26,11 @@ compliance_standards:
   - "GACP Guidelines"
   - "OSHA Standards"
   - "ALCOA+ principles"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Equipment Maintenance and Management

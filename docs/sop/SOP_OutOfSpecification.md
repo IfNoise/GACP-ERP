@@ -26,6 +26,11 @@ compliance_standards:
   - "ICH Q2(R1)"
   - "ALCOA+ principles"
   - "EU-GMP Chapter 6"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Out of Specification Investigation and Management

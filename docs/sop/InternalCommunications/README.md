@@ -7,6 +7,11 @@ last_updated: "2025-09-14"
 approved_by: "Quality Assurance Manager"
 department: "IT Operations / Quality Management"
 classification: "Critical Infrastructure"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # Internal Communications System Documentation

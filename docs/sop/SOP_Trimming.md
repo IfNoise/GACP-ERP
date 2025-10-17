@@ -11,6 +11,11 @@ related_sops:
   - SOP_PersonnelHygiene.md
   - SOP_EquipmentMaintenance.md
   - SOP_WastePlantMaterial.md
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 ## 1. Purpose

@@ -1,3 +1,16 @@
+---
+title: "Test Cases Directory"
+version: "1.0"
+status: "active"
+last_updated: "2025-10-16"
+type: "validation"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
+---
+
 # TestCases
 
 Директория содержит шаблоны тест-кейсов для всех модулей ERP. Каждый файл теста привязан к URS/FS/DS и шагам IQ/OQ/PQ.

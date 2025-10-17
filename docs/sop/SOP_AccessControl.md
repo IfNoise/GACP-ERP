@@ -9,6 +9,11 @@ approver: "General Manager"
 effective_date: "2025-10-15"
 review_date: "2026-10-15"
 regulatory_basis: "FDA 21 CFR Part 11, EU GMP Annex 11, ISO 27001, NIST SP 800-63"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Access Control

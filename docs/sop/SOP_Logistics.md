@@ -26,6 +26,11 @@ compliance_standards:
   - "GACP Guidelines"
   - "State Cannabis Regulations"
   - "Transportation Security Standards"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Logistics and Supply Chain Management

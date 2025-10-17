@@ -1,3 +1,16 @@
+---
+title: "Coding Standards & Best Practices"
+version: "1.0"
+status: "active"
+last_updated: "2025-09-14"
+type: "standards"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
+---
+
 # 📏 Стандарты кодирования и лучшие практики
 
 **Документ**: Coding Standards & Best Practices  

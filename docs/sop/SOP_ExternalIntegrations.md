@@ -13,6 +13,11 @@ related_sops:
   - "SOP_AccessControl.md"
   - "SOP_AuditTrail.md"
 risk_level: "High"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: External Integrations & API Management

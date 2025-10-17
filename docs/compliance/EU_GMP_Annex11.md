@@ -6,6 +6,11 @@ last_updated: "2025-10-15"
 regulatory_authority: "European Medicines Agency (EMA)"
 scope: "Computerised systems used in GMP-regulated activities"
 related_standards: "EU GMP Part I & II, ICH Q7, WHO Annex 4"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # EU GMP Annex 11: Computerised Systems

@@ -10,6 +10,11 @@ status: "active"
 last_updated: "2025-10-15"
 test_priority: "High"
 regulatory_impact: "Critical - GMP Annex 11, FDA 21 CFR Part 11"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # TC-TRAIN-001: Training Completion Tracking

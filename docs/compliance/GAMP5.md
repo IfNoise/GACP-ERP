@@ -6,6 +6,11 @@ last_updated: "2025-10-15"
 regulatory_authority: "ISPE (International Society for Pharmaceutical Engineering)"
 scope: "Validation of computerized systems in GxP environments"
 related_standards: "FDA 21 CFR Part 11, EU GMP Annex 11, MHRA Data Integrity, ICH Q9"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # GAMP 5: A Risk-Based Approach to Compliant GxP Computerized Systems

@@ -1,3 +1,16 @@
+---
+title: "System Architecture Document (SAD)"
+version: "1.0"
+status: "active"
+last_updated: "2025-09-14"
+type: "architecture"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
+---
+
 # 🏗️ Архитектура GACP-ERP системы
 
 **Документ**: System Architecture Document (SAD)  

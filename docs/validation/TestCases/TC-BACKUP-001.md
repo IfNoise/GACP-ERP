@@ -10,6 +10,11 @@ status: "active"
 last_updated: "2025-10-15"
 test_priority: "Critical"
 regulatory_impact: "Critical - FDA 21 CFR Part 11, EU GMP Annex 11, Data Integrity"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # TC-BACKUP-001: Disaster Recovery - Backup & Restore Validation

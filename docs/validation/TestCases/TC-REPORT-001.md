@@ -10,6 +10,11 @@ status: "active"
 last_updated: "2025-10-15"
 test_priority: "Critical"
 regulatory_impact: "Critical - WHO GACP, EU GMP Annex 11, FDA 21 CFR Part 11"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # TC-REPORT-001: Compliance Reporting Generation & Validation

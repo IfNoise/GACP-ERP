@@ -4,7 +4,15 @@ system: "ERP for GACP-Compliant Cannabis Cultivation"
 version: "1.0"
 status: "approved"
 last_updated: "2025-09-15"
-approved_by: "System Administrat##### VictoriaMetrics Installation for Application Metrics
+approved_by: "System Administrator"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
+---
+
+##### VictoriaMetrics Installation for Application Metrics
 
 ```bash
 # Install VictoriaMetrics cluster for application metrics

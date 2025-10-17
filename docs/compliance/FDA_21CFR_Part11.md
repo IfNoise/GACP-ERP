@@ -5,6 +5,11 @@ status: "active"
 last_updated: "2025-10-15"
 regulatory_authority: "U.S. Food and Drug Administration"
 scope: "Electronic records, electronic signatures, and handwritten signatures executed to electronic records"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # FDA 21 CFR Part 11: Electronic Records & Electronic Signatures

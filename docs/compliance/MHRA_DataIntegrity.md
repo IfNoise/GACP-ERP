@@ -1,9 +1,4 @@
 ---
-
-### `docs/compliance/MHRA_DataIntegrity.md`
-
-````markdown
----
 title: "MHRA GXP Data Integrity Guidance and Definitions"
 version: "March 2018 (Current)"
 status: "active"
@@ -11,6 +6,11 @@ last_updated: "2025-10-15"
 regulatory_authority: "Medicines and Healthcare products Regulatory Agency (UK)"
 scope: "Data integrity requirements for GxP computerised systems"
 related_standards: "EU GMP Annex 11, FDA 21 CFR Part 11, WHO Annex 5"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # MHRA GXP Data Integrity Guidance and Definitions
@@ -55,6 +55,7 @@ Critical_Concepts:
 - Backup and archive integrity
 
 **GACP-ERP Relevance:**
+
 ```yaml
 System_Risk_Assessment:
   data_integrity_risk: "High"

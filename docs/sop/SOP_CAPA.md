@@ -29,6 +29,11 @@ compliance_standards:
   - "ICH Q10 Pharmaceutical Quality System"
   - "ALCOA+ principles"
   - "ISO 9001:2015"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: CAPA (Corrective and Preventive Actions)

@@ -9,6 +9,11 @@ approver: "General Manager"
 effective_date: "2025-10-15"
 review_date: "2026-10-15"
 regulatory_basis: "ICH Q10, ISO 9001:2015, WHO GACP, EU GMP, FDA 21 CFR Part 11"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Quality Management System (QMS) Governance

@@ -7,6 +7,11 @@ last_updated: "2025-01-23"
 approved_by: "Validation Team"
 regulatory_scope: "FDA 21 CFR Part 11, EU GMP Annex 11, GACP Guidelines, ALCOA+, ICH Q9/Q10"
 classification: "Critical Computerized System"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # GACP-ERP Validation Master Plan (VMP)

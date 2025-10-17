@@ -1,3 +1,17 @@
+---
+title: "Data Replication & High Availability Architecture"
+version: "1.0"
+status: "active"
+last_updated: "2025-09-14"
+type: "infrastructure"
+audience: "Auditors, DevOps, IT Administration"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
+---
+
 # Data Replication & High Availability Architecture
 
 **Документ**: Data Replication Architecture Specification  

@@ -13,6 +13,11 @@ related_sops:
   - "SOP_WorkforceManagement.md"
   - "SOP_ChangeControl.md"
 risk_level: "Medium"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Knowledge Management & Learning System

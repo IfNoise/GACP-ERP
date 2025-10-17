@@ -13,6 +13,11 @@ related_sops:
   - "SOP_InventoryManagement.md"
   - "SOP_FinancialAccounting.md"
 risk_level: "High"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # SOP: Procurement Management & Supplier Integration

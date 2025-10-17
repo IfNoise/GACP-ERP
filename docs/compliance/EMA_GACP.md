@@ -6,6 +6,11 @@ last_updated: "2025-10-15"
 regulatory_authority: "European Medicines Agency (EMA)"
 scope: "Herbal medicinal products - cultivation and primary processing"
 related_standards: "EU GMP, WHO GACP, Ph.Eur. (European Pharmacopoeia)"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # EMA Guidelines on GACP for Starting Materials of Herbal Origin

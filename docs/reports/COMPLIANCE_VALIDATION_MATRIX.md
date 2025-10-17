@@ -5,6 +5,11 @@ date: "2025-01-15"
 author: "AI Compliance Auditor"
 status: "Active"
 scope: "All documentation (24 files from commit 4022a17 + foundational documents)"
+# AI-Assisted Documentation Metadata (per AI_Assisted_Documentation_Policy.md)
+ai_generated: true
+author_verified: false
+qa_approved: false
+ai_status: draft
 ---
 
 # Compliance Validation Matrix
