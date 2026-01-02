@@ -107,15 +107,33 @@ if (contactForm) {
         });
         
         // Disable submit button
-        const submitBtn = contactForm.querySelector('.btn-submit');
-        const originalText = submitBtn.textContent;
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
+        submitBtn.innerHTML = '<span>Sending...</span>';
         
         try {
-            // Simulate API call (replace with actual endpoint)
-            await simulateApiCall(data);
+            // Send data to Google Apps Script endpoint
+            const response = await fetch('https://script.google.com/macros/s/AKfycbwmvd_uhbHVjcrm2vQmNdQIyEr3ng2MRL_R2aCsplC72Fseteim714jxTZuTJbniZJX/exec', {
+                method: 'POST',
+                mode: 'no-cors', // Google Apps Script requires no-cors mode
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: data.name || '',
+                    company: data.company || '',
+                    email: data.email || '',
+                    phone: data.phone || '',
+                    interest: data.interest || '',
+                    facilitySize: data['facility-size'] || '',
+                    message: data.message || '',
+                    newsletter: data.newsletter === 'on' ? 'Yes' : 'No',
+                    timestamp: new Date().toISOString()
+                })
+            });
             
+            // Note: no-cors mode doesn't allow reading response, so we assume success
             // Show success message
             formSuccess.style.display = 'block';
             contactForm.reset();
@@ -123,8 +141,8 @@ if (contactForm) {
             // Scroll to success message
             formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
-            // Log to console (for demo purposes)
-            console.log('Form submitted:', data);
+            // Log to console
+            console.log('Form submitted successfully:', data);
             
         } catch (error) {
             // Show error message
@@ -134,32 +152,8 @@ if (contactForm) {
         } finally {
             // Re-enable submit button
             submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
+            submitBtn.innerHTML = originalText;
         }
-    });
-}
-
-// Simulate API call (replace with actual implementation)
-function simulateApiCall(data) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Simulate successful submission
-            // In production, replace with actual fetch/axios call:
-            /*
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => resolve(data))
-            .catch(error => reject(error));
-            */
-            
-            resolve({ success: true });
-        }, 1500);
     });
 }
 
