@@ -69,24 +69,24 @@ ai_status: draft
 ├─────────────────────────────────────────────────────────────────────┤
 │                    NestJS API Gateway                              │
 │  ┌─────────────────────────────────────────────────────────────────┐│
-│  │                     MICROSERVICES                              ││
+│  │                     MICROSERVICES                               ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
 │  │ │Plant        │ │Financial    │ │Workforce    │ │Spatial    │ ││
 │  │ │Lifecycle    │ │Management   │ │Management   │ │Planning   │ ││
 │  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
 │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
 │  │ │IoT &        │ │Training &   │ │Procurement  │ │Analytics  │ ││
-│  │ │Monitoring   │ │Competency   │ │Management   │ │& Forecast │ ││
-│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
-│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
-│  │ │Authorization│ │Audit Trail  │ │Document Mgmt│ │PDF Report │ ││
-│  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Generator  │ ││
-│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
-│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ││
-│  │ │Internal      ││Database    │ │Knowledge    │ │External   │ ││
-│  │ │Communications│ │Replication  │ │Management   │ │Integration│ ││
-│  │ │(Jitsi Stack) │ │& WORM       │ │(Wiki.js)    │ │& APIs     │ ││
-│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ ││
+│  │ │Monitoring   │ │Competency   │ │Management   │ │& Forecast │   ││
+│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘   ││
+│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐   ││
+│  │ │Authorization│ │Audit Trail  │ │Document Mgmt│ │PDF Report │   ││
+│  │ │& Authz      │ │& Compliance │ │(Mayan EDMS) │ │Generator  │   ││
+│  │ └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘   ││
+│  │ ┌──────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐  ││
+│  │ │Internal      │ │Database     │ │Knowledge    │ │External   │  ││
+│  │ │Communications│ │Replication  │ │Knowledge    │ │External   │  ││
+│  │ │(Jitsi Stack) │ │& WORM       │ │Management   │ │Integration│  ││
+│  │ └──────────────┘ └─────────────┘ └─────────────┘ └───────────┘  ││
 │  └─────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────┘
                               │
@@ -132,7 +132,23 @@ ai_status: draft
 
 ### 2.2 Архитектурные принципы
 
-#### 2.2.1 NX Monorepo Architecture
+#### 2.2.1 🏛️ ФУНДАМЕНТАЛЬНЫЙ ПРИНЦИП: Zod-First Development
+
+> **КРИТИЧЕСКИ ВАЖНО**: Zod schemas являются единственным источником истины (Single Source of Truth) для всех типов, валидации и API контрактов
+
+- **ЗАПРЕЩЕНО**: Использование TypeScript `interface` или `type` без Zod схемы
+- **ОБЯЗАТЕЛЬНО**: Все типы выводятся через `z.infer<typeof Schema>`
+- **ОБЯЗАТЕЛЬНО**: Runtime validation для всех входящих данных (API, Kafka, MQTT)
+- **ОБЯЗАТЕЛЬНО**: Schema-first API design с ts-rest + Zod
+
+#### 2.2.2 Schema-First API Design с ts-rest
+
+- **API Contracts**: Определяются через ts-rest contracts с Zod валидацией
+- **Type Safety**: Полная типобезопасность от backend до frontend
+- **Validation**: Автоматическая валидация request/response через Zod
+- **Documentation**: Auto-generated OpenAPI спецификация из Zod схем
+
+#### 2.2.3 NX Monorepo Architecture
 
 - **Project Structure**: NX Workspace для организации всех модулей и библиотек
 - **Code Generation**: Автоматическое создание сервисов, библиотек и приложений
@@ -140,23 +156,24 @@ ai_status: draft
 - **Build Optimization**: Распределенная сборка и кэширование
 - **Dependency Graph**: Визуализация и валидация зависимостей между проектами
 
-#### 2.2.2 Domain-Driven Design (DDD)
+#### 2.2.4 Domain-Driven Design (DDD)
 
 - **Bounded Contexts**: Четкое разделение доменов
-- **Aggregates**: Consistency boundaries
-- **Domain Events**: Loose coupling между модулями
+- **Aggregates**: Consistency boundaries с Zod validation
+- **Domain Events**: Loose coupling между модулями через Kafka + Zod
 - **Ubiquitous Language**: Единый язык предметной области
 
-#### 2.2.3 Event-Driven Architecture (EDA)
+#### 2.2.5 Event-Driven Architecture (EDA)
 
-- **Event Sourcing**: Для audit trail и compliance
+- **Event Sourcing**: Для audit trail и compliance с Zod схемами событий
 - **CQRS**: Разделение команд и запросов
 - **Eventual Consistency**: Между microservices
 - **Saga Pattern**: Для distributed transactions
+- **Event Validation**: Все Kafka события валидируются через Zod
 
-#### 2.2.4 Microservices Patterns
+#### 2.2.6 Microservices Patterns
 
-- **API Gateway**: Единая точка входа
+- **API Gateway**: Единая точка входа с ts-rest контрактами
 - **Service Discovery**: Автоматическое обнаружение сервисов
 - **Circuit Breaker**: Защита от каскадных отказов
 - **Bulkhead**: Изоляция ресурсов
@@ -172,47 +189,148 @@ ai_status: draft
 **Bounded Context**: Управление жизненным циклом растений
 
 ```typescript
-// 🎯 Все схемы данных определены через Zod
+// 🎯 Все схемы данных определены через Zod - ЕДИНСТВЕННЫЙ источник истины
 // См. CONTRACT_SPECIFICATIONS.md для полных определений
 
+import { z } from "zod";
 import {
   PlantSchema,
   BatchSchema,
   PlantEventSchema,
+  LocationSchema,
+  PlantStageSchema,
 } from "@gacp/shared/schemas";
 
-// Type inference из Zod схем
-type Plant = z.infer<typeof PlantSchema>;
-type Batch = z.infer<typeof BatchSchema>;
-type PlantEvent = z.infer<typeof PlantEventSchema>;
+// ✅ ПРАВИЛЬНО: Type inference из Zod схем
+export type Plant = z.infer<typeof PlantSchema>;
+export type Batch = z.infer<typeof BatchSchema>;
+export type PlantEvent = z.infer<typeof PlantEventSchema>;
+export type PlantStage = z.infer<typeof PlantStageSchema>;
+export type Location = z.infer<typeof LocationSchema>;
 
-// Runtime validation для всех операций
-const validatePlant = (data: unknown): Plant => PlantSchema.parse(data);
-const validateBatch = (data: unknown): Batch => BatchSchema.parse(data);
-```
+// ❌ НЕПРАВИЛЬНО: НИКОГДА не используем interface без Zod схемы
+// interface Plant { ... } // ЗАПРЕЩЕНО!
 
-// Aggregates
-class PlantAggregate {
-transition(newStage: PlantStage): PlantEvent[];
-move(newLocation: Location): PlantEvent[];
-harvest(): PlantEvent[];
+// Runtime validation для всех операций - ОБЯЗАТЕЛЬНО
+export const validatePlant = (data: unknown): Plant => PlantSchema.parse(data);
+export const validateBatch = (data: unknown): Batch => BatchSchema.parse(data);
+
+// Domain Aggregates с Zod validation
+export class PlantAggregate {
+  constructor(private readonly plant: Plant) {
+    // Валидация при создании
+    PlantSchema.parse(plant);
+  }
+
+  transition(newStage: PlantStage): PlantEvent[] {
+    // Валидация stage transition
+    PlantStageSchema.parse(newStage);
+    // ... logic
+    return [];
+  }
+
+  move(newLocation: Location): PlantEvent[] {
+    // Валидация location
+    LocationSchema.parse(newLocation);
+    // ... logic
+    return [];
+  }
+
+  harvest(): PlantEvent[] {
+    // ... logic
+    return [];
+  }
 }
 
 ````
 
-**API Endpoints**:
+**API Endpoints с ts-rest + Zod**:
 
 ```typescript
-// REST API Specification
-POST   /api/v1/plants              // Create plant
-GET    /api/v1/plants/:id          // Get plant details
-PUT    /api/v1/plants/:id          // Update plant
-DELETE /api/v1/plants/:id          // Delete plant
-POST   /api/v1/plants/:id/transition // Stage transition
-POST   /api/v1/plants/:id/move     // Move plant
-GET    /api/v1/batches             // List batches
-POST   /api/v1/batches             // Create batch
-GET    /api/v1/batches/:id/plants  // Get batch plants
+// ✅ ПРАВИЛЬНО: Schema-first API Design с ts-rest
+import { initContract } from "@ts-rest/core";
+import { z } from "zod";
+import {
+  PlantSchema,
+  CreatePlantSchema,
+  UpdatePlantSchema,
+  PlantResponseSchema,
+  BatchResponseSchema,
+} from "@gacp/shared/schemas";
+
+const c = initContract();
+
+export const plantsContract = c.router(
+  {
+    createPlant: {
+      method: "POST",
+      path: "/plants",
+      body: CreatePlantSchema,
+      responses: {
+        201: PlantResponseSchema,
+        400: z.object({ message: z.string() }),
+      },
+      summary: "Create plant",
+    },
+    getPlant: {
+      method: "GET",
+      path: "/plants/:id",
+      pathParams: z.object({ id: z.string().uuid() }),
+      responses: {
+        200: PlantResponseSchema,
+        404: z.object({ message: z.string() }),
+      },
+      summary: "Get plant details",
+    },
+    updatePlant: {
+      method: "PUT",
+      path: "/plants/:id",
+      pathParams: z.object({ id: z.string().uuid() }),
+      body: UpdatePlantSchema,
+      responses: {
+        200: PlantResponseSchema,
+        404: z.object({ message: z.string() }),
+      },
+      summary: "Update plant",
+    },
+    transitionPlantStage: {
+      method: "POST",
+      path: "/plants/:id/transition",
+      pathParams: z.object({ id: z.string().uuid() }),
+      body: z.object({ newStage: PlantStageSchema }),
+      responses: {
+        200: PlantResponseSchema,
+        400: z.object({ message: z.string() }),
+      },
+      summary: "Transition plant stage",
+    },
+    listBatches: {
+      method: "GET",
+      path: "/batches",
+      query: z.object({
+        page: z.number().int().positive().optional(),
+        limit: z.number().int().positive().max(100).optional(),
+      }),
+      responses: {
+        200: z.object({
+          data: z.array(BatchResponseSchema),
+          pagination: z.object({
+            page: z.number(),
+            limit: z.number(),
+            total: z.number(),
+          }),
+        }),
+      },
+      summary: "List batches",
+    },
+  },
+  {
+    pathPrefix: "/api/v1",
+  }
+);
+
+// Type inference - автоматические типы для всего API
+export type PlantsContract = typeof plantsContract;
 ````
 
 **Database Schema**:
@@ -249,51 +367,121 @@ CREATE INDEX idx_plant_events_plant_id ON plant_events(plant_id);
 **Bounded Context**: Финансовый учет и биологические активы
 
 ```typescript
-// Domain Entities
-interface Account {
-  id: AccountId;
-  code: string;
-  name: string;
-  type: AccountType;
-  parentId?: AccountId;
-  balance: Money;
-}
+// ✅ ПРАВИЛЬНО: Zod schemas как Single Source of Truth
+import { z } from "zod";
 
-interface JournalEntry {
-  id: JournalEntryId;
-  date: Date;
-  description: string;
-  lines: JournalLine[];
-  reference?: string;
-  status: JournalStatus;
-}
+// Zod Schemas
+export const AccountSchema = z.object({
+  id: z.string().uuid(),
+  code: z.string().min(1).max(20),
+  name: z.string().min(1).max(255),
+  type: z.enum(["asset", "liability", "equity", "revenue", "expense"]),
+  parentId: z.string().uuid().optional(),
+  balance: z.object({
+    amount: z.number(),
+    currency: z.enum(["USD", "EUR", "RUB"]),
+  }),
+});
 
-interface BiologicalAsset {
-  id: BiologicalAssetId;
-  plantId: PlantId;
-  acquisitionCost: Money;
-  currentValue: Money;
-  valuationDate: Date;
-  method: ValuationMethod;
-}
+export const JournalEntrySchema = z.object({
+  id: z.string().uuid(),
+  date: z.string().datetime(),
+  description: z.string().min(1),
+  lines: z.array(
+    z.object({
+      accountId: z.string().uuid(),
+      debit: z.number().nonnegative().optional(),
+      credit: z.number().nonnegative().optional(),
+    })
+  ),
+  reference: z.string().optional(),
+  status: z.enum(["draft", "posted", "void"]),
+});
 
-// Value Objects
-class Money {
-  constructor(public amount: number, public currency: Currency) {}
-}
+export const BiologicalAssetSchema = z.object({
+  id: z.string().uuid(),
+  plantId: z.string().uuid(),
+  acquisitionCost: z.object({
+    amount: z.number().nonnegative(),
+    currency: z.enum(["USD", "EUR", "RUB"]),
+  }),
+  currentValue: z.object({
+    amount: z.number().nonnegative(),
+    currency: z.enum(["USD", "EUR", "RUB"]),
+  }),
+  valuationDate: z.string().datetime(),
+  method: z.enum(["cost", "fair_value", "net_realizable_value"]),
+});
+
+// Type inference - NO interfaces!
+export type Account = z.infer<typeof AccountSchema>;
+export type JournalEntry = z.infer<typeof JournalEntrySchema>;
+export type BiologicalAsset = z.infer<typeof BiologicalAssetSchema>;
+
+// ❌ НЕПРАВИЛЬНО: Не используем interface
+// interface Account { ... } // ЗАПРЕЩЕНО!
 ```
 
-**API Endpoints**:
+**API Endpoints с ts-rest**:
 
 ```typescript
-// Financial API
-GET / api / v1 / accounts; // Chart of accounts
-POST / api / v1 / journal - entries; // Create journal entry
-GET / api / v1 / journal - entries; // List entries
-GET / api / v1 / biological - assets; // List biological assets
-POST / api / v1 / biological - assets / valuation; // Asset valuation
-GET / api / v1 / reports / balance - sheet; // Balance sheet
-GET / api / v1 / reports / income - statement; // P&L statement
+// ✅ ПРАВИЛЬНО: ts-rest contract для Financial API
+import { initContract } from "@ts-rest/core";
+import { z } from "zod";
+import {
+  AccountSchema,
+  JournalEntrySchema,
+  BiologicalAssetSchema,
+} from "@gacp/shared/schemas";
+
+const c = initContract();
+
+export const financialContract = c.router(
+  {
+    getAccounts: {
+      method: "GET",
+      path: "/accounts",
+      query: z.object({
+        type: z.enum(["asset", "liability", "equity", "revenue", "expense"]).optional(),
+      }),
+      responses: {
+        200: z.object({ data: z.array(AccountSchema) }),
+      },
+      summary: "Get chart of accounts",
+    },
+    createJournalEntry: {
+      method: "POST",
+      path: "/journal-entries",
+      body: JournalEntrySchema.omit({ id: true, status: true }),
+      responses: {
+        201: JournalEntrySchema,
+        400: z.object({ message: z.string() }),
+      },
+      summary: "Create journal entry",
+    },
+    listBiologicalAssets: {
+      method: "GET",
+      path: "/biological-assets",
+      responses: {
+        200: z.object({ data: z.array(BiologicalAssetSchema) }),
+      },
+      summary: "List biological assets",
+    },
+    valuateBiologicalAsset: {
+      method: "POST",
+      path: "/biological-assets/valuation",
+      body: z.object({
+        assetId: z.string().uuid(),
+        method: z.enum(["cost", "fair_value", "net_realizable_value"]),
+      }),
+      responses: {
+        200: BiologicalAssetSchema,
+      },
+      summary: "Valuation of biological asset",
+    },
+  },
+  { pathPrefix: "/api/v1" }
+);
 ```
 
 #### 3.1.3 Document Management (Mayan-EDMS)
@@ -301,63 +489,129 @@ GET / api / v1 / reports / income - statement; // P&L statement
 **Bounded Context**: Электронный документооборот
 
 ```typescript
-// Domain Entities
-interface Document {
-  id: DocumentId;
-  title: string;
-  description?: string;
-  documentType: DocumentType;
-  metadata: DocumentMetadata;
-  versions: DocumentVersion[];
-  workflow?: WorkflowInstance;
-  permissions: Permission[];
-}
+// ✅ ПРАВИЛЬНО: Zod schemas для Document Management
+import { z } from "zod";
 
-interface WorkflowInstance {
-  id: WorkflowInstanceId;
-  workflowId: WorkflowId;
-  currentState: WorkflowState;
-  tasks: WorkflowTask[];
-  startedAt: Date;
-  completedAt?: Date;
-}
+// Zod Schemas
+export const DocumentSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1).max(500),
+  description: z.string().optional(),
+  documentType: z.enum(["sop", "batch_record", "training", "audit", "report"]),
+  metadata: z.record(z.string(), z.unknown()),
+  versions: z.array(
+    z.object({
+      versionId: z.string().uuid(),
+      versionNumber: z.number().int().positive(),
+      uploadedAt: z.string().datetime(),
+      uploadedBy: z.string().uuid(),
+      fileSize: z.number().positive(),
+      checksum: z.string(),
+    })
+  ),
+  workflow: z
+    .object({
+      id: z.string().uuid(),
+      workflowId: z.string().uuid(),
+      currentState: z.string(),
+      tasks: z.array(
+        z.object({
+          taskId: z.string().uuid(),
+          assignee: z.string().uuid(),
+          status: z.enum(["pending", "in_progress", "completed", "rejected"]),
+        })
+      ),
+      startedAt: z.string().datetime(),
+      completedAt: z.string().datetime().optional(),
+    })
+    .optional(),
+  permissions: z.array(
+    z.object({
+      userId: z.string().uuid(),
+      role: z.enum(["owner", "editor", "viewer"]),
+    })
+  ),
+});
 
-interface ElectronicSignature {
-  id: SignatureId;
-  documentId: DocumentId;
-  signerId: UserId;
-  signatureData: string;
-  timestamp: Date;
-  certificate: Certificate;
-}
+export const ElectronicSignatureSchema = z.object({
+  id: z.string().uuid(),
+  documentId: z.string().uuid(),
+  signerId: z.string().uuid(),
+  signatureData: z.string(), // Base64 encoded signature
+  timestamp: z.string().datetime(),
+  certificate: z.object({
+    issuer: z.string(),
+    serialNumber: z.string(),
+    validFrom: z.string().datetime(),
+    validTo: z.string().datetime(),
+  }),
+});
+
+// Type inference
+export type Document = z.infer<typeof DocumentSchema>;
+export type ElectronicSignature = z.infer<typeof ElectronicSignatureSchema>;
 ```
 
-**Integration Points**:
+**Integration Points с Zod validation**:
 
 ```typescript
-// Mayan-EDMS Integration Service
-class MayanEdmsService {
-  async uploadDocument(
-    file: File,
-    metadata: DocumentMetadata
-  ): Promise<Document>;
-  async getDocument(documentId: DocumentId): Promise<Document>;
-  async startWorkflow(
-    documentId: DocumentId,
-    workflowId: WorkflowId
-  ): Promise<WorkflowInstance>;
-  async signDocument(
-    documentId: DocumentId,
-    signature: ElectronicSignature
-  ): Promise<void>;
-  async searchDocuments(query: SearchQuery): Promise<Document[]>;
-}
+// ✅ ПРАВИЛЬНО: Service с Zod validation
+import { Injectable } from "@nestjs/common";
+import { z } from "zod";
+import {
+  DocumentSchema,
+  ElectronicSignatureSchema,
+} from "@gacp/shared/schemas";
 
-// SOP Integration
-class SopService {
-  async createSop(content: SopContent): Promise<Sop>;
-  async linkSopToTask(sopId: SopId, taskId: TaskId): Promise<void>;
-  async getSopForTask(taskId: TaskId): Promise<Sop[]>;
+// Input schemas для API методов
+const UploadDocumentInputSchema = z.object({
+  file: z.instanceof(File),
+  metadata: z.record(z.string(), z.unknown()),
+});
+
+const SearchQuerySchema = z.object({
+  query: z.string().min(1),
+  documentType: z.enum(["sop", "batch_record", "training", "audit", "report"]).optional(),
+  dateFrom: z.string().datetime().optional(),
+  dateTo: z.string().datetime().optional(),
+});
+
+@Injectable()
+export class MayanEdmsService {
+  async uploadDocument(
+    input: z.infer<typeof UploadDocumentInputSchema>
+  ): Promise<z.infer<typeof DocumentSchema>> {
+    // Runtime validation
+    const validated = UploadDocumentInputSchema.parse(input);
+    // ... implementation
+    const document = await this.uploadToMayan(validated);
+    return DocumentSchema.parse(document);
+  }
+
+  async getDocument(documentId: string): Promise<z.infer<typeof DocumentSchema>> {
+    const document = await this.fetchFromMayan(documentId);
+    // Runtime validation результата
+    return DocumentSchema.parse(document);
+  }
+
+  async signDocument(
+    documentId: string,
+    signature: z.infer<typeof ElectronicSignatureSchema>
+  ): Promise<void> {
+    // Валидация signature
+    ElectronicSignatureSchema.parse(signature);
+    await this.applySignature(documentId, signature);
+  }
+
+  async searchDocuments(
+    query: z.infer<typeof SearchQuerySchema>
+  ): Promise<Array<z.infer<typeof DocumentSchema>>> {
+    // Runtime validation
+    const validated = SearchQuerySchema.parse(query);
+    const results = await this.searchInMayan(validated);
+    // Валидация результатов
+    return z.array(DocumentSchema).parse(results);
+  }
 }
 ```
 
@@ -411,70 +665,129 @@ class MqttHandler {
 **Bounded Context**: Внутренние коммуникации и конференц-связь
 
 ```typescript
-// Domain Entities
-interface Conference {
-  id: ConferenceId;
-  name: string;
-  roomId: string;
-  participants: Participant[];
-  startTime: Date;
-  endTime?: Date;
-  recording?: RecordingInfo;
-  moderator: UserId;
-}
+// ✅ ПРАВИЛЬНО: Zod schemas для Jitsi Communications
+import { z } from "zod";
 
-interface Participant {
-  userId: UserId;
-  displayName: string;
-  jid: string; // XMPP Jabber ID
-  role: ParticipantRole; // moderator | participant
-  joinTime: Date;
-  leaveTime?: Date;
-  status: ParticipantStatus; // active | muted | away
-}
+// Zod Schemas
+export const ConferenceSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(255),
+  roomId: z.string().min(1),
+  participants: z.array(
+    z.object({
+      userId: z.string().uuid(),
+      displayName: z.string().min(1),
+      jid: z.string(), // XMPP Jabber ID
+      role: z.enum(["moderator", "participant"]),
+      joinTime: z.string().datetime(),
+      leaveTime: z.string().datetime().optional(),
+      status: z.enum(["active", "muted", "away"]),
+    })
+  ),
+  startTime: z.string().datetime(),
+  endTime: z.string().datetime().optional(),
+  recording: z
+    .object({
+      recordingId: z.string().uuid(),
+      url: z.string().url(),
+      duration: z.number().positive(),
+    })
+    .optional(),
+  moderator: z.string().uuid(),
+});
 
-interface Message {
-  id: MessageId;
-  from: UserId;
-  to: UserId | ConferenceId;
-  content: string;
-  type: MessageType; // chat | notification | alert
-  timestamp: Date;
-  delivered: boolean;
-  read: boolean;
-}
+export const MessageSchema = z.object({
+  id: z.string().uuid(),
+  from: z.string().uuid(),
+  to: z.string().uuid(), // userId or conferenceId
+  content: z.string().min(1),
+  type: z.enum(["chat", "notification", "alert"]),
+  timestamp: z.string().datetime(),
+  delivered: z.boolean(),
+  read: z.boolean(),
+});
+
+export const CreateConferenceRequestSchema = z.object({
+  name: z.string().min(1).max(255),
+  moderatorId: z.string().uuid(),
+  enableRecording: z.boolean().default(false),
+  maxParticipants: z.number().int().positive().optional(),
+});
+
+// Type inference
+export type Conference = z.infer<typeof ConferenceSchema>;
+export type Message = z.infer<typeof MessageSchema>;
+export type CreateConferenceRequest = z.infer<typeof CreateConferenceRequestSchema>;
 ```
 
-**Jitsi Integration Architecture**:
+**Jitsi Integration Architecture с Zod validation**:
 
 ```typescript
-// Jitsi Service Integration
+// ✅ ПРАВИЛЬНО: Service с Zod validation
+import { Injectable } from "@nestjs/common";
+import {
+  ConferenceSchema,
+  CreateConferenceRequestSchema,
+  MessageSchema,
+} from "@gacp/shared/schemas";
+import { z } from "zod";
+
+const JoinResponseSchema = z.object({
+  conferenceId: z.string().uuid(),
+  jwtToken: z.string(),
+  roomUrl: z.string().url(),
+  permissions: z.array(z.string()),
+});
+
+const MessageRequestSchema = z.object({
+  from: z.string().uuid(),
+  to: z.string().uuid(),
+  content: z.string().min(1),
+  type: z.enum(["chat", "notification", "alert"]),
+});
+
 @Injectable()
 export class JitsiService {
   async createConference(
-    request: CreateConferenceRequest
-  ): Promise<Conference> {
+    request: z.infer<typeof CreateConferenceRequestSchema>
+  ): Promise<z.infer<typeof ConferenceSchema>> {
+    // Runtime validation
+    const validated = CreateConferenceRequestSchema.parse(request);
+    
     // Create room in Prosody XMPP
     // Configure Jicofo for media management
     // Setup recording if required
     // Generate JWT token for authentication
+    
+    const conference = await this.setupConference(validated);
+    return ConferenceSchema.parse(conference);
   }
 
   async joinConference(
-    conferenceId: ConferenceId,
-    userId: UserId
-  ): Promise<JoinResponse> {
+    conferenceId: string,
+    userId: string
+  ): Promise<z.infer<typeof JoinResponseSchema>> {
     // Authenticate user via Keycloak SSO
     // Generate secure conference JWT
     // Configure participant permissions
     // Log access for audit trail
+    
+    const response = await this.generateJoinResponse(conferenceId, userId);
+    return JoinResponseSchema.parse(response);
   }
 
-  async sendMessage(message: MessageRequest): Promise<void> {
+  async sendMessage(
+    message: z.infer<typeof MessageRequestSchema>
+  ): Promise<void> {
+    // Runtime validation
+    const validated = MessageRequestSchema.parse(message);
+    
     // Send via Prosody XMPP server
     // Store in audit trail (immudb)
     // Push notification if user offline
     // Integrate with Kafka events
+    
+    await this.deliverMessage(validated);
   }
 }
 ```
@@ -516,90 +829,187 @@ Component "conference.gacp-erp.local" "muc"
 **Bounded Context**: Репликация данных и обеспечение непрерывности
 
 ```typescript
-// Domain Entities
-interface ReplicationStream {
-  id: StreamId;
-  name: string;
-  sourceDatabase: DatabaseConfig;
-  targetReplicas: ReplicaConfig[];
-  status: ReplicationStatus;
-  lag: number; // milliseconds
-  lastSync: Date;
-  configuration: StreamConfiguration;
-}
+// ✅ ПРАВИЛЬНО: Zod schemas для Database Replication
+import { z } from "zod";
 
-interface ReplicaConfig {
-  id: ReplicaId;
-  type: ReplicaType; // primary | standby | cloud
-  location: ReplicaLocation; // on-premise | aws | azure
-  isWORM: boolean; // Write Once Read Many for compliance
-  retentionPolicy: RetentionPolicy;
-  encryptionConfig: EncryptionConfig;
-}
+// Zod Schemas
+export const ReplicationStreamSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(255),
+  sourceDatabase: z.object({
+    host: z.string(),
+    port: z.number().int().positive(),
+    database: z.string(),
+    ssl: z.boolean(),
+  }),
+  targetReplicas: z.array(
+    z.object({
+      id: z.string().uuid(),
+      type: z.enum(["primary", "standby", "cloud"]),
+      location: z.enum(["on-premise", "aws", "azure", "gcp"]),
+      isWORM: z.boolean(), // Write Once Read Many
+      retentionPolicy: z.object({
+        days: z.number().int().positive(),
+        deleteAfter: z.boolean(),
+      }),
+      encryptionConfig: z.object({
+        enabled: z.boolean(),
+        algorithm: z.enum(["AES-256", "AES-128"]),
+        keyRotationDays: z.number().int().positive(),
+      }),
+    })
+  ),
+  status: z.enum(["active", "paused", "error", "stopped"]),
+  lag: z.number().nonnegative(), // milliseconds
+  lastSync: z.string().datetime(),
+  configuration: z.record(z.string(), z.unknown()),
+});
 
-interface AuditReplicationEvent {
-  eventId: EventId;
-  streamId: StreamId;
-  eventType: ReplicationEventType;
-  timestamp: Date;
-  sourceWAL: WALPosition;
-  targetWAL: WALPosition;
-  latency: number;
-  checksum: string;
-}
+export const AuditReplicationEventSchema = z.object({
+  eventId: z.string().uuid(),
+  streamId: z.string().uuid(),
+  eventType: z.enum(["sync_started", "sync_completed", "sync_failed", "lag_warning"]),
+  timestamp: z.string().datetime(),
+  sourceWAL: z.string(), // WAL position
+  targetWAL: z.string(),
+  latency: z.number().nonnegative(),
+  checksum: z.string(),
+});
+
+export const DatabaseChangeEventSchema = z.object({
+  operation: z.enum(["INSERT", "UPDATE", "DELETE"]),
+  table: z.string(),
+  schema: z.string(),
+  oldData: z.record(z.string(), z.unknown()).optional(),
+  newData: z.record(z.string(), z.unknown()).optional(),
+  timestamp: z.string().datetime(),
+  transactionId: z.string(),
+  userId: z.string(),
+  checksum: z.string(),
+});
+
+// Type inference
+export type ReplicationStream = z.infer<typeof ReplicationStreamSchema>;
+export type AuditReplicationEvent = z.infer<typeof AuditReplicationEventSchema>;
+export type DatabaseChangeEvent = z.infer<typeof DatabaseChangeEventSchema>;
 ```
 
-**PostgreSQL Streaming Replication**:
+**PostgreSQL Streaming Replication с Zod validation**:
 
 ```typescript
+import { Injectable } from "@nestjs/common";
+import { z } from "zod";
+import {
+  ReplicationStreamSchema,
+  AuditReplicationEventSchema,
+} from "@gacp/shared/schemas";
+
+const ReplicationConfigSchema = z.object({
+  streamName: z.string(),
+  sourceDsn: z.string(),
+  targets: z.array(
+    z.object({
+      dsn: z.string(),
+      isWORM: z.boolean(),
+    })
+  ),
+});
+
+const ReplicationStatusSchema = z.object({
+  streamId: z.string().uuid(),
+  isHealthy: z.boolean(),
+  currentLag: z.number().nonnegative(),
+  lastSync: z.string().datetime(),
+  errors: z.array(z.string()),
+});
+
+const IntegrityReportSchema = z.object({
+  streamId: z.string().uuid(),
+  checksumMatch: z.boolean(),
+  alcoapCompliant: z.boolean(),
+  wormIntact: z.boolean(),
+  issues: z.array(z.string()),
+});
+
 @Injectable()
 export class DatabaseReplicationService {
-  async configureStreaming(config: ReplicationConfig): Promise<void> {
+  async configureStreaming(
+    config: z.infer<typeof ReplicationConfigSchema>
+  ): Promise<void> {
+    // Runtime validation
+    const validated = ReplicationConfigSchema.parse(config);
+    
     // Configure WAL streaming
     // Setup replication slots
     // Configure Kafka for change events
     // Initialize cloud replicas with WORM
   }
 
-  async monitorReplicationLag(): Promise<ReplicationStatus> {
+  async monitorReplicationLag(): Promise<z.infer<typeof ReplicationStatusSchema>> {
     // Check pg_stat_replication view
     // Verify Kafka consumer lag
     // Validate WORM integrity
     // Generate alerts if thresholds exceeded
+    
+    const status = await this.checkReplicationHealth();
+    return ReplicationStatusSchema.parse(status);
   }
 
-  async validateDataIntegrity(): Promise<IntegrityReport> {
+  async validateDataIntegrity(): Promise<z.infer<typeof IntegrityReportSchema>> {
     // Compare checksums between primary and replicas
     // Verify ALCOA+ compliance on audit tables
     // Check WORM policy enforcement
     // Generate compliance report
+    
+    const report = await this.performIntegrityCheck();
+    return IntegrityReportSchema.parse(report);
   }
 }
 ```
 
-**Kafka Integration for Replication Events**:
+**Kafka Integration for Replication Events с Zod validation**:
 
 ```typescript
-// Kafka Topics for Database Events
-interface DatabaseChangeEvent {
-  operation: "INSERT" | "UPDATE" | "DELETE";
-  table: string;
-  schema: string;
-  oldData?: Record<string, any>;
-  newData?: Record<string, any>;
-  timestamp: Date;
-  transactionId: string;
-  userId: string;
-  checksum: string;
-}
+// ✅ ПРАВИЛЬНО: Kafka события с Zod валидацией
+import { Injectable } from "@nestjs/common";
+import { KafkaConsumer } from "@nestjs/microservices";
+import { DatabaseChangeEventSchema } from "@gacp/shared/schemas";
+import { z } from "zod";
 
+@Injectable()
 @KafkaConsumer("database-changes")
 export class ReplicationConsumer {
-  async processChange(event: DatabaseChangeEvent): Promise<void> {
+  async processChange(payload: unknown): Promise<void> {
+    // ОБЯЗАТЕЛЬНАЯ Runtime validation
+    const event = DatabaseChangeEventSchema.parse(payload);
+    
     // Stream to cloud replicas
+    await this.streamToCloud(event);
+    
     // Validate against WORM policies
+    await this.validateWORMCompliance(event);
+    
     // Store in immudb for audit
+    await this.storeInAuditLog(event);
+    
     // Update replication metrics
+    await this.updateMetrics(event);
+  }
+
+  private async streamToCloud(event: z.infer<typeof DatabaseChangeEventSchema>) {
+    // Implementation
+  }
+
+  private async validateWORMCompliance(event: z.infer<typeof DatabaseChangeEventSchema>) {
+    // WORM validation logic
+  }
+
+  private async storeInAuditLog(event: z.infer<typeof DatabaseChangeEventSchema>) {
+    // Audit trail storage
+  }
+
+  private async updateMetrics(event: z.infer<typeof DatabaseChangeEventSchema>) {
+    // Metrics update
   }
 }
 ```
@@ -641,57 +1051,91 @@ CREATE TRIGGER worm_enforcement
 **Bounded Context**: Автоматическая генерация PDF-отчетов для GACP-соответствия
 
 ```typescript
-// Domain Entities
-interface PDFReportTemplate {
-  id: TemplateId;
-  name: string;
-  version: string;
-  templateType:
-    | "daily-plant-report"
-    | "weekly-summary"
-    | "batch-lifecycle"
-    | "audit-trail-export";
-  reactComponent: string; // React component definition
-  fields: TemplateField[];
-  gacpCompliant: boolean;
-  author: string;
-  createdAt: Date;
-  isActive: boolean;
-}
+// ✅ ПРАВИЛЬНО: Zod schemas для PDF Generator
+import { z } from "zod";
 
-interface PDFDocument {
-  id: DocumentId;
-  templateId: TemplateId;
-  fileName: string;
-  hash: string; // SHA-256 hash for integrity
-  digitalSignature: string; // OpenSSL signature
-  qrCode: string; // QR code for verification
-  edmDocumentId: string; // Mayan EDMS document ID
-  backupUrl: string; // S3/MinIO URL
-  metadata: DocumentMetadata;
-  generatedAt: Date;
-  generatedBy: string;
-}
+// Zod Schemas
+export const PDFReportTemplateSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(255),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/), // Semver
+  templateType: z.enum([
+    "daily-plant-report",
+    "weekly-summary",
+    "batch-lifecycle",
+    "audit-trail-export",
+  ]),
+  reactComponent: z.string(), // React component definition
+  fields: z.array(
+    z.object({
+      fieldName: z.string(),
+      fieldType: z.enum(["string", "number", "date", "array", "object"]),
+      required: z.boolean(),
+      validation: z.string().optional(),
+    })
+  ),
+  gacpCompliant: z.boolean(),
+  author: z.string(),
+  createdAt: z.string().datetime(),
+  isActive: z.boolean(),
+});
 
-interface ReportGenerationEvent {
-  eventId: EventId;
-  triggerEvent: AuditEvent;
-  templateType: string;
-  documentId: DocumentId;
-  status:
-    | "pending"
-    | "generating"
-    | "signing"
-    | "storing"
-    | "completed"
-    | "failed";
-  metrics: GenerationMetrics;
-}
+export const PDFDocumentSchema = z.object({
+  id: z.string().uuid(),
+  templateId: z.string().uuid(),
+  fileName: z.string(),
+  hash: z.string(), // SHA-256 hash for integrity
+  digitalSignature: z.string(), // OpenSSL signature
+  qrCode: z.string(), // QR code for verification
+  edmDocumentId: z.string(), // Mayan EDMS document ID
+  backupUrl: z.string().url(), // S3/MinIO URL
+  metadata: z.object({
+    generatedBy: z.string().uuid(),
+    generatedFor: z.string().uuid().optional(),
+    period: z.string().optional(),
+    tags: z.array(z.string()),
+  }),
+  generatedAt: z.string().datetime(),
+  generatedBy: z.string(),
+});
+
+export const ReportGenerationEventSchema = z.object({
+  eventId: z.string().uuid(),
+  triggerEvent: z.string().uuid(), // Reference to audit event
+  templateType: z.string(),
+  documentId: z.string().uuid(),
+  status: z.enum(["pending", "generating", "signing", "storing", "completed", "failed"]),
+  metrics: z.object({
+    generationTime: z.number().positive(),
+    fileSize: z.number().positive(),
+    pageCount: z.number().int().positive(),
+  }),
+});
+
+// Type inference
+export type PDFReportTemplate = z.infer<typeof PDFReportTemplateSchema>;
+export type PDFDocument = z.infer<typeof PDFDocumentSchema>;
+export type ReportGenerationEvent = z.infer<typeof ReportGenerationEventSchema>;
 ```
 
-**PDF Generation Service**:
+**PDF Generation Service с Zod validation**:
 
 ```typescript
+import { Injectable } from "@nestjs/common";
+import { z } from "zod";
+import {
+  PDFDocumentSchema,
+  PDFReportTemplateSchema,
+} from "@gacp/shared/schemas";
+
+const ReportMetadataSchema = z.object({
+  label: z.string(),
+  edmUrl: z.string().url(),
+  generatedBy: z.string().uuid(),
+  period: z.string().optional(),
+  tags: z.array(z.string()),
+});
+
 @Injectable()
 export class PDFGeneratorService {
   constructor(
@@ -703,9 +1147,12 @@ export class PDFGeneratorService {
 
   async generateReport(
     templateName: string,
-    data: any,
-    metadata: ReportMetadata
-  ): Promise<PDFDocument> {
+    data: unknown,
+    metadata: z.infer<typeof ReportMetadataSchema>
+  ): Promise<z.infer<typeof PDFDocumentSchema>> {
+    // Runtime validation metadata
+    const validatedMetadata = ReportMetadataSchema.parse(metadata);
+
     // 1. Generate PDF using React-PDF renderer
     const { filePath, hash } = await this.templateEngine.render(
       templateName,
@@ -716,11 +1163,11 @@ export class PDFGeneratorService {
     const signature = await this.signatureService.signWithOpenSSL(filePath);
 
     // 3. Generate QR code for verification
-    const qrCode = await this.generateVerificationQR(hash, metadata.edmUrl);
+    const qrCode = await this.generateVerificationQR(hash, validatedMetadata.edmUrl);
 
     // 4. Store in Mayan EDMS
     const edmDocument = await this.edmService.upload(filePath, {
-      label: metadata.label,
+      label: validatedMetadata.label,
       hash,
       signature,
       template: templateName,
@@ -729,8 +1176,8 @@ export class PDFGeneratorService {
     // 5. Backup to S3/MinIO
     const backupUrl = await this.storageService.upload(filePath);
 
-    return {
-      id: generateDocumentId(),
+    const document = {
+      id: crypto.randomUUID(),
       templateId: templateName,
       fileName: path.basename(filePath),
       hash,
@@ -738,10 +1185,17 @@ export class PDFGeneratorService {
       qrCode,
       edmDocumentId: edmDocument.id,
       backupUrl,
-      metadata,
-      generatedAt: new Date(),
+      metadata: {
+        generatedBy: validatedMetadata.generatedBy,
+        period: validatedMetadata.period,
+        tags: validatedMetadata.tags,
+      },
+      generatedAt: new Date().toISOString(),
       generatedBy: "pdf-service",
     };
+
+    // Runtime validation результата
+    return PDFDocumentSchema.parse(document);
   }
 
   private async generateVerificationQR(
