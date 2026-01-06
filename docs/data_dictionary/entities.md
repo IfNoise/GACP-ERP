@@ -369,8 +369,8 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ChangeControlZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 9 (8 topics, 15 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
+| Поле                    | Тип                     | Описание                                                                                              | Обязательное |
+| ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- | ------------ |
 | `id` | UUID | Уникальный идентификатор change request | ✅ |
 | `requestId` | string | Номер заявки (CR-YYYY-NNNN) | ✅ |
 | `title` | string | Заголовок изменения | ✅ |
@@ -391,22 +391,22 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - CAPAZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 10 (6 topics, 12 events)`
 
-| Поле                 | Тип             | Описание                                                                                            | Обязательное |
-|----------------------|-----------------|-----------------------------------------------------------------------------------------------------|--------------|
+| Поле                      | Тип                        | Описание                                                                                             | Обязательное |
+| ------------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------- | ------------ |
 | `id`                 | UUID            | Уникальный идентификатор                                                                             | ✅           |
 | `capaId`             | string          | Номер CAPA (CAPA-YYYY-NNNN)                                                                         | ✅           |
-| `type`               | 'corrective' \| 'preventive' | Тип действия                                                                                     | ✅           |
-| `title`              | string          | Заголовок                                                                                           | ✅           |
-| `description`        | string          | Описание проблемы                                                                                   | ✅           |
-| `status`             | CAPAStatus      | initiated/investigation/root_cause_identified/action_plan/implementation/effectiveness_check/closed | ✅           |
-| `priority`           | Priority        | low/medium/high/critical                                                                             | ✅           |
-| `sourceType`         | string          | Источник (deviation, audit_finding, quality_event)                                                | ✅           |
-| `sourceId`           | UUID            | ID источника                                                                                       | ❌           |
-| `rootCauseAnalysis`  | RootCauseAnalysis | Анализ первопричины (5 Why, Fishbone, etc.)                                                      | ✅           |
-| `actions`            | CAPAAction[]   | Корректирующие/предупреждающие действия                                                           | ✅           |
-| `effectivenessCheck` | EffectivenessCheck | Проверка эффективности | ❌           |
-|     `electronicSignatures`| ElectronicSignature[] | Электронные подписи | ✅           |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅           |
+| `type`                    | 'corrective' \| 'preventive' | Тип действия                                                                                        | ✅           |
+| `title`                   | string                     | Заголовок                                                                                            | ✅           |
+| `description`             | string                     | Описание проблемы                                                                                    | ✅           |
+| `status`                  | CAPAStatus                 | initiated/investigation/root_cause_identified/action_plan/implementation/effectiveness_check/closed  | ✅           |
+| `priority`                | Priority                   | low/medium/high/critical                                                                             | ✅           |
+| `sourceType`              | string                     | Источник (deviation, audit_finding, quality_event)                                                  | ✅           |
+| `sourceId`                | UUID                       | ID источника                                                                                         | ❌           |
+| `rootCauseAnalysis`       | RootCauseAnalysis          | Анализ первопричины (5 Why, Fishbone, etc.)                                                         | ✅           |
+| `actions`                 | CAPAAction[]               | Корректирующие/предупреждающие действия                                                              | ✅           |
+| `effectivenessCheck`      | EffectivenessCheck         | Проверка эффективности                                                                               | ❌           |
+| `electronicSignatures`    | ElectronicSignature[]      | Электронные подписи                                                                                  | ✅           |
+| `auditTrail`              | AuditTrailMetadata         | ALCOA+ метаданные                                                                                    | ✅           |
 
 **Related Entities**: Deviation, ChangeControl, QualityEvent, Training
 
@@ -416,25 +416,25 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DeviationZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 11 (5 topics, 10 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `deviationId` | string | Номер отклонения (DEV-YYYY-NNNN) | ✅ |
-| `title` | string | Заголовок | ✅ |
-| `description` | string | Описание отклонения | ✅ |
-| `classification` | DeviationClassification | critical/major/minor | ✅ |
-| `status` | DeviationStatus | reported/classified/investigation/impact_assessment/closed | ✅ |
-| `reportedBy` | UserReference | Кто сообщил | ✅ |
-| `reportedDate` | ISO8601DateTime | Дата сообщения | ✅ |
-| `affectedProcess` | string | Затронутый процесс | ✅ |
-| `affectedProducts` | string[] | Затронутые продукты | ❌ |
-| `immediateActions` | string | Немедленные действия | ✅ |
-| `investigation` | Investigation | Расследование | ❌ |
-| `impactAssessment` | ImpactAssessment | Оценка влияния на качество | ✅ |
-| `capaRequired` | boolean | Требуется ли CAPA | ✅ |
-| `capaId` | UUID | ID связанного CAPA | ❌ |
-| `electronicSignatures` | ElectronicSignature[] | Электронные подписи | ✅ |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅ |
+| Поле                    | Тип                       | Описание                                                   | Обязательное |
+| ----------------------- | ------------------------- | ---------------------------------------------------------- | ------------ |
+| `id`                    | UUID                      | Уникальный идентификатор                                   | ✅           |
+| `deviationId`           | string                    | Номер отклонения (DEV-YYYY-NNNN)                           | ✅           |
+| `title`                 | string                    | Заголовок                                                  | ✅           |
+| `description`           | string                    | Описание отклонения                                        | ✅           |
+| `classification`        | DeviationClassification   | critical/major/minor                                       | ✅           |
+| `status`                | DeviationStatus           | reported/classified/investigation/impact_assessment/closed | ✅           |
+| `reportedBy`            | UserReference             | Кто сообщил                                                | ✅           |
+| `reportedDate`          | ISO8601DateTime           | Дата сообщения                                             | ✅           |
+| `affectedProcess`       | string                    | Затронутый процесс                                         | ✅           |
+| `affectedProducts`      | string[]                  | Затронутые продукты                                        | ❌           |
+| `immediateActions`      | string                    | Немедленные действия                                       | ✅           |
+| `investigation`         | Investigation             | Расследование                                              | ❌           |
+| `impactAssessment`      | ImpactAssessment          | Оценка влияния на качество                                 | ✅           |
+| `capaRequired`          | boolean                   | Требуется ли CAPA                                          | ✅           |
+| `capaId`                | UUID                      | ID связанного CAPA                                         | ❌           |
+| `electronicSignatures`  | ElectronicSignature[]     | Электронные подписи                                        | ✅           |
+| `auditTrail`            | AuditTrailMetadata        | ALCOA+ метаданные                                          | ✅           |
 
 **Related Entities**: CAPA, ChangeControl, QualityEvent
 
@@ -444,22 +444,22 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ValidationZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 12 (4 topics, 8 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `validationId` | string | Номер валидации (VAL-YYYY-NNNN) | ✅ |
-| `title` | string | Название валидации | ✅ |
-| `type` | ValidationType | IQ/OQ/PQ/revalidation | ✅ |
-| `system` | string | Валидируемая система | ✅ |
-| `gampCategory` | GAMPCategory | 1/3/4/5 (GAMP 5 classification) | ✅ |
-| `status` | ValidationStatus | planning/protocol_draft/protocol_approved/execution/report_draft/report_approved/closed | ✅ |
-| `protocol` | ValidationProtocol | Протокол валидации | ✅ |
-| `testCases` | ValidationTestCase[] | Тест-кейсы | ✅ |
-| `executionResults` | ValidationResult[] | Результаты выполнения | ❌ |
-| `deviations` | ValidationDeviation[] | Отклонения от протокола | ❌ |
-| `report` | ValidationReport | Отчёт о валидации | ❌ |
-| `electronicSignatures` | ElectronicSignature[] | Электронные подписи | ✅ |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅ |
+| Поле                    | Тип                      | Описание                                                                                 | Обязательное |
+| ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------- | ------------ |
+| `id`                    | UUID                     | Уникальный идентификатор                                                                         | ✅           |
+| `validationId`          | string                   | Номер валидации (VAL-YYYY-NNNN)                                                                  | ✅           |
+| `title`                 | string                   | Название валидации                                                                               | ✅           |
+| `type`                  | ValidationType           | IQ/OQ/PQ/revalidation                                                                            | ✅           |
+| `system`                | string                   | Валидируемая система                                                                             | ✅           |
+| `gampCategory`          | GAMPCategory             | 1/3/4/5 (GAMP 5 classification)                                                                  | ✅           |
+| `status`                | ValidationStatus         | planning/protocol_draft/protocol_approved/execution/report_draft/report_approved/closed          | ✅           |
+| `protocol`              | ValidationProtocol       | Протокол валидации                                                                               | ✅           |
+| `testCases`             | ValidationTestCase[]     | Тест-кейсы                                                                                       | ✅           |
+| `executionResults`      | ValidationResult[]       | Результаты выполнения                                                                            | ❌           |
+| `deviations`            | ValidationDeviation[]    | Отклонения от протокола                                                                          | ❌           |
+| `report`                | ValidationReport         | Отчёт о валидации                                                                                | ❌           |
+| `electronicSignatures`  | ElectronicSignature[]    | Электронные подписи                                                                              | ✅           |
+| `auditTrail`            | AuditTrailMetadata       | ALCOA+ метаданные                                                                                | ✅           |
 
 **Related Entities**: ChangeControl, Document, QualityEvent
 
@@ -469,22 +469,22 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - QualityEventZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 13 (3 topics, 6 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `eventId` | string | Номер события (QE-YYYY-NNNN) | ✅ |
-| `type` | QualityEventType | complaint/audit_finding/inspection_observation/quality_issue | ✅ |
-| `title` | string | Заголовок | ✅ |
-| `description` | string | Описание события | ✅ |
-| `severity` | Severity | low/medium/high/critical | ✅ |
-| `status` | QualityEventStatus | reported/investigation/action_plan/closed | ✅ |
-| `reportedBy` | UserReference | Кто сообщил | ✅ |
-| `reportedDate` | ISO8601DateTime | Дата сообщения | ✅ |
-| `affectedAreas` | string[] | Затронутые области | ✅ |
-| `investigation` | Investigation | Расследование | ❌ |
-| `linkedRecords` | LinkedRecord[] | Связанные записи (CAPA, Deviation, Change) | ❌ |
-| `electronicSignatures` | ElectronicSignature[] | Электронные подписи | ✅ |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅ |
+| Поле                    | Тип                  | Описание                                                            | Обязательное |
+| ----------------------- | -------------------- | ------------------------------------------------------------------- | ------------ |
+| `id`                    | UUID                 | Уникальный идентификатор                                        | ✅           |
+| `eventId`               | string               | Номер события (QE-YYYY-NNNN)                                    | ✅           |
+| `type`                  | QualityEventType     | complaint/audit_finding/inspection_observation/quality_issue    | ✅           |
+| `title`                 | string               | Заголовок                                                       | ✅           |
+| `description`           | string               | Описание события                                                | ✅           |
+| `severity`              | Severity             | low/medium/high/critical                                        | ✅           |
+| `status`                | QualityEventStatus   | reported/investigation/action_plan/closed                       | ✅           |
+| `reportedBy`            | UserReference        | Кто сообщил                                                     | ✅           |
+| `reportedDate`          | ISO8601DateTime      | Дата сообщения                                                  | ✅           |
+| `affectedAreas`         | string[]             | Затронутые области                                              | ✅           |
+| `investigation`         | Investigation        | Расследование                                                   | ❌           |
+| `linkedRecords`         | LinkedRecord[]       | Связанные записи (CAPA, Deviation, Change)                      | ❌           |
+| `electronicSignatures`  | ElectronicSignature[]| Электронные подписи                                             | ✅           |
+| `auditTrail`            | AuditTrailMetadata   | ALCOA+ метаданные                                               | ✅           |
 
 **Related Entities**: CAPA, Deviation, ChangeControl, Training
 
@@ -494,22 +494,22 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - TrainingZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 14 (2 topics, 4 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `trainingId` | string | Номер обучения (TRN-YYYY-NNNN) | ✅ |
-| `courseId` | string | ID курса (CUR-XXX) | ✅ |
-| `userId` | UUID | ID пользователя | ✅ |
-| `status` | TrainingStatus | enrolled/in_progress/completed/expired | ✅ |
-| `startDate` | ISO8601DateTime | Дата начала | ✅ |
-| `completionDate` | ISO8601DateTime | Дата завершения | ❌ |
-| `expirationDate` | ISO8601DateTime | Дата истечения сертификата | ❌ |
-| `score` | number | Оценка (если экзамен) | ❌ |
-| `passingScore` | number | Проходной балл | ✅ |
-| `attempts` | number | Количество попыток | ✅ |
-| `certificateIssued` | boolean | Выдан ли сертификат | ✅ |
-| `electronicSignatures` | ElectronicSignature[] | Электронные подписи | ✅ |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅ |
+| Поле                    | Тип                   | Описание                       | Обязательное |
+| ----------------------- | --------------------- | ------------------------------ | ------------ |
+| `id`                    | UUID                  | Уникальный идентификатор           | ✅           |
+| `trainingId`            | string                | Номер обучения (TRN-YYYY-NNNN)     | ✅           |
+| `courseId`              | string                | ID курса (CUR-XXX)                 | ✅           |
+| `userId`                | UUID                  | ID пользователя                    | ✅           |
+| `status`                | TrainingStatus        | enrolled/in_progress/completed/expired | ✅       |
+| `startDate`             | ISO8601DateTime       | Дата начала                        | ✅           |
+| `completionDate`        | ISO8601DateTime       | Дата завершения                    | ❌           |
+| `expirationDate`        | ISO8601DateTime       | Дата истечения сертификата         | ❌           |
+| `score`                 | number                | Оценка (если экзамен)              | ❌           |
+| `passingScore`          | number                | Проходной балл                     | ✅           |
+| `attempts`              | number                | Количество попыток                 | ✅           |
+| `certificateIssued`     | boolean               | Выдан ли сертификат                | ✅           |
+| `electronicSignatures`  | ElectronicSignature[] | Электронные подписи                | ✅           |
+| `auditTrail`            | AuditTrailMetadata    | ALCOA+ метаданные                  | ✅           |
 
 **Related Entities**: User, QualityEvent, CAPA (для training gap CAPA)
 
@@ -519,22 +519,22 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - DocumentZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 15 (1 topic, 3 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `documentId` | string | Номер документа (DOC-XXX-YYYY-NNNN) | ✅ |
-| `title` | string | Название | ✅ |
-| `type` | DocumentType | SOP/protocol/report/form/policy | ✅ |
-| `version` | string | Версия (1.0, 2.0, etc.) | ✅ |
-| `status` | DocumentStatus | draft/review/approved/obsolete/archived | ✅ |
-| `author` | UserReference | Автор | ✅ |
-| `approver` | UserReference | Утверждающий | ❌ |
-| `effectiveDate` | ISO8601DateTime | Дата вступления в силу | ❌ |
-| `reviewDate` | ISO8601DateTime | Дата следующего пересмотра | ❌ |
-| `edmsDocumentId` | string | ID в Mayan-EDMS | ✅ |
-| `changeControlId` | UUID | ID связанного Change Control | ❌ |
-| `electronicSignatures` | ElectronicSignature[] | Электронные подписи | ✅ |
-| `auditTrail` | AuditTrailMetadata | ALCOA+ метаданные | ✅ |
+| Поле                    | Тип                   | Описание                                              | Обязательное |
+| ----------------------- | --------------------- | ----------------------------------------------------- | ------------ |
+| `id`                    | UUID                  | Уникальный идентификатор                  | ✅           |
+| `documentId`            | string                | Номер документа (DOC-XXX-YYYY-NNNN)       | ✅           |
+| `title`                 | string                | Название                                  | ✅           |
+| `type`                  | DocumentType          | SOP/protocol/report/form/policy           | ✅           |
+| `version`               | string                | Версия (1.0, 2.0, etc.)                   | ✅           |
+| `status`                | DocumentStatus        | draft/review/approved/obsolete/archived   | ✅           |
+| `author`                | UserReference         | Автор                                     | ✅           |
+| `approver`              | UserReference         | Утверждающий                              | ❌           |
+| `effectiveDate`         | ISO8601DateTime       | Дата вступления в силу                    | ❌           |
+| `reviewDate`            | ISO8601DateTime       | Дата следующего пересмотра                | ❌           |
+| `edmsDocumentId`        | string                | ID в Mayan-EDMS                           | ✅           |
+| `changeControlId`       | UUID                  | ID связанного Change Control              | ❌           |
+| `electronicSignatures`  | ElectronicSignature[] | Электронные подписи                        | ✅           |
+| `auditTrail`            | AuditTrailMetadata    | ALCOA+ метаданные                          | ✅           |
 
 **Related Entities**: ChangeControl, Validation, Training
 
@@ -544,18 +544,18 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AnalyticsZodSchema`  
 **Events**: `EVENT_ARCHITECTURE.md Section 16 (2 topics, 5 events)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `id` | UUID | Уникальный идентификатор | ✅ |
-| `metricType` | string | Тип метрики | ✅ |
-| `period` | string | Период (daily/weekly/monthly/quarterly) | ✅ |
-| `startDate` | ISO8601DateTime | Начало периода | ✅ |
-| `endDate` | ISO8601DateTime | Конец периода | ✅ |
-| `module` | string | Модуль (change_control/capa/deviation/validation) | ✅ |
-| `metrics` | Record<string, number> | Метрики | ✅ |
-| `trends` | TrendData[] | Трендовые данные | ❌ |
-| `generatedBy` | UserReference | Кто сгенерировал | ✅ |
-| `generatedAt` | ISO8601DateTime | Когда сгенерировано | ✅ |
+| Поле            | Тип                   | Описание                                                    | Обязательное |
+| --------------- | --------------------- | ----------------------------------------------------------- | ------------ |
+| `id`            | UUID                  | Уникальный идентификатор                                | ✅           |
+| `metricType`    | string                | Тип метрики                                             | ✅           |
+| `period`        | string                | Период (daily/weekly/monthly/quarterly)                 | ✅           |
+| `startDate`     | ISO8601DateTime       | Начало периода                                          | ✅           |
+| `endDate`       | ISO8601DateTime       | Конец периода                                           | ✅           |
+| `module`        | string                | Модуль (change_control/capa/deviation/validation)       | ✅           |
+| `metrics`       | Record<string, number>| Метрики                                                 | ✅           |
+| `trends`        | TrendData[]           | Трендовые данные                                        | ❌           |
+| `generatedBy`   | UserReference         | Кто сгенерировал                                        | ✅           |
+| `generatedAt`   | ISO8601DateTime       | Когда сгенерировано                                     | ✅           |
 
 **Related Entities**: All compliance modules
 
@@ -568,43 +568,43 @@ type Vector3 = [number, number, number]; // [x, y, z]
 **Описание**: Электронная подпись согласно 21 CFR Part 11  
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - ElectronicSignatureZodSchema (Enhanced)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `userId` | UUID | ID пользователя | ✅ |
-| `fullName` | string | Полное имя | ✅ |
-| `role` | string | Роль | ✅ |
-| `action` | string | Действие (approved, reviewed, implemented) | ✅ |
-| `reason` | string | Обоснование (mandatory per 21 CFR Part 11) | ✅ |
-| `timestamp` | ISO8601DateTime | Время подписи | ✅ |
-| `ipAddress` | string | IP адрес | ✅ |
-| `authenticationMethod` | string | Метод аутентификации (password/mfa/certificate) | ✅ |
+| Поле                     | Тип             | Описание                                            | Обязательное |
+| ------------------------ | --------------- | --------------------------------------------------- | ------------ |
+| `userId`                 | UUID            | ID пользователя                                     | ✅           |
+| `fullName`               | string          | Полное имя                                          | ✅           |
+| `role`                   | string          | Роль                                                | ✅           |
+| `action`                 | string          | Действие (approved, reviewed, implemented)          | ✅           |
+| `reason`                 | string          | Обоснование (mandatory per 21 CFR Part 11)          | ✅           |
+| `timestamp`              | ISO8601DateTime | Время подписи                                       | ✅           |
+| `ipAddress`              | string          | IP адрес                                            | ✅           |
+| `authenticationMethod`   | string          | Метод аутентификации (password/mfa/certificate)     | ✅           |
 
 ### AuditTrailMetadata
 
 **Описание**: ALCOA+ совместимые метаданные аудита  
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - AuditTrailZodSchema (Enhanced)`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `createdBy` | UserReference | Кто создал | ✅ |
-| `createdAt` | ISO8601DateTime | Когда создано | ✅ |
-| `lastModifiedBy` | UserReference | Кто изменил последний раз | ❌ |
-| `lastModifiedAt` | ISO8601DateTime | Когда изменено | ❌ |
-| `changeReason` | string | Причина изменения | ❌ |
-| `version` | number | Версия записи | ✅ |
-| `dataIntegrityHash` | string | Хеш для проверки целостности | ✅ |
+| Поле                 | Тип             | Описание                       | Обязательное |
+| -------------------- | --------------- | ------------------------------ | ------------ |
+| `createdBy`          | UserReference   | Кто создал                         | ✅           |
+| `createdAt`          | ISO8601DateTime | Когда создано                      | ✅           |
+| `lastModifiedBy`     | UserReference   | Кто изменил последний раз          | ❌           |
+| `lastModifiedAt`     | ISO8601DateTime | Когда изменено                     | ❌           |
+| `changeReason`       | string          | Причина изменения                  | ❌           |
+| `version`            | number          | Версия записи                      | ✅           |
+| `dataIntegrityHash`  | string          | Хеш для проверки целостности       | ✅           |
 
 ### GxPValidationFields
 
 **Описание**: Mixin для всех GxP-критичных сущностей  
 **Источник**: `CONTRACT_SPECIFICATIONS.md v2.0 - GxPValidationFieldsSchema`
 
-| Поле | Тип | Описание | Обязательное |
-|------|-----|----------|--------------|
-| `gxpCritical` | boolean | Критично ли для GxP | ✅ |
-| `validationStatus` | ValidationStatus | Статус валидации | ✅ |
-| `regulatoryRelevance` | string[] | Применимые регуляторные требования | ✅ |
-| `dataIntegrityLevel` | AlcoaLevel | ALCOA+ compliance level | ✅ |
+| Поле                     | Тип              | Описание                                | Обязательное |
+| ------------------------ | ---------------- | --------------------------------------- | ------------ |
+| `gxpCritical`            | boolean          | Критично ли для GxP                     | ✅           |
+| `validationStatus`       | ValidationStatus | Статус валидации                        | ✅           |
+| `regulatoryRelevance`    | string[]         | Применимые регуляторные требования      | ✅           |
+| `dataIntegrityLevel`     | AlcoaLevel       | ALCOA+ compliance level                 | ✅           |
 
 ---
 

@@ -21,6 +21,7 @@ ai_status: draft
 ## 1. Purpose
 
 Установить комплексную систему управления качеством (QMS) для обеспечения:
+
 - Соответствия GACP требованиям в производстве медицинского каннабиса
 - Гарантии качества, безопасности и эффективности продукции
 - Непрерывного улучшения всех процессов жизненного цикла
@@ -188,6 +189,7 @@ ai_status: draft
 #### 9.1.1 Risk Identification
 
 **Systematic Approach:**
+
 ```yaml
 Risk_Sources:
   product_related:
@@ -231,6 +233,7 @@ Low Probability     |   HIGH     | MEDIUM|  MEDIUM  |  LOW   | VERY LOW |
 ```
 
 **Risk Response Strategies:**
+
 - **EXTREME/HIGH**: Immediate action required
 - **MEDIUM**: Action within defined timeframe
 - **LOW**: Monitor, consider preventive actions
@@ -241,6 +244,7 @@ Low Probability     |   HIGH     | MEDIUM|  MEDIUM  |  LOW   | VERY LOW |
 #### 9.2.1 Control Strategies by Risk Level
 
 **Critical Risks (EXTREME):**
+
 ```yaml
 Control_Strategy:
   prevention:
@@ -263,12 +267,14 @@ Control_Strategy:
 ```
 
 **Major Risks (HIGH):**
+
 - Enhanced controls
 - Periodic verification
 - Trend monitoring
 - Management oversight
 
 **Moderate Risks (MEDIUM):**
+
 - Standard controls
 - Routine monitoring
 - Periodic review
@@ -277,12 +283,14 @@ Control_Strategy:
 #### 9.2.2 Risk Communication
 
 **Internal Communication:**
+
 - Risk register updates
 - Management review meetings
 - Cross-functional risk forums
 - Training and awareness programs
 
 **External Communication:**
+
 - Regulatory submissions
 - Customer notifications (if applicable)
 - Supplier risk sharing
@@ -318,6 +326,7 @@ Review_Cycle:
 #### 10.1.1 Knowledge Sources
 
 **Explicit Knowledge:**
+
 - SOPs and work instructions
 - Validation protocols and reports
 - Technical specifications
@@ -325,6 +334,7 @@ Review_Cycle:
 - Regulatory submissions
 
 **Tacit Knowledge:**
+
 - Expert experience
 - Troubleshooting insights
 - Process optimization tips
@@ -359,18 +369,21 @@ Transfer_Methods:
 #### 10.2.1 Learning Initiatives
 
 **Individual Level:**
+
 - Personal development plans
 - Skills assessment
 - Certification programs
 - External training opportunities
 
 **Team Level:**
+
 - Cross-functional workshops
 - Problem-solving sessions
 - Best practice sharing
 - Improvement projects
 
 **Organizational Level:**
+
 - Annual quality conference
 - Innovation challenges
 - Benchmarking studies
@@ -403,6 +416,7 @@ Recognition_Program:
 #### 11.1.1 Qualification Process
 
 **Pre-Qualification:**
+
 ```markdown
 Step 1: Initial Assessment
   - Business profile review
@@ -432,12 +446,14 @@ Step 4: Approval
 #### 11.1.2 Approved Supplier List (ASL)
 
 **Maintenance:**
+
 - Regular performance review
 - Periodic re-audits (annually or bi-annually)
 - Incident tracking
 - Continuous monitoring
 
 **Categories:**
+
 ```yaml
 Supplier_Classification:
   critical:
@@ -488,6 +504,7 @@ Rating_Categories:
 ```
 
 **Actions by Rating:**
+
 - **A (Preferred)**: Maintain, consider volume increase
 - **B (Acceptable)**: Continue with monitoring
 - **C (Conditional)**: Improvement plan required
@@ -498,12 +515,14 @@ Rating_Categories:
 #### 11.3.1 Collaborative Improvement
 
 **Joint Initiatives:**
+
 - Quality improvement projects
 - Process optimization
 - Technology transfer
 - Co-innovation programs
 
 **Support Programs:**
+
 - Technical assistance
 - Training provision
 - Audit preparation
@@ -539,6 +558,7 @@ Partnership_Criteria:
 #### 12.1.1 Review Scope
 
 **Required Data Analysis:**
+
 ```markdown
 1. Production Data
    - Batch records review
@@ -574,6 +594,7 @@ Partnership_Criteria:
 #### 12.1.2 Review Process
 
 **Timeline:**
+
 - **Data Collection**: Month 1
 - **Analysis**: Months 2-3
 - **Report Drafting**: Month 3
@@ -582,6 +603,7 @@ Partnership_Criteria:
 - **Implementation Tracking**: Ongoing
 
 **Review Team:**
+
 - Quality Manager (Lead)
 - Production Manager
 - Laboratory Manager
@@ -592,6 +614,7 @@ Partnership_Criteria:
 #### 12.1.3 Deliverables
 
 **PQR Report Sections:**
+
 1. Executive Summary
 2. Product Overview
 3. Production Analysis
@@ -608,6 +631,7 @@ Partnership_Criteria:
 #### 12.2.1 Statistical Methods
 
 **Process Capability:**
+
 ```
 Cpk = min[(USL - μ)/(3σ), (μ - LSL)/(3σ)]
 
@@ -621,6 +645,7 @@ Target: Cpk ≥ 1.33
 ```
 
 **Control Charts:**
+
 - X-bar and R charts for continuous data
 - p-charts for attribute data
 - CUSUM for trend detection
@@ -629,6 +654,7 @@ Target: Cpk ≥ 1.33
 #### 12.2.2 Data Integrity in PQR
 
 **ALCOA+ Compliance:**
+
 - ✅ All data attributable to source
 - ✅ Records legible and permanent
 - ✅ Contemporaneous documentation
@@ -680,6 +706,7 @@ Stage_5_Closure:
 #### 13.1.2 Technology Package Contents
 
 **Essential Documentation:**
+
 - Master formula/batch records
 - Analytical methods
 - Process flow diagrams
@@ -690,6 +717,7 @@ Stage_5_Closure:
 - Risk assessments
 
 **Training Materials:**
+
 - Process training guides
 - Equipment operation manuals
 - Troubleshooting guides
@@ -725,6 +753,7 @@ Transfer_Acceptance:
 #### 14.1.1 Culture Indicators
 
 **Behavioral Indicators:**
+
 ```markdown
 ✅ Positive Indicators:
 - Open reporting of issues
@@ -746,6 +775,7 @@ Transfer_Acceptance:
 #### 14.1.2 Culture Building Activities
 
 **Leadership Behaviors:**
+
 - Visible quality commitment
 - Resources for quality
 - Recognition and reward
@@ -754,6 +784,7 @@ Transfer_Acceptance:
 - Accountability at all levels
 
 **Organizational Practices:**
+
 - Quality in performance reviews
 - Quality metrics visibility
 - Celebration of successes
@@ -789,6 +820,7 @@ Core_Competencies:
 #### 14.2.2 Development Programs
 
 **Quality Leader Pipeline:**
+
 ```
 Level 1: Quality Specialist
   → Technical excellence
@@ -814,6 +846,7 @@ Level 4: Quality Director
 #### 15.1.1 Integrated Modules
 
 **Core QMS Modules:**
+
 ```yaml
 Document_Management:
   - Version control
@@ -849,6 +882,7 @@ Change_Control:
 #### 15.1.2 Data Analytics for Quality
 
 **Real-Time Dashboards:**
+
 - Deviation trends by type/area
 - CAPA aging and effectiveness
 - Training compliance rates
@@ -857,6 +891,7 @@ Change_Control:
 - Supplier performance
 
 **Predictive Analytics:**
+
 - Deviation prediction models
 - Quality risk forecasting
 - Resource optimization
@@ -889,18 +924,21 @@ ML_Use_Cases:
 #### 16.1.1 Continuous Readiness Approach
 
 **Daily Readiness:**
+
 - Real-time GMP compliance
 - Current documentation
 - Trained personnel
 - Clean and organized facilities
 
 **Monthly Self-Inspection:**
+
 - Mock inspection exercises
 - Gap identification
 - Corrective action tracking
 - Continuous improvement
 
 **Annual Comprehensive Review:**
+
 - Full system audit
 - Regulatory requirement mapping
 - Best practice benchmarking
@@ -909,6 +947,7 @@ ML_Use_Cases:
 #### 16.1.2 Inspection Response Procedures
 
 **Pre-Inspection:**
+
 ```markdown
 1. Notification Received
    - Assemble response team
@@ -930,6 +969,7 @@ ML_Use_Cases:
 ```
 
 **During Inspection:**
+
 - Accurate, concise responses
 - Document everything
 - No speculation
@@ -937,6 +977,7 @@ ML_Use_Cases:
 - Professional demeanor
 
 **Post-Inspection:**
+
 ```yaml
 Inspection_Closeout:
   observations_review:
@@ -972,6 +1013,7 @@ Inspection_Closeout:
 #### 16.2.2 Audit Execution
 
 **Audit Process:**
+
 ```
 1. Planning (2 weeks before)
    → Audit scope definition
@@ -1002,6 +1044,7 @@ Inspection_Closeout:
 #### 16.2.3 Auditor Qualifications
 
 **Required Competencies:**
+
 - GxP regulations knowledge
 - QMS principles understanding
 - Auditing techniques
@@ -1010,6 +1053,7 @@ Inspection_Closeout:
 - Industry experience
 
 **Training Path:**
+
 ```
 Level 1: Audit Observer
   → Shadow experienced auditors
@@ -1052,7 +1096,7 @@ Level 4: Audit Program Manager
 ## 19. Approvals
 
 | Role | Name | Signature | Date |
-|------|------|-----------|------|
+|------------------------|--------------------------|-----------|------|
 | **Author** | Quality Manager | _________________ | __________ |
 | **Technical Reviewer** | Compliance Officer | _________________ | __________ |
 | **Quality Reviewer** | Quality Director | _________________ | __________ |
@@ -1061,6 +1105,7 @@ Level 4: Audit Program Manager
 ---
 
 **Document Control:**
+
 - Document ID: SOP-QMS-001
 - Location: /docs/sop/SOP_QMS_Governance.md
 - Classification: Internal - Restricted
