@@ -1,0 +1,958 @@
+# DSL Schema for Reports
+# Version: 1.0.0
+# Purpose: Standardized structure for regulatory reports, summaries, and analytics
+
+schema_version: "1.0.0"
+document_type: "report"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: string                    # RPT-XXX-NNN (e.g., RPT-QA-001)
+  title: string                 # Report title
+  version: string               # Version number (e.g., 1.0.0)
+  effective_date: date          # When report template becomes effective
+  supersedes: string            # Previous version ID (optional)
+  
+  report_type:
+   type:
+    enum:
+    values:
+      - audit_report            # Internal/external audit report
+      - incident_report         # Incident/deviation report
+      - investigation_report    # Root cause investigation
+      - batch_report            # Batch production/release report
+      - validation_report       # Process/equipment validation
+      - analytical_report       # Laboratory test results
+      - compliance_report       # Regulatory compliance status
+      - performance_report      # KPI/metrics report
+      - summary_report          # Executive/management summary
+      - training_report         # Training effectiveness/completion
+      - capa_report            # Corrective/preventive action report
+      - change_control_report   # Change control summary
+      - environmental_report    # Environmental monitoring
+      - stability_report        # Stability study results
+      - trending_report         # Data trending and analysis
+  
+  report_category: enum
+    values:
+      - regulatory              # For regulatory submission/review
+      - internal                # Internal use only
+      - management              # Management review
+      - operational             # Day-to-day operations
+      - strategic               # Strategic planning
+  
+  confidentiality: enum
+    values:
+      - public
+      - internal
+      - confidential
+      - restricted
+  
+  purpose: string               # Brief description of report purpose
+  scope: string                 # What the report covers
+  
+  regulatory_compliance:
+    standards:
+      - string                  # e.g., "FDA 21 CFR Part 11", "WHO GACP"
+    requirements:
+      - string                  # Specific requirements met
+
+# ====================
+# 2. REPORT CONTEXT
+# ====================
+report_context:
+  reporting_period: string      # Time period covered (e.g., "Monthly", "Per batch")
+  frequency: string             # How often generated (daily, weekly, monthly, quarterly, annual, ad-hoc)
+  
+  triggered_by:
+    type: enum
+    values:
+      - scheduled               # Regular scheduled report
+      - event_driven            # Triggered by specific event
+      - request                 # Generated on request
+      - regulatory_requirement  # Required by regulation
+      - management_review       # For management review meeting
+  
+  trigger_conditions:           # What triggers report generation
+    - condition: string
+      threshold: string
+  
+  related_documents:
+    sops:
+      - id: string
+        title: string
+        section: string
+    
+    forms:
+      - id: string
+        title: string
+    
+    other_reports:
+      - id: string
+        title: string
+        relationship: string    # Parent, child, related
+  
+  responsible_roles:            # Who prepares/reviews/approves report
+    prepared_by:
+      role: string
+      qualification: string
+    
+    reviewed_by:
+      role: string
+      qualification: string
+    
+    approved_by:
+      role: string
+      authority_level: string
+  
+  distribution:                 # Who receives the report
+    - recipient_role: string
+      delivery_method: enum
+        values:
+          - email
+          - printed
+          - system_access
+          - secure_portal
+      mandatory: boolean
+
+# ====================
+# 3. REPORT STRUCTURE
+# ====================
+report_structure:
+  cover_page:                   # Report cover information
+    fields:
+      - field_id: string
+        field_name: string
+        field_type: enum
+          values:
+            - text
+            - date
+            - reference_number
+            - version
+        required: boolean
+        auto_populated: boolean
+        data_source: string     # Where data comes from
+  
+  executive_summary:            # High-level summary section
+    required: boolean
+    max_length_words: integer
+    key_points:
+      - point_type: string      # Finding, conclusion, recommendation
+        description: string
+  
+  sections:                     # Main report sections
+    - section_id: string
+      section_number: string    # e.g., "1.0", "2.1"
+      section_title: string
+      section_description: string
+      mandatory: boolean
+      
+      subsections:
+        - subsection_id: string
+          subsection_number: string
+          subsection_title: string
+          
+          content_type: enum
+            values:
+              - narrative         # Text narrative
+              - data_table        # Structured data table
+              - chart             # Chart/graph
+              - checklist         # Embedded checklist
+              - timeline          # Timeline visualization
+              - attachment        # Attached document
+              - photo             # Photo documentation
+              - diagram           # Technical diagram
+          
+          # For narrative content
+          narrative:
+            prompt: string      # What to describe
+            guidance: string    # How to describe it
+            min_length_words: integer
+            max_length_words: integer
+          
+          # For data tables
+          data_table:
+            table_id: string
+            table_title: string
+            
+            columns:
+              - column_id: string
+                column_name: string
+                data_type: enum
+                  values:
+                    - text
+                    - number
+                    - date
+                    - percentage
+                    - currency
+                    - boolean
+                    - reference
+                unit: string
+                format: string
+                required: boolean
+                
+                validation:
+                  min_value: number
+                  max_value: number
+                  allowed_values: array
+                
+                calculation: string  # Formula for calculated columns
+            
+            data_source:
+              source_type: enum
+                values:
+                  - manual_entry
+                  - database_query
+                  - form_data
+                  - imported_file
+                  - calculated
+              query: string
+              transformation: string
+            
+            sorting:
+              default_sort_column: string
+              sort_direction: enum
+                values:
+                  - ascending
+                  - descending
+            
+            aggregation:
+              - aggregation_type: enum
+                  values:
+                    - sum
+                    - average
+                    - count
+                    - min
+                    - max
+                    - median
+                column: string
+                display_as: string
+          
+          # For charts
+          chart:
+            chart_type: enum
+              values:
+                - line
+                - bar
+                - pie
+                - scatter
+                - histogram
+                - control_chart
+                - pareto
+            
+            data_source:
+              source_type: string
+              query: string
+            
+            x_axis:
+              label: string
+              data_field: string
+              unit: string
+            
+            y_axis:
+              label: string
+              data_field: string
+              unit: string
+            
+            series:
+              - series_name: string
+                data_field: string
+                color: string
+            
+            control_limits:       # For control charts
+              ucl: number         # Upper control limit
+              lcl: number         # Lower control limit
+              target: number      # Target value
+          
+          # For attachments
+          attachments:
+            - attachment_type: string
+              description: string
+              mandatory: boolean
+              file_format: array  # Accepted formats
+  
+  conclusions:                  # Conclusions section
+    required: boolean
+    
+    conclusion_items:
+      - conclusion_id: string
+        conclusion_type: enum
+          values:
+            - finding
+            - observation
+            - non_conformance
+            - recommendation
+            - action_required
+        
+        severity: enum
+          values:
+            - critical
+            - major
+            - minor
+            - observation
+        
+        description: string
+        evidence: string
+        impact: string
+        
+        linked_to_section: string  # Reference to section with supporting data
+  
+  recommendations:              # Recommendations section
+    required: boolean
+    
+    recommendation_items:
+      - recommendation_id: string
+        recommendation_text: string
+        rationale: string
+        priority: enum
+          values:
+            - immediate
+            - high
+            - medium
+            - low
+        
+        responsible_party: string
+        target_completion_date: date
+        
+        resources_required:
+          - resource: string
+            estimated_cost: string
+  
+  action_plan:                  # Action plan section
+    required: boolean
+    
+    actions:
+      - action_id: string
+        action_description: string
+        responsible: string
+        target_date: date
+        status: enum
+          values:
+            - not_started
+            - in_progress
+            - completed
+            - overdue
+            - cancelled
+        
+        verification_method: string
+        completion_criteria: string
+  
+  appendices:                   # Appendices section
+    - appendix_id: string
+      appendix_number: string   # e.g., "Appendix A"
+      appendix_title: string
+      
+      content_type: enum
+        values:
+          - raw_data
+          - calculations
+          - referenced_documents
+          - photos
+          - charts
+          - supplementary_analysis
+      
+      description: string
+  
+  approval_page:                # Approval signatures
+    fields:
+      - field_id: string
+        field_name: string
+        field_type: enum
+          values:
+            - signature
+            - date
+            - printed_name
+            - title
+        role: string
+        required: boolean
+
+# ====================
+# 4. DATA SOURCES AND COLLECTION
+# ====================
+data_sources:
+  - source_id: string
+    source_name: string
+    source_type: enum
+      values:
+        - database_table
+        - form_collection
+        - log_file
+        - external_system
+        - manual_entry
+        - calculation
+        - imported_file
+    
+    connection_details:
+      system: string
+      query: string
+      filters: array
+      date_range: string
+    
+    data_validation:
+      validation_rules:
+        - rule: string
+          error_action: enum
+            values:
+              - reject
+              - flag
+              - accept_with_note
+    
+    refresh_frequency: string   # How often data is updated
+    last_updated: datetime
+
+# ====================
+# 5. ANALYSIS AND CALCULATIONS
+# ====================
+analysis:
+  statistical_methods:
+    - method_name: string       # e.g., "Trend analysis", "Control chart"
+      method_description: string
+      applicable_sections: array
+      
+      parameters:
+        - parameter_name: string
+          parameter_value: string
+      
+      acceptance_criteria: string
+      interpretation_guide: string
+  
+  calculations:
+    - calculation_id: string
+      calculation_name: string
+      formula: string
+      input_variables:
+        - variable_name: string
+          data_source: string
+      output_variable: string
+      unit: string
+      
+      validation:
+        expected_range_min: number
+        expected_range_max: number
+        error_handling: string
+  
+  trending:
+    enabled: boolean
+    trend_period: string        # How far back to trend
+    trend_parameters:
+      - parameter: string
+        baseline: number
+        alert_threshold: number
+        action_threshold: number
+
+# ====================
+# 6. QUALITY AND COMPLIANCE
+# ====================
+quality_requirements:
+  data_integrity:
+    alcoa_plus_compliance: boolean
+    
+    attributable:
+      requirement: string
+      implementation: string
+    
+    legible:
+      requirement: string
+      implementation: string
+    
+    contemporaneous:
+      requirement: string
+      implementation: string
+    
+    original:
+      requirement: string
+      implementation: string
+    
+    accurate:
+      requirement: string
+      implementation: string
+    
+    complete:
+      requirement: string
+      implementation: string
+    
+    consistent:
+      requirement: string
+      implementation: string
+    
+    enduring:
+      requirement: string
+      implementation: string
+    
+    available:
+      requirement: string
+      implementation: string
+  
+  review_requirements:
+    technical_review:
+      required: boolean
+      reviewer_role: string
+      review_criteria:
+        - criterion: string
+    
+    quality_review:
+      required: boolean
+      reviewer_role: string
+      review_criteria:
+        - criterion: string
+    
+    management_review:
+      required: boolean
+      reviewer_role: string
+      review_criteria:
+        - criterion: string
+  
+  approval_workflow:
+    - step_number: integer
+      approver_role: string
+      approval_criteria:
+        - criterion: string
+      can_reject: boolean
+      rejection_procedure: string
+
+# ====================
+# 7. REPORT GENERATION
+# ====================
+generation:
+  generation_method: enum
+    values:
+      - manual                  # Manually created
+      - semi_automated          # Template with manual input
+      - fully_automated         # Auto-generated from data
+  
+  templates:
+    - template_id: string
+      template_name: string
+      template_format: enum
+        values:
+          - docx
+          - pdf
+          - html
+          - xlsx
+          - xml
+      template_location: string
+  
+  automation:
+    automated_sections:
+      - section_id: string
+        automation_script: string
+        data_source: string
+    
+    scheduled_generation:
+      enabled: boolean
+      schedule: string          # Cron expression or description
+      auto_distribute: boolean
+  
+  output_formats:
+    - format: enum
+        values:
+          - pdf
+          - docx
+          - html
+          - xlsx
+          - xml
+          - csv
+      primary: boolean
+      
+      formatting_requirements:
+        page_size: string
+        margins: string
+        font: string
+        headers_footers: boolean
+        watermark: string
+
+# ====================
+# 8. DISTRIBUTION AND ACCESS
+# ====================
+distribution:
+  distribution_list:
+    - recipient_role: string
+      recipient_name: string
+      delivery_method: enum
+        values:
+          - email
+          - printed
+          - portal_access
+          - secure_file_transfer
+      delivery_timing: string
+      read_receipt_required: boolean
+  
+  access_control:
+    who_can_view:
+      - role: string
+        access_level: enum
+          values:
+            - full
+            - summary_only
+            - restricted_sections
+    
+    who_can_edit:
+      - role: string
+        edit_scope: array       # Which sections can be edited
+    
+    who_can_approve:
+      - role: string
+  
+  external_distribution:
+    external_recipients_allowed: boolean
+    
+    external_recipients:
+      - recipient_type: string  # Regulator, client, partner
+        recipient_name: string
+        approval_required: boolean
+        approver_role: string
+
+# ====================
+# 9. RETENTION AND ARCHIVAL
+# ====================
+data_retention:
+  retention_period: string      # How long to keep
+  retention_triggers:
+    - trigger: string           # What starts retention clock
+      duration: string
+  
+  storage_location:
+    primary: string
+    backup: string
+    archive: string
+  
+  archival_procedure:
+    archive_timing: string      # When to archive
+    archive_format: string      # Format for archival
+    archive_location: string
+    retrieval_procedure: string
+  
+  destruction:
+    destruction_timing: string
+    destruction_method: string
+    destruction_approval: string
+    destruction_documentation: string
+
+# ====================
+# 10. METRICS AND KPIs
+# ====================
+report_metrics:
+  - metric_id: string
+    metric_name: string
+    metric_description: string
+    
+    calculation:
+      formula: string
+      data_sources: array
+    
+    target_value: string
+    
+    thresholds:
+      red_threshold: string     # Unacceptable
+      yellow_threshold: string  # Warning
+      green_threshold: string   # Acceptable
+    
+    trending_enabled: boolean
+    trend_direction: enum       # Higher is better, lower is better, target
+      values:
+        - higher_better
+        - lower_better
+        - target_best
+    
+    visualization_type: enum
+      values:
+        - gauge
+        - trend_line
+        - bar_chart
+        - traffic_light
+
+# ====================
+# 11. REVISION HISTORY
+# ====================
+revision_history:
+  - version: string
+    date: date
+    changes: string
+    reason_for_change: string
+    sections_affected: array
+    changed_by: string
+    approved_by: string
+
+# ====================
+# EXAMPLE USAGE
+# ====================
+example:
+  metadata:
+    id: "RPT-QA-001"
+    title: "Monthly Quality Metrics Report"
+    version: "1.0.0"
+    effective_date: "2024-01-15"
+    report_type: "performance_report"
+    report_category: "management"
+    confidentiality: "internal"
+    
+    purpose: "Provide monthly summary of quality metrics and trends to management"
+    scope: "All GMP operations for the reporting month"
+    
+    regulatory_compliance:
+      standards:
+        - "WHO GACP Section 7"
+        - "ISO 9001 Section 9.1"
+      requirements:
+        - "Monthly quality review required"
+        - "KPI tracking and trending"
+  
+  report_context:
+    reporting_period: "Monthly"
+    frequency: "Monthly, within 5 business days of month end"
+    
+    triggered_by: "scheduled"
+    
+    related_documents:
+      sops:
+        - id: "SOP-QMS-001"
+          title: "Quality Management System"
+          section: "Section 8 - Metrics and KPIs"
+    
+    responsible_roles:
+      prepared_by:
+        role: "QA Analyst"
+        qualification: "Trained on SOP-QMS-001"
+      
+      reviewed_by:
+        role: "QA Manager"
+        qualification: "QA Manager certification"
+      
+      approved_by:
+        role: "Quality Director"
+        authority_level: "Executive"
+    
+    distribution:
+      - recipient_role: "Quality Director"
+        delivery_method: "email"
+        mandatory: true
+      
+      - recipient_role: "Operations Director"
+        delivery_method: "email"
+        mandatory: true
+      
+      - recipient_role: "Management Team"
+        delivery_method: "system_access"
+        mandatory: false
+  
+  report_structure:
+    cover_page:
+      fields:
+        - field_id: "report_number"
+          field_name: "Report Number"
+          field_type: "reference_number"
+          required: true
+          auto_populated: true
+          data_source: "Document control system"
+        
+        - field_id: "report_date"
+          field_name: "Report Date"
+          field_type: "date"
+          required: true
+          auto_populated: true
+        
+        - field_id: "reporting_period"
+          field_name: "Reporting Period"
+          field_type: "text"
+          required: true
+          auto_populated: false
+    
+    executive_summary:
+      required: true
+      max_length_words: 500
+      key_points:
+        - point_type: "finding"
+          description: "Overall quality status for the month"
+        
+        - point_type: "finding"
+          description: "Key metrics performance vs targets"
+        
+        - point_type: "recommendation"
+          description: "Priority actions for next month"
+    
+    sections:
+      - section_id: "deviations"
+        section_number: "1.0"
+        section_title: "Deviation Summary"
+        section_description: "Summary of all deviations reported during the period"
+        mandatory: true
+        
+        subsections:
+          - subsection_id: "deviation_stats"
+            subsection_number: "1.1"
+            subsection_title: "Deviation Statistics"
+            content_type: "data_table"
+            
+            data_table:
+              table_id: "TBL-DEV-001"
+              table_title: "Deviations by Type and Severity"
+              
+              columns:
+                - column_id: "deviation_type"
+                  column_name: "Deviation Type"
+                  data_type: "text"
+                  required: true
+                
+                - column_id: "critical_count"
+                  column_name: "Critical"
+                  data_type: "number"
+                  required: true
+                  
+                  validation:
+                    min_value: 0
+                
+                - column_id: "major_count"
+                  column_name: "Major"
+                  data_type: "number"
+                  required: true
+                
+                - column_id: "minor_count"
+                  column_name: "Minor"
+                  data_type: "number"
+                  required: true
+                
+                - column_id: "total"
+                  column_name: "Total"
+                  data_type: "number"
+                  required: true
+                  calculation: "critical_count + major_count + minor_count"
+              
+              data_source:
+                source_type: "database_query"
+                query: "SELECT deviation_type, COUNT(*) FROM deviations WHERE month = :reporting_month GROUP BY deviation_type, severity"
+              
+              aggregation:
+                - aggregation_type: "sum"
+                  column: "total"
+                  display_as: "Total Deviations"
+          
+          - subsection_id: "deviation_trend"
+            subsection_number: "1.2"
+            subsection_title: "Deviation Trend"
+            content_type: "chart"
+            
+            chart:
+              chart_type: "line"
+              
+              data_source:
+                source_type: "database_query"
+                query: "SELECT month, COUNT(*) as count FROM deviations WHERE date >= DATE_SUB(NOW(), INTERVAL 12 MONTH) GROUP BY month"
+              
+              x_axis:
+                label: "Month"
+                data_field: "month"
+              
+              y_axis:
+                label: "Number of Deviations"
+                data_field: "count"
+              
+              series:
+                - series_name: "Total Deviations"
+                  data_field: "count"
+                  color: "#FF6384"
+      
+      - section_id: "capa"
+        section_number: "2.0"
+        section_title: "CAPA Status"
+        section_description: "Status of corrective and preventive actions"
+        mandatory: true
+        
+        subsections:
+          - subsection_id: "capa_summary"
+            subsection_number: "2.1"
+            subsection_title: "CAPA Summary"
+            content_type: "data_table"
+            
+            data_table:
+              table_id: "TBL-CAPA-001"
+              table_title: "CAPA Status Summary"
+              
+              columns:
+                - column_id: "status"
+                  column_name: "Status"
+                  data_type: "text"
+                  required: true
+                
+                - column_id: "count"
+                  column_name: "Count"
+                  data_type: "number"
+                  required: true
+                
+                - column_id: "percentage"
+                  column_name: "Percentage"
+                  data_type: "percentage"
+                  required: true
+                  format: "0.0%"
+              
+              data_source:
+                source_type: "database_query"
+                query: "SELECT status, COUNT(*) as count FROM capa WHERE month = :reporting_month GROUP BY status"
+    
+    conclusions:
+      required: true
+      
+      conclusion_items:
+        - conclusion_id: "CONC-001"
+          conclusion_type: "finding"
+          severity: "observation"
+          description: "Overall quality metrics within acceptable ranges"
+          evidence: "See sections 1-5 for detailed metrics"
+          impact: "No immediate action required"
+          linked_to_section: "executive_summary"
+    
+    recommendations:
+      required: true
+      
+      recommendation_items:
+        - recommendation_id: "REC-001"
+          recommendation_text: "Continue monitoring deviation trends for early warning signs"
+          rationale: "Proactive identification prevents escalation"
+          priority: "medium"
+          responsible_party: "QA Manager"
+          target_completion_date: "Ongoing"
+    
+    approval_page:
+      fields:
+        - field_id: "prepared_by_sig"
+          field_name: "Prepared By"
+          field_type: "signature"
+          role: "QA Analyst"
+          required: true
+        
+        - field_id: "reviewed_by_sig"
+          field_name: "Reviewed By"
+          field_type: "signature"
+          role: "QA Manager"
+          required: true
+        
+        - field_id: "approved_by_sig"
+          field_name: "Approved By"
+          field_type: "signature"
+          role: "Quality Director"
+          required: true
+  
+  data_retention:
+    retention_period: "7 years from report date"
+    
+    storage_location:
+      primary: "QMS Document Repository"
+      backup: "Offsite backup server"
+      archive: "Long-term archive storage"
+    
+    archival_procedure:
+      archive_timing: "After 3 years"
+      archive_format: "PDF/A"
+      archive_location: "Archive storage system"
+      retrieval_procedure: "Submit request to Records Management"
+  
+  revision_history:
+    - version: "1.0.0"
+      date: "2024-01-15"
+      changes: "Initial release of report template"
+      reason_for_change: "New monthly reporting requirement"
+      sections_affected:
+        - "All sections"
+      changed_by: "Quality Assurance Department"
+      approved_by: "Quality Director"

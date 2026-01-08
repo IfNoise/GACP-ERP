@@ -1,0 +1,30 @@
+# SOP DSL System - Git Ignore Rules
+
+# Generated documentation (derived from DSL)
+docs/generated/*.md
+docs/generated/**/*.md
+
+# Python cache
+templates/__pycache__/
+templates/*.pyc
+templates/*.pyo
+
+# Temporary generation files
+*.tmp
+*.bak
+test_*.md
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep directory structure
+!docs/generated/.gitkeep
+!.gitkeep

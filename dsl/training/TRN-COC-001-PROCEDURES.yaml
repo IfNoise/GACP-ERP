@@ -1,0 +1,884 @@
+# DSL: Chain of Custody Training
+# Version: 1.0
+# Referenced by: SOP-COC-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+document_type: "training"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "TRN-COC-001"
+  title: "Chain of Custody Procedures Training"
+  version: "1.0.0"
+  effective_date: "2024-01-15"
+  supersedes: null
+  
+  training_type: "initial"
+  level: "intermediate"
+  
+  duration:
+    estimated_hours: 24
+    validity_period: "1 year"
+  
+  purpose: "Qualify personnel to execute chain of custody procedures in compliance with FDA 21 CFR Part 11 and WHO GACP requirements, ensuring unbroken documentation of material custody and integrity"
+  scope: "All personnel involved in receiving, handling, transferring, or shipping materials requiring CoC documentation"
+  
+  regulatory_requirements:
+    standards:
+      - "FDA 21 CFR Part 11"
+      - "WHO GACP Guidelines"
+      - "GMP Annex 11"
+    mandatory_for:
+      - role: "Authorized Receiver"
+        requirement: "Required before receiving materials independently"
+      - role: "Material Custodian"
+        requirement: "Required before being assigned custody of materials"
+      - role: "QA Technician"
+        requirement: "Required for CoC verification duties"
+
+# ====================
+# 2. PREREQUISITES
+# ====================
+prerequisites:
+  required_training:
+    - training_id: "TRN-GMP-001"
+      training_title: "GMP Fundamentals"
+    
+    - training_id: "TRN-DOC-001"
+      training_title: "Document Control Basics"
+  
+  required_qualifications:
+    - qualification: "High school diploma or equivalent"
+      level: "Entry-level"
+  
+  experience_requirements:
+    minimum_experience: "3 months in GMP environment preferred"
+    specific_experience: "Preferred: Experience with material handling or documentation"
+
+# ====================
+# 3. LEARNING OBJECTIVES
+# ====================
+learning_objectives:
+  knowledge_objectives:
+    - objective: "Explain the purpose and regulatory basis of chain of custody"
+      assessment_method: "Written exam - essay questions"
+    
+    - objective: "Identify critical CoC documentation requirements per FDA 21 CFR Part 11"
+      assessment_method: "Written exam - multiple choice"
+    
+    - objective: "Describe ALCOA+ principles as applied to CoC documentation"
+      assessment_method: "Written exam - short answer"
+    
+    - objective: "Explain different types of CoC breaches and their consequences"
+      assessment_method: "Case study analysis"
+  
+  skill_objectives:
+    - objective: "Correctly complete CoC receipt form (FORM-COC-001) with all required fields"
+      practical_demonstration: "Practical exercise with simulated material receipt"
+    
+    - objective: "Properly inspect and document seal integrity"
+      practical_demonstration: "Hands-on seal inspection with various seal types"
+    
+    - objective: "Execute internal material transfer with proper CoC documentation"
+      practical_demonstration: "Role-play transfer scenario with peer"
+    
+    - objective: "Use ERP CoC module to create and track CoC records"
+      practical_demonstration: "Computer lab exercise in test environment"
+    
+    - objective: "Apply tamper-evident seals correctly and document seal numbers"
+      practical_demonstration: "Sealing demonstration with verification"
+  
+  behavioral_objectives:
+    - objective: "Report CoC discrepancies immediately without hesitation"
+      observation_criteria: "Demonstrated during scenario exercises"
+    
+    - objective: "Follow established procedures without shortcuts even under time pressure"
+      observation_criteria: "Observed during timed practical exercises"
+    
+    - objective: "Maintain professional skepticism when accepting materials"
+      observation_criteria: "Demonstrated in case study discussions"
+
+# ====================
+# 4. TRAINING CONTENT
+# ====================
+training_content:
+  modules:
+    - module_id: "MOD-01"
+      module_title: "Introduction to Chain of Custody"
+      duration_minutes: 120
+      
+      topics:
+        - topic_title: "What is Chain of Custody and Why It Matters"
+          content_type: "lecture"
+          
+          key_points:
+            - "Definition and purpose of CoC"
+            - "Legal and regulatory implications"
+            - "Consequences of CoC failures (case studies)"
+            - "Real-world impact on product quality and patient safety"
+          
+          instructor_notes: "Use real case studies of CoC failures from pharmaceutical/cannabis industry. Emphasize consequences."
+        
+        - topic_title: "Regulatory Framework"
+          content_type: "lecture"
+          
+          key_points:
+            - "FDA 21 CFR Part 11 requirements"
+            - "WHO GACP guidelines"
+            - "EU GMP Annex 11"
+            - "ALCOA+ principles application to CoC"
+          
+          instructor_notes: "Provide regulatory reference documents. Highlight specific relevant sections."
+        
+        - topic_title: "Tour of Receiving and Storage Areas"
+          content_type: "demonstration"
+          
+          key_points:
+            - "Controlled receiving area layout"
+            - "Storage area security measures"
+            - "Seal storage and inventory location"
+            - "Emergency quarantine procedures"
+          
+          materials_needed:
+            - material: "Access to receiving and storage areas"
+              quantity: "N/A"
+      
+      practical_exercises:
+        - exercise_id: "EX-01-01"
+          exercise_title: "ALCOA+ Principles Application"
+          description: "Analyze CoC documentation examples for ALCOA+ compliance"
+          
+          steps:
+            - step_number: 1
+              instruction: "Review provided CoC form example"
+            
+            - step_number: 2
+              instruction: "Identify ALCOA+ principle violations"
+            
+            - step_number: 3
+              instruction: "Propose corrections for each violation"
+            
+            - step_number: 4
+              instruction: "Present findings to group"
+          
+          success_criteria:
+            - "Identifies at least 80% of planted violations"
+            - "Proposes appropriate corrections"
+          
+          common_mistakes:
+            - mistake: "Confusing Contemporaneous with Timely"
+              correction: "Contemporaneous means recorded at time of event, not just quickly"
+    
+    - module_id: "MOD-02"
+      module_title: "Material Receipt Procedures"
+      duration_minutes: 240
+      
+      topics:
+        - topic_title: "Pre-Receipt Preparation"
+          content_type: "lecture"
+          
+          key_points:
+            - "24-hour advance notification requirements"
+            - "Document preparation and review"
+            - "Receiving area preparation"
+            - "Equipment readiness (scales, scanners, etc.)"
+          
+          instructor_notes: "Demonstrate ERP notification system"
+        
+        - topic_title: "Receipt Inspection Process"
+          content_type: "demonstration"
+          
+          key_points:
+            - "Transport vehicle inspection"
+            - "Seal integrity verification"
+            - "Packaging condition assessment"
+            - "Quantitative verification procedures"
+          
+          materials_needed:
+            - material: "Sample packages with various seal types"
+              quantity: "5-10 samples"
+            - material: "Calibrated scale"
+              quantity: "1"
+        
+        - topic_title: "Hands-on Material Receipt"
+          content_type: "hands_on"
+          
+          key_points:
+            - "Complete FORM-COC-001 correctly"
+            - "Document seal numbers accurately"
+            - "Identify contamination or damage"
+            - "Make accept/reject decisions"
+          
+          materials_needed:
+            - material: "Mock material packages"
+              quantity: "3 per trainee"
+            - material: "FORM-COC-001 (paper and electronic)"
+              quantity: "3 per trainee"
+      
+      practical_exercises:
+        - exercise_id: "EX-02-01"
+          exercise_title: "Mock Material Receipt"
+          description: "Receive and document simulated material delivery"
+          
+          steps:
+            - step_number: 1
+              instruction: "Review advance notification and prepare documents"
+            
+            - step_number: 2
+              instruction: "Inspect delivery vehicle (photo provided)"
+            
+            - step_number: 3
+              instruction: "Verify seal integrity"
+            
+            - step_number: 4
+              instruction: "Count/weigh material"
+            
+            - step_number: 5
+              instruction: "Complete FORM-COC-001"
+            
+            - step_number: 6
+              instruction: "Make acceptance decision"
+            
+            - step_number: 7
+              instruction: "Submit to instructor for review"
+          
+          success_criteria:
+            - "All required fields completed"
+            - "Correct acceptance decision"
+            - "Seal numbers accurately documented"
+            - "Completed within 30 minutes"
+          
+          common_mistakes:
+            - mistake: "Not documenting all seal numbers"
+              correction: "Every seal must be recorded, even if multiple seals"
+            
+            - mistake: "Accepting material with quantity variance >2%"
+              correction: "Variances >2% require QA review before acceptance"
+    
+    - module_id: "MOD-03"
+      module_title: "Internal Transfers and Custody Changes"
+      duration_minutes: 180
+      
+      topics:
+        - topic_title: "Internal Transfer Procedures"
+          content_type: "lecture"
+          
+          key_points:
+            - "When internal transfers are required"
+            - "Authorization requirements"
+            - "FORM-COC-003 completion"
+            - "ERP system updates"
+          
+          instructor_notes: "Emphasize importance of continuous documentation"
+        
+        - topic_title: "Custody Change Scenarios"
+          content_type: "case_study"
+          
+          key_points:
+            - "Between production areas"
+            - "To/from laboratory"
+            - "To/from storage"
+            - "Emergency transfers"
+          
+          instructor_notes: "Use real facility scenarios"
+      
+      practical_exercises:
+        - exercise_id: "EX-03-01"
+          exercise_title: "Role-Play Transfer Scenario"
+          description: "Execute complete internal transfer with peer"
+          
+          steps:
+            - step_number: 1
+              instruction: "Receive transfer request"
+            
+            - step_number: 2
+              instruction: "Verify authorization"
+            
+            - step_number: 3
+              instruction: "Prepare material for transfer"
+            
+            - step_number: 4
+              instruction: "Complete documentation"
+            
+            - step_number: 5
+              instruction: "Execute transfer with peer (alternating roles)"
+            
+            - step_number: 6
+              instruction: "Update ERP system"
+          
+          success_criteria:
+            - "Both roles executed correctly"
+            - "Documentation complete and accurate"
+            - "ERP properly updated"
+          
+          common_mistakes:
+            - mistake: "Skipping authorization verification"
+              correction: "Always verify transfer is authorized before executing"
+    
+    - module_id: "MOD-04"
+      module_title: "Seal Systems and Integrity"
+      duration_minutes: 120
+      
+      topics:
+        - topic_title: "Types of Tamper-Evident Seals"
+          content_type: "demonstration"
+          
+          key_points:
+            - "Adhesive seals"
+            - "Plastic security ties"
+            - "Metal seals"
+            - "Electronic seals with RFID"
+          
+          materials_needed:
+            - material: "Sample of each seal type"
+              quantity: "5-10 each"
+        
+        - topic_title: "Seal Application and Documentation"
+          content_type: "hands_on"
+          
+          key_points:
+            - "Proper seal application technique"
+            - "Serial number documentation"
+            - "Seal inventory management"
+            - "What constitutes seal compromise"
+          
+          materials_needed:
+            - material: "Various seal types"
+              quantity: "10 per trainee"
+            - material: "Sample containers to seal"
+              quantity: "5 per trainee"
+      
+      practical_exercises:
+        - exercise_id: "EX-04-01"
+          exercise_title: "Seal Application and Inspection"
+          description: "Apply seals correctly and inspect for tampering"
+          
+          steps:
+            - step_number: 1
+              instruction: "Apply 3 different types of seals to containers"
+            
+            - step_number: 2
+              instruction: "Document all seal numbers"
+            
+            - step_number: 3
+              instruction: "Inspect pre-sealed containers for tampering"
+            
+            - step_number: 4
+              instruction: "Identify compromised seals in mixed sample set"
+          
+          success_criteria:
+            - "All seals applied correctly"
+            - "All serial numbers accurately recorded"
+            - "Identifies all compromised seals (planted examples)"
+          
+          common_mistakes:
+            - mistake: "Not pulling seal tight before securing"
+              correction: "Seal must be snug to be effective, but not damage container"
+    
+    - module_id: "MOD-05"
+      module_title: "ERP System and Electronic Records"
+      duration_minutes: 180
+      
+      topics:
+        - topic_title: "ERP CoC Module Navigation"
+          content_type: "demonstration"
+          
+          key_points:
+            - "System login and PKI certificate use"
+            - "Creating new CoC records"
+            - "Searching and retrieving records"
+            - "Reporting and dashboards"
+          
+          materials_needed:
+            - material: "Computer lab access"
+              quantity: "1 computer per trainee"
+            - material: "Test environment access"
+              quantity: "N/A"
+        
+        - topic_title: "Electronic Signatures"
+          content_type: "hands_on"
+          
+          key_points:
+            - "PKI certificate management"
+            - "Signature meaning and legal implications"
+            - "When signatures are required"
+            - "Signature verification"
+          
+          materials_needed:
+            - material: "PKI certificates for trainees"
+              quantity: "1 per trainee"
+      
+      practical_exercises:
+        - exercise_id: "EX-05-01"
+          exercise_title: "ERP System Workflow"
+          description: "Complete full CoC workflow in test environment"
+          
+          steps:
+            - step_number: 1
+              instruction: "Log in using PKI certificate"
+            
+            - step_number: 2
+              instruction: "Create new material receipt record"
+            
+            - step_number: 3
+              instruction: "Complete all required fields"
+            
+            - step_number: 4
+              instruction: "Apply electronic signature"
+            
+            - step_number: 5
+              instruction: "Create internal transfer record"
+            
+            - step_number: 6
+              instruction: "Generate CoC chain report"
+          
+          success_criteria:
+            - "Successfully completes all transactions"
+            - "No field validation errors"
+            - "Signatures applied correctly"
+            - "Report generated and reviewed"
+          
+          common_mistakes:
+            - mistake: "Using someone else's PKI certificate"
+              correction: "Each user must use their own certificate - sharing is violation"
+    
+    - module_id: "MOD-06"
+      module_title: "CoC Breaches and Investigations"
+      duration_minutes: 180
+      
+      topics:
+        - topic_title: "Types of CoC Breaches"
+          content_type: "lecture"
+          
+          key_points:
+            - "Critical breaches (seal tampering, material loss)"
+            - "Major breaches (documentation gaps, condition violations)"
+            - "Minor breaches (documentation errors, delays)"
+            - "Consequences of each type"
+          
+          instructor_notes: "Use real case studies (anonymized)"
+        
+        - topic_title: "Immediate Response to Breaches"
+          content_type: "demonstration"
+          
+          key_points:
+            - "Isolation of affected materials"
+            - "Evidence preservation"
+            - "Notification procedures"
+            - "Preliminary assessment"
+          
+          instructor_notes: "Demonstrate evidence preservation techniques"
+        
+        - topic_title: "Investigation Procedures"
+          content_type: "case_study"
+          
+          key_points:
+            - "Root cause analysis"
+            - "Documentation review"
+            - "Personnel interviews"
+            - "Corrective actions"
+          
+          materials_needed:
+            - material: "Case study packets"
+              quantity: "1 per group"
+      
+      practical_exercises:
+        - exercise_id: "EX-06-01"
+          exercise_title: "CoC Breach Scenario"
+          description: "Respond to simulated CoC breach"
+          
+          steps:
+            - step_number: 1
+              instruction: "Receive notification of seal breach (scenario)"
+            
+            - step_number: 2
+              instruction: "List immediate actions to take"
+            
+            - step_number: 3
+              instruction: "Identify who to notify and when"
+            
+            - step_number: 4
+              instruction: "Describe evidence preservation steps"
+            
+            - step_number: 5
+              instruction: "Outline investigation approach"
+          
+          success_criteria:
+            - "Identifies all critical immediate actions"
+            - "Correct notification sequence and timing"
+            - "Proper evidence preservation protocol"
+          
+          common_mistakes:
+            - mistake: "Delaying notification to 'investigate first'"
+              correction: "Notification must be immediate - investigation comes after"
+
+# ====================
+# 5. ASSESSMENTS
+# ====================
+assessments:
+  theoretical_assessment:
+    type: "written_exam"
+    passing_score: 85
+    
+    questions:
+      - question_id: "Q001"
+        question_type: "multiple_choice"
+        question_text: "What is the maximum acceptable quantity variance on material receipt before QA review is required?"
+        
+        options:
+          - option: "±1%"
+            correct: false
+          - option: "±2%"
+            correct: true
+          - option: "±5%"
+            correct: false
+          - option: "±10%"
+            correct: false
+        
+        points: 5
+        rationale: "Per SOP-COC-001 Section 8.2, variances exceeding ±2% require QA review before acceptance"
+      
+      - question_id: "Q002"
+        question_type: "multiple_choice"
+        question_text: "How soon must management be notified of a critical CoC breach?"
+        
+        options:
+          - option: "Within 1 hour"
+            correct: true
+          - option: "Within 4 hours"
+            correct: false
+          - option: "By end of shift"
+            correct: false
+          - option: "Within 24 hours"
+            correct: false
+        
+        points: 5
+        rationale: "Per SOP-COC-001 Section 8.2.1, management notification must occur within 1 hour of critical breach detection"
+      
+      - question_id: "Q003"
+        question_type: "true_false"
+        question_text: "It is acceptable to accept materials if seals are intact even if seal numbers don't match documentation."
+        correct_answer: "False"
+        points: 5
+        rationale: "Seal number mismatch indicates potential unauthorized access. Material must be quarantined pending investigation."
+      
+      - question_id: "Q004"
+        question_type: "short_answer"
+        question_text: "List the 9 principles of ALCOA+ and briefly explain how they apply to CoC documentation."
+        correct_answer: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available - each ensures data integrity in CoC records"
+        points: 10
+        rationale: "Understanding ALCOA+ is fundamental to proper CoC documentation per FDA 21 CFR Part 11"
+      
+      - question_id: "Q005"
+        question_type: "essay"
+        question_text: "Describe the complete procedure for receiving materials from a supplier, including all documentation, inspections, and system updates required."
+        correct_answer: "[See SOP-COC-001 Section 6.1 - must include: notification verification, document preparation, physical inspection, seal verification, quantity verification, FORM-COC-001 completion, acceptance decision, system update]"
+        points: 15
+        rationale: "Demonstrates comprehensive understanding of receipt procedure"
+  
+  practical_assessment:
+    type: "skill_demonstration"
+    
+    evaluation_criteria:
+      - criterion: "Material receipt execution"
+        weight: 30
+        
+        performance_levels:
+          - level: "Proficient"
+            description: "Completes full receipt process correctly with no errors"
+            score: 100
+          
+          - level: "Competent"
+            description: "Completes receipt with minor errors, corrects when identified"
+            score: 85
+          
+          - level: "Needs Improvement"
+            description: "Multiple errors or critical step missed"
+            score: 70
+          
+          - level: "Unsatisfactory"
+            description: "Unable to complete receipt process correctly"
+            score: 0
+      
+      - criterion: "Documentation completion"
+        weight: 25
+        
+        performance_levels:
+          - level: "Proficient"
+            description: "All fields completed accurately, signatures applied correctly"
+            score: 100
+          
+          - level: "Competent"
+            description: "Minor documentation errors, corrected before submission"
+            score: 85
+          
+          - level: "Needs Improvement"
+            description: "Multiple documentation errors or incomplete fields"
+            score: 70
+          
+          - level: "Unsatisfactory"
+            description: "Significant documentation errors or missing signatures"
+            score: 0
+      
+      - criterion: "Seal integrity assessment"
+        weight: 20
+        
+        performance_levels:
+          - level: "Proficient"
+            description: "Correctly identifies all seal issues, proper documentation"
+            score: 100
+          
+          - level: "Competent"
+            description: "Identifies most seal issues"
+            score: 85
+          
+          - level: "Needs Improvement"
+            description: "Misses some seal issues"
+            score: 70
+          
+          - level: "Unsatisfactory"
+            description: "Fails to identify critical seal compromise"
+            score: 0
+      
+      - criterion: "ERP system use"
+        weight: 15
+        
+        performance_levels:
+          - level: "Proficient"
+            description: "Navigates system efficiently, completes all transactions correctly"
+            score: 100
+          
+          - level: "Competent"
+            description: "Completes transactions with minimal assistance"
+            score: 85
+          
+          - level: "Needs Improvement"
+            description: "Requires significant assistance"
+            score: 70
+          
+          - level: "Unsatisfactory"
+            description: "Unable to complete system transactions"
+            score: 0
+      
+      - criterion: "Breach response"
+        weight: 10
+        
+        performance_levels:
+          - level: "Proficient"
+            description: "Immediately identifies breach, takes correct actions, notifies properly"
+            score: 100
+          
+          - level: "Competent"
+            description: "Identifies breach, takes most correct actions"
+            score: 85
+          
+          - level: "Needs Improvement"
+            description: "Delayed identification or incomplete response"
+            score: 70
+          
+          - level: "Unsatisfactory"
+            description: "Fails to identify breach or takes incorrect actions"
+            score: 0
+    
+    observer_checklist:
+      - item: "Verifies advance notification before proceeding"
+        critical: true
+      
+      - item: "Documents all seal numbers accurately"
+        critical: true
+      
+      - item: "Completes all required fields in FORM-COC-001"
+        critical: true
+      
+      - item: "Applies electronic signature correctly"
+        critical: true
+      
+      - item: "Makes correct acceptance decision based on criteria"
+        critical: false
+      
+      - item: "Updates ERP system promptly"
+        critical: false
+    
+    retake_policy:
+      allowed_attempts: 3
+      wait_period: "1 week between attempts"
+      remediation_required: true
+
+# ====================
+# 6. RELATED DOCUMENTS
+# ====================
+related_documents:
+  sops:
+    - id: "SOP-COC-001"
+      title: "Chain of Custody"
+      relevance: "Primary SOP for all CoC procedures"
+    
+    - id: "SOP-DEV-001"
+      title: "Deviation Management"
+      relevance: "Procedures for handling CoC breaches"
+    
+    - id: "SOP-DOC-001"
+      title: "Document Control"
+      relevance: "Electronic signature and documentation requirements"
+  
+  forms:
+    - id: "FORM-COC-001"
+      title: "Chain of Custody Receipt Form"
+      usage_context: "Primary form used in training exercises"
+    
+    - id: "FORM-COC-003"
+      title: "Internal Transfer Form"
+      usage_context: "Used in transfer scenario exercises"
+  
+  reference_materials:
+    - material_type: "Regulation"
+      title: "FDA 21 CFR Part 11"
+      source: "FDA.gov"
+    
+    - material_type: "Guideline"
+      title: "WHO GACP Guidelines"
+      source: "WHO Technical Report Series"
+    
+    - material_type: "Standard"
+      title: "ALCOA+ Data Integrity Principles"
+      source: "MHRA Data Integrity Guidance"
+
+# ====================
+# 7. TRAINING DELIVERY
+# ====================
+training_delivery:
+  delivery_methods:
+    - method: "classroom"
+      percentage: 40
+    
+    - method: "hands_on"
+      percentage: 40
+    
+    - method: "computer_lab"
+      percentage: 20
+  
+  instructor_requirements:
+    qualifications:
+      - "CoC SME (Subject Matter Expert) certification"
+      - "Minimum 3 years CoC system experience"
+      - "Train-the-trainer certification"
+    training_required: "Instructor qualification program completion"
+  
+  class_size:
+    minimum: 4
+    maximum: 12
+    optimal: 8
+  
+  frequency:
+    initial_training: "Before assignment to CoC-related duties"
+    refresher_frequency: "Annually"
+
+# ====================
+# 8. TRAINING RECORDS
+# ====================
+training_records:
+  required_documentation:
+    - document: "Training attendance roster"
+      retention_period: "Duration of employment + 3 years"
+    
+    - document: "Completed assessments (written and practical)"
+      retention_period: "Duration of employment + 3 years"
+    
+    - document: "Training certificate"
+      retention_period: "Duration of employment + 3 years"
+    
+    - document: "Practical exercise worksheets"
+      retention_period: "Duration of employment + 3 years"
+  
+  trainee_records:
+    - field: "Employee Name"
+      description: "Full legal name"
+      mandatory: true
+    
+    - field: "Employee ID"
+      description: "Unique employee identifier"
+      mandatory: true
+    
+    - field: "Training Dates"
+      description: "All dates of training sessions attended"
+      mandatory: true
+    
+    - field: "Written Assessment Score"
+      description: "Score on theoretical exam"
+      mandatory: true
+    
+    - field: "Practical Assessment Score"
+      description: "Score on practical demonstration"
+      mandatory: true
+    
+    - field: "Overall Pass/Fail"
+      description: "Final training outcome"
+      mandatory: true
+    
+    - field: "Trainer Signature"
+      description: "Qualified trainer who delivered training"
+      mandatory: true
+    
+    - field: "Trainee Signature"
+      description: "Confirmation trainee attended and understood"
+      mandatory: true
+  
+  certification:
+    certificate_issued: true
+    certificate_template_id: "CERT-TRN-COC-001"
+    certificate_validity: "1 year from date of training"
+    renewal_requirements: "Pass refresher training with score ≥85%"
+
+# ====================
+# 9. EFFECTIVENESS EVALUATION
+# ====================
+effectiveness_evaluation:
+  immediate_evaluation:
+    methods:
+      - method: "Post-training survey"
+        description: "Trainee feedback on content clarity, relevance, instructor effectiveness"
+      
+      - method: "Knowledge retention quiz"
+        description: "10 question quiz administered 48 hours post-training"
+  
+  delayed_evaluation:
+    methods:
+      - method: "Supervisor observation"
+        kpi: "CoC documentation errors per trainee"
+        target: "Zero critical errors within 90 days post-training"
+      
+      - method: "QA review findings"
+        kpi: "CoC-related audit findings"
+        target: "≤1 minor finding per trainee per year"
+      
+      - method: "System metrics"
+        kpi: "Form completion time and accuracy"
+        target: "95% accuracy rate, <15 minutes per form"
+  
+  continuous_monitoring:
+    metrics:
+      - metric: "CoC form accuracy rate"
+        measurement_method: "QA spot checks of trainee-completed forms"
+        frequency: "Monthly"
+      
+      - metric: "Seal documentation accuracy"
+        measurement_method: "Verification of seal number documentation"
+        frequency: "Weekly"
+      
+      - metric: "Breach detection rate"
+        measurement_method: "Percentage of breaches correctly identified by trainees"
+        frequency: "Quarterly"
+
+# ====================
+# 10. REVISION HISTORY
+# ====================
+revision_history:
+  - version: "1.0.0"
+    date: "2024-01-15"
+    changes: "Initial release of training program"
+    reason_for_change: "New training program to support SOP-COC-001 implementation"
+    changed_by: "Training Department in collaboration with QA"
+    approved_by: "Quality Director"

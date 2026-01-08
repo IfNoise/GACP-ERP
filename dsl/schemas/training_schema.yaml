@@ -1,0 +1,599 @@
+# DSL Schema for Training Materials
+# Version: 1.0.0
+# Purpose: Standardized structure for training programs, modules, and assessments
+
+schema_version: "1.0.0"
+document_type: "training"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: string # TRN-XXX-NNN (e.g., TRN-SAN-001)
+  title: string # Training title
+  version: string # Version number
+  effective_date: date # When training becomes effective
+  supersedes: string # Previous version (optional)
+
+  training_type:
+    enum:
+      values:
+        - initial # Initial qualification training
+        - refresher # Periodic refresher
+        - requalification # After deviation or change
+        - advanced # Advanced certification
+        - awareness # General awareness
+
+  level:
+    enum:
+      values:
+        - basic # Entry-level
+        - intermediate # Experienced operators
+        - advanced # Subject matter experts
+
+  duration:
+    estimated_hours: number # Expected completion time
+    validity_period: string # How long certification lasts (e.g., "1 year")
+
+  purpose: string
+  scope: string
+
+  regulatory_requirements:
+    standards:
+      - string # e.g., "WHO GACP", "ISO 17025"
+    mandatory_for:
+      - role: string # Which roles must complete
+        requirement: string # Why it's required
+
+# ====================
+# 2. PREREQUISITES
+# ====================
+prerequisites:
+  required_training: # Training that must be completed first
+    - training_id: string
+      training_title: string
+
+  required_qualifications: # Qualifications/certifications needed
+    - qualification: string
+      level: string
+
+  experience_requirements:
+    minimum_experience: string # e.g., "6 months in GMP environment"
+    specific_experience: string
+
+# ====================
+# 3. LEARNING OBJECTIVES
+# ====================
+learning_objectives:
+  knowledge_objectives: # What learner will KNOW
+    - objective: string
+      assessment_method: string # How this will be tested
+
+  skill_objectives: # What learner will be able to DO
+    - objective: string
+      practical_demonstration: string
+
+  behavioral_objectives: # How learner will BEHAVE
+    - objective: string
+      observation_criteria: string
+
+# ====================
+# 4. TRAINING CONTENT
+# ====================
+training_content:
+  modules:
+    - module_id: string
+      module_title: string
+      duration_minutes: integer
+
+      topics:
+        - topic_title: string
+          content_type:
+            enum:
+            values:
+              - lecture
+              - video
+              - demonstration
+              - hands_on
+              - case_study
+              - discussion
+
+          key_points:
+            - string
+
+          materials_needed:
+            - material: string
+              quantity: string
+
+          instructor_notes: string
+
+      practical_exercises:
+        - exercise_id: string
+          exercise_title: string
+          description: string
+
+          steps:
+            - step_number: integer
+              instruction: string
+
+          success_criteria:
+            - criterion: string
+
+          common_mistakes:
+            - mistake: string
+              correction: string
+
+# ====================
+# 5. ASSESSMENTS
+# ====================
+assessments:
+  theoretical_assessment:
+    type:
+      enum:
+        values:
+          - written_exam
+          - oral_exam
+          - quiz
+          - case_study_analysis
+
+    passing_score: number # Percentage (e.g., 80)
+
+    questions:
+      - question_id: string
+        question_type:
+          enum:
+            values:
+              - multiple_choice
+              - true_false
+              - short_answer
+              - essay
+
+        question_text: string
+
+        # For multiple choice
+        options:
+          - option: string
+            correct: boolean
+
+        # For all types
+        correct_answer: string
+        points: number
+
+        rationale: string # Why this is the correct answer
+
+  practical_assessment:
+    type:
+      enum:
+      values:
+        - skill_demonstration
+        - simulation
+        - on_the_job_observation
+
+    evaluation_criteria:
+      - criterion: string
+        weight: number # Percentage of total score
+
+        performance_levels:
+          - level: string # e.g., "Proficient", "Needs Improvement"
+            description: string
+            score: number
+
+    observer_checklist:
+      - item: string
+        critical: boolean # Must pass or auto-fail
+
+  retake_policy:
+    allowed_attempts: integer
+    wait_period: string # Time between attempts
+    remediation_required: boolean
+
+# ====================
+# 6. RELATED DOCUMENTS
+# ====================
+related_documents:
+  sops:
+    - id: string
+      title: string
+      relevance: string
+
+  forms:
+    - id: string
+      title: string
+      usage_context: string
+
+  reference_materials:
+    - material_type: string
+      title: string
+      source: string
+
+# ====================
+# 7. TRAINING DELIVERY
+# ====================
+training_delivery:
+  delivery_methods:
+    - method:
+      type:
+        enum:
+          values:
+            - classroom
+            - online
+            - on_the_job
+            - blended
+            - self_paced
+
+      percentage: number # % of training via this method
+
+  instructor_requirements:
+    qualifications:
+      - string
+    training_required: string
+
+  class_size:
+    minimum: integer
+    maximum: integer
+    optimal: integer
+
+  frequency:
+    initial_training: string # When new employees trained
+    refresher_frequency: string # How often to retrain
+
+# ====================
+# 8. TRAINING RECORDS
+# ====================
+training_records:
+  required_documentation:
+    - document: string
+      retention_period: string
+
+  trainee_records:
+    - field: string
+      description: string
+      mandatory: boolean
+
+  certification:
+    certificate_issued: boolean
+    certificate_template_id: string
+    certificate_validity: string
+    renewal_requirements: string
+
+# ====================
+# 9. EFFECTIVENESS EVALUATION
+# ====================
+effectiveness_evaluation:
+  immediate_evaluation: # Right after training
+    methods:
+      - method: string
+        description: string
+
+  delayed_evaluation: # 30-90 days post-training
+    methods:
+      - method: string
+        kpi: string # Key performance indicator
+        target: string
+
+  continuous_monitoring:
+    metrics:
+      - metric: string
+        measurement_method: string
+        frequency: string
+
+# ====================
+# 10. REVISION HISTORY
+# ====================
+revision_history:
+  - version: string
+    date: date
+    changes: string
+    reason_for_change: string
+    changed_by: string
+    approved_by: string
+
+# ====================
+# EXAMPLE USAGE
+# ====================
+example:
+  metadata:
+    id: "TRN-SAN-001"
+    title: "Cleaning and Sanitation Training"
+    version: "1.0.0"
+    effective_date: "2024-01-15"
+    training_type: "initial"
+    level: "basic"
+
+    duration:
+      estimated_hours: 4
+      validity_period: "1 year"
+
+    purpose: "Qualify personnel to perform cleaning and sanitation activities in compliance with SOP-SAN-001"
+    scope: "All personnel involved in sanitation of GMP areas and equipment"
+
+    regulatory_requirements:
+      standards:
+        - "WHO GACP Section 5.3"
+        - "FDA 21 CFR Part 211.25"
+      mandatory_for:
+        - role: "Sanitation Technician"
+          requirement: "Required before independent work"
+        - role: "Production Operator"
+          requirement: "Awareness level required"
+
+  prerequisites:
+    required_training:
+      - training_id: "TRN-GMP-001"
+        training_title: "GMP Fundamentals"
+
+    required_qualifications:
+      - qualification: "High school diploma or equivalent"
+        level: "Entry-level"
+
+    experience_requirements:
+      minimum_experience: "None required for basic level"
+      specific_experience: "Preferred: 3 months in production environment"
+
+  learning_objectives:
+    knowledge_objectives:
+      - objective: "Identify approved cleaning agents and their applications"
+        assessment_method: "Written exam - multiple choice"
+
+      - objective: "Explain ALCOA+ principles in context of cleaning documentation"
+        assessment_method: "Short answer questions"
+
+    skill_objectives:
+      - objective: "Correctly prepare and apply cleaning solutions"
+        practical_demonstration: "Hands-on exercise observed by trainer"
+
+      - objective: "Complete cleaning log (FORM-CLN-001) accurately"
+        practical_demonstration: "Practice form completion with feedback"
+
+    behavioral_objectives:
+      - objective: "Follow safety protocols without prompting"
+        observation_criteria: "Proper PPE usage, chemical handling"
+
+      - objective: "Report deviations immediately to supervisor"
+        observation_criteria: "Demonstrated during case study discussion"
+
+  training_content:
+    modules:
+      - module_id: "MOD-01"
+        module_title: "Introduction to GMP Cleaning"
+        duration_minutes: 60
+
+        topics:
+          - topic_title: "Why Cleaning Matters in GACP"
+            content_type: "lecture"
+
+            key_points:
+              - "Contamination prevention"
+              - "Cross-contamination risks"
+              - "Regulatory requirements (WHO GACP)"
+
+            instructor_notes: "Use real-world examples of contamination events"
+
+          - topic_title: "Tour of Cleaning Materials Storage"
+            content_type: "demonstration"
+
+            key_points:
+              - "Approved cleaning agents location"
+              - "SDS availability"
+              - "Expiration date checking"
+
+            materials_needed:
+              - material: "Sample cleaning agents"
+                quantity: "1 of each type"
+
+        practical_exercises:
+          - exercise_id: "EX-01"
+            exercise_title: "Dilution Calculations"
+            description: "Calculate correct dilution ratios for various cleaning agents"
+
+            steps:
+              - step_number: 1
+                instruction: "Read concentration on product label"
+
+              - step_number: 2
+                instruction: "Calculate volume of concentrate needed"
+
+              - step_number: 3
+                instruction: "Verify calculation with instructor"
+
+            success_criteria:
+              - "All calculations within ±2% of correct value"
+
+            common_mistakes:
+              - mistake: "Confusing v/v with w/v concentrations"
+                correction: "Always check if percentage is volume or weight based"
+
+  assessments:
+    theoretical_assessment:
+      type: "written_exam"
+      passing_score: 80
+
+      questions:
+        - question_id: "Q001"
+          question_type: "multiple_choice"
+          question_text: "What is the minimum contact time for Isopropyl Alcohol 70% disinfection?"
+
+          options:
+            - option: "30 seconds"
+              correct: false
+            - option: "2 minutes"
+              correct: true
+            - option: "5 minutes"
+              correct: false
+            - option: "10 minutes"
+              correct: false
+
+          points: 5
+          rationale: "Per SOP-SAN-001 Section 6.2, minimum contact time is 2 minutes for efficacy"
+
+        - question_id: "Q002"
+          question_type: "true_false"
+          question_text: "It is acceptable to use non-approved cleaning agents if approved ones are unavailable."
+          correct_answer: "False"
+          points: 5
+          rationale: "Only approved agents listed in SOP-SAN-001 may be used. Deviations require formal approval process."
+
+    practical_assessment:
+      type: "skill_demonstration"
+
+      evaluation_criteria:
+        - criterion: "Proper PPE donning and use"
+          weight: 20
+
+          performance_levels:
+            - level: "Proficient"
+              description: "All PPE correctly worn throughout procedure"
+              score: 100
+
+            - level: "Needs Improvement"
+              description: "Minor PPE errors, corrected when pointed out"
+              score: 70
+
+            - level: "Unsatisfactory"
+              description: "Critical PPE errors or refusal to wear PPE"
+              score: 0
+
+        - criterion: "Cleaning solution preparation"
+          weight: 30
+
+          performance_levels:
+            - level: "Proficient"
+              description: "Correct dilution, proper mixing technique"
+              score: 100
+
+      observer_checklist:
+        - item: "Safety glasses worn throughout"
+          critical: true
+
+        - item: "Chemical gloves worn when handling concentrates"
+          critical: true
+
+        - item: "Cleaning log completed with all required fields"
+          critical: false
+
+    retake_policy:
+      allowed_attempts: 3
+      wait_period: "1 week between attempts"
+      remediation_required: true
+
+  related_documents:
+    sops:
+      - id: "SOP-SAN-001"
+        title: "Cleaning and Sanitation Procedures"
+        relevance: "Primary SOP being trained on"
+
+      - id: "SOP-DOC-001"
+        title: "Document Control"
+        relevance: "Explains documentation requirements"
+
+    forms:
+      - id: "FORM-CLN-001"
+        title: "Cleaning and Sanitation Log"
+        usage_context: "Trainees must complete this form during practical"
+
+    reference_materials:
+      - material_type: "External Standard"
+        title: "WHO GACP Guidelines"
+        source: "WHO Technical Report Series, No. 1023"
+
+  training_delivery:
+    delivery_methods:
+      - method: "classroom"
+        percentage: 50
+
+      - method: "on_the_job"
+        percentage: 50
+
+    instructor_requirements:
+      qualifications:
+        - "Certified GMP trainer"
+        - "Minimum 2 years experience in sanitation operations"
+      training_required: "Train-the-trainer workshop completion"
+
+    class_size:
+      minimum: 3
+      maximum: 8
+      optimal: 6
+
+    frequency:
+      initial_training: "Before any unsupervised cleaning activities"
+      refresher_frequency: "Annually, or after any SOP revision"
+
+  training_records:
+    required_documentation:
+      - document: "Training attendance roster"
+        retention_period: "Duration of employment + 3 years"
+
+      - document: "Completed assessments (written and practical)"
+        retention_period: "Duration of employment + 3 years"
+
+      - document: "Training certificate"
+        retention_period: "Duration of employment + 3 years"
+
+    trainee_records:
+      - field: "Employee Name"
+        description: "Full legal name"
+        mandatory: true
+
+      - field: "Employee ID"
+        description: "Unique employee identifier"
+        mandatory: true
+
+      - field: "Training Date"
+        description: "Date training completed"
+        mandatory: true
+
+      - field: "Assessment Scores"
+        description: "Written and practical assessment results"
+        mandatory: true
+
+      - field: "Trainer Signature"
+        description: "Qualified trainer who delivered training"
+        mandatory: true
+
+      - field: "Trainee Signature"
+        description: "Confirmation trainee attended and understood"
+        mandatory: true
+
+    certification:
+      certificate_issued: true
+      certificate_template_id: "CERT-TRN-001"
+      certificate_validity: "1 year from date of training"
+      renewal_requirements: "Pass refresher assessment with score ≥80%"
+
+  effectiveness_evaluation:
+    immediate_evaluation:
+      methods:
+        - method: "Post-training survey"
+          description: "Trainee feedback on clarity, relevance, instructor effectiveness"
+
+        - method: "Knowledge retention quiz"
+          description: "10 question quiz administered 24 hours post-training"
+
+    delayed_evaluation:
+      methods:
+        - method: "Supervisor observation"
+          kpi: "Cleaning deviations per trainee"
+          target: "Zero critical deviations within 90 days post-training"
+
+        - method: "Audit findings review"
+          kpi: "Sanitation-related findings"
+          target: "≤2 minor findings per trainee per year"
+
+    continuous_monitoring:
+      metrics:
+        - metric: "Cleaning log accuracy rate"
+          measurement_method: "QA spot checks of completed forms"
+          frequency: "Monthly"
+
+        - metric: "Environmental monitoring results"
+          measurement_method: "Swab test pass rate for areas cleaned by trained personnel"
+          frequency: "Weekly"
+
+  revision_history:
+    - version: "1.0.0"
+      date: "2024-01-15"
+      changes: "Initial release of training program"
+      reason_for_change: "New training program to support SOP-SAN-001"
+      changed_by: "Training Department"
+      approved_by: "QA Manager"

@@ -1,0 +1,13 @@
+# This directory contains auto-generated SOP documents
+# 
+# DO NOT EDIT files in this directory manually!
+# 
+# These documents are generated from DSL definitions in /dsl/processes/
+# using the generator script at /templates/generate_sop.py
+#
+# To regenerate documents:
+#   make generate-all
+# or:
+#   python templates/generate_sop.py dsl/processes/<file>.yaml <locale>
+#
+# See /dsl/README.md for complete documentation

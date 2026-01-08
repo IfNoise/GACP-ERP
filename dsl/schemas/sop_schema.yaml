@@ -1,0 +1,344 @@
+# SOP DSL Schema Definition
+# Version: 1.0.0
+# Purpose: Declarative schema for normalizing operational procedures
+#
+# Core Principles:
+# - Language-neutral structure
+# - No prose in DSL
+# - Explicit marking of undefined values
+# - Deterministic and reproducible
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+# ==============================================================================
+# METADATA STRUCTURE
+# ==============================================================================
+metadata:
+  type: object
+  required:
+    - process_id # Unique identifier (e.g., SOP-SAN-001)
+    - process_type # Type: sop | work_instruction | policy
+    - version # Semantic version (e.g., 1.0.0)
+    - status # draft | active | deprecated
+    - domain # Process domain (see domains enum)
+    - classification # critical | important | standard
+
+  optional:
+    - supersedes # Previous version identifier
+    - effective_date # ISO 8601 date
+    - review_period_months # Review frequency
+    - related_processes # List of related process IDs
+    - regulatory_refs # List of regulatory reference codes
+
+  domains:
+    enum:
+      - cultivation
+      - processing
+      - quality_control
+      - sanitation
+      - equipment
+      - safety
+      - security
+      - documentation
+      - training
+      - compliance
+
+# ==============================================================================
+# PROCESS DEFINITION
+# ==============================================================================
+process:
+  type: object
+  required:
+    - purpose # Short declarative statement
+    - scope_areas # List of applicable areas
+    - frequency # Execution frequency definition
+
+  optional:
+    - prerequisites # List of required conditions
+    - dependencies # List of required resources/processes
+    - duration_estimate # Estimated time in minutes
+    - critical_path # Boolean: is this process time-critical?
+
+# ==============================================================================
+# ROLES AND RESPONSIBILITIES
+# ==============================================================================
+roles:
+  type: array
+  items:
+    role_id: string # Unique role identifier
+    role_name: string # Role designation
+    qualifications:
+      required: array # List of required qualifications
+      optional: array # List of preferred qualifications
+    responsibilities:
+      - action: string # Specific responsibility
+        accountability: enum # responsible | accountable | consulted | informed
+        verification: enum # none | documented | witnessed | approved
+
+# ==============================================================================
+# OPERATIONAL PARAMETERS
+# ==============================================================================
+parameters:
+  type: object
+
+  environmental:
+    temperature:
+      min_celsius: number | null
+      max_celsius: number | null
+      target_celsius: number | null
+      tolerance: number | null
+      control_required: boolean
+
+    humidity:
+      min_percent: number | null
+      max_percent: number | null
+      target_percent: number | null
+      tolerance: number | null
+      control_required: boolean
+
+    pressure:
+      min_pascal: number | null
+      max_pascal: number | null
+      control_required: boolean
+
+    lighting:
+      required: boolean
+      type: enum # natural | artificial | none
+      intensity_lux: number | null
+
+  temporal:
+    exposure_time_min: number | null
+    contact_time_min: number | null
+    dwell_time_min: number | null
+    pre_operation_wait_min: number | null
+    post_operation_wait_min: number | null
+
+  physical:
+    area_m2: number | null
+    volume_m3: number | null
+    flow_rate_lpm: number | null
+    pressure_kpa: number | null
+
+# ==============================================================================
+# MATERIALS AND CHEMICALS
+# ==============================================================================
+materials:
+  type: array
+  items:
+    material_id: string # Unique material identifier
+    material_name: string # Chemical/material name
+    cas_number: string | null # CAS registry number
+    concentration: string | null # Specified as "value unit" or "defined_by_qa"
+    volume_ml: number | null
+    quantity: string | null # "defined_by_operator" if variable
+    preparation:
+      method: string | null # "defined_by_manufacturer" | specific method
+      dilution_ratio: string | null
+      mixing_order: array | null
+    safety_class: enum # hazardous | irritant | corrosive | safe
+    storage_requirements: string # Storage condition specification
+    disposal_method: string # Disposal procedure reference
+
+# ==============================================================================
+# EQUIPMENT AND TOOLS
+# ==============================================================================
+equipment:
+  type: array
+  items:
+    equipment_id: string # Unique equipment identifier
+    equipment_name: string # Equipment designation
+    equipment_type: enum # See equipment_types
+    calibration_required: boolean
+    calibration_frequency_days: number | null
+    specifications:
+      accuracy: string | null
+      range: string | null
+      resolution: string | null
+    maintenance_ref: string | null # Reference to maintenance procedure
+
+  equipment_types:
+    enum:
+      - measuring_instrument
+      - cleaning_tool
+      - protective_equipment
+      - monitoring_device
+      - processing_equipment
+      - safety_equipment
+
+# ==============================================================================
+# PROCEDURE STEPS
+# ==============================================================================
+procedure:
+  type: array
+  items:
+    step_number: integer # Sequential step number
+    step_id: string # Unique step identifier
+    action: string # Imperative verb + object
+
+    substeps:
+      type: array | null
+      items:
+        substep_id: string
+        action: string
+        parameters: object | null
+
+    parameters:
+      type: object | null
+      # Any parameter from parameters section can be referenced
+
+    controls:
+      type: array | null
+      items:
+        control_type: enum # visual | measurement | documentation | verification
+        parameter: string # What is being controlled
+        acceptance_criteria: string # Specific criteria or "defined_by_qa"
+        frequency: enum # continuous | per_batch | periodic | as_needed
+
+    documentation_required:
+      type: boolean
+      forms: array | null # List of form references
+      data_points: array | null # Specific data to record
+
+    safety_considerations:
+      type: array | null
+      items: string
+
+    critical_step: boolean # Marks GMP critical steps
+    verification_method: enum | null # none | witness | double_check | qa_approval
+
+# ==============================================================================
+# QUALITY CONTROLS
+# ==============================================================================
+quality_controls:
+  type: array
+  items:
+    control_id: string
+    control_type: enum # in_process | final | periodic | validation
+    parameter: string # What is measured/inspected
+    method: string # How it is measured
+    frequency: string # When it is performed
+    acceptance_criteria:
+      type: string | object
+      # Either "defined_by_qa" or structured criteria
+    sampling_plan: string | null # Reference to sampling procedure
+    test_method_ref: string | null # Reference to analytical method
+    documentation_form: string # Form reference
+    out_of_spec_action: string # Procedure reference for OOS handling
+
+# ==============================================================================
+# SAFETY REQUIREMENTS
+# ==============================================================================
+safety:
+  type: object
+
+  ppe_required:
+    head_protection: boolean
+    eye_protection: boolean
+    respiratory_protection: boolean | enum # false | mask_type
+    hand_protection: enum # none | gloves_type
+    body_protection: enum # none | apron | coverall | gown
+    foot_protection: boolean
+
+  hazards:
+    type: array
+    items:
+      hazard_type: enum # chemical | biological | physical | ergonomic
+      hazard_description: string
+      risk_level: enum # low | medium | high | critical
+      mitigation_measures: array
+      emergency_procedure_ref: string | null
+
+  training_required:
+    type: array
+    items:
+      training_id: string
+      training_name: string
+      frequency_months: number
+      certification_required: boolean
+
+# ==============================================================================
+# DOCUMENTATION AND RECORDS
+# ==============================================================================
+documentation:
+  type: object
+
+  records_generated:
+    type: array
+    items:
+      record_id: string
+      record_name: string
+      record_type: enum # log | checklist | certificate | report | label
+      form_ref: string | null
+      retention_years: number
+      storage_location: string # physical | electronic | both
+      access_control: enum # public | restricted | confidential
+
+  data_integrity_requirements:
+    alcoa_plus_compliance: boolean
+    electronic_signature_required: boolean
+    audit_trail_required: boolean
+    backup_required: boolean
+
+  review_requirements:
+    review_frequency: enum # daily | weekly | monthly | per_batch | as_needed
+    reviewer_role: string
+    approval_required: boolean
+    approver_role: string | null
+
+# ==============================================================================
+# DEVIATIONS AND EXCEPTIONS
+# ==============================================================================
+deviations:
+  type: object
+
+  deviation_handling:
+    reporting_required: boolean
+    reporting_procedure_ref: string
+    investigation_required: boolean
+    capa_trigger_criteria: string
+
+  acceptable_ranges:
+    type: array | null
+    items:
+      parameter: string
+      nominal_value: string
+      acceptable_min: string | null
+      acceptable_max: string | null
+      action_limit_min: string | null
+      action_limit_max: string | null
+
+# ==============================================================================
+# VALIDATION AND VERIFICATION
+# ==============================================================================
+validation:
+  type: object
+
+  validation_status: enum # not_required | required | validated | revalidation_due
+  validation_protocol_ref: string | null
+  validation_report_ref: string | null
+  revalidation_trigger_events:
+    type: array | null
+    items: string
+
+  performance_indicators:
+    type: array | null
+    items:
+      kpi_id: string
+      kpi_name: string
+      measurement_method: string
+      target_value: string | null # "defined_by_management"
+      review_frequency: string
+
+# ==============================================================================
+# SPECIAL MARKERS FOR UNDEFINED VALUES
+# ==============================================================================
+undefined_value_markers:
+  enum:
+    - "defined_by_qa" # Quality Assurance defines this value
+    - "defined_by_regulation" # Regulatory requirement specifies this
+    - "defined_by_manufacturer" # Equipment/chemical manufacturer specifies
+    - "defined_by_operator" # Operator determines based on conditions
+    - "defined_by_management" # Management decision required
+    - "to_be_determined" # Pending determination
+    - "not_applicable" # Does not apply to this process

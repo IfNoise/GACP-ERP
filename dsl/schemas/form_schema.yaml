@@ -1,0 +1,363 @@
+# DSL Schema for Forms and Templates
+# Version: 1.0.0
+# Purpose: Standardized structure for regulatory forms, logs, and templates
+
+schema_version: "1.0.0"
+document_type: "form"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: string                    # FORM-XXX-NNN (e.g., FORM-CLN-001)
+  title: string                 # Form title
+  version: string               # Version number (e.g., 1.0.0)
+  effective_date: date          # When form becomes effective
+  supersedes: string            # Previous version ID (optional)
+  category: enum                # Type of form
+    values:
+      - log                     # Logging form (daily records)
+      - checklist               # Verification checklist
+      - report                  # Report template
+      - request                 # Request/approval form
+      - record                  # Record-keeping form
+      - label                   # Label template
+      - certificate             # Certificate template
+  
+  purpose: string               # Brief description
+  scope: string                 # Where/when form is used
+  
+  regulatory_compliance:
+    standards:
+      - string                  # e.g., "FDA 21 CFR Part 11", "EU GMP Annex 11"
+    requirements:
+      - string                  # Specific requirements met
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  frequency: string             # How often used (daily, per batch, as needed)
+  location: string              # Where form is used
+  triggered_by: string          # What action triggers form usage
+  related_sops:                 # SOPs that reference this form
+    - id: string
+      title: string
+  
+  responsible_roles:            # Who can complete this form
+    - role: string
+      qualification: string     # Required training/certification
+
+# ====================
+# 3. FORM STRUCTURE
+# ====================
+form_structure:
+  header:                       # Form header information
+    fields:
+      - field_id: string        # Unique field identifier
+        field_name: string      # Display name
+        field_type: enum        # Data type
+          values:
+            - text
+            - number
+            - date
+            - datetime
+            - dropdown
+            - checkbox
+            - signature
+            - multiline_text
+        required: boolean
+        default_value: string
+        validation: string      # Validation rules (optional)
+        placeholder: string     # Help text
+  
+  sections:                     # Form body sections
+    - section_id: string
+      section_title: string
+      description: string
+      
+      fields:
+        - field_id: string
+          field_name: string
+          field_type: enum
+          required: boolean
+          
+          # For dropdown fields
+          options:
+            - value: string
+              label: string
+          
+          # For numeric fields
+          min: number
+          max: number
+          unit: string
+          
+          # For text fields
+          max_length: integer
+          pattern: string       # Regex pattern
+          
+          help_text: string
+  
+  footer:                       # Signatures and approvals
+    fields:
+      - field_id: string
+        field_name: string
+        field_type: signature
+        role: string            # Required role for this signature
+        required: boolean
+
+# ====================
+# 4. COMPLETION INSTRUCTIONS
+# ====================
+instructions:
+  general: string               # General instructions for completing form
+  
+  steps:                        # Step-by-step guidance
+    - step_number: integer
+      instruction: string
+      notes: string
+  
+  common_errors:                # Common mistakes to avoid
+    - error: string
+      correction: string
+
+# ====================
+# 5. DATA RETENTION
+# ====================
+data_retention:
+  retention_period: string      # How long to keep (e.g., "3 years")
+  storage_location: string      # Where to store completed forms
+  archival_procedure: string    # How to archive
+  destruction_method: string    # How to destroy after retention
+
+# ====================
+# 6. VALIDATION & REVIEW
+# ====================
+validation:
+  review_required: boolean      # Does form need review?
+  review_by: string             # Who reviews (role)
+  review_frequency: string      # How often to review form design
+  
+  quality_checks:               # Checks before form is considered complete
+    - check: string
+      criteria: string
+
+# ====================
+# 7. ELECTRONIC RECORDS
+# ====================
+electronic_records:
+  system: string                # System where electronic version lives
+  
+  audit_trail:
+    captured_events:
+      - event: string           # e.g., "Form Created", "Field Modified"
+    
+  electronic_signature:
+    enabled: boolean
+    authentication_method: string
+    
+  data_integrity:                # ALCOA+ compliance
+    attributable: string
+    legible: string
+    contemporaneous: string
+    original: string
+    accurate: string
+
+# ====================
+# 8. ATTACHMENTS
+# ====================
+attachments:
+  required_attachments:
+    - attachment_type: string
+      description: string
+      mandatory: boolean
+  
+  optional_attachments:
+    - attachment_type: string
+      description: string
+
+# ====================
+# 9. REVISION HISTORY
+# ====================
+revision_history:
+  - version: string
+    date: date
+    changes: string
+    changed_by: string
+    approved_by: string
+
+# ====================
+# EXAMPLE USAGE
+# ====================
+example:
+  metadata:
+    id: "FORM-CLN-001"
+    title: "Cleaning and Sanitation Log"
+    version: "1.0.0"
+    effective_date: "2024-01-15"
+    category: "log"
+    purpose: "Daily documentation of cleaning and sanitation activities"
+    scope: "All cultivation and processing areas"
+    
+    regulatory_compliance:
+      standards:
+        - "WHO GACP Section 5.3"
+        - "FDA 21 CFR Part 11"
+      requirements:
+        - "Complete audit trail of cleaning activities"
+        - "Electronic signature capability"
+  
+  usage:
+    frequency: "Daily, after each cleaning event"
+    location: "All GMP-controlled areas"
+    triggered_by: "Completion of cleaning procedure per SOP-SAN-001"
+    related_sops:
+      - id: "SOP-SAN-001"
+        title: "Cleaning and Sanitation Procedures"
+    
+    responsible_roles:
+      - role: "Sanitation Technician"
+        qualification: "Trained on SOP-SAN-001"
+  
+  form_structure:
+    header:
+      fields:
+        - field_id: "form_number"
+          field_name: "Form Number"
+          field_type: "text"
+          required: true
+          default_value: "Auto-generated"
+        
+        - field_id: "date"
+          field_name: "Date"
+          field_type: "date"
+          required: true
+        
+        - field_id: "area_cleaned"
+          field_name: "Area/Equipment Cleaned"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "grow_room_a"
+              label: "Grow Room A"
+            - value: "processing_room"
+              label: "Processing Room"
+    
+    sections:
+      - section_id: "cleaning_details"
+        section_title: "Cleaning Details"
+        
+        fields:
+          - field_id: "cleaning_agent"
+            field_name: "Cleaning Agent Used"
+            field_type: "dropdown"
+            required: true
+            options:
+              - value: "MAT-DISINF-001"
+                label: "Isopropyl Alcohol 70%"
+              - value: "MAT-CLN-001"
+                label: "Enzymatic Cleaner"
+          
+          - field_id: "contact_time"
+            field_name: "Contact Time (minutes)"
+            field_type: "number"
+            required: true
+            min: 1
+            max: 60
+            unit: "minutes"
+          
+          - field_id: "visual_inspection"
+            field_name: "Visual Inspection Result"
+            field_type: "dropdown"
+            required: true
+            options:
+              - value: "pass"
+                label: "Pass - No visible residue"
+              - value: "fail"
+                label: "Fail - Re-cleaning required"
+    
+    footer:
+      fields:
+        - field_id: "technician_signature"
+          field_name: "Technician Signature"
+          field_type: "signature"
+          role: "Sanitation Technician"
+          required: true
+        
+        - field_id: "supervisor_signature"
+          field_name: "Supervisor Verification"
+          field_type: "signature"
+          role: "QA Supervisor"
+          required: true
+  
+  instructions:
+    general: "Complete this form immediately after performing cleaning and sanitation activities. Ensure all fields are filled accurately."
+    
+    steps:
+      - step_number: 1
+        instruction: "Select the area or equipment that was cleaned from the dropdown menu"
+      
+      - step_number: 2
+        instruction: "Record the cleaning agent used and verify it matches the approved list in SOP-SAN-001"
+      
+      - step_number: 3
+        instruction: "Document the contact time and ensure it meets the minimum requirement"
+      
+      - step_number: 4
+        instruction: "Perform visual inspection and record result"
+      
+      - step_number: 5
+        instruction: "Sign and date the form. Submit to QA for verification signature"
+    
+    common_errors:
+      - error: "Forgetting to record contact time"
+        correction: "Contact time is critical for efficacy - always document"
+      
+      - error: "Using non-approved cleaning agents"
+        correction: "Only use agents listed in SOP-SAN-001 Section 5"
+  
+  data_retention:
+    retention_period: "3 years from date of creation"
+    storage_location: "QA Document Archive (electronic and physical backup)"
+    archival_procedure: "Electronic: migrate to long-term storage after 1 year. Physical: scan and store in Archive Room B"
+    destruction_method: "Secure shredding for physical copies, secure deletion for electronic"
+  
+  validation:
+    review_required: true
+    review_by: "QA Supervisor"
+    review_frequency: "Monthly spot checks, full audit quarterly"
+    
+    quality_checks:
+      - check: "All required fields completed"
+        criteria: "No blank required fields"
+      
+      - check: "Signatures present and valid"
+        criteria: "Both technician and supervisor signatures with dates"
+  
+  electronic_records:
+    system: "ERP QMS Module"
+    
+    audit_trail:
+      captured_events:
+        - "Form Created"
+        - "Field Modified"
+        - "Form Submitted"
+        - "Review Completed"
+    
+    electronic_signature:
+      enabled: true
+      authentication_method: "Username/Password + 2FA"
+    
+    data_integrity:
+      attributable: "All actions linked to authenticated user"
+      legible: "Data stored in readable format, exportable to PDF"
+      contemporaneous: "Timestamps auto-captured for all events"
+      original: "Immutable once submitted, amendments tracked"
+      accurate: "Validation rules prevent invalid data entry"
+  
+  revision_history:
+    - version: "1.0.0"
+      date: "2024-01-15"
+      changes: "Initial release"
+      changed_by: "Quality Assurance Team"
+      approved_by: "QA Manager"

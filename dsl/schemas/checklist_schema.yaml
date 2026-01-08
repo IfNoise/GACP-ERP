@@ -1,0 +1,616 @@
+# DSL Schema for Checklists
+# Version: 1.0.0
+# Purpose: Standardized structure for verification and inspection checklists
+
+schema_version: "1.0.0"
+document_type: "checklist"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: string                    # CHKLST-XXX-NNN (e.g., CHKLST-EQP-001)
+  title: string                 # Checklist title
+  version: string               # Version number (e.g., 1.0.0)
+  effective_date: date          # When checklist becomes effective
+  supersedes: string            # Previous version ID (optional)
+  
+  checklist_type: enum
+    values:
+      - verification            # Verification checklist
+      - inspection              # Inspection checklist
+      - validation              # Validation checklist
+      - audit                   # Audit checklist
+      - safety                  # Safety checklist
+      - pre_operational         # Pre-operational checklist
+      - post_operational        # Post-operational checklist
+      - maintenance             # Maintenance checklist
+      - cleaning                # Cleaning verification
+      - qualification           # Personnel/equipment qualification
+  
+  purpose: string               # Brief description of checklist purpose
+  scope: string                 # Where/when checklist applies
+  
+  regulatory_compliance:
+    standards:
+      - string                  # e.g., "WHO GACP", "ISO 17025"
+    requirements:
+      - string                  # Specific requirements addressed
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  frequency: string             # How often used (daily, weekly, per batch, etc.)
+  location: string              # Where checklist is used
+  triggered_by: string          # What action triggers checklist usage
+  
+  related_sops:                 # SOPs that reference this checklist
+    - id: string
+      title: string
+      section: string           # Optional: specific section reference
+  
+  responsible_roles:            # Who completes this checklist
+    - role: string
+      qualification: string     # Required training/certification
+      authority_level: enum     # operator | supervisor | manager | qa
+        values:
+          - operator
+          - supervisor
+          - manager
+          - qa
+          - auditor
+
+# ====================
+# 3. CHECKLIST STRUCTURE
+# ====================
+checklist_structure:
+  header:                       # Checklist header information
+    fields:
+      - field_id: string
+        field_name: string
+        field_type: enum
+          values:
+            - text
+            - date
+            - datetime
+            - dropdown
+            - reference_number
+        required: boolean
+        default_value: string
+        validation: string
+  
+  sections:                     # Main checklist sections
+    - section_id: string
+      section_title: string
+      section_description: string
+      critical_section: boolean # Is this section GMP-critical?
+      
+      items:                    # Checklist items
+        - item_id: string
+          item_number: string   # Display number (e.g., "1.1", "2.3")
+          item_text: string     # What to check/verify
+          
+          item_type: enum
+            values:
+              - yes_no          # Simple yes/no check
+              - pass_fail       # Pass/fail check
+              - conformance     # Conforming/non-conforming
+              - measurement     # Numeric measurement
+              - observation     # Text observation
+              - verification    # Verified/not verified
+              - na_applicable   # N/A option available
+          
+          critical: boolean     # Must pass or auto-fail entire checklist
+          
+          acceptance_criteria: string  # What constitutes pass/acceptable
+          
+          # For measurement items
+          measurement:
+            parameter: string
+            unit: string
+            min_value: number
+            max_value: number
+            target_value: number
+            tolerance: number
+          
+          # For observation items
+          observation:
+            expected_state: string
+            deviation_action: string
+          
+          # Reference information
+          reference:
+            source: string      # SOP, specification, regulation
+            section: string     # Specific section/clause
+          
+          # Actions if item fails
+          failure_actions:
+            - action: string
+              responsible: string
+              escalation_required: boolean
+          
+          notes_allowed: boolean
+          photo_required: boolean
+          attachment_allowed: boolean
+  
+  footer:                       # Signatures and approvals
+    fields:
+      - field_id: string
+        field_name: string
+        field_type: enum
+          values:
+            - signature
+            - initial
+            - date
+        role: string
+        required: boolean
+
+# ====================
+# 4. SCORING AND EVALUATION
+# ====================
+scoring:
+  scoring_method: enum
+    values:
+      - all_must_pass          # All items must pass
+      - percentage_pass        # Minimum percentage required
+      - critical_items_only    # Only critical items must pass
+      - weighted_score         # Items have different weights
+      - no_scoring            # Informational only
+  
+  # For percentage_pass method
+  minimum_pass_percentage: number
+  
+  # For weighted_score method
+  total_possible_points: number
+  minimum_passing_score: number
+  
+  # Critical items handling
+  critical_item_failure:
+    auto_fail_checklist: boolean
+    requires_immediate_action: boolean
+    notification_required: boolean
+    notify_roles:
+      - string
+
+# ====================
+# 5. COMPLETION INSTRUCTIONS
+# ====================
+instructions:
+  general: string               # General instructions
+  
+  preparation:                  # Pre-checklist preparation
+    - instruction: string
+  
+  completion_steps:             # How to complete checklist
+    - step_number: integer
+      instruction: string
+      notes: string
+  
+  special_conditions:           # Special circumstances
+    - condition: string
+      action: string
+  
+  common_errors:
+    - error: string
+      correction: string
+
+# ====================
+# 6. DEVIATION HANDLING
+# ====================
+deviation_handling:
+  deviations_allowed: boolean
+  
+  deviation_procedure:
+    minor_deviation:
+      definition: string
+      action_required: string
+      approval_required: boolean
+      approver_role: string
+    
+    major_deviation:
+      definition: string
+      action_required: string
+      approval_required: boolean
+      approver_role: string
+      investigation_required: boolean
+      capa_required: boolean
+  
+  documentation_requirements:
+    deviation_form_ref: string
+    investigation_form_ref: string
+
+# ====================
+# 7. DATA RETENTION AND RECORDS
+# ====================
+data_retention:
+  retention_period: string      # How long to keep
+  storage_location: string      # Where to store
+  archival_procedure: string    # How to archive
+  destruction_method: string    # How to destroy after retention
+  
+  audit_trail_required: boolean
+  electronic_signature_required: boolean
+
+# ====================
+# 8. REVIEW AND VALIDATION
+# ====================
+review:
+  review_required: boolean
+  reviewer_role: string
+  review_frequency: string
+  review_criteria:
+    - criterion: string
+  
+  approval_required: boolean
+  approver_role: string
+  approval_criteria:
+    - criterion: string
+
+# ====================
+# 9. CORRECTIVE ACTIONS
+# ====================
+corrective_actions:
+  immediate_actions:            # Actions to take immediately on failure
+    - trigger: string           # What triggers this action
+      action: string            # What to do
+      responsible: string       # Who does it
+      timeframe: string         # When it must be done
+  
+  follow_up_required: boolean
+  follow_up_procedure_ref: string
+  capa_integration: boolean
+  capa_trigger_criteria: string
+
+# ====================
+# 10. INTEGRATION WITH OTHER SYSTEMS
+# ====================
+integrations:
+  electronic_system: string     # ERP/QMS module
+  
+  data_export:
+    export_format: array        # PDF, CSV, XML, etc.
+    auto_export: boolean
+    export_destination: string
+  
+  notifications:
+    - event: string             # What triggers notification
+      recipients: array         # Who gets notified
+      notification_method: enum # email, sms, system_alert
+        values:
+          - email
+          - sms
+          - system_alert
+          - dashboard
+
+# ====================
+# 11. REVISION HISTORY
+# ====================
+revision_history:
+  - version: string
+    date: date
+    changes: string
+    reason_for_change: string
+    changed_by: string
+    approved_by: string
+
+# ====================
+# EXAMPLE USAGE
+# ====================
+example:
+  metadata:
+    id: "CHKLST-EQP-001"
+    title: "Equipment Calibration Verification Checklist"
+    version: "1.0.0"
+    effective_date: "2024-01-15"
+    checklist_type: "verification"
+    
+    purpose: "Verify equipment calibration status before use in GMP operations"
+    scope: "All measuring and monitoring equipment in production areas"
+    
+    regulatory_compliance:
+      standards:
+        - "WHO GACP Section 4.5"
+        - "ISO 17025"
+      requirements:
+        - "Equipment must be calibrated before use"
+        - "Calibration status must be verified"
+  
+  usage:
+    frequency: "Before each use of measuring equipment"
+    location: "At equipment location"
+    triggered_by: "Equipment setup for production or testing"
+    
+    related_sops:
+      - id: "SOP-EQP-002"
+        title: "Equipment Calibration"
+        section: "Section 6.3"
+    
+    responsible_roles:
+      - role: "Equipment Operator"
+        qualification: "Trained on SOP-EQP-002"
+        authority_level: "operator"
+      
+      - role: "QA Technician"
+        qualification: "QA certification"
+        authority_level: "qa"
+  
+  checklist_structure:
+    header:
+      fields:
+        - field_id: "checklist_number"
+          field_name: "Checklist Number"
+          field_type: "reference_number"
+          required: true
+          default_value: "Auto-generated"
+        
+        - field_id: "equipment_id"
+          field_name: "Equipment ID"
+          field_type: "text"
+          required: true
+        
+        - field_id: "date"
+          field_name: "Verification Date"
+          field_type: "date"
+          required: true
+    
+    sections:
+      - section_id: "calibration_status"
+        section_title: "Calibration Status Verification"
+        section_description: "Verify current calibration status of equipment"
+        critical_section: true
+        
+        items:
+          - item_id: "CAL-001"
+            item_number: "1.1"
+            item_text: "Calibration label present and legible"
+            item_type: "pass_fail"
+            critical: true
+            acceptance_criteria: "Label must be present, intact, and readable"
+            
+            reference:
+              source: "SOP-EQP-002"
+              section: "Section 5.2"
+            
+            failure_actions:
+              - action: "Do not use equipment. Notify QA immediately"
+                responsible: "Equipment Operator"
+                escalation_required: true
+            
+            notes_allowed: true
+            photo_required: false
+            attachment_allowed: true
+          
+          - item_id: "CAL-002"
+            item_number: "1.2"
+            item_text: "Calibration is current (not expired)"
+            item_type: "pass_fail"
+            critical: true
+            acceptance_criteria: "Calibration due date must be in the future"
+            
+            reference:
+              source: "SOP-EQP-002"
+              section: "Section 5.3"
+            
+            failure_actions:
+              - action: "Do not use equipment. Tag as 'Calibration Expired'. Submit to Calibration Lab"
+                responsible: "Equipment Operator"
+                escalation_required: true
+            
+            notes_allowed: true
+            photo_required: true
+            attachment_allowed: false
+          
+          - item_id: "CAL-003"
+            item_number: "1.3"
+            item_text: "Equipment is within calibration range for intended use"
+            item_type: "verification"
+            critical: true
+            acceptance_criteria: "Calibration range must encompass measurement range needed"
+            
+            reference:
+              source: "SOP-EQP-002"
+              section: "Section 5.4"
+            
+            failure_actions:
+              - action: "Select different equipment with appropriate range"
+                responsible: "Equipment Operator"
+                escalation_required: false
+            
+            notes_allowed: true
+            photo_required: false
+            attachment_allowed: false
+      
+      - section_id: "physical_condition"
+        section_title: "Physical Condition Check"
+        section_description: "Verify equipment is in good physical condition"
+        critical_section: false
+        
+        items:
+          - item_id: "PHY-001"
+            item_number: "2.1"
+            item_text: "Equipment is clean and free from contamination"
+            item_type: "pass_fail"
+            critical: false
+            acceptance_criteria: "No visible dirt, debris, or contamination"
+            
+            observation:
+              expected_state: "Clean, no visible contamination"
+              deviation_action: "Clean per SOP-SAN-001 before use"
+            
+            notes_allowed: true
+            photo_required: false
+            attachment_allowed: false
+          
+          - item_id: "PHY-002"
+            item_number: "2.2"
+            item_text: "No physical damage observed"
+            item_type: "pass_fail"
+            critical: false
+            acceptance_criteria: "No cracks, dents, or other damage"
+            
+            observation:
+              expected_state: "Intact, no damage"
+              deviation_action: "Tag as damaged, notify Maintenance"
+            
+            failure_actions:
+              - action: "Do not use. Tag equipment and notify Maintenance Department"
+                responsible: "Equipment Operator"
+                escalation_required: true
+            
+            notes_allowed: true
+            photo_required: true
+            attachment_allowed: false
+    
+    footer:
+      fields:
+        - field_id: "operator_signature"
+          field_name: "Verified By (Operator)"
+          field_type: "signature"
+          role: "Equipment Operator"
+          required: true
+        
+        - field_id: "qa_signature"
+          field_name: "Reviewed By (QA)"
+          field_type: "signature"
+          role: "QA Technician"
+          required: true
+  
+  scoring:
+    scoring_method: "critical_items_only"
+    
+    critical_item_failure:
+      auto_fail_checklist: true
+      requires_immediate_action: true
+      notification_required: true
+      notify_roles:
+        - "QA Supervisor"
+        - "Production Supervisor"
+  
+  instructions:
+    general: "Complete this checklist before using any measuring or monitoring equipment. All critical items must pass."
+    
+    preparation:
+      - "Locate equipment and ensure it is accessible"
+      - "Have equipment ID and calibration records available"
+    
+    completion_steps:
+      - step_number: 1
+        instruction: "Verify equipment ID matches the intended equipment"
+        notes: "Check equipment label against work order or batch record"
+      
+      - step_number: 2
+        instruction: "Complete all items in Section 1 (Calibration Status)"
+        notes: "All items in this section are critical"
+      
+      - step_number: 3
+        instruction: "Complete all items in Section 2 (Physical Condition)"
+        notes: "Non-critical items but must be addressed"
+      
+      - step_number: 4
+        instruction: "Sign and date the checklist"
+        notes: "Submit to QA for review signature"
+    
+    special_conditions:
+      - condition: "Equipment is out of calibration"
+        action: "Do not use. Tag equipment and notify QA immediately. Complete deviation report."
+      
+      - condition: "Calibration label is damaged but equipment is known to be calibrated"
+        action: "Notify QA. May continue with QA approval while replacement label is generated."
+    
+    common_errors:
+      - error: "Not checking calibration due date"
+        correction: "Always verify the 'Next Cal Due' date is in the future"
+      
+      - error: "Using equipment outside calibrated range"
+        correction: "Verify measurement range needed is within calibrated range on label"
+  
+  deviation_handling:
+    deviations_allowed: true
+    
+    deviation_procedure:
+      minor_deviation:
+        definition: "Non-critical item fails, equipment still usable"
+        action_required: "Document observation, notify supervisor, take corrective action"
+        approval_required: false
+        approver_role: "N/A"
+      
+      major_deviation:
+        definition: "Critical item fails, equipment cannot be used"
+        action_required: "Stop work, tag equipment, complete deviation report, notify QA"
+        approval_required: true
+        approver_role: "QA Manager"
+        investigation_required: true
+        capa_required: false
+    
+    documentation_requirements:
+      deviation_form_ref: "FORM-DEV-001"
+      investigation_form_ref: "FORM-INV-001"
+  
+  data_retention:
+    retention_period: "Duration of batch + 3 years"
+    storage_location: "Equipment history file (electronic and physical backup)"
+    archival_procedure: "Migrate to long-term storage after batch completion"
+    destruction_method: "Secure deletion for electronic, secure shredding for physical"
+    
+    audit_trail_required: true
+    electronic_signature_required: true
+  
+  review:
+    review_required: true
+    reviewer_role: "QA Technician"
+    review_frequency: "Within 24 hours of completion"
+    review_criteria:
+      - "All items completed"
+      - "All critical items passed"
+      - "Signatures present and valid"
+    
+    approval_required: false
+    approver_role: "N/A"
+  
+  corrective_actions:
+    immediate_actions:
+      - trigger: "Calibration expired"
+        action: "Tag equipment 'DO NOT USE - CALIBRATION EXPIRED' and send to Calibration Lab"
+        responsible: "Equipment Operator"
+        timeframe: "Immediate"
+      
+      - trigger: "Equipment damaged"
+        action: "Tag equipment 'DO NOT USE - DAMAGED' and notify Maintenance"
+        responsible: "Equipment Operator"
+        timeframe: "Immediate"
+    
+    follow_up_required: true
+    follow_up_procedure_ref: "SOP-EQP-003 - Equipment Out of Service"
+    capa_integration: false
+    capa_trigger_criteria: "N/A for equipment issues"
+  
+  integrations:
+    electronic_system: "ERP Equipment Management Module"
+    
+    data_export:
+      export_format:
+        - "PDF"
+        - "CSV"
+      auto_export: true
+      export_destination: "Equipment History Database"
+    
+    notifications:
+      - event: "Critical item failure"
+        recipients:
+          - "QA Supervisor"
+          - "Production Supervisor"
+        notification_method: "system_alert"
+      
+      - event: "Checklist completed"
+        recipients:
+          - "QA Technician"
+        notification_method: "email"
+  
+  revision_history:
+    - version: "1.0.0"
+      date: "2024-01-15"
+      changes: "Initial release"
+      reason_for_change: "New checklist to support SOP-EQP-002"
+      changed_by: "Quality Assurance Department"
+      approved_by: "QA Manager"

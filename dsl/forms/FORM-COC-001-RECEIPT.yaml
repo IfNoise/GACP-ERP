@@ -1,0 +1,498 @@
+# DSL: Chain of Custody Receipt Form
+# Version: 1.0
+# Referenced by: SOP-COC-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+document_type: "form"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "FORM-COC-001"
+  title: "Chain of Custody - Material Receipt Form"
+  version: "1.0.0"
+  effective_date: "2024-01-15"
+  supersedes: null
+  category: "log"
+  
+  purpose: "Document receipt of materials with full CoC traceability including supplier information, material identification, quantity verification, seal integrity, and custodian signatures"
+  scope: "All materials received from external suppliers"
+  
+  regulatory_compliance:
+    standards:
+      - "FDA 21 CFR Part 11"
+      - "WHO GACP Guidelines"
+    requirements:
+      - "Complete audit trail of material receipts"
+      - "Electronic signature capability"
+      - "ALCOA+ data integrity compliance"
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  frequency: "Per receipt event"
+  location: "Receiving area"
+  triggered_by: "Arrival of material shipment from supplier"
+  related_sops:
+    - id: "SOP-COC-001"
+      title: "Chain of Custody"
+      section: "Section 6.1"
+  
+  responsible_roles:
+    - role: "Authorized Receiver"
+      qualification: "CoC training completed, ERP system certified"
+      authority_level: "operator"
+
+# ====================
+# 3. FORM STRUCTURE
+# ====================
+form_structure:
+  header:
+    fields:
+      - field_id: "form_number"
+        field_name: "Form Number"
+        field_type: "text"
+        required: true
+        default_value: "Auto-generated"
+        validation: "COC-RCV-YYYY-NNNN"
+        placeholder: "COC-RCV-2024-0001"
+      
+      - field_id: "receipt_date"
+        field_name: "Receipt Date"
+        field_type: "datetime"
+        required: true
+        default_value: "Current datetime"
+        validation: "ISO 8601 format"
+        placeholder: "2024-01-15T14:30:00Z"
+      
+      - field_id: "receiver_name"
+        field_name: "Received By"
+        field_type: "text"
+        required: true
+        default_value: "Current user full name"
+        validation: null
+        placeholder: "John Smith"
+      
+      - field_id: "receiver_id"
+        field_name: "Receiver Employee ID"
+        field_type: "text"
+        required: true
+        default_value: "Current user ID"
+        validation: "EMP-NNNN"
+        placeholder: "EMP-1234"
+  
+  sections:
+    - section_id: "supplier_info"
+      section_title: "Supplier Information"
+      description: "Details about the supplier and shipment"
+      
+      fields:
+        - field_id: "supplier_name"
+          field_name: "Supplier Name"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "supplier_001"
+              label: "Qualified Supplier A"
+            - value: "supplier_002"
+              label: "Qualified Supplier B"
+          help_text: "Select from approved supplier list"
+        
+        - field_id: "supplier_contact"
+          field_name: "Supplier Contact Person"
+          field_type: "text"
+          required: true
+          max_length: 100
+          help_text: "Name and phone of supplier contact"
+        
+        - field_id: "po_number"
+          field_name: "Purchase Order Number"
+          field_type: "text"
+          required: true
+          pattern: "PO-\\d{4}-\\d{4}"
+          help_text: "Reference PO number"
+        
+        - field_id: "carrier_name"
+          field_name: "Carrier/Transport Company"
+          field_type: "text"
+          required: true
+          max_length: 100
+          help_text: "Name of transport company"
+        
+        - field_id: "driver_name"
+          field_name: "Driver Name"
+          field_type: "text"
+          required: true
+          max_length: 100
+          help_text: "Name of delivery driver"
+        
+        - field_id: "vehicle_id"
+          field_name: "Vehicle ID/License Plate"
+          field_type: "text"
+          required: true
+          max_length: 50
+          help_text: "Vehicle identification"
+    
+    - section_id: "material_info"
+      section_title: "Material Information"
+      description: "Details about the received material"
+      
+      fields:
+        - field_id: "material_name"
+          field_name: "Material Name/Description"
+          field_type: "text"
+          required: true
+          max_length: 200
+          help_text: "Full material description"
+        
+        - field_id: "material_type"
+          field_name: "Material Type"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "raw_material"
+              label: "Raw Material"
+            - value: "seeds_clones"
+              label: "Seeds/Clones"
+            - value: "nutrients"
+              label: "Nutrients/Fertilizers"
+            - value: "packaging"
+              label: "Packaging Materials"
+            - value: "reagents"
+              label: "Laboratory Reagents"
+            - value: "other"
+              label: "Other"
+          help_text: "Category of material"
+        
+        - field_id: "batch_lot_number"
+          field_name: "Batch/Lot Number"
+          field_type: "text"
+          required: true
+          max_length: 50
+          help_text: "Supplier's batch or lot number"
+        
+        - field_id: "quantity_declared"
+          field_name: "Declared Quantity"
+          field_type: "number"
+          required: true
+          min: 0
+          unit: "kg/units"
+          help_text: "Quantity per supplier documentation"
+        
+        - field_id: "quantity_received"
+          field_name: "Actual Quantity Received"
+          field_type: "number"
+          required: true
+          min: 0
+          unit: "kg/units"
+          help_text: "Quantity verified on receipt"
+        
+        - field_id: "quantity_variance"
+          field_name: "Variance (%)"
+          field_type: "number"
+          required: false
+          unit: "%"
+          help_text: "Auto-calculated from declared vs received"
+        
+        - field_id: "unit_of_measure"
+          field_name: "Unit of Measure"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "kg"
+              label: "Kilograms (kg)"
+            - value: "g"
+              label: "Grams (g)"
+            - value: "L"
+              label: "Liters (L)"
+            - value: "units"
+              label: "Units/Pieces"
+            - value: "boxes"
+              label: "Boxes"
+          help_text: "Measurement unit"
+    
+    - section_id: "packaging_integrity"
+      section_title: "Packaging and Seal Integrity"
+      description: "Verification of packaging condition and seals"
+      
+      fields:
+        - field_id: "seal_numbers"
+          field_name: "Seal Numbers"
+          field_type: "multiline_text"
+          required: true
+          max_length: 500
+          help_text: "List all seal numbers (one per line)"
+        
+        - field_id: "seals_intact"
+          field_name: "All Seals Intact?"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "yes"
+              label: "Yes - All seals intact"
+            - value: "no"
+              label: "No - Seal breach detected"
+          help_text: "Visual inspection result"
+        
+        - field_id: "packaging_condition"
+          field_name: "Packaging Condition"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "good"
+              label: "Good - No damage"
+            - value: "minor_damage"
+              label: "Minor Damage - Non-critical"
+            - value: "major_damage"
+              label: "Major Damage - Material at risk"
+            - value: "compromised"
+              label: "Compromised - Reject material"
+          help_text: "Overall packaging assessment"
+        
+        - field_id: "temperature_indicators"
+          field_name: "Temperature Indicators Status"
+          field_type: "dropdown"
+          required: false
+          options:
+            - value: "na"
+              label: "Not Applicable"
+            - value: "normal"
+              label: "Normal - Within range"
+            - value: "exceeded"
+              label: "Exceeded - Out of range"
+          help_text: "If temperature-sensitive material"
+        
+        - field_id: "visual_contamination"
+          field_name: "Visual Contamination Check"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "no_contamination"
+              label: "No Contamination Visible"
+            - value: "suspected"
+              label: "Suspected Contamination"
+            - value: "confirmed"
+              label: "Confirmed Contamination"
+          help_text: "Visual inspection for contamination"
+        
+        - field_id: "observations"
+          field_name: "Additional Observations"
+          field_type: "multiline_text"
+          required: false
+          max_length: 1000
+          help_text: "Any additional notes or observations"
+    
+    - section_id: "acceptance_decision"
+      section_title: "Acceptance Decision"
+      description: "Final decision on material acceptance"
+      
+      fields:
+        - field_id: "acceptance_status"
+          field_name: "Acceptance Status"
+          field_type: "dropdown"
+          required: true
+          options:
+            - value: "accepted"
+              label: "Accepted - Material meets requirements"
+            - value: "accepted_with_notes"
+              label: "Accepted with Notes - Minor issues documented"
+            - value: "quarantine"
+              label: "Quarantine - Pending QA review"
+            - value: "rejected"
+              label: "Rejected - Does not meet requirements"
+          help_text: "Final acceptance decision"
+        
+        - field_id: "rejection_reason"
+          field_name: "Rejection Reason"
+          field_type: "multiline_text"
+          required: false
+          max_length: 500
+          help_text: "Required if rejected"
+        
+        - field_id: "storage_location"
+          field_name: "Storage Location"
+          field_type: "text"
+          required: true
+          max_length: 100
+          help_text: "Where material will be stored"
+        
+        - field_id: "internal_batch_id"
+          field_name: "Internal Batch ID"
+          field_type: "text"
+          required: true
+          default_value: "Auto-generated"
+          validation: "BATCH-YYYY-NNNN"
+          help_text: "System-generated internal tracking ID"
+  
+  footer:
+    fields:
+      - field_id: "receiver_signature"
+        field_name: "Receiver Signature"
+        field_type: "signature"
+        role: "Authorized Receiver"
+        required: true
+      
+      - field_id: "receiver_signature_date"
+        field_name: "Signature Date/Time"
+        field_type: "datetime"
+        role: "Authorized Receiver"
+        required: true
+      
+      - field_id: "qa_reviewer_signature"
+        field_name: "QA Review Signature"
+        field_type: "signature"
+        role: "QA Supervisor"
+        required: true
+      
+      - field_id: "qa_signature_date"
+        field_name: "QA Review Date/Time"
+        field_type: "datetime"
+        role: "QA Supervisor"
+        required: true
+
+# ====================
+# 4. COMPLETION INSTRUCTIONS
+# ====================
+instructions:
+  general: "Complete this form immediately upon receipt of materials. All required fields must be completed before material can be released to storage. If any critical deviations are noted (seal breach, contamination, major damage), notify QA immediately before proceeding."
+  
+  steps:
+    - step_number: 1
+      instruction: "Verify 24-hour advance notification was received"
+      notes: "Check email or system notification"
+    
+    - step_number: 2
+      instruction: "Prepare controlled receiving area"
+      notes: "Ensure clean, appropriate environment"
+    
+    - step_number: 3
+      instruction: "Complete Supplier Information section"
+      notes: "Verify all supplier documents present"
+    
+    - step_number: 4
+      instruction: "Inspect and count materials, complete Material Information section"
+      notes: "Use calibrated scale for weighing"
+    
+    - step_number: 5
+      instruction: "Perform thorough packaging and seal inspection"
+      notes: "Document all seal numbers, take photos if breach detected"
+    
+    - step_number: 6
+      instruction: "Make acceptance decision"
+      notes: "Consult QA if uncertain"
+    
+    - step_number: 7
+      instruction: "Apply electronic signature"
+      notes: "Must use PKI certificate"
+    
+    - step_number: 8
+      instruction: "Submit form to QA for review"
+      notes: "Material remains in receiving area until QA approval"
+  
+  common_errors:
+    - error: "Not documenting all seal numbers"
+      correction: "Record every seal number visible on packaging"
+    
+    - error: "Accepting material with quantity variance >2%"
+      correction: "Quantities outside ±2% require QA review before acceptance"
+    
+    - error: "Missing photos of damaged packaging"
+      correction: "Always attach photos when damage or seal breach is noted"
+
+# ====================
+# 5. DATA RETENTION
+# ====================
+data_retention:
+  retention_period: "30 years from receipt date"
+  storage_location: "ERP CoC Module (primary), encrypted backup storage (secondary)"
+  archival_procedure: "Auto-archive to long-term storage after 3 years. Maintain full searchability and audit trail integrity."
+  destruction_method: "Secure deletion per FDA Part 11 requirements after retention period. Requires QA Director approval."
+
+# ====================
+# 6. VALIDATION & REVIEW
+# ====================
+validation:
+  review_required: true
+  review_by: "QA Supervisor"
+  review_frequency: "Within 24 hours of form submission"
+  
+  quality_checks:
+    - check: "All required fields completed"
+      criteria: "No blank required fields"
+    
+    - check: "Quantity variance within acceptable range"
+      criteria: "Variance ≤2% or QA-approved"
+    
+    - check: "Seal integrity verified"
+      criteria: "All seals documented and status confirmed"
+    
+    - check: "Signatures present and valid"
+      criteria: "Receiver and QA signatures with valid PKI certificates"
+  
+  approval_required: true
+  approver_role: "QA Supervisor"
+  approval_criteria:
+    - "All quality checks passed"
+    - "No critical deviations or appropriately documented"
+    - "Material ready for storage release"
+
+# ====================
+# 7. ELECTRONIC RECORDS
+# ====================
+electronic_records:
+  system: "ERP CoC Module"
+  
+  audit_trail:
+    captured_events:
+      - "Form Created"
+      - "Field Modified (with before/after values)"
+      - "Form Submitted"
+      - "QA Review Initiated"
+      - "QA Review Completed"
+      - "Form Approved/Rejected"
+  
+  electronic_signature:
+    enabled: true
+    authentication_method: "PKI Certificate + Password"
+  
+  data_integrity:
+    attributable: "All actions linked to authenticated user with employee ID"
+    legible: "All data stored in human-readable format, exportable to PDF"
+    contemporaneous: "Timestamps auto-captured for all events, NTP-synchronized"
+    original: "Forms immutable after submission. Amendments via addendum process only."
+    accurate: "Field validation prevents invalid data entry"
+
+# ====================
+# 8. ATTACHMENTS
+# ====================
+attachments:
+  required_attachments:
+    - attachment_type: "Supplier CoA"
+      description: "Supplier's Certificate of Analysis"
+      mandatory: true
+    
+    - attachment_type: "Shipping Documents"
+      description: "Bill of lading, packing slip, etc."
+      mandatory: true
+  
+  optional_attachments:
+    - attachment_type: "Photos"
+      description: "Photos of packaging, seals, or damage"
+      mandatory: false
+    
+    - attachment_type: "Temperature Logs"
+      description: "Temperature data logger files for temperature-sensitive materials"
+      mandatory: false
+
+# ====================
+# 9. REVISION HISTORY
+# ====================
+revision_history:
+  - version: "1.0.0"
+    date: "2024-01-15"
+    changes: "Initial release of form"
+    changed_by: "Quality Assurance Team"
+    approved_by: "QA Director"

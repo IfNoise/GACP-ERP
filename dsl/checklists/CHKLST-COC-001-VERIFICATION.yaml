@@ -1,0 +1,631 @@
+# DSL: Chain of Custody Verification Checklist
+# Version: 1.0
+# Referenced by: SOP-COC-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+document_type: "checklist"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "CHKLST-COC-001"
+  title: "Chain of Custody Verification Checklist"
+  version: "1.0.0"
+  effective_date: "2024-01-15"
+  supersedes: null
+  checklist_type: "verification"
+  
+  purpose: "Verify completeness and continuity of chain of custody documentation for material transfers"
+  scope: "All material transfers requiring CoC documentation"
+  
+  regulatory_compliance:
+    standards:
+      - "FDA 21 CFR Part 11"
+      - "WHO GACP Guidelines"
+    requirements:
+      - "Unbroken chain of custody verification"
+      - "Document completeness verification"
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  frequency: "At completion of material transfer"
+  location: "Where transfer occurs or at QA review"
+  triggered_by: "Completion of material transfer or periodic CoC audit"
+  
+  related_sops:
+    - id: "SOP-COC-001"
+      title: "Chain of Custody"
+      section: "Section 7 - Quality Controls"
+  
+  responsible_roles:
+    - role: "QA Technician"
+      qualification: "CoC procedures training"
+      authority_level: "qa"
+    
+    - role: "QA Supervisor"
+      qualification: "QA supervisor certification"
+      authority_level: "qa"
+
+# ====================
+# 3. CHECKLIST STRUCTURE
+# ====================
+checklist_structure:
+  header:
+    fields:
+      - field_id: "checklist_number"
+        field_name: "Checklist Number"
+        field_type: "reference_number"
+        required: true
+        default_value: "Auto-generated"
+        validation: "CHKLST-COC-YYYY-NNNN"
+      
+      - field_id: "material_batch_id"
+        field_name: "Material Batch ID"
+        field_type: "text"
+        required: true
+        validation: "BATCH-YYYY-NNNN"
+      
+      - field_id: "verification_date"
+        field_name: "Verification Date"
+        field_type: "date"
+        required: true
+      
+      - field_id: "verifier_name"
+        field_name: "Verified By"
+        field_type: "text"
+        required: true
+  
+  sections:
+    - section_id: "documentation_completeness"
+      section_title: "Documentation Completeness"
+      section_description: "Verify all required CoC documentation is present and complete"
+      critical_section: true
+      
+      items:
+        - item_id: "DOC-001"
+          item_number: "1.1"
+          item_text: "CoC form present for initial receipt from supplier"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "FORM-COC-001 completed and signed"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 6.1.2"
+          
+          failure_actions:
+            - action: "Material cannot be released. Initiate deviation report DEV-001."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "DOC-002"
+          item_number: "1.2"
+          item_text: "All custodian transfer records present"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "FORM-COC-003 for each internal transfer"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 6.2"
+          
+          failure_actions:
+            - action: "Identify missing transfers. Reconstruct CoC chain if possible."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "DOC-003"
+          item_number: "1.3"
+          item_text: "All required fields completed in each form"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "No blank required fields in any CoC document"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 5.1"
+          
+          failure_actions:
+            - action: "Return to custodian for completion or create addendum"
+              responsible: "QA Technician"
+              escalation_required: false
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "DOC-004"
+          item_number: "1.4"
+          item_text: "Electronic signatures present and valid"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "PKI-authenticated signatures for all custodians"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 5.2.1"
+          
+          failure_actions:
+            - action: "Contact custodian for valid signature. Investigate authentication failure."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "DOC-005"
+          item_number: "1.5"
+          item_text: "Timestamps present and chronologically correct"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "All timestamps in chronological order with no gaps"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 5.1.1"
+          
+          failure_actions:
+            - action: "Investigate timestamp discrepancy. May indicate system issue."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+    
+    - section_id: "chain_continuity"
+      section_title: "Chain Continuity"
+      section_description: "Verify unbroken chain of custody from receipt to current location"
+      critical_section: true
+      
+      items:
+        - item_id: "CHAIN-001"
+          item_number: "2.1"
+          item_text: "Initial receipt documented from supplier"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "Receipt documented with supplier transfer information"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 6.1"
+          
+          failure_actions:
+            - action: "Cannot establish CoC origin. Material must be quarantined."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "CHAIN-002"
+          item_number: "2.2"
+          item_text: "All transfers between custodians documented"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "Each custody change has corresponding transfer record"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 6.2"
+          
+          failure_actions:
+            - action: "Identify gap in CoC. Interview custodians to reconstruct."
+              responsible: "QA Supervisor"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "CHAIN-003"
+          item_number: "2.3"
+          item_text: "No unexplained gaps in custody"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "Continuous custody chain with all time periods accounted"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 8.1"
+          
+          failure_actions:
+            - action: "Investigate gap. May constitute CoC breach."
+              responsible: "QA Supervisor"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: true
+          attachment_allowed: true
+        
+        - item_id: "CHAIN-004"
+          item_number: "2.4"
+          item_text: "Current location matches last custody transfer"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "Physical location matches documentation"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 6.2"
+          
+          failure_actions:
+            - action: "Physical verification required. May indicate unauthorized movement."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+    
+    - section_id: "seal_integrity"
+      section_title: "Seal Integrity"
+      section_description: "Verify seal integrity throughout custody chain"
+      critical_section: true
+      
+      items:
+        - item_id: "SEAL-001"
+          item_number: "3.1"
+          item_text: "Initial seal numbers documented on receipt"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "All seal numbers recorded in receipt documentation"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 7.1"
+          
+          failure_actions:
+            - action: "Cannot verify initial seal integrity. Material status uncertain."
+              responsible: "QA Technician"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "SEAL-002"
+          item_number: "3.2"
+          item_text: "Seal integrity confirmed at each transfer"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "Seal status documented as intact at each transfer point"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 7.1"
+          
+          failure_actions:
+            - action: "Investigate any seal breach. Review security footage if available."
+              responsible: "QA Supervisor"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: true
+          attachment_allowed: true
+        
+        - item_id: "SEAL-003"
+          item_number: "3.3"
+          item_text: "Current seal matches last documented seal"
+          item_type: "verification"
+          critical: true
+          acceptance_criteria: "Physical seal number matches last documented number"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 7.1"
+          
+          failure_actions:
+            - action: "Seal discrepancy indicates unauthorized access. Immediate investigation."
+              responsible: "QA Supervisor"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: true
+          attachment_allowed: true
+        
+        - item_id: "SEAL-004"
+          item_number: "3.4"
+          item_text: "No evidence of tampering"
+          item_type: "pass_fail"
+          critical: true
+          acceptance_criteria: "Seal shows no signs of tampering or breach"
+          
+          observation:
+            expected_state: "Intact seal with no damage or alteration"
+            deviation_action: "Quarantine material immediately and initiate investigation"
+          
+          failure_actions:
+            - action: "Material quarantine. Full forensic investigation required."
+              responsible: "QA Manager"
+              escalation_required: true
+          
+          notes_allowed: true
+          photo_required: true
+          attachment_allowed: true
+    
+    - section_id: "environmental_conditions"
+      section_title: "Environmental Conditions"
+      section_description: "Verify environmental conditions were maintained per requirements"
+      critical_section: false
+      
+      items:
+        - item_id: "ENV-001"
+          item_number: "4.1"
+          item_text: "Temperature data logger present (if required)"
+          item_type: "na_applicable"
+          critical: false
+          acceptance_criteria: "Data logger attached for temperature-sensitive materials"
+          
+          reference:
+            source: "SOP-COC-001"
+            section: "Section 7.3"
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+        
+        - item_id: "ENV-002"
+          item_number: "4.2"
+          item_text: "Temperature within acceptable range (if applicable)"
+          item_type: "measurement"
+          critical: false
+          acceptance_criteria: "Temperature per material specification"
+          
+          measurement:
+            parameter: "Temperature"
+            unit: "°C"
+            min_value: null  # Material-specific
+            max_value: null  # Material-specific
+            target_value: null
+            tolerance: null
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: true
+        
+        - item_id: "ENV-003"
+          item_number: "4.3"
+          item_text: "Storage conditions documented at each location"
+          item_type: "verification"
+          critical: false
+          acceptance_criteria: "Storage conditions noted in transfer records"
+          
+          notes_allowed: true
+          photo_required: false
+          attachment_allowed: false
+  
+  footer:
+    fields:
+      - field_id: "verifier_signature"
+        field_name: "Verified By (QA Technician)"
+        field_type: "signature"
+        role: "QA Technician"
+        required: true
+      
+      - field_id: "verifier_date"
+        field_name: "Verification Date"
+        field_type: "date"
+        role: "QA Technician"
+        required: true
+      
+      - field_id: "supervisor_signature"
+        field_name: "Reviewed By (QA Supervisor)"
+        field_type: "signature"
+        role: "QA Supervisor"
+        required: true
+      
+      - field_id: "supervisor_date"
+        field_name: "Review Date"
+        field_type: "date"
+        role: "QA Supervisor"
+        required: true
+
+# ====================
+# 4. SCORING AND EVALUATION
+# ====================
+scoring:
+  scoring_method: "critical_items_only"
+  
+  critical_item_failure:
+    auto_fail_checklist: true
+    requires_immediate_action: true
+    notification_required: true
+    notify_roles:
+      - "QA Manager"
+      - "Quality Director"
+
+# ====================
+# 5. COMPLETION INSTRUCTIONS
+# ====================
+instructions:
+  general: "Complete this checklist when verifying CoC documentation for a material batch. All critical items must pass. Any critical failure requires immediate escalation and investigation."
+  
+  preparation:
+    - "Gather all CoC documentation for the material batch"
+    - "Access ERP system to view electronic records"
+    - "Prepare to physically inspect material and seals if needed"
+  
+  completion_steps:
+    - step_number: 1
+      instruction: "Enter material batch ID in header"
+      notes: "Ensure correct batch is being verified"
+    
+    - step_number: 2
+      instruction: "Complete Section 1 - Documentation Completeness"
+      notes: "Verify all forms present and complete"
+    
+    - step_number: 3
+      instruction: "Complete Section 2 - Chain Continuity"
+      notes: "Trace complete chain from supplier to current location"
+    
+    - step_number: 4
+      instruction: "Complete Section 3 - Seal Integrity"
+      notes: "Verify seal numbers and integrity"
+    
+    - step_number: 5
+      instruction: "Complete Section 4 - Environmental Conditions"
+      notes: "Verify temperature and storage conditions"
+    
+    - step_number: 6
+      instruction: "If any critical items fail, stop and escalate immediately"
+      notes: "Do not continue if critical failure detected"
+    
+    - step_number: 7
+      instruction: "Apply electronic signature and submit for supervisor review"
+      notes: "Attach any supporting documentation or photos"
+  
+  special_conditions:
+    - condition: "Critical item failure detected"
+      action: "Stop verification immediately. Notify QA Supervisor and quarantine material. Initiate deviation investigation per SOP-DEV-001."
+    
+    - condition: "Multiple non-critical items fail"
+      action: "Document all failures. Consult with QA Supervisor to determine if cumulative impact warrants escalation."
+  
+  common_errors:
+    - error: "Not verifying electronic signature validity"
+      correction: "Check PKI certificate status in system, don't just verify signature is present"
+    
+    - error: "Accepting timestamp discrepancies"
+      correction: "Any timestamp that doesn't make chronological sense must be investigated"
+    
+    - error: "Not taking photos of seal discrepancies"
+      correction: "Always photograph seals when any issue is noted"
+
+# ====================
+# 6. DEVIATION HANDLING
+# ====================
+deviation_handling:
+  deviations_allowed: true
+  
+  deviation_procedure:
+    minor_deviation:
+      definition: "Non-critical item fails with documented justification"
+      action_required: "Document in notes, notify supervisor, may continue with approval"
+      approval_required: true
+      approver_role: "QA Supervisor"
+    
+    major_deviation:
+      definition: "Critical item fails"
+      action_required: "Stop verification, quarantine material, initiate full investigation per SOP-DEV-001"
+      approval_required: true
+      approver_role: "QA Manager"
+      investigation_required: true
+      capa_required: true
+  
+  documentation_requirements:
+    deviation_form_ref: "FORM-DEV-001"
+    investigation_form_ref: "FORM-INV-001"
+
+# ====================
+# 7. DATA RETENTION AND RECORDS
+# ====================
+data_retention:
+  retention_period: "30 years from verification date"
+  storage_location: "ERP CoC Module with all related CoC documentation"
+  archival_procedure: "Auto-archive with associated CoC documents after 3 years"
+  destruction_method: "Secure deletion per FDA Part 11 after retention period"
+  
+  audit_trail_required: true
+  electronic_signature_required: true
+
+# ====================
+# 8. REVIEW AND VALIDATION
+# ====================
+review:
+  review_required: true
+  reviewer_role: "QA Supervisor"
+  review_frequency: "Within 24 hours of checklist completion"
+  review_criteria:
+    - "All critical items passed"
+    - "All items completed (no blanks)"
+    - "Photos attached for any noted issues"
+    - "Verifier signature valid"
+  
+  approval_required: true
+  approver_role: "QA Supervisor"
+  approval_criteria:
+    - "All review criteria met"
+    - "No unresolved critical issues"
+    - "Material status properly updated in system"
+
+# ====================
+# 9. CORRECTIVE ACTIONS
+# ====================
+corrective_actions:
+  immediate_actions:
+    - trigger: "Critical item failure"
+      action: "Quarantine material immediately using QUARANTINE tag"
+      responsible: "QA Technician"
+      timeframe: "Immediate"
+    
+    - trigger: "Seal breach detected"
+      action: "Isolate material, preserve evidence, notify security, initiate investigation"
+      responsible: "QA Supervisor"
+      timeframe: "Within 1 hour"
+    
+    - trigger: "CoC gap detected"
+      action: "Interview all potential custodians, review security footage, reconstruct timeline"
+      responsible: "QA Manager"
+      timeframe: "Within 4 hours"
+  
+  follow_up_required: true
+  follow_up_procedure_ref: "SOP-DEV-001 - Deviation Management"
+  capa_integration: true
+  capa_trigger_criteria: "Any critical CoC failure or pattern of non-critical failures"
+
+# ====================
+# 10. INTEGRATION WITH OTHER SYSTEMS
+# ====================
+integrations:
+  electronic_system: "ERP CoC Module"
+  
+  data_export:
+    export_format:
+      - "PDF"
+      - "CSV"
+    auto_export: true
+    export_destination: "CoC verification database"
+  
+  notifications:
+    - event: "Critical item failure"
+      recipients:
+        - "QA Manager"
+        - "Quality Director"
+      notification_method: "system_alert"
+    
+    - event: "Checklist completed"
+      recipients:
+        - "QA Supervisor"
+      notification_method: "email"
+    
+    - event: "Verification overdue"
+      recipients:
+        - "QA Technician"
+        - "QA Supervisor"
+      notification_method: "email"
+
+# ====================
+# 11. REVISION HISTORY
+# ====================
+revision_history:
+  - version: "1.0.0"
+    date: "2024-01-15"
+    changes: "Initial release"
+    reason_for_change: "New checklist to support SOP-COC-001 quality controls"
+    changed_by: "Quality Assurance Department"
+    approved_by: "QA Manager"

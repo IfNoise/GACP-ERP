@@ -1,0 +1,808 @@
+# DSL: Chain of Custody SOP
+# Version: 2.0
+# Source: SOP_ChainOfCustody.md
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  process_id: "SOP-COC-001"
+  process_type: "sop"
+  version: "2.0"
+  status: "draft"
+  domain: "documentation"
+  classification: "critical"
+  
+  effective_date: "2024-01-15"
+  supersedes: "SOP-COC-001 v1.0"
+  review_period_months: 3
+  
+  related_processes:
+    - "SOP-SAM-001"  # Sample Handling
+    - "SOP-DOC-001"  # Document Control
+    - "SOP-QC-001"   # Quality Control
+  
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "WHO GACP Guidelines"
+    - "CONTRACT_SPECIFICATIONS.md#TrackingEventSchema"
+    - "CONTRACT_SPECIFICATIONS.md#ChainOfCustodySchema"
+
+# ==============================================================================
+# PROCESS DEFINITION
+# ==============================================================================
+process:
+  purpose: "Ensure unbroken documented chain of custody for all materials to guarantee integrity, authenticity, prevent counterfeiting and contamination, ensure regulatory compliance, create complete audit trail, and support forensic investigations"
+  
+  scope_areas:
+    - "raw_materials_and_supplies"
+    - "intermediate_products"
+    - "finished_goods"
+    - "samples_for_testing"
+    - "documentation_and_certificates"
+  
+  frequency: "continuous"
+  
+  prerequisites:
+    - "Trained and authorized personnel"
+    - "ERP system access with PKI certificates"
+    - "Tamper-evident sealing materials"
+    - "Calibrated measuring equipment"
+  
+  dependencies:
+    - "Electronic signature system (PKI)"
+    - "ERP system with CoC module"
+    - "GPS tracking system"
+    - "Environmental monitoring system"
+  
+  duration_estimate: null  # Variable by operation type
+  critical_path: true
+
+# ==============================================================================
+# ROLES AND RESPONSIBILITIES
+# ==============================================================================
+roles:
+  - role_id: "QUAL_DIR"
+    role_name: "Quality Director"
+    qualifications:
+      required:
+        - "PhD or equivalent in relevant field"
+        - "10+ years quality management experience"
+        - "GMP/GACP certification"
+      optional:
+        - "Regulatory affairs certification"
+    responsibilities:
+      - action: "Overall CoC system oversight"
+        accountability: "accountable"
+        verification: "approved"
+      - action: "Procedure and policy approval"
+        accountability: "accountable"
+        verification: "approved"
+      - action: "Regulatory liaison"
+        accountability: "accountable"
+        verification: "documented"
+  
+  - role_id: "QA_MGR"
+    role_name: "QA Manager"
+    qualifications:
+      required:
+        - "Bachelor's degree in relevant field"
+        - "5+ years QA experience"
+        - "CoC training certification"
+      optional: []
+    responsibilities:
+      - action: "Daily CoC procedure management"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Personnel training"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Internal audits"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Document management"
+        accountability: "responsible"
+        verification: "approved"
+  
+  - role_id: "CUSTODIAN"
+    role_name: "Material Custodian"
+    qualifications:
+      required:
+        - "CoC training completion"
+        - "GMP basics training"
+        - "ERP system user certification"
+      optional:
+        - "Material handling certification"
+    responsibilities:
+      - action: "Physical responsibility for materials"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Document all transfers"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Ensure storage conditions"
+        accountability: "responsible"
+        verification: "witnessed"
+      - action: "Report violations immediately"
+        accountability: "responsible"
+        verification: "documented"
+  
+  - role_id: "AUTH_RECEIVER"
+    role_name: "Authorized Receiver"
+    qualifications:
+      required:
+        - "CoC training completion"
+        - "Material inspection training"
+        - "ERP system access"
+      optional: []
+    responsibilities:
+      - action: "Verify integrity upon receipt"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Confirm material receipt"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Follow transfer procedures"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "Maintain local records"
+        accountability: "responsible"
+        verification: "documented"
+  
+  - role_id: "AUDITOR"
+    role_name: "QA Auditor"
+    qualifications:
+      required:
+        - "Internal auditor certification"
+        - "CoC system training"
+        - "3+ years audit experience"
+      optional:
+        - "Lead auditor certification"
+    responsibilities:
+      - action: "Independent CoC procedure verification"
+        accountability: "consulted"
+        verification: "documented"
+      - action: "Identify violations and deviations"
+        accountability: "consulted"
+        verification: "documented"
+      - action: "Improvement recommendations"
+        accountability: "consulted"
+        verification: "documented"
+      - action: "Prepare audit reports"
+        accountability: "responsible"
+        verification: "approved"
+
+# ==============================================================================
+# OPERATIONAL PARAMETERS
+# ==============================================================================
+parameters:
+  environmental:
+    temperature:
+      min_celsius: null  # Material-specific
+      max_celsius: null  # Material-specific
+      target_celsius: null
+      tolerance: null
+      control_required: true
+    
+    humidity:
+      min_percent: null  # Material-specific
+      max_percent: null  # Material-specific
+      target_percent: null
+      tolerance: null
+      control_required: true
+    
+    pressure:
+      min_pascal: null
+      max_pascal: null
+      control_required: false
+    
+    lighting:
+      required: true
+      type: "artificial"
+      intensity_lux: "defined_by_material_type"
+  
+  temporal:
+    exposure_time_min: null
+    contact_time_min: null
+    dwell_time_min: null
+    pre_operation_wait_min: 0
+    post_operation_wait_min: 0
+
+# ==============================================================================
+# MATERIALS AND CHEMICALS
+# ==============================================================================
+materials: []  # CoC procedure does not use chemicals
+
+# ==============================================================================
+# EQUIPMENT AND TOOLS
+# ==============================================================================
+equipment:
+  - equipment_id: "PKI-CERT-001"
+    equipment_name: "PKI Digital Certificate System"
+    equipment_type: "safety_equipment"
+    calibration_required: false
+    calibration_frequency_days: null
+    specifications:
+      accuracy: "256-bit encryption"
+      range: "All authorized users"
+      resolution: null
+    maintenance_ref: "SOP-IT-SEC-001"
+  
+  - equipment_id: "SEAL-GEN-001"
+    equipment_name: "Tamper-Evident Seals"
+    equipment_type: "safety_equipment"
+    calibration_required: false
+    calibration_frequency_days: null
+    specifications:
+      accuracy: "Unique sequential numbering"
+      range: "Multiple types available"
+      resolution: null
+    maintenance_ref: null
+  
+  - equipment_id: "SCALE-001"
+    equipment_name: "Calibrated Scale"
+    equipment_type: "measuring_instrument"
+    calibration_required: true
+    calibration_frequency_days: 90
+    specifications:
+      accuracy: "±0.1g"
+      range: "0-50kg"
+      resolution: "0.1g"
+    maintenance_ref: "SOP-EQP-CAL-001"
+  
+  - equipment_id: "GPS-TRK-001"
+    equipment_name: "GPS Tracking System"
+    equipment_type: "monitoring_device"
+    calibration_required: false
+    calibration_frequency_days: null
+    specifications:
+      accuracy: "±10m"
+      range: "Global"
+      resolution: "1m"
+    maintenance_ref: "SOP-IT-001"
+  
+  - equipment_id: "TEMP-LOG-001"
+    equipment_name: "Temperature Data Logger"
+    equipment_type: "monitoring_device"
+    calibration_required: true
+    calibration_frequency_days: 365
+    specifications:
+      accuracy: "±0.5°C"
+      range: "-20°C to +60°C"
+      resolution: "0.1°C"
+    maintenance_ref: "SOP-EQP-CAL-001"
+
+# ==============================================================================
+# PROCEDURE STEPS
+# ==============================================================================
+procedure:
+  - step_number: 1
+    step_id: "COC-001-RECEIVE"
+    action: "Receive materials from suppliers"
+    
+    substeps:
+      - substep_id: "COC-001-RECEIVE-01"
+        action: "Verify 24-hour advance notification received"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-02"
+        action: "Prepare and verify authorization documents"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-03"
+        action: "Assign authorized receiver"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-04"
+        action: "Prepare controlled reception area"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-05"
+        action: "Inspect transport vehicle and seals"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-06"
+        action: "Verify shipping documents match order"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-07"
+        action: "Perform physical inspection of packaging and labeling"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-08"
+        action: "Conduct quantitative acceptance (count/weigh)"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-09"
+        action: "Perform qualitative visual inspection"
+        parameters: null
+      
+      - substep_id: "COC-001-RECEIVE-10"
+        action: "Complete CoC receipt form with digital signature"
+        parameters: null
+    
+    parameters: null
+    
+    controls:
+      - control_type: "verification"
+        parameter: "Seal integrity"
+        acceptance_criteria: "Seals intact, no tampering evidence"
+        frequency: "per_batch"
+      
+      - control_type: "documentation"
+        parameter: "Receipt documentation"
+        acceptance_criteria: "All fields completed, signatures present"
+        frequency: "per_batch"
+      
+      - control_type: "measurement"
+        parameter: "Quantity verification"
+        acceptance_criteria: "Within ±2% of declared quantity"
+        frequency: "per_batch"
+    
+    documentation_required: true
+    forms:
+      - "FORM-COC-001"  # Chain of Custody Receipt Form
+      - "FORM-COC-002"  # Material Inspection Checklist
+    
+    safety_considerations:
+      - "Use appropriate PPE for material type"
+      - "Follow material-specific handling requirements"
+      - "Maintain controlled environment conditions"
+    
+    critical_step: true
+    verification_method: "double_check"
+  
+  - step_number: 2
+    step_id: "COC-002-SAMPLE"
+    action: "Collect representative samples upon receipt"
+    
+    substeps:
+      - substep_id: "COC-002-SAMPLE-01"
+        action: "Collect representative sample per statistical sampling plan"
+        parameters: null
+      
+      - substep_id: "COC-002-SAMPLE-02"
+        action: "Use sterile conditions to prevent contamination"
+        parameters: null
+      
+      - substep_id: "COC-002-SAMPLE-03"
+        action: "Apply double sealing for analysis and archive samples"
+        parameters: null
+      
+      - substep_id: "COC-002-SAMPLE-04"
+        action: "Apply immediate labeling with unique identifiers"
+        parameters: null
+    
+    parameters: null
+    
+    controls:
+      - control_type: "verification"
+        parameter: "Sample representativeness"
+        acceptance_criteria: "Follows approved sampling plan"
+        frequency: "per_batch"
+      
+      - control_type: "verification"
+        parameter: "Sterility"
+        acceptance_criteria: "No contamination evidence"
+        frequency: "per_batch"
+    
+    documentation_required: true
+    forms:
+      - "FORM-SAM-001"  # Sampling Record
+    
+    safety_considerations:
+      - "Use sterile technique"
+      - "Proper PPE required"
+    
+    critical_step: true
+    verification_method: "witness"
+  
+  - step_number: 3
+    step_id: "COC-003-INTERNAL"
+    action: "Execute internal material transfers"
+    
+    substeps:
+      - substep_id: "COC-003-INTERNAL-01"
+        action: "Submit transfer request with justification"
+        parameters: null
+      
+      - substep_id: "COC-003-INTERNAL-02"
+        action: "Obtain management authorization"
+        parameters: null
+      
+      - substep_id: "COC-003-INTERNAL-03"
+        action: "Prepare materials for transfer (packaging and labeling)"
+        parameters: null
+      
+      - substep_id: "COC-003-INTERNAL-04"
+        action: "Prepare accompanying CoC documentation"
+        parameters: null
+      
+      - substep_id: "COC-003-INTERNAL-05"
+        action: "Execute physical transfer with signatures from both parties"
+        parameters: null
+      
+      - substep_id: "COC-003-INTERNAL-06"
+        action: "Update status in ERP system"
+        parameters: null
+    
+    parameters: null
+    
+    controls:
+      - control_type: "documentation"
+        parameter: "Transfer authorization"
+        acceptance_criteria: "Approved by authorized personnel"
+        frequency: "per_batch"
+      
+      - control_type: "verification"
+        parameter: "Recipient verification"
+        acceptance_criteria: "Confirmed receipt and acceptance"
+        frequency: "per_batch"
+    
+    documentation_required: true
+    forms:
+      - "FORM-COC-003"  # Internal Transfer Form
+    
+    safety_considerations:
+      - "Follow material-specific transport requirements"
+    
+    critical_step: false
+    verification_method: "double_check"
+  
+  - step_number: 4
+    step_id: "COC-004-SHIPPING"
+    action: "Ship finished goods to customers"
+    
+    substeps:
+      - substep_id: "COC-004-SHIPPING-01"
+        action: "Verify completion of all QC procedures"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-02"
+        action: "Prepare packaging documentation per requirements"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-03"
+        action: "Conduct final quality inspection"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-04"
+        action: "Create shipping documents with CoC certificate"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-05"
+        action: "Apply tamper-evident sealing"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-06"
+        action: "Verify carrier authorization"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-07"
+        action: "Inspect transport vehicle condition"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-08"
+        action: "Supervise loading by authorized personnel"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-09"
+        action: "Apply final transport vehicle sealing"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-10"
+        action: "Transfer all documentation to carrier"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-11"
+        action: "Activate GPS tracking"
+        parameters: null
+      
+      - substep_id: "COC-004-SHIPPING-12"
+        action: "Monitor delivery in real-time"
+        parameters: null
+    
+    parameters: null
+    
+    controls:
+      - control_type: "verification"
+        parameter: "QC release status"
+        acceptance_criteria: "All tests passed, release approved"
+        frequency: "per_batch"
+      
+      - control_type: "verification"
+        parameter: "Seal integrity"
+        acceptance_criteria: "All seals applied and documented"
+        frequency: "per_batch"
+      
+      - control_type: "measurement"
+        parameter: "GPS tracking active"
+        acceptance_criteria: "Real-time location data available"
+        frequency: "continuous"
+    
+    documentation_required: true
+    forms:
+      - "FORM-COC-004"  # Shipping Release Form
+      - "FORM-COC-005"  # Transport CoC Certificate
+    
+    safety_considerations:
+      - "Verify transport conditions appropriate for product"
+      - "Ensure temperature control for sensitive materials"
+    
+    critical_step: true
+    verification_method: "qa_approval"
+  
+  - step_number: 5
+    step_id: "COC-005-BREACH"
+    action: "Manage CoC breach incidents"
+    
+    substeps:
+      - substep_id: "COC-005-BREACH-01"
+        action: "Immediately isolate affected materials"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-02"
+        action: "Preserve all evidence (photos, samples)"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-03"
+        action: "Notify management within 1 hour"
+        parameters:
+          time_limit_min: 60
+      
+      - substep_id: "COC-005-BREACH-04"
+        action: "Conduct preliminary assessment"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-05"
+        action: "Establish investigation team"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-06"
+        action: "Perform detailed investigation"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-07"
+        action: "Document findings in investigation report"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-08"
+        action: "Implement corrective and preventive actions"
+        parameters: null
+      
+      - substep_id: "COC-005-BREACH-09"
+        action: "Update procedures if needed"
+        parameters: null
+    
+    parameters:
+      temporal:
+        pre_operation_wait_min: 0
+        post_operation_wait_min: 0
+    
+    controls:
+      - control_type: "documentation"
+        parameter: "Breach notification"
+        acceptance_criteria: "Management notified within 1 hour"
+        frequency: "as_needed"
+      
+      - control_type: "verification"
+        parameter: "Investigation completeness"
+        acceptance_criteria: "All required elements documented"
+        frequency: "as_needed"
+    
+    documentation_required: true
+    forms:
+      - "FORM-DEV-001"  # Deviation Report
+      - "FORM-INV-001"  # Investigation Report
+    
+    safety_considerations:
+      - "Treat as potential contamination event"
+      - "Follow emergency response procedures if needed"
+    
+    critical_step: true
+    verification_method: "qa_approval"
+
+# ==============================================================================
+# QUALITY CONTROLS
+# ==============================================================================
+quality_controls:
+  - control_id: "QC-COC-001"
+    control_type: "in_process"
+    parameter: "Seal integrity"
+    method: "Visual inspection and physical examination"
+    frequency: "Every transfer"
+    acceptance_criteria: "No evidence of tampering, seals intact with documented numbers"
+    sampling_plan: "100% inspection"
+    test_method_ref: null
+    documentation_form: "FORM-COC-002"
+    out_of_spec_action: "SOP-DEV-001 - Deviation Management"
+  
+  - control_id: "QC-COC-002"
+    control_type: "in_process"
+    parameter: "Documentation completeness"
+    method: "Document review"
+    frequency: "Every transfer"
+    acceptance_criteria: "All required fields completed with valid signatures"
+    sampling_plan: "100% review"
+    test_method_ref: null
+    documentation_form: "FORM-COC-001"
+    out_of_spec_action: "SOP-DEV-001 - Deviation Management"
+  
+  - control_id: "QC-COC-003"
+    control_type: "periodic"
+    parameter: "Temperature compliance"
+    method: "Data logger review"
+    frequency: "Continuous with review every 24 hours"
+    acceptance_criteria: "defined_by_material_specification"
+    sampling_plan: "100% of transport time"
+    test_method_ref: "SOP-ENV-MON-001"
+    documentation_form: "FORM-TEMP-LOG-001"
+    out_of_spec_action: "SOP-DEV-001 - Deviation Management"
+  
+  - control_id: "QC-COC-004"
+    control_type: "final"
+    parameter: "CoC chain continuity"
+    method: "Document chain verification"
+    frequency: "At completion of transfer"
+    acceptance_criteria: "Unbroken chain of custody with all custodians documented"
+    sampling_plan: "100% of records"
+    test_method_ref: null
+    documentation_form: "CHKLST-COC-001"
+    out_of_spec_action: "SOP-DEV-001 - Deviation Management"
+
+# ==============================================================================
+# SAFETY REQUIREMENTS
+# ==============================================================================
+safety:
+  ppe_required:
+    head_protection: false
+    eye_protection: false
+    respiratory_protection: false
+    hand_protection: "nitrile_gloves"
+    body_protection: "lab_coat"
+    foot_protection: false
+  
+  hazards:
+    - hazard_type: "physical"
+      hazard_description: "Heavy lifting of material packages"
+      risk_level: "medium"
+      mitigation_measures:
+        - "Use mechanical aids for packages >20kg"
+        - "Team lifting for heavy items"
+        - "Proper lifting technique training"
+      emergency_procedure_ref: "SOP-SAFE-001"
+    
+    - hazard_type: "physical"
+      hazard_description: "Potential exposure to unknown materials"
+      risk_level: "medium"
+      mitigation_measures:
+        - "Review SDS before handling"
+        - "Appropriate PPE per material type"
+        - "Contamination control procedures"
+      emergency_procedure_ref: "SOP-SAFE-002"
+  
+  training_required:
+    - training_id: "TRN-COC-001"
+      training_name: "Chain of Custody Procedures"
+      frequency_months: 12
+      certification_required: true
+    
+    - training_id: "TRN-GMP-001"
+      training_name: "GMP Basics"
+      frequency_months: 12
+      certification_required: true
+    
+    - training_id: "TRN-ERP-001"
+      training_name: "ERP CoC Module"
+      frequency_months: 24
+      certification_required: true
+
+# ==============================================================================
+# DOCUMENTATION AND RECORDS
+# ==============================================================================
+documentation:
+  records_generated:
+    - record_id: "REC-COC-001"
+      record_name: "Material Receipt Record"
+      record_type: "log"
+      form_ref: "FORM-COC-001"
+      retention_years: 30
+      storage_location: "electronic"
+      access_control: "restricted"
+    
+    - record_id: "REC-COC-002"
+      record_name: "Internal Transfer Record"
+      record_type: "log"
+      form_ref: "FORM-COC-003"
+      retention_years: 30
+      storage_location: "electronic"
+      access_control: "restricted"
+    
+    - record_id: "REC-COC-003"
+      record_name: "Shipping Record"
+      record_type: "log"
+      form_ref: "FORM-COC-004"
+      retention_years: 30
+      storage_location: "both"
+      access_control: "restricted"
+    
+    - record_id: "REC-COC-004"
+      record_name: "CoC Breach Investigation"
+      record_type: "report"
+      form_ref: "FORM-INV-001"
+      retention_years: 30
+      storage_location: "both"
+      access_control: "confidential"
+  
+  data_integrity_requirements:
+    alcoa_plus_compliance: true
+    electronic_signature_required: true
+    audit_trail_required: true
+    backup_required: true
+  
+  review_requirements:
+    review_frequency: "per_batch"
+    reviewer_role: "QA Supervisor"
+    approval_required: true
+    approver_role: "QA Manager"
+
+# ==============================================================================
+# DEVIATIONS AND EXCEPTIONS
+# ==============================================================================
+deviations:
+  deviation_handling:
+    reporting_required: true
+    reporting_procedure_ref: "SOP-DEV-001"
+    investigation_required: true
+    capa_trigger_criteria: "Any critical CoC breach or repeated minor breaches"
+  
+  acceptable_ranges:
+    - parameter: "Temperature during transport"
+      nominal_value: "defined_by_material_specification"
+      acceptable_min: "defined_by_material_specification"
+      acceptable_max: "defined_by_material_specification"
+      action_limit_min: "defined_by_material_specification"
+      action_limit_max: "defined_by_material_specification"
+    
+    - parameter: "Quantity variance on receipt"
+      nominal_value: "100%"
+      acceptable_min: "98%"
+      acceptable_max: "102%"
+      action_limit_min: "95%"
+      action_limit_max: "105%"
+
+# ==============================================================================
+# VALIDATION AND VERIFICATION
+# ==============================================================================
+validation:
+  validation_status: "validated"
+  validation_protocol_ref: "VAL-COC-001"
+  validation_report_ref: "VAL-COC-001-RPT"
+  revalidation_trigger_events:
+    - "Major ERP system upgrade"
+    - "Change in regulatory requirements"
+    - "Significant process changes"
+    - "Repeated CoC breaches"
+  
+  performance_indicators:
+    - kpi_id: "KPI-COC-001"
+      kpi_name: "CoC Breach Rate"
+      measurement_method: "Number of breaches per 1000 transfers"
+      target_value: "<1 per 1000"
+      review_frequency: "monthly"
+    
+    - kpi_id: "KPI-COC-002"
+      kpi_name: "Documentation Completeness"
+      measurement_method: "Percentage of complete CoC records"
+      target_value: "100%"
+      review_frequency: "weekly"
+    
+    - kpi_id: "KPI-COC-003"
+      kpi_name: "Seal Integrity Rate"
+      measurement_method: "Percentage of intact seals on receipt"
+      target_value: "100%"
+      review_frequency: "weekly"
