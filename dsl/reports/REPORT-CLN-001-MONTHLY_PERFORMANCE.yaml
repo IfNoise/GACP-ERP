@@ -1,0 +1,323 @@
+schema_version: "1.0.0"
+type: report
+metadata:
+  id: REPORT-CLN-001
+  title: Monthly Cleaning and Sanitation Performance Report
+  version: "1.0"
+  effective_date: "2025-09-02"
+  related_process: SOP-CLN-001
+  department: Facility Management
+  classification: GMP Quality Report
+  frequency: Monthly
+  distribution:
+    - Facility Manager
+    - Sanitation Supervisor
+    - Quality Assurance Manager
+    - Operations Director
+    - Regulatory Affairs
+
+report_structure:
+  - section_number: 1
+    section_title: Executive Summary
+    content_requirements:
+      - Monthly cleaning operations summary (total cleaning events, areas covered, labor hours)
+      - Key performance highlights and achievements
+      - Critical issues and challenges encountered
+      - Overall cleaning program effectiveness assessment
+      - High-level recommendations for management action
+
+  - section_number: 2
+    section_title: Cleaning Activities Summary
+    content_requirements:
+      - Total number of cleaning events by area type (cultivation, processing, laboratory, common areas)
+      - Daily cleaning compliance rate (% of scheduled cleaning completed)
+      - Weekly deep cleaning completion rate
+      - Monthly comprehensive cleaning completion
+      - Specialized cleaning events (equipment overhauls, emergency cleanings)
+      - Total labor hours dedicated to cleaning operations
+      - Comparison to previous month and year-to-date averages
+
+    required_charts:
+      - chart_type: Bar Chart
+        chart_title: Cleaning Events by Area Type
+        x_axis: Area Type
+        y_axis: Number of Cleaning Events
+        data_series:
+          - Current Month
+          - Previous Month
+          - Monthly Average (YTD)
+
+      - chart_type: Line Chart
+        chart_title: Daily Cleaning Compliance Trend (12-Month Rolling)
+        x_axis: Month
+        y_axis: Compliance Rate (%)
+        data_series:
+          - Daily Cleaning Compliance
+          - Target (100%)
+          - Trend Line
+
+  - section_number: 3
+    section_title: Quality Verification Results
+    content_requirements:
+      - Visual inspection pass rate (% areas passing on first inspection)
+      - Re-cleaning frequency and reasons
+      - Analytical testing results (microbial sampling, ATP testing, chemical residue testing)
+      - Environmental monitoring results (air quality, surface cleanliness)
+      - Non-conformances identified and corrective actions
+      - Comparison to established quality standards and targets
+      - Trending analysis of quality metrics
+
+    key_performance_indicators:
+      - kpi_name: Visual Inspection Pass Rate
+        target: ≥95%
+        measurement: Percentage of cleaned areas passing initial visual inspection
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: Microbial Test Pass Rate
+        target: ≥98%
+        measurement: Percentage of surface samples meeting microbial specifications
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: ATP Test Pass Rate
+        target: ≥90%
+        measurement: Percentage of surfaces passing ATP cleanliness criteria
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: Re-cleaning Frequency
+        target: ≤5%
+        measurement: Percentage of areas requiring re-cleaning after initial verification
+        trend: Current month, 3-month average, 12-month average
+
+    required_charts:
+      - chart_type: Stacked Bar Chart
+        chart_title: Quality Verification Results
+        x_axis: Month
+        y_axis: Number of Tests
+        data_series:
+          - Pass - First Attempt
+          - Pass - After Re-cleaning
+          - Failed - Corrective Action Required
+
+  - section_number: 4
+    section_title: Chemical Usage and Management
+    content_requirements:
+      - Cleaning chemical inventory and usage volumes by chemical type
+      - Chemical cost analysis and cost per cleaning event
+      - Chemical preparation compliance (proper dilution, expiration management)
+      - Chemical safety incidents or exposures
+      - Chemical waste generation and disposal
+      - Chemical supplier performance
+      - Opportunities for chemical optimization or substitution
+
+    metrics:
+      - metric_name: Chemical Cost Efficiency
+        calculation: Total chemical cost / Total cleaning events
+        target: Within budget target
+        current_value: [To be calculated]
+
+      - metric_name: Chemical Waste Rate
+        calculation: (Chemical waste volume / Total chemical used) × 100%
+        target: ≤5%
+        current_value: [To be calculated]
+
+  - section_number: 5
+    section_title: Equipment and Tools Performance
+    content_requirements:
+      - Cleaning equipment utilization rates
+      - Equipment downtime and maintenance issues
+      - Tool and supply inventory management
+      - Equipment replacement or procurement needs
+      - Equipment performance issues affecting cleaning effectiveness
+      - Color-coding system compliance and effectiveness
+
+  - section_number: 6
+    section_title: Labor and Resource Management
+    content_requirements:
+      - Cleaning labor hours by area and activity type
+      - Staff productivity metrics (area cleaned per labor hour)
+      - Overtime hours and reasons
+      - Staff availability and absenteeism
+      - Training hours and competency assessments
+      - Resource allocation efficiency
+      - Staffing adequacy assessment and recommendations
+
+    metrics:
+      - metric_name: Labor Productivity
+        calculation: Total square footage cleaned / Total labor hours
+        target: Meet or exceed baseline productivity
+        current_value: [To be calculated]
+
+      - metric_name: Labor Cost per Square Foot
+        calculation: Total labor cost / Total square footage cleaned
+        target: Within budget target
+        current_value: [To be calculated]
+
+  - section_number: 7
+    section_title: Schedule Adherence and Timeliness
+    content_requirements:
+      - On-time cleaning completion rate
+      - Schedule deviations and reasons
+      - Impact of cleaning delays on production operations
+      - Emergency or unscheduled cleaning events
+      - Schedule optimization opportunities
+      - Coordination with production and maintenance schedules
+
+  - section_number: 8
+    section_title: Safety Performance
+    content_requirements:
+      - Safety incidents during cleaning operations (injuries, exposures, near-misses)
+      - PPE compliance rates
+      - Chemical exposure incidents and response
+      - Slip and fall incidents related to cleaning
+      - Equipment safety issues
+      - Safety training completion and effectiveness
+      - Environmental safety compliance (waste disposal, air quality)
+
+    metrics:
+      - metric_name: Safety Incident Rate
+        calculation: (Number of incidents / Total labor hours) × 100,000
+        target: 0 incidents (zero tolerance)
+        current_value: [To be calculated]
+
+      - metric_name: PPE Compliance Rate
+        calculation: (Compliant observations / Total observations) × 100%
+        target: 100%
+        current_value: [To be calculated]
+
+  - section_number: 9
+    section_title: Training and Competency
+    content_requirements:
+      - Training hours delivered during reporting period
+      - Personnel trained (initial, refresher, specialized)
+      - Competency assessment results
+      - Training effectiveness indicators (quality improvement correlation)
+      - Training needs identified from performance data
+      - Upcoming training planned
+      - Certification status for cleaning personnel
+
+  - section_number: 10
+    section_title: Regulatory Compliance and Audits
+    content_requirements:
+      - Regulatory inspections or audits conducted
+      - Internal audit findings and corrective actions
+      - Compliance with cleaning standards and regulations
+      - Documentation completeness and accuracy
+      - Regulatory updates affecting cleaning program
+      - Audit readiness assessment
+
+  - section_number: 11
+    section_title: Issues and Corrective Actions
+    content_requirements:
+      - Summary of significant cleaning issues encountered
+      - Corrective actions implemented and effectiveness
+      - Recurring problems requiring systemic solutions
+      - Equipment or facility maintenance issues affecting cleaning
+      - Process improvements implemented
+      - Open corrective action items and status
+
+  - section_number: 12
+    section_title: Continuous Improvement Initiatives
+    content_requirements:
+      - Process optimization projects underway or completed
+      - Technology upgrades evaluated or implemented
+      - Best practice adoption
+      - Employee suggestions and implementation
+      - Benchmarking activities and results
+      - Innovation opportunities identified
+
+  - section_number: 13
+    section_title: Cost Analysis
+    content_requirements:
+      - Total cleaning program costs (labor, chemicals, equipment, supplies)
+      - Cost per square foot of cleaned area
+      - Cost variance analysis (actual vs budget)
+      - Cost reduction opportunities
+      - ROI from cleaning program improvements
+      - Budget forecast for upcoming periods
+
+  - section_number: 14
+    section_title: Environmental Performance
+    content_requirements:
+      - Waste generation by type (chemical waste, packaging, disposables)
+      - Recycling and waste minimization achievements
+      - Green chemical usage and sustainability initiatives
+      - Water and energy consumption for cleaning operations
+      - Environmental compliance and sustainability goals
+
+  - section_number: 15
+    section_title: Recommendations and Action Items
+    content_requirements:
+      - Prioritized recommendations for management decision
+      - Resource needs (staffing, equipment, budget)
+      - Process improvement opportunities
+      - Training and development needs
+      - Equipment or facility upgrades required
+      - Action items with responsible parties and target dates
+
+data_requirements:
+  - data_source: Cleaning Records (FORM-CLN-002, Daily Checklists)
+    data_elements:
+      - Cleaning event dates and times
+      - Areas cleaned and activity types
+      - Personnel and labor hours
+      - Verification results (pass/fail)
+      - Issues and corrective actions
+
+  - data_source: Quality Verification Records
+    data_elements:
+      - Visual inspection results
+      - Analytical testing results (microbial, ATP, chemical residue)
+      - Environmental monitoring data
+      - Re-cleaning events
+
+  - data_source: Chemical Management System
+    data_elements:
+      - Chemical inventory and usage
+      - Chemical costs
+      - Preparation records
+      - Safety incidents
+
+  - data_source: Training Records
+    data_elements:
+      - Training hours by topic and personnel
+      - Competency assessment results
+      - Certification status
+
+  - data_source: Maintenance System
+    data_elements:
+      - Equipment downtime
+      - Maintenance costs
+      - Equipment performance issues
+
+analysis_methods:
+  - Descriptive statistics (averages, percentages, totals)
+  - Trend analysis (month-over-month, year-over-year comparisons)
+  - Variance analysis (actual vs target, actual vs budget)
+  - Pareto analysis (identifying top issues or cost drivers)
+  - Control chart analysis (process stability assessment)
+  - Cost-benefit analysis (improvement initiative ROI)
+
+report_timeline:
+  - data_collection_period: 1st day to last day of calendar month
+  - report_generation: Within 10 business days of month end
+  - management_review: Within 15 business days of month end
+  - action_items_due: As assigned, typically within 30 days
+
+approval_requirements:
+  - prepared_by: Sanitation Supervisor
+  - reviewed_by: Facility Manager
+  - approved_by: Operations Director
+
+distribution_and_retention:
+  - Primary distribution: Electronic via quality management system
+  - Meeting presentation: Monthly Facility Management Review
+  - Retention period: Minimum 3 years
+  - Archive location: Quality Management System - Performance Reports folder
+
+validation_rules:
+  - All data extracted from validated systems and approved records
+  - Data completeness verified (no missing cleaning events or verifications)
+  - Calculations verified by second person
+  - Charts and graphs accurately represent underlying data
+  - Trends compared against statistical significance thresholds
+  - Report reviewed and approved before distribution

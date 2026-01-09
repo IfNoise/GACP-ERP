@@ -1,0 +1,400 @@
+schema_version: "1.0.0"
+type: checklist
+metadata:
+  id: CHKLST-CLN-001
+  title: Daily Cultivation Area Cleaning Checklist
+  version: "1.0"
+  effective_date: "2025-09-02"
+  related_process: SOP-CLN-001
+  department: Facility Management
+  classification: GMP Critical
+  frequency: Daily
+
+sections:
+  - section_number: 1
+    section_title: Pre-Cleaning Preparation
+    items:
+      - item_number: 1.1
+        description: Verify all required cleaning chemicals available and properly labeled with current expiration dates
+        verification_method: Visual inspection of chemical inventory and labels
+        acceptance_criteria: All chemicals available, properly labeled, not expired
+        responsible_role: Cleaning Technician
+
+      - item_number: 1.2
+        description: Gather all required cleaning equipment and tools for cultivation area cleaning
+        verification_method: Checklist of equipment needed
+        acceptance_criteria: All equipment available and in good working condition
+        responsible_role: Cleaning Technician
+
+      - item_number: 1.3
+        description: Don appropriate personal protective equipment (PPE) including gloves, safety glasses, protective clothing, and footwear
+        verification_method: PPE verification by supervisor or self-check
+        acceptance_criteria: All required PPE worn properly
+        responsible_role: Cleaning Technician
+
+      - item_number: 1.4
+        description: Verify cultivation area ready for cleaning (plants protected, equipment powered down as appropriate)
+        verification_method: Visual inspection and communication with cultivation staff
+        acceptance_criteria: Area prepared, no active operations in progress
+        responsible_role: Cleaning Technician
+
+  - section_number: 2
+    section_title: Floor Cleaning
+    items:
+      - item_number: 2.1
+        description: Remove all loose debris and plant material from floor surfaces by sweeping or vacuuming
+        verification_method: Visual inspection for debris
+        acceptance_criteria: Floor clear of visible debris
+        responsible_role: Cleaning Technician
+
+      - item_number: 2.2
+        description: Wet mop floors with approved cleaning detergent solution, paying attention to corners and edges
+        verification_method: Visual inspection of cleaning thoroughness
+        acceptance_criteria: Entire floor area mopped, no missed areas
+        responsible_role: Cleaning Technician
+
+      - item_number: 2.3
+        description: Rinse floor with clean water to remove detergent residue
+        verification_method: Visual inspection for residue
+        acceptance_criteria: No visible detergent residue or streaking
+        responsible_role: Cleaning Technician
+
+      - item_number: 2.4
+        description: Apply approved sanitizer to floor surfaces according to manufacturer instructions with proper contact time
+        verification_method: Verification of contact time and coverage
+        acceptance_criteria: Sanitizer applied evenly, contact time met
+        responsible_role: Cleaning Technician
+
+      - item_number: 2.5
+        description: Allow floor to air dry or use approved drying method
+        verification_method: Visual inspection for dryness
+        acceptance_criteria: Floor dry, no standing water or wet spots
+        responsible_role: Cleaning Technician
+
+  - section_number: 3
+    section_title: Work Surface and Table Cleaning
+    items:
+      - item_number: 3.1
+        description: Remove all items from work surfaces and tables
+        verification_method: Visual verification
+        acceptance_criteria: Surfaces clear and ready for cleaning
+        responsible_role: Cleaning Technician
+
+      - item_number: 3.2
+        description: Wipe work surfaces with approved cleaning detergent using microfiber cloths
+        verification_method: Visual inspection of cleaning
+        acceptance_criteria: All surfaces wiped clean, no visible contamination
+        responsible_role: Cleaning Technician
+
+      - item_number: 3.3
+        description: Rinse surfaces with clean water to remove detergent residue
+        verification_method: Visual inspection and tactile check
+        acceptance_criteria: No residue remaining, surfaces clean to touch
+        responsible_role: Cleaning Technician
+
+      - item_number: 3.4
+        description: Apply sanitizer to work surfaces and allow proper contact time
+        verification_method: Contact time verification
+        acceptance_criteria: Sanitizer contact time met per manufacturer specifications
+        responsible_role: Cleaning Technician
+
+      - item_number: 3.5
+        description: Air dry or wipe dry with clean cloth
+        verification_method: Visual and tactile inspection
+        acceptance_criteria: Surfaces dry and ready for use
+        responsible_role: Cleaning Technician
+
+  - section_number: 4
+    section_title: Plant Area Maintenance
+    items:
+      - item_number: 4.1
+        description: Remove fallen leaves, dead plant material, and debris from around plants without disturbing healthy growth
+        verification_method: Visual inspection of plant areas
+        acceptance_criteria: No visible debris around plants, plants undisturbed
+        responsible_role: Cleaning Technician
+
+      - item_number: 4.2
+        description: Wipe down plant containers and pots if accessible without disturbing plants
+        verification_method: Visual inspection of containers
+        acceptance_criteria: Containers clean, no algae or contamination buildup
+        responsible_role: Cleaning Technician
+
+      - item_number: 4.3
+        description: Check for and remove any spilled water, soil, or growing media from floors around plant areas
+        verification_method: Visual inspection of floor areas
+        acceptance_criteria: No spills or contamination present
+        responsible_role: Cleaning Technician
+
+  - section_number: 5
+    section_title: Irrigation System Maintenance
+    items:
+      - item_number: 5.1
+        description: Wipe down irrigation lines, drip emitters, and watering equipment accessible without system disassembly
+        verification_method: Visual inspection of irrigation components
+        acceptance_criteria: Irrigation equipment clean, no algae or mineral buildup
+        responsible_role: Cleaning Technician
+
+      - item_number: 5.2
+        description: Check water trays and collection pans, empty if needed, and clean
+        verification_method: Visual inspection of drainage systems
+        acceptance_criteria: Trays empty, clean, no standing water or algae
+        responsible_role: Cleaning Technician
+
+      - item_number: 5.3
+        description: Inspect and clean water filters if accessible (per maintenance schedule)
+        verification_method: Visual inspection of filters
+        acceptance_criteria: Filters clean or replaced per schedule
+        responsible_role: Cleaning Technician
+
+  - section_number: 6
+    section_title: Environmental Equipment Cleaning
+    items:
+      - item_number: 6.1
+        description: Wipe down HVAC vents and grilles with dry cloth to remove dust
+        verification_method: Visual inspection of vents
+        acceptance_criteria: Vents free of visible dust accumulation
+        responsible_role: Cleaning Technician
+
+      - item_number: 6.2
+        description: Clean lighting fixtures and reflectors (exterior surfaces only, no bulb removal unless scheduled)
+        verification_method: Visual inspection of lighting
+        acceptance_criteria: Light fixtures clean, no dust or debris affecting light output
+        responsible_role: Cleaning Technician
+
+      - item_number: 6.3
+        description: Wipe down environmental monitoring sensors and equipment without disturbing calibration
+        verification_method: Visual inspection of monitoring equipment
+        acceptance_criteria: Equipment clean, sensors undisturbed
+        responsible_role: Cleaning Technician
+
+      - item_number: 6.4
+        description: Clean fans, circulation fans, and air movement equipment (exterior surfaces)
+        verification_method: Visual inspection of fans
+        acceptance_criteria: Fan exteriors clean, no dust accumulation
+        responsible_role: Cleaning Technician
+
+  - section_number: 7
+    section_title: Walls, Doors, and Structural Cleaning
+    items:
+      - item_number: 7.1
+        description: Wipe down walls and vertical surfaces up to reachable height to remove dust and splashes
+        verification_method: Visual inspection of walls
+        acceptance_criteria: Walls clean, no visible contamination or water spots
+        responsible_role: Cleaning Technician
+
+      - item_number: 7.2
+        description: Clean door surfaces (interior and exterior), handles, and door frames
+        verification_method: Visual inspection of doors
+        acceptance_criteria: Doors clean, handles sanitized
+        responsible_role: Cleaning Technician
+
+      - item_number: 7.3
+        description: Clean windows and viewing glass with appropriate cleaner
+        verification_method: Visual inspection through windows
+        acceptance_criteria: Windows clear, no streaks or obstructions to visibility
+        responsible_role: Cleaning Technician
+
+      - item_number: 7.4
+        description: Inspect ceiling for leaks, condensation, or contamination; report any findings
+        verification_method: Visual inspection of ceiling
+        acceptance_criteria: Ceiling clean and dry, no issues present
+        responsible_role: Cleaning Technician
+
+  - section_number: 8
+    section_title: Waste Removal and Container Management
+    items:
+      - item_number: 8.1
+        description: Empty all waste containers and replace with fresh liners
+        verification_method: Visual verification of empty containers
+        acceptance_criteria: All waste removed, fresh liners installed
+        responsible_role: Cleaning Technician
+
+      - item_number: 8.2
+        description: Wipe down and sanitize waste container exteriors
+        verification_method: Visual inspection of containers
+        acceptance_criteria: Containers clean and sanitized
+        responsible_role: Cleaning Technician
+
+      - item_number: 8.3
+        description: Transport waste to designated disposal area following proper segregation procedures
+        verification_method: Verification of proper waste segregation
+        acceptance_criteria: Waste properly segregated and disposed per facility procedures
+        responsible_role: Cleaning Technician
+
+  - section_number: 9
+    section_title: Drain Cleaning and Maintenance
+    items:
+      - item_number: 9.1
+        description: Remove drain covers and clean drain openings to remove debris
+        verification_method: Visual inspection of drains
+        acceptance_criteria: Drains clear, no debris or blockage
+        responsible_role: Cleaning Technician
+
+      - item_number: 9.2
+        description: Sanitize drain covers before replacing
+        verification_method: Application of sanitizer with contact time
+        acceptance_criteria: Drain covers sanitized and properly replaced
+        responsible_role: Cleaning Technician
+
+      - item_number: 9.3
+        description: Pour approved drain cleaner/sanitizer into drains per facility protocol
+        verification_method: Verification of chemical application
+        acceptance_criteria: Proper chemical and quantity used per protocol
+        responsible_role: Cleaning Technician
+
+  - section_number: 10
+    section_title: Pest Prevention Measures
+    items:
+      - item_number: 10.1
+        description: Inspect for signs of pest activity (droppings, damage, nests) during cleaning
+        verification_method: Visual inspection throughout cleaning process
+        acceptance_criteria: No signs of pest activity observed
+        responsible_role: Cleaning Technician
+
+      - item_number: 10.2
+        description: Verify pest control devices (traps, monitors) are in place and undisturbed
+        verification_method: Visual verification of pest control stations
+        acceptance_criteria: All devices present and properly positioned
+        responsible_role: Cleaning Technician
+
+      - item_number: 10.3
+        description: Remove any materials or conditions that could attract pests (food debris, standing water, clutter)
+        verification_method: Visual inspection for pest attractants
+        acceptance_criteria: No pest attractants present in area
+        responsible_role: Cleaning Technician
+
+      - item_number: 10.4
+        description: Report any pest activity or conducive conditions to supervisor immediately
+        verification_method: Communication log
+        acceptance_criteria: Any findings reported per protocol
+        responsible_role: Cleaning Technician
+
+  - section_number: 11
+    section_title: Cleaning Tool and Equipment Care
+    items:
+      - item_number: 11.1
+        description: Clean all mops, brushes, and cleaning tools used during cultivation area cleaning
+        verification_method: Visual inspection of clean tools
+        acceptance_criteria: All tools cleaned and free of visible contamination
+        responsible_role: Cleaning Technician
+
+      - item_number: 11.2
+        description: Sanitize cleaned tools with appropriate sanitizer
+        verification_method: Application of sanitizer
+        acceptance_criteria: Tools sanitized per protocol
+        responsible_role: Cleaning Technician
+
+      - item_number: 11.3
+        description: Properly dry and store cleaning tools in designated area
+        verification_method: Visual verification of storage
+        acceptance_criteria: Tools dried and stored properly to prevent contamination
+        responsible_role: Cleaning Technician
+
+      - item_number: 11.4
+        description: Dispose of single-use cleaning items (cloths, wipes) in appropriate waste containers
+        verification_method: Visual verification of disposal
+        acceptance_criteria: Disposable items properly discarded
+        responsible_role: Cleaning Technician
+
+  - section_number: 12
+    section_title: Final Inspection and Verification
+    items:
+      - item_number: 12.1
+        description: Conduct final walk-through inspection of entire cultivation area
+        verification_method: Comprehensive visual inspection
+        acceptance_criteria: All cleaning tasks completed satisfactorily
+        responsible_role: Cleaning Technician
+
+      - item_number: 12.2
+        description: Verify no cleaning equipment or supplies left in cultivation area
+        verification_method: Visual inspection
+        acceptance_criteria: Area clear of cleaning materials
+        responsible_role: Cleaning Technician
+
+      - item_number: 12.3
+        description: Check environmental conditions (temperature, humidity) are within normal ranges
+        verification_method: Reading of environmental monitoring system
+        acceptance_criteria: Conditions within specified ranges
+        responsible_role: Cleaning Technician
+
+      - item_number: 12.4
+        description: Verify area ready for cultivation operations to resume
+        verification_method: Overall assessment
+        acceptance_criteria: Area clean, safe, and ready for use
+        responsible_role: Cleaning Technician
+
+completion:
+  - field_name: cleaning_date
+    field_type: date
+    required: true
+    description: Date daily cleaning completed
+
+  - field_name: cultivation_room_number
+    field_type: text
+    required: true
+    description: Cultivation room or area identifier
+
+  - field_name: cleaning_start_time
+    field_type: time
+    required: true
+    description: Time cleaning began
+
+  - field_name: cleaning_end_time
+    field_type: time
+    required: true
+    description: Time cleaning completed
+
+  - field_name: cleaned_by_name
+    field_type: text
+    required: true
+    description: Name of cleaning technician
+
+  - field_name: cleaned_by_signature
+    field_type: signature
+    required: true
+    description: Cleaning technician electronic signature
+
+  - field_name: all_items_completed
+    field_type: yes_no
+    required: true
+    description: All checklist items completed satisfactorily?
+
+  - field_name: issues_identified
+    field_type: textarea
+    required: false
+    description: Any issues, defects, or concerns identified during cleaning
+
+  - field_name: supervisor_name
+    field_type: text
+    required: true
+    description: Supervisor verifying cleaning completion
+
+  - field_name: supervisor_signature
+    field_type: signature
+    required: true
+    description: Supervisor electronic signature
+
+  - field_name: supervisor_verification_date
+    field_type: date
+    required: true
+    description: Date of supervisor verification
+
+instructions:
+  - Complete daily cultivation area cleaning at scheduled time each day
+  - Follow proper cleaning chemical preparation and dilution procedures
+  - Allow proper contact time for sanitizers to be effective
+  - Be careful not to damage plants or equipment during cleaning
+  - Report any pest activity, equipment damage, or maintenance needs immediately
+  - Do not skip any checklist items; if item cannot be completed, document reason
+  - Ensure all cleaning is complete before production staff resume cultivation activities
+  - Clean and store all tools properly after use
+  - Complete documentation accurately and obtain required signatures
+
+validation_rules:
+  - All checklist items must be marked complete or reason documented
+  - Cleaning end time must be after start time
+  - Cleaning technician must have current training on cultivation area cleaning procedures
+  - Cannot mark "all items completed" as Yes if any items not completed
+  - Issues identified must be reported to supervisor and documented
+  - Supervisor verification must occur same day as cleaning completion
+  - Supervisor signature confirms visual verification of cleaning quality

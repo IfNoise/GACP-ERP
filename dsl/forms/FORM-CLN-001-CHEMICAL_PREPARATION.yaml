@@ -1,0 +1,341 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-CLN-001
+  title: Chemical Preparation Record
+  version: "1.0"
+  effective_date: "2025-09-02"
+  related_process: SOP-CLN-001
+  department: Facility Management
+  classification: GMP Quality Record
+  retention_period: 3 years
+
+sections:
+  - section_number: 1
+    section_title: Chemical Information
+    fields:
+      - field_name: preparation_date
+        field_type: date
+        required: true
+        description: Date of chemical solution preparation
+
+      - field_name: preparation_time
+        field_type: time
+        required: true
+        description: Time of chemical solution preparation
+
+      - field_name: chemical_name
+        field_type: text
+        required: true
+        description: Name of cleaning chemical being prepared
+
+      - field_name: chemical_lot_number
+        field_type: text
+        required: true
+        description: Manufacturer lot number of concentrate chemical
+
+      - field_name: chemical_expiration_date
+        field_type: date
+        required: true
+        description: Expiration date of concentrate chemical
+
+      - field_name: sds_review_date
+        field_type: date
+        required: true
+        description: Date Safety Data Sheet reviewed by preparer
+
+  - section_number: 2
+    section_title: Dilution and Preparation
+    fields:
+      - field_name: target_concentration
+        field_type: text
+        required: true
+        description: Target concentration or dilution ratio per manufacturer specification
+
+      - field_name: concentrate_volume
+        field_type: number
+        required: true
+        unit: mL
+        description: Volume of chemical concentrate used
+
+      - field_name: diluent_type
+        field_type: enum
+        required: true
+        enum:
+          - Potable Water
+          - Deionized Water
+          - Distilled Water
+          - Other (Specify)
+        description: Type of diluent used for dilution
+
+      - field_name: diluent_volume
+        field_type: number
+        required: true
+        unit: L
+        description: Volume of diluent added
+
+      - field_name: total_solution_volume
+        field_type: number
+        required: true
+        unit: L
+        description: Total volume of prepared solution
+
+      - field_name: mixing_method
+        field_type: enum
+        required: true
+        enum:
+          - Manual Stirring
+          - Mechanical Mixing
+          - Inversion Mixing
+          - Automatic Dispenser
+        description: Method used to mix chemical solution
+
+      - field_name: mixing_duration
+        field_type: number
+        required: true
+        unit: minutes
+        description: Duration of mixing to ensure homogeneity
+
+  - section_number: 3
+    section_title: Quality Verification
+    fields:
+      - field_name: concentration_verification_method
+        field_type: enum
+        required: true
+        enum:
+          - pH Measurement
+          - Test Strip
+          - Titration
+          - Conductivity
+          - Visual Inspection Only
+        description: Method used to verify chemical concentration
+
+      - field_name: measured_value
+        field_type: text
+        required: false
+        description: Measured value from verification testing (if applicable)
+
+      - field_name: acceptance_range
+        field_type: text
+        required: true
+        description: Acceptable range for verification measurement
+
+      - field_name: verification_result
+        field_type: enum
+        required: true
+        enum:
+          - Pass - Within Specification
+          - Fail - Out of Specification
+        description: Result of concentration verification
+
+      - field_name: solution_appearance
+        field_type: enum
+        required: true
+        enum:
+          - Clear
+          - Slightly Hazy
+          - Turbid
+          - Particulates Present
+        description: Visual appearance of prepared solution
+
+  - section_number: 4
+    section_title: Storage and Stability
+    fields:
+      - field_name: storage_container_type
+        field_type: enum
+        required: true
+        enum:
+          - Original Dispensing Bottle
+          - Spray Bottle
+          - Bucket with Lid
+          - Carboy
+          - Other Container
+        description: Type of container for prepared solution storage
+
+      - field_name: container_label_complete
+        field_type: yes_no
+        required: true
+        description: Container properly labeled with chemical name, concentration, preparation date, expiration date, and hazard warnings?
+
+      - field_name: storage_location
+        field_type: text
+        required: true
+        description: Storage location for prepared solution
+
+      - field_name: storage_temperature
+        field_type: enum
+        required: true
+        enum:
+          - Room Temperature (15-30°C)
+          - Refrigerated (2-8°C)
+          - Controlled Room Temperature (20-25°C)
+        description: Required storage temperature for solution stability
+
+      - field_name: solution_expiration_date
+        field_type: date
+        required: true
+        description: Expiration or use-by date for prepared solution
+
+      - field_name: solution_stability_period
+        field_type: number
+        required: true
+        unit: days
+        description: Stability period for prepared solution per manufacturer
+
+  - section_number: 5
+    section_title: Intended Use
+    fields:
+      - field_name: intended_application
+        field_type: enum
+        required: true
+        enum:
+          - General Surface Cleaning
+          - Equipment Cleaning
+          - Floor Cleaning
+          - Sanitization
+          - Disinfection
+          - Specialized Cleaning
+        description: Primary intended use for prepared solution
+
+      - field_name: application_area
+        field_type: multiselect
+        required: true
+        options:
+          - Cultivation Areas
+          - Processing Areas
+          - Laboratory Areas
+          - Packaging Areas
+          - Storage Areas
+          - Common Areas
+          - Restrooms
+          - Exterior Areas
+        description: Facility areas where solution will be used
+
+      - field_name: estimated_usage_volume
+        field_type: number
+        required: false
+        unit: L
+        description: Estimated volume to be used (optional)
+
+  - section_number: 6
+    section_title: Safety and PPE
+    fields:
+      - field_name: ppe_required
+        field_type: multiselect
+        required: true
+        options:
+          - Safety Glasses / Goggles
+          - Face Shield
+          - Chemical-Resistant Gloves
+          - Protective Apron
+          - Respiratory Protection
+          - Protective Footwear
+        description: Personal protective equipment required for handling
+
+      - field_name: ppe_verified
+        field_type: yes_no
+        required: true
+        description: Preparer verified wearing all required PPE?
+
+      - field_name: ventilation_adequate
+        field_type: yes_no
+        required: true
+        description: Adequate ventilation present during preparation?
+
+      - field_name: spill_kit_available
+        field_type: yes_no
+        required: true
+        description: Chemical spill kit readily available during preparation?
+
+      - field_name: emergency_eyewash_accessible
+        field_type: yes_no
+        required: true
+        description: Emergency eyewash station accessible within 10 seconds?
+
+  - section_number: 7
+    section_title: Preparation Personnel
+    fields:
+      - field_name: prepared_by_name
+        field_type: text
+        required: true
+        description: Name of person who prepared chemical solution
+
+      - field_name: prepared_by_signature
+        field_type: signature
+        required: true
+        description: Electronic signature of preparer
+
+      - field_name: preparer_training_current
+        field_type: yes_no
+        required: true
+        description: Preparer current on chemical safety and preparation training?
+
+      - field_name: supervisor_name
+        field_type: text
+        required: true
+        description: Name of supervisor verifying preparation (if required)
+
+      - field_name: supervisor_signature
+        field_type: signature
+        required: false
+        description: Supervisor signature for hazardous chemicals or first-time preparer
+
+  - section_number: 8
+    section_title: Verification and Approval
+    fields:
+      - field_name: preparation_compliant
+        field_type: enum
+        required: true
+        enum:
+          - Compliant - Approved for Use
+          - Non-Compliant - Rejected
+        description: Overall compliance with preparation procedure
+
+      - field_name: non_compliance_reason
+        field_type: textarea
+        required: false
+        description: Reason for non-compliance (if applicable)
+
+      - field_name: corrective_action_taken
+        field_type: textarea
+        required: false
+        description: Corrective action for non-compliant preparation
+
+      - field_name: verification_date
+        field_type: date
+        required: true
+        description: Date of preparation verification
+
+      - field_name: qa_inspector_name
+        field_type: text
+        required: false
+        description: QA Inspector name (for critical chemicals)
+
+      - field_name: qa_inspector_signature
+        field_type: signature
+        required: false
+        description: QA Inspector signature for critical chemical verification
+
+instructions:
+  - Prepare chemicals in well-ventilated area with adequate lighting
+  - Always add chemical concentrate to water (never water to concentrate for caustic chemicals)
+  - Wear all required PPE before handling concentrated chemicals
+  - Mix thoroughly to ensure uniform concentration throughout solution
+  - Verify concentration using appropriate testing method before use
+  - Label prepared solution container immediately with all required information
+  - Dispose of non-compliant solutions per hazardous waste procedures
+  - Store prepared solutions in designated chemical storage area
+  - Never mix different chemical types unless specifically approved by manufacturer
+  - Discard solutions if appearance changes or expiration date reached
+
+validation_rules:
+  - Preparation date must be current date or within last 24 hours
+  - Chemical expiration date must be in future (not expired)
+  - SDS review must be within last 30 days
+  - Dilution ratio must match manufacturer specifications
+  - Total solution volume must equal concentrate + diluent volumes
+  - Verification result must be "Pass" for solution to be approved for use
+  - Container must be labeled before leaving preparation area
+  - Solution expiration date must not exceed stability period from preparation date
+  - All required PPE must be worn during preparation
+  - Preparer must have current training on chemical safety

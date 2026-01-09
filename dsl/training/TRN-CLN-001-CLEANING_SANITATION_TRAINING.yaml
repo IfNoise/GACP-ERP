@@ -1,0 +1,451 @@
+schema_version: "1.0.0"
+type: training
+metadata:
+  id: TRN-CLN-001
+  title: Cleaning and Sanitation Operations Training Program
+  version: "1.0"
+  effective_date: "2025-09-02"
+  related_process: SOP-CLN-001
+  department: Facility Management
+  classification: Critical GMP Training
+
+training_info:
+  target_audience:
+    - Cleaning Technicians
+    - Sanitation Supervisors
+    - Facility Maintenance Staff
+    - Production Personnel (basic cleaning responsibilities)
+    - Quality Assurance Inspectors (verification activities)
+    - New Employees (facility cleaning awareness)
+
+  prerequisites:
+    - GMP Fundamentals Training (completed)
+    - Personal Hygiene and Facility Access Training (completed)
+    - Chemical Hazard Communication Training (completed)
+    - Basic understanding of cannabis cultivation and processing operations
+    - Physical ability to perform cleaning tasks
+
+  training_duration:
+    total_hours: 32
+    classroom_instruction: 16 hours
+    hands_on_practical: 12 hours
+    assessment: 4 hours
+
+  retraining_frequency: Annually, or when SOP-CLN-001 significantly revised, or when performance deficiencies identified
+
+modules:
+  - module_number: 1
+    module_title: Introduction to Cleaning and Sanitation in Cannabis Facilities
+    duration_hours: 2
+    learning_objectives:
+      - Understand the critical importance of cleaning and sanitation in cannabis production
+      - Recognize contamination risks and their impact on product quality and consumer safety
+      - Identify regulatory requirements for facility cleaning and sanitation (GMP, GACP, local regulations)
+      - Explain the difference between cleaning, sanitizing, disinfecting, and sterilizing
+      - Understand the role of cleaning in overall quality management system
+    topics:
+      - Purpose and scope of SOP-CLN-001
+      - Product quality and consumer safety impacts
+      - Regulatory framework (WHO GACP, GMP guidelines, local cannabis regulations)
+      - Contamination types (microbial, chemical, physical, cross-contamination)
+      - Cleaning program objectives and expectations
+      - Consequences of inadequate cleaning (product failures, regulatory action, recalls)
+      - Integration with other facility systems (HVAC, pest control, equipment maintenance)
+    teaching_methods:
+      - Lecture with presentation slides
+      - Regulatory document review
+      - Discussion of contamination case studies
+      - Facility tour showing cleaning program in action
+    assessment_methods:
+      - Written quiz (10 questions, multiple choice)
+      - Minimum passing score 80%
+
+  - module_number: 2
+    module_title: Cleaning Chemicals - Selection, Safety, and Management
+    duration_hours: 4
+    learning_objectives:
+      - Identify approved cleaning chemicals and their appropriate applications
+      - Read and interpret Safety Data Sheets (SDS) for cleaning chemicals
+      - Understand chemical hazards and safety precautions
+      - Prepare cleaning solutions with correct dilution ratios
+      - Apply proper chemical storage, handling, and disposal procedures
+      - Select appropriate PPE for chemical handling tasks
+    topics:
+      - Types of cleaning chemicals (detergents, degreasers, sanitizers, disinfectants)
+      - Chemical selection criteria (efficacy, safety, regulatory approval, compatibility)
+      - Safety Data Sheets (SDS) - structure, content, interpretation
+      - Chemical hazards (corrosive, toxic, flammable, reactive)
+      - Personal protective equipment (PPE) requirements by chemical type
+      - Chemical preparation procedures and dilution calculations
+      - Verification of chemical concentration (pH testing, test strips, titration)
+      - Chemical storage requirements (segregation, temperature, containment)
+      - Chemical waste disposal and environmental protection
+      - Emergency procedures for chemical spills and exposures
+    teaching_methods:
+      - Lecture with chemical demonstrations
+      - Hands-on chemical preparation exercises
+      - SDS review workshop
+      - PPE selection and donning practice
+      - Chemical spill response simulation
+    assessment_methods:
+      - Written exam (15 questions)
+      - Practical demonstration: Prepare chemical solution with correct dilution and verify concentration
+      - Minimum passing score 85%
+
+  - module_number: 3
+    module_title: Cleaning Equipment and Tools
+    duration_hours: 2
+    learning_objectives:
+      - Identify cleaning equipment and tools for different applications
+      - Operate mechanical cleaning equipment safely and effectively
+      - Understand and apply color-coding system for cross-contamination prevention
+      - Perform proper cleaning and maintenance of cleaning tools
+      - Recognize when tools need replacement
+    topics:
+      - Mechanical equipment (floor scrubbers, pressure washers, vacuum systems, steam cleaners)
+      - Manual tools (microfiber cloths, brushes, mops, squeegees)
+      - Specialized equipment (fogging systems, UV sanitizers, electrostatic sprayers)
+      - Color-coding system for area-specific tools
+      - Tool storage and organization
+      - Tool cleaning and sanitization after use
+      - Equipment maintenance and preventive maintenance schedules
+      - Replacement criteria for worn or damaged tools
+    teaching_methods:
+      - Equipment demonstrations
+      - Hands-on equipment operation practice
+      - Color-coding system workshop
+      - Tool cleaning practical exercise
+    assessment_methods:
+      - Practical demonstration: Operate floor scrubber or pressure washer safely
+      - Color-coding system quiz
+      - Minimum passing score 85%
+
+  - module_number: 4
+    module_title: Cultivation Area Cleaning Procedures
+    duration_hours: 4
+    learning_objectives:
+      - Execute daily cultivation area cleaning per CHKLST-CLN-001
+      - Perform cleaning tasks without damaging plants or cultivation equipment
+      - Clean irrigation systems and environmental control equipment
+      - Conduct pre-harvest and post-harvest cleaning and sanitization
+      - Identify and report pest activity and facility maintenance issues
+    topics:
+      - Daily cleaning requirements (floors, work surfaces, plant areas)
+      - Plant protection during cleaning activities
+      - Irrigation system maintenance and cleaning
+      - Environmental equipment cleaning (HVAC, lighting, monitoring sensors)
+      - Pre-harvest sanitization protocols
+      - Post-harvest deep cleaning and room sanitization
+      - Waste removal and disposal from cultivation areas
+      - Pest prevention and reporting
+      - Documentation completion (CHKLST-CLN-001)
+    teaching_methods:
+      - Lecture with procedure walk-through
+      - Hands-on cultivation area cleaning exercise
+      - Video demonstration of proper techniques
+      - Documentation practice
+    assessment_methods:
+      - Practical demonstration: Complete daily cultivation area cleaning with supervisor observation
+      - Documentation accuracy assessment
+      - Minimum passing score 85%
+
+  - module_number: 5
+    module_title: Processing and Laboratory Area Cleaning
+    duration_hours: 4
+    learning_objectives:
+      - Perform pre-operational, in-process, and post-operational cleaning of processing areas
+      - Execute equipment breakdown and deep cleaning procedures
+      - Clean specialized processing equipment (trimmers, packaging machines, scales, conveyors)
+      - Apply contamination prevention protocols in laboratory areas
+      - Clean analytical equipment and specialized laboratory equipment
+    topics:
+      - Pre-operational cleaning and verification (CHKLST-CLN-003)
+      - In-process cleaning and spill response
+      - Post-operational cleaning procedures (FORM-CLN-002)
+      - Equipment disassembly and cleaning
+      - Chemical application methods (spray, wipe, immersion, CIP)
+      - Rinse water quality and residue removal
+      - Drying procedures to prevent recontamination
+      - Laboratory-specific cleaning (analytical instruments, fume hoods, biosafety cabinets)
+      - Cross-contamination prevention in labs
+      - Final verification and documentation
+    teaching_methods:
+      - Lecture with equipment-specific procedures
+      - Hands-on equipment cleaning exercises
+      - Laboratory cleaning demonstration
+      - Form completion workshop (FORM-CLN-002)
+    assessment_methods:
+      - Practical demonstration: Perform post-operational cleaning of processing equipment
+      - Laboratory cleaning competency assessment
+      - Minimum passing score 85%
+
+  - module_number: 6
+    module_title: Cleaning Verification and Quality Control
+    duration_hours: 3
+    learning_objectives:
+      - Conduct visual inspection of cleaned areas using established criteria
+      - Perform ATP testing for organic contamination detection
+      - Collect surface samples for microbial testing
+      - Interpret verification results and determine pass/fail status
+      - Implement corrective actions for failed verifications
+      - Document verification activities accurately
+    topics:
+      - Visual inspection criteria and standards
+      - Analytical testing methods (ATP, microbial swabs, chemical residue)
+      - Sampling locations and techniques
+      - Interpretation of test results
+      - Acceptance criteria for different area types
+      - Re-cleaning procedures for failed verifications
+      - Root cause analysis for cleaning failures
+      - Environmental monitoring integration
+      - Documentation requirements for verification
+    teaching_methods:
+      - Lecture on verification methods
+      - Hands-on ATP testing demonstration and practice
+      - Surface sampling technique workshop
+      - Case studies of verification failures and corrective actions
+    assessment_methods:
+      - Practical demonstration: Perform visual inspection and ATP testing
+      - Written case study: Analyze verification failure and propose corrective action
+      - Minimum passing score 85%
+
+  - module_number: 7
+    module_title: Safety and Environmental Protection
+    duration_hours: 3
+    learning_objectives:
+      - Select and use appropriate PPE for cleaning tasks
+      - Apply chemical safety procedures during cleaning operations
+      - Recognize and respond to safety hazards during cleaning
+      - Implement environmental protection measures (waste minimization, proper disposal)
+      - Respond appropriately to chemical spills and emergencies
+      - Practice ergonomic techniques to prevent injury
+    topics:
+      - PPE selection, donning, and doffing procedures
+      - Chemical safety protocols (ventilation, handling, storage)
+      - Slip and fall prevention during wet cleaning
+      - Electrical safety with cleaning equipment
+      - Confined space safety considerations
+      - Ergonomics and injury prevention (lifting, repetitive motions)
+      - Chemical spill response procedures
+      - Biological contamination response
+      - Emergency procedures (fire, flood, power outage)
+      - Waste segregation and disposal
+      - Green cleaning and sustainability practices
+    teaching_methods:
+      - Lecture with safety demonstrations
+      - PPE practice session
+      - Chemical spill response simulation
+      - Ergonomic technique demonstrations
+    assessment_methods:
+      - Practical demonstration: Proper PPE selection and use
+      - Emergency response scenario exercise
+      - Minimum passing score 85%
+
+  - module_number: 8
+    module_title: Cleaning Schedules and Documentation
+    duration_hours: 2
+    learning_objectives:
+      - Understand daily, weekly, monthly, and quarterly cleaning requirements
+      - Prioritize cleaning tasks based on area criticality and risk
+      - Complete cleaning documentation accurately and completely
+      - Use electronic documentation systems for cleaning records
+      - Understand documentation requirements for regulatory compliance
+    topics:
+      - Daily cleaning schedules and task lists
+      - Weekly deep cleaning requirements
+      - Monthly comprehensive cleaning programs
+      - Quarterly and seasonal intensive cleaning
+      - Schedule coordination with production operations
+      - Cleaning record forms (FORM-CLN-001, FORM-CLN-002, checklists)
+      - Electronic signature and data integrity (ALCOA+ principles)
+      - Documentation review and approval process
+      - Record retention requirements
+      - Audit readiness and inspection preparation
+    teaching_methods:
+      - Lecture on scheduling and documentation
+      - Hands-on documentation practice with actual forms
+      - Electronic system training (if applicable)
+      - Mock audit exercise
+    assessment_methods:
+      - Form completion accuracy assessment
+      - Documentation review exercise
+      - Minimum passing score 85%
+
+  - module_number: 9
+    module_title: Specialized Cleaning and Emergency Response
+    duration_hours: 2
+    learning_objectives:
+      - Execute specialized cleaning procedures for unique situations
+      - Respond to cleaning emergencies and unscheduled cleaning needs
+      - Perform emergency spill cleanup procedures
+      - Apply enhanced cleaning protocols for contamination incidents
+      - Understand cleaning during equipment qualification and validation
+    topics:
+      - Equipment changeover cleaning between different products
+      - Cleaning for equipment qualification (IQ, OQ, PQ support)
+      - Cleaning validation and verification
+      - Emergency spill response (product spills, chemical spills)
+      - Biological contamination response (mold, bacterial growth)
+      - Cleaning after facility damage or compromise (flood, fire, structural)
+      - Cleaning for investigational activities (OOS, deviations)
+      - Post-maintenance cleaning procedures
+      - Regulatory inspection preparation cleaning
+    teaching_methods:
+      - Lecture with emergency scenarios
+      - Spill response simulation
+      - Video demonstrations of specialized cleaning
+      - Group discussion of challenging cleaning situations
+    assessment_methods:
+      - Emergency response scenario exercise
+      - Written case study analysis
+      - Minimum passing score 85%
+
+  - module_number: 10
+    module_title: Continuous Improvement and Performance Management
+    duration_hours: 2
+    learning_objectives:
+      - Understand key performance indicators (KPIs) for cleaning program
+      - Identify opportunities for process improvement
+      - Participate in continuous improvement initiatives
+      - Understand cleaning program review and update processes
+      - Contribute to cleaning program effectiveness
+    topics:
+      - Cleaning KPIs and performance metrics
+      - Quality metrics (effectiveness rates, test pass rates, customer satisfaction)
+      - Efficiency metrics (cleaning time, labor productivity, chemical usage)
+      - Cost metrics (cost per area, resource optimization)
+      - Safety metrics (incident rates, PPE compliance)
+      - Monthly performance reporting (REPORT-CLN-001)
+      - Process improvement methodologies (Lean, Six Sigma basics)
+      - Employee suggestion program
+      - Benchmarking and best practice adoption
+      - Technology innovations in cleaning (automation, monitoring, green chemistry)
+    teaching_methods:
+      - Lecture on performance management
+      - Group exercise: Analyze performance data and identify improvements
+      - Brainstorming session for improvement ideas
+      - Case studies of successful improvement projects
+    assessment_methods:
+      - Group presentation: Propose process improvement initiative
+      - Performance data analysis exercise
+      - Minimum passing score 85%
+
+  - module_number: 11
+    module_title: Hands-On Competency Demonstration
+    duration_hours: 4
+    learning_objectives:
+      - Demonstrate competency in all critical cleaning tasks
+      - Perform cleaning procedures independently under supervision
+      - Show proper technique, safety practices, and documentation
+      - Achieve acceptable quality standards for cleaned areas
+      - Function as qualified cleaning technician
+    topics:
+      - Complete cleaning event from start to finish
+      - Chemical preparation and safety
+      - Equipment operation
+      - Area cleaning (cultivation, processing, or laboratory)
+      - Verification and quality control
+      - Documentation completion
+      - Supervisor evaluation and feedback
+    teaching_methods:
+      - Supervised hands-on practice
+      - Real-world cleaning assignments
+      - One-on-one coaching and feedback
+      - Progressive independence as competency demonstrated
+    assessment_methods:
+      - Practical competency demonstration with supervisor evaluation
+      - Cleaning quality assessment by QA inspector
+      - Documentation accuracy review
+      - Minimum passing score 85% on all competency elements
+
+assessment:
+  written_exam:
+    format: Multiple choice, short answer, case-based questions
+    total_questions: 50
+    passing_score: 80%
+    time_allowed: 120 minutes
+    topics_covered: All modules with emphasis on safety, chemicals, procedures, and documentation
+
+  practical_demonstration:
+    tasks:
+      - Chemical preparation with proper dilution and safety (15 points)
+      - Equipment operation (floor scrubber or pressure washer) (10 points)
+      - Cultivation area daily cleaning (20 points)
+      - Processing equipment post-operational cleaning (20 points)
+      - Cleaning verification (visual inspection, ATP testing) (15 points)
+      - Documentation completion (forms and checklists) (10 points)
+      - PPE selection and safety practices (10 points)
+    passing_score: 85% (total 100 points)
+    evaluation_criteria: Technique, safety, thoroughness, quality of results, documentation accuracy
+
+  overall_passing_requirements:
+    - Written exam ≥80%
+    - Practical demonstration ≥85%
+    - Attendance requirement: ≥90% of training sessions
+    - All hands-on competency elements passed
+
+competency_verification:
+  initial_competency:
+    - Successful completion of all training modules and assessments
+    - Supervisor observation and evaluation of first 5 cleaning assignments
+    - Quality verification of cleaning results by QA inspector
+    - Documentation review and approval by sanitation supervisor
+    - Sign-off by facility manager on competency qualification
+
+  ongoing_competency:
+    - Annual retraining and reassessment
+    - Quarterly supervisor observation and evaluation
+    - Ongoing documentation review for accuracy and completeness
+    - Cleaning quality metrics monitoring (visual inspection pass rates, verification test results)
+    - Corrective action for performance deficiencies
+
+training_delivery:
+  delivery_method:
+    - In-person classroom and hands-on training (preferred for initial training)
+    - Blended learning (online theory modules + hands-on practice for refresher training)
+    - On-the-job training with experienced mentor for new hires
+
+  instructor_qualifications:
+    - Minimum 3 years experience in facility cleaning and sanitation in regulated industry
+    - Knowledge of GMP and GACP requirements
+    - Chemical safety expertise and hazard communication training
+    - Teaching or training delivery experience
+    - Current certification in safety topics (chemical safety, first aid/CPR helpful)
+
+  training_materials:
+    - Participant workbook with procedures, checklists, and reference materials
+    - SOP-CLN-001 and related documents (forms, checklists)
+    - Safety Data Sheets for all cleaning chemicals
+    - Equipment operation manuals
+    - Video demonstrations of cleaning procedures
+    - Assessment tools and competency evaluation forms
+
+  training_environment:
+    - Classroom with presentation equipment and chemical safety features
+    - Access to actual facility areas for hands-on practice
+    - Cleaning equipment and tools for practice
+    - Cleaning chemicals for preparation exercises
+    - PPE for all participants
+    - Assessment and evaluation materials
+
+documentation:
+  training_records:
+    - Attendance records (sign-in sheets with dates and times)
+    - Assessment results (written exam scores, practical demonstration scores)
+    - Competency verification documentation
+    - Retraining records
+    - Retention period: Duration of employment + 3 years minimum
+
+  training_effectiveness:
+    - Post-training evaluation survey (content, delivery, materials, instructor)
+    - Cleaning quality metrics before and after training
+    - Safety incident rates
+    - Supervisor feedback on trainee performance
+    - Continuous improvement of training program based on metrics and feedback
+
+regulatory_compliance:
+  - Training conducted per GMP and GACP requirements
+  - Training records maintained per regulatory standards (WHO GACP, local cannabis regulations)
+  - Competency documented and verified
+  - Retraining conducted annually or as needed
+  - Training program reviewed and updated annually

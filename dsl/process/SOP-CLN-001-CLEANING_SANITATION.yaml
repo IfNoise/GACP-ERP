@@ -1,0 +1,325 @@
+schema_version: "1.0.0"
+type: sop_process
+metadata:
+  process_id: SOP-CLN-001
+  title: Cleaning and Sanitation Operations
+  version: "1.0"
+  effective_date: "2025-09-02"
+  department: Facility Management
+  classification: Critical GMP
+  related_processes:
+    - SOP-HYGIENE-001
+    - SOP-DISINFECT-001
+    - SOP-EQMAINT-001
+    - SOP-WASTE-001
+    - SOP-INC-001
+
+procedures:
+  - procedure_number: 1
+    procedure_title: Chemical Selection and Management
+    description: Selection, approval, storage, and management of cleaning chemicals to ensure efficacy, safety, regulatory compliance, and environmental responsibility
+    roles:
+      - Facility Manager
+      - Sanitation Supervisor
+      - Quality Assurance Inspector
+    steps:
+      - step_number: 1.1
+        action: Select approved cleaning chemicals based on efficacy, safety profile, regulatory approvals, environmental impact, and equipment compatibility
+        acceptance_criteria: Chemicals selected meet all safety and efficacy requirements with EPA registration and food-grade certification where applicable
+        documentation: Chemical approval list with selection criteria justification
+
+      - step_number: 1.2
+        action: Establish segregated chemical storage areas with proper temperature control, secondary containment, access restrictions, and inventory rotation systems
+        acceptance_criteria: Chemical storage compliant with safety regulations, proper separation by chemical type, current SDS available for all chemicals
+        documentation: Chemical storage inventory log with location mapping
+
+      - step_number: 1.3
+        action: Maintain current Safety Data Sheets (SDS) for all chemicals with clear hazard labeling, PPE requirements, emergency procedures, and disposal instructions
+        acceptance_criteria: SDS readily accessible, labeling clear and compliant, emergency procedures posted, disposal requirements understood
+        documentation: SDS library with hazard communication records
+
+      - step_number: 1.4
+        action: Monitor chemical inventory with expiration date tracking, usage logging, reorder point management, and waste disposal coordination
+        acceptance_criteria: No expired chemicals in use, adequate stock maintained, proper disposal of obsolete materials
+        documentation: Chemical usage log and inventory management records
+
+  - procedure_number: 2
+    procedure_title: Chemical Preparation and Application
+    description: Proper dilution, preparation, application, and verification of cleaning chemicals to achieve effective cleaning and sanitization
+    roles:
+      - Cleaning Technician
+      - Sanitation Supervisor
+    steps:
+      - step_number: 2.1
+        action: Prepare cleaning solutions according to manufacturer specifications with accurate dilution ratios, proper mixing procedures, and quality verification
+        acceptance_criteria: Chemical concentrations within specified ranges verified by testing, preparation documented with batch details
+        documentation: Chemical preparation record (FORM-CLN-001)
+
+      - step_number: 2.2
+        action: Apply cleaning chemicals using appropriate methods including spray application, wipe-down, immersion, foam application, or automated systems
+        acceptance_criteria: Even coverage achieved, proper technique demonstrated, application method appropriate for surface and contamination type
+        documentation: Application method documented on cleaning log
+
+      - step_number: 2.3
+        action: Allow required contact time for chemical effectiveness ensuring minimum dwell time met, proper surface preparation, and appropriate environmental conditions
+        acceptance_criteria: Full contact time achieved, environmental conditions within specifications, verification testing confirms effectiveness
+        documentation: Contact time log with environmental condition recording
+
+      - step_number: 2.4
+        action: Rinse surfaces thoroughly with potable water to remove chemical residues, inspect for cleanliness, implement proper drying procedures
+        acceptance_criteria: No visible chemical residues, surfaces pass visual and analytical inspection, proper drying prevents recontamination
+        documentation: Rinse water quality verification and surface inspection record
+
+  - procedure_number: 3
+    procedure_title: Cleaning Equipment Management
+    description: Selection, maintenance, storage, and organization of cleaning equipment and tools to ensure effectiveness and prevent cross-contamination
+    roles:
+      - Sanitation Supervisor
+      - Cleaning Technician
+    steps:
+      - step_number: 3.1
+        action: Select and maintain appropriate cleaning equipment including mechanical equipment (floor scrubbers, pressure washers, vacuum systems), manual tools (microfiber cloths, brushes, mops), and specialized equipment (fogging systems, UV sanitization, electrostatic sprayers)
+        acceptance_criteria: Equipment appropriate for cleaning task, properly maintained, calibrated as required, backup equipment available
+        documentation: Equipment inventory and maintenance log
+
+      - step_number: 3.2
+        action: Implement color-coding system for cleaning tools with area-specific designation, contamination prevention protocols, easy identification, and inventory tracking
+        acceptance_criteria: Color coding system consistently applied, tools properly designated for specific areas, cross-contamination prevented
+        documentation: Color-coding assignment matrix
+
+      - step_number: 3.3
+        action: Store cleaning tools in designated clean storage areas with proper drying facilities, organized inventory management, security measures, and maintenance scheduling
+        acceptance_criteria: Tools stored in clean condition, properly dried, organized for easy access, secure storage maintained
+        documentation: Tool storage and organization log
+
+      - step_number: 3.4
+        action: Clean and sanitize tools after each use with systematic cleaning procedures, chemical treatment, inspection, replacement as needed, and documentation
+        acceptance_criteria: Tools cleaned to visual cleanliness standard, sanitized per protocol, replaced when worn, documentation complete
+        documentation: Tool cleaning and maintenance record
+
+  - procedure_number: 4
+    procedure_title: Cultivation Area Cleaning
+    description: Systematic cleaning and sanitization of cultivation areas including growing rooms, harvest preparation, and post-harvest cleanup
+    roles:
+      - Cleaning Technician
+      - Cultivation Supervisor
+      - Quality Assurance Inspector
+    steps:
+      - step_number: 4.1
+        action: Perform daily cultivation area maintenance including floor cleaning, waste removal, surface sanitization, plant area cleaning, irrigation system maintenance, environmental system cleaning, and pest prevention
+        acceptance_criteria: Floors clean and sanitized, waste removed, surfaces free of debris, irrigation systems clean, environmental equipment maintained
+        documentation: Daily cultivation cleaning checklist (CHKLST-CLN-001)
+
+      - step_number: 4.2
+        action: Conduct pre-harvest sanitization with thorough facility cleaning, tool and equipment preparation, work surface sanitization, container cleaning, and personnel hygiene area preparation
+        acceptance_criteria: Facility sanitized to microbial standards, all harvest tools clean, work surfaces sanitized, containers ready for use
+        documentation: Pre-harvest sanitization record
+
+      - step_number: 4.3
+        action: Execute post-harvest cleanup with plant debris removal, deep cleaning of surfaces and equipment, floor and drain cleaning, and complete room sanitization before next cycle
+        acceptance_criteria: All plant material removed, deep cleaning verified by inspection, drains cleaned, room sanitized and ready for next cycle
+        documentation: Post-harvest cleaning verification (CHKLST-CLN-002)
+
+      - step_number: 4.4
+        action: Maintain environmental control systems with HVAC cleaning, lighting fixture maintenance, monitoring equipment care, structural cleaning, and utility infrastructure maintenance
+        acceptance_criteria: HVAC filters clean, lighting fixtures dust-free, monitoring equipment calibrated, structural components clean
+        documentation: Environmental system maintenance log
+
+  - procedure_number: 5
+    procedure_title: Processing Area Cleaning
+    description: Pre-operational, in-process, and post-operational cleaning of processing areas and equipment to prevent contamination and ensure product quality
+    roles:
+      - Cleaning Technician
+      - Production Supervisor
+      - Quality Assurance Inspector
+    steps:
+      - step_number: 5.1
+        action: Complete pre-operational cleaning with equipment sanitization, work surface preparation, tool preparation, environmental verification, and documentation sign-off
+        acceptance_criteria: All equipment sanitized and ready for use, work surfaces clean, tools prepared, environmental conditions verified acceptable
+        documentation: Pre-operational cleaning verification (CHKLST-CLN-003)
+
+      - step_number: 5.2
+        action: Maintain continuous in-process cleaning with ongoing maintenance, immediate spill response, equipment changeover cleaning, waste management, and personnel hygiene
+        acceptance_criteria: Work areas maintained clean during operations, spills cleaned immediately, equipment properly cleaned between products
+        documentation: In-process cleaning log
+
+      - step_number: 5.3
+        action: Execute post-operational cleaning with equipment breakdown and deep cleaning, chemical sanitization, waste removal, floor and drain cleaning, and final inspection
+        acceptance_criteria: Equipment disassembled and thoroughly cleaned, chemical treatment applied, all waste removed, floors and drains clean
+        documentation: Post-operational cleaning record (FORM-CLN-002)
+
+      - step_number: 5.4
+        action: Clean specialized processing equipment including trimming machines, packaging equipment, weighing scales, conveyor systems, and storage containers
+        acceptance_criteria: All specialized equipment cleaned per manufacturer specifications, inspected, and verified ready for next use
+        documentation: Specialized equipment cleaning log
+
+  - procedure_number: 6
+    procedure_title: Laboratory Area Cleaning
+    description: Specialized cleaning protocols for laboratory areas including analytical equipment, contamination prevention, and specialized laboratory equipment
+    roles:
+      - Laboratory Technician
+      - Laboratory Supervisor
+      - Quality Assurance Inspector
+    steps:
+      - step_number: 6.1
+        action: Clean analytical equipment with specialized procedures for instruments, sample preparation areas, chemical storage, waste disposal areas, and calibration standard storage
+        acceptance_criteria: Instruments cleaned without damage, sample prep areas contamination-free, chemical storage organized, waste areas clean
+        documentation: Laboratory equipment cleaning log
+
+      - step_number: 6.2
+        action: Implement contamination prevention protocols with cross-contamination control, sterile technique support, environmental monitoring, personnel protection, and data integrity support
+        acceptance_criteria: No cross-contamination events, aseptic conditions maintained, environmental monitoring within limits, data integrity preserved
+        documentation: Laboratory contamination prevention checklist
+
+      - step_number: 6.3
+        action: Perform specialized laboratory equipment cleaning including fume hoods, biosafety cabinets, autoclaves, microscopes, and refrigeration equipment
+        acceptance_criteria: Specialized equipment cleaned per manufacturer specifications, performance verified, certification maintained
+        documentation: Specialized laboratory equipment maintenance record
+
+  - procedure_number: 7
+    procedure_title: Cleaning Schedule Management and Execution
+    description: Implementation and management of daily, weekly, monthly, quarterly, and seasonal cleaning programs
+    roles:
+      - Sanitation Supervisor
+      - Cleaning Technician
+      - Facility Manager
+    steps:
+      - step_number: 7.1
+        action: Execute daily cleaning requirements including production area tasks, common area maintenance, and quality control verification
+        acceptance_criteria: All daily cleaning tasks completed, documented, inspected, and approved
+        documentation: Daily cleaning checklist with supervisor sign-off
+
+      - step_number: 7.2
+        action: Perform weekly deep cleaning including equipment internal cleaning, high surface cleaning, drainage system maintenance, storage area organization, and HVAC maintenance
+        acceptance_criteria: Deep cleaning tasks completed per schedule, equipment disassembled and cleaned, drains cleared, storage organized
+        documentation: Weekly deep cleaning record
+
+      - step_number: 7.3
+        action: Conduct monthly comprehensive cleaning with facility deep sanitization, structural maintenance, equipment preventive maintenance, pest control support, and regulatory compliance preparation
+        acceptance_criteria: Complete facility sanitization verified, structural issues addressed, equipment maintenance completed, audit-ready condition achieved
+        documentation: Monthly comprehensive cleaning report (REPORT-CLN-001)
+
+      - step_number: 7.4
+        action: Execute quarterly and seasonal cleaning programs including facility shutdowns, structural repairs, equipment overhauls, system validations, and seasonal preparations
+        acceptance_criteria: Intensive cleaning completed during scheduled downtime, facility prepared for seasonal operations, systems validated
+        documentation: Quarterly/seasonal cleaning summary report
+
+  - procedure_number: 8
+    procedure_title: Quality Control and Cleaning Verification
+    description: Verification of cleaning effectiveness through visual inspection, analytical testing, environmental monitoring, and corrective actions
+    roles:
+      - Quality Assurance Inspector
+      - Sanitation Supervisor
+      - Laboratory Technician
+    steps:
+      - step_number: 8.1
+        action: Conduct visual inspection of cleaned areas for surface cleanliness, equipment condition, area organization, absence of chemical residues, and overall professional appearance
+        acceptance_criteria: Surfaces visibly clean, no debris or contamination, equipment properly cleaned, no chemical streaking or residues
+        documentation: Visual inspection checklist
+
+      - step_number: 8.2
+        action: Perform analytical testing including microbial sampling (surface swabs, environmental sampling), ATP testing, chemical residue testing, pH testing, and allergen testing
+        acceptance_criteria: Microbial counts within acceptable limits, ATP readings pass criteria, no unacceptable chemical residues, pH neutral
+        documentation: Analytical testing results and trending report
+
+      - step_number: 8.3
+        action: Execute environmental monitoring with air quality assessment, water quality testing, surface monitoring, equipment monitoring, and documentation review
+        acceptance_criteria: Environmental conditions within specifications, monitoring data trending favorably, documentation complete and accurate
+        documentation: Environmental monitoring record
+
+      - step_number: 8.4
+        action: Implement corrective actions for failed verifications including re-cleaning, root cause analysis, training interventions, procedure modifications, and management escalation
+        acceptance_criteria: Failed areas re-cleaned and pass verification, root causes identified, preventive measures implemented
+        documentation: Corrective action report (FORM-CLN-003)
+
+  - procedure_number: 9
+    procedure_title: Safety and Environmental Protection
+    description: Personnel safety protocols and environmental protection measures during cleaning operations
+    roles:
+      - Sanitation Supervisor
+      - Cleaning Technician
+      - Safety Coordinator
+    steps:
+      - step_number: 9.1
+        action: Implement personnel safety measures including proper PPE use (chemical protection, respiratory protection, eye/face protection, hand/skin protection, foot protection), chemical safety procedures, equipment safety protocols, and environmental safety measures
+        acceptance_criteria: All personnel properly equipped with PPE, safety procedures followed, hazards identified and controlled
+        documentation: PPE compliance checklist and safety observation log
+
+      - step_number: 9.2
+        action: Execute environmental protection procedures including waste minimization, proper waste disposal, sustainable cleaning practices, and pollution prevention
+        acceptance_criteria: Waste minimized and properly segregated, green chemicals used where possible, environmental regulations followed
+        documentation: Environmental compliance and waste disposal log
+
+      - step_number: 9.3
+        action: Respond to emergency situations with chemical spill response, biological contamination response, facility emergency procedures, and post-incident procedures
+        acceptance_criteria: Emergencies contained quickly, personnel protected, proper cleanup executed, incidents thoroughly documented
+        documentation: Emergency response and incident report (FORM-CLN-004)
+
+  - procedure_number: 10
+    procedure_title: Performance Monitoring and Continuous Improvement
+    description: Systematic monitoring of cleaning program performance and implementation of continuous improvement initiatives
+    roles:
+      - Facility Manager
+      - Sanitation Supervisor
+      - Quality Assurance Manager
+    steps:
+      - step_number: 10.1
+        action: Monitor key performance indicators including quality metrics (cleaning effectiveness rates, microbial test pass rates, customer satisfaction, regulatory compliance, contamination incident frequency), efficiency metrics (cleaning time, chemical usage, labor productivity, equipment utilization, rework frequency), cost metrics (cost per square foot, chemical costs, labor costs, equipment maintenance, waste disposal), and safety metrics (accident rates, chemical exposure, near-miss reporting, PPE compliance, training completion)
+        acceptance_criteria: KPIs tracked consistently, trending analyzed, performance targets met or exceeded, data-driven decisions made
+        documentation: Monthly KPI dashboard and performance report (REPORT-CLN-002)
+
+      - step_number: 10.2
+        action: Implement continuous improvement programs with process optimization, technology advancement, quality enhancement, innovation encouragement, and best practice standardization
+        acceptance_criteria: Improvement initiatives identified and implemented, technology evaluated and adopted, employee suggestions encouraged
+        documentation: Continuous improvement project log
+
+      - step_number: 10.3
+        action: Conduct regular SOP reviews with monthly performance reviews, quarterly comprehensive evaluations, annual strategic reviews, and change management procedures
+        acceptance_criteria: SOP reviewed on schedule, updates implemented with proper change control, stakeholders consulted, training updated
+        documentation: SOP review and update log
+
+references:
+  - WHO Good Agricultural and Collection Practices (GACP)
+  - EU GMP Guidelines - Annex 1 (Manufacture of Sterile Medicinal Products)
+  - FDA Code of Federal Regulations Title 21 Part 110 (Current Good Manufacturing Practice in Manufacturing, Packing, or Holding Human Food)
+  - EPA Registered Disinfectant List
+  - OSHA Hazard Communication Standard 29 CFR 1910.1200
+  - ISO 14644 (Cleanroom and Controlled Environment Standards)
+  - ALCOA+ Data Integrity Principles
+
+definitions:
+  - term: Cleaning
+    definition: Physical removal of dirt, debris, organic matter, and other contaminants from surfaces
+
+  - term: Sanitization
+    definition: Reduction of microbial contamination to safe levels through chemical treatment
+
+  - term: Disinfection
+    definition: Elimination or inactivation of pathogenic microorganisms (excluding bacterial spores)
+
+  - term: Sterilization
+    definition: Complete elimination of all forms of microbial life including bacterial spores
+
+  - term: Contact Time
+    definition: Minimum time that a cleaning or sanitizing chemical must remain on a surface to be effective
+
+  - term: Cross-Contamination
+    definition: Unintentional transfer of contaminants from one surface, material, or area to another
+
+  - term: PPE (Personal Protective Equipment)
+    definition: Equipment worn to minimize exposure to hazards including chemicals, biological agents, and physical hazards
+
+  - term: SDS (Safety Data Sheet)
+    definition: Document providing information on chemical properties, hazards, handling, and emergency procedures
+
+  - term: ATP (Adenosine Triphosphate)
+    definition: Molecule present in all living cells used as an indicator of organic contamination
+
+  - term: HEPA (High-Efficiency Particulate Air)
+    definition: Filter capable of removing 99.97% of particles 0.3 microns or larger
+
+change_history:
+  - version: "1.0"
+    date: "2025-09-02"
+    description: Initial SOP creation - comprehensive cleaning and sanitation procedures established
+    approved_by: Operations Director

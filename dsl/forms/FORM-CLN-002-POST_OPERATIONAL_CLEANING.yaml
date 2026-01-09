@@ -1,0 +1,482 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-CLN-002
+  title: Post-Operational Cleaning Record
+  version: "1.0"
+  effective_date: "2025-09-02"
+  related_process: SOP-CLN-001
+  department: Facility Management
+  classification: GMP Critical Record
+  retention_period: 3 years
+
+sections:
+  - section_number: 1
+    section_title: Area and Equipment Information
+    fields:
+      - field_name: cleaning_date
+        field_type: date
+        required: true
+        description: Date of post-operational cleaning
+
+      - field_name: cleaning_start_time
+        field_type: time
+        required: true
+        description: Time cleaning operations began
+
+      - field_name: cleaning_end_time
+        field_type: time
+        required: true
+        description: Time cleaning operations completed
+
+      - field_name: area_cleaned
+        field_type: enum
+        required: true
+        enum:
+          - Cultivation Room
+          - Processing Area
+          - Packaging Room
+          - Laboratory
+          - Storage Area
+          - Equipment Cleaning Room
+          - Other (Specify)
+        description: Primary area where cleaning performed
+
+      - field_name: room_number
+        field_type: text
+        required: true
+        description: Room or area identification number
+
+      - field_name: last_product_processed
+        field_type: text
+        required: false
+        description: Product name or batch number last processed in area
+
+      - field_name: production_end_time
+        field_type: time
+        required: true
+        description: Time production operations ended before cleaning
+
+  - section_number: 2
+    section_title: Equipment Cleaning
+    fields:
+      - field_name: equipment_disassembled
+        field_type: yes_no
+        required: true
+        description: Equipment disassembled for thorough cleaning?
+
+      - field_name: equipment_list
+        field_type: textarea
+        required: true
+        description: List of all equipment cleaned (include IDs)
+
+      - field_name: removable_parts_cleaned
+        field_type: yes_no
+        required: true
+        description: All removable parts cleaned separately?
+
+      - field_name: internal_surfaces_cleaned
+        field_type: yes_no
+        required: true
+        description: Internal surfaces and product contact areas cleaned?
+
+      - field_name: external_surfaces_cleaned
+        field_type: yes_no
+        required: true
+        description: External surfaces and non-product contact areas cleaned?
+
+      - field_name: mechanical_debris_removed
+        field_type: yes_no
+        required: true
+        description: All mechanical debris and residues removed?
+
+  - section_number: 3
+    section_title: Cleaning Chemicals and Methods
+    fields:
+      - field_name: detergent_used
+        field_type: text
+        required: true
+        description: Name of cleaning detergent used
+
+      - field_name: detergent_concentration
+        field_type: text
+        required: true
+        description: Concentration or dilution ratio of detergent
+
+      - field_name: detergent_lot_number
+        field_type: text
+        required: true
+        description: Lot number of prepared detergent solution
+
+      - field_name: sanitizer_used
+        field_type: text
+        required: true
+        description: Name of sanitizing chemical used
+
+      - field_name: sanitizer_concentration
+        field_type: text
+        required: true
+        description: Concentration of sanitizer solution
+
+      - field_name: sanitizer_lot_number
+        field_type: text
+        required: true
+        description: Lot number of prepared sanitizer solution
+
+      - field_name: sanitizer_contact_time
+        field_type: number
+        required: true
+        unit: minutes
+        description: Contact time allowed for sanitizer effectiveness
+
+      - field_name: cleaning_method
+        field_type: multiselect
+        required: true
+        options:
+          - Manual Scrubbing
+          - Pressure Washing
+          - Spray Application
+          - Wipe Down
+          - Immersion
+          - CIP (Clean-in-Place)
+          - Foam Application
+        description: Methods used for cleaning
+
+      - field_name: rinse_water_used
+        field_type: enum
+        required: true
+        enum:
+          - Potable Water
+          - Purified Water
+          - Hot Water (>65°C)
+        description: Type of water used for rinsing
+
+  - section_number: 4
+    section_title: Work Surface and Floor Cleaning
+    fields:
+      - field_name: work_surfaces_cleaned
+        field_type: yes_no
+        required: true
+        description: All work surfaces (tables, benches) cleaned and sanitized?
+
+      - field_name: walls_cleaned
+        field_type: yes_no
+        required: true
+        description: Walls and vertical surfaces cleaned as needed?
+
+      - field_name: ceiling_inspected
+        field_type: yes_no
+        required: true
+        description: Ceiling inspected and cleaned if needed?
+
+      - field_name: floors_swept
+        field_type: yes_no
+        required: true
+        description: Floors swept to remove debris before wet cleaning?
+
+      - field_name: floors_mopped_detergent
+        field_type: yes_no
+        required: true
+        description: Floors mopped with detergent solution?
+
+      - field_name: floors_sanitized
+        field_type: yes_no
+        required: true
+        description: Floors sanitized with approved sanitizer?
+
+      - field_name: drains_cleaned
+        field_type: yes_no
+        required: true
+        description: Floor drains cleaned and sanitized?
+
+      - field_name: drain_covers_cleaned
+        field_type: yes_no
+        required: true
+        description: Drain covers removed, cleaned, and replaced?
+
+  - section_number: 5
+    section_title: Waste Removal and Disposal
+    fields:
+      - field_name: all_waste_removed
+        field_type: yes_no
+        required: true
+        description: All production waste and byproducts removed from area?
+
+      - field_name: waste_containers_emptied
+        field_type: yes_no
+        required: true
+        description: Waste containers emptied and cleaned?
+
+      - field_name: waste_disposal_method
+        field_type: enum
+        required: true
+        enum:
+          - Regular Trash
+          - Organic Waste / Composting
+          - Hazardous Waste
+          - Recyclable Materials
+          - Product Waste (Destruction)
+        description: Method of waste disposal used
+
+      - field_name: waste_documentation_complete
+        field_type: yes_no
+        required: true
+        description: Waste documentation (manifests, logs) completed as required?
+
+  - section_number: 6
+    section_title: Tools and Utensils
+    fields:
+      - field_name: tools_cleaned
+        field_type: yes_no
+        required: true
+        description: All tools and utensils cleaned and sanitized?
+
+      - field_name: cleaning_tools_cleaned
+        field_type: yes_no
+        required: true
+        description: Cleaning tools (mops, brushes, cloths) cleaned after use?
+
+      - field_name: cleaning_tools_stored
+        field_type: yes_no
+        required: true
+        description: Cleaning tools properly dried and stored?
+
+      - field_name: single_use_items_disposed
+        field_type: yes_no
+        required: true
+        description: Single-use cleaning items properly disposed?
+
+  - section_number: 7
+    section_title: Visual Inspection and Verification
+    fields:
+      - field_name: visual_inspection_result
+        field_type: enum
+        required: true
+        enum:
+          - Pass - No Visible Contamination
+          - Pass - Minor Issues Corrected
+          - Fail - Re-cleaning Required
+        description: Overall visual inspection result
+
+      - field_name: residue_free
+        field_type: yes_no
+        required: true
+        description: Surfaces free of visible product residues?
+
+      - field_name: chemical_residue_free
+        field_type: yes_no
+        required: true
+        description: No visible cleaning chemical residues or streaking?
+
+      - field_name: properly_dried
+        field_type: yes_no
+        required: true
+        description: All surfaces properly dried to prevent water spots and microbial growth?
+
+      - field_name: odor_free
+        field_type: yes_no
+        required: true
+        description: Area free of unusual or offensive odors?
+
+      - field_name: organized_appearance
+        field_type: yes_no
+        required: true
+        description: Area neat, organized, and professional in appearance?
+
+      - field_name: defects_identified
+        field_type: textarea
+        required: false
+        description: Any defects, damage, or maintenance issues identified during cleaning
+
+  - section_number: 8
+    section_title: Environmental Conditions
+    fields:
+      - field_name: room_temperature
+        field_type: number
+        required: true
+        unit: "°C"
+        description: Room temperature during and after cleaning
+
+      - field_name: room_humidity
+        field_type: number
+        required: true
+        unit: "%RH"
+        description: Room relative humidity during and after cleaning
+
+      - field_name: air_quality_acceptable
+        field_type: yes_no
+        required: true
+        description: Air quality acceptable (no excessive dust, odors, or vapors)?
+
+      - field_name: hvac_functioning
+        field_type: yes_no
+        required: true
+        description: HVAC system functioning properly?
+
+      - field_name: lighting_adequate
+        field_type: yes_no
+        required: true
+        description: Lighting adequate for inspection and verification?
+
+  - section_number: 9
+    section_title: Analytical Verification (If Required)
+    fields:
+      - field_name: analytical_testing_required
+        field_type: yes_no
+        required: true
+        description: Analytical testing required per cleaning verification program?
+
+      - field_name: swab_samples_collected
+        field_type: number
+        required: false
+        description: Number of surface swab samples collected (if applicable)
+
+      - field_name: atp_testing_performed
+        field_type: yes_no
+        required: false
+        description: ATP testing performed for organic contamination?
+
+      - field_name: atp_results
+        field_type: enum
+        required: false
+        enum:
+          - Pass - Within Limits
+          - Fail - Above Limits
+          - Not Performed
+        description: ATP test results (if performed)
+
+      - field_name: microbial_testing_required
+        field_type: yes_no
+        required: false
+        description: Microbial environmental monitoring required?
+
+      - field_name: sample_ids
+        field_type: textarea
+        required: false
+        description: Sample IDs for analytical testing (if applicable)
+
+  - section_number: 10
+    section_title: Corrective Actions
+    fields:
+      - field_name: corrective_action_required
+        field_type: yes_no
+        required: true
+        description: Corrective action required for cleaning deficiencies?
+
+      - field_name: corrective_action_description
+        field_type: textarea
+        required: false
+        description: Description of corrective actions taken
+
+      - field_name: re_cleaning_performed
+        field_type: yes_no
+        required: false
+        description: Re-cleaning performed and verified?
+
+      - field_name: maintenance_required
+        field_type: yes_no
+        required: false
+        description: Equipment or facility maintenance required?
+
+      - field_name: maintenance_request_number
+        field_type: text
+        required: false
+        description: Maintenance work order number (if applicable)
+
+  - section_number: 11
+    section_title: Cleaning Personnel and Approval
+    fields:
+      - field_name: cleaned_by_name
+        field_type: text
+        required: true
+        description: Name of cleaning technician who performed cleaning
+
+      - field_name: cleaned_by_signature
+        field_type: signature
+        required: true
+        description: Electronic signature of cleaning technician
+
+      - field_name: cleaning_technician_training_current
+        field_type: yes_no
+        required: true
+        description: Cleaning technician training current and competency verified?
+
+      - field_name: supervisor_inspected_by
+        field_type: text
+        required: true
+        description: Name of supervisor who inspected cleaning
+
+      - field_name: supervisor_signature
+        field_type: signature
+        required: true
+        description: Supervisor electronic signature approving cleaning
+
+      - field_name: supervisor_inspection_date
+        field_type: date
+        required: true
+        description: Date of supervisor inspection
+
+      - field_name: qa_inspector_name
+        field_type: text
+        required: false
+        description: QA Inspector name (for critical area verification)
+
+      - field_name: qa_inspector_signature
+        field_type: signature
+        required: false
+        description: QA Inspector signature for critical area approval
+
+  - section_number: 12
+    section_title: Area Release for Production
+    fields:
+      - field_name: area_approved_for_production
+        field_type: enum
+        required: true
+        enum:
+          - Approved - Ready for Production
+          - Conditional Approval - Minor Items Pending
+          - Not Approved - Re-cleaning Required
+        description: Overall approval status for area release
+
+      - field_name: approval_conditions
+        field_type: textarea
+        required: false
+        description: Conditions or limitations for conditional approval
+
+      - field_name: next_use_date
+        field_type: date
+        required: false
+        description: Scheduled date for next production use
+
+      - field_name: hold_time_before_use
+        field_type: number
+        required: false
+        unit: hours
+        description: Minimum hold time before area can be used (if required)
+
+      - field_name: release_approval_date
+        field_type: date
+        required: true
+        description: Date area released for production use
+
+instructions:
+  - Begin post-operational cleaning promptly after production ends to prevent residue hardening
+  - Disassemble equipment completely for thorough cleaning of all product contact surfaces
+  - Use appropriate cleaning chemicals at correct concentrations per manufacturer specifications
+  - Allow proper contact time for sanitizers to be effective
+  - Rinse all surfaces thoroughly to remove chemical residues
+  - Verify cleaning effectiveness through visual inspection and analytical testing as required
+  - Document any defects, damage, or maintenance needs identified during cleaning
+  - Do not release area for production use until all verifications complete and approved
+  - Complete all documentation accurately and obtain required signatures before leaving shift
+  - Report any cleaning difficulties or unusual findings to supervisor immediately
+
+validation_rules:
+  - Cleaning end time must be after start time
+  - Sanitizer contact time must meet minimum requirement per chemical manufacturer
+  - All visual inspection criteria must pass or corrective action documented
+  - Area cannot be approved for production if visual inspection failed
+  - Analytical testing must be performed if required by cleaning verification program
+  - All required signatures must be obtained before area released for production
+  - Defects identified during cleaning must be documented with maintenance request if needed
+  - Cleaning must be completed within maximum hold time after production ends (typically 24 hours)
