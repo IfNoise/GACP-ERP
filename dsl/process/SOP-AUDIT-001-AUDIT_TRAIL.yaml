@@ -1,0 +1,654 @@
+# DSL: Audit Trail Management and Data Integrity
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  process_id: "SOP-AUDIT-001"
+  process_type: "sop"
+  version: "1.0"
+  status: "active"
+  domain: "compliance"
+  classification: "critical"
+
+  effective_date: "2025-10-17"
+  supersedes: null # UNDEFINED: Initial DSL version
+  review_period_months: 12
+
+  related_processes:
+    - "SOP-CHG-001" # Change Control
+    - "SOP-CAPA-001" # CAPA
+    - "SOP-DEV-001" # Deviation Management
+    - "SOP-DOC-001" # Document Control
+
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "MHRA Data Integrity Guidance"
+    - "WHO GACP Guidelines"
+    - "ALCOA+ Principles"
+
+# ==============================================================================
+# PROCESS DEFINITION
+# ==============================================================================
+process:
+  purpose: "Ensure immutable, complete, and trustworthy recording of all critical actions in ERP system per ALCOA+ principles and GACP requirements for traceability and regulatory compliance"
+
+  scope_areas:
+    - "user_actions_in_erp"
+    - "system_events_automatic_processes"
+    - "integration_external_systems"
+    - "configuration_admin_changes"
+    - "critical_business_transactions"
+    - "confidential_information_access"
+
+  frequency: "continuous"
+
+  prerequisites:
+    - "ImmuDB operational"
+    - "Kafka message queue operational"
+    - "Elasticsearch operational"
+    - "NTP time sync configured"
+
+  dependencies:
+    - "ImmuDB immutable database"
+    - "Apache Kafka event streaming"
+    - "Elasticsearch search engine"
+    - "NTP time server"
+
+  duration_estimate: null # UNDEFINED: Continuous automated
+  critical_path: true
+
+# ==============================================================================
+# ROLES AND RESPONSIBILITIES
+# ==============================================================================
+roles:
+  - role_id: "ROLE-COMP-001"
+    role_name: "Compliance Officer"
+    qualifications:
+      required:
+        - "Degree in Life Sciences or related"
+        - "FDA 21 CFR Part 11 knowledge"
+        - "Data integrity certification"
+      optional: []
+    responsibilities:
+      - action: "Overall ALCOA+ and GxP compliance control"
+        accountability: "accountable"
+        verification: "approved"
+      - action: "Regulatory liaison and reporting"
+        accountability: "accountable"
+        verification: "documented"
+
+  - role_id: "ROLE-IT-001"
+    role_name: "IT Administrator"
+    qualifications:
+      required:
+        - "IT degree or equivalent"
+        - "Audit trail systems experience"
+        - "Data integrity training"
+      optional: []
+    responsibilities:
+      - action: "Technical support of logging system"
+        accountability: "responsible"
+        verification: "documented"
+      - action: "System monitoring and optimization"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-QA-001"
+    role_name: "Quality Manager"
+    qualifications:
+      required:
+        - "Quality Management certification"
+        - "GMP/GACP training"
+        - "Audit trail review training"
+      optional: []
+    responsibilities:
+      - action: "Periodic analysis and verification"
+        accountability: "accountable"
+        verification: "approved"
+
+  - role_id: "ROLE-SYSADM-001"
+    role_name: "System Administrator"
+    qualifications:
+      required:
+        - "System administration certification"
+        - "Database management experience"
+      optional: []
+    responsibilities:
+      - action: "Configuration and monitoring"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-DBA-001"
+    role_name: "Database Administrator"
+    qualifications:
+      required:
+        - "Database administration certification"
+        - "ImmuDB or similar experience"
+      optional: []
+    responsibilities:
+      - action: "Data integrity and backup"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-AUD-001"
+    role_name: "Internal Auditor"
+    qualifications:
+      required:
+        - "Internal auditor certification"
+        - "GxP auditing experience"
+      optional: []
+    responsibilities:
+      - action: "System and data audits"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-USER-001"
+    role_name: "All Users"
+    qualifications:
+      required:
+        - "TRN-AUD-001 completion"
+        - "Annual refresher training"
+      optional: []
+    responsibilities:
+      - action: "Data integrity principles compliance"
+        accountability: "responsible"
+        verification: "documented"
+
+# ==============================================================================
+# OPERATIONAL PARAMETERS
+# ==============================================================================
+parameters:
+  temporal:
+    max_latency_seconds: 5
+    ntp_sync_interval_hours: 1
+    access_token_duration_hours: 4
+    backup_daily_time: "00:00"
+    backup_weekly_day: "sunday"
+
+  performance:
+    hash_verification_target_percent: 99.99
+    system_uptime_target_percent: 99.9
+    logging_response_time_ms: 100
+    storage_capacity_threshold_percent: 80
+
+# ==============================================================================
+# EQUIPMENT AND TOOLS
+# ==============================================================================
+equipment:
+  - equipment_id: "EQP-AUDIT-001"
+    equipment_name: "ImmuDB Immutable Database"
+    equipment_type: "processing_equipment"
+    calibration_required: false
+    calibration_frequency_days: null # UNDEFINED: Software
+    specifications:
+      accuracy: "Cryptographically verifiable"
+      range: "WORM storage"
+      resolution: null
+    maintenance_ref: "Quarterly software updates"
+
+  - equipment_id: "EQP-AUDIT-002"
+    equipment_name: "Apache Kafka Message Queue"
+    equipment_type: "processing_equipment"
+    calibration_required: false
+    calibration_frequency_days: null
+    specifications:
+      accuracy: "Real-time event streaming"
+      range: null
+      resolution: null
+    maintenance_ref: "Monthly performance review"
+
+  - equipment_id: "EQP-AUDIT-003"
+    equipment_name: "Elasticsearch Search Engine"
+    equipment_type: "processing_equipment"
+    calibration_required: false
+    calibration_frequency_days: null
+    specifications:
+      accuracy: "Fast search and indexing"
+      range: null
+      resolution: null
+    maintenance_ref: "Weekly index optimization"
+
+  - equipment_id: "EQP-AUDIT-004"
+    equipment_name: "NTP Time Server"
+    equipment_type: "measuring_instrument"
+    calibration_required: true
+    calibration_frequency_days: 90
+    specifications:
+      accuracy: "Within 100ms of national standard"
+      range: "UTC time synchronization"
+      resolution: "1 millisecond"
+    maintenance_ref: "Quarterly sync verification"
+
+# ==============================================================================
+# PROCEDURE STEPS
+# ==============================================================================
+procedure:
+  - step_number: 1
+    step_id: "AUDIT-001"
+    action: "Capture events automatically at application, database, and system levels"
+
+    substeps:
+      - substep_id: "AUDIT-001-01"
+        action: "Capture application-level events via ERP hooks, triggers, UI interactions, workflow changes"
+        parameters: null
+
+      - substep_id: "AUDIT-001-02"
+        action: "Capture database-level events via CDC, triggers, transaction logs, schema changes"
+        parameters: null
+
+      - substep_id: "AUDIT-001-03"
+        action: "Capture system-level events: OS events, network logs, filesystem changes, security events"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "event_capture_coverage"
+        acceptance_criteria: "100% of critical events captured"
+        frequency: "continuous"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 2
+    step_id: "AUDIT-002"
+    action: "Process captured events through validation, enrichment, signature, and storage pipeline"
+
+    substeps:
+      - substep_id: "AUDIT-002-01"
+        action: "Validate event format against schema and business rules"
+        parameters: null
+
+      - substep_id: "AUDIT-002-02"
+        action: "Enrich event with metadata: user context, session, location, device"
+        parameters: null
+
+      - substep_id: "AUDIT-002-03"
+        action: "Generate SHA-256 digital signature for critical events"
+        parameters: null
+
+      - substep_id: "AUDIT-002-04"
+        action: "Store event in ImmuDB with WORM properties"
+        parameters: null
+
+      - substep_id: "AUDIT-002-05"
+        action: "Index event in Elasticsearch for fast search"
+        parameters: null
+
+      - substep_id: "AUDIT-002-06"
+        action: "Generate alerts for security/compliance violations"
+        parameters: null
+
+    parameters:
+      max_latency_seconds: 5
+
+    controls:
+      - control_type: "measurement"
+        parameter: "processing_latency"
+        acceptance_criteria: "< 5 seconds"
+        frequency: "continuous"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 3
+    step_id: "AUDIT-003"
+    action: "Perform real-time validation and continuous integrity verification"
+
+    substeps:
+      - substep_id: "AUDIT-003-01"
+        action: "Real-time validation: schema, business rules, data types, completeness"
+        parameters: null
+
+      - substep_id: "AUDIT-003-02"
+        action: "Integrity verification: hash calculation, signature validation, cross-reference"
+        parameters: null
+
+      - substep_id: "AUDIT-003-03"
+        action: "Execute periodic integrity checks on stored records"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "hash_verification_success"
+        acceptance_criteria: ">= 99.99%"
+        frequency: "continuous"
+
+    documentation_required: true
+    forms:
+      - "CHKLST-AUD-001" # ALCOA+ Compliance Checklist
+
+  - step_number: 4
+    step_id: "AUDIT-004"
+    action: "Provide authorized access to audit trail data with proper controls"
+
+    substeps:
+      - substep_id: "AUDIT-004-01"
+        action: "Verify RBAC authorization for requested data"
+        parameters: null
+
+      - substep_id: "AUDIT-004-02"
+        action: "Require purpose-based justification for access"
+        parameters: null
+
+      - substep_id: "AUDIT-004-03"
+        action: "Generate time-limited access token (4 hours max)"
+        parameters:
+          access_token_duration_hours: 4
+
+      - substep_id: "AUDIT-004-04"
+        action: "Log all audit trail access in meta-audit trail"
+        parameters: null
+
+      - substep_id: "AUDIT-004-05"
+        action: "Provide search: full-text, predefined templates, custom queries, export (CSV/PDF/JSON)"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "access_authorization"
+        acceptance_criteria: "Only authorized roles can access"
+        frequency: "per_batch"
+
+    documentation_required: true
+    forms:
+      - "FORM-AUD-001" # Emergency Access Request
+
+  - step_number: 5
+    step_id: "AUDIT-005"
+    action: "Monitor system health and generate automated alerts for critical events"
+
+    substeps:
+      - substep_id: "AUDIT-005-01"
+        action: "Monitor system health: storage, performance, availability"
+        parameters: null
+
+      - substep_id: "AUDIT-005-02"
+        action: "Monitor data integrity: hash, signature, checksum verification"
+        parameters: null
+
+      - substep_id: "AUDIT-005-03"
+        action: "Monitor security: unauthorized access, suspicious patterns"
+        parameters: null
+
+      - substep_id: "AUDIT-005-04"
+        action: "Monitor compliance: violations, regulatory deadlines"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "measurement"
+        parameter: "system_uptime"
+        acceptance_criteria: ">= 99.9%"
+        frequency: "continuous"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 6
+    step_id: "AUDIT-006"
+    action: "Generate standard and ad-hoc reports for compliance and investigation"
+
+    substeps:
+      - substep_id: "AUDIT-006-01"
+        action: "Generate standard reports: Daily Activity, Security, Data Integrity, Compliance, Performance"
+        parameters: null
+
+      - substep_id: "AUDIT-006-02"
+        action: "Support ad-hoc investigations: forensics, timeline, pattern recognition, root cause"
+        parameters: null
+
+    parameters: null
+
+    controls: []
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 7
+    step_id: "AUDIT-007"
+    action: "Manage data lifecycle per retention policies with automated archival"
+
+    substeps:
+      - substep_id: "AUDIT-007-01"
+        action: "Apply retention: Business Critical (permanent), Quality (permanent), Security (7y), System (5y)"
+        parameters: null
+
+      - substep_id: "AUDIT-007-02"
+        action: "Execute automated archival: policy-based migration, compression (zstd), integrity check"
+        parameters: null
+
+      - substep_id: "AUDIT-007-03"
+        action: "Support archive retrieval: authorized request, 24-48h restoration timeline"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "retention_compliance"
+        acceptance_criteria: "All records meet retention policy"
+        frequency: "monthly"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 8
+    step_id: "AUDIT-008"
+    action: "Maintain backup strategy and execute recovery procedures when needed"
+
+    substeps:
+      - substep_id: "AUDIT-008-01"
+        action: "Maintain backups: daily incremental, weekly full, geographic distribution, encrypted cloud"
+        parameters: null
+
+      - substep_id: "AUDIT-008-02"
+        action: "Detect corruption: automated checks, hash/signature validation"
+        parameters: null
+
+      - substep_id: "AUDIT-008-03"
+        action: "Execute recovery: assess damage, identify restore point, restore data, verify integrity"
+        parameters: null
+
+      - substep_id: "AUDIT-008-04"
+        action: "Document incident in CAPA system and initiate root cause analysis"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "backup_completeness"
+        acceptance_criteria: "All backups successful"
+        frequency: "daily"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 9
+    step_id: "AUDIT-009"
+    action: "Maintain inspection readiness with prepared documentation and demonstrations"
+
+    substeps:
+      - substep_id: "AUDIT-009-01"
+        action: "Maintain pre-inspection checklist: IQ/OQ/PQ, data integrity evidence, reports, training, policies"
+        parameters: null
+
+      - substep_id: "AUDIT-009-02"
+        action: "Prepare demonstration scripts: immutability, ALCOA+ compliance, batch lifecycle"
+        parameters: null
+
+      - substep_id: "AUDIT-009-03"
+        action: "Respond to inspector queries within timeframes: batch (<5m), demo (<10m), logins (<2m)"
+        parameters: null
+
+    parameters: null
+
+    controls: []
+
+    documentation_required: true
+    forms:
+      - "CHKLST-AUD-002" # Inspection Readiness Checklist
+
+# ==============================================================================
+# QUALITY CONTROLS
+# ==============================================================================
+quality_controls:
+  - control_id: "QC-AUD-001"
+    control_type: "verification"
+    description: "Logging coverage - 100% critical events captured"
+    frequency: "continuous"
+    acceptance_criteria: "100% capture within 5 seconds"
+    responsible_role: "ROLE-IT-001"
+    form_ref: null
+
+  - control_id: "QC-AUD-002"
+    control_type: "verification"
+    description: "Data integrity - hash verification success"
+    frequency: "continuous"
+    acceptance_criteria: "99.99% success rate"
+    responsible_role: "ROLE-IT-001"
+    form_ref: null
+
+  - control_id: "QC-AUD-003"
+    control_type: "measurement"
+    description: "System availability monitoring"
+    frequency: "continuous"
+    acceptance_criteria: "99.9% uptime"
+    responsible_role: "ROLE-IT-001"
+    form_ref: null
+
+  - control_id: "QC-AUD-004"
+    control_type: "inspection"
+    description: "Periodic audit trail review"
+    frequency: "monthly"
+    acceptance_criteria: "No critical issues identified"
+    responsible_role: "ROLE-QA-001"
+    form_ref: "REPORT-AUD-004"
+
+  - control_id: "QC-AUD-005"
+    control_type: "validation"
+    description: "Internal audit of system"
+    frequency: "quarterly"
+    acceptance_criteria: "Findings resolved within 30 days"
+    responsible_role: "ROLE-AUD-001"
+    form_ref: null
+
+# ==============================================================================
+# SAFETY REQUIREMENTS
+# ==============================================================================
+safety_requirements:
+  ppe: [] # UNDEFINED: IT procedure, no physical PPE
+
+  hazards:
+    - hazard_description: "Data breach - unauthorized audit trail access"
+      severity: "high"
+      mitigation_measures:
+        - "RBAC implementation"
+        - "Multi-factor authentication"
+        - "Access audit trail"
+
+    - hazard_description: "Data loss - storage failure or corruption"
+      severity: "critical"
+      mitigation_measures:
+        - "Multiple backup strategies"
+        - "Geographic distribution"
+        - "Immutable storage (WORM)"
+
+    - hazard_description: "Compliance risk - regulatory non-compliance"
+      severity: "critical"
+      mitigation_measures:
+        - "ALCOA+ compliance validation"
+        - "Periodic audits"
+        - "Inspection readiness maintenance"
+
+# ==============================================================================
+# RECORDS AND DOCUMENTATION
+# ==============================================================================
+records:
+  - record_id: "REC-AUD-001"
+    record_type: "audit_trail_records"
+    description: "All audit trail records"
+    retention_period: "permanent"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-AUD-002"
+    record_type: "emergency_access_records"
+    description: "Emergency access requests and approvals"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-AUD-003"
+    record_type: "access_log"
+    description: "Audit trail access log (meta-audit)"
+    retention_period: "7_years"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-AUD-004"
+    record_type: "monthly_reviews"
+    description: "Monthly quality review reports"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "monthly"
+
+# ==============================================================================
+# TRAINING REQUIREMENTS
+# ==============================================================================
+training_requirements:
+  required_courses:
+    - course_id: "TRN-AUD-001"
+      course_name: "Audit Trail and e-Signatures"
+      duration_hours: 8
+      recertification_months: 12
+
+  prerequisites:
+    - "TRN-GMP-001"
+    - "TRN-DI-001"
+
+# ==============================================================================
+# RELATED DOCUMENTS
+# ==============================================================================
+related_documents:
+  forms:
+    - "FORM-AUD-001" # Emergency Access Request
+
+  checklists:
+    - "CHKLST-AUD-001" # ALCOA+ Compliance
+    - "CHKLST-AUD-002" # Inspection Readiness
+
+  reports:
+    - "REPORT-AUD-001" # Daily Activity Summary
+    - "REPORT-AUD-002" # Security Report
+    - "REPORT-AUD-003" # Data Integrity Report
+    - "REPORT-AUD-004" # Compliance Report
+    - "REPORT-AUD-005" # Performance Report
+
+  parent_sops: []
+  child_sops: []
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_AuditTrail.md v2.0"
+    approved_by: "Pending"

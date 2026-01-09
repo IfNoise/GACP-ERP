@@ -1,0 +1,555 @@
+# DSL: ALCOA+ Verification Checklist
+# Version: 1.0
+# Source: SOP_DataIntegrity.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-DI-001"
+  title: "ALCOA+ Principles Verification Checklist"
+  version: "1.0"
+  status: "active"
+  checklist_type: "verification"
+  related_sop: "SOP-DI-001"
+  department: "Quality Assurance"
+
+checklist_context:
+  purpose: "Systematic verification of ALCOA+ compliance for data, systems, or processes to ensure comprehensive data integrity per regulatory requirements"
+
+  when_to_use:
+    - "New system validation and qualification"
+    - "Periodic data integrity audits (quarterly/annual)"
+    - "Investigation of data integrity issues"
+    - "Regulatory inspection preparation"
+    - "Quality system internal audits"
+    - "Change control data integrity impact assessment"
+    - "Supplier/vendor data integrity assessment"
+
+  completion_requirements:
+    required_qualifications: "Quality Assurance personnel trained in ALCOA+ principles and data integrity requirements"
+    estimated_time: "30-120 minutes depending on scope"
+    passing_criteria: "All critical items must pass. Overall score ≥95% required for acceptable data integrity compliance."
+
+checklist_sections:
+  - section_id: "SEC-001"
+    section_title: "Checklist Information"
+    section_order: 1
+
+    items:
+      - item_id: "INFO-001"
+        item_text: "Checklist ID and Date"
+        item_type: "information"
+        criticality: "informational"
+        fields:
+          - "Checklist ID: AUTO-GENERATED (CHKLST-DI-YYYY-NNNN)"
+          - "Verification Date: [DATE]"
+          - "Verifier Name: [NAME]"
+          - "Verifier Title: [TITLE]"
+
+      - item_id: "INFO-002"
+        item_text: "Scope of Verification"
+        item_type: "information"
+        criticality: "informational"
+        fields:
+          - "System/Process Name: [TEXT]"
+          - "System Version (if applicable): [TEXT]"
+          - "Data Type(s) Reviewed: [MULTI-SELECT: Analytical, Production, Quality, Regulatory, Business, System]"
+          - "Verification Type: [DROPDOWN: New System, Periodic Audit, Issue Investigation, Change Assessment, Other]"
+
+      - item_id: "INFO-003"
+        item_text: "Sample Size and Methodology"
+        item_type: "information"
+        criticality: "informational"
+        fields:
+          - "Sample Size: [NUMBER] records reviewed"
+          - "Sampling Method: [DROPDOWN: Random, Risk-Based, Representative, Complete Population, Targeted]"
+          - "Date Range of Sample: [DATE RANGE]"
+
+  - section_id: "SEC-002"
+    section_title: "Attributable (A) - User Attribution and Accountability"
+    section_order: 2
+    instructions: "Verify that all data can be attributed to the individual who generated, modified, or reviewed it"
+
+    items:
+      - item_id: "ATTR-001"
+        item_text: "Unique user identification: Each user has a unique user ID that cannot be shared"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review user accounts in system, interview personnel about credential sharing policies"
+        acceptance_criteria: "100% of users have unique IDs, no shared accounts, credential sharing policy documented and enforced"
+        evidence_required: true
+        common_findings:
+          - "Shared generic accounts (e.g., 'labuser', 'admin')"
+          - "Temporary accounts with shared passwords"
+          - "Service accounts used for manual activities"
+
+      - item_id: "ATTR-002"
+        item_text: "User authentication: Strong authentication required (password complexity, MFA for critical systems)"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review authentication settings, test login procedures, review password policy"
+        acceptance_criteria: "Password complexity enforced (min 8 char, upper/lower/number/special), MFA for critical systems, account lockout after failed attempts"
+        evidence_required: true
+
+      - item_id: "ATTR-003"
+        item_text: "User metadata captured: System captures user ID, full name, timestamp for all data activities"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review sample of data records, verify metadata completeness"
+        acceptance_criteria: "100% of data records include user attribution metadata (user ID, name, role, timestamp)"
+        evidence_required: true
+
+      - item_id: "ATTR-004"
+        item_text: "Electronic signatures: Electronic signatures meet 21 CFR Part 11 requirements (unique ID, non-repudiation, meaning)"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review electronic signature implementation, test signature application, review audit trail"
+        acceptance_criteria: "E-signatures capture: user ID, name, meaning, timestamp. Linked to signed record. Cannot be repudiated."
+        evidence_required: true
+
+      - item_id: "ATTR-005"
+        item_text: "Session management: Secure session tracking with automatic timeout and re-authentication"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Test session timeout (should be ≤15 minutes inactivity), verify re-authentication required"
+        acceptance_criteria: "Session timeout ≤15 minutes, re-authentication required after timeout, session logs maintained"
+        evidence_required: false
+
+      - item_id: "ATTR-006"
+        item_text: "Device tracking: Devices used for data entry are identified (IP address, device ID, location if applicable)"
+        item_type: "yes_no_na"
+        criticality: "moderate"
+        verification_method: "Review audit trail for device metadata, verify device registration process"
+        acceptance_criteria: "Device identifiers captured in audit trail (IP address minimum, device ID preferred)"
+        evidence_required: false
+
+  - section_id: "SEC-003"
+    section_title: "Legible (L) - Data Readability and Clarity"
+    section_order: 3
+    instructions: "Verify that data is legible and readable throughout retention period"
+
+    items:
+      - item_id: "LEG-001"
+        item_text: "Font and format standards: Data displayed and printed in readable fonts with adequate size (≥10pt)"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review printed reports and screen displays, verify font specifications"
+        acceptance_criteria: "Standardized fonts (Arial, Calibri), minimum 10pt size, high contrast"
+        evidence_required: false
+
+      - item_id: "LEG-002"
+        item_text: "Image resolution: Scanned documents and images meet minimum resolution standards (≥300 DPI)"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review sample of scanned documents, check image properties"
+        acceptance_criteria: "All scanned documents ≥300 DPI, OCR applied for searchability where appropriate"
+        evidence_required: true
+
+      - item_id: "LEG-003"
+        item_text: "Character encoding: UTF-8 or equivalent encoding supports international characters"
+        item_type: "yes_no_na"
+        criticality: "moderate"
+        verification_method: "Review system character encoding settings, test special character entry"
+        acceptance_criteria: "UTF-8 encoding, international characters display correctly"
+        evidence_required: false
+
+      - item_id: "LEG-004"
+        item_text: "Format preservation: Original file formats preserved, or migration procedures documented"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review format preservation strategy, verify PDF/A archival for critical documents"
+        acceptance_criteria: "Original formats retained OR migrated to accessible format (PDF/A) with validation"
+        evidence_required: true
+
+      - item_id: "LEG-005"
+        item_text: "Accessibility: Data accessible throughout retention period, rendering tools maintained"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Attempt to access archived data from previous periods, verify readability"
+        acceptance_criteria: "Archived data from retention period accessible and readable within target retrieval time"
+        evidence_required: true
+
+  - section_id: "SEC-004"
+    section_title: "Contemporaneous (C) - Timely Data Recording"
+    section_order: 4
+    instructions: "Verify data is recorded at the time of activity or as soon as practicable"
+
+    items:
+      - item_id: "CONT-001"
+        item_text: "Real-time timestamps: System-generated timestamps synchronized across all systems (NTP)"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Verify NTP synchronization, check timestamp consistency across systems, review time server logs"
+        acceptance_criteria: "NTP implemented with ±100ms accuracy, time synchronization monitored, timestamps in UTC or with timezone"
+        evidence_required: true
+
+      - item_id: "CONT-002"
+        item_text: "Workflow integration: Data capture integrated into workflows, minimal manual transcription"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Observe data entry process, verify workflow automation, identify transcription steps"
+        acceptance_criteria: "Data entry points integrated into workflow, automated capture where feasible, transcription documented and justified"
+        evidence_required: true
+
+      - item_id: "CONT-003"
+        item_text: "Immediate storage: No data buffering, immediate database commit (<5 seconds transaction time)"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review system architecture, test data entry and verify immediate storage, check transaction logs"
+        acceptance_criteria: "Data committed to database immediately, transaction time <5 seconds, no buffering or queuing"
+        evidence_required: false
+
+      - item_id: "CONT-004"
+        item_text: "Delayed entry procedures: Procedures exist for handling delayed or reconstructed data with justification"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review delayed entry SOP, verify delayed data flagged in system, check supervisor approval"
+        acceptance_criteria: "Delayed entry procedure documented, delay flagged, justification required, supervisor approval"
+        evidence_required: true
+
+      - item_id: "CONT-005"
+        item_text: "Delay analysis: Review sample for delays between activity time and data entry time"
+        item_type: "sample_review"
+        criticality: "major"
+        verification_method: "Compare activity timestamps to data entry timestamps in sample, calculate delays"
+        acceptance_criteria: ">95% of data entries contemporaneous per SOP-DI-001 acceptable delays, flagged delays have justification"
+        evidence_required: true
+
+  - section_id: "SEC-005"
+    section_title: "Original (O) - Original Data Preservation"
+    section_order: 5
+    instructions: "Verify original data is preserved and protected from unauthorized modification"
+
+    items:
+      - item_id: "ORIG-001"
+        item_text: "WORM storage: Critical original data stored in Write-Once-Read-Many (WORM) storage"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Verify WORM storage implementation for critical data (batch records, analytical results, regulatory submissions), test immutability"
+        acceptance_criteria: "WORM storage for critical data, immutability validated, retention per requirements"
+        evidence_required: true
+
+      - item_id: "ORIG-002"
+        item_text: "Cryptographic hashing: SHA-256 or equivalent hashing for data integrity verification"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Verify hash calculation on data storage, test hash verification on retrieval, review hash algorithms"
+        acceptance_criteria: "SHA-256 or stronger hashing, hash verified on access, hash stored securely"
+        evidence_required: true
+
+      - item_id: "ORIG-003"
+        item_text: "Version control: Complete version history maintained, all versions accessible"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review version control system, verify version history for sample records, test version retrieval"
+        acceptance_criteria: "All versions retained, version history complete, previous versions accessible, change tracking"
+        evidence_required: true
+
+      - item_id: "ORIG-004"
+        item_text: "Copy certification: True copies are certified with metadata, linked to original"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review copy certification procedure, verify certified copies include metadata and original reference"
+        acceptance_criteria: "Copy certification process documented, certified by authorized personnel, original link maintained"
+        evidence_required: true
+
+      - item_id: "ORIG-005"
+        item_text: "Modification controls: Original data protected from unauthorized modification, audit trail for all changes"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Test modification controls, verify access restrictions, review modification audit trail"
+        acceptance_criteria: "Original data cannot be overwritten, modifications create new versions, complete audit trail, authorization required"
+        evidence_required: true
+
+  - section_id: "SEC-006"
+    section_title: "Accurate (A) - Data Accuracy and Reliability"
+    section_order: 6
+    instructions: "Verify data is accurate, reliable, and free from errors"
+
+    items:
+      - item_id: "ACC-001"
+        item_text: "Input validation: Real-time validation of data entry with immediate feedback"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Test data entry validation (format, range, business rules), verify user feedback, review validation rules"
+        acceptance_criteria: "Validation rules implemented, real-time feedback, invalid data rejected, validation rules documented"
+        evidence_required: true
+
+      - item_id: "ACC-002"
+        item_text: "Calculation verification: Automated calculations verified, critical calculations independently checked"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review calculation formulas, test calculations, verify independent verification for critical calculations"
+        acceptance_criteria: "Calculations automated where possible, formulas validated, critical calculations independently verified"
+        evidence_required: true
+
+      - item_id: "ACC-003"
+        item_text: "Cross-validation: Data validated against related data and external references"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Test cross-reference validation (e.g., material lot vs. CoA, batch vs. specification), verify referential integrity"
+        acceptance_criteria: "Cross-validation rules implemented, referential integrity enforced, validation errors flagged"
+        evidence_required: false
+
+      - item_id: "ACC-004"
+        item_text: "Double data entry: Critical data entered twice independently with comparison (if applicable)"
+        item_type: "yes_no_na"
+        criticality: "moderate"
+        verification_method: "Verify double entry procedure for critical data, review comparison and discrepancy resolution"
+        acceptance_criteria: "Double entry for critical data per SOP, independent entry verified, discrepancies resolved with documentation"
+        evidence_required: true
+
+      - item_id: "ACC-005"
+        item_text: "Accuracy sample review: Review sample data for accuracy (compare to source, check calculations)"
+        item_type: "sample_review"
+        criticality: "major"
+        verification_method: "Select sample, compare to source documents/raw data, verify calculations, assess accuracy"
+        acceptance_criteria: ">99% accuracy for critical data, >95% for non-critical, errors documented and investigated"
+        evidence_required: true
+
+  - section_id: "SEC-007"
+    section_title: "Complete (C) - Data Completeness"
+    section_order: 7
+    instructions: "Verify data is complete with all required information"
+
+    items:
+      - item_id: "COMP-001"
+        item_text: "Schema validation: Data validated against predefined schemas, mandatory fields enforced"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review data schemas, test mandatory field enforcement, verify schema validation on entry"
+        acceptance_criteria: "Data schemas defined, mandatory fields cannot be skipped, schema validation automated"
+        evidence_required: true
+
+      - item_id: "COMP-002"
+        item_text: "Mandatory fields: All required fields populated, no omissions"
+        item_type: "sample_review"
+        criticality: "critical"
+        verification_method: "Review sample for missing mandatory fields, verify completeness"
+        acceptance_criteria: "100% of mandatory fields populated in sample, no missing critical data"
+        evidence_required: true
+
+      - item_id: "COMP-003"
+        item_text: "Relationship integrity: All data relationships complete (foreign keys, cross-references valid)"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Test referential integrity, verify foreign key constraints, check orphaned records"
+        acceptance_criteria: "Referential integrity enforced, no orphaned records, all relationships valid"
+        evidence_required: false
+
+      - item_id: "COMP-004"
+        item_text: "Supporting documentation: Required supporting documentation attached and complete"
+        item_type: "sample_review"
+        criticality: "major"
+        verification_method: "Review sample for required attachments (CoAs, protocols, reports), verify completeness"
+        acceptance_criteria: ">95% of records have required supporting documentation, missing docs have justification"
+        evidence_required: true
+
+      - item_id: "COMP-005"
+        item_text: "Audit trail completeness: Complete audit trails for all data activities (CRUD operations)"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review audit trail for sample records, verify create/read/update/delete tracking, check for gaps"
+        acceptance_criteria: "100% audit trail capture, no gaps, all CRUD operations tracked"
+        evidence_required: true
+
+  - section_id: "SEC-008"
+    section_title: "Consistent (C) - Data Consistency"
+    section_order: 8
+    instructions: "Verify data is internally consistent and consistent across systems"
+
+    items:
+      - item_id: "CONS-001"
+        item_text: "Format standardization: Consistent data formats (ISO 8601 dates, SI units, decimal separators)"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review data format standards, verify format consistency in sample, test format validation"
+        acceptance_criteria: "Format standards documented (ISO 8601 dates, SI units), validation enforced, consistent across system"
+        evidence_required: true
+
+      - item_id: "CONS-002"
+        item_text: "Terminology management: Controlled vocabulary and standardized terminology used"
+        item_type: "yes_no_na"
+        criticality: "moderate"
+        verification_method: "Review terminology database/standards, verify drop-down lists use controlled vocabulary, check consistency"
+        acceptance_criteria: "Controlled vocabulary documented, terminology consistent, drop-downs from master list"
+        evidence_required: false
+
+      - item_id: "CONS-003"
+        item_text: "Unit consistency: Units of measurement consistent, conversions automated and validated"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review unit standards, verify unit labels, test unit conversions, check consistency"
+        acceptance_criteria: "SI units preferred, units clearly labeled, conversions automated with validation, consistent throughout"
+        evidence_required: false
+
+      - item_id: "CONS-004"
+        item_text: "Cross-system consistency: Data consistent across integrated systems, reconciliation performed"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Select data that appears in multiple systems, verify consistency, review reconciliation procedures"
+        acceptance_criteria: "Data matches across systems, discrepancies <1%, reconciliation procedure documented and followed"
+        evidence_required: true
+
+      - item_id: "CONS-005"
+        item_text: "Temporal consistency: Time-series data shows logical progression, no unexplained gaps or anomalies"
+        item_type: "sample_review"
+        criticality: "moderate"
+        verification_method: "Review time-series data (environmental monitoring, batch progression), verify logical sequence, identify gaps"
+        acceptance_criteria: "Temporal data logical, gaps documented with justification, no unexplained inconsistencies"
+        evidence_required: false
+
+  - section_id: "SEC-009"
+    section_title: "Enduring (E) - Data Preservation and Durability"
+    section_order: 9
+    instructions: "Verify data is preserved throughout required retention period"
+
+    items:
+      - item_id: "END-001"
+        item_text: "Storage tier management: Tiered storage implemented (HOT/WARM/COLD), automated migration"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review storage tier strategy, verify tiering rules, test migration procedures"
+        acceptance_criteria: "Storage tiers defined, automated migration, performance meets SLAs for each tier"
+        evidence_required: true
+
+      - item_id: "END-002"
+        item_text: "Redundant storage: Multiple copies in geographically distributed locations"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Verify replication configuration, identify storage locations, review disaster recovery plan"
+        acceptance_criteria: "Primary + secondary storage sites, real-time replication for critical data, geographically distributed"
+        evidence_required: true
+
+      - item_id: "END-003"
+        item_text: "Integrity monitoring: Continuous hash verification, periodic integrity checks"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review integrity monitoring procedures, verify hash checks on access, check scheduled integrity validation"
+        acceptance_criteria: "Automated hash verification on access, quarterly integrity checks, corruption detection and alerting"
+        evidence_required: true
+
+      - item_id: "END-004"
+        item_text: "Format migration: Proactive migration to accessible formats before obsolescence"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review format migration plan, verify PDF/A archival, check technology refresh schedule"
+        acceptance_criteria: "Format migration plan exists, PDF/A for archival, technology refresh every 5 years"
+        evidence_required: true
+
+      - item_id: "END-005"
+        item_text: "Retention compliance: Data retained per retention schedule, disposal authorized and documented"
+        item_type: "yes_no_na"
+        criticality: "major"
+        verification_method: "Review retention schedules by data category, verify retention tracking, review disposal procedures"
+        acceptance_criteria: "Retention schedules documented (7+ years minimum for quality), tracking automated, disposal authorized"
+        evidence_required: true
+
+  - section_id: "SEC-010"
+    section_title: "Available (A) - Data Accessibility"
+    section_order: 10
+    instructions: "Verify data is readily accessible throughout retention period"
+
+    items:
+      - item_id: "AVAIL-001"
+        item_text: "Retrieval performance: Data retrievable within target times (HOT <1s, WARM <10s, COLD <5min)"
+        item_type: "performance_test"
+        criticality: "major"
+        verification_method: "Test data retrieval from each storage tier, measure response times, verify SLA compliance"
+        acceptance_criteria: "95th percentile retrieval times meet SLA: HOT <1s, WARM <10s, COLD <5min"
+        evidence_required: true
+
+      - item_id: "AVAIL-002"
+        item_text: "Search capabilities: Intelligent search with full-text indexing, faceted search, filtering"
+        item_type: "yes_no_na"
+        criticality: "moderate"
+        verification_method: "Test search functionality, verify full-text indexing, test faceted search and filters"
+        acceptance_criteria: "Full-text search implemented, search response <2 seconds, filters and faceted search available"
+        evidence_required: false
+
+      - item_id: "AVAIL-003"
+        item_text: "Access control: Role-based access enforced, audit trail of all access"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Test access controls, verify RBAC implementation, review access audit trail"
+        acceptance_criteria: "RBAC enforced, least privilege principle, all access logged in audit trail, unauthorized access denied"
+        evidence_required: true
+
+      - item_id: "AVAIL-004"
+        item_text: "System availability: System uptime >99.9%, redundancy and failover implemented"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review availability monitoring, verify uptime reports, test failover procedures"
+        acceptance_criteria: "Uptime >99.9% (max 8.76 hours/year downtime), redundancy implemented, failover tested"
+        evidence_required: true
+
+      - item_id: "AVAIL-005"
+        item_text: "Disaster recovery: DR plan exists, tested quarterly, RTO/RPO meet requirements"
+        item_type: "yes_no_na"
+        criticality: "critical"
+        verification_method: "Review DR plan, verify quarterly testing, check RTO (4 hours) and RPO (1 hour) targets"
+        acceptance_criteria: "DR plan documented, tested quarterly with evidence, RTO ≤4 hours, RPO ≤1 hour"
+        evidence_required: true
+
+scoring:
+  scoring_method: "weighted"
+  critical_items_must_pass: true
+
+  item_weights:
+    critical: 5
+    major: 3
+    moderate: 2
+    minor: 1
+    informational: 0
+
+  scoring_formula: "(Sum of passed item weights / Sum of applicable item weights) × 100"
+
+  passing_criteria:
+    overall_score: "≥95%"
+    critical_items: "100% (all critical items must pass)"
+    major_items: "≥90%"
+
+  rating_scale:
+    - range: "95-100%"
+      rating: "Excellent"
+      description: "Exemplary ALCOA+ compliance, no significant findings"
+    - range: "90-94%"
+      rating: "Good"
+      description: "Good compliance with minor improvement opportunities"
+    - range: "80-89%"
+      rating: "Acceptable"
+      description: "Acceptable with notable gaps requiring remediation"
+    - range: "<80%"
+      rating: "Unacceptable"
+      description: "Significant compliance gaps, immediate corrective action required"
+
+completion:
+  reviewer_certification:
+    statement: "I certify that I have completed this ALCOA+ verification checklist thoroughly and documented findings accurately"
+    required_fields:
+      - "Reviewer Name"
+      - "Reviewer Title"
+      - "Date"
+      - "Electronic Signature"
+
+  follow_up_actions:
+    - condition: "Any critical item fails"
+      action: "Immediate escalation to Quality Manager, investigation required per FORM-DI-002"
+    - condition: "Overall score <95%"
+      action: "Document findings, create action plan with timeline, assign CAPA if systemic"
+    - condition: "Overall score ≥95%"
+      action: "Document verification as evidence of compliance, schedule next review"
+
+storage:
+  location: "Mayan-EDMS under Data Integrity Audits folder"
+  retention_period: "7_years"
+  backup_requirement: "automated_daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP-DI-001"
+    approved_by: "Pending"

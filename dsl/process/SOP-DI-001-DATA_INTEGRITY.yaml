@@ -1,0 +1,1312 @@
+# DSL: Data Integrity Management System
+# Version: 2.0
+# Source: SOP_DataIntegrity.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+metadata:
+  id: "SOP-DI-001"
+  title: "Comprehensive Data Integrity Management"
+  version: "2.0"
+  status: "active"
+  effective_date: "2025-01-15"
+  category: "critical_quality_compliance"
+  classification: "Critical - Regulatory Compliance"
+  department:
+    - "Quality Assurance"
+    - "Laboratory Management"
+    - "IT Operations"
+  document_owner: "Quality Assurance Manager"
+
+regulatory_context:
+  purpose: "Establish comprehensive framework for maintaining data integrity throughout all aspects of GACP-compliant cannabis cultivation and ERP operations, ensuring compliance with ALCOA+ principles, FDA 21 CFR Part 11, EU GMP Annex 11, and international data integrity guidelines"
+
+  scope:
+    includes:
+      - "Laboratory data: Analytical results, testing protocols, calibration records, method validation"
+      - "Production data: Batch records, cultivation parameters, environmental monitoring, yield data"
+      - "Quality data: Inspection records, deviation investigations, CAPA documentation, audit findings"
+      - "Regulatory data: Submissions, correspondence, compliance records, validation documentation"
+      - "Business data: Financial records, inventory data, personnel records, training documentation"
+      - "System data: Audit trails, system logs, backup records, security events"
+
+    excludes:
+      - "Personal employee data not related to GMP/GACP operations"
+      - "Marketing and promotional materials"
+      - "External vendor data not integrated into GACP-ERP"
+
+  regulatory_references:
+    - standard: "FDA_21_CFR_Part_11"
+      requirement: "Electronic records and electronic signatures"
+      applicability: "All electronic records and signatures"
+    - standard: "EU_GMP_Annex_11"
+      requirement: "Computerized systems validation and data integrity"
+      applicability: "All computerized systems"
+    - standard: "ALCOA_PLUS"
+      requirement: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+      applicability: "All data throughout lifecycle"
+    - standard: "MHRA_Data_Integrity"
+      requirement: "UK MHRA data integrity guidelines"
+      applicability: "All GMP data"
+    - standard: "WHO_Data_Integrity"
+      requirement: "WHO data integrity guidelines"
+      applicability: "All pharmaceutical quality data"
+    - standard: "ISO_9001_2015"
+      requirement: "Quality management systems - Data integrity controls"
+      applicability: "All quality management data"
+
+  related_procedures:
+    - "SOP-AUDIT-001: Audit Trail and Electronic Signatures"
+    - "SOP-DOC-001: Document Control Management"
+    - "SOP-CHG-001: Change Control Management"
+    - "SOP-CAPA-001: Corrective and Preventive Actions"
+    - "SOP_ITSecurity: IT Security Management"
+    - "SOP_Training: Training and Competency Management"
+
+integration_framework:
+  systems:
+    - system: "DataIntegrityModule"
+      purpose: "Central data governance and monitoring system"
+      integration_points:
+        - "Real-time ALCOA+ compliance monitoring"
+        - "Data quality metrics dashboard"
+        - "Automated data integrity assessment"
+
+    - system: "AuditTrailSystem"
+      purpose: "Comprehensive audit trail management across all modules"
+      integration_points:
+        - "Multi-layer audit capture (database, application, system, blockchain)"
+        - "Immutable audit records in ImmuDB"
+        - "21 CFR Part 11 compliant electronic signatures"
+
+    - system: "Mayan-EDMS"
+      purpose: "Electronic document management with version control"
+      integration_points:
+        - "Controlled document lifecycle"
+        - "Version history and change tracking"
+        - "Access control and distribution"
+
+    - system: "SecurityFramework"
+      purpose: "Multi-layered security controls and access management"
+      integration_points:
+        - "Role-based access control (RBAC)"
+        - "Multi-factor authentication"
+        - "Encryption at rest and in transit"
+
+    - system: "BackupSystems"
+      purpose: "Validated backup and recovery procedures"
+      integration_points:
+        - "Automated daily backups"
+        - "Quarterly disaster recovery tests"
+        - "Backup integrity verification"
+
+    - system: "ValidationFramework"
+      purpose: "Continuous validation of data integrity controls"
+      integration_points:
+        - "Automated validation testing"
+        - "Periodic revalidation"
+        - "Change impact assessment"
+
+alcoa_plus_principles:
+  - principle_id: "ALCOA-001"
+    principle_name: "Attributable"
+    definition: "Data must be attributable to the individual who generated it with clear identification, authentication, and non-repudiation"
+
+    implementation:
+      user_attribution:
+        - control: "Unique user identification"
+          description: "Each user has unique credentials that cannot be shared"
+          verification: "User management system with individual accounts"
+
+        - control: "Multi-factor authentication"
+          description: "Biometric or token-based authentication required for critical operations"
+          verification: "Authentication logs with biometric/token verification"
+
+        - control: "Device registration"
+          description: "All devices used for data entry registered and tracked"
+          verification: "Device management system with asset tracking"
+
+        - control: "Location tracking"
+          description: "GPS and network-based location verification for mobile devices"
+          verification: "Location metadata captured with each transaction"
+
+        - control: "Session management"
+          description: "Secure session tracking with automatic timeout (15 minutes inactivity) and re-authentication"
+          verification: "Session logs with timeout enforcement"
+
+      attribution_metadata:
+        required_fields:
+          - "user_id: Unique system identifier"
+          - "user_name: Full legal name"
+          - "user_role: Assigned role at time of action"
+          - "timestamp: UTC timestamp with millisecond precision"
+          - "session_id: Unique session identifier"
+          - "ip_address: Network IP address"
+          - "device_id: Unique device identifier"
+          - "biometric_verification: Biometric authentication status (if applicable)"
+          - "location: Geographic location (if applicable)"
+
+        storage: "Embedded in data record with cryptographic hash for integrity"
+
+    verification_procedures:
+      - "Monthly audit of user accounts and access rights"
+      - "Quarterly review of authentication logs"
+      - "Annual validation of attribution controls"
+
+    non_compliance_handling:
+      - severity: "critical"
+        action: "Immediate investigation, data review, CAPA initiation"
+        notification: "Quality Manager, IT Security Manager within 1 hour"
+
+  - principle_id: "ALCOA-002"
+    principle_name: "Legible"
+    definition: "Data must be legible and readable throughout the entire retention period, including original records and true copies"
+
+    implementation:
+      legibility_standards:
+        - standard: "Font requirements"
+          requirement: "Standardized fonts (Arial, Calibri) with minimum 10pt size for printed documents"
+          verification: "Document template validation"
+
+        - standard: "Image resolution"
+          requirement: "Minimum 300 DPI for scanned documents and images"
+          verification: "Automated resolution check on upload"
+
+        - standard: "Color contrast"
+          requirement: "High contrast ratios (minimum 4.5:1), WCAG 2.1 AA compliance"
+          verification: "Accessibility validation tools"
+
+        - standard: "Character encoding"
+          requirement: "UTF-8 encoding for international character support"
+          verification: "Encoding validation on data entry"
+
+        - standard: "Format consistency"
+          requirement: "ISO 8601 date/time formats, SI units, standardized number formats"
+          verification: "Format validation rules"
+
+      format_preservation:
+        - "Original file formats retained (PDF/A for archival)"
+        - "Rendering engine maintained for proprietary formats"
+        - "Migration procedures for format obsolescence"
+        - "Regular accessibility testing (quarterly)"
+
+      special_considerations:
+        - context: "Handwritten data"
+          requirement: "Scanned at 600 DPI minimum, OCR with human verification"
+        - context: "Color-coded data"
+          requirement: "Color meaning documented, alternative text indicators provided"
+        - context: "Charts and graphs"
+          requirement: "High resolution, underlying data tables retained"
+
+    verification_procedures:
+      - "Quarterly legibility audit of archived documents"
+      - "Annual format migration assessment"
+      - "Accessibility compliance testing with screen readers"
+
+    non_compliance_handling:
+      - severity: "major"
+        action: "Document review, format migration if needed, preventive measures"
+        notification: "Document Controller, Quality Assurance within 24 hours"
+
+  - principle_id: "ALCOA-003"
+    principle_name: "Contemporaneous"
+    definition: "Data must be recorded at the time the activity is performed or as soon as practicable thereafter"
+
+    implementation:
+      real_time_capture:
+        - control: "Automated time stamping"
+          description: "System-generated timestamps synchronized across all systems via NTP (±100ms accuracy)"
+          verification: "NTP sync status monitoring, time server redundancy"
+
+        - control: "Workflow integration"
+          description: "Data capture integrated into standard operating procedures, no manual data transcription"
+          verification: "Workflow analysis, electronic workflow system"
+
+        - control: "Immediate storage"
+          description: "No data buffering, immediate database commit (transaction timeout <5 seconds)"
+          verification: "Transaction log analysis"
+
+        - control: "Mobile data capture"
+          description: "Offline capability with automatic sync upon connection"
+          verification: "Sync log validation, data integrity checks"
+
+      acceptable_delays:
+        - scenario: "Instrument data transfer"
+          maximum_delay: "Within same shift (maximum 8 hours)"
+          justification: "Automated transfer with manual oversight"
+          documentation_required: "Transfer log with reason"
+
+        - scenario: "Field observations"
+          maximum_delay: "End of shift (maximum 12 hours)"
+          justification: "Manual recording from field conditions"
+          documentation_required: "Observation log with explanation"
+
+        - scenario: "Emergency situations"
+          maximum_delay: "24 hours with documented justification"
+          justification: "Safety or business continuity priorities"
+          documentation_required: "Incident report, management approval"
+
+      delayed_data_handling:
+        - "Clearly marked as delayed entry"
+        - "Reason for delay documented"
+        - "Supervisor review and approval"
+        - "Investigation if delay exceeds acceptable threshold"
+
+    verification_procedures:
+      - "Weekly review of data entry timestamps vs activity timestamps"
+      - "Monthly analysis of delayed entries"
+      - "Quarterly NTP synchronization validation"
+
+    non_compliance_handling:
+      - severity: "major"
+        action: "Investigation of delay, data verification, process improvement"
+        notification: "Quality Manager, Department Manager within 24 hours"
+
+  - principle_id: "ALCOA-004"
+    principle_name: "Original"
+    definition: "Data must be the original record or a certified true copy with complete metadata and audit trail"
+
+    implementation:
+      original_data_preservation:
+        - control: "WORM storage"
+          description: "Write-Once-Read-Many storage for critical original data (regulatory submissions, batch records, analytical results)"
+          verification: "WORM storage validation, immutability testing"
+
+        - control: "Cryptographic hashing"
+          description: "SHA-256 hashing for data integrity verification"
+          verification: "Hash verification on access, periodic integrity checks"
+
+        - control: "Blockchain integration"
+          description: "Immutable blockchain records for data provenance (using ImmuDB)"
+          verification: "Blockchain audit trail, cryptographic proof"
+
+        - control: "Version control"
+          description: "Complete version history with change tracking"
+          verification: "Version control system validation"
+
+      true_copy_requirements:
+        - "Exact duplicate of original with no alterations"
+        - "Metadata preserved: creation date, author, modifications, audit trail"
+        - "Copy certification: Certified by authorized personnel"
+        - "Copy purpose: Reason for copy creation documented"
+        - "Original reference: Link to original data maintained"
+        - "Copy audit trail: All access to copy tracked"
+
+      copy_certification_process:
+        steps:
+          - step: 1
+            action: "Generate exact copy with metadata"
+          - step: 2
+            action: "Calculate hash of copy and compare to original"
+          - step: 3
+            action: "Authorized personnel review and certify"
+          - step: 4
+            action: "Apply electronic signature to certification"
+          - step: 5
+            action: "Document purpose and distribution"
+
+    verification_procedures:
+      - "Monthly WORM storage integrity verification"
+      - "Quarterly hash verification of critical data"
+      - "Annual blockchain audit trail validation"
+
+    non_compliance_handling:
+      - severity: "critical"
+        action: "Immediate quarantine, investigation, regulatory notification if impact, CAPA"
+        notification: "Quality Director, Regulatory Affairs, Senior Management within 2 hours"
+
+  - principle_id: "ALCOA-005"
+    principle_name: "Accurate"
+    definition: "Data must be free from errors, reliable, and truthful, reflecting the actual observations or activities"
+
+    implementation:
+      accuracy_validation:
+        - control: "Input validation"
+          description: "Real-time validation with immediate feedback (format, range, business rules)"
+          verification: "Validation rule testing, user acceptance testing"
+
+        - control: "Calculation verification"
+          description: "Automated verification of calculations and formulas with independent verification for critical calculations"
+          verification: "Calculation validation, formula audit"
+
+        - control: "Cross-reference validation"
+          description: "Validation against related data and external references"
+          verification: "Cross-reference integrity checks"
+
+        - control: "Statistical analysis"
+          description: "Statistical process control for detecting data anomalies (control charts, outlier detection)"
+          verification: "SPC implementation, trending analysis"
+
+        - control: "Machine learning detection"
+          description: "AI-powered anomaly detection for unusual patterns"
+          verification: "ML model validation, performance monitoring"
+
+      accuracy_controls:
+        - "Double data entry for critical data (laboratory results, batch records)"
+        - "Independent review for high-risk data"
+        - "Automated range checks and reasonableness tests"
+        - "Instrument calibration and qualification"
+        - "Method validation and verification"
+
+      error_handling:
+        - detection: "Real-time validation errors, periodic data quality audits"
+        - correction: "Documented correction with reason and approval"
+        - prevention: "Root cause analysis, control improvements"
+
+    verification_procedures:
+      - "Daily validation of critical data entries"
+      - "Weekly statistical analysis of data quality"
+      - "Monthly accuracy audit of high-risk data"
+
+    non_compliance_handling:
+      - severity: "major"
+        action: "Data review, correction if needed, investigation, process improvement"
+        notification: "Quality Manager, Department Manager within 24 hours"
+
+  - principle_id: "ALCOA-006"
+    principle_name: "Complete"
+    definition: "Data must include all required information with no omissions, complete audit trails, and complete documentation"
+
+    implementation:
+      completeness_management:
+        - control: "Schema validation"
+          description: "Data validated against predefined schemas, mandatory fields enforced"
+          verification: "Schema validation testing"
+
+        - control: "Relationship integrity"
+          description: "All data relationships complete and valid (foreign key constraints, referential integrity)"
+          verification: "Database integrity checks"
+
+        - control: "Documentation completeness"
+          description: "Supporting documentation required and attached"
+          verification: "Document completeness checklist"
+
+        - control: "Audit trail completeness"
+          description: "Complete audit trails for all data activities (create, read, update, delete)"
+          verification: "Audit trail validation, 100% capture rate"
+
+      mandatory_fields:
+        - "Data identifier (unique ID)"
+        - "Data creation date/time and author"
+        - "Data content (all required fields per schema)"
+        - "Data status (draft, approved, superseded, etc.)"
+        - "Related documents/data (cross-references)"
+        - "Approval signatures (if applicable)"
+        - "Audit trail (complete history)"
+
+      incomplete_data_handling:
+        - "Flagged as incomplete in system"
+        - "Completion workflow triggered automatically"
+        - "Notifications to responsible personnel"
+        - "Cannot finalize until complete"
+        - "Periodic review of incomplete data (weekly)"
+
+    verification_procedures:
+      - "Daily completeness validation of critical data"
+      - "Weekly review of incomplete data items"
+      - "Monthly completeness audit"
+
+    non_compliance_handling:
+      - severity: "major"
+        action: "Data completion workflow, investigation if chronic, process improvement"
+        notification: "Quality Manager, Department Manager within 24 hours"
+
+  - principle_id: "ALCOA-007"
+    principle_name: "Consistent"
+    definition: "Data must be internally consistent and consistent with related data across systems, using standardized formats and terminology"
+
+    implementation:
+      consistency_framework:
+        - control: "Format standardization"
+          description: "Consistent data formats across all systems (ISO 8601 dates, SI units)"
+          verification: "Format validation, template compliance"
+
+        - control: "Terminology management"
+          description: "Standardized terminology and controlled vocabularies"
+          verification: "Terminology database validation"
+
+        - control: "Unit standardization"
+          description: "Consistent units of measurement with automated conversion"
+          verification: "Unit validation, conversion accuracy"
+
+        - control: "Naming conventions"
+          description: "Standardized naming conventions for all data elements"
+          verification: "Naming convention compliance checks"
+
+        - control: "Cross-system consistency"
+          description: "Data consistency across integrated systems validated"
+          verification: "Cross-system reconciliation, integration testing"
+
+      consistency_standards:
+        - standard: "Date/time formats"
+          requirement: "ISO 8601 (YYYY-MM-DD, HH:MM:SS UTC)"
+        - standard: "Units of measurement"
+          requirement: "SI units with documented conversions"
+        - standard: "Decimal separators"
+          requirement: "Period (.) for decimal, comma (,) for thousands"
+        - standard: "Boolean values"
+          requirement: "true/false or Yes/No (consistent within system)"
+        - standard: "Terminology"
+          requirement: "Controlled vocabulary from master terminology database"
+
+      inconsistency_handling:
+        - "Automated detection of inconsistencies"
+        - "Standardization transformations applied"
+        - "Manual review for complex inconsistencies"
+        - "Documentation of inconsistencies and resolutions"
+
+    verification_procedures:
+      - "Weekly consistency validation across integrated systems"
+      - "Monthly terminology compliance audit"
+      - "Quarterly cross-system reconciliation"
+
+    non_compliance_handling:
+      - severity: "moderate"
+        action: "Standardization, investigation if systemic, process improvement"
+        notification: "Data Integrity Manager, IT Manager within 48 hours"
+
+  - principle_id: "ALCOA-008"
+    principle_name: "Enduring"
+    definition: "Data must be durable and preserved throughout the required retention period with maintained accessibility and integrity"
+
+    implementation:
+      preservation_framework:
+        - control: "Multi-tier storage"
+          description: "Automated data migration between storage tiers (HOT: <1 year, WARM: 1-5 years, COLD: >5 years)"
+          verification: "Storage tier management validation"
+
+        - control: "Format migration"
+          description: "Proactive migration to current accessible formats before obsolescence"
+          verification: "Format migration testing, accessibility validation"
+
+        - control: "Redundant storage"
+          description: "Multiple copies in geographically distributed locations (primary, secondary, disaster recovery sites)"
+          verification: "Replication validation, disaster recovery testing"
+
+        - control: "Integrity monitoring"
+          description: "Continuous hash verification, quarterly integrity checks"
+          verification: "Integrity monitoring logs, hash validation"
+
+        - control: "Technology refresh"
+          description: "Regular technology refresh to maintain accessibility (5-year cycle)"
+          verification: "Technology refresh plan, migration validation"
+
+      retention_requirements:
+        - category: "GMP critical records"
+          period: "Lifetime of product + 1 year minimum (typically 10+ years)"
+          examples: "Batch records, analytical results, validation documentation"
+
+        - category: "Quality records"
+          period: "7 years minimum"
+          examples: "Deviations, CAPAs, audit reports, change controls"
+
+        - category: "Training records"
+          period: "Duration of employment + 3 years"
+          examples: "Training completion, competency assessments, certifications"
+
+        - category: "Financial records"
+          period: "7 years per tax regulations"
+          examples: "Invoices, purchase orders, financial statements"
+
+        - category: "Regulatory submissions"
+          period: "Lifetime of regulatory approval + 5 years"
+          examples: "License applications, regulatory correspondence"
+
+      disposal_procedures:
+        - "Retention period expiration verification"
+        - "Authorization by Quality Manager and Legal"
+        - "Secure disposal with certificate of destruction"
+        - "Disposal audit trail maintained permanently"
+
+    verification_procedures:
+      - "Quarterly integrity verification of archived data"
+      - "Annual format accessibility testing"
+      - "Biennial disaster recovery testing with data restoration"
+
+    non_compliance_handling:
+      - severity: "critical"
+        action: "Immediate investigation, data recovery attempt, regulatory notification if data loss, CAPA"
+        notification: "Quality Director, Legal, Senior Management, Regulatory Affairs within 2 hours"
+
+  - principle_id: "ALCOA-009"
+    principle_name: "Available"
+    definition: "Data must be readily available and accessible for review, audit, and inspection throughout the retention period"
+
+    implementation:
+      availability_management:
+        - control: "Rapid retrieval"
+          description: "HOT data <1 second, WARM data <10 seconds, COLD data <5 minutes"
+          verification: "Performance testing, SLA monitoring"
+
+        - control: "Intelligent search"
+          description: "AI-powered search with natural language, faceted search, full-text indexing"
+          verification: "Search accuracy testing, user acceptance"
+
+        - control: "Access control integration"
+          description: "Role-based access with complete audit trail of all access"
+          verification: "Access control validation, audit trail completeness"
+
+        - control: "Performance optimization"
+          description: "Caching, indexing, query optimization for sub-second response"
+          verification: "Performance benchmarking"
+
+        - control: "24/7 availability"
+          description: "System availability >99.9% with redundancy and failover"
+          verification: "Availability monitoring, uptime reporting"
+
+      availability_requirements:
+        - requirement: "System uptime"
+          target: "99.9% (maximum 8.76 hours downtime per year)"
+          monitoring: "Real-time monitoring with alerts"
+
+        - requirement: "Data retrieval time"
+          target: "95th percentile within tier SLA"
+          monitoring: "Performance analytics dashboard"
+
+        - requirement: "Search response time"
+          target: "<2 seconds for 95% of queries"
+          monitoring: "Query performance logging"
+
+        - requirement: "Concurrent access"
+          target: "Support 1000+ concurrent users"
+          monitoring: "Load testing, capacity planning"
+
+      unavailability_procedures:
+        - event: "Planned maintenance"
+          notification: "48 hours advance notice, off-hours scheduling"
+          mitigation: "Read-only access maintained"
+
+        - event: "Unplanned outage"
+          response_time: "Initial response <15 minutes, resolution <4 hours"
+          mitigation: "Failover to backup systems, emergency procedures"
+
+        - event: "Data corruption"
+          response_time: "Detection <1 hour, restoration <4 hours"
+          mitigation: "Restore from validated backups, integrity verification"
+
+    verification_procedures:
+      - "Daily availability monitoring and reporting"
+      - "Weekly performance analysis"
+      - "Quarterly disaster recovery testing"
+
+    non_compliance_handling:
+      - severity: "critical"
+        action: "Immediate incident response, root cause analysis, system restoration, CAPA"
+        notification: "IT Manager, Quality Manager, Senior Management within 1 hour"
+
+data_lifecycle_management:
+  - phase: "data_creation_and_capture"
+    phase_order: 1
+
+    description: "Controlled data entry and initial capture with immediate validation and attribution"
+
+    controls:
+      - control_id: "DC-001"
+        control_name: "Controlled data entry"
+        control_type: "preventive"
+        implementation:
+          - "Real-time input validation with immediate user feedback"
+          - "Mandatory field enforcement before submission"
+          - "Format validation (dates, numbers, units)"
+          - "Range checks and business rule validation"
+          - "Drop-down lists and controlled vocabularies where applicable"
+        verification: "Input validation testing, user acceptance testing"
+
+      - control_id: "DC-002"
+        control_name: "Immediate attribution"
+        control_type: "detective"
+        implementation:
+          - "Automatic user attribution with biometric verification for critical data"
+          - "Session management and device tracking"
+          - "Location capture for mobile data entry"
+          - "Embedded attribution metadata with cryptographic hash"
+        verification: "Attribution audit, metadata validation"
+
+      - control_id: "DC-003"
+        control_name: "Immediate storage"
+        control_type: "preventive"
+        implementation:
+          - "No data buffering, immediate database commit"
+          - "Transaction confirmation to user"
+          - "Integrity verification on storage"
+          - "Automated backup within 1 hour"
+        verification: "Transaction log analysis, backup validation"
+
+    workflow:
+      - step: 1
+        action: "User initiates data entry"
+        responsibility: "Data Entry Personnel"
+        system: "Application front-end"
+
+      - step: 2
+        action: "Real-time validation and user feedback"
+        responsibility: "Application"
+        system: "Validation Engine"
+
+      - step: 3
+        action: "Attribution applied automatically"
+        responsibility: "System"
+        system: "Attribution Engine"
+
+      - step: 4
+        action: "Immediate storage with integrity controls"
+        responsibility: "System"
+        system: "Database"
+
+      - step: 5
+        action: "Audit trail entry created"
+        responsibility: "System"
+        system: "Audit Trail System"
+
+    verification_activities:
+      - "Daily validation of data entry integrity"
+      - "Weekly review of validation failures"
+      - "Monthly audit of attribution completeness"
+
+  - phase: "data_processing_and_transformation"
+    phase_order: 2
+
+    description: "Integrity-preserving processing with complete lineage tracking and version control"
+
+    controls:
+      - control_id: "DP-001"
+        control_name: "Processing lineage tracking"
+        control_type: "detective"
+        implementation:
+          - "Complete data lineage from source to derived data"
+          - "Processing rules and transformations documented"
+          - "Input data hash and output data hash captured"
+          - "Processing context metadata (who, when, how, why)"
+        verification: "Lineage audit, traceability testing"
+
+      - control_id: "DP-002"
+        control_name: "Processing validation"
+        control_type: "preventive"
+        implementation:
+          - "Validation of processing logic against requirements"
+          - "Calculation verification for derived data"
+          - "Cross-validation against independent methods"
+          - "Statistical validation of outputs"
+        verification: "Processing validation testing"
+
+      - control_id: "DP-003"
+        control_name: "Version control"
+        control_type: "detective"
+        implementation:
+          - "All processed data versions retained"
+          - "Version comparison and diff capabilities"
+          - "Rollback capabilities to previous versions"
+          - "Change history with rationale"
+        verification: "Version control validation"
+
+    workflow:
+      - step: 1
+        action: "Retrieve source data"
+        responsibility: "System"
+        system: "Data Retrieval Engine"
+
+      - step: 2
+        action: "Apply processing rules with lineage tracking"
+        responsibility: "System"
+        system: "Transformation Engine"
+
+      - step: 3
+        action: "Validate processed data"
+        responsibility: "System"
+        system: "Validation Engine"
+
+      - step: 4
+        action: "Create version record with complete context"
+        responsibility: "System"
+        system: "Version Control System"
+
+      - step: 5
+        action: "Store processed data with lineage"
+        responsibility: "System"
+        system: "Database"
+
+    verification_activities:
+      - "Weekly validation of processing lineage"
+      - "Monthly processing accuracy audit"
+      - "Quarterly version control validation"
+
+  - phase: "data_storage_and_archival"
+    phase_order: 3
+
+    description: "Tiered storage management with integrity preservation and long-term accessibility"
+
+    controls:
+      - control_id: "DS-001"
+        control_name: "Storage tier management"
+        control_type: "preventive"
+        implementation:
+          - "Automated tier assignment based on access patterns and retention requirements"
+          - "HOT: Active data <1 year, high-performance storage"
+          - "WARM: Recent historical 1-5 years, balanced storage"
+          - "COLD: Long-term archival >5 years, cost-effective storage"
+          - "WORM: Regulatory compliance data, immutable storage"
+        verification: "Tier assignment validation, migration testing"
+
+      - control_id: "DS-002"
+        control_name: "Integrity monitoring"
+        control_type: "detective"
+        implementation:
+          - "Continuous hash verification of stored data"
+          - "Quarterly integrity checks of all archived data"
+          - "Automated corruption detection and alerting"
+          - "Restoration from backup if corruption detected"
+        verification: "Integrity monitoring logs, validation testing"
+
+      - control_id: "DS-003"
+        control_name: "Redundant storage"
+        control_type: "preventive"
+        implementation:
+          - "Primary storage: On-site production environment"
+          - "Secondary storage: Off-site replication (real-time for critical, daily for others)"
+          - "Disaster recovery site: Geographically distributed"
+          - "Backup storage: Automated daily backups, 30-day retention on-site, 7-year off-site"
+        verification: "Replication validation, disaster recovery testing"
+
+    workflow:
+      - step: 1
+        action: "Determine storage tier based on data classification and age"
+        responsibility: "System"
+        system: "Storage Tier Manager"
+
+      - step: 2
+        action: "Store data with integrity controls (hash, encryption)"
+        responsibility: "System"
+        system: "Storage System"
+
+      - step: 3
+        action: "Replicate to secondary and backup storage"
+        responsibility: "System"
+        system: "Replication Engine"
+
+      - step: 4
+        action: "Verify storage integrity"
+        responsibility: "System"
+        system: "Integrity Monitor"
+
+      - step: 5
+        action: "Schedule future tier migrations if applicable"
+        responsibility: "System"
+        system: "Migration Scheduler"
+
+    verification_activities:
+      - "Daily backup verification"
+      - "Weekly replication integrity checks"
+      - "Monthly storage tier audit"
+      - "Quarterly disaster recovery testing"
+
+  - phase: "data_retrieval_and_access"
+    phase_order: 4
+
+    description: "Controlled data access with comprehensive audit trail and performance optimization"
+
+    controls:
+      - control_id: "DR-001"
+        control_name: "Access control"
+        control_type: "preventive"
+        implementation:
+          - "Role-based access control (RBAC) enforced"
+          - "Need-to-know principle applied"
+          - "Multi-factor authentication for sensitive data"
+          - "Session timeout after 15 minutes inactivity"
+        verification: "Access control validation, penetration testing"
+
+      - control_id: "DR-002"
+        control_name: "Access audit trail"
+        control_type: "detective"
+        implementation:
+          - "All access attempts logged (successful and failed)"
+          - "Access audit trail includes: who, what, when, where, why"
+          - "Audit trail immutable and retained per retention requirements"
+          - "Regular review of access patterns for anomalies"
+        verification: "Audit trail completeness validation"
+
+      - control_id: "DR-003"
+        control_name: "Performance optimization"
+        control_type: "preventive"
+        implementation:
+          - "Intelligent caching for frequently accessed data"
+          - "Database indexing optimized for query patterns"
+          - "Query optimization for complex searches"
+          - "Load balancing across multiple servers"
+        verification: "Performance testing, query optimization"
+
+    workflow:
+      - step: 1
+        action: "User requests data access"
+        responsibility: "User"
+        system: "Application"
+
+      - step: 2
+        action: "Verify access authorization"
+        responsibility: "System"
+        system: "Access Control System"
+
+      - step: 3
+        action: "Retrieve data with performance optimization"
+        responsibility: "System"
+        system: "Data Retrieval Engine"
+
+      - step: 4
+        action: "Log access in audit trail"
+        responsibility: "System"
+        system: "Audit Trail System"
+
+      - step: 5
+        action: "Return data to user"
+        responsibility: "System"
+        system: "Application"
+
+    verification_activities:
+      - "Daily access audit trail review"
+      - "Weekly access pattern analysis"
+      - "Monthly access control validation"
+      - "Quarterly penetration testing"
+
+  - phase: "data_modification_and_correction"
+    phase_order: 5
+
+    description: "Controlled data modifications with complete audit trail and justification"
+
+    controls:
+      - control_id: "DM-001"
+        control_name: "Modification authorization"
+        control_type: "preventive"
+        implementation:
+          - "Data modifications require explicit authorization"
+          - "Critical data modifications require supervisor approval"
+          - "Original data always preserved (no overwriting)"
+          - "New version created with complete change history"
+        verification: "Modification authorization audit"
+
+      - control_id: "DM-002"
+        control_name: "Modification audit trail"
+        control_type: "detective"
+        implementation:
+          - "Complete before and after values captured"
+          - "Reason for change documented and required"
+          - "Approver identity and timestamp captured"
+          - "Modification audit trail linked to original data"
+        verification: "Audit trail completeness validation"
+
+      - control_id: "DM-003"
+        control_name: "Modification validation"
+        control_type: "preventive"
+        implementation:
+          - "Modified data re-validated against all business rules"
+          - "Impact assessment on related data"
+          - "Independent review for critical modifications"
+          - "Electronic signature for approval"
+        verification: "Modification validation testing"
+
+    workflow:
+      - step: 1
+        action: "User identifies need for data modification"
+        responsibility: "User"
+        system: "Application"
+
+      - step: 2
+        action: "User provides justification and submits modification request"
+        responsibility: "User"
+        system: "Modification Request Form"
+
+      - step: 3
+        action: "Supervisor reviews and approves modification"
+        responsibility: "Supervisor"
+        system: "Approval Workflow"
+
+      - step: 4
+        action: "System creates new version preserving original"
+        responsibility: "System"
+        system: "Version Control System"
+
+      - step: 5
+        action: "Modification audit trail created with complete metadata"
+        responsibility: "System"
+        system: "Audit Trail System"
+
+      - step: 6
+        action: "Modified data validated and notifications sent"
+        responsibility: "System"
+        system: "Validation Engine, Notification System"
+
+    verification_activities:
+      - "Daily review of data modifications"
+      - "Weekly modification audit"
+      - "Monthly validation of modification procedures"
+
+  - phase: "data_retention_and_disposal"
+    phase_order: 6
+
+    description: "Controlled retention and secure disposal per regulatory requirements"
+
+    controls:
+      - control_id: "DD-001"
+        control_name: "Retention policy enforcement"
+        control_type: "preventive"
+        implementation:
+          - "Automated retention period tracking by data category"
+          - "Alerts 90 days before retention expiration"
+          - "Legal hold capabilities to prevent premature disposal"
+          - "Retention extension process for ongoing matters"
+        verification: "Retention policy validation"
+
+      - control_id: "DD-002"
+        control_name: "Disposal authorization"
+        control_type: "preventive"
+        implementation:
+          - "Retention period expiration verified"
+          - "Authorization by Quality Manager and Legal required"
+          - "No ongoing investigations or legal holds"
+          - "Regulatory compliance confirmed"
+        verification: "Disposal authorization audit"
+
+      - control_id: "DD-003"
+        control_name: "Secure disposal"
+        control_type: "preventive"
+        implementation:
+          - "Data sanitization per NIST SP 800-88 standards"
+          - "Physical media destruction with certificate"
+          - "Disposal audit trail maintained permanently"
+          - "Verification of complete data removal"
+        verification: "Disposal verification testing"
+
+    workflow:
+      - step: 1
+        action: "System identifies data approaching retention expiration"
+        responsibility: "System"
+        system: "Retention Manager"
+
+      - step: 2
+        action: "Notification to Quality Manager and Legal"
+        responsibility: "System"
+        system: "Notification System"
+
+      - step: 3
+        action: "Review and authorization for disposal"
+        responsibility: "Quality Manager, Legal"
+        system: "Disposal Authorization Workflow"
+
+      - step: 4
+        action: "Secure disposal with certificate of destruction"
+        responsibility: "IT Department, Vendor"
+        system: "Disposal Procedures"
+
+      - step: 5
+        action: "Disposal audit trail created and retained permanently"
+        responsibility: "System"
+        system: "Audit Trail System"
+
+    verification_activities:
+      - "Quarterly review of retention schedules"
+      - "Annual disposal procedures audit"
+      - "Verification of disposal certificates"
+
+risk_assessment:
+  data_criticality_classification:
+    - level: "critical"
+      definition: "Data essential for product quality, patient safety, or regulatory compliance"
+      examples:
+        - "Analytical test results for batch release"
+        - "Batch production records"
+        - "Equipment calibration records"
+        - "Validation documentation"
+        - "Audit trail records"
+      controls_required: "All ALCOA+ controls, real-time monitoring, WORM storage, blockchain, 100% validation"
+      review_frequency: "continuous_monitoring"
+
+    - level: "high"
+      definition: "Data important for operations and compliance but with lower immediate patient safety impact"
+      examples:
+        - "Environmental monitoring data"
+        - "Training records"
+        - "Preventive maintenance logs"
+        - "Quality event documentation"
+      controls_required: "ALCOA+ controls, daily monitoring, redundant storage, 95% validation"
+      review_frequency: "daily"
+
+    - level: "medium"
+      definition: "Data supporting operations with indirect impact on quality"
+      examples:
+        - "Inventory records"
+        - "Scheduling data"
+        - "Vendor qualification documentation"
+        - "Utility consumption data"
+      controls_required: "Core ALCOA+ controls, weekly monitoring, standard storage, 90% validation"
+      review_frequency: "weekly"
+
+    - level: "low"
+      definition: "Data with minimal impact on compliance or product quality"
+      examples:
+        - "Draft documents"
+        - "Preliminary data analysis"
+        - "General correspondence"
+        - "Meeting notes"
+      controls_required: "Basic controls, monthly monitoring, standard storage"
+      review_frequency: "monthly"
+
+  risk_based_controls:
+    - risk: "Intentional data manipulation"
+      likelihood: "low"
+      impact: "critical"
+      risk_level: "medium"
+      mitigations:
+        - "Access controls with segregation of duties"
+        - "Immutable audit trails in blockchain"
+        - "Anomaly detection for unusual data patterns"
+        - "Regular access reviews and recertification"
+        - "Behavioral analytics for insider threat detection"
+
+    - risk: "Unintentional data corruption"
+      likelihood: "medium"
+      impact: "high"
+      risk_level: "high"
+      mitigations:
+        - "Input validation to prevent invalid data"
+        - "Redundant storage with integrity verification"
+        - "Automated backups with integrity checking"
+        - "User training on data entry procedures"
+        - "Error detection and correction mechanisms"
+
+    - risk: "System failure or outage"
+      likelihood: "low"
+      impact: "high"
+      risk_level: "medium"
+      mitigations:
+        - "High availability architecture (99.9% uptime)"
+        - "Failover and redundancy"
+        - "Regular disaster recovery testing (quarterly)"
+        - "Validated backup and restoration procedures"
+        - "Business continuity procedures"
+
+    - risk: "Data loss due to retention issues"
+      likelihood: "low"
+      impact: "critical"
+      risk_level: "medium"
+      mitigations:
+        - "Automated retention policy enforcement"
+        - "Multiple backup copies in distributed locations"
+        - "Regular backup integrity verification"
+        - "Legal hold capabilities"
+        - "Retention policy training and awareness"
+
+    - risk: "Unauthorized access or breach"
+      likelihood: "medium"
+      impact: "high"
+      risk_level: "high"
+      mitigations:
+        - "Multi-factor authentication"
+        - "Role-based access control"
+        - "Encryption at rest and in transit"
+        - "Regular penetration testing (annual)"
+        - "Security monitoring and alerting"
+
+monitoring_and_reporting:
+  key_performance_indicators:
+    - kpi_id: "KPI-DI-001"
+      kpi_name: "ALCOA+ Compliance Rate"
+      target: ">99%"
+      measurement: "Percentage of data passing all ALCOA+ validation checks"
+      frequency: "daily"
+      responsibility: "Data Integrity Manager"
+      escalation: "Weekly report to Quality Manager, immediate alert if <95%"
+
+    - kpi_id: "KPI-DI-002"
+      kpi_name: "Data Quality Score"
+      target: ">95%"
+      measurement: "Weighted score based on accuracy, completeness, consistency"
+      frequency: "weekly"
+      responsibility: "Quality Assurance"
+      escalation: "Monthly report to Senior Management"
+
+    - kpi_id: "KPI-DI-003"
+      kpi_name: "Audit Trail Completeness"
+      target: "100%"
+      measurement: "Percentage of activities with complete audit trail"
+      frequency: "daily"
+      responsibility: "Audit System Administrator"
+      escalation: "Immediate alert if <100%"
+
+    - kpi_id: "KPI-DI-004"
+      kpi_name: "System Availability"
+      target: ">99.9%"
+      measurement: "Percentage uptime excluding planned maintenance"
+      frequency: "real-time"
+      responsibility: "IT Operations"
+      escalation: "Immediate alert if downtime >15 minutes"
+
+    - kpi_id: "KPI-DI-005"
+      kpi_name: "Data Integrity Incidents"
+      target: "0 critical, <3 major per month"
+      measurement: "Number and severity of data integrity incidents"
+      frequency: "monthly"
+      responsibility: "Quality Manager"
+      escalation: "Quarterly trending to Senior Management"
+
+    - kpi_id: "KPI-DI-006"
+      kpi_name: "Training Compliance"
+      target: "100%"
+      measurement: "Percentage of personnel current on data integrity training"
+      frequency: "monthly"
+      responsibility: "Training Coordinator"
+      escalation: "Quarterly report to HR and Quality"
+
+  reporting_requirements:
+    - report: "Daily Data Integrity Dashboard"
+      audience: "Data Integrity Manager, Quality Manager"
+      content:
+        - "ALCOA+ compliance rate"
+        - "Audit trail completeness"
+        - "System availability"
+        - "Critical alerts and incidents"
+      delivery: "Automated email at 06:00"
+
+    - report: "Weekly Data Quality Report"
+      audience: "Quality Manager, Department Managers"
+      content:
+        - "Data quality scores by department"
+        - "Validation failure analysis"
+        - "Trending of quality metrics"
+        - "Recommendations for improvement"
+      delivery: "Every Monday morning"
+
+    - report: "Monthly Data Integrity Performance Report"
+      audience: "Senior Management, Quality Director"
+      content:
+        - "All KPIs with trending"
+        - "Incident summary and CAPA status"
+        - "Training compliance status"
+        - "Audit findings and remediation"
+        - "Regulatory compliance status"
+        - "Continuous improvement initiatives"
+      delivery: "5th business day of following month"
+
+    - report: "Quarterly Management Review"
+      audience: "Executive Management, Quality Committee"
+      content:
+        - "Strategic data integrity initiatives"
+        - "Risk assessment updates"
+        - "Regulatory compliance summary"
+        - "Technology and innovation updates"
+        - "Resource requirements"
+        - "External audit readiness"
+      delivery: "Within 15 days of quarter end"
+
+training_requirements:
+  general_training:
+    - training_id: "TRN-DI-001"
+      training_name: "Data Integrity Fundamentals"
+      target_audience: "All personnel with data entry responsibilities"
+      duration: "4 hours"
+      frequency: "annual"
+      content:
+        - "ALCOA+ principles overview"
+        - "Regulatory requirements (FDA, EU GMP)"
+        - "Data lifecycle management"
+        - "Consequences of poor data integrity"
+        - "Individual responsibilities"
+      assessment: "Written test, 80% passing score"
+      reference: "TRN-DI-001-FUNDAMENTALS.yaml"
+
+  role_specific_training:
+    - training_id: "TRN-DI-002"
+      training_name: "Data Entry Personnel Training"
+      target_audience: "Data entry personnel, laboratory analysts"
+      duration: "16 hours (2 days)"
+      frequency: "initial + annual refresher"
+      content:
+        - "Proper data entry techniques"
+        - "Input validation and error handling"
+        - "Contemporaneous recording requirements"
+        - "Attribution and electronic signatures"
+        - "System navigation and usage"
+      assessment: "Practical demonstration, 100% competency"
+      reference: "See TRN-DI-001-FUNDAMENTALS.yaml module MOD-002"
+
+    - training_id: "TRN-DI-003"
+      training_name: "Quality Assurance Data Integrity Training"
+      target_audience: "Quality Assurance personnel"
+      duration: "32 hours (4 days)"
+      frequency: "initial + annual refresher"
+      content:
+        - "Data integrity auditing techniques"
+        - "Risk assessment for data integrity"
+        - "Investigation procedures"
+        - "CAPA for data integrity issues"
+        - "Regulatory expectations"
+      assessment: "Practical audit simulation, 80% score"
+      reference: "See TRN-DI-001-FUNDAMENTALS.yaml module MOD-003"
+
+    - training_id: "TRN-DI-004"
+      training_name: "IT Personnel Data Integrity Training"
+      target_audience: "IT personnel, system administrators"
+      duration: "40 hours (5 days)"
+      frequency: "initial + annual refresher"
+      content:
+        - "System validation for data integrity"
+        - "Database integrity management"
+        - "Audit trail configuration"
+        - "Security controls"
+        - "Backup and recovery procedures"
+      assessment: "Technical implementation, 100% competency"
+      reference: "See TRN-DI-001-FUNDAMENTALS.yaml module MOD-004"
+
+  retraining_triggers:
+    - "Data integrity incident or deviation"
+    - "Audit finding related to data integrity"
+    - "Job role change involving data responsibilities"
+    - "SOP major revision"
+    - "New system implementation"
+    - "Poor performance on assessment"
+
+continuous_improvement:
+  improvement_initiatives:
+    - initiative: "AI-powered data quality enhancement"
+      description: "Machine learning models for predictive validation and automated anomaly detection"
+      status: "in_progress"
+      expected_completion: "Q3 2026"
+      benefits: "Proactive data quality improvement, reduced manual review, faster issue detection"
+
+    - initiative: "Blockchain integration expansion"
+      description: "Expand blockchain usage for additional critical data types beyond current audit trails"
+      status: "planned"
+      expected_completion: "Q4 2026"
+      benefits: "Enhanced data provenance, immutability for critical records"
+
+    - initiative: "Mobile data integrity app"
+      description: "Mobile application for field data capture with offline capabilities and integrity controls"
+      status: "in_progress"
+      expected_completion: "Q2 2026"
+      benefits: "Improved contemporaneous recording, reduced transcription errors"
+
+  innovation_tracking:
+    - "Quarterly review of emerging technologies"
+    - "Pilot programs for new data integrity tools"
+    - "Collaboration with industry working groups"
+    - "Benchmarking against industry best practices"
+    - "Continuous assessment of regulatory guidance updates"
+
+change_history:
+  - version: "1.0"
+    date: "2024-06-01"
+    author: "QA Team"
+    description: "Initial SOP creation"
+    approved_by: "Quality Assurance Manager"
+
+  - version: "2.0"
+    date: "2025-01-15"
+    author: "AI Development Team"
+    description: "Comprehensive ALCOA+ implementation with full ERP integration, enhanced controls, AI-powered monitoring"
+    approved_by: "Operations Director"
+
+  - version: "2.0-DSL"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Conversion to structured DSL format"
+    approved_by: "Pending"

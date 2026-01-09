@@ -1,0 +1,607 @@
+# DSL: Monthly Compliance Report
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 9.4
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "REPORT-AUD-004"
+  report_type: "compliance"
+  category: "regulatory"
+  confidentiality: "internal"
+
+  title: "Monthly Audit Trail Compliance Report"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "MHRA Data Integrity Guidance"
+    - "WHO GACP Guidelines"
+    - "ALCOA+ Principles"
+
+# ==============================================================================
+# REPORT CONTEXT
+# ==============================================================================
+report_context:
+  purpose: "Provide comprehensive monthly assessment of audit trail system compliance with regulatory requirements, data integrity principles, and organizational policies"
+
+  reporting_period: "monthly"
+
+  frequency: "monthly"
+
+  report_due_date: "5th business day of following month"
+
+  responsible_roles:
+    - role: "ROLE-QA-001"
+      responsibility: "Primary author and analysis"
+    - role: "ROLE-COMP-001"
+      responsibility: "Review and regulatory interpretation"
+    - role: "ROLE-IT-001"
+      responsibility: "Technical data and metrics"
+
+  approvers:
+    - role: "ROLE-QA-001"
+      approval_type: "prepared_by"
+    - role: "ROLE-COMP-001"
+      approval_type: "reviewed_by"
+    - role: "ROLE-MGMT-001"
+      approval_type: "approved_by"
+
+  distribution:
+    - "Quality Manager"
+    - "Compliance Officer"
+    - "IT Administrator"
+    - "Management Team"
+    - "Regulatory Affairs (as needed)"
+
+# ==============================================================================
+# REPORT STRUCTURE
+# ==============================================================================
+report_structure:
+  # ----------------------------------------------------------------------------
+  # SECTION 1: EXECUTIVE SUMMARY
+  # ----------------------------------------------------------------------------
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Overall Compliance Status"
+          content_description: "High-level assessment of audit trail compliance for reporting period"
+          data_sources:
+            - "CHKLST-AUD-001 monthly checklist score"
+            - "System performance metrics"
+            - "Open CAPA count related to audit trail"
+
+          fields:
+            - field_id: "EXEC-001"
+              field_label: "Compliance Rating"
+              field_type: "categorical"
+              allowed_values:
+                - "Fully Compliant (>= 95%)"
+                - "Minor Issues (90-94%)"
+                - "Major Issues (< 90%)"
+                - "Non-Compliant (critical failure)"
+
+            - field_id: "EXEC-002"
+              field_label: "ALCOA+ Checklist Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "EXEC-003"
+              field_label: "Critical Issues Count"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "EXEC-004"
+              field_label: "Open CAPAs"
+              field_type: "integer"
+              acceptance_criteria: "All within target dates"
+
+        - subsection_id: "SEC-001-02"
+          subsection_title: "Key Highlights and Concerns"
+          content_description: "3-5 bullet points summarizing most important findings"
+          data_sources:
+            - "Manual analysis by Quality Manager"
+
+          fields:
+            - field_id: "EXEC-005"
+              field_label: "Highlights"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "EXEC-006"
+              field_label: "Concerns"
+              field_type: "bullet_list"
+              max_items: 5
+
+    # --------------------------------------------------------------------------
+    # SECTION 2: REGULATORY COMPLIANCE STATUS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-002"
+      section_title: "Regulatory Compliance Status"
+      section_order: 2
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "FDA 21 CFR Part 11 Compliance"
+          content_description: "Assessment of electronic records and signatures compliance"
+          data_sources:
+            - "CHKLST-AUD-001 sections on Attributable, Legible, Enduring, Available"
+            - "Access control logs"
+            - "E-signature audit trail"
+
+          fields:
+            - field_id: "REG-001"
+              field_label: "Electronic Records Integrity"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - all records accurate, complete, and trustworthy"
+
+            - field_id: "REG-002"
+              field_label: "Audit Trail Completeness"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - all required data captured per §11.10(e)"
+
+            - field_id: "REG-003"
+              field_label: "Access Controls"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - unique user IDs, access limitations per §11.10(d)"
+
+        - subsection_id: "SEC-002-02"
+          subsection_title: "EU GMP Annex 11 Compliance"
+          content_description: "Assessment of computerized systems compliance"
+          data_sources:
+            - "Validation documentation status"
+            - "Change control records"
+            - "Data integrity assessment"
+
+          fields:
+            - field_id: "REG-004"
+              field_label: "System Validation Current"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - IQ/OQ/PQ valid and up-to-date"
+
+            - field_id: "REG-005"
+              field_label: "Change Control Compliant"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - all changes documented and validated"
+
+            - field_id: "REG-006"
+              field_label: "Data Security"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - physical/logical security adequate"
+
+        - subsection_id: "SEC-002-03"
+          subsection_title: "MHRA Data Integrity Compliance"
+          content_description: "Assessment against MHRA Data Integrity Guidance"
+          data_sources:
+            - "CHKLST-AUD-001 full ALCOA+ assessment"
+
+          fields:
+            - field_id: "REG-007"
+              field_label: "ALCOA+ Principles Met"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "REG-008"
+              field_label: "Data Governance"
+              field_type: "pass_fail"
+              acceptance_criteria: "Pass - policies, procedures, training current"
+
+    # --------------------------------------------------------------------------
+    # SECTION 3: ALCOA+ ASSESSMENT DETAILS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-003"
+      section_title: "ALCOA+ Assessment Details"
+      section_order: 3
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Individual Principle Scores"
+          content_description: "Detailed scoring for each of nine ALCOA+ principles"
+          data_sources:
+            - "CHKLST-AUD-001 section scores"
+
+          fields:
+            - field_id: "ALC-001"
+              field_label: "Attributable Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-002"
+              field_label: "Legible Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-003"
+              field_label: "Contemporaneous Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-004"
+              field_label: "Original Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-005"
+              field_label: "Accurate Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-006"
+              field_label: "Complete Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-007"
+              field_label: "Consistent Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-008"
+              field_label: "Enduring Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-009"
+              field_label: "Available Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+        - subsection_id: "SEC-003-02"
+          subsection_title: "Failed Items and Corrective Actions"
+          content_description: "List of any failed ALCOA+ checklist items with action plans"
+          data_sources:
+            - "CHKLST-AUD-001 failed items"
+            - "Related CAPA records"
+
+          fields:
+            - field_id: "ALC-010"
+              field_label: "Failed Items Table"
+              field_type: "table"
+              columns:
+                - "Item ID"
+                - "Description"
+                - "Impact"
+                - "CAPA Number"
+                - "Target Date"
+                - "Status"
+
+    # --------------------------------------------------------------------------
+    # SECTION 4: QUALITY METRICS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-004"
+      section_title: "Quality Metrics"
+      section_order: 4
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Data Integrity Metrics"
+          content_description: "Quantitative assessment of data integrity performance"
+          data_sources:
+            - "ImmuDB integrity check results"
+            - "Hash verification reports"
+            - "Event capture statistics"
+
+          fields:
+            - field_id: "QM-001"
+              field_label: "Hash Verification Success Rate"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.99%"
+
+            - field_id: "QM-002"
+              field_label: "Event Capture Coverage"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+            - field_id: "QM-003"
+              field_label: "Sequence Gaps Detected"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "QM-004"
+              field_label: "Tamper Attempts Detected"
+              field_type: "integer"
+              acceptance_criteria: "All investigated and resolved"
+
+        - subsection_id: "SEC-004-02"
+          subsection_title: "System Performance Metrics"
+          content_description: "Technical performance assessment"
+          data_sources:
+            - "System monitoring dashboards"
+            - "Performance logs"
+
+          fields:
+            - field_id: "QM-005"
+              field_label: "System Uptime"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.9%"
+
+            - field_id: "QM-006"
+              field_label: "Average Logging Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 5 seconds"
+
+            - field_id: "QM-007"
+              field_label: "Average Search Response Time"
+              field_type: "seconds"
+              acceptance_criteria: "< 2 seconds"
+
+            - field_id: "QM-008"
+              field_label: "Storage Capacity Used"
+              field_type: "percentage"
+              acceptance_criteria: "< 80%"
+
+    # --------------------------------------------------------------------------
+    # SECTION 5: SECURITY EVENTS SUMMARY
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-005"
+      section_title: "Security Events Summary"
+      section_order: 5
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Security Incident Statistics"
+          content_description: "Count and categorization of security events"
+          data_sources:
+            - "REPORT-AUD-002 weekly security reports"
+            - "Security alert logs"
+
+          fields:
+            - field_id: "SEC-001"
+              field_label: "Failed Login Attempts"
+              field_type: "integer"
+              acceptance_criteria: "Investigated if > threshold"
+
+            - field_id: "SEC-002"
+              field_label: "Unauthorized Access Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0 or all investigated"
+
+            - field_id: "SEC-003"
+              field_label: "Privilege Escalation Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0 or all investigated"
+
+            - field_id: "SEC-004"
+              field_label: "Emergency Access Requests"
+              field_type: "integer"
+              acceptance_criteria: "All properly authorized (FORM-AUD-001)"
+
+        - subsection_id: "SEC-005-02"
+          subsection_title: "Critical Security Events"
+          content_description: "Details of any critical security incidents requiring escalation"
+          data_sources:
+            - "Incident reports"
+            - "CAPA records"
+
+          fields:
+            - field_id: "SEC-005"
+              field_label: "Critical Incidents Table"
+              field_type: "table"
+              columns:
+                - "Incident ID"
+                - "Date"
+                - "Description"
+                - "Impact"
+                - "Resolution"
+                - "CAPA"
+
+    # --------------------------------------------------------------------------
+    # SECTION 6: ISSUES AND CAPAS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-006"
+      section_title: "Issues and CAPAs"
+      section_order: 6
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "Open CAPAs Related to Audit Trail"
+          content_description: "Status of all open corrective and preventive actions"
+          data_sources:
+            - "CAPA system query for audit trail related items"
+
+          fields:
+            - field_id: "CAPA-001"
+              field_label: "Open CAPAs Table"
+              field_type: "table"
+              columns:
+                - "CAPA Number"
+                - "Issue Description"
+                - "Root Cause"
+                - "Corrective Action"
+                - "Target Date"
+                - "Status"
+
+        - subsection_id: "SEC-006-02"
+          subsection_title: "Recently Closed CAPAs"
+          content_description: "CAPAs closed during reporting period with effectiveness check"
+          data_sources:
+            - "CAPA system closed items"
+
+          fields:
+            - field_id: "CAPA-002"
+              field_label: "Closed CAPAs Table"
+              field_type: "table"
+              columns:
+                - "CAPA Number"
+                - "Issue Description"
+                - "Resolution"
+                - "Close Date"
+                - "Effectiveness Verified"
+
+    # --------------------------------------------------------------------------
+    # SECTION 7: TRAINING COMPLIANCE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-007"
+      section_title: "Training Compliance"
+      section_order: 7
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Training Status"
+          content_description: "Compliance with TRN-AUD-001 requirements"
+          data_sources:
+            - "Learning Management System (LMS)"
+
+          fields:
+            - field_id: "TRN-001"
+              field_label: "Users Current on Training"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+            - field_id: "TRN-002"
+              field_label: "Overdue Training Count"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "TRN-003"
+              field_label: "New User Training Completion"
+              field_type: "percentage"
+              acceptance_criteria: "100% before system access granted"
+
+        - subsection_id: "SEC-007-02"
+          subsection_title: "Training Effectiveness"
+          content_description: "Assessment of training effectiveness"
+          data_sources:
+            - "Post-training assessments"
+            - "Audit findings related to user errors"
+
+          fields:
+            - field_id: "TRN-004"
+              field_label: "Average Post-Training Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 80%"
+
+            - field_id: "TRN-005"
+              field_label: "User Errors Related to Training Gaps"
+              field_type: "integer"
+              acceptance_criteria: "Trending down"
+
+    # --------------------------------------------------------------------------
+    # SECTION 8: INSPECTION READINESS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-008"
+      section_title: "Inspection Readiness"
+      section_order: 8
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "Inspection Readiness Status"
+          content_description: "Assessment using CHKLST-AUD-002"
+          data_sources:
+            - "CHKLST-AUD-002 quarterly checklist (most recent)"
+
+          fields:
+            - field_id: "INSP-001"
+              field_label: "Inspection Readiness Score"
+              field_type: "percentage"
+              acceptance_criteria: "100% (all critical items pass)"
+
+            - field_id: "INSP-002"
+              field_label: "Outstanding Documentation Gaps"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "INSP-003"
+              field_label: "Demo Scripts Tested"
+              field_type: "boolean"
+              acceptance_criteria: "Yes - within last 30 days"
+
+    # --------------------------------------------------------------------------
+    # SECTION 9: RECOMMENDATIONS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-009"
+      section_title: "Recommendations"
+      section_order: 9
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-009-01"
+          subsection_title: "Action Items for Next Period"
+          content_description: "Prioritized recommendations for continuous improvement"
+          data_sources:
+            - "Quality Manager analysis"
+            - "Compliance Officer input"
+
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "REC-002"
+              field_label: "Medium Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "REC-003"
+              field_label: "System Enhancement Proposals"
+              field_type: "bullet_list"
+              max_items: 3
+
+# ==============================================================================
+# GENERATION AND AUTOMATION
+# ==============================================================================
+generation:
+  automated: true
+
+  automation_details:
+    data_collection: "Automated queries to ImmuDB, Elasticsearch, CAPA system, LMS"
+    report_generation: "Automated compilation of metrics and statistics"
+    manual_sections:
+      - "SEC-001-02: Key Highlights and Concerns (Quality Manager analysis)"
+      - "SEC-009: Recommendations (Quality Manager + Compliance Officer)"
+
+  scheduling:
+    generation_date: "1st day of month"
+    review_period: "Days 1-3 of month"
+    approval_deadline: "5th business day of month"
+
+  templates:
+    - "Compliance report template (Word/PDF)"
+    - "ALCOA+ scoring dashboard"
+    - "Regulatory cross-reference matrix"
+
+# ==============================================================================
+# DISTRIBUTION AND STORAGE
+# ==============================================================================
+distribution:
+  format: "PDF"
+  delivery_method: "Document Management System + Email notification"
+  confidentiality: "Internal - Restricted"
+
+storage:
+  location: "electronic"
+  system: "ERP Quality Management / Document Control"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+  record_type: "REC-AUD-004"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_AuditTrail.md Section 9.4"
+    approved_by: "Pending"

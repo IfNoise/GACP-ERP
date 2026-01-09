@@ -1,0 +1,524 @@
+schema_version: "1.0.0"
+type: training
+metadata:
+  id: TRN-EQCAL-001
+  title: Equipment Calibration Training Program
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  target_audience:
+    - Calibration Technicians
+    - Engineering Personnel
+    - Quality Assurance Personnel
+  prerequisites:
+    - Basic understanding of measurement principles
+    - Mathematical skills (basic statistics, calculations)
+    - Familiarity with laboratory equipment
+    - Computer skills for data entry and analysis
+  total_duration_hours: 120
+
+training_objectives:
+  - Understand principles of metrology and measurement traceability
+  - Perform equipment calibrations according to approved procedures
+  - Properly use and maintain calibration standards
+  - Calculate and interpret measurement uncertainty
+  - Document calibration results accurately per 21 CFR Part 11 requirements
+  - Identify and respond to out-of-tolerance conditions
+  - Manage calibration schedules and resources effectively
+  - Apply risk-based approach to equipment classification
+  - Utilize IoT integration for continuous monitoring
+  - Implement continuous improvement in calibration program
+
+modules:
+  - module_number: 1
+    module_title: Introduction to Metrology and Calibration Fundamentals
+    duration_hours: 16
+    learning_objectives:
+      - Define key metrology terms (accuracy, precision, traceability, uncertainty)
+      - Explain the importance of calibration in GACP-compliant operations
+      - Understand regulatory requirements (GACP, USP, ISO/IEC 17025, FDA 21 CFR Part 11)
+      - Describe the calibration standards hierarchy (primary, secondary, working)
+      - Explain NIST traceability requirements and documentation
+      - Understand equipment classification based on risk assessment
+    topics:
+      - Metrology fundamentals and terminology
+      - International System of Units (SI) and measurement standards
+      - NIST and national metrology institutes role
+      - Regulatory framework for calibration (GACP, GMP, USP, ISO/IEC 17025)
+      - Traceability concepts and requirements
+      - Equipment classification (Class A/B/C) and risk-based approach
+      - Calibration standards hierarchy
+      - Documentation requirements and 21 CFR Part 11 compliance
+    teaching_methods:
+      - Classroom lecture with visual aids
+      - Regulatory document review
+      - Case studies of calibration failures
+      - Group discussion on risk assessment
+    assessment:
+      - Written examination (15 questions, 80% pass required)
+      - Risk assessment exercise
+
+  - module_number: 2
+    module_title: Calibration Standards Management and Traceability
+    duration_hours: 12
+    learning_objectives:
+      - Identify and select appropriate calibration standards for equipment
+      - Verify NIST traceability documentation
+      - Calculate accuracy ratios (3:1 or 4:1 minimum)
+      - Properly store and handle calibration standards
+      - Manage standards recertification schedules
+      - Interpret calibration certificates
+    topics:
+      - Types of calibration standards (mass, temperature, pressure, electrical, pH)
+      - Primary, secondary, and working standards characteristics
+      - NIST traceability chain documentation
+      - Calibration certificate interpretation
+      - Accuracy ratio calculation and significance
+      - Standards storage requirements (environmental control, access restrictions)
+      - Standards handling procedures (gloves, contamination prevention)
+      - Recertification scheduling and management
+      - Standards verification and intermediate checks
+    teaching_methods:
+      - Hands-on standards inspection and handling
+      - Certificate review exercises
+      - Standards inventory management demonstration
+      - Environmental monitoring practice
+    assessment:
+      - Certificate interpretation exercise
+      - Accuracy ratio calculation quiz
+      - Standards handling practical demonstration
+
+  - module_number: 3
+    module_title: Analytical Balance Calibration Procedures
+    duration_hours: 16
+    learning_objectives:
+      - Perform complete analytical balance calibration
+      - Execute zero/tare, sensitivity, linearity, repeatability, and eccentricity tests
+      - Calculate statistical parameters (average, standard deviation, accuracy, precision)
+      - Interpret calibration results against acceptance criteria
+      - Properly document balance calibration
+    topics:
+      - Analytical balance principles of operation
+      - Environmental requirements (temperature, humidity, vibration, air currents)
+      - Pre-calibration setup (leveling, warm-up, environmental verification)
+      - Calibration weight selection and preparation
+      - Zero and tare test procedures
+      - Sensitivity test (10% capacity)
+      - Linearity test (multi-point ascending and descending)
+      - Repeatability test (10 measurements, statistical analysis)
+      - Eccentricity test (off-center loading)
+      - Statistical analysis (accuracy, precision, R² calculation)
+      - As-found vs as-left condition documentation
+      - Balance maintenance and troubleshooting
+    teaching_methods:
+      - Classroom instruction on balance principles
+      - Demonstration of complete calibration sequence
+      - Hands-on practice calibration (supervised)
+      - Statistical calculation exercises
+      - Documentation practice using FORM-EQCAL-003
+    assessment:
+      - Written exam on balance calibration (10 questions, 80% pass)
+      - Practical calibration demonstration (85% pass required)
+      - Statistical calculation quiz
+
+  - module_number: 4
+    module_title: Temperature Equipment Calibration
+    duration_hours: 14
+    learning_objectives:
+      - Calibrate temperature sensors, probes, and thermometers
+      - Set up and operate temperature calibration baths
+      - Perform multi-point temperature calibration
+      - Execute response time and stability tests
+      - Document temperature calibration results
+    topics:
+      - Temperature measurement principles (RTD, thermocouple, thermistor)
+      - Calibration bath types and operation (water, oil, sand, dry block)
+      - Reference thermometer selection and use
+      - Thermal equilibrium and stabilization requirements
+      - Multi-point calibration (low, mid, high temperatures)
+      - Response time testing (step change analysis)
+      - Stability testing (drift monitoring over time)
+      - Measurement uncertainty for temperature equipment
+      - Environmental vs process temperature calibration requirements
+      - Documentation using FORM-EQCAL-004
+    teaching_methods:
+      - Classroom instruction on temperature measurement
+      - Bath setup and stabilization demonstration
+      - Hands-on multi-point calibration practice
+      - Response time and stability test exercises
+    assessment:
+      - Written exam (10 questions, 80% pass)
+      - Practical calibration of temperature sensor (85% pass)
+      - Bath operation and safety quiz
+
+  - module_number: 5
+    module_title: pH Meter and Electrochemical Equipment Calibration
+    duration_hours: 12
+    learning_objectives:
+      - Calibrate pH meters using two-point and three-point methods
+      - Assess pH electrode condition and maintenance needs
+      - Calculate and interpret slope percentage
+      - Perform conductivity meter calibration
+      - Document electrochemical equipment calibration
+    topics:
+      - pH measurement principles and electrode function
+      - pH buffer preparation and handling
+      - Electrode conditioning and maintenance
+      - Two-point calibration (pH 7.00 offset, pH 4.01 slope)
+      - Three-point verification (pH 10.01 check)
+      - Slope calculation and interpretation (>95% healthy electrode)
+      - Response time testing for pH meters
+      - Electrode troubleshooting and replacement criteria
+      - Conductivity meter calibration principles
+      - Standard solutions for conductivity calibration
+      - Documentation using FORM-EQCAL-005
+    teaching_methods:
+      - Classroom instruction on electrochemical principles
+      - pH meter calibration demonstration
+      - Hands-on pH calibration practice
+      - Electrode maintenance workshop
+      - Conductivity meter calibration practice
+    assessment:
+      - Written exam (8 questions, 80% pass)
+      - Practical pH meter calibration (85% pass)
+      - Slope calculation and interpretation quiz
+
+  - module_number: 6
+    module_title: Analytical Instrument Calibration (HPLC, GC-MS)
+    duration_hours: 16
+    learning_objectives:
+      - Perform system suitability testing for analytical instruments
+      - Execute multi-level calibration curve development
+      - Verify detector linearity and sensitivity
+      - Calculate and interpret limit of detection (LOD) and limit of quantitation (LOQ)
+      - Document analytical instrument calibration
+    topics:
+      - HPLC and GC-MS principles of operation
+      - System suitability test parameters (resolution, tailing, S/N ratio)
+      - Calibration curve development (minimum 5 points)
+      - Certified reference materials for cannabis analysis
+      - Linear regression and correlation coefficient (R² > 0.995)
+      - Quality control standard verification (95-105% accuracy)
+      - Detector linearity assessment
+      - LOD and LOQ calculation from signal-to-noise ratios
+      - Blank analysis for contamination verification
+      - Troubleshooting poor calibration curves
+      - Documentation using FORM-EQCAL-006
+    teaching_methods:
+      - Classroom instruction on analytical instrument principles
+      - Demonstration of system suitability testing
+      - Hands-on calibration curve development
+      - Statistical analysis software training
+      - Troubleshooting exercises
+    assessment:
+      - Written exam (12 questions, 80% pass)
+      - Practical calibration curve development (85% pass)
+      - Statistical analysis quiz
+
+  - module_number: 7
+    module_title: Measurement Uncertainty and Statistical Analysis
+    duration_hours: 16
+    learning_objectives:
+      - Identify sources of measurement uncertainty
+      - Calculate combined and expanded uncertainty
+      - Apply uncertainty to acceptance decisions (guard banding)
+      - Perform statistical process control for calibration data
+      - Interpret control charts and trends
+    topics:
+      - Measurement uncertainty concepts and significance
+      - Type A uncertainty (statistical evaluation from repeated measurements)
+      - Type B uncertainty (evaluation from specifications, certificates, experience)
+      - Uncertainty budget components (reference standard, resolution, repeatability, environmental, drift)
+      - Combined uncertainty calculation (root sum of squares)
+      - Expanded uncertainty (coverage factor k=2 for 95% confidence)
+      - Uncertainty reporting and statement format
+      - Guard banding for accept/reject decisions
+      - Statistical process control principles
+      - Control chart development and interpretation
+      - Trend analysis and predictive methods
+      - Calibration data trending software
+    teaching_methods:
+      - Classroom lecture on uncertainty principles
+      - Uncertainty budget calculation exercises
+      - Statistical software training
+      - Control chart development practice
+      - Real calibration data analysis
+    assessment:
+      - Written exam on uncertainty concepts (10 questions, 80% pass)
+      - Uncertainty calculation exercise (practical problem)
+      - Control chart interpretation quiz
+
+  - module_number: 8
+    module_title: Documentation, Data Integrity, and Electronic Records
+    duration_hours: 8
+    learning_objectives:
+      - Complete calibration records accurately and completely
+      - Apply electronic signatures per 21 CFR Part 11
+      - Maintain data integrity through documentation lifecycle
+      - Manage calibration database and schedule
+      - Generate calibration certificates and labels
+    topics:
+      - Documentation requirements for calibration records
+      - FDA 21 CFR Part 11 electronic records and signatures
+      - Data integrity principles (ALCOA+)
+      - Calibration database management
+      - Calibration certificate generation
+      - Equipment labeling (IN CALIBRATION, OUT OF CALIBRATION)
+      - Calibration schedule management
+      - Record retention and archival requirements
+      - Audit trail maintenance
+      - Common documentation errors and prevention
+    teaching_methods:
+      - Classroom instruction on documentation requirements
+      - LIMS/database training session
+      - Record completion exercises
+      - Electronic signature system training
+    assessment:
+      - Documentation completeness exercise
+      - Electronic signature system competency check
+      - Data integrity quiz
+
+  - module_number: 9
+    module_title: Out-of-Tolerance Investigation and CAPA
+    duration_hours: 10
+    learning_objectives:
+      - Recognize out-of-tolerance conditions
+      - Implement immediate quarantine and notification procedures
+      - Conduct root cause analysis for calibration failures
+      - Assess product impact from out-of-tolerance equipment
+      - Develop and implement corrective and preventive actions (CAPA)
+    topics:
+      - Out-of-tolerance identification and classification
+      - Immediate actions (quarantine, notification, documentation)
+      - Equipment impact assessment procedures
+      - Product lot identification and genealogy review
+      - Root cause analysis methods (5 Whys, fishbone diagram, fault tree)
+      - Equipment factors (damage, wear, environmental exposure, failure)
+      - Process factors (procedure adequacy, standards accuracy, technician competency)
+      - System factors (maintenance effectiveness, change control, training)
+      - CAPA development and implementation
+      - Effectiveness verification requirements
+      - Documentation in deviation investigation system
+    teaching_methods:
+      - Classroom instruction on investigation methods
+      - Case studies of real out-of-tolerance events
+      - Root cause analysis exercises
+      - CAPA development workshop
+      - Impact assessment practice
+    assessment:
+      - Written exam on OOT procedures (8 questions, 80% pass)
+      - Root cause analysis case study
+      - CAPA development exercise
+
+  - module_number: 10
+    module_title: IoT Integration and Continuous Monitoring
+    duration_hours: 8
+    learning_objectives:
+      - Configure IoT sensors for continuous calibration monitoring
+      - Set up automated drift detection and alerts
+      - Utilize digital calibration records and dashboards
+      - Implement predictive maintenance algorithms
+      - Leverage real-time data for calibration optimization
+    topics:
+      - IoT sensor integration architecture
+      - Continuous drift monitoring principles
+      - Statistical process control with automated alerts
+      - Digital calibration record generation
+      - Real-time calibration status dashboards
+      - Predictive maintenance using AI/machine learning
+      - Automated calibration verification protocols
+      - Blockchain for enhanced traceability (emerging technology)
+      - Mobile calibration applications
+      - Cloud-based calibration data management
+    teaching_methods:
+      - Classroom presentation on IoT capabilities
+      - Demonstration of monitoring dashboard
+      - Hands-on alert configuration
+      - Predictive analytics case studies
+    assessment:
+      - IoT system configuration exercise
+      - Alert threshold setting quiz
+      - Digital record system competency check
+
+  - module_number: 11
+    module_title: Calibration Program Management and Continuous Improvement
+    duration_hours: 12
+    learning_objectives:
+      - Manage calibration schedules and resources
+      - Optimize calibration intervals based on reliability data
+      - Track and analyze program performance metrics
+      - Conduct internal calibration audits
+      - Implement process improvements and innovation
+    topics:
+      - Annual and monthly calibration schedule development
+      - Resource planning (technicians, standards, consumables)
+      - Coordination with operations to minimize downtime
+      - Calibration interval optimization (risk-based, statistical approach)
+      - Cost-benefit analysis for interval changes
+      - Performance metrics and KPIs (schedule adherence, first-pass rate, OOT rate)
+      - Internal audit procedures and checklists
+      - Continuous improvement methodologies
+      - Technology assessment and innovation
+      - External calibration service provider management
+      - Budget planning and cost control
+    teaching_methods:
+      - Classroom instruction on program management
+      - Schedule development exercise
+      - Interval optimization case study
+      - Performance metrics calculation workshop
+      - Audit observation (participate in real audit)
+    assessment:
+      - Written exam on program management (10 questions, 80% pass)
+      - Schedule development exercise
+      - Metrics analysis and interpretation quiz
+
+assessment_methods:
+  written_examinations:
+    - description: Module-specific written exams covering key concepts
+    - passing_score: "80%"
+    - format: Multiple choice, short answer, and calculation problems
+    - duration: 30-60 minutes per exam depending on module
+
+  practical_demonstrations:
+    - description: Hands-on calibration performance under observation
+    - passing_score: "85%"
+    - format: Perform complete calibration following procedure, evaluator observation
+    - duration: 1-3 hours depending on equipment type
+    - equipment_types:
+        - Analytical balance calibration
+        - Temperature equipment calibration
+        - pH meter calibration
+        - Analytical instrument calibration curve
+
+  competency_assessments:
+    - description: Ongoing evaluation during actual calibration work
+    - frequency: Quarterly for first year, annually thereafter
+    - method: Supervisor observation and documentation review
+    - criteria: Procedure compliance, accuracy, documentation quality, problem-solving
+
+recertification_requirements:
+  frequency: Annual
+  content:
+    - Procedure updates and changes (4 hours)
+    - New equipment and technologies (4 hours)
+    - Regulatory requirement updates (2 hours)
+    - Quality system improvements (2 hours)
+    - Safety and environmental updates (2 hours)
+    - Refresher on statistical methods (2 hours)
+  total_annual_hours: 16
+  assessment: Written exam (80% pass) and observed calibration (85% pass)
+
+training_records:
+  required_documentation:
+    - Training attendance records
+    - Examination scores and results
+    - Practical demonstration evaluations
+    - Competency assessment records
+    - Certification status and expiration dates
+    - Continuing education and specialized training
+  retention_period: Active employee + 7 years after termination
+  storage: Electronic training management system with backup
+
+training_effectiveness:
+  evaluation_methods:
+    - Post-training knowledge assessment scores
+    - On-the-job performance observation
+    - Calibration accuracy and first-pass rates
+    - Documentation quality reviews
+    - Deviation and error rates
+    - Supervisor and peer feedback
+  frequency: Quarterly review of training effectiveness
+  improvement_cycle: Annual training program review and updates based on effectiveness data
+
+specialized_training:
+  advanced_topics:
+    - Advanced metrology techniques (16 hours, as needed)
+    - Statistical analysis and uncertainty calculation workshops (8 hours, annually)
+    - Equipment-specific manufacturer training (variable, as required)
+    - Leadership and management skills (16 hours, for supervisory roles)
+    - Regulatory compliance deep-dives (8 hours, as needed)
+    - Industry conferences and metrology symposiums (annual attendance encouraged)
+
+qualification_levels:
+  - level: Calibration Technician I
+    requirements:
+      - Completion of initial 120-hour training program
+      - Pass all written exams (80% minimum)
+      - Pass all practical demonstrations (85% minimum)
+      - Minimum 1 year experience
+      - Supervised calibration work only
+    authorized_activities:
+      - Perform routine calibrations under supervision
+      - Basic equipment (Class C)
+      - Documentation completion
+
+  - level: Calibration Technician II
+    requirements:
+      - Technician I qualification + 2 additional years experience
+      - Advanced training completion
+      - Demonstrated competency on multiple equipment types
+      - Minimum 3 years total experience
+    authorized_activities:
+      - Independent calibration of Class B and C equipment
+      - Supervised calibration of Class A equipment
+      - Intermediate checks and verifications
+      - Training assistance for new technicians
+
+  - level: Senior Calibration Technician
+    requirements:
+      - Technician II qualification + 2 additional years experience
+      - External training/certification (ASQ CQT preferred)
+      - Demonstrated expertise on complex equipment
+      - Minimum 5 years total experience
+    authorized_activities:
+      - Independent calibration of all equipment classes
+      - Complex analytical instrument calibrations
+      - Uncertainty calculations
+      - Investigation support and root cause analysis
+      - Procedure development and review
+      - Technician training and mentoring
+
+  - level: Calibration Supervisor/Manager
+    requirements:
+      - Senior Technician qualification or Engineering degree
+      - Management and leadership training
+      - Minimum 7 years calibration experience
+      - Professional registration (P.E.) or ASQ certification preferred
+    authorized_activities:
+      - Program management and oversight
+      - Procedure approval
+      - Interval optimization decisions
+      - External service provider management
+      - Budget and resource planning
+      - Regulatory compliance assurance
+
+training_delivery:
+  instructors:
+    - Calibration Manager (primary instructor)
+    - Senior Calibration Technicians (hands-on training)
+    - External subject matter experts (specialized topics)
+    - Equipment manufacturers (equipment-specific training)
+
+  facilities:
+    - Classroom with audio-visual capabilities
+    - Calibration laboratory for hands-on practice
+    - Computer lab for software and statistical training
+    - Access to all equipment types for practical sessions
+
+  materials:
+    - Training manual with all module content
+    - Calibration procedures (all applicable SOPs)
+    - Reference materials (USP, NIST documents, ISO standards)
+    - Practice calibration worksheets
+    - Statistical analysis software
+    - Video demonstrations of critical techniques
+
+continuous_improvement:
+  - Annual review of training program effectiveness
+  - Incorporation of lessons learned from deviations and investigations
+  - Updates for new equipment and technologies
+  - Regulatory requirement changes integration
+  - Trainee and instructor feedback incorporation
+  - Industry best practice adoption
+  - Benchmarking against peer programs

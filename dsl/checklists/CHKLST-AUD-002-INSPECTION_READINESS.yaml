@@ -1,0 +1,422 @@
+# DSL: Inspection Readiness Checklist
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 12.1
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "CHKLST-AUD-002"
+  checklist_type: "inspection_readiness"
+  title: "Audit Trail Inspection Readiness Checklist"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "MHRA Data Integrity Guidance"
+    - "WHO GACP Guidelines"
+
+# ==============================================================================
+# USAGE CONTEXT
+# ==============================================================================
+usage:
+  purpose: "Ensure complete audit trail system documentation and demonstration readiness before regulatory inspection or internal audit"
+
+  frequency: "quarterly"
+
+  trigger: "Scheduled quarterly review, notification of upcoming inspection, internal audit preparation, or compliance assessment"
+
+  responsible_roles:
+    - "ROLE-COMP-001" # Compliance Officer - Primary
+    - "ROLE-QA-001" # Quality Manager - Review
+    - "ROLE-IT-001" # IT Administrator - Technical support
+
+  estimated_duration_minutes: 180
+
+# ==============================================================================
+# CHECKLIST STRUCTURE
+# ==============================================================================
+checklist_structure:
+  # ----------------------------------------------------------------------------
+  # SECTION 1: VALIDATION DOCUMENTATION
+  # ----------------------------------------------------------------------------
+  sections:
+    - section_id: "SEC-001"
+      section_title: "System Validation Documentation"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "INSP-001"
+          item_text: "IQ (Installation Qualification) protocol and report available"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "IQ documentation complete and approved"
+          evidence_required: true
+          guidance: "Verify IQ includes: hardware installation, software installation, network configuration, security setup"
+
+        - item_id: "INSP-002"
+          item_text: "OQ (Operational Qualification) protocol and report available"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "OQ documentation complete and approved"
+          evidence_required: true
+          guidance: "Verify OQ includes: functional testing, integration testing, performance testing, security testing"
+
+        - item_id: "INSP-003"
+          item_text: "PQ (Performance Qualification) protocol and report available"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "PQ documentation complete and approved"
+          evidence_required: true
+          guidance: "Verify PQ includes: real-world scenarios, stress testing, ALCOA+ compliance verification, retention testing"
+
+        - item_id: "INSP-004"
+          item_text: "Validation Summary Report (VSR) approved and current"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "VSR summarizes IQ/OQ/PQ results and confirms system validation"
+          evidence_required: true
+          guidance: "Check VSR date is within last 12 months or after last major system change"
+
+        - item_id: "INSP-005"
+          item_text: "Change control records for system modifications available"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All changes since last inspection documented per SOP-CHG-001"
+          evidence_required: true
+          guidance: "Review change log and verify impact assessments completed"
+
+    # --------------------------------------------------------------------------
+    # SECTION 2: DATA INTEGRITY EVIDENCE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-002"
+      section_title: "Data Integrity Evidence"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "INSP-006"
+          item_text: "Monthly ALCOA+ compliance checklists (CHKLST-AUD-001) for last 12 months"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 12 monthly checklists complete with pass scores >= 95%"
+          evidence_required: true
+          guidance: "Review scoring trends and any corrective actions"
+
+        - item_id: "INSP-007"
+          item_text: "Immutability verification: hash integrity test results"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Latest hash verification shows >= 99.99% success rate"
+          evidence_required: true
+          guidance: "Run fresh hash verification on random sample before inspection"
+
+        - item_id: "INSP-008"
+          item_text: "Tamper-evidence demonstration prepared (attempt to modify record)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Demo script shows system prevents modification and logs attempt"
+          evidence_required: true
+          guidance: "Practice demo: attempt to modify/delete record, show rejection and alert"
+
+        - item_id: "INSP-009"
+          item_text: "Audit trail completeness report: 100% critical event coverage"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Report confirms all event categories per event matrix are captured"
+          evidence_required: true
+          guidance: "Generate report showing event type distribution over last 30 days"
+
+        - item_id: "INSP-010"
+          item_text: "Backup and recovery test results from last 90 days"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Last backup restore test successful with data integrity verified"
+          evidence_required: true
+          guidance: "Review restore test logs and post-restore integrity checks"
+
+    # --------------------------------------------------------------------------
+    # SECTION 3: STANDARD REPORTS AVAILABILITY
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-003"
+      section_title: "Standard Reports Availability"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "INSP-011"
+          item_text: "Daily Activity Summary Reports (REPORT-AUD-001) for last 30 days"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 30 daily reports generated and reviewed"
+          evidence_required: true
+          guidance: "Verify no gaps in daily report generation"
+
+        - item_id: "INSP-012"
+          item_text: "Weekly Security Reports (REPORT-AUD-002) for last 12 weeks"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 12 weekly reports available with follow-up on alerts"
+          evidence_required: true
+          guidance: "Check that security incidents were investigated and resolved"
+
+        - item_id: "INSP-013"
+          item_text: "Monthly Data Integrity Reports (REPORT-AUD-003) for last 12 months"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 12 monthly reports showing consistently high integrity scores"
+          evidence_required: true
+          guidance: "Review trends and any data integrity incidents"
+
+        - item_id: "INSP-014"
+          item_text: "Monthly Compliance Reports (REPORT-AUD-004) for last 12 months"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 12 monthly reports with compliance assessment and CAPA closure"
+          evidence_required: true
+          guidance: "Verify all open CAPAs have action plans"
+
+        - item_id: "INSP-015"
+          item_text: "Quarterly Performance Reports (REPORT-AUD-005) for last 4 quarters"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All 4 quarterly reports showing system performance within spec"
+          evidence_required: true
+          guidance: "Highlight uptime, latency, storage capacity metrics"
+
+    # --------------------------------------------------------------------------
+    # SECTION 4: TRAINING RECORDS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-004"
+      section_title: "Training Records"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "INSP-016"
+          item_text: "TRN-AUD-001 training records for all system users current"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "100% of active users have completed TRN-AUD-001 within last 12 months"
+          evidence_required: true
+          guidance: "Generate training matrix report from LMS"
+
+        - item_id: "INSP-017"
+          item_text: "Role-specific training documented for Compliance Officer, IT Admin, QA Manager"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All key roles have completed advanced training"
+          evidence_required: true
+          guidance: "Verify training includes: data integrity, ALCOA+, system administration"
+
+        - item_id: "INSP-018"
+          item_text: "Training effectiveness assessment completed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Post-training assessments show >= 80% competency"
+          evidence_required: true
+          guidance: "Review quiz results and practical assessments"
+
+    # --------------------------------------------------------------------------
+    # SECTION 5: POLICIES AND PROCEDURES
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-005"
+      section_title: "Policies and Procedures"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "INSP-019"
+          item_text: "SOP-AUDIT-001 current and approved within review period"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "SOP version current, approved, within 12-month review period"
+          evidence_required: true
+          guidance: "Check effective date and next review date"
+
+        - item_id: "INSP-020"
+          item_text: "Related SOPs current: SOP-CHG-001, SOP-CAPA-001, SOP-DEV-001, SOP-DOC-001"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All related SOPs approved and current"
+          evidence_required: false
+          guidance: "Verify document control system shows current versions"
+
+        - item_id: "INSP-021"
+          item_text: "Access control policy documented and enforced"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "RBAC matrix defined, emergency access procedures clear"
+          evidence_required: true
+          guidance: "Review FORM-AUD-001 emergency access records"
+
+        - item_id: "INSP-022"
+          item_text: "Data retention and archival policy documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Retention periods defined per regulatory requirements"
+          evidence_required: true
+          guidance: "Verify: Business Critical (permanent), Quality (permanent), Security (7y), System (5y)"
+
+    # --------------------------------------------------------------------------
+    # SECTION 6: QUICK RESPONSE PREPARATION
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-006"
+      section_title: "Quick Response Preparation"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "INSP-023"
+          item_text: "Batch traceability demo script ready (< 5 minutes to show complete batch history)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Demo script tested and successfully completed in < 5 minutes"
+          evidence_required: true
+          guidance: "Practice demo: select batch, show all audit events from creation to disposition"
+
+        - item_id: "INSP-024"
+          item_text: "ALCOA+ demonstration script ready (< 10 minutes to show all nine principles)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Demo script covers all nine ALCOA+ principles with examples"
+          evidence_required: true
+          guidance: "Practice demo showing: Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+
+        - item_id: "INSP-025"
+          item_text: "User login history query ready (< 2 minutes to retrieve specific user activity)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Prepared query templates for common inspector requests"
+          evidence_required: true
+          guidance: "Test query: show all logins for specific user in date range"
+
+        - item_id: "INSP-026"
+          item_text: "Critical event query ready (show security alerts, failed logins, admin actions)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Query templates tested and return results in < 30 seconds"
+          evidence_required: true
+          guidance: "Test queries for: failed login attempts, privilege escalations, configuration changes"
+
+        - item_id: "INSP-027"
+          item_text: "Export demonstration ready (show CSV, PDF, JSON formats)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Can export sample data in all three formats with validated content"
+          evidence_required: true
+          guidance: "Practice: export search results, verify format and content accuracy"
+
+    # --------------------------------------------------------------------------
+    # SECTION 7: SYSTEM HEALTH CHECK
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-007"
+      section_title: "System Health Check"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "INSP-028"
+          item_text: "System uptime >= 99.9% over last 30 days"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Monitoring dashboard shows >= 99.9% availability"
+          evidence_required: true
+          guidance: "Review uptime metrics from monitoring system"
+
+        - item_id: "INSP-029"
+          item_text: "Storage capacity within limits (< 80% full)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "ImmuDB storage < 80% capacity, growth projections acceptable"
+          evidence_required: true
+          guidance: "Check storage metrics and verify capacity planning"
+
+        - item_id: "INSP-030"
+          item_text: "Performance metrics within specifications (latency < 5s, search < 2s)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Average latency < 5s, search response < 2s"
+          evidence_required: true
+          guidance: "Review performance dashboards from last 30 days"
+
+        - item_id: "INSP-031"
+          item_text: "NTP synchronization active and accurate (< 100ms drift)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "NTP status = active, current drift < 100ms"
+          evidence_required: true
+          guidance: "Check NTP sync status and time accuracy"
+
+        - item_id: "INSP-032"
+          item_text: "No critical alerts or unresolved incidents"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All critical alerts resolved, incidents documented in CAPA"
+          evidence_required: true
+          guidance: "Review alert log and incident management system"
+
+# ==============================================================================
+# SCORING METHOD
+# ==============================================================================
+scoring_method:
+  method: "percentage"
+
+  passing_score: 100
+
+  critical_items:
+    - "INSP-001" # IQ
+    - "INSP-002" # OQ
+    - "INSP-003" # PQ
+    - "INSP-006" # ALCOA+ checklists
+    - "INSP-007" # Hash integrity
+    - "INSP-009" # Event coverage
+    - "INSP-016" # Training current
+    - "INSP-019" # SOP current
+
+  critical_item_requirement: "All critical items must pass - inspection readiness requires 100% critical compliance"
+
+# ==============================================================================
+# CORRECTIVE ACTION
+# ==============================================================================
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document all failed items with root cause"
+      - "Develop action plan with target completion dates"
+      - "Escalate to Compliance Officer and Quality Manager"
+      - "Delay inspection request if possible until items resolved"
+
+    follow_up_required:
+      - "Complete all corrective actions"
+      - "Re-run checklist to verify all items pass"
+      - "Brief inspection response team on remaining risks"
+
+    form_ref: "CAPA-001"
+
+# ==============================================================================
+# STORAGE AND RETENTION
+# ==============================================================================
+storage:
+  location: "electronic"
+  system: "ERP Quality Management"
+  retention_period: "30_years"
+  backup_requirement: "quarterly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_AuditTrail.md Section 12.1"
+    approved_by: "Pending"

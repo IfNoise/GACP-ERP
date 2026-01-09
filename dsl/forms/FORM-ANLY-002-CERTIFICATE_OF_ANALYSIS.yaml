@@ -1,0 +1,736 @@
+---
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-ANLY-002"
+  title: "Certificate of Analysis (CoA)"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_sop: "SOP-ANLY-001"
+  category: "certificate"
+  form_purpose: "Official report of analytical testing results for cannabis products"
+  required_for: "All completed analytical testing batches"
+  approvers:
+    - "Senior Analyst"
+    - "Laboratory Manager"
+    - "QA Laboratory Specialist"
+
+sections:
+  - section_number: 1
+    section_title: "Certificate Header"
+    instructions: "Laboratory and certificate identification information"
+    fields:
+      - field_id: "certificate_number"
+        field_label: "Certificate Number"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          pattern: "^COA-[0-9]{6}$"
+      - field_id: "issue_date"
+        field_label: "Issue Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "laboratory_name"
+        field_label: "Laboratory Name"
+        field_type: "text"
+        required: true
+        readonly: true
+        default: "GACP-ERP Analytical Laboratory"
+      - field_id: "laboratory_address"
+        field_label: "Laboratory Address"
+        field_type: "textarea"
+        required: true
+        readonly: true
+      - field_id: "laboratory_accreditation"
+        field_label: "Accreditation/Certification"
+        field_type: "text"
+        required: false
+        readonly: true
+        placeholder: "ISO/IEC 17025:2017 Accreditation Number (if applicable)"
+      - field_id: "page_number"
+        field_label: "Page"
+        field_type: "text"
+        required: true
+        readonly: true
+        default: "Page 1 of X"
+
+  - section_number: 2
+    section_title: "Client Information"
+    instructions: "Information about the organization submitting the sample"
+    fields:
+      - field_id: "client_name"
+        field_label: "Client Name"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          max_length: 200
+      - field_id: "client_contact_person"
+        field_label: "Contact Person"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          max_length: 100
+      - field_id: "client_address"
+        field_label: "Client Address"
+        field_type: "textarea"
+        required: false
+        readonly: true
+      - field_id: "client_contact_info"
+        field_label: "Contact Phone/Email"
+        field_type: "text"
+        required: false
+        readonly: true
+
+  - section_number: 3
+    section_title: "Sample Information"
+    instructions: "Detailed information about the sample tested"
+    fields:
+      - field_id: "sample_id_client"
+        field_label: "Client Sample ID"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          max_length: 100
+      - field_id: "sample_id_lab"
+        field_label: "Laboratory Sample ID (LIMS)"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          pattern: "^LAB-[A-Z0-9\\-]+$"
+      - field_id: "sample_description"
+        field_label: "Sample Description"
+        field_type: "text"
+        required: true
+        readonly: true
+        validation:
+          max_length: 300
+      - field_id: "sample_type"
+        field_label: "Sample Type/Matrix"
+        field_type: "text"
+        required: true
+        readonly: true
+      - field_id: "batch_lot_number"
+        field_label: "Batch/Lot Number"
+        field_type: "text"
+        required: true
+        readonly: true
+      - field_id: "sample_receipt_date"
+        field_label: "Date Sample Received"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "analysis_start_date"
+        field_label: "Analysis Start Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "analysis_completion_date"
+        field_label: "Analysis Completion Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "sample_condition"
+        field_label: "Sample Condition on Receipt"
+        field_type: "text"
+        required: true
+        readonly: true
+
+  - section_number: 4
+    section_title: "Cannabinoid Analysis Results"
+    instructions: "Quantitative cannabinoid content by HPLC-UV/DAD"
+    fields:
+      - field_id: "cannabinoids_tested"
+        field_label: "Cannabinoids Analyzed"
+        field_type: "checkbox"
+        required: false
+        readonly: true
+        options:
+          - "THC"
+          - "THCA"
+          - "Total THC"
+          - "CBD"
+          - "CBDA"
+          - "Total CBD"
+          - "CBG"
+          - "CBN"
+          - "CBC"
+      - field_id: "thc_result"
+        field_label: "Δ9-THC"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "thca_result"
+        field_label: "THCA"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "total_thc_result"
+        field_label: "Total THC (THC + 0.877 × THCA)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cbd_result"
+        field_label: "CBD"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cbda_result"
+        field_label: "CBDA"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "total_cbd_result"
+        field_label: "Total CBD (CBD + 0.877 × CBDA)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cbg_result"
+        field_label: "CBG"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cbn_result"
+        field_label: "CBN"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cbc_result"
+        field_label: "CBC"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "total_cannabinoids"
+        field_label: "Total Cannabinoids"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "cannabinoid_method"
+        field_label: "Test Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "HPLC-UV/DAD per SOP-ANLY-001-HPLC"
+      - field_id: "cannabinoid_loq"
+        field_label: "Limit of Quantitation (LOQ)"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "0.01 mg/g"
+      - field_id: "cannabinoid_uncertainty"
+        field_label: "Measurement Uncertainty"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "±10% at 95% confidence level"
+
+  - section_number: 5
+    section_title: "Terpene Profile Results"
+    instructions: "Terpene identification and quantitation by GC-MS"
+    fields:
+      - field_id: "terpenes_analyzed"
+        field_label: "Terpene Analysis Performed?"
+        field_type: "radio"
+        required: false
+        readonly: true
+        options:
+          - "Yes"
+          - "No"
+      - field_id: "alpha_pinene"
+        field_label: "α-Pinene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "beta_pinene"
+        field_label: "β-Pinene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "myrcene"
+        field_label: "Myrcene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "limonene"
+        field_label: "Limonene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "linalool"
+        field_label: "Linalool"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "caryophyllene"
+        field_label: "β-Caryophyllene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "humulene"
+        field_label: "Humulene"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "total_terpenes"
+        field_label: "Total Terpenes"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "mg/g or %"
+      - field_id: "terpene_method"
+        field_label: "Test Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "GC-MS per SOP-ANLY-001-GCMS"
+      - field_id: "terpene_loq"
+        field_label: "Limit of Quantitation (LOQ)"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "0.01 mg/g"
+
+  - section_number: 6
+    section_title: "Microbiological Testing Results"
+    instructions: "Microbial limits testing per USP <61> and <62>"
+    fields:
+      - field_id: "microbiology_tested"
+        field_label: "Microbiological Testing Performed?"
+        field_type: "radio"
+        required: false
+        readonly: true
+        options:
+          - "Yes"
+          - "No"
+      - field_id: "total_aerobic_count"
+        field_label: "Total Aerobic Count"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "CFU/g"
+      - field_id: "total_aerobic_limit"
+        field_label: "Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<10^5 CFU/g"
+      - field_id: "total_aerobic_result"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "yeast_mold_count"
+        field_label: "Total Yeast and Mold"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "CFU/g"
+      - field_id: "yeast_mold_limit"
+        field_label: "Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<10^4 CFU/g"
+      - field_id: "yeast_mold_result"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "ecoli_result"
+        field_label: "E. coli"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass (<10 CFU/g)"
+          - "Fail (≥10 CFU/g)"
+      - field_id: "salmonella_result"
+        field_label: "Salmonella spp."
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass (Absent in 1g)"
+          - "Fail (Detected in 1g)"
+      - field_id: "stec_result"
+        field_label: "STEC E. coli"
+        field_label: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass (Absent in 1g)"
+          - "Fail (Detected in 1g)"
+      - field_id: "microbiology_method"
+        field_label: "Test Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "USP <61>, <62>, AOAC 2011.09"
+
+  - section_number: 7
+    section_title: "Heavy Metals Results"
+    instructions: "Heavy metals analysis by ICP-MS"
+    fields:
+      - field_id: "heavy_metals_tested"
+        field_label: "Heavy Metals Testing Performed?"
+        field_type: "radio"
+        required: false
+        readonly: true
+        options:
+          - "Yes"
+          - "No"
+      - field_id: "lead_result"
+        field_label: "Lead (Pb)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "μg/g (ppm)"
+      - field_id: "lead_limit"
+        field_label: "Action Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<0.5 μg/g"
+      - field_id: "lead_pass_fail"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "cadmium_result"
+        field_label: "Cadmium (Cd)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "μg/g (ppm)"
+      - field_id: "cadmium_limit"
+        field_label: "Action Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<0.2 μg/g"
+      - field_id: "cadmium_pass_fail"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "mercury_result"
+        field_label: "Mercury (Hg)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "μg/g (ppm)"
+      - field_id: "mercury_limit"
+        field_label: "Action Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<0.1 μg/g"
+      - field_id: "mercury_pass_fail"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "arsenic_result"
+        field_label: "Arsenic (As)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "μg/g (ppm)"
+      - field_id: "arsenic_limit"
+        field_label: "Action Limit"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "<0.2 μg/g"
+      - field_id: "arsenic_pass_fail"
+        field_label: "Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+      - field_id: "heavy_metals_method"
+        field_label: "Test Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "ICP-MS per SOP-ANLY-001-ICPMS"
+
+  - section_number: 8
+    section_title: "Additional Testing Results"
+    instructions: "Results from other requested tests"
+    fields:
+      - field_id: "moisture_content"
+        field_label: "Moisture Content"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "%"
+      - field_id: "moisture_method"
+        field_label: "Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "Loss on Drying or Karl Fischer"
+      - field_id: "water_activity"
+        field_label: "Water Activity (aw)"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "dimensionless"
+      - field_id: "water_activity_method"
+        field_label: "Method"
+        field_type: "text"
+        required: false
+        readonly: true
+        default: "Water Activity Meter"
+      - field_id: "residual_solvents"
+        field_label: "Residual Solvents Testing"
+        field_type: "text"
+        required: false
+        readonly: true
+        placeholder: "List solvents tested and results"
+      - field_id: "pesticides"
+        field_label: "Pesticide Screening"
+        field_type: "text"
+        required: false
+        readonly: true
+        placeholder: "Pass/Fail or list detections"
+
+  - section_number: 9
+    section_title: "Quality Control Summary"
+    instructions: "QC samples analyzed with this batch"
+    fields:
+      - field_id: "method_blank"
+        field_label: "Method Blank Result"
+        field_type: "dropdown"
+        required: true
+        readonly: true
+        options:
+          - "Pass (<LOQ)"
+          - "Fail (>LOQ)"
+      - field_id: "duplicate_sample_rpd"
+        field_label: "Duplicate Sample RPD"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "%"
+      - field_id: "matrix_spike_recovery"
+        field_label: "Matrix Spike Recovery"
+        field_type: "text"
+        required: false
+        readonly: true
+        unit: "%"
+      - field_id: "reference_material"
+        field_label: "Reference Material Result"
+        field_type: "dropdown"
+        required: false
+        readonly: true
+        options:
+          - "Pass (Within ±10%)"
+          - "Fail"
+      - field_id: "continuing_calibration"
+        field_label: "Continuing Calibration Verification"
+        field_type: "dropdown"
+        required: true
+        readonly: true
+        options:
+          - "Pass (Within ±15%)"
+          - "Fail"
+      - field_id: "system_suitability"
+        field_label: "System Suitability Test"
+        field_type: "dropdown"
+        required: true
+        readonly: true
+        options:
+          - "Pass"
+          - "Fail"
+
+  - section_number: 10
+    section_title: "Overall Result and Comments"
+    instructions: "Final determination and any relevant notes"
+    fields:
+      - field_id: "overall_result"
+        field_label: "Overall Sample Result"
+        field_type: "dropdown"
+        required: true
+        readonly: true
+        options:
+          - "Pass - All Tests Met Specifications"
+          - "Pass with Comments - See Notes"
+          - "Fail - One or More Tests Outside Specifications"
+          - "For Information Only - No Specifications Applied"
+      - field_id: "comments"
+        field_label: "Comments and Notes"
+        field_type: "textarea"
+        required: false
+        readonly: true
+        placeholder: "Any relevant observations, deviations, or additional information"
+        validation:
+          max_length: 1000
+      - field_id: "limitations"
+        field_label: "Limitations and Disclaimers"
+        field_type: "textarea"
+        required: false
+        readonly: true
+        default: "This Certificate of Analysis applies only to the specific sample tested. Results are representative of the sample as received. Unless otherwise noted, tests were performed at the laboratory listed on this certificate using validated methods."
+
+  - section_number: 11
+    section_title: "Approvals and Signatures"
+    instructions: "Electronic signatures of personnel reviewing and approving this CoA"
+    fields:
+      - field_id: "analyst_name"
+        field_label: "Analyzed By (Name)"
+        field_type: "text"
+        required: true
+        readonly: true
+      - field_id: "analyst_signature"
+        field_label: "Analyst Signature"
+        field_type: "signature"
+        required: true
+        readonly: true
+      - field_id: "analyst_date"
+        field_label: "Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "reviewer_name"
+        field_label: "Reviewed By (Senior Analyst)"
+        field_type: "text"
+        required: true
+        readonly: true
+      - field_id: "reviewer_signature"
+        field_label: "Reviewer Signature"
+        field_type: "signature"
+        required: true
+        readonly: true
+      - field_id: "reviewer_date"
+        field_label: "Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "lab_manager_name"
+        field_label: "Approved By (Laboratory Manager)"
+        field_type: "text"
+        required: true
+        readonly: true
+      - field_id: "lab_manager_signature"
+        field_label: "Laboratory Manager Signature"
+        field_type: "signature"
+        required: true
+        readonly: true
+      - field_id: "lab_manager_date"
+        field_label: "Date"
+        field_type: "date"
+        required: true
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "qa_approval_name"
+        field_label: "QA Approval (if required)"
+        field_type: "text"
+        required: false
+        readonly: true
+      - field_id: "qa_approval_signature"
+        field_label: "QA Signature"
+        field_type: "signature"
+        required: false
+        readonly: true
+      - field_id: "qa_approval_date"
+        field_label: "Date"
+        field_type: "date"
+        required: false
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+
+completion_instructions:
+  steps:
+    - "This form is auto-populated from LIMS after all testing and data review is complete"
+    - "Analyst completes initial data review and applies electronic signature"
+    - "Senior Analyst performs second-level review and approves"
+    - "Laboratory Manager performs final review and releases Certificate"
+    - "QA approval may be required for certain sample types or regulatory testing"
+    - "Certificate is automatically generated as PDF and sent to client"
+    - "Original electronic record retained in LIMS with complete audit trail"
+  required_signatures:
+    - "Analyst"
+    - "Senior Analyst (Reviewer)"
+    - "Laboratory Manager"
+  distribution: "Client receives PDF via email, copy retained in LIMS and Document Management System"
+
+validation_rules:
+  critical_fields:
+    - "certificate_number"
+    - "sample_id_lab"
+    - "At least one test section must be completed"
+    - "All QC sections must pass"
+    - "Three levels of approval required"
+  warnings:
+    - condition: "overall_result = 'Fail'"
+      message: "OOS investigation must be completed per SOP-OOS-001 before release"
+    - condition: "any QC fails"
+      message: "Cannot release CoA until QC issues resolved"
+
+related_documents:
+  - "SOP-ANLY-001: Analytical Methods"
+  - "FORM-ANLY-001: Analytical Test Request Form"
+  - "SOP-OOS-001: Out of Specification Investigations"
+  - "SOP-DI-001: Data Integrity"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    description: "Initial release"
+    author: "Laboratory Manager"

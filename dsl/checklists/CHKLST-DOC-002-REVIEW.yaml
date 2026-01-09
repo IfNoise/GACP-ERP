@@ -1,0 +1,492 @@
+# DSL: Document Review Checklist
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-DOC-002"
+  checklist_type: "review"
+  title: "Document Review Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Conduct comprehensive formal review of controlled documents for technical accuracy, regulatory compliance, and cross-reference validation"
+  frequency: "per_document"
+  trigger: "Document submitted for formal review"
+  responsible_roles:
+    - "ROLE-DOCREV-001"
+  estimated_duration_minutes: 60
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Reviewer Information and Scope"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "INFO-001"
+          item_text: "Reviewer expertise appropriate for document content"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Reviewer has SME knowledge in document subject area"
+          evidence_required: false
+          guidance: "If not qualified, escalate to Document Controller for reassignment"
+
+        - item_id: "INFO-002"
+          item_text: "Reviewer has no conflict of interest"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Reviewer independent, not author or direct report of author"
+          evidence_required: false
+          guidance: "Self-review not acceptable for formal review"
+
+        - item_id: "INFO-003"
+          item_text: "Review scope and timeline understood"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Reviewer understands what to review and deadline"
+          evidence_required: false
+          guidance: "Target: 5 business days for standard documents"
+
+    - section_id: "SEC-002"
+      section_title: "Document Completeness"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "COMP-001"
+          item_text: "All required sections present"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document contains all sections required by template"
+          evidence_required: false
+          guidance: "Purpose, Scope, Responsibilities, Procedures, References, etc."
+
+        - item_id: "COMP-002"
+          item_text: "Metadata complete and accurate"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document ID, version, author, related docs, compliance standards complete"
+          evidence_required: false
+          guidance: "Verify metadata fields populated correctly"
+
+        - item_id: "COMP-003"
+          item_text: "Forms and attachments referenced are provided"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All referenced attachments included with document"
+          evidence_required: false
+          guidance: "N/A if no attachments referenced"
+
+        - item_id: "COMP-004"
+          item_text: "Change history updated appropriately"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Change log current with this version, summary of changes clear"
+          evidence_required: false
+          guidance: "Verify version increment justification"
+
+    - section_id: "SEC-003"
+      section_title: "Technical Accuracy and Content"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "TECH-001"
+          item_text: "Technical content accurate and scientifically sound"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Information factually correct, consistent with science and practice"
+          evidence_required: false
+          guidance: "This is primary reviewer responsibility - verify technical accuracy"
+
+        - item_id: "TECH-002"
+          item_text: "Procedures feasible and practical"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Procedures can be performed as written with available resources"
+          evidence_required: false
+          guidance: "Consider equipment, skills, time, materials required"
+
+        - item_id: "TECH-003"
+          item_text: "Process parameters and specifications appropriate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Critical parameters, limits, acceptance criteria scientifically justified"
+          evidence_required: false
+          guidance: "N/A if not procedural document"
+
+        - item_id: "TECH-004"
+          item_text: "Safety and environmental considerations addressed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Hazards identified, safety precautions specified, PPE requirements clear"
+          evidence_required: false
+          guidance: "N/A if no safety or environmental aspects"
+
+        - item_id: "TECH-005"
+          item_text: "Quality controls adequate and appropriate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Quality checkpoints at critical steps, acceptance criteria defined"
+          evidence_required: false
+          guidance: "N/A for non-procedural documents"
+
+        - item_id: "TECH-006"
+          item_text: "Calculations, formulas, and data accurate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All calculations verified, formulas correct, data accurate"
+          evidence_required: false
+          guidance: "N/A if no calculations or data tables"
+
+    - section_id: "SEC-004"
+      section_title: "Regulatory and Compliance"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "REG-001"
+          item_text: "Applicable regulatory requirements identified and met"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "FDA, Health Canada, EU GMP, provincial regulations addressed"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents; otherwise critical item"
+
+        - item_id: "REG-002"
+          item_text: "GMP/GACP principles incorporated"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Good Manufacturing/Agricultural Practices followed"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents"
+
+        - item_id: "REG-003"
+          item_text: "ALCOA+ data integrity principles embedded"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Data handling ensures Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+          evidence_required: false
+          guidance: "N/A if document does not involve data capture or management"
+
+        - item_id: "REG-004"
+          item_text: "21 CFR Part 11 requirements for electronic records/signatures specified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Audit trail, electronic signature, system validation requirements clear"
+          evidence_required: false
+          guidance: "N/A if no electronic records or signatures"
+
+        - item_id: "REG-005"
+          item_text: "Traceability and audit trail requirements adequate"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document specifies how activities will be recorded and traceable"
+          evidence_required: false
+          guidance: "All GxP activities must be traceable"
+
+    - section_id: "SEC-005"
+      section_title: "Cross-Reference Validation"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "XREF-001"
+          item_text: "Related SOPs and documents identified"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All related/referenced documents listed"
+          evidence_required: false
+          guidance: "Check if any related procedures missed"
+
+        - item_id: "XREF-002"
+          item_text: "Cross-referenced documents exist and are current"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All referenced docs verified in Mayan-EDMS, not obsolete"
+          evidence_required: true
+          guidance: "Check system for current versions"
+
+        - item_id: "XREF-003"
+          item_text: "No conflicts with related procedures"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document integrates seamlessly, no contradictions"
+          evidence_required: false
+          guidance: "Review related SOPs for consistency"
+
+        - item_id: "XREF-004"
+          item_text: "Form IDs and template references correct"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Form numbers match controlled forms in system"
+          evidence_required: false
+          guidance: "N/A if no forms referenced"
+
+        - item_id: "XREF-005"
+          item_text: "External references (regulations, standards) cited correctly"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Citations accurate with version/edition/date"
+          evidence_required: false
+          guidance: "Verify against current regulations"
+
+    - section_id: "SEC-006"
+      section_title: "Roles and Responsibilities"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "ROLE-001"
+          item_text: "All roles clearly defined"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Each role has clear description of responsibilities"
+          evidence_required: false
+          guidance: "No ambiguity about who does what"
+
+        - item_id: "ROLE-002"
+          item_text: "Authority and decision-making clear"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Approval authorities and escalation paths defined"
+          evidence_required: false
+          guidance: "Who can approve, reject, make final decisions?"
+
+        - item_id: "ROLE-003"
+          item_text: "Training and qualification requirements specified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Document specifies qualifications or training needed to perform procedures"
+          evidence_required: false
+          guidance: "N/A if no special training required"
+
+        - item_id: "ROLE-004"
+          item_text: "Roles align with organizational structure"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Roles exist in organization, not creating new undefined roles"
+          evidence_required: false
+          guidance: "Use standard role IDs from org structure"
+
+    - section_id: "SEC-007"
+      section_title: "Clarity and Usability"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "CLAR-001"
+          item_text: "Language clear, concise, and unambiguous"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No confusing or ambiguous statements, professional tone"
+          evidence_required: false
+          guidance: "Can target audience understand this?"
+
+        - item_id: "CLAR-002"
+          item_text: "Procedures logically organized and easy to follow"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Steps in logical sequence, numbered, action-oriented"
+          evidence_required: false
+          guidance: "Could a trained person follow this procedure?"
+
+        - item_id: "CLAR-003"
+          item_text: "Technical terms and acronyms defined or explained"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Glossary or definitions provided for non-standard terms"
+          evidence_required: false
+          guidance: "N/A if no technical jargon"
+
+        - item_id: "CLAR-004"
+          item_text: "Visual aids (flowcharts, diagrams, tables) helpful and accurate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Graphics enhance understanding, correctly labeled"
+          evidence_required: false
+          guidance: "N/A if no visual aids"
+
+        - item_id: "CLAR-005"
+          item_text: "Document length appropriate (not unnecessarily verbose)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document concise while remaining complete"
+          evidence_required: false
+          guidance: "Eliminate redundancy and unnecessary detail"
+
+    - section_id: "SEC-008"
+      section_title: "Format and Style"
+      section_order: 8
+      required: true
+
+      items:
+        - item_id: "FMT-001"
+          item_text: "Template used correctly without unauthorized modifications"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Standard template applied, formatting consistent"
+          evidence_required: false
+          guidance: "Template provides consistent look and required sections"
+
+        - item_id: "FMT-002"
+          item_text: "Heading hierarchy and numbering correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No skipped heading levels, numbering sequential"
+          evidence_required: false
+          guidance: "Use automatic heading numbering"
+
+        - item_id: "FMT-003"
+          item_text: "Tables, figures, and attachments numbered and referenced"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Each table/figure has number and caption, referenced in text"
+          evidence_required: false
+          guidance: "N/A if no tables or figures"
+
+        - item_id: "FMT-004"
+          item_text: "Grammar, spelling, and punctuation correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Professional quality, no errors"
+          evidence_required: false
+          guidance: "Use spell-check, but also read for sense"
+
+    - section_id: "SEC-009"
+      section_title: "Impact Assessment"
+      section_order: 9
+      required: true
+
+      items:
+        - item_id: "IMP-001"
+          item_text: "Related documents requiring update identified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "List of other documents needing revision due to this change"
+          evidence_required: false
+          guidance: "N/A if new document with no impact on existing docs"
+
+        - item_id: "IMP-002"
+          item_text: "Training requirements assessed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Reviewer identifies if training needed and for whom"
+          evidence_required: false
+          guidance: "Who needs to be trained on this document?"
+
+        - item_id: "IMP-003"
+          item_text: "Implementation impact on operations considered"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Reviewer assesses if procedures can be implemented without disruption"
+          evidence_required: false
+          guidance: "Are there operational constraints or timing issues?"
+
+        - item_id: "IMP-004"
+          item_text: "Resource requirements realistic"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Required equipment, personnel, time, materials available"
+          evidence_required: false
+          guidance: "Can we actually do what this document describes?"
+
+    - section_id: "SEC-010"
+      section_title: "Final Review Decision"
+      section_order: 10
+      required: true
+
+      items:
+        - item_id: "DEC-001"
+          item_text: "All review criteria met"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All critical items pass, no unresolved major issues"
+          evidence_required: false
+          guidance: "If critical items fail, return to author for revision"
+
+        - item_id: "DEC-002"
+          item_text: "Comments documented clearly for author"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All comments specific, actionable, clearly explained"
+          evidence_required: false
+          guidance: "Author must be able to understand and address comments"
+
+        - item_id: "DEC-003"
+          item_text: "Review decision documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear decision: Approve, Approve with Minor Revisions, Return for Major Revisions"
+          evidence_required: false
+          guidance: "Sign off review with clear recommendation"
+
+decision_criteria:
+  approve:
+    requirements:
+      - "All critical items pass"
+      - "No more than 3 minor comments"
+      - "Document technically sound and compliant"
+    action: "Recommend approval, send to approver"
+
+  approve_with_minor_revisions:
+    requirements:
+      - "All critical items pass"
+      - "4-10 minor comments requiring editorial changes"
+      - "No technical or compliance issues"
+    action: "Approve with condition that author address minor comments"
+
+  return_for_major_revisions:
+    requirements:
+      - "Any critical item fails"
+      - "Significant technical inaccuracies"
+      - "Major compliance gaps"
+      - "> 10 comments or major restructuring needed"
+    action: "Return to author with detailed comments, re-review required"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 90
+  critical_items:
+    - "INFO-001"
+    - "COMP-001"
+    - "TECH-001"
+    - "REG-001"
+    - "REG-005"
+    - "XREF-002"
+    - "XREF-003"
+    - "ROLE-001"
+    - "CLAR-001"
+    - "CLAR-002"
+    - "DEC-001"
+  critical_item_requirement: "All critical items must pass for approval recommendation"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document all deficiencies and non-compliances"
+      - "Provide clear, actionable comments to author"
+      - "Return to author for revision"
+    follow_up_required:
+      - "Author addresses comments"
+      - "Revised document re-submitted for review"
+      - "Re-review focuses on areas previously identified"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

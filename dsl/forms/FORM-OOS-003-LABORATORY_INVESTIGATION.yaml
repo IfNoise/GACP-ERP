@@ -1,0 +1,279 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-OOS-003
+  title: Laboratory Investigation Worksheet (Phase I)
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Control
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: Investigation Identification
+    fields:
+      - field_name: oos_number
+        field_type: text
+        required: true
+        description: OOS investigation number (from FORM-OOS-001)
+
+      - field_name: investigation_start_date
+        field_type: date
+        required: true
+        description: Phase I investigation start date
+
+      - field_name: investigation_leader
+        field_type: text
+        required: true
+        description: Laboratory Supervisor name
+
+  - section_number: 2
+    section_title: Data Review and Verification
+    fields:
+      - field_name: raw_data_reviewed
+        field_type: yes_no
+        required: true
+        description: All raw data (chromatograms, spectra, printouts) reviewed?
+
+      - field_name: calculations_verified
+        field_type: yes_no
+        required: true
+        description: All calculations manually verified?
+
+      - field_name: transcriptions_checked
+        field_type: yes_no
+        required: true
+        description: All transcriptions verified?
+
+      - field_name: data_integrity_confirmed
+        field_type: yes_no
+        required: true
+        description: Data integrity (ALCOA+) verified?
+
+      - field_name: data_anomalies_found
+        field_type: yes_no
+        required: true
+        description: Any data anomalies or irregularities identified?
+
+      - field_name: data_findings
+        field_type: textarea
+        required: true
+        description: Summary of data review findings
+
+  - section_number: 3
+    section_title: Method Compliance Review
+    fields:
+      - field_name: method_followed
+        field_type: yes_no
+        required: true
+        description: Method followed at all steps?
+
+      - field_name: method_suitability_confirmed
+        field_type: yes_no
+        required: true
+        description: Method suitable for sample tested?
+
+      - field_name: method_changes_reviewed
+        field_type: yes_no
+        required: true
+        description: Recent method changes reviewed?
+
+      - field_name: validation_status_confirmed
+        field_type: yes_no
+        required: true
+        description: Method validation status confirmed current?
+
+      - field_name: method_findings
+        field_type: textarea
+        required: true
+        description: Summary of method compliance findings
+
+  - section_number: 4
+    section_title: Equipment and Instrumentation Review
+    fields:
+      - field_name: calibration_current
+        field_type: yes_no
+        required: true
+        description: Instrument calibration current?
+
+      - field_name: maintenance_reviewed
+        field_type: yes_no
+        required: true
+        description: Maintenance records reviewed?
+
+      - field_name: performance_check_done
+        field_type: yes_no
+        required: true
+        description: Performance check executed?
+
+      - field_name: system_suitability_met
+        field_type: yes_no
+        required: true
+        description: System suitability criteria met?
+
+      - field_name: reference_standards_verified
+        field_type: yes_no
+        required: true
+        description: Reference standards verified current?
+
+      - field_name: equipment_findings
+        field_type: textarea
+        required: true
+        description: Summary of equipment review findings
+
+  - section_number: 5
+    section_title: Sample Integrity Assessment
+    fields:
+      - field_name: chain_of_custody_verified
+        field_type: yes_no
+        required: true
+        description: Chain of custody verified?
+
+      - field_name: sample_id_confirmed
+        field_type: yes_no
+        required: true
+        description: Sample identification confirmed?
+
+      - field_name: storage_conditions_ok
+        field_type: yes_no
+        required: true
+        description: Storage conditions appropriate?
+
+      - field_name: sample_preparation_reviewed
+        field_type: yes_no
+        required: true
+        description: Sample preparation reviewed?
+
+      - field_name: sample_findings
+        field_type: textarea
+        required: true
+        description: Summary of sample integrity findings
+
+  - section_number: 6
+    section_title: Re-testing (If Performed)
+    fields:
+      - field_name: retest_performed
+        field_type: yes_no
+        required: true
+        description: Re-testing performed?
+
+      - field_name: retest_justification
+        field_type: textarea
+        required: false
+        description: Scientific justification for re-testing
+
+      - field_name: retest_analyst
+        field_type: text
+        required: false
+        description: Analyst performing retest (different from original)
+
+      - field_name: retest_instrument
+        field_type: text
+        required: false
+        description: Instrument used for retest
+
+      - field_name: retest_result_1
+        field_type: text
+        required: false
+        description: Retest result 1
+
+      - field_name: retest_result_2
+        field_type: text
+        required: false
+        description: Retest result 2 (if performed)
+
+      - field_name: statistical_analysis
+        field_type: textarea
+        required: false
+        description: Statistical analysis of all results (original + retest)
+
+  - section_number: 7
+    section_title: Laboratory Investigation Conclusion
+    fields:
+      - field_name: assignable_cause_identified
+        field_type: yes_no
+        required: true
+        description: Assignable laboratory cause identified?
+
+      - field_name: root_cause_description
+        field_type: textarea
+        required: false
+        description: Description of identified laboratory root cause
+
+      - field_name: root_cause_verification
+        field_type: textarea
+        required: false
+        description: How root cause was verified
+
+      - field_name: phase_2_required
+        field_type: yes_no
+        required: true
+        description: Phase II full investigation required?
+
+      - field_name: conclusion
+        field_type: textarea
+        required: true
+        description: Laboratory investigation conclusion summary
+
+      - field_name: recommendations
+        field_type: textarea
+        required: true
+        description: Recommendations for corrective actions or Phase II investigation
+
+  - section_number: 8
+    section_title: Review and Approval
+    fields:
+      - field_name: investigation_completion_date
+        field_type: date
+        required: true
+        description: Investigation completion date
+
+      - field_name: lab_supervisor_signature
+        field_type: signature
+        required: true
+        description: Laboratory Supervisor signature
+
+      - field_name: lab_supervisor_date
+        field_type: date
+        required: true
+        description: Signature date
+
+      - field_name: qc_manager_signature
+        field_type: signature
+        required: true
+        description: QC Manager signature
+
+      - field_name: qc_manager_date
+        field_type: date
+        required: true
+        description: Signature date
+
+      - field_name: qa_manager_signature
+        field_type: signature
+        required: true
+        description: QA Manager signature
+
+      - field_name: qa_manager_date
+        field_type: date
+        required: true
+        description: Signature date
+
+instructions:
+  - Complete comprehensive laboratory investigation before moving to Phase II
+  - Review all data, methods, equipment, and sample integrity thoroughly
+  - Document all findings objectively with supporting evidence
+  - Re-testing must be scientifically justified - cannot be used to invalidate original OOS
+  - All results (original and retest) must be reported and evaluated
+  - If laboratory cause identified, document root cause and verification
+  - If no laboratory cause found, recommend Phase II full investigation
+  - Target completion: 5-10 business days from OOS identification
+  - Attach all supporting documentation (chromatograms, calculations, equipment logs)
+
+validation_rules:
+  - All investigation sections must be completed
+  - Cannot skip to Phase II without completing thorough Phase I investigation
+  - If retest performed, justification and statistical analysis required
+  - If assignable cause identified, root cause description and verification required
+  - All required approvals must be obtained

@@ -1,0 +1,362 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-EQCAL-001
+  title: Equipment Classification and Risk Assessment Record
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  retention_period: Life of equipment + 7 years
+
+sections:
+  - section_number: 1
+    section_title: Equipment Identification
+    fields:
+      - field_name: equipment_id
+        field_type: text
+        required: true
+        description: Unique equipment identifier code
+
+      - field_name: equipment_name
+        field_type: text
+        required: true
+        description: Equipment name/description
+
+      - field_name: manufacturer
+        field_type: text
+        required: true
+        description: Equipment manufacturer name
+
+      - field_name: model_number
+        field_type: text
+        required: true
+        description: Manufacturer model number
+
+      - field_name: serial_number
+        field_type: text
+        required: true
+        description: Equipment serial number
+
+      - field_name: location
+        field_type: text
+        required: true
+        description: Physical location of equipment (facility, room, area)
+
+      - field_name: department_owner
+        field_type: text
+        required: true
+        description: Department responsible for equipment
+
+      - field_name: equipment_type
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Analytical Balance
+            - HPLC System
+            - GC-MS System
+            - pH Meter
+            - Temperature Sensor
+            - Pressure Gauge
+            - Flow Meter
+            - Conductivity Meter
+            - Environmental Controller
+            - Data Logger
+            - Scale (Non-analytical)
+            - Spectrophotometer
+            - Moisture Analyzer
+            - Ruler/Caliper
+            - Stopwatch
+            - Basic Thermometer
+            - Other
+
+  - section_number: 2
+    section_title: Risk Assessment - Product Quality Impact
+    fields:
+      - field_name: product_quality_impact_score
+        field_type: select
+        required: true
+        options:
+          enum:
+            - 1 - Minimal or no impact on product quality
+            - 2 - Minor impact, non-critical parameters
+            - 3 - Moderate impact, affects product characteristics
+            - 4 - Direct critical impact on product quality and safety
+        description: Score 1-4 based on equipment's direct impact on product quality
+
+      - field_name: product_quality_justification
+        field_type: textarea
+        required: true
+        description: Detailed justification for product quality impact score including specific parameters affected and potential consequences
+
+      - field_name: product_testing_use
+        field_type: yes_no
+        required: true
+        description: Is equipment used for product release testing or critical quality parameter measurement?
+
+  - section_number: 3
+    section_title: Risk Assessment - Regulatory Significance
+    fields:
+      - field_name: regulatory_significance_score
+        field_type: select
+        required: true
+        options:
+          enum:
+            - 1 - Not subject to regulatory requirements
+            - 2 - General documentation requirements
+            - 3 - Subject to specific regulatory calibration requirements
+            - 4 - Critical regulatory compliance equipment (GMP, GACP critical)
+        description: Score 1-4 based on regulatory compliance significance
+
+      - field_name: regulatory_justification
+        field_type: textarea
+        required: true
+        description: Regulatory requirements applicable to this equipment (GACP, GMP, USP, FDA 21 CFR Part 11, etc.)
+
+      - field_name: audit_inspections
+        field_type: yes_no
+        required: true
+        description: Is equipment typically reviewed during regulatory audits or inspections?
+
+      - field_name: compliance_citations
+        field_type: textarea
+        required: false
+        description: Specific regulatory citations or standards applicable (USP chapter, GACP section, etc.)
+
+  - section_number: 4
+    section_title: Risk Assessment - Measurement Criticality
+    fields:
+      - field_name: measurement_criticality_score
+        field_type: select
+        required: true
+        options:
+          enum:
+            - 1 - Non-critical measurements, no decision making
+            - 2 - Informational measurements, minimal decision impact
+            - 3 - Important measurements affecting process decisions
+            - 4 - Critical measurements for product release or safety decisions
+        description: Score 1-4 based on criticality of measurements for decision making
+
+      - field_name: measurement_criticality_justification
+        field_type: textarea
+        required: true
+        description: How measurement results are used and consequences of inaccurate measurements
+
+      - field_name: decision_types
+        field_type: checkbox_group
+        required: true
+        options:
+          enum:
+            - Product release decisions
+            - Process control adjustments
+            - Environmental condition verification
+            - Batch disposition
+            - Specification compliance
+            - Safety limit monitoring
+            - Regulatory reporting
+            - Trend analysis only
+            - General information
+
+  - section_number: 5
+    section_title: Risk Assessment - Failure Consequence
+    fields:
+      - field_name: failure_consequence_score
+        field_type: select
+        required: true
+        options:
+          enum:
+            - 1 - Minimal consequence, easily detected and corrected
+            - 2 - Minor consequence, limited impact on operations
+            - 3 - Moderate consequence, significant operational or quality impact
+            - 4 - Severe consequence, major quality/safety/regulatory risk
+        description: Score 1-4 based on potential consequences of equipment failure or out-of-tolerance condition
+
+      - field_name: failure_consequence_justification
+        field_type: textarea
+        required: true
+        description: Potential consequences including product quality, safety, business, and regulatory impacts
+
+      - field_name: failure_detectability
+        field_type: select
+        required: true
+        options:
+          enum:
+            - High - Immediate detection through alarms or checks
+            - Medium - Detection through periodic monitoring
+            - Low - May not be detected until next calibration
+
+      - field_name: backup_equipment_available
+        field_type: yes_no
+        required: true
+        description: Is backup or redundant equipment available if this equipment fails or is out of calibration?
+
+  - section_number: 6
+    section_title: Risk Score Calculation and Equipment Classification
+    fields:
+      - field_name: total_risk_score
+        field_type: number
+        required: true
+        description: Sum of all four risk factor scores (4-16 range)
+        validation: Must be sum of product quality impact + regulatory significance + measurement criticality + failure consequence scores
+
+      - field_name: equipment_classification
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Class A (Critical - High Risk, Score 11-16)
+            - Class B (Important - Medium Risk, Score 7-10)
+            - Class C (Standard - Low Risk, Score 4-6)
+        description: Equipment classification based on total risk score
+
+      - field_name: classification_justification
+        field_type: textarea
+        required: true
+        description: Summary justification for final equipment classification including all risk factors
+
+  - section_number: 7
+    section_title: Calibration Requirements
+    fields:
+      - field_name: calibration_frequency
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Weekly
+            - Monthly
+            - Quarterly
+            - Semi-Annual
+            - Annual
+            - Biennial
+            - As Needed
+        description: Required calibration frequency based on classification and risk
+
+      - field_name: frequency_justification
+        field_type: textarea
+        required: true
+        description: Justification for calibration frequency including manufacturer recommendations, regulatory requirements, historical performance, and risk factors
+
+      - field_name: calibration_procedure
+        field_type: text
+        required: true
+        description: Applicable calibration procedure document number or reference
+
+      - field_name: calibration_points
+        field_type: text
+        required: true
+        description: Number and location of calibration points (e.g., 5-point, 0-25-50-75-100%)
+
+      - field_name: acceptance_criteria
+        field_type: text
+        required: true
+        description: Calibration acceptance criteria (tolerance, accuracy requirements)
+
+      - field_name: standards_required
+        field_type: textarea
+        required: true
+        description: Calibration standards and reference equipment required
+
+  - section_number: 8
+    section_title: Special Requirements
+    fields:
+      - field_name: environmental_requirements
+        field_type: textarea
+        required: false
+        description: Special environmental conditions required for calibration (temperature, humidity, vibration control)
+
+      - field_name: warm_up_time
+        field_type: text
+        required: false
+        description: Required warm-up or stabilization time before calibration
+
+      - field_name: external_calibration_required
+        field_type: yes_no
+        required: true
+        description: Must calibration be performed by external accredited laboratory?
+
+      - field_name: external_lab_requirements
+        field_type: text
+        required: false
+        description: Accreditation requirements for external lab (ISO/IEC 17025, NIST traceability, etc.)
+
+      - field_name: special_handling
+        field_type: textarea
+        required: false
+        description: Any special handling, safety, or operational requirements for calibration
+
+  - section_number: 9
+    section_title: Review and Approval
+    fields:
+      - field_name: assessment_date
+        field_type: date
+        required: true
+        description: Date risk assessment completed
+
+      - field_name: assessed_by_name
+        field_type: text
+        required: true
+        description: Name of person performing risk assessment
+
+      - field_name: assessed_by_title
+        field_type: text
+        required: true
+        description: Title of person performing assessment
+
+      - field_name: assessed_by_signature
+        field_type: signature
+        required: true
+        description: Electronic signature of assessor
+
+      - field_name: engineering_review_name
+        field_type: text
+        required: true
+        description: Engineering Manager name
+
+      - field_name: engineering_review_date
+        field_type: date
+        required: true
+        description: Engineering review date
+
+      - field_name: engineering_review_signature
+        field_type: signature
+        required: true
+        description: Engineering Manager electronic signature
+
+      - field_name: qa_review_name
+        field_type: text
+        required: true
+        description: QA Representative name
+
+      - field_name: qa_review_date
+        field_type: date
+        required: true
+        description: QA review date
+
+      - field_name: qa_review_signature
+        field_type: signature
+        required: true
+        description: QA Representative electronic signature
+
+      - field_name: next_review_date
+        field_type: date
+        required: true
+        description: Next scheduled classification review date (annual minimum)
+
+instructions:
+  - Complete risk assessment for all new equipment before placing in service
+  - Review and update classification annually or when equipment use changes
+  - Use scoring matrix consistently - 1 (low) to 4 (high) for each risk factor
+  - Total risk score determines classification automatically (Class A = 11-16, Class B = 7-10, Class C = 4-6)
+  - Classification determines calibration requirements, frequency, and oversight level
+  - Engineering Manager and QA must both review and approve classification
+  - Equipment cannot be placed in service without completed and approved classification
+  - Changes to classification require new risk assessment and approval
+
+validation_rules:
+  - Total risk score must equal sum of four individual risk factor scores
+  - Equipment classification must match total risk score range
+  - Calibration frequency must be appropriate for equipment class
+  - All signatures required before form considered complete
+  - Next review date must be within 1 year of assessment date

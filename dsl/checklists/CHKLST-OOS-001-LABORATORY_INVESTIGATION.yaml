@@ -1,0 +1,281 @@
+schema_version: "1.0.0"
+type: checklist
+metadata:
+  id: CHKLST-OOS-001
+  title: Laboratory Investigation Checklist (Phase I)
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Control
+  classification: Critical
+  frequency: Per OOS Investigation
+
+sections:
+  - section_number: 1
+    section_title: Initial Actions and Preparation
+    items:
+      - item_number: 1.1
+        description: OOS result documented and notification completed per FORM-OOS-001
+        verification_method: Review completed FORM-OOS-001
+        acceptance_criteria: Form complete with all required notifications and timestamps
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 1.2
+        description: Sample and materials quarantined with appropriate labels
+        verification_method: Physical verification of quarantine status
+        acceptance_criteria: OOS HOLD labels applied, inventory system holds in place
+        responsible_role: Laboratory Analyst
+
+      - item_number: 1.3
+        description: All raw data and documentation preserved and secured
+        verification_method: Verify data preservation and security
+        acceptance_criteria: All chromatograms, printouts, logs secured and accessible
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 1.4
+        description: Investigation team assigned and timeline established
+        verification_method: Review FORM-OOS-001 Section 6
+        acceptance_criteria: Investigation leader and team identified, target date set
+        responsible_role: QC Manager
+
+  - section_number: 2
+    section_title: Data Review and Verification
+    items:
+      - item_number: 2.1
+        description: All raw data reviewed including chromatograms, spectra, and instrument printouts
+        verification_method: Line-by-line review of all analytical records
+        acceptance_criteria: Complete data package reviewed, no missing data
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 2.2
+        description: All calculations manually verified (dilutions, response factors, concentrations)
+        verification_method: Independent recalculation by second person
+        acceptance_criteria: All calculations verified correct or errors identified
+        responsible_role: Laboratory Analyst
+
+      - item_number: 2.3
+        description: All transcriptions checked from instrument to worksheet to report
+        verification_method: Line-by-line comparison of transcribed data
+        acceptance_criteria: All transcriptions verified accurate or errors found
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 2.4
+        description: Data integrity (ALCOA+) verified - complete, consistent, accurate, traceable
+        verification_method: ALCOA+ assessment of all records
+        acceptance_criteria: All data meets ALCOA+ requirements
+        responsible_role: Quality Assurance Representative
+
+      - item_number: 2.5
+        description: Any data anomalies or irregularities documented
+        verification_method: Review for unusual observations or patterns
+        acceptance_criteria: All anomalies documented with assessment of significance
+        responsible_role: Laboratory Supervisor
+
+  - section_number: 3
+    section_title: Method Compliance and Suitability
+    items:
+      - item_number: 3.1
+        description: Analytical method followed at all steps per approved procedure
+        verification_method: Comparison of executed steps to method requirements
+        acceptance_criteria: All method steps followed or deviations documented
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 3.2
+        description: Method suitable for sample matrix and concentration range
+        verification_method: Review method validation and intended use
+        acceptance_criteria: Method validated for sample type and concentration
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 3.3
+        description: Recent method changes or revisions reviewed
+        verification_method: Check method history and recent modifications
+        acceptance_criteria: No recent changes affecting results or changes assessed
+        responsible_role: QC Manager
+
+      - item_number: 3.4
+        description: Method validation status confirmed current
+        verification_method: Review validation documentation and revalidation dates
+        acceptance_criteria: Method validation current and no revalidation overdue
+        responsible_role: Laboratory Supervisor
+
+  - section_number: 4
+    section_title: Equipment and Instrumentation
+    items:
+      - item_number: 4.1
+        description: Instrument calibration status verified current
+        verification_method: Check calibration label and database
+        acceptance_criteria: Calibration current at time of analysis
+        responsible_role: Laboratory Analyst
+
+      - item_number: 4.2
+        description: Maintenance records reviewed for past 3 months
+        verification_method: Review maintenance log and service records
+        acceptance_criteria: No maintenance issues affecting performance
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 4.3
+        description: Equipment performance check executed with reference standard
+        verification_method: Run performance verification test
+        acceptance_criteria: Performance within expected range for reference
+        responsible_role: Laboratory Analyst
+
+      - item_number: 4.4
+        description: System suitability test results reviewed and met criteria
+        verification_method: Review SST parameters against acceptance criteria
+        acceptance_criteria: All SST parameters within specifications
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 4.5
+        description: Reference standards verified current and properly prepared
+        verification_method: Check expiration dates and preparation records
+        acceptance_criteria: Standards not expired, properly prepared and stored
+        responsible_role: Laboratory Analyst
+
+  - section_number: 5
+    section_title: Sample Integrity
+    items:
+      - item_number: 5.1
+        description: Chain of custody verified from collection through analysis
+        verification_method: Review COC documentation
+        acceptance_criteria: Complete COC with no gaps or discrepancies
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 5.2
+        description: Sample identification confirmed through labels and documentation
+        verification_method: Match sample label to paperwork and batch records
+        acceptance_criteria: Sample identity confirmed, no mix-ups possible
+        responsible_role: Laboratory Analyst
+
+      - item_number: 5.3
+        description: Storage conditions appropriate between collection and analysis
+        verification_method: Review storage temperature logs and conditions
+        acceptance_criteria: Storage conditions maintained per requirements
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 5.4
+        description: Sample preparation reviewed for errors or deviations
+        verification_method: Review sample preparation records and observations
+        acceptance_criteria: Sample prep correct or issues identified
+        responsible_role: Laboratory Analyst
+
+  - section_number: 6
+    section_title: Environmental and Cross-Contamination Assessment
+    items:
+      - item_number: 6.1
+        description: Environmental conditions (temperature, humidity) reviewed
+        verification_method: Check environmental monitoring data
+        acceptance_criteria: Conditions within method specifications during analysis
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 6.2
+        description: Laboratory workflow evaluated for cross-contamination potential
+        verification_method: Review sample sequence and laboratory activities
+        acceptance_criteria: No cross-contamination risks identified
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 6.3
+        description: Equipment cleaning verified between samples
+        verification_method: Check equipment cleaning log
+        acceptance_criteria: Cleaning performed per schedule and verified
+        responsible_role: Laboratory Analyst
+
+  - section_number: 7
+    section_title: Re-testing (If Performed)
+    items:
+      - item_number: 7.1
+        description: Scientific justification for re-testing documented
+        verification_method: Review rationale in investigation worksheet
+        acceptance_criteria: Clear justification based on investigation findings
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 7.2
+        description: Re-test performed by different analyst if qualified analyst available
+        verification_method: Verify analyst assignment
+        acceptance_criteria: Different analyst or justification for same analyst
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 7.3
+        description: Re-test performed on different instrument if available
+        verification_method: Check instrument used for retest
+        acceptance_criteria: Different instrument or justification documented
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 7.4
+        description: All results (original and retest) documented and evaluated
+        verification_method: Review complete result set with statistical analysis
+        acceptance_criteria: All results reported, none excluded, statistical analysis performed
+        responsible_role: Laboratory Supervisor
+
+  - section_number: 8
+    section_title: Investigation Conclusion
+    items:
+      - item_number: 8.1
+        description: Laboratory investigation report completed using FORM-OOS-003
+        verification_method: Review completed investigation worksheet
+        acceptance_criteria: All sections complete with findings documented
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 8.2
+        description: Assignable cause determination made (identified or not identified)
+        verification_method: Review conclusion section
+        acceptance_criteria: Clear statement if laboratory cause identified
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 8.3
+        description: If cause identified, root cause verified with supporting evidence
+        verification_method: Review verification documentation
+        acceptance_criteria: Root cause confirmed through testing or evaluation
+        responsible_role: QC Manager
+
+      - item_number: 8.4
+        description: Recommendation documented (close or proceed to Phase II)
+        verification_method: Review recommendations section
+        acceptance_criteria: Clear recommendation with justification
+        responsible_role: Laboratory Supervisor
+
+      - item_number: 8.5
+        description: All required approvals obtained (Lab Supervisor, QC Manager, QA Manager)
+        verification_method: Verify signatures on investigation report
+        acceptance_criteria: All required signatures and dates present
+        responsible_role: Quality Assurance Manager
+
+completion:
+  - field_name: investigation_completed_by
+    field_type: text
+    required: true
+    description: Laboratory Supervisor name
+
+  - field_name: completion_date
+    field_type: date
+    required: true
+    description: Investigation completion date
+
+  - field_name: supervisor_signature
+    field_type: signature
+    required: true
+    description: Laboratory Supervisor electronic signature
+
+  - field_name: all_items_verified
+    field_type: yes_no
+    required: true
+    description: All checklist items completed satisfactorily?
+
+  - field_name: issues_identified
+    field_type: textarea
+    required: false
+    description: Any issues or concerns identified during investigation
+
+instructions:
+  - Complete all checklist items during Phase I laboratory investigation
+  - Each item must be verified and checked off before proceeding to conclusion
+  - Document any findings or issues in investigation worksheet
+  - If any critical items cannot be completed, escalate to QC Manager
+  - Attach completed checklist to FORM-OOS-003 Laboratory Investigation Worksheet
+  - Target completion: 5-10 business days from OOS identification
+  - All items must be satisfactorily completed before closing Phase I or proceeding to Phase II
+
+validation_rules:
+  - All checklist items must be completed and verified
+  - Cannot proceed to investigation conclusion without completing all items
+  - If assignable cause identified, verification must be documented
+  - All required approvals must be obtained before investigation considered complete

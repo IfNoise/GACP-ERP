@@ -1,0 +1,524 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-EQCAL-005
+  title: pH Meter Calibration Record
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: Equipment Information
+    fields:
+      - field_name: equipment_id
+        field_type: text
+        required: true
+        description: pH meter equipment identifier
+
+      - field_name: equipment_description
+        field_type: text
+        required: true
+        description: pH meter description and model
+
+      - field_name: serial_number
+        field_type: text
+        required: true
+        description: Meter serial number
+
+      - field_name: electrode_id
+        field_type: text
+        required: true
+        description: pH electrode identifier
+
+      - field_name: electrode_type
+        field_type: text
+        required: true
+        description: Electrode type and model
+
+      - field_name: location
+        field_type: text
+        required: true
+        description: Equipment location
+
+      - field_name: calibration_date
+        field_type: date
+        required: true
+        description: Calibration date
+
+      - field_name: calibration_time
+        field_type: time
+        required: true
+        description: Calibration time
+
+      - field_name: technician_name
+        field_type: text
+        required: true
+        description: Calibration technician
+
+      - field_name: procedure_reference
+        field_type: text
+        required: true
+        description: Procedure reference
+
+  - section_number: 2
+    section_title: Environmental Conditions and Equipment Check
+    fields:
+      - field_name: ambient_temperature
+        field_type: number
+        required: true
+        description: Ambient temperature (°C)
+
+      - field_name: electrode_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Excellent - Clean, no damage
+            - Good - Minor residue, functional
+            - Fair - Cleaning required
+            - Poor - Damage visible, consider replacement
+        description: pH electrode physical condition
+
+      - field_name: electrode_storage_solution
+        field_type: yes_no
+        required: true
+        description: Electrode stored in proper storage solution?
+
+      - field_name: electrode_cleaned
+        field_type: yes_no
+        required: true
+        description: Electrode cleaned before calibration?
+
+  - section_number: 3
+    section_title: pH Buffer Solutions
+    fields:
+      - field_name: buffer_ph4_lot
+        field_type: text
+        required: true
+        description: pH 4.01 buffer lot number
+
+      - field_name: buffer_ph4_expiration
+        field_type: date
+        required: true
+        description: pH 4.01 buffer expiration date
+        validation: Must be current (not expired)
+
+      - field_name: buffer_ph4_temperature
+        field_type: number
+        required: true
+        description: pH 4.01 buffer temperature (°C)
+
+      - field_name: buffer_ph7_lot
+        field_type: text
+        required: true
+        description: pH 7.00 buffer lot number
+
+      - field_name: buffer_ph7_expiration
+        field_type: date
+        required: true
+        description: pH 7.00 buffer expiration date
+        validation: Must be current (not expired)
+
+      - field_name: buffer_ph7_temperature
+        field_type: number
+        required: true
+        description: pH 7.00 buffer temperature (°C)
+
+      - field_name: buffer_ph10_lot
+        field_type: text
+        required: true
+        description: pH 10.01 buffer lot number
+
+      - field_name: buffer_ph10_expiration
+        field_type: date
+        required: true
+        description: pH 10.01 buffer expiration date
+        validation: Must be current (not expired)
+
+      - field_name: buffer_ph10_temperature
+        field_type: number
+        required: true
+        description: pH 10.01 buffer temperature (°C)
+
+      - field_name: buffer_certification
+        field_type: text
+        required: true
+        description: Buffer certification/traceability reference
+
+  - section_number: 4
+    section_title: Two-Point Calibration - pH 7.00 Buffer
+    fields:
+      - field_name: ph7_rinse_performed
+        field_type: yes_no
+        required: true
+        description: Electrode rinsed with deionized water before pH 7 buffer?
+
+      - field_name: ph7_initial_reading
+        field_type: number
+        required: true
+        description: Initial pH reading in pH 7.00 buffer (before adjustment)
+
+      - field_name: ph7_stabilization_time
+        field_type: number
+        required: true
+        description: Stabilization time (seconds)
+
+      - field_name: ph7_adjustment_made
+        field_type: yes_no
+        required: true
+        description: pH 7.00 adjustment made (offset calibration)?
+
+      - field_name: ph7_final_reading
+        field_type: number
+        required: true
+        description: Final reading after adjustment (should read 7.00)
+        validation: Should be 7.00 ±0.02
+
+      - field_name: ph7_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria for pH 7.00 (typically 7.00 ±0.02)
+
+      - field_name: ph7_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: pH 7.00 calibration result
+
+  - section_number: 5
+    section_title: Two-Point Calibration - pH 4.01 Buffer
+    fields:
+      - field_name: ph4_rinse_performed
+        field_type: yes_no
+        required: true
+        description: Electrode rinsed thoroughly before pH 4 buffer?
+
+      - field_name: ph4_initial_reading
+        field_type: number
+        required: true
+        description: Initial pH reading in pH 4.01 buffer (before slope adjustment)
+
+      - field_name: ph4_stabilization_time
+        field_type: number
+        required: true
+        description: Stabilization time (seconds)
+
+      - field_name: ph4_slope_adjustment_made
+        field_type: yes_no
+        required: true
+        description: Slope adjustment made based on pH 4 reading?
+
+      - field_name: ph4_final_reading
+        field_type: number
+        required: true
+        description: Final reading after slope adjustment (should read 4.01)
+        validation: Should be 4.01 ±0.05
+
+      - field_name: ph4_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria for pH 4.01 (typically 4.01 ±0.05)
+
+      - field_name: ph4_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: pH 4.01 calibration result
+
+  - section_number: 6
+    section_title: Three-Point Verification - pH 10.01 Buffer
+    fields:
+      - field_name: ph10_verification_required
+        field_type: yes_no
+        required: true
+        description: Is three-point verification required for this meter?
+
+      - field_name: ph10_rinse_performed
+        field_type: yes_no
+        required: false
+        description: Electrode rinsed thoroughly before pH 10 buffer?
+
+      - field_name: ph10_reading
+        field_type: number
+        required: false
+        description: pH reading in pH 10.01 buffer (no adjustment made)
+
+      - field_name: ph10_stabilization_time
+        field_type: number
+        required: false
+        description: Stabilization time (seconds)
+
+      - field_name: ph10_acceptance
+        field_type: text
+        required: false
+        description: Acceptance criteria for pH 10.01 (typically 10.01 ±0.05)
+
+      - field_name: ph10_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass
+            - Fail
+            - Not Applicable
+        description: pH 10.01 verification result
+
+  - section_number: 7
+    section_title: Slope Calculation and Verification
+    fields:
+      - field_name: slope_percentage
+        field_type: number
+        required: true
+        description: Calculated slope percentage (% of theoretical slope)
+        validation: Should be >95% typically
+
+      - field_name: slope_mv_per_ph
+        field_type: number
+        required: true
+        description: Slope in mV per pH unit
+
+      - field_name: theoretical_slope
+        field_type: number
+        required: true
+        description: Theoretical slope at calibration temperature (typically 59.16 mV/pH at 25°C)
+
+      - field_name: slope_acceptance_criteria
+        field_type: text
+        required: true
+        description: Slope acceptance criteria (typically >95% of theoretical)
+
+      - field_name: slope_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass - Slope >95%
+            - Marginal - Slope 90-95%
+            - Fail - Slope <90%
+        description: Slope verification result
+
+      - field_name: slope_interpretation
+        field_type: textarea
+        required: false
+        description: Interpretation of slope result (indicates electrode condition)
+
+  - section_number: 8
+    section_title: Response Time Test
+    fields:
+      - field_name: response_time_test_required
+        field_type: yes_no
+        required: true
+        description: Is response time test required for this equipment class?
+
+      - field_name: response_start_buffer
+        field_type: select
+        required: false
+        options:
+          enum:
+            - pH 4.01
+            - pH 7.00
+        description: Starting buffer for response test
+
+      - field_name: response_end_buffer
+        field_type: select
+        required: false
+        options:
+          enum:
+            - pH 7.00
+            - pH 10.01
+        description: Ending buffer for response test
+
+      - field_name: time_to_stable_reading
+        field_type: number
+        required: false
+        description: Time to reach stable reading (seconds)
+
+      - field_name: response_time_acceptance
+        field_type: text
+        required: false
+        description: Response time acceptance criteria (typically <30 seconds)
+
+      - field_name: response_time_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass
+            - Fail
+            - Not Applicable
+        description: Response time test result
+
+  - section_number: 9
+    section_title: As-Found and As-Left Condition
+    fields:
+      - field_name: as_found_ph7_reading
+        field_type: number
+        required: true
+        description: As-found pH 7 reading (before calibration)
+
+      - field_name: as_found_ph4_reading
+        field_type: number
+        required: true
+        description: As-found pH 4 reading (before calibration)
+
+      - field_name: as_found_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance - No adjustment needed
+            - Out of Tolerance - Adjustment required
+            - Marginal - Near limits
+        description: As-found condition classification
+
+      - field_name: adjustments_made
+        field_type: textarea
+        required: false
+        description: Description of calibration adjustments performed
+
+      - field_name: as_left_ph7_reading
+        field_type: number
+        required: true
+        description: As-left pH 7 reading (after calibration)
+
+      - field_name: as_left_ph4_reading
+        field_type: number
+        required: true
+        description: As-left pH 4 reading (after calibration)
+
+      - field_name: as_left_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance - Pass
+            - Out of Tolerance - Fail
+        description: As-left condition classification
+
+  - section_number: 10
+    section_title: Electrode Maintenance and Recommendations
+    fields:
+      - field_name: electrode_age
+        field_type: text
+        required: true
+        description: Electrode age or service life
+
+      - field_name: electrode_replacement_recommended
+        field_type: select
+        required: true
+        options:
+          enum:
+            - No - Electrode in good condition
+            - Soon - Electrode showing wear, plan replacement
+            - Yes - Immediate replacement recommended
+        description: Electrode replacement recommendation
+
+      - field_name: maintenance_performed
+        field_type: textarea
+        required: false
+        description: Electrode maintenance performed (cleaning, reconditioning, etc.)
+
+      - field_name: maintenance_recommendations
+        field_type: textarea
+        required: false
+        description: Recommendations for future maintenance or electrode care
+
+  - section_number: 11
+    section_title: Overall Calibration Result
+    fields:
+      - field_name: overall_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass - All tests within acceptance criteria
+            - Pass with Electrode Warning - Replace electrode soon
+            - Fail - One or more tests out of tolerance
+        description: Overall calibration determination
+
+      - field_name: limitations
+        field_type: textarea
+        required: false
+        description: Any use limitations or restrictions
+
+      - field_name: equipment_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - IN CALIBRATION - Released for Use
+            - OUT OF CALIBRATION - Remove from Service
+            - LIMITED USE - Restrictions Apply
+        description: Equipment operational status
+
+      - field_name: next_calibration_due
+        field_type: date
+        required: true
+        description: Next calibration due date
+
+      - field_name: label_applied
+        field_type: yes_no
+        required: true
+        description: Calibration label applied to meter?
+
+  - section_number: 12
+    section_title: Review and Approval
+    fields:
+      - field_name: technician_signature
+        field_type: signature
+        required: true
+        description: Technician electronic signature
+
+      - field_name: technician_date
+        field_type: date
+        required: true
+        description: Technician signature date
+
+      - field_name: reviewer_name
+        field_type: text
+        required: true
+        description: Reviewer name (required for Class A meters)
+
+      - field_name: reviewer_signature
+        field_type: signature
+        required: true
+        description: Reviewer electronic signature
+
+      - field_name: reviewer_date
+        field_type: date
+        required: true
+        description: Reviewer signature date
+
+instructions:
+  - Use only fresh, non-expired pH buffers for calibration
+  - Ensure all buffers are at same temperature (preferably 25°C)
+  - Rinse electrode thoroughly with deionized water between buffers
+  - Allow readings to stabilize before recording (typically 30-60 seconds)
+  - Always calibrate at pH 7.00 first (offset), then pH 4.01 (slope)
+  - pH 10.01 is verification only - do not adjust meter based on pH 10 reading
+  - Slope percentage >95% indicates healthy electrode
+  - Slope <90% indicates electrode degradation - consider replacement
+  - Response time test required for Class A pH meters used in critical applications
+  - If any calibration point fails, mark meter OUT OF CALIBRATION
+  - QA review required for Class A pH meters
+  - Apply calibration label showing next due date
+
+validation_rules:
+  - All pH buffers must have current expiration dates (not expired)
+  - pH 7.00 final reading must be 7.00 ±0.02 for Pass
+  - pH 4.01 final reading must be 4.01 ±0.05 for Pass
+  - pH 10.01 reading (if tested) must be 10.01 ±0.05 for Pass
+  - Slope percentage must be >95% for Pass (90-95% = Marginal, <90% = Fail)
+  - All calibration points must Pass for overall Pass result
+  - Next calibration due date must align with equipment classification frequency
+  - QA review required for Class A pH meters

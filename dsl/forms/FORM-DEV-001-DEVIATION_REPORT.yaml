@@ -1,0 +1,171 @@
+# DSL: Deviation Report Form
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-DEV-001"
+  category: "quality_event"
+  title: "Deviation Report Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DEV-001"
+
+usage:
+  purpose: "Document discovery and initial assessment of deviations from approved procedures, specifications, or standards"
+  frequency: "as_needed"
+  trigger: "Discovery of deviation from established requirements"
+  responsible_roles:
+    - "ROLE-ALL-001" # Reporter
+    - "ROLE-SUPER-001" # Supervisor review
+    - "ROLE-QA-002" # QA classification
+
+form_structure:
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "Deviation ID"
+        field_type: "auto_generated"
+        data_type: "string"
+        required: true
+        format: "DEV-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "Discovery Date/Time"
+        field_type: "datetime"
+        data_type: "datetime"
+        required: true
+        format: "YYYY-MM-DD HH:MM:SS"
+
+      - field_id: "HDR-003"
+        label: "Reporter Name"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-004"
+        label: "Reporter Department"
+        field_type: "dropdown"
+        data_type: "string"
+        required: true
+        options:
+          - "Production"
+          - "Quality Control"
+          - "Quality Assurance"
+          - "Materials Management"
+          - "Facility/Utilities"
+          - "Laboratory"
+          - "Other"
+
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Deviation Details"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "Area/Process Where Deviation Occurred"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "Production"
+            - "Quality Control"
+            - "Materials Management"
+            - "Facility/Utilities"
+            - "Documentation"
+
+        - field_id: "SEC-001-F02"
+          label: "Detailed Description of Deviation"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "What happened? When? Where? Who was involved?"
+
+        - field_id: "SEC-001-F03"
+          label: "Material/Batch Information"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 500
+          placeholder: "Batch numbers, material codes, quantities affected"
+
+        - field_id: "SEC-001-F04"
+          label: "Procedure/Specification Deviated From"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 200
+
+        - field_id: "SEC-001-F05"
+          label: "Immediate Actions Taken"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Containment, isolation, notifications"
+
+    - section_id: "SEC-002"
+      section_title: "Preliminary Classification"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Severity Classification"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Critical (safety/efficacy impact)"
+            - "Major (quality impact)"
+            - "Minor (no quality/safety impact)"
+
+        - field_id: "SEC-002-F02"
+          label: "Classification Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "Reporter"
+        required_role: "ROLE-ALL-001"
+        required: true
+        meaning: "I reported this deviation accurately and completely"
+        date_required: true
+        time_required: true
+
+      - signature_id: "SIG-002"
+        role: "Supervisor Review"
+        required_role: "ROLE-SUPER-001"
+        required: true
+        meaning: "I reviewed initial assessment and classification"
+        date_required: true
+        time_required: true
+
+      - signature_id: "SIG-003"
+        role: "QA Classification Approval"
+        required_role: "ROLE-QA-002"
+        required: true
+        meaning: "I approve final deviation classification"
+        date_required: true
+        time_required: true
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

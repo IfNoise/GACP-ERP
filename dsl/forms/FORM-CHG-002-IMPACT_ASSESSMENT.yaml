@@ -1,0 +1,630 @@
+# DSL: Change Impact Assessment Form
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-CHG-002"
+  category: "change_control"
+  title: "Change Impact Assessment Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+usage:
+  purpose: "Document comprehensive multi-disciplinary impact assessment of proposed changes across technical, quality, regulatory, operational, and financial dimensions"
+  frequency: "per_change"
+  trigger: "After change classification, before approval"
+  responsible_roles:
+    - "ROLE-CHGOWN-001"
+    - "ROLE-QA-002"
+    - "ROLE-ITMGR-001"
+    - "ROLE-REGMGR-001"
+
+form_structure:
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "Change Request ID"
+        field_type: "reference"
+        data_type: "string"
+        required: true
+        format: "CR-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "Change Title"
+        field_type: "reference"
+        data_type: "string"
+        required: true
+        max_length: 200
+
+      - field_id: "HDR-003"
+        label: "Assessment Date"
+        field_type: "auto_date"
+        data_type: "date"
+        required: true
+        format: "YYYY-MM-DD"
+
+      - field_id: "HDR-004"
+        label: "Change Owner"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-005"
+        label: "Change Criticality"
+        field_type: "reference"
+        data_type: "string"
+        required: true
+        options:
+          - "Critical"
+          - "Major"
+          - "Minor"
+          - "Emergency"
+
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Technical Impact Assessment"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "System Functionality Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Major functionality changes or new features"
+            - "Medium - Moderate functionality modifications"
+            - "Low - Minor adjustments or bug fixes"
+            - "None - No functionality impact"
+
+        - field_id: "SEC-001-F02"
+          label: "Performance Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Positive - Expected performance improvement"
+            - "Neutral - No performance change expected"
+            - "Negative - May degrade performance (requires mitigation)"
+            - "Unknown - Requires performance testing"
+
+        - field_id: "SEC-001-F03"
+          label: "Integration and Interface Impact"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "No integration impact"
+            - "ERP-LIMS integration affected"
+            - "ERP-MES integration affected"
+            - "Environmental monitoring integration affected"
+            - "External API integrations affected"
+            - "Database interfaces affected"
+            - "Third-party system integration affected"
+
+        - field_id: "SEC-001-F04"
+          label: "Data Integrity Impact (ALCOA+)"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Direct impact on data capture, storage, retrieval, or audit trail"
+            - "Medium - Indirect impact on data controls or validation"
+            - "Low - Minimal data integrity considerations"
+            - "None - No data integrity impact"
+
+        - field_id: "SEC-001-F05"
+          label: "Security Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Changes access controls, authentication, authorization, or encryption"
+            - "Medium - May affect security controls indirectly"
+            - "Low - Minimal security considerations"
+            - "None - No security impact"
+
+        - field_id: "SEC-001-F06"
+          label: "Backup and Recovery Impact"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Impact on backup procedures, recovery processes, business continuity"
+
+        - field_id: "SEC-001-F07"
+          label: "Technical Assessment Details"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Comprehensive technical impact analysis"
+
+        - field_id: "SEC-001-F08"
+          label: "Technical SME Name"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+
+        - field_id: "SEC-001-F09"
+          label: "Technical SME Signature"
+          field_type: "signature"
+          data_type: "string"
+          required: true
+
+    - section_id: "SEC-002"
+      section_title: "Quality Impact Assessment"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Product Quality Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Direct - Changes product quality attributes or specifications"
+            - "Indirect - May affect quality through process changes"
+            - "None - No product quality impact"
+
+        - field_id: "SEC-002-F02"
+          label: "Process Capability Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Improved - Expected improvement in process capability"
+            - "Maintained - No change to process capability"
+            - "Potentially reduced - Requires validation to confirm"
+            - "Not applicable"
+
+        - field_id: "SEC-002-F03"
+          label: "Specifications and Limits"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - Specifications or acceptance criteria change"
+            - "No - Specifications remain unchanged"
+
+        - field_id: "SEC-002-F04"
+          label: "Testing and Release Criteria"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - Testing methods or release criteria modified"
+            - "No - Testing and release unchanged"
+
+        - field_id: "SEC-002-F05"
+          label: "Validation/Qualification Requirements"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Full validation required (IQ/OQ/PQ)"
+            - "Partial validation/verification required"
+            - "Impact assessment only"
+            - "Not required"
+
+        - field_id: "SEC-002-F06"
+          label: "Quality System Integration"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "No quality system impact"
+            - "Deviation management affected"
+            - "CAPA system affected"
+            - "Change control affected"
+            - "Document control affected"
+            - "Audit trail affected"
+            - "Training system affected"
+            - "Complaint handling affected"
+
+        - field_id: "SEC-002-F07"
+          label: "Quality Assessment Details"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Comprehensive quality impact analysis"
+
+        - field_id: "SEC-002-F08"
+          label: "Quality Manager Name"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+
+        - field_id: "SEC-002-F09"
+          label: "Quality Manager Signature"
+          field_type: "signature"
+          data_type: "string"
+          required: true
+
+    - section_id: "SEC-003"
+      section_title: "Regulatory and Compliance Impact"
+      section_order: 3
+
+      fields:
+        - field_id: "SEC-003-F01"
+          label: "Regulatory Submission Required"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - Prior approval submission required"
+            - "Yes - Post-approval change notification required"
+            - "Yes - Annual report inclusion required"
+            - "No - No regulatory submission required"
+
+        - field_id: "SEC-003-F02"
+          label: "Authority Notification Required"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "No notification required"
+            - "Health Canada notification"
+            - "Provincial authority notification"
+            - "International authority notification"
+
+        - field_id: "SEC-003-F03"
+          label: "License or Permit Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - License/permit amendment required"
+            - "Yes - License/permit notification required"
+            - "No - No license/permit impact"
+
+        - field_id: "SEC-003-F04"
+          label: "Compliance Standards Affected"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "No compliance standards affected"
+            - "FDA 21 CFR Part 11"
+            - "EU GMP Annex 11"
+            - "WHO GACP"
+            - "MHRA Data Integrity"
+            - "ICH Q9 (Quality Risk Management)"
+            - "ICH Q10 (Pharmaceutical Quality System)"
+            - "GAMP 5"
+
+        - field_id: "SEC-003-F05"
+          label: "Post-Market Surveillance Impact"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1000
+          placeholder: "Impact on adverse event reporting, product complaints, recalls"
+
+        - field_id: "SEC-003-F06"
+          label: "Regulatory Assessment Details"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Comprehensive regulatory and compliance impact analysis"
+
+        - field_id: "SEC-003-F07"
+          label: "Regulatory Affairs Manager Name"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+
+        - field_id: "SEC-003-F08"
+          label: "Regulatory Affairs Manager Signature"
+          field_type: "signature"
+          data_type: "string"
+          required: true
+
+    - section_id: "SEC-004"
+      section_title: "Operational Impact Assessment"
+      section_order: 4
+
+      fields:
+        - field_id: "SEC-004-F01"
+          label: "Workflow and Procedure Changes"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Major - Significant workflow redesign"
+            - "Moderate - Notable procedure modifications"
+            - "Minor - Small adjustments to procedures"
+            - "None - No workflow impact"
+
+        - field_id: "SEC-004-F02"
+          label: "Training Requirements"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Extensive - Formal training program required"
+            - "Moderate - Training sessions or workshops required"
+            - "Minimal - Briefing or awareness communication sufficient"
+            - "None - No training required"
+
+        - field_id: "SEC-004-F03"
+          label: "Estimated Training Hours per Person"
+          field_type: "number"
+          data_type: "integer"
+          required: false
+          min_value: 0
+          max_value: 100
+
+        - field_id: "SEC-004-F04"
+          label: "Number of Personnel Requiring Training"
+          field_type: "number"
+          data_type: "integer"
+          required: false
+          min_value: 0
+
+        - field_id: "SEC-004-F05"
+          label: "Resource Allocation Impact"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Personnel, equipment, system resources, time impact"
+
+        - field_id: "SEC-004-F06"
+          label: "Performance Measurement Impact"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1000
+          placeholder: "Changes to KPIs, metrics, reporting"
+
+        - field_id: "SEC-004-F07"
+          label: "Business Continuity Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Requires business continuity plan activation"
+            - "Medium - May cause temporary disruption"
+            - "Low - Minimal disruption expected"
+            - "None - No business continuity impact"
+
+        - field_id: "SEC-004-F08"
+          label: "Operational Assessment Details"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Comprehensive operational impact analysis"
+
+        - field_id: "SEC-004-F09"
+          label: "Department Head Name"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+
+        - field_id: "SEC-004-F10"
+          label: "Department Head Signature"
+          field_type: "signature"
+          data_type: "string"
+          required: true
+
+    - section_id: "SEC-005"
+      section_title: "Financial Impact Assessment"
+      section_order: 5
+
+      fields:
+        - field_id: "SEC-005-F01"
+          label: "Implementation Cost Estimate"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "One-time costs: software, hardware, consulting, validation, training"
+
+        - field_id: "SEC-005-F02"
+          label: "Total Implementation Cost"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "< $5,000"
+            - "$5,000 - $25,000"
+            - "$25,000 - $50,000"
+            - "$50,000 - $100,000"
+            - "$100,000 - $250,000"
+            - "> $250,000"
+
+        - field_id: "SEC-005-F03"
+          label: "Ongoing Cost Impact"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Recurring costs: licenses, maintenance, support, personnel"
+
+        - field_id: "SEC-005-F04"
+          label: "Annual Ongoing Cost"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "$0 (no ongoing cost)"
+            - "< $10,000"
+            - "$10,000 - $50,000"
+            - "$50,000 - $100,000"
+            - "> $100,000"
+
+        - field_id: "SEC-005-F05"
+          label: "Expected Benefits and ROI"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "Cost savings, efficiency gains, quality improvements, risk reductions, compliance benefits"
+
+        - field_id: "SEC-005-F06"
+          label: "Payback Period Estimate"
+          field_type: "dropdown"
+          data_type: "string"
+          required: false
+          options:
+            - "< 6 months"
+            - "6-12 months"
+            - "1-2 years"
+            - "2-3 years"
+            - "> 3 years"
+            - "Not applicable (compliance/regulatory requirement)"
+
+    - section_id: "SEC-006"
+      section_title: "Overall Impact Summary"
+      section_order: 6
+
+      fields:
+        - field_id: "SEC-006-F01"
+          label: "Overall Impact Level"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Significant cross-functional impact"
+            - "Medium - Moderate impact across multiple areas"
+            - "Low - Limited impact, localized scope"
+
+        - field_id: "SEC-006-F02"
+          label: "Key Stakeholders Affected"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "Production"
+            - "Quality Assurance"
+            - "Quality Control Laboratory"
+            - "IT/Systems"
+            - "Facilities/Engineering"
+            - "Regulatory Affairs"
+            - "Compliance"
+            - "Supply Chain"
+            - "Management"
+            - "External Partners/Suppliers"
+
+        - field_id: "SEC-006-F03"
+          label: "Dependencies and Prerequisites"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "Other changes, projects, resources that must be in place first"
+
+        - field_id: "SEC-006-F04"
+          label: "Assumptions Made in Assessment"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "Key assumptions underlying this impact assessment"
+
+        - field_id: "SEC-006-F05"
+          label: "Impact Assessment Recommendation"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Proceed - Impacts acceptable, benefits justify change"
+            - "Proceed with Conditions - Specific conditions must be met"
+            - "Defer - More analysis or planning needed"
+            - "Reject - Impacts too high, benefits insufficient"
+
+        - field_id: "SEC-006-F06"
+          label: "Conditions or Additional Analysis Needed"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1500
+          placeholder: "If conditional approval or deferral, specify requirements"
+
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "Change Owner (Assessment Coordinator)"
+        required_role: "ROLE-CHGOWN-001"
+        required: true
+        meaning: "I coordinated this impact assessment and attest to completeness"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-002"
+        role: "Quality Manager Review"
+        required_role: "ROLE-QA-002"
+        required: true
+        meaning: "I reviewed impact assessment for adequacy and accuracy"
+        date_required: true
+        time_required: false
+
+validation:
+  rules:
+    - rule_id: "VAL-001"
+      field_ref: "SEC-001-F09"
+      rule_type: "required_signature"
+      condition: "Technical SME signature required"
+      error_message: "Technical impact assessment must be signed by qualified SME"
+
+    - rule_id: "VAL-002"
+      field_ref: "SEC-002-F09"
+      rule_type: "required_signature"
+      condition: "Quality Manager signature required"
+      error_message: "Quality impact assessment must be signed by Quality Manager"
+
+    - rule_id: "VAL-003"
+      field_ref: "SEC-003-F08"
+      rule_type: "required_signature"
+      condition: "Regulatory Affairs signature required"
+      error_message: "Regulatory impact assessment must be signed by Regulatory Affairs Manager"
+
+    - rule_id: "VAL-004"
+      field_ref: "SEC-004-F10"
+      rule_type: "required_signature"
+      condition: "Department Head signature required"
+      error_message: "Operational impact assessment must be signed by Department Head"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "Impact assessment in progress"
+      next_states: ["submitted"]
+
+    - state: "submitted"
+      description: "Awaiting SME reviews"
+      next_states: ["approved", "returned"]
+
+    - state: "approved"
+      description: "Impact assessment complete and approved"
+      next_states: []
+
+    - state: "returned"
+      description: "Returned for additional analysis"
+      next_states: ["draft"]
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

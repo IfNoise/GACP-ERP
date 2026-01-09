@@ -1,0 +1,490 @@
+# DSL: ALCOA+ Compliance Verification Checklist
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 4.1
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "CHKLST-AUD-001"
+  checklist_type: "compliance"
+  title: "ALCOA+ Compliance Verification Checklist"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "MHRA Data Integrity Guidance"
+    - "ALCOA+ Principles"
+
+# ==============================================================================
+# USAGE CONTEXT
+# ==============================================================================
+usage:
+  purpose: "Verify and document compliance with all nine ALCOA+ data integrity principles in audit trail system and processes"
+
+  frequency: "monthly"
+
+  trigger: "Scheduled monthly quality review, internal audit, pre-inspection preparation, or compliance investigation"
+
+  responsible_roles:
+    - "ROLE-QA-001" # Quality Manager - Primary
+    - "ROLE-COMP-001" # Compliance Officer - Review
+    - "ROLE-AUD-001" # Internal Auditor - Independent verification
+
+  estimated_duration_minutes: 120
+
+# ==============================================================================
+# CHECKLIST STRUCTURE
+# ==============================================================================
+checklist_structure:
+  # ----------------------------------------------------------------------------
+  # SECTION 1: ATTRIBUTABLE
+  # ----------------------------------------------------------------------------
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Attributable - Clear Data Ownership"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "ALC-A-001"
+          item_text: "Each audit trail record contains WHO (user_id, full_name, role) performed the action"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "100% of records include user identification"
+          evidence_required: true
+          guidance: "Verify random sample of 20 records across different event types"
+
+        - item_id: "ALC-A-002"
+          item_text: "User authentication is enforced before any recorded action"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No unauthenticated actions logged"
+          evidence_required: true
+          guidance: "Review authentication logs and cross-check with audit events"
+
+        - item_id: "ALC-A-003"
+          item_text: "Unique user IDs prevent shared accounts or generic logins"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All user_id values are unique and assigned to specific individuals"
+          evidence_required: true
+          guidance: "Check user management system for shared or generic accounts"
+
+        - item_id: "ALC-A-004"
+          item_text: "Role-based access control (RBAC) is documented in every record"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Role field populated in 100% of records"
+          evidence_required: false
+          guidance: "Verify role mapping is correct and current"
+
+    # --------------------------------------------------------------------------
+    # SECTION 2: LEGIBLE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-002"
+      section_title: "Legible - Clear and Readable Data"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "ALC-L-001"
+          item_text: "Audit trail records are permanently readable and not degraded over time"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Historical records (>1 year old) are fully readable"
+          evidence_required: true
+          guidance: "Test retrieval and display of records from oldest available data"
+
+        - item_id: "ALC-L-002"
+          item_text: "Data format is structured (JSON/YAML) and human-readable"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Records can be exported to readable format (JSON/CSV/PDF)"
+          evidence_required: true
+          guidance: "Export sample records and verify readability"
+
+        - item_id: "ALC-L-003"
+          item_text: "Field names and values are clear and unambiguous"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No cryptic codes or unclear abbreviations"
+          evidence_required: false
+          guidance: "Review data dictionary and field naming conventions"
+
+        - item_id: "ALC-L-004"
+          item_text: "User interface provides clear search and display capabilities"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Authorized users can easily search and view records"
+          evidence_required: true
+          guidance: "Test UI with non-technical user for usability"
+
+    # --------------------------------------------------------------------------
+    # SECTION 3: CONTEMPORANEOUS
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-003"
+      section_title: "Contemporaneous - Recorded at Time of Activity"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "ALC-C-001"
+          item_text: "Timestamp is auto-generated at moment of event occurrence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No manual timestamp entry, all auto-generated"
+          evidence_required: true
+          guidance: "Verify application code prevents manual timestamp modification"
+
+        - item_id: "ALC-C-002"
+          item_text: "System clock is synchronized with NTP within 100ms accuracy"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "NTP sync status = active, drift < 100ms"
+          evidence_required: true
+          guidance: "Check NTP server logs and synchronization metrics"
+
+        - item_id: "ALC-C-003"
+          item_text: "Latency between event and logging is < 5 seconds"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Average latency < 5 seconds, 99th percentile < 10 seconds"
+          evidence_required: true
+          guidance: "Review Kafka processing metrics and ImmuDB write latencies"
+
+        - item_id: "ALC-C-004"
+          item_text: "Timezone information is explicitly recorded (UTC or local with offset)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All timestamps include timezone"
+          evidence_required: false
+          guidance: "Verify timestamp format includes TZ (e.g., 2025-10-17T14:30:00Z)"
+
+    # --------------------------------------------------------------------------
+    # SECTION 4: ORIGINAL
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-004"
+      section_title: "Original - First Recording of Data"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "ALC-O-001"
+          item_text: "Audit trail captures original data at first entry point"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Events logged at application/database/system level before any processing"
+          evidence_required: true
+          guidance: "Verify capture points in architecture diagram"
+
+        - item_id: "ALC-O-002"
+          item_text: "No intermediate systems alter data before logging"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Direct capture with no transformation before storage"
+          evidence_required: true
+          guidance: "Review data flow from capture to ImmuDB"
+
+        - item_id: "ALC-O-003"
+          item_text: "Original data is preserved even if later processed or enriched"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Raw event data stored separately from enriched metadata"
+          evidence_required: false
+          guidance: "Check ImmuDB schema for original vs enriched data separation"
+
+        - item_id: "ALC-O-004"
+          item_text: "Copies and derivations are clearly marked and traceable to original"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Derived records include source_record_id reference"
+          evidence_required: false
+          guidance: "Review data lineage documentation"
+
+    # --------------------------------------------------------------------------
+    # SECTION 5: ACCURATE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-005"
+      section_title: "Accurate - Free from Errors"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "ALC-AC-001"
+          item_text: "Real-time validation is applied to all incoming events"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Schema validation + business rules enforced before storage"
+          evidence_required: true
+          guidance: "Review Kafka validation logic and test with invalid event"
+
+        - item_id: "ALC-AC-002"
+          item_text: "Errors and validation failures are logged separately"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Error log exists with rejected events and reasons"
+          evidence_required: true
+          guidance: "Check error queue in Kafka and verify sampling"
+
+        - item_id: "ALC-AC-003"
+          item_text: "Automated testing verifies data accuracy (hash, signature, cross-reference)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Hash verification success rate >= 99.99%"
+          evidence_required: true
+          guidance: "Review automated integrity check results from last 30 days"
+
+        - item_id: "ALC-AC-004"
+          item_text: "Manual data entry is minimized or eliminated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "100% automated capture, no manual audit trail entry"
+          evidence_required: false
+          guidance: "Verify no UI or API exists for manual audit trail creation"
+
+    # --------------------------------------------------------------------------
+    # SECTION 6: COMPLETE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-006"
+      section_title: "Complete - All Data Captured"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "ALC-CM-001"
+          item_text: "100% of critical events are captured per event matrix"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No gaps in event coverage, all categories represented"
+          evidence_required: true
+          guidance: "Compare event matrix against actual logged event types"
+
+        - item_id: "ALC-CM-002"
+          item_text: "Full lifecycle of data is tracked (create, read, update, delete)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "CRUD operations all logged for critical entities"
+          evidence_required: true
+          guidance: "Test CRUD on critical entity and verify all events logged"
+
+        - item_id: "ALC-CM-003"
+          item_text: "Context is captured (user, session, location, device)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Metadata fields populated >= 95%"
+          evidence_required: false
+          guidance: "Review random sample for metadata completeness"
+
+        - item_id: "ALC-CM-004"
+          item_text: "Sequence continuity is verifiable (no missing sequence numbers)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Sequence number gaps are detected and investigated"
+          evidence_required: true
+          guidance: "Run sequence gap detection script and review results"
+
+    # --------------------------------------------------------------------------
+    # SECTION 7: CONSISTENT
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-007"
+      section_title: "Consistent - Uniform Throughout Lifecycle"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "ALC-CS-001"
+          item_text: "Timestamps follow single standard (UTC) across all systems"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All timestamps in UTC or clearly marked timezone"
+          evidence_required: true
+          guidance: "Review timestamp format in different event sources"
+
+        - item_id: "ALC-CS-002"
+          item_text: "Data format is consistent (same schema version)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Single active schema version, migration documented"
+          evidence_required: true
+          guidance: "Check schema version field distribution in ImmuDB"
+
+        - item_id: "ALC-CS-003"
+          item_text: "Terminology and codes are standardized"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Data dictionary defined and enforced"
+          evidence_required: false
+          guidance: "Verify controlled vocabulary for event types, actions, outcomes"
+
+        - item_id: "ALC-CS-004"
+          item_text: "Chronological order is maintained"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Records sortable by timestamp, no time reversals"
+          evidence_required: false
+          guidance: "Query records and verify chronological sorting"
+
+    # --------------------------------------------------------------------------
+    # SECTION 8: ENDURING
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-008"
+      section_title: "Enduring - Data Preserved Throughout Retention Period"
+      section_order: 8
+      required: true
+
+      items:
+        - item_id: "ALC-E-001"
+          item_text: "Immutable storage (WORM) prevents deletion or alteration"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "ImmuDB WORM mode active, no delete operations allowed"
+          evidence_required: true
+          guidance: "Attempt to delete record in ImmuDB and verify rejection"
+
+        - item_id: "ALC-E-002"
+          item_text: "Cryptographic hash ensures tamper-evidence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "SHA-256 hash stored with each critical record"
+          evidence_required: true
+          guidance: "Verify hash field present and validation successful"
+
+        - item_id: "ALC-E-003"
+          item_text: "Backups are automated, tested, and geographically distributed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Daily incremental + weekly full backups, last restore test successful"
+          evidence_required: true
+          guidance: "Review backup logs and last successful restore test date"
+
+        - item_id: "ALC-E-004"
+          item_text: "Storage media lifecycle is managed (migration before obsolescence)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Media refresh plan documented, technology migration tested"
+          evidence_required: false
+          guidance: "Review IT infrastructure migration plan"
+
+    # --------------------------------------------------------------------------
+    # SECTION 9: AVAILABLE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-009"
+      section_title: "Available - Accessible for Review and Audit"
+      section_order: 9
+      required: true
+
+      items:
+        - item_id: "ALC-AV-001"
+          item_text: "Authorized users can access data within defined timeframes"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Search response time < 2 seconds for standard queries"
+          evidence_required: true
+          guidance: "Test common search scenarios and measure response time"
+
+        - item_id: "ALC-AV-002"
+          item_text: "System uptime meets availability target (>= 99.9%)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Last 30 days uptime >= 99.9%"
+          evidence_required: true
+          guidance: "Review system monitoring dashboards and incident logs"
+
+        - item_id: "ALC-AV-003"
+          item_text: "Data can be retrieved from archive within 24-48 hours"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Archive retrieval process documented and tested"
+          evidence_required: true
+          guidance: "Review last archive retrieval request and resolution time"
+
+        - item_id: "ALC-AV-004"
+          item_text: "Multiple export formats support different use cases (CSV, PDF, JSON)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All three formats functional and tested"
+          evidence_required: true
+          guidance: "Test export in each format with sample dataset"
+
+        - item_id: "ALC-AV-005"
+          item_text: "Inspection readiness is maintained (demo scripts, quick queries)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Demonstration can be performed within timeframes: batch <5m, demo <10m, logins <2m"
+          evidence_required: true
+          guidance: "Run through inspection demo script and time each section"
+
+# ==============================================================================
+# SCORING METHOD
+# ==============================================================================
+scoring_method:
+  method: "weighted_percentage"
+
+  passing_score: 95
+
+  section_weights:
+    SEC-001: 11 # Attributable
+    SEC-002: 11 # Legible
+    SEC-003: 11 # Contemporaneous
+    SEC-004: 11 # Original
+    SEC-005: 11 # Accurate
+    SEC-006: 11 # Complete
+    SEC-007: 11 # Consistent
+    SEC-008: 12 # Enduring (critical for long-term compliance)
+    SEC-009: 11 # Available
+
+  critical_items:
+    - "ALC-A-002" # User authentication
+    - "ALC-C-001" # Auto-timestamp
+    - "ALC-O-001" # Original capture
+    - "ALC-AC-001" # Real-time validation
+    - "ALC-CM-001" # 100% event coverage
+    - "ALC-E-001" # Immutable storage
+    - "ALC-E-002" # Cryptographic hash
+
+  critical_item_requirement: "All critical items must pass for overall pass"
+
+# ==============================================================================
+# CORRECTIVE ACTION
+# ==============================================================================
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document all failed items with evidence"
+      - "Assess impact on data integrity and compliance"
+      - "Notify Compliance Officer and Quality Manager immediately"
+
+    follow_up_required:
+      - "Initiate CAPA if critical items fail"
+      - "Conduct root cause analysis"
+      - "Implement corrective actions within 30 days"
+      - "Re-verify compliance after corrections"
+
+    form_ref: "CAPA-001" # Reference to CAPA initiation form
+
+# ==============================================================================
+# STORAGE AND RETENTION
+# ==============================================================================
+storage:
+  location: "electronic"
+  system: "ERP Quality Management"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_AuditTrail.md Section 4.1"
+    approved_by: "Pending"

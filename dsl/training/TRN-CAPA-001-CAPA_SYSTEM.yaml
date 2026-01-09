@@ -1,0 +1,355 @@
+# DSL: CAPA System Training Module
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-CAPA-001"
+  training_type: "mandatory"
+  category: "quality"
+  title: "CAPA System Management"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CAPA-001"
+
+training_details:
+  purpose: "Ensure personnel understand CAPA system requirements, can effectively investigate root causes, develop action plans, implement solutions, and verify effectiveness"
+  target_audience:
+    - "CAPA Managers"
+    - "Quality Managers"
+    - "Department Managers"
+    - "CAPA Coordinators"
+    - "Quality Assurance staff"
+    - "Subject Matter Experts involved in investigations"
+  prerequisites:
+    - "TRN-GMP-001: Good Manufacturing Practice Basics"
+    - "TRN-DEV-001: Deviation Recognition and Reporting"
+  duration_hours: 6
+  delivery_method: "blended"
+  delivery_components:
+    - "E-learning module (3 hours)"
+    - "Instructor-led training (2 hours)"
+    - "Practical root cause analysis exercise (1 hour)"
+  recertification_period_months: 24
+  passing_score: 85
+
+learning_objectives:
+  - objective_id: "LO-001"
+    objective: "Explain purpose and importance of CAPA system for quality improvement"
+    bloom_level: "understanding"
+
+  - objective_id: "LO-002"
+    objective: "Classify CAPAs by priority, type, and complexity"
+    bloom_level: "applying"
+
+  - objective_id: "LO-003"
+    objective: "Perform systematic root cause analysis using Five Why and Fishbone methods"
+    bloom_level: "applying"
+
+  - objective_id: "LO-004"
+    objective: "Develop comprehensive corrective and preventive action plans"
+    bloom_level: "creating"
+
+  - objective_id: "LO-005"
+    objective: "Verify CAPA effectiveness using appropriate metrics and methods"
+    bloom_level: "evaluating"
+
+training_modules:
+  - module_id: "MOD-001"
+    module_title: "CAPA System Fundamentals"
+    module_order: 1
+    duration_minutes: 45
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-001-T01"
+        topic_title: "What is CAPA?"
+        content_summary: "Definition, difference between corrective and preventive actions, regulatory requirements (FDA 21 CFR Part 820, ISO 13485)"
+        duration_minutes: 15
+      - topic_id: "MOD-001-T02"
+        topic_title: "CAPA System Benefits"
+        content_summary: "Quality improvement, risk mitigation, cost reduction, regulatory compliance, continuous improvement culture"
+        duration_minutes: 15
+      - topic_id: "MOD-001-T03"
+        topic_title: "CAPA Process Overview"
+        content_summary: "7-step process from initiation to closure, roles and responsibilities"
+        duration_minutes: 15
+    assessment:
+      - question_id: "MOD-001-Q01"
+        question_type: "multiple_choice"
+        question_text: "What is the primary difference between corrective and preventive action?"
+        correct_answer: "Corrective action addresses existing problems; preventive action addresses potential problems"
+      - question_id: "MOD-001-Q02"
+        question_type: "true_false"
+        question_text: "CAPA is only required for regulatory violations"
+        correct_answer: "False - CAPA applies to any quality issue or improvement opportunity"
+
+  - module_id: "MOD-002"
+    module_title: "CAPA Initiation and Classification"
+    module_order: 2
+    duration_minutes: 45
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-002-T01"
+        topic_title: "CAPA Triggers"
+        content_summary: "Reactive triggers (deviations, complaints, audit findings) and proactive triggers (risk assessments, trends)"
+        duration_minutes: 15
+      - topic_id: "MOD-002-T02"
+        topic_title: "Priority Classification"
+        content_summary: "P1-P4 priority levels, criteria, response timelines"
+        duration_minutes: 15
+      - topic_id: "MOD-002-T03"
+        topic_title: "Completing FORM-CAPA-001"
+        content_summary: "Required fields, initial risk assessment, CAPA assignment"
+        duration_minutes: 15
+    assessment:
+      - question_id: "MOD-002-Q01"
+        question_type: "scenario"
+        question_text: "Customer reports adverse event potentially related to product. What CAPA priority?"
+        correct_answer: "Priority 1 (Critical) - immediate safety threat, 24h immediate action required"
+      - question_id: "MOD-002-Q02"
+        question_type: "multiple_select"
+        question_text: "Which are proactive CAPA triggers? (Select all)"
+        correct_answer:
+          [
+            "Risk assessment findings",
+            "Trend analysis",
+            "Process performance monitoring",
+          ]
+
+  - module_id: "MOD-003"
+    module_title: "Root Cause Analysis Methods"
+    module_order: 3
+    duration_minutes: 90
+    delivery_method: "instructor-led"
+    topics:
+      - topic_id: "MOD-003-T01"
+        topic_title: "Five Why Analysis"
+        content_summary: "Systematic questioning technique, when to use, how to identify true root cause, common pitfalls"
+        duration_minutes: 30
+      - topic_id: "MOD-003-T02"
+        topic_title: "Fishbone Diagram (Ishikawa)"
+        content_summary: "6M categories (Methods, Machines, Materials, Manpower, Measurement, Environment), brainstorming techniques"
+        duration_minutes: 30
+      - topic_id: "MOD-003-T03"
+        topic_title: "Advanced RCA Methods"
+        content_summary: "Fault Tree Analysis, FMEA, when to use advanced methods for complex problems"
+        duration_minutes: 30
+    assessment:
+      - question_id: "MOD-003-Q01"
+        question_type: "practical"
+        question_text: "Demonstrate Five Why analysis for provided problem scenario"
+        correct_answer: "Instructor assessment using CHKLST-CAPA-001"
+      - question_id: "MOD-003-Q02"
+        question_type: "practical"
+        question_text: "Create Fishbone diagram for provided quality issue"
+        correct_answer: "Instructor assessment - all 6 categories explored"
+
+  - module_id: "MOD-004"
+    module_title: "Investigation and Data Analysis"
+    module_order: 4
+    duration_minutes: 60
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-004-T01"
+        topic_title: "Investigation Planning"
+        content_summary: "Team formation, scope definition, timeline, data collection planning"
+        duration_minutes: 20
+      - topic_id: "MOD-004-T02"
+        topic_title: "Data Collection and Analysis"
+        content_summary: "Types of data, analysis techniques, statistical process control, trend analysis"
+        duration_minutes: 20
+      - topic_id: "MOD-004-T03"
+        topic_title: "Root Cause Validation"
+        content_summary: "How to verify root cause with evidence, avoiding jumping to conclusions"
+        duration_minutes: 20
+    assessment:
+      - question_id: "MOD-004-Q01"
+        question_type: "multiple_choice"
+        question_text: "What is the best way to validate a suspected root cause?"
+        correct_answer: "Collect objective data that demonstrates eliminating the cause prevents recurrence"
+      - question_id: "MOD-004-Q02"
+        question_type: "scenario"
+        question_text: "Investigation reveals three contributing factors. How do you identify THE root cause?"
+        correct_answer: "Continue Five Why analysis on each factor until fundamental cause identified"
+
+  - module_id: "MOD-005"
+    module_title: "Action Planning and Implementation"
+    module_order: 5
+    duration_minutes: 60
+    delivery_method: "instructor-led"
+    topics:
+      - topic_id: "MOD-005-T01"
+        topic_title: "Developing Corrective Actions"
+        content_summary: "Eliminating root cause, immediate vs long-term actions, SMART action criteria"
+        duration_minutes: 20
+      - topic_id: "MOD-005-T02"
+        topic_title: "Developing Preventive Actions"
+        content_summary: "Preventing recurrence, extending to similar processes, risk mitigation"
+        duration_minutes: 20
+      - topic_id: "MOD-005-T03"
+        topic_title: "Implementation Management"
+        content_summary: "Project planning, resource allocation, progress monitoring, change management"
+        duration_minutes: 20
+    assessment:
+      - question_id: "MOD-005-Q01"
+        question_type: "scenario"
+        question_text: "Root cause is inadequate training. Develop both corrective and preventive actions"
+        correct_answer: "CA: Retrain affected personnel. PA: Revise training program, add competency assessment, periodic refresher"
+      - question_id: "MOD-005-Q02"
+        question_type: "multiple_choice"
+        question_text: "Good CAPA actions must be..."
+        correct_answer: "Specific, measurable, achievable, relevant, time-bound (SMART)"
+
+  - module_id: "MOD-006"
+    module_title: "Effectiveness Verification"
+    module_order: 6
+    duration_minutes: 45
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-006-T01"
+        topic_title: "Effectiveness Verification Planning"
+        content_summary: "Verification methods, monitoring period, success metrics, data collection"
+        duration_minutes: 15
+      - topic_id: "MOD-006-T02"
+        topic_title: "Conducting Effectiveness Verification"
+        content_summary: "Using CHKLST-CAPA-002, data analysis, comparing pre/post CAPA metrics"
+        duration_minutes: 15
+      - topic_id: "MOD-006-T03"
+        topic_title: "Ineffective CAPAs"
+        content_summary: "What to do when CAPA is ineffective, re-investigation, additional actions"
+        duration_minutes: 15
+    assessment:
+      - question_id: "MOD-006-Q01"
+        question_type: "multiple_choice"
+        question_text: "When should CAPA effectiveness be verified?"
+        correct_answer: "Minimum 30 days after implementation completion (or longer for infrequent processes)"
+      - question_id: "MOD-006-Q02"
+        question_type: "true_false"
+        question_text: "If problem does not recur immediately, CAPA can be closed as effective"
+        correct_answer: "False - need adequate monitoring period and data to demonstrate sustained effectiveness"
+
+  - module_id: "MOD-007"
+    module_title: "Practical Case Study Exercise"
+    module_order: 7
+    duration_minutes: 60
+    delivery_method: "practical"
+    topics:
+      - topic_id: "MOD-007-T01"
+        topic_title: "Complete CAPA Exercise"
+        content_summary: "Work through real case study from initiation through root cause analysis, action planning, and effectiveness planning"
+        duration_minutes: 60
+    assessment:
+      - question_id: "MOD-007-Q01"
+        question_type: "practical"
+        question_text: "Complete all CAPA steps for case study: initiate, classify, investigate root cause, develop actions, plan verification"
+        correct_answer: "Instructor evaluation using scoring rubric"
+
+assessment_strategy:
+  formative_assessment:
+    - "Quiz at end of each module"
+    - "Practical exercises for root cause analysis"
+    - "Case study discussion participation"
+  summative_assessment:
+    - assessment_id: "FINAL-001"
+      assessment_type: "final_exam"
+      format: "computer-based"
+      duration_minutes: 45
+      questions_count: 25
+      passing_score: 85
+      question_breakdown:
+        multiple_choice: 12
+        scenario_based: 10
+        true_false: 3
+    - assessment_id: "FINAL-002"
+      assessment_type: "practical_assessment"
+      format: "case_study"
+      duration_minutes: 60
+      passing_score: 85
+      evaluation_criteria: "Complete CAPA cycle for assigned case"
+  remediation:
+    on_fail: "Re-take failed modules, one-on-one coaching, re-take final exam and practical"
+    max_attempts: 3
+
+training_materials:
+  required_materials:
+    - "Training slides and workbook"
+    - "SOP-CAPA-001 (reference copy)"
+    - "FORM-CAPA-001 blank template"
+    - "FORM-DEV-002 CAPA worksheet blank"
+    - "CHKLST-CAPA-001 Root Cause Analysis Checklist"
+    - "CHKLST-CAPA-002 Effectiveness Verification Checklist"
+    - "Case studies and examples"
+    - "Root cause analysis tools quick reference"
+  optional_materials:
+    - "Root Cause Analysis Tools Guide"
+    - "CAPA best practices articles"
+    - "ICH Q9 Quality Risk Management guidance"
+
+trainer_qualifications:
+  required:
+    - "Train-the-Trainer certification"
+    - "GMP/GACP knowledge"
+    - "Extensive CAPA system experience (minimum 3 years)"
+    - "Root cause analysis expertise"
+  preferred:
+    - "Quality Manager or CAPA Manager experience"
+    - "Lean Six Sigma certification"
+    - "ASQ Certified Quality Auditor (CQA) or similar"
+
+training_record:
+  documentation_required:
+    - "Attendance record"
+    - "Final exam score"
+    - "Practical assessment result"
+    - "Trainer signature"
+    - "Trainee signature"
+  storage_location: "Learning Management System (LMS)"
+  retention_period: "30_years"
+  record_fields:
+    - field: "employee_id"
+      required: true
+    - field: "employee_name"
+      required: true
+    - field: "training_date"
+      required: true
+    - field: "final_exam_score"
+      required: true
+    - field: "practical_score"
+      required: true
+    - field: "trainer_name"
+      required: true
+    - field: "next_recertification_date"
+      required: true
+
+effectiveness_evaluation:
+  methods:
+    - method: "Post-training knowledge assessment"
+      timing: "Immediately after training"
+      target: ">= 85% average score"
+    - method: "Quality of CAPA investigations (QA assessment)"
+      timing: "90 days post-training"
+      target: "> 95% adequate root cause analysis"
+    - method: "CAPA effectiveness rate for personnel trained"
+      timing: "6 months post-training"
+      target: "> 90% effective CAPAs"
+    - method: "CAPA cycle time for trained personnel"
+      timing: "6 months post-training"
+      target: "< average cycle time"
+  continuous_improvement:
+    review_frequency: "annually"
+    responsible_role: "ROLE-CAPAMGR-001"
+    update_triggers:
+      - "Procedure changes"
+      - "New RCA methods introduced"
+      - "Training effectiveness below target"
+      - "Regulatory guidance updates"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

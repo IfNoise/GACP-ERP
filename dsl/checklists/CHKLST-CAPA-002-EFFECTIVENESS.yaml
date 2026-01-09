@@ -1,0 +1,311 @@
+# DSL: CAPA Effectiveness Verification Checklist
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-CAPA-002"
+  checklist_type: "verification"
+  title: "CAPA Effectiveness Verification Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CAPA-001"
+
+usage:
+  purpose: "Verify that implemented corrective and preventive actions are effective in eliminating root cause and preventing problem recurrence"
+  frequency: "per_capa"
+  trigger: "30 days after CAPA implementation completion"
+  responsible_roles:
+    - "ROLE-CAPAMGR-001"
+    - "ROLE-QA-002"
+  estimated_duration_minutes: 120
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Implementation Verification"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "EFF-001"
+          item_text: "All planned corrective actions fully implemented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Evidence of completion for each corrective action"
+          evidence_required: true
+          guidance: "Review implementation records, sign-offs, completion dates"
+
+        - item_id: "EFF-002"
+          item_text: "All planned preventive actions fully implemented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Evidence of completion for each preventive action"
+          evidence_required: true
+          guidance: "Review implementation records, sign-offs, completion dates"
+
+        - item_id: "EFF-003"
+          item_text: "Implementation completed within target timeframe"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Actual completion date ≤ target date (or extension approved)"
+          evidence_required: false
+          guidance: "Check planned vs actual completion dates"
+
+        - item_id: "EFF-004"
+          item_text: "All required training completed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Training records show all affected personnel trained"
+          evidence_required: true
+          guidance: "Verify training completion, quiz scores, attendance"
+
+    - section_id: "SEC-002"
+      section_title: "Data Collection for Effectiveness"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "EFF-005"
+          item_text: "Appropriate monitoring period established (minimum 30 days)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Monitoring period adequate to demonstrate effectiveness"
+          evidence_required: false
+          guidance: "Consider process frequency - may need longer for infrequent processes"
+
+        - item_id: "EFF-006"
+          item_text: "Relevant performance data collected during monitoring period"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Data collected per effectiveness verification plan"
+          evidence_required: true
+          guidance: "Process data, quality results, incident reports, complaints"
+
+        - item_id: "EFF-007"
+          item_text: "Sample size adequate for statistical confidence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Sufficient data points to draw valid conclusions"
+          evidence_required: false
+          guidance: "Minimum 3 batches or 30 days, whichever is longer"
+
+        - item_id: "EFF-008"
+          item_text: "Baseline data available for comparison"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Pre-CAPA data exists to compare against post-CAPA data"
+          evidence_required: true
+          guidance: "Need 'before' data to demonstrate 'after' improvement"
+
+    - section_id: "SEC-003"
+      section_title: "Effectiveness Analysis"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "EFF-009"
+          item_text: "Problem has not recurred during monitoring period"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Zero recurrence of original problem"
+          evidence_required: true
+          guidance: "Search deviation, complaint, OOS databases for similar events"
+
+        - item_id: "EFF-010"
+          item_text: "Process performance metrics improved or stable"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Key metrics show improvement or maintained at acceptable level"
+          evidence_required: true
+          guidance: "Compare pre-CAPA vs post-CAPA metrics"
+
+        - item_id: "EFF-011"
+          item_text: "Quality indicators show improvement or stability"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Product quality attributes within specification"
+          evidence_required: true
+          guidance: "Review QC results, customer complaints, deviation rates"
+
+        - item_id: "EFF-012"
+          item_text: "Root cause eliminated as demonstrated by data"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Objective evidence confirms root cause no longer present"
+          evidence_required: true
+          guidance: "Can you prove root cause is eliminated?"
+
+        - item_id: "EFF-013"
+          item_text: "No new problems created by CAPA implementation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No unintended consequences or new issues introduced"
+          evidence_required: true
+          guidance: "Monitor for unexpected side effects of changes"
+
+    - section_id: "SEC-004"
+      section_title: "Process Verification"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "EFF-014"
+          item_text: "Procedure changes effective and understood by personnel"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Personnel demonstrate understanding and compliance"
+          evidence_required: true
+          guidance: "Observe work, interview personnel, review records"
+
+        - item_id: "EFF-015"
+          item_text: "Equipment modifications functioning as intended"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Equipment performing to specifications"
+          evidence_required: true
+          guidance: "Review equipment performance data, maintenance logs"
+
+        - item_id: "EFF-016"
+          item_text: "System/software changes validated and functioning correctly"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Validation complete, system performing as designed"
+          evidence_required: true
+          guidance: "Review validation documentation, system performance"
+
+        - item_id: "EFF-017"
+          item_text: "Document updates complete and accessible to users"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Current versions available, obsolete versions removed"
+          evidence_required: true
+          guidance: "Verify document control, user access to current procedures"
+
+    - section_id: "SEC-005"
+      section_title: "Sustainability Assessment"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "EFF-018"
+          item_text: "Changes integrated into standard operating procedures"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Procedures updated to reflect CAPA actions"
+          evidence_required: true
+          guidance: "All affected SOPs, work instructions, forms updated"
+
+        - item_id: "EFF-019"
+          item_text: "Monitoring plan established for ongoing surveillance"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Defined metrics, frequency, responsible parties for continued monitoring"
+          evidence_required: false
+          guidance: "How will sustained effectiveness be monitored long-term?"
+
+        - item_id: "EFF-020"
+          item_text: "Personnel demonstrate sustained compliance with changes"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Observations confirm continued adherence to new procedures"
+          evidence_required: true
+          guidance: "Multiple observations over monitoring period"
+
+    - section_id: "SEC-006"
+      section_title: "Documentation Review"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "EFF-021"
+          item_text: "Effectiveness verification report prepared"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Complete report with data analysis and conclusions"
+          evidence_required: true
+          guidance: "Include data tables, charts, statistical analysis"
+
+        - item_id: "EFF-022"
+          item_text: "All supporting data and evidence attached"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Complete evidence package with cross-references"
+          evidence_required: true
+          guidance: "Process data, training records, observation notes, trend charts"
+
+        - item_id: "EFF-023"
+          item_text: "Conclusions supported by objective evidence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear link between data and effectiveness conclusions"
+          evidence_required: false
+          guidance: "Can conclusion be justified by evidence presented?"
+
+        - item_id: "EFF-024"
+          item_text: "Quality Manager approval obtained"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "QA Manager signature and date on effectiveness report"
+          evidence_required: true
+          guidance: "Obtain final QA approval before closing CAPA"
+
+decision_criteria:
+  effective:
+    requirements:
+      - "All critical items pass"
+      - "No problem recurrence"
+      - "Performance metrics improved or stable"
+      - "Root cause eliminated"
+    action: "Close CAPA as effective"
+
+  partially_effective:
+    requirements:
+      - "Some improvement demonstrated"
+      - "Problem reduced but not eliminated"
+      - "Root cause partially addressed"
+    action: "Extend monitoring period or implement additional actions"
+
+  ineffective:
+    requirements:
+      - "Problem recurred"
+      - "No improvement in metrics"
+      - "Root cause still present"
+    action: "Re-open investigation, identify why CAPA failed, develop new actions"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "EFF-001"
+    - "EFF-002"
+    - "EFF-009"
+    - "EFF-012"
+    - "EFF-013"
+    - "EFF-024"
+  critical_item_requirement: "All critical items must pass for CAPA to be considered effective"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document deficiencies in effectiveness"
+      - "Investigate why CAPA was ineffective"
+      - "Develop additional or revised actions"
+    follow_up_required:
+      - "Re-open CAPA for additional investigation"
+      - "Implement revised actions and re-verify effectiveness"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

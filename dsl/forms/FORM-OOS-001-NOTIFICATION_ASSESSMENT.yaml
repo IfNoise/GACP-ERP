@@ -1,0 +1,402 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-OOS-001
+  title: OOS Notification and Initial Assessment
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Control
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: OOS Result Information
+    fields:
+      - field_name: oos_number
+        field_type: text
+        required: true
+        description: Unique OOS investigation number (auto-generated)
+
+      - field_name: oos_date
+        field_type: date
+        required: true
+        description: Date OOS result identified
+
+      - field_name: oos_time
+        field_type: time
+        required: true
+        description: Time OOS result identified
+
+      - field_name: product_name
+        field_type: text
+        required: true
+        description: Product name
+
+      - field_name: batch_lot_number
+        field_type: text
+        required: true
+        description: Batch or lot number
+
+      - field_name: test_parameter
+        field_type: text
+        required: true
+        description: Test parameter that is OOS
+
+      - field_name: specification_limit
+        field_type: text
+        required: true
+        description: Specification limit or acceptance criteria
+
+      - field_name: oos_result
+        field_type: text
+        required: true
+        description: Out of specification result obtained
+
+      - field_name: units
+        field_type: text
+        required: true
+        description: Units of measurement
+
+      - field_name: analytical_method
+        field_type: text
+        required: true
+        description: Analytical method number and name
+
+      - field_name: analyst_name
+        field_type: text
+        required: true
+        description: Analyst who performed testing
+
+  - section_number: 2
+    section_title: Sample Information
+    fields:
+      - field_name: sample_id
+        field_type: text
+        required: true
+        description: Sample identification number
+
+      - field_name: sample_type
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Raw Material
+            - In-Process
+            - Finished Product
+            - Stability
+            - Environmental Monitoring
+            - Water System
+            - Equipment Qualification
+            - Cleaning Validation
+            - Other
+        description: Type of sample
+
+      - field_name: sample_collection_date
+        field_type: date
+        required: true
+        description: Date sample collected
+
+      - field_name: analysis_date
+        field_type: date
+        required: true
+        description: Date of analysis
+
+      - field_name: instrument_id
+        field_type: text
+        required: true
+        description: Instrument used for analysis
+
+  - section_number: 3
+    section_title: Immediate Notification (Complete Within 2 Hours)
+    fields:
+      - field_name: lab_supervisor_notified
+        field_type: yes_no
+        required: true
+        description: Laboratory Supervisor notified of OOS result?
+
+      - field_name: lab_supervisor_name
+        field_type: text
+        required: true
+        description: Laboratory Supervisor name
+
+      - field_name: lab_supervisor_notification_time
+        field_type: datetime
+        required: true
+        description: Date and time of notification
+
+      - field_name: qc_manager_notified
+        field_type: yes_no
+        required: true
+        description: QC Manager notified?
+
+      - field_name: qc_manager_name
+        field_type: text
+        required: true
+        description: QC Manager name
+
+      - field_name: qc_manager_notification_time
+        field_type: datetime
+        required: true
+        description: Date and time of notification
+
+      - field_name: qa_manager_notified
+        field_type: yes_no
+        required: true
+        description: QA Manager notified?
+
+      - field_name: qa_manager_notification_time
+        field_type: datetime
+        required: false
+        description: Date and time of QA notification
+
+      - field_name: production_manager_notified
+        field_type: yes_no
+        required: false
+        description: Production Manager notified (if applicable)?
+
+      - field_name: production_notification_time
+        field_type: datetime
+        required: false
+        description: Date and time of Production notification
+
+  - section_number: 4
+    section_title: Criticality Assessment
+    fields:
+      - field_name: patient_safety_impact
+        field_type: select
+        required: true
+        options:
+          enum:
+            - High - Direct patient safety concern
+            - Medium - Potential safety impact
+            - Low - No direct safety concern
+        description: Patient safety impact assessment
+
+      - field_name: safety_justification
+        field_type: textarea
+        required: true
+        description: Justification for patient safety impact rating
+
+      - field_name: regulatory_significance
+        field_type: select
+        required: true
+        options:
+          enum:
+            - High - Critical quality attribute or regulatory notification required
+            - Medium - Important quality attribute
+            - Low - Non-critical parameter
+        description: Regulatory significance assessment
+
+      - field_name: regulatory_justification
+        field_type: textarea
+        required: true
+        description: Justification for regulatory significance rating
+
+      - field_name: business_impact
+        field_type: select
+        required: true
+        options:
+          enum:
+            - High - Significant production/release delay or customer impact
+            - Medium - Moderate delay possible
+            - Low - Minimal business impact
+        description: Business impact assessment
+
+      - field_name: business_justification
+        field_type: textarea
+        required: true
+        description: Justification for business impact rating
+
+      - field_name: overall_criticality
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Critical (High) - Immediate senior management notification required
+            - Important (Medium) - Standard investigation timeline
+            - Routine (Low) - Normal investigation procedures
+        description: Overall criticality classification
+
+  - section_number: 5
+    section_title: Containment Actions (Complete Within 8 Hours)
+    fields:
+      - field_name: sample_quarantined
+        field_type: yes_no
+        required: true
+        description: OOS sample and related samples quarantined?
+
+      - field_name: quarantine_location
+        field_type: text
+        required: false
+        description: Physical quarantine location
+
+      - field_name: related_batches_quarantined
+        field_type: yes_no
+        required: true
+        description: Related batches/lots placed on hold?
+
+      - field_name: batch_numbers_quarantined
+        field_type: textarea
+        required: false
+        description: List of batch/lot numbers placed on hold
+
+      - field_name: inventory_system_hold
+        field_type: yes_no
+        required: true
+        description: Electronic hold applied in inventory system?
+
+      - field_name: distribution_stopped
+        field_type: yes_no
+        required: true
+        description: Distribution stopped for affected materials?
+
+      - field_name: raw_data_preserved
+        field_type: yes_no
+        required: true
+        description: All raw data, chromatograms, printouts preserved?
+
+      - field_name: equipment_logs_secured
+        field_type: yes_no
+        required: true
+        description: Equipment logs and maintenance records secured?
+
+      - field_name: lab_notebook_locked
+        field_type: yes_no
+        required: true
+        description: Laboratory notebook entries locked/secured?
+
+  - section_number: 6
+    section_title: Investigation Team Assignment
+    fields:
+      - field_name: investigation_leader
+        field_type: text
+        required: true
+        description: Investigation Leader name and title
+
+      - field_name: team_members
+        field_type: textarea
+        required: true
+        description: Investigation team members (names and roles)
+
+      - field_name: target_completion_date
+        field_type: date
+        required: true
+        description: Target investigation completion date
+
+      - field_name: investigation_priority
+        field_type: select
+        required: true
+        options:
+          enum:
+            - High Priority - Complete within 5 business days
+            - Medium Priority - Complete within 10 business days
+            - Routine - Complete within 15 business days
+        description: Investigation priority and timeline
+
+  - section_number: 7
+    section_title: Initial Assessment and Planning
+    fields:
+      - field_name: similar_oos_history
+        field_type: yes_no
+        required: true
+        description: Has similar OOS occurred previously?
+
+      - field_name: previous_oos_details
+        field_type: textarea
+        required: false
+        description: Details of previous similar OOS (if applicable)
+
+      - field_name: regulatory_reporting_required
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Yes - Immediate notification required
+            - Maybe - Assess after investigation
+            - No - No regulatory reporting expected
+        description: Preliminary assessment of regulatory reporting need
+
+      - field_name: customer_notification_required
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Yes - Immediate notification required
+            - Maybe - Assess after investigation
+            - No - No customer notification expected
+        description: Preliminary assessment of customer notification need
+
+      - field_name: phase_2_likely
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Likely - Suspect non-laboratory cause
+            - Possible - Cannot rule out yet
+            - Unlikely - Appears laboratory-related
+        description: Preliminary assessment of Phase II investigation need
+
+  - section_number: 8
+    section_title: Approval and Verification
+    fields:
+      - field_name: analyst_signature
+        field_type: signature
+        required: true
+        description: Analyst electronic signature
+
+      - field_name: analyst_date
+        field_type: date
+        required: true
+        description: Analyst signature date
+
+      - field_name: lab_supervisor_signature
+        field_type: signature
+        required: true
+        description: Laboratory Supervisor electronic signature
+
+      - field_name: lab_supervisor_date
+        field_type: date
+        required: true
+        description: Supervisor signature date
+
+      - field_name: qc_manager_signature
+        field_type: signature
+        required: true
+        description: QC Manager electronic signature
+
+      - field_name: qc_manager_date
+        field_type: date
+        required: true
+        description: QC Manager signature date
+
+      - field_name: qa_manager_signature
+        field_type: signature
+        required: true
+        description: QA Manager electronic signature
+
+      - field_name: qa_manager_date
+        field_type: date
+        required: true
+        description: QA Manager signature date
+
+instructions:
+  - Complete this form immediately upon identification of OOS result
+  - Section 1-2: Complete by Analyst within 1 hour
+  - Section 3: Complete all notifications within 2 hours
+  - Section 4: Criticality assessment by QC Manager within 4 hours
+  - Section 5: All containment actions within 8 hours
+  - Section 6: Investigation team assigned within 24 hours
+  - Section 7: Initial assessment by QC/QA within 24 hours
+  - Section 8: All approvals within 24 hours of OOS identification
+  - This form initiates formal OOS investigation tracking
+  - Attach to FORM-OOS-003 Laboratory Investigation Worksheet
+
+validation_rules:
+  - OOS notification must be completed within 24 hours of result identification
+  - All required notifications must be documented with timestamps
+  - Criticality assessment must be completed and justified
+  - All containment actions must be verified as completed
+  - Investigation team and timeline must be established
+  - All required approvals must be obtained before proceeding with investigation

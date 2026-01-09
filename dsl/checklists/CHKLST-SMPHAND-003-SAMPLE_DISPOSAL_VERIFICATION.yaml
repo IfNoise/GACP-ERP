@@ -1,0 +1,518 @@
+---
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-SMPHAND-003"
+  title: "Sample Disposal Verification Checklist"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  checklist_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "DEA Regulations, EPA Hazardous Waste, ISO/IEC 17025"
+  frequency: "Per disposal event"
+  estimated_duration: "30-60 minutes per disposal batch"
+
+purpose: "Systematic verification of sample disposal procedures to ensure regulatory compliance, proper waste characterization, complete destruction, and appropriate documentation for all sample types including controlled substances"
+
+target_audience:
+  - "Laboratory Technicians"
+  - "Sample Coordinators"
+  - "Laboratory Managers"
+  - "QA Specialists"
+
+when_to_use:
+  - "Before executing any sample disposal"
+  - "For routine disposal of samples after retention period met"
+  - "For disposal of damaged or rejected samples"
+  - "For disposal of expired reference standards or QC samples"
+  - "During DEA-witnessed controlled substance destruction"
+
+completion_criteria: "All items verified, disposal authorization obtained, all required signatures present, photographic evidence captured, samples rendered completely unusable"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Pre-Disposal Authorization and Eligibility"
+    description: "Verification of disposal authorization and sample eligibility"
+    required: true
+    items:
+      - item_id: "ITEM-001"
+        item_text: "Verify disposal authorized by Laboratory Manager or designee"
+        verification_method: "Authorization signature check"
+        acceptance_criteria: "FORM-SMPHAND-003 signed by authorized person"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-002"
+        item_text: "Confirm all testing complete for samples"
+        verification_method: "LIMS status check"
+        acceptance_criteria: "LIMS shows all requested tests completed"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-003"
+        item_text: "Verify results reported to client"
+        verification_method: "LIMS report status"
+        acceptance_criteria: "Reports issued and delivered, or N/A for internal samples"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-004"
+        item_text: "Confirm no active holds or investigations"
+        verification_method: "LIMS hold status check"
+        acceptance_criteria: "No hold flags, no open OOS investigations"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-005"
+        item_text: "Verify retention period requirements met"
+        verification_method: "Date calculation"
+        acceptance_criteria: "Minimum retention period expired, or early disposal authorized"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-006"
+        item_text: "Confirm client approval for disposal if contractually required"
+        verification_method: "Contract review and client communication"
+        acceptance_criteria: "Client approval documented, or not required per contract"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+  - section_id: "SEC-002"
+    section_name: "Waste Classification and Characterization"
+    description: "Proper classification of waste type for regulatory compliance"
+    required: true
+    items:
+      - item_id: "ITEM-007"
+        item_text: "Classify waste type (cannabis, hazardous, controlled, biological, etc.)"
+        verification_method: "Material characterization"
+        acceptance_criteria: "Waste classification documented on FORM-SMPHAND-003"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-008"
+        item_text: "For controlled substances, verify DEA schedule"
+        verification_method: "DEA schedule verification"
+        acceptance_criteria: "Schedule I-V correctly identified"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-009"
+        item_text: "For hazardous waste, assign EPA waste codes"
+        verification_method: "Hazardous waste determination"
+        acceptance_criteria: "Appropriate EPA waste codes assigned (D001, F003, etc.)"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-010"
+        item_text: "Identify all waste hazards (ignitable, corrosive, toxic, reactive)"
+        verification_method: "Hazard assessment"
+        acceptance_criteria: "All hazard characteristics documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-011"
+        item_text: "Determine if mixed waste (cannabis + hazardous chemicals)"
+        verification_method: "Composition analysis"
+        acceptance_criteria: "Mixed waste correctly identified"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-012"
+        item_text: "Verify MSDS/SDS available for hazardous components"
+        verification_method: "Document check"
+        acceptance_criteria: "MSDS/SDS on hand for hazardous waste disposal"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+  - section_id: "SEC-003"
+    section_name: "Disposal Method Selection"
+    description: "Selection of appropriate disposal method for waste type"
+    required: true
+    items:
+      - item_id: "ITEM-013"
+        item_text: "Select disposal method appropriate for waste classification"
+        verification_method: "Method selection per SOP"
+        acceptance_criteria: "Method matches waste type per SOP-SMPHAND-001"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-014"
+        item_text: "Verify disposal method meets regulatory requirements"
+        verification_method: "Regulatory compliance check"
+        acceptance_criteria: "Method compliant with DEA, EPA, or state regulations"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-015"
+        item_text: "For third-party disposal, verify vendor licensed and qualified"
+        verification_method: "Vendor qualification review"
+        acceptance_criteria: "Vendor EPA/DEA licensed, qualifications current"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-016"
+        item_text: "Verify disposal facility permits current and adequate"
+        verification_method: "Permit review"
+        acceptance_criteria: "Facility permitted for waste type being disposed"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+  - section_id: "SEC-004"
+    section_name: "DEA Controlled Substance Disposal Requirements"
+    description: "Special requirements for DEA Schedule I-V controlled substances"
+    required: false
+    conditional_trigger:
+      field: "waste_classification"
+      condition: "equals"
+      value: "controlled_substance"
+    items:
+      - item_id: "ITEM-017"
+        item_text: "Verify witness present for controlled substance destruction"
+        verification_method: "Physical verification"
+        acceptance_criteria: "Authorized witness present (DEA agent, law enforcement, or qualified laboratory personnel)"
+        responsible_role: "Laboratory Manager"
+        critical: true
+
+      - item_id: "ITEM-018"
+        item_text: "Verify DEA Form 41 completed accurately"
+        verification_method: "Form review"
+        acceptance_criteria: "All fields on Form 41 complete and accurate"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-019"
+        item_text: "Document inventory reconciliation before destruction"
+        verification_method: "Inventory count"
+        acceptance_criteria: "LIMS inventory matches physical count 100%"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-020"
+        item_text: "Verify disposal method renders substance irretrievable"
+        verification_method: "Method verification"
+        acceptance_criteria: "Incineration, chemical destruction, or other DEA-approved method"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-021"
+        item_text: "Secure destruction area with access control"
+        verification_method: "Security check"
+        acceptance_criteria: "Area secured, unauthorized personnel excluded"
+        responsible_role: "Laboratory Manager"
+        critical: true
+
+  - section_id: "SEC-005"
+    section_name: "Hazardous Waste Disposal Requirements"
+    description: "EPA hazardous waste disposal compliance"
+    required: false
+    conditional_trigger:
+      field: "waste_classification"
+      condition: "in"
+      values:
+        - "hazardous_waste"
+        - "mixed_waste"
+    items:
+      - item_id: "ITEM-022"
+        item_text: "Complete EPA Uniform Hazardous Waste Manifest"
+        verification_method: "Form completion"
+        acceptance_criteria: "Manifest complete with all required information"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-023"
+        item_text: "Verify waste containerized in DOT-approved containers"
+        verification_method: "Container inspection"
+        acceptance_criteria: "Containers appropriate for waste type, properly labeled"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-024"
+        item_text: "Affix hazardous waste labels with accumulation start date"
+        verification_method: "Label verification"
+        acceptance_criteria: "Labels include waste type, hazards, accumulation date"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-025"
+        item_text: "Verify waste stored in compliant satellite accumulation area"
+        verification_method: "Storage area check"
+        acceptance_criteria: "Area meets EPA satellite accumulation requirements"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-026"
+        item_text: "Confirm disposal within regulatory time limits (90/180 days)"
+        verification_method: "Date calculation"
+        acceptance_criteria: "Disposal within generator status time limits"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-027"
+        item_text: "Verify transporter EPA ID number valid"
+        verification_method: "EPA ID verification"
+        acceptance_criteria: "Transporter EPA ID active and valid"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+  - section_id: "SEC-006"
+    section_name: "Cannabis Waste Disposal (Non-Hazardous)"
+    description: "Cannabis-specific waste disposal requirements"
+    required: false
+    conditional_trigger:
+      field: "waste_classification"
+      condition: "equals"
+      value: "cannabis_waste"
+    items:
+      - item_id: "ITEM-028"
+        item_text: "Prepare rendering agent (kitty litter, dirt, or other inedible material)"
+        verification_method: "Material preparation"
+        acceptance_criteria: "Rendering material in 1:1 or greater ratio to cannabis"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-029"
+        item_text: "Mix cannabis waste thoroughly with rendering material"
+        verification_method: "Physical mixing"
+        acceptance_criteria: "Waste completely mixed, rendering it unusable"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-030"
+        item_text: "Photograph rendered waste showing unusable state"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Clear photos showing mixture, waste not recoverable"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-031"
+        item_text: "Update state track-and-trace system if required"
+        verification_method: "System update"
+        acceptance_criteria: "Waste disposal recorded in seed-to-sale system"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-032"
+        item_text: "Verify disposal vendor authorized for cannabis waste"
+        verification_method: "Vendor authorization check"
+        acceptance_criteria: "Vendor licensed for cannabis waste disposal"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+  - section_id: "SEC-007"
+    section_name: "Disposal Execution and Witnessing"
+    description: "Actual disposal execution with appropriate witnessing"
+    required: true
+    items:
+      - item_id: "ITEM-033"
+        item_text: "Verify correct samples retrieved for disposal"
+        verification_method: "Sample ID verification"
+        acceptance_criteria: "Sample IDs match disposal batch list 100%"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-034"
+        item_text: "Photograph samples before disposal (with IDs visible)"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Clear photos of all samples with labels visible"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-035"
+        item_text: "Execute disposal per approved method"
+        verification_method: "Method execution"
+        acceptance_criteria: "Disposal method executed as documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-036"
+        item_text: "Photograph disposal in progress"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Photos document destruction process"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-037"
+        item_text: "Verify witness present and observing (if required)"
+        verification_method: "Witness verification"
+        acceptance_criteria: "Witness present throughout disposal, identity verified"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-038"
+        item_text: "Photograph completely destroyed/rendered samples"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Final photos show samples completely unusable/destroyed"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-039"
+        item_text: "Record disposal completion date and time"
+        verification_method: "Timestamp documentation"
+        acceptance_criteria: "Exact disposal date and time recorded"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-008"
+    section_name: "Post-Disposal Verification"
+    description: "Verification of complete and irreversible disposal"
+    required: true
+    items:
+      - item_id: "ITEM-040"
+        item_text: "Verify samples rendered completely unusable"
+        verification_method: "Visual verification"
+        acceptance_criteria: "Samples cannot be recovered or reconstituted"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-041"
+        item_text: "Confirm all containers in disposal batch destroyed"
+        verification_method: "Count verification"
+        acceptance_criteria: "Number disposed matches disposal batch list"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-042"
+        item_text: "For third-party disposal, obtain shipment confirmation"
+        verification_method: "Transporter receipt"
+        acceptance_criteria: "Signed manifest or shipping receipt obtained"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-043"
+        item_text: "Verify disposal area cleaned and decontaminated"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "No residual waste, area clean and ready for next use"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+  - section_id: "SEC-009"
+    section_name: "Documentation Completion"
+    description: "Complete all required disposal documentation"
+    required: true
+    items:
+      - item_id: "ITEM-044"
+        item_text: "Complete FORM-SMPHAND-003 Sample Disposal Record"
+        verification_method: "Form review"
+        acceptance_criteria: "All sections complete, no blank fields"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-045"
+        item_text: "Attach all photographs to disposal record"
+        verification_method: "Photo attachment"
+        acceptance_criteria: "Before, during, and after photos attached and labeled"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-046"
+        item_text: "Obtain disposal technician signature"
+        verification_method: "Signature verification"
+        acceptance_criteria: "Technician signature with date/time on disposal record"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-047"
+        item_text: "Obtain witness signature (if required)"
+        verification_method: "Signature verification"
+        acceptance_criteria: "Witness signature with date/time, matching technician"
+        responsible_role: "Witness"
+        critical: true
+
+      - item_id: "ITEM-048"
+        item_text: "Obtain QA review and approval signature"
+        verification_method: "Signature verification"
+        acceptance_criteria: "QA signature indicating record review and approval"
+        responsible_role: "QA Laboratory Specialist"
+        critical: true
+
+      - item_id: "ITEM-049"
+        item_text: "Attach regulatory forms (DEA Form 41, EPA manifest, etc.)"
+        verification_method: "Document attachment"
+        acceptance_criteria: "All regulatory forms attached with confirmation numbers"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-010"
+    section_name: "LIMS and System Updates"
+    description: "Update laboratory systems with disposal information"
+    required: true
+    items:
+      - item_id: "ITEM-050"
+        item_text: "Update LIMS sample status to 'Disposed'"
+        verification_method: "LIMS update"
+        acceptance_criteria: "All samples in batch marked as disposed with disposal date"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-051"
+        item_text: "Link disposal record to sample records in LIMS"
+        verification_method: "Document linking"
+        acceptance_criteria: "Disposal record accessible from sample records"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-052"
+        item_text: "Update inventory system for controlled substances"
+        verification_method: "Inventory reconciliation"
+        acceptance_criteria: "Controlled substance inventory reduced by disposed amount"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-053"
+        item_text: "Update state track-and-trace system if required"
+        verification_method: "System update"
+        acceptance_criteria: "Disposal recorded in seed-to-sale or state system"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-054"
+        item_text: "Archive disposal record in document management system"
+        verification_method: "Electronic archival"
+        acceptance_criteria: "Disposal record and photos archived with backup"
+        responsible_role: "Document Control"
+        critical: true
+
+      - item_id: "ITEM-055"
+        item_text: "File original paper records (if applicable) in secure location"
+        verification_method: "Filing"
+        acceptance_criteria: "Original DEA Form 41 and manifests filed securely"
+        responsible_role: "Document Control"
+        critical: true
+
+non_conformance_handling:
+  - criterion: "Disposal authorization not obtained"
+    action: "Stop disposal immediately, obtain required authorization before proceeding"
+  - criterion: "Samples not eligible for disposal (testing incomplete, hold active)"
+    action: "Do not dispose, return samples to storage, resolve issue first"
+  - criterion: "Waste classification incorrect or uncertain"
+    action: "Stop disposal, consult Laboratory Manager and safety officer, reclassify"
+  - criterion: "Required witness not present for controlled substance"
+    action: "Stop disposal, reschedule with appropriate witness present"
+  - criterion: "Disposal method fails to render samples unusable"
+    action: "Re-process samples with additional destruction, document issue"
+  - criterion: "Documentation incomplete or missing signatures"
+    action: "Do not finalize disposal, obtain all required documentation before proceeding"
+
+training_requirements:
+  - "Completion of TRN-SMPHAND-001: Sample Handling Technician Training"
+  - "DEA controlled substance handling training (if handling controlled substances)"
+  - "EPA hazardous waste generator training (40-hour or 8-hour as appropriate)"
+  - "State-specific cannabis waste disposal training"
+  - "Annual refresher training on disposal procedures"
+
+record_retention: "Permanent for DEA controlled substances, 5 years for EPA hazardous waste, sample lifetime + 5 years for all other waste types"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "FORM-SMPHAND-003: Sample Disposal and Destruction Record"
+  - "DEA Form 41: Registrant's Inventory of Drugs Surrendered"
+  - "EPA Uniform Hazardous Waste Manifest"
+  - "SOP-DEV-001: Deviation Management"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Disposal Verification Checklist"
+    author: "Laboratory Manager"

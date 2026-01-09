@@ -1,0 +1,361 @@
+# DSL: Root Cause Analysis Checklist
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-CAPA-001"
+  checklist_type: "investigation"
+  title: "Root Cause Analysis Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CAPA-001"
+
+usage:
+  purpose: "Ensure systematic and thorough root cause analysis using appropriate methodologies to identify fundamental cause of problems"
+  frequency: "per_capa"
+  trigger: "CAPA investigation phase"
+  responsible_roles:
+    - "ROLE-CAPAMGR-001"
+    - "ROLE-SME-001"
+    - "ROLE-QA-002"
+  estimated_duration_minutes: 240
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Investigation Preparation"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "RCA-001"
+          item_text: "Problem statement clearly defined and documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Specific, measurable, clear problem statement"
+          evidence_required: true
+          guidance: "What exactly happened? When? Where? Who was involved?"
+
+        - item_id: "RCA-002"
+          item_text: "Investigation team with appropriate expertise assembled"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Team includes process owner, SME, quality representative"
+          evidence_required: false
+          guidance: "Ensure cross-functional representation for complex issues"
+
+        - item_id: "RCA-003"
+          item_text: "Investigation scope and objectives established"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear scope boundaries and investigation goals documented"
+          evidence_required: false
+          guidance: "What questions need to be answered? What is out of scope?"
+
+        - item_id: "RCA-004"
+          item_text: "Timeline for investigation established per priority"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "P1=30d, P2=60d, P3=90d, P4=120d"
+          evidence_required: false
+          guidance: "Set milestones and target completion date"
+
+    - section_id: "SEC-002"
+      section_title: "Data Collection"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "RCA-005"
+          item_text: "All relevant process data collected and reviewed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Process monitoring data, batch records, control charts"
+          evidence_required: true
+          guidance: "Gather data from time period before, during, and after event"
+
+        - item_id: "RCA-006"
+          item_text: "Equipment performance logs and maintenance records reviewed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Equipment logs, calibration records, maintenance history"
+          evidence_required: true
+          guidance: "Check equipment status at time of event"
+
+        - item_id: "RCA-007"
+          item_text: "Environmental monitoring data reviewed if applicable"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Temperature, humidity, pressure, air quality data"
+          evidence_required: true
+          guidance: "Verify environmental conditions were within specifications"
+
+        - item_id: "RCA-008"
+          item_text: "Personnel training and qualification records verified"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Training current, qualifications adequate for task"
+          evidence_required: true
+          guidance: "Were personnel properly trained and qualified?"
+
+        - item_id: "RCA-009"
+          item_text: "Raw material and component specifications and test results reviewed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Material specifications, COAs, test results"
+          evidence_required: true
+          guidance: "Verify materials met specifications"
+
+        - item_id: "RCA-010"
+          item_text: "Relevant procedure and specification documents reviewed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Current SOPs, specifications, work instructions"
+          evidence_required: true
+          guidance: "Were procedures followed? Are procedures adequate?"
+
+    - section_id: "SEC-003"
+      section_title: "Five Why Analysis"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "RCA-011"
+          item_text: "Initial 'Why' question posed: Why did problem occur?"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "First level cause identified with supporting evidence"
+          evidence_required: true
+          guidance: "Start with immediate cause directly linked to problem"
+
+        - item_id: "RCA-012"
+          item_text: "Second 'Why' question: Why did first cause occur?"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Second level cause identified with supporting evidence"
+          evidence_required: true
+          guidance: "Dig deeper - what allowed first cause to happen?"
+
+        - item_id: "RCA-013"
+          item_text: "Third 'Why' question: Why did second cause occur?"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Third level cause identified with supporting evidence"
+          evidence_required: true
+          guidance: "Continue questioning to reach fundamental cause"
+
+        - item_id: "RCA-014"
+          item_text: "Fourth 'Why' question: Why did third cause occur?"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Fourth level cause identified with supporting evidence"
+          evidence_required: true
+          guidance: "Approaching root cause - look for systemic issues"
+
+        - item_id: "RCA-015"
+          item_text: "Fifth 'Why' (or more) question until root cause reached"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Fundamental root cause identified - cannot ask 'why' further"
+          evidence_required: true
+          guidance: "Root cause is fundamental reason - eliminating it prevents recurrence"
+
+    - section_id: "SEC-004"
+      section_title: "Fishbone Diagram Analysis"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "RCA-016"
+          item_text: "Methods (procedures, processes) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All process-related potential causes brainstormed"
+          evidence_required: true
+          guidance: "Were procedures adequate? Followed correctly? Up to date?"
+
+        - item_id: "RCA-017"
+          item_text: "Machines (equipment, technology) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All equipment-related potential causes brainstormed"
+          evidence_required: true
+          guidance: "Equipment condition? Calibrated? Maintained? Capable?"
+
+        - item_id: "RCA-018"
+          item_text: "Materials (raw materials, components) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All material-related potential causes brainstormed"
+          evidence_required: true
+          guidance: "Materials met specs? Storage proper? Handling correct?"
+
+        - item_id: "RCA-019"
+          item_text: "Manpower (personnel, training) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All people-related potential causes brainstormed"
+          evidence_required: true
+          guidance: "Training adequate? Experience sufficient? Fatigue factors?"
+
+        - item_id: "RCA-020"
+          item_text: "Measurement (testing, inspection) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All measurement-related potential causes brainstormed"
+          evidence_required: true
+          guidance: "Test methods adequate? Equipment calibrated? Analysts qualified?"
+
+        - item_id: "RCA-021"
+          item_text: "Environment (conditions, workplace) category explored"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All environmental potential causes brainstormed"
+          evidence_required: true
+          guidance: "Temperature, humidity, cleanliness, lighting, workspace adequate?"
+
+        - item_id: "RCA-022"
+          item_text: "Most likely causes prioritized for further investigation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Top 3-5 potential causes ranked by likelihood and impact"
+          evidence_required: false
+          guidance: "Use data and evidence to narrow focus"
+
+    - section_id: "SEC-005"
+      section_title: "Advanced Analysis (Complex CAPAs)"
+      section_order: 5
+      required: false
+
+      items:
+        - item_id: "RCA-023"
+          item_text: "Fault Tree Analysis (FTA) performed if applicable"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "Logical tree showing how basic events lead to top event"
+          evidence_required: true
+          guidance: "Use for complex problems with multiple contributing factors"
+
+        - item_id: "RCA-024"
+          item_text: "Failure Mode and Effects Analysis (FMEA) performed if applicable"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "Systematic analysis of potential failure modes and effects"
+          evidence_required: true
+          guidance: "Use for process analysis and risk prioritization"
+
+    - section_id: "SEC-006"
+      section_title: "Root Cause Validation"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "RCA-025"
+          item_text: "Identified root cause supported by objective evidence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Data, observations, test results support root cause conclusion"
+          evidence_required: true
+          guidance: "Can you demonstrate root cause is true fundamental reason?"
+
+        - item_id: "RCA-026"
+          item_text: "Root cause elimination would prevent problem recurrence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Team consensus that eliminating root cause prevents recurrence"
+          evidence_required: false
+          guidance: "If we eliminate this cause, will problem be prevented?"
+
+        - item_id: "RCA-027"
+          item_text: "Contributing factors identified and documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All significant contributing factors documented separately"
+          evidence_required: true
+          guidance: "What other factors made root cause more likely or severe?"
+
+        - item_id: "RCA-028"
+          item_text: "Root cause statement clearly documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear, concise statement of fundamental root cause"
+          evidence_required: true
+          guidance: "Write definitive root cause statement for CAPA plan"
+
+    - section_id: "SEC-007"
+      section_title: "Investigation Documentation"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "RCA-029"
+          item_text: "Complete investigation report prepared"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Report includes: problem, data, analysis, root cause, evidence"
+          evidence_required: true
+          guidance: "Use standard investigation report template"
+
+        - item_id: "RCA-030"
+          item_text: "All analysis tools and worksheets attached"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Five Why worksheet, Fishbone diagram, data summaries included"
+          evidence_required: true
+          guidance: "Ensure complete evidence package"
+
+        - item_id: "RCA-031"
+          item_text: "CAPA recommendations clearly stated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Both corrective and preventive actions recommended"
+          evidence_required: false
+          guidance: "What actions will eliminate root cause and prevent recurrence?"
+
+        - item_id: "RCA-032"
+          item_text: "Investigation approved by Quality Manager"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Quality Manager signature and date on investigation report"
+          evidence_required: true
+          guidance: "Obtain QA approval before proceeding to action planning"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "RCA-001"
+    - "RCA-005"
+    - "RCA-011"
+    - "RCA-015"
+    - "RCA-025"
+    - "RCA-026"
+    - "RCA-028"
+    - "RCA-032"
+  critical_item_requirement: "All critical items must pass"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document investigation deficiencies"
+      - "Complete missing analysis elements"
+      - "Obtain additional expertise or data"
+    follow_up_required:
+      - "Re-submit investigation for QA review"
+      - "Update investigation if systematic gaps identified"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

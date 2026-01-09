@@ -1,0 +1,434 @@
+# DSL: Document Quality Checklist
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-DOC-001"
+  checklist_type: "quality"
+  title: "Document Quality Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Verify document quality, format compliance, and completeness before submission for formal review"
+  frequency: "per_document"
+  trigger: "Document author completes draft, before formal review"
+  responsible_roles:
+    - "ROLE-DOCAUTH-001"
+  estimated_duration_minutes: 20
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Document Identification and Metadata"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "META-001"
+          item_text: "Document ID correctly formatted per numbering system"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Format: [ORG]-[CATEGORY]-[TYPE]-[NUMBER]-[VERSION]"
+          evidence_required: false
+          guidance: "Example: GACP-SOP-QMS-001-v1.0"
+
+        - item_id: "META-002"
+          item_text: "Document title clear, descriptive, and accurate"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Title clearly describes document content and purpose"
+          evidence_required: false
+          guidance: "Avoid vague titles; be specific"
+
+        - item_id: "META-003"
+          item_text: "Version number correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Major.Minor format, incremented appropriately"
+          evidence_required: false
+          guidance: "Major change: x.0, Minor change: x.y"
+
+        - item_id: "META-004"
+          item_text: "Document status set to DRAFT"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Status indicator shows DRAFT"
+          evidence_required: false
+          guidance: "Only approved documents have APPROVED status"
+
+        - item_id: "META-005"
+          item_text: "Author name and contact information complete"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Author name, department, email provided"
+          evidence_required: false
+          guidance: null
+
+        - item_id: "META-006"
+          item_text: "Related SOPs and documents listed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All related documents identified and cross-referenced"
+          evidence_required: false
+          guidance: "N/A if standalone document with no dependencies"
+
+        - item_id: "META-007"
+          item_text: "Compliance standards identified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Applicable regulatory standards listed (FDA, EU GMP, ISO, etc.)"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents"
+
+    - section_id: "SEC-002"
+      section_title: "Content Quality and Completeness"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "CONT-001"
+          item_text: "Purpose clearly stated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Purpose section answers 'Why does this document exist?'"
+          evidence_required: false
+          guidance: "Clear, concise statement of document objective"
+
+        - item_id: "CONT-002"
+          item_text: "Scope clearly defined (inclusions and exclusions)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Scope section defines what is and is not covered"
+          evidence_required: false
+          guidance: "Be specific about boundaries"
+
+        - item_id: "CONT-003"
+          item_text: "Roles and responsibilities clearly defined"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Each role has clear responsibilities and authority"
+          evidence_required: false
+          guidance: "Use role IDs from organizational structure"
+
+        - item_id: "CONT-004"
+          item_text: "Procedures logically organized and complete"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Step-by-step procedures in logical order, all steps included"
+          evidence_required: false
+          guidance: "Can a trained person follow this without confusion?"
+
+        - item_id: "CONT-005"
+          item_text: "Technical content accurate and current"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Information verified accurate, no outdated content"
+          evidence_required: false
+          guidance: "Check against current practices and standards"
+
+        - item_id: "CONT-006"
+          item_text: "Definitions provided for technical terms and acronyms"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All non-standard terms defined or referenced"
+          evidence_required: false
+          guidance: "N/A if no technical terms requiring definition"
+
+        - item_id: "CONT-007"
+          item_text: "References to external standards and regulations accurate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All citations correct with version/date"
+          evidence_required: false
+          guidance: "Verify citations against current regulations"
+
+        - item_id: "CONT-008"
+          item_text: "Forms and attachments referenced are available"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All referenced forms exist and are current"
+          evidence_required: false
+          guidance: "N/A if no forms referenced"
+
+        - item_id: "CONT-009"
+          item_text: "Quality controls and checkpoints identified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Critical quality checkpoints clearly marked"
+          evidence_required: false
+          guidance: "N/A for non-procedural documents"
+
+    - section_id: "SEC-003"
+      section_title: "Format and Style Compliance"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "FMT-001"
+          item_text: "Document uses approved template"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Current template used, not modified template"
+          evidence_required: false
+          guidance: "Obtain templates from Document Controller"
+
+        - item_id: "FMT-002"
+          item_text: "Heading hierarchy correct and consistent"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Headings numbered correctly (1, 1.1, 1.1.1), no skipped levels"
+          evidence_required: false
+          guidance: "Use automatic heading numbering"
+
+        - item_id: "FMT-003"
+          item_text: "Tables and figures properly numbered and captioned"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Sequential numbering (Table 1, Figure 1, etc.), descriptive captions"
+          evidence_required: false
+          guidance: "N/A if no tables or figures"
+
+        - item_id: "FMT-004"
+          item_text: "Font, spacing, and margins consistent with template"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No font or format deviations from template"
+          evidence_required: false
+          guidance: "Do not modify template formatting"
+
+        - item_id: "FMT-005"
+          item_text: "Page numbers and footers correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All pages numbered, footer shows document ID and version"
+          evidence_required: false
+          guidance: "Verify footer updates automatically"
+
+        - item_id: "FMT-006"
+          item_text: "Table of contents generated and accurate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "TOC matches actual headings and page numbers"
+          evidence_required: false
+          guidance: "Update TOC before finalizing; N/A if document < 5 pages"
+
+    - section_id: "SEC-004"
+      section_title: "Language and Readability"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "LANG-001"
+          item_text: "Language clear, concise, and professional"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No jargon, slang, or ambiguous language"
+          evidence_required: false
+          guidance: "Write for target audience reading level"
+
+        - item_id: "LANG-002"
+          item_text: "Grammar, spelling, and punctuation correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No errors detected by spell-check, readable"
+          evidence_required: false
+          guidance: "Use spell-check tool"
+
+        - item_id: "LANG-003"
+          item_text: "Active voice used, instructions action-oriented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Procedures written in imperative form (Do this, Verify that)"
+          evidence_required: false
+          guidance: "Avoid passive voice in procedural steps"
+
+        - item_id: "LANG-004"
+          item_text: "Consistent terminology throughout document"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Same terms used consistently (not mixing synonyms)"
+          evidence_required: false
+          guidance: "Example: Use 'equipment' throughout, not 'equipment' and 'apparatus' interchangeably"
+
+    - section_id: "SEC-005"
+      section_title: "Cross-References and Integration"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "XREF-001"
+          item_text: "All cross-referenced documents exist and are current"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Referenced documents verified in system, not obsolete"
+          evidence_required: true
+          guidance: "Check Mayan-EDMS for current version"
+
+        - item_id: "XREF-002"
+          item_text: "Document integrates with related procedures"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "No conflicts or gaps with related SOPs"
+          evidence_required: false
+          guidance: "Review related SOPs for consistency"
+
+        - item_id: "XREF-003"
+          item_text: "Forms and templates referenced by correct ID"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Form IDs match current controlled forms"
+          evidence_required: false
+          guidance: "N/A if no forms referenced"
+
+    - section_id: "SEC-006"
+      section_title: "Regulatory and Compliance"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "REG-001"
+          item_text: "Regulatory requirements addressed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Applicable FDA, EU GMP, Health Canada requirements incorporated"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents"
+
+        - item_id: "REG-002"
+          item_text: "ALCOA+ principles embedded where applicable"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Data integrity controls included for data-generating procedures"
+          evidence_required: false
+          guidance: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+
+        - item_id: "REG-003"
+          item_text: "21 CFR Part 11 requirements met for electronic records/signatures"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Electronic signature and audit trail requirements specified"
+          evidence_required: false
+          guidance: "N/A if no electronic records/signatures involved"
+
+    - section_id: "SEC-007"
+      section_title: "Change Control and Version Management"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "VERS-001"
+          item_text: "Change history section updated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Change log includes version, date, author, summary of changes"
+          evidence_required: false
+          guidance: "Update change history for every revision"
+
+        - item_id: "VERS-002"
+          item_text: "Changes highlighted or described if revision"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Summary of changes clear, significant changes highlighted in document"
+          evidence_required: false
+          guidance: "N/A if new document (version 1.0)"
+
+        - item_id: "VERS-003"
+          item_text: "Superseded document identified if applicable"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Previous document ID and version listed"
+          evidence_required: false
+          guidance: "N/A if new document"
+
+    - section_id: "SEC-008"
+      section_title: "Final Review and Readiness"
+      section_order: 8
+      required: true
+
+      items:
+        - item_id: "FINAL-001"
+          item_text: "Author self-review completed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Author has reviewed entire document for accuracy and completeness"
+          evidence_required: false
+          guidance: "Read document end-to-end before submitting"
+
+        - item_id: "FINAL-002"
+          item_text: "Peer review completed (if applicable)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "SME peer has reviewed and provided feedback"
+          evidence_required: false
+          guidance: "Recommended for complex or high-risk documents"
+
+        - item_id: "FINAL-003"
+          item_text: "Supporting documents attached"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All referenced attachments included"
+          evidence_required: false
+          guidance: "N/A if no attachments"
+
+        - item_id: "FINAL-004"
+          item_text: "Document ready for formal review"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All checklist items pass, author confident in document quality"
+          evidence_required: false
+          guidance: "Do not submit if significant issues remain"
+
+decision_criteria:
+  pass:
+    requirements:
+      - "All critical items pass"
+      - "No more than 2 non-critical failures"
+      - "All failures have documented justification or corrective action"
+    action: "Submit document for formal review"
+
+  fail:
+    requirements:
+      - "Any critical item fails"
+      - "More than 2 non-critical failures"
+      - "Author not confident in document readiness"
+    action: "Revise document, address failures, re-check before submission"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 95
+  critical_items:
+    - "META-001"
+    - "META-003"
+    - "CONT-001"
+    - "CONT-002"
+    - "CONT-004"
+    - "FMT-001"
+    - "FINAL-004"
+  critical_item_requirement: "All critical items must pass"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document issues identified during checklist"
+      - "Revise document to address failures"
+      - "Re-perform checklist after revisions"
+    follow_up_required:
+      - "Do not submit for formal review until checklist passes"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

@@ -1,0 +1,424 @@
+# DSL: Monthly Change Control Performance Report
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-CHG-001"
+  report_type: "performance"
+  category: "change_control"
+  confidentiality: "internal"
+  title: "Monthly Change Control Performance Report"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+report_context:
+  purpose: "Track change control system performance, identify trends, ensure timely change implementation, and drive continuous improvement of change management process"
+  reporting_period: "monthly"
+  frequency: "monthly"
+  report_due_date: "5th business day of following month"
+  responsible_roles:
+    - role: "ROLE-CHGOWN-001"
+      responsibility: "Primary author and data compilation (if dedicated Change Manager)"
+    - role: "ROLE-QA-002"
+      responsibility: "Data analysis, review, and recommendations"
+  distribution:
+    - "Quality Manager"
+    - "Quality Director"
+    - "IT Manager"
+    - "Department Managers"
+    - "Change Control Board members"
+    - "Management Team"
+
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Key Metrics Overview"
+          data_sources:
+            - "Change management system"
+          fields:
+            - field_id: "EXEC-001"
+              field_label: "Total Active Changes"
+              field_type: "integer"
+            - field_id: "EXEC-002"
+              field_label: "Changes Initiated This Month"
+              field_type: "integer"
+            - field_id: "EXEC-003"
+              field_label: "Changes Closed This Month"
+              field_type: "integer"
+              acceptance_criteria: "≥ initiated (reducing backlog)"
+            - field_id: "EXEC-004"
+              field_label: "Change Success Rate"
+              field_type: "percentage"
+              acceptance_criteria: "≥ 95%"
+            - field_id: "EXEC-005"
+              field_label: "Average Cycle Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Minor <30d, Major <90d, Critical <180d"
+            - field_id: "EXEC-006"
+              field_label: "On-Time Completion Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+
+    - section_id: "SEC-002"
+      section_title: "Change Portfolio Status"
+      section_order: 2
+      required: true
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Changes by Status"
+          data_sources:
+            - "Change system status queries"
+          fields:
+            - field_id: "STAT-001"
+              field_label: "Change Status Distribution Table"
+              field_type: "table"
+              columns:
+                - "Status"
+                - "Count"
+                - "% of Total"
+                - "Avg Age (days)"
+            - field_id: "STAT-002"
+              field_label: "Status Distribution Pie Chart"
+              field_type: "pie_chart"
+              categories:
+                - "Under Review"
+                - "Pending Approval"
+                - "Approved - Not Started"
+                - "In Implementation"
+                - "In Verification"
+                - "Closed"
+
+    - section_id: "SEC-003"
+      section_title: "Changes by Criticality and Type"
+      section_order: 3
+      required: true
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Criticality Distribution"
+          data_sources:
+            - "Change classification data"
+          fields:
+            - field_id: "CRIT-001"
+              field_label: "Critical Changes"
+              field_type: "integer"
+              acceptance_criteria: "All critical changes receive CCB review"
+            - field_id: "CRIT-002"
+              field_label: "Major Changes"
+              field_type: "integer"
+            - field_id: "CRIT-003"
+              field_label: "Minor Changes"
+              field_type: "integer"
+            - field_id: "CRIT-004"
+              field_label: "Emergency Changes"
+              field_type: "integer"
+              acceptance_criteria: "< 10% of total changes"
+
+        - subsection_id: "SEC-003-02"
+          subsection_title: "Change Type Analysis"
+          data_sources:
+            - "Change type categorization"
+          fields:
+            - field_id: "TYPE-001"
+              field_label: "Change Type Distribution Table"
+              field_type: "table"
+              columns:
+                - "Change Type"
+                - "Count"
+                - "% of Total"
+                - "Avg Cycle Time"
+
+    - section_id: "SEC-004"
+      section_title: "Cycle Time and Efficiency"
+      section_order: 4
+      required: true
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Cycle Time Analysis"
+          data_sources:
+            - "Change timeline tracking"
+          fields:
+            - field_id: "TIME-001"
+              field_label: "Average Time: Submission to Approval (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 14 days"
+            - field_id: "TIME-002"
+              field_label: "Average Time: Approval to Implementation Start (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 7 days"
+            - field_id: "TIME-003"
+              field_label: "Average Implementation Duration (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Per planned timeline"
+            - field_id: "TIME-004"
+              field_label: "Average Total Change Cycle Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Minor <30d, Major <90d, Critical <180d"
+            - field_id: "TIME-005"
+              field_label: "% Changes Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+
+        - subsection_id: "SEC-004-02"
+          subsection_title: "Overdue Changes"
+          data_sources:
+            - "Change due date tracking"
+          fields:
+            - field_id: "OVER-001"
+              field_label: "Overdue Changes Detail Table"
+              field_type: "table"
+              columns:
+                - "Change ID"
+                - "Criticality"
+                - "Owner"
+                - "Current Phase"
+                - "Days Overdue"
+                - "Reason"
+
+    - section_id: "SEC-005"
+      section_title: "Changes by Department/System"
+      section_order: 5
+      required: true
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Departmental Change Activity"
+          data_sources:
+            - "Change owner department"
+          fields:
+            - field_id: "DEPT-001"
+              field_label: "Department Change Table"
+              field_type: "table"
+              columns:
+                - "Department"
+                - "Changes Initiated"
+                - "Changes Closed"
+                - "Active Changes"
+                - "Success Rate %"
+
+        - subsection_id: "SEC-005-02"
+          subsection_title: "System/Area Affected"
+          data_sources:
+            - "Change affected systems"
+          fields:
+            - field_id: "SYS-001"
+              field_label: "Top 10 Systems/Areas Affected"
+              field_type: "table"
+              columns:
+                - "System/Area"
+                - "Change Count"
+                - "% of Total"
+
+    - section_id: "SEC-006"
+      section_title: "Change Success and Quality"
+      section_order: 6
+      required: true
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "Success Metrics"
+          data_sources:
+            - "Change closure and post-implementation data"
+          fields:
+            - field_id: "SUCC-001"
+              field_label: "Changes Closed Successfully"
+              field_type: "integer"
+            - field_id: "SUCC-002"
+              field_label: "Changes Rolled Back"
+              field_type: "integer"
+              acceptance_criteria: "< 5% of implemented changes"
+            - field_id: "SUCC-003"
+              field_label: "Changes Rejected"
+              field_type: "integer"
+            - field_id: "SUCC-004"
+              field_label: "Overall Change Success Rate"
+              field_type: "percentage"
+              acceptance_criteria: "≥ 95%"
+            - field_id: "SUCC-005"
+              field_label: "Post-Implementation Issues"
+              field_type: "integer"
+              acceptance_criteria: "Critical issues ≤ 2% of changes"
+            - field_id: "SUCC-006"
+              field_label: "Rollback Analysis"
+              field_type: "text"
+              acceptance_criteria: "Root cause identified for all rollbacks"
+
+    - section_id: "SEC-007"
+      section_title: "Approval Process Performance"
+      section_order: 7
+      required: true
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Approval Metrics"
+          data_sources:
+            - "Approval workflow data"
+          fields:
+            - field_id: "APP-001"
+              field_label: "Changes Approved This Month"
+              field_type: "integer"
+            - field_id: "APP-002"
+              field_label: "First-Time Approval Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 80%"
+            - field_id: "APP-003"
+              field_label: "Changes Returned for More Information"
+              field_type: "integer"
+            - field_id: "APP-004"
+              field_label: "Changes Rejected"
+              field_type: "integer"
+            - field_id: "APP-005"
+              field_label: "CCB Meetings Held"
+              field_type: "integer"
+            - field_id: "APP-006"
+              field_label: "Average CCB Decision Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 10 days from submission to CCB decision"
+
+    - section_id: "SEC-008"
+      section_title: "Compliance and Risk"
+      section_order: 8
+      required: true
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "Compliance Metrics"
+          data_sources:
+            - "Change documentation and audit data"
+          fields:
+            - field_id: "COMP-001"
+              field_label: "Documentation Completeness Rate"
+              field_type: "percentage"
+              acceptance_criteria: "≥ 99%"
+            - field_id: "COMP-002"
+              field_label: "Impact Assessments Completed"
+              field_type: "percentage"
+              acceptance_criteria: "100% for Major and Critical changes"
+            - field_id: "COMP-003"
+              field_label: "Risk Assessments Completed"
+              field_type: "percentage"
+              acceptance_criteria: "100% for all changes"
+            - field_id: "COMP-004"
+              field_label: "Validation/Qualification Completion"
+              field_type: "percentage"
+              acceptance_criteria: "100% where required"
+            - field_id: "COMP-005"
+              field_label: "Training Completion for Changes"
+              field_type: "percentage"
+              acceptance_criteria: "100% before production use"
+            - field_id: "COMP-006"
+              field_label: "Regulatory Submissions/Notifications Timely"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+    - section_id: "SEC-009"
+      section_title: "Emergency Change Analysis"
+      section_order: 9
+      required: true
+      subsections:
+        - subsection_id: "SEC-009-01"
+          subsection_title: "Emergency Changes"
+          data_sources:
+            - "Emergency change records"
+          fields:
+            - field_id: "EMER-001"
+              field_label: "Emergency Changes This Month"
+              field_type: "integer"
+              acceptance_criteria: "< 10% of total changes"
+            - field_id: "EMER-002"
+              field_label: "Emergency Change Justification Table"
+              field_type: "table"
+              columns:
+                - "Change ID"
+                - "Justification"
+                - "Response Time (hours)"
+                - "Retrospective Doc Complete"
+            - field_id: "EMER-003"
+              field_label: "Emergency Change Trend"
+              field_type: "text"
+              acceptance_criteria: "Analysis of emergency change patterns"
+
+    - section_id: "SEC-010"
+      section_title: "Trending and Patterns"
+      section_order: 10
+      required: true
+      subsections:
+        - subsection_id: "SEC-010-01"
+          subsection_title: "6-Month Trend Analysis"
+          data_sources:
+            - "Historical change data"
+          fields:
+            - field_id: "TREND-001"
+              field_label: "Change Volume Trend (6 months)"
+              field_type: "line_chart"
+            - field_id: "TREND-002"
+              field_label: "Success Rate Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or improving, ≥ 95%"
+            - field_id: "TREND-003"
+              field_label: "Cycle Time Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or decreasing"
+            - field_id: "TREND-004"
+              field_label: "Emerging Patterns"
+              field_type: "bullet_list"
+              max_items: 5
+
+    - section_id: "SEC-011"
+      section_title: "Recommendations and Action Items"
+      section_order: 11
+      required: true
+      subsections:
+        - subsection_id: "SEC-011-01"
+          subsection_title: "Process Improvement Opportunities"
+          data_sources:
+            - "Quality Manager analysis"
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+            - field_id: "REC-002"
+              field_label: "Process Bottlenecks Identified"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-003"
+              field_label: "Training Needs"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-004"
+              field_label: "Technology/Tool Improvements"
+              field_type: "bullet_list"
+              max_items: 3
+
+generation:
+  automated: true
+  automation_details:
+    data_collection: "Automated queries to change management system"
+    report_generation: "Semi-automated with QA Manager analysis"
+    manual_sections:
+      - "SEC-006-01: Rollback analysis"
+      - "SEC-009-01: Emergency change trend analysis"
+      - "SEC-010-01: Emerging patterns"
+      - "SEC-011: All recommendations"
+  scheduling:
+    generation_date: "1st of month"
+    review_period: "Days 1-3"
+    approval_deadline: "5th business day"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

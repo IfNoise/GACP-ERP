@@ -1,0 +1,579 @@
+# DSL: Sampling Procedures
+# Version: 1.0
+# Source: SOP_Sampling.md v0.2
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  process_id: "SOP-SMPL-001"
+  process_type: "sop"
+  version: "1.0"
+  status: "draft"
+  domain: "quality_control"
+  classification: "critical"
+
+  effective_date: "2026-01-08"
+  supersedes: null
+  review_period_months: 12
+
+  related_processes:
+    - "SOP-ANLY-001"
+    - "SOP-EQCAL-001"
+    - "SOP-OOS-001"
+    - "SOP-COC-001"
+    - "SOP-DI-001"
+    - "SOP-DEV-001"
+
+  regulatory_refs:
+    - "GACP Guidelines (WHO, EMA)"
+    - "ASTM E122"
+    - "MIL-STD-105E"
+    - "ICH Q2(R1)"
+    - "USP <1058>"
+
+# ==============================================================================
+# PURPOSE & SCOPE
+# ==============================================================================
+purpose:
+  statement: "Establish standardized procedures for collecting representative samples of cannabis products at all production stages to ensure objective quality control, specification compliance, and GACP requirements adherence"
+
+  objectives:
+    - "Ensure sample representativeness for all product batches"
+    - "Guarantee statistically justified sample sizes"
+    - "Maintain complete traceability from collection to analysis"
+    - "Ensure sample integrity throughout the process"
+    - "Comply with GACP, GMP and local regulations"
+    - "Minimize contamination and cross-contamination risks"
+
+scope:
+  included:
+    - "Raw material sampling (seeds, clones, fertilizers, substrates)"
+    - "In-process plant testing during cultivation"
+    - "Finished product sampling (dried flowers)"
+    - "Microbiological testing samples"
+    - "Environmental monitoring samples (air, water)"
+    - "Retain samples for long-term storage"
+    - "Chain of custody procedures"
+    - "Sample documentation and labeling"
+    - "Sample storage and disposal"
+
+  excluded:
+    - "Analytical testing methods (see SOP-ANLY-001)"
+    - "Laboratory equipment calibration (see SOP-EQCAL-001)"
+    - "Out of specification investigations (see SOP-OOS-001)"
+    - "Sample disposal procedures (see SOP-WASTE-001)"
+
+# ==============================================================================
+# DEFINITIONS
+# ==============================================================================
+definitions:
+  - term: "Representative Sample"
+    definition: "Sample whose characteristics accurately reflect the properties of the entire batch"
+
+  - term: "Composite Sample"
+    definition: "Sample composed of multiple sub-samples from different parts of the batch"
+
+  - term: "Retain Sample"
+    definition: "Finished product sample stored for possible re-analysis"
+
+  - term: "Chain of Custody"
+    definition: "Documented continuous sequence of sample transfers"
+
+  - term: "Homogeneous Batch"
+    definition: "Product batch with uniform characteristics (strain, harvest date, processing)"
+
+  - term: "Sample Point"
+    definition: "Specific location in batch from which sub-sample is taken"
+
+  - term: "AQL (Acceptance Quality Limit)"
+    definition: "Maximum acceptable defect level for batch acceptance"
+
+# ==============================================================================
+# ROLES & RESPONSIBILITIES
+# ==============================================================================
+roles:
+  - role_id: "qc_sampling_tech"
+    role_name: "QC Sampling Technician"
+    responsibilities:
+      - "Execute sampling procedures according to approved methods"
+      - "Maintain aseptic technique"
+      - "Proper sample labeling and documentation"
+      - "Maintain chain of custody"
+      - "Store samples until laboratory transfer"
+      - "Calibrate and maintain sampling equipment"
+    required_training:
+      - "TRN-SMPL-001"
+    required_qualifications:
+      - "Basic laboratory training"
+      - "GMP awareness certification"
+
+  - role_id: "qc_manager"
+    role_name: "QC Manager"
+    responsibilities:
+      - "Develop sampling plans"
+      - "Approve sampling methods"
+      - "Investigate sampling deviations"
+      - "Train personnel"
+      - "Analyze statistics and trends"
+      - "Liaise with regulatory authorities"
+    required_training:
+      - "TRN-SMPL-002"
+
+  - role_id: "lab_analyst"
+    role_name: "Laboratory Analyst"
+    responsibilities:
+      - "Receive and verify samples per chain of custody"
+      - "Assess sample condition upon receipt"
+      - "Execute analytical methods"
+      - "Document results"
+      - "Manage sample storage"
+    required_training:
+      - "TRN-SMPL-003"
+
+  - role_id: "prod_supervisor"
+    role_name: "Production Supervisor"
+    responsibilities:
+      - "Provide access to materials for sampling"
+      - "Coordinate sampling timing"
+      - "Notify QC of batch readiness"
+      - "Assist in batch identification"
+
+# ==============================================================================
+# PROCESS STEPS
+# ==============================================================================
+process:
+  - step_id: "SMPL-001"
+    step_name: "Sampling Preparation"
+    description: "Prepare for sampling activity"
+    responsible_role: "qc_sampling_tech"
+
+    inputs:
+      - "Sampling schedule"
+      - "Batch information"
+      - "Sampling equipment"
+
+    actions:
+      - action_id: "SMPL-001-A01"
+        description: "Review sampling plan and requirements"
+        verification: "CHKLST-SMPL-001"
+
+      - action_id: "SMPL-001-A02"
+        description: "Verify sampler qualification is current"
+        verification: "Training records check"
+
+      - action_id: "SMPL-001-A03"
+        description: "Gather and inspect sampling equipment"
+        verification: "Equipment calibration status"
+
+      - action_id: "SMPL-001-A04"
+        description: "Prepare sample containers and labels"
+        verification: "Container cleanliness, label accuracy"
+
+      - action_id: "SMPL-001-A05"
+        description: "Don appropriate PPE"
+        verification: "PPE checklist"
+
+    outputs:
+      - "Ready sampling equipment"
+      - "Prepared sample containers"
+      - "Completed pre-sampling checklist"
+
+    documentation:
+      - "CHKLST-SMPL-001"
+      - "Equipment calibration records"
+
+  - step_id: "SMPL-002"
+    step_name: "Batch Identification and Assessment"
+    description: "Verify and assess batch for sampling"
+    responsible_role: "qc_sampling_tech"
+
+    inputs:
+      - "Batch/lot number"
+      - "Batch documentation"
+
+    actions:
+      - action_id: "SMPL-002-A01"
+        description: "Verify batch identification matches documentation"
+        verification: "Visual confirmation, label check"
+
+      - action_id: "SMPL-002-A02"
+        description: "Assess batch homogeneity"
+        verification: "Visual inspection"
+
+      - action_id: "SMPL-002-A03"
+        description: "Record environmental conditions"
+        verification: "Temperature, humidity, cleanliness"
+
+      - action_id: "SMPL-002-A04"
+        description: "Determine sample size per statistical tables"
+        verification: "MIL-STD-105E tables"
+
+      - action_id: "SMPL-002-A05"
+        description: "Identify sampling points"
+        verification: "Random or systematic distribution"
+
+    outputs:
+      - "Verified batch identification"
+      - "Sampling point locations"
+      - "Required sample size"
+
+    documentation:
+      - "FORM-SMPL-001"
+
+  - step_id: "SMPL-003"
+    step_name: "Sample Collection"
+    description: "Collect representative samples from batch"
+    responsible_role: "qc_sampling_tech"
+
+    inputs:
+      - "Identified sampling points"
+      - "Sample size requirements"
+      - "Sterile sampling equipment"
+
+    actions:
+      - action_id: "SMPL-003-A01"
+        description: "Collect sub-samples from each sampling point"
+        verification: "Equal quantities from each point"
+
+      - action_id: "SMPL-003-A02"
+        description: "Combine into composite sample if required"
+        verification: "Thorough but gentle mixing"
+
+      - action_id: "SMPL-003-A03"
+        description: "Transfer to appropriate sample containers"
+        verification: "No contamination, proper fill level"
+
+      - action_id: "SMPL-003-A04"
+        description: "Seal containers with tamper-evident seals"
+        verification: "Seal integrity"
+
+      - action_id: "SMPL-003-A05"
+        description: "Apply sample labels and QR codes"
+        verification: "Label accuracy and adhesion"
+
+    outputs:
+      - "Collected samples in sealed containers"
+      - "Labeled samples"
+
+    documentation:
+      - "FORM-SMPL-001"
+
+  - step_id: "SMPL-004"
+    step_name: "Sample Documentation"
+    description: "Complete all required documentation"
+    responsible_role: "qc_sampling_tech"
+
+    inputs:
+      - "Collected samples"
+      - "Batch information"
+
+    actions:
+      - action_id: "SMPL-004-A01"
+        description: "Complete sample collection record"
+        verification: "All fields completed accurately"
+
+      - action_id: "SMPL-004-A02"
+        description: "Initiate chain of custody form"
+        verification: "Sampler signature and timestamp"
+
+      - action_id: "SMPL-004-A03"
+        description: "Photograph samples and batch"
+        verification: "Clear images with identifiable labels"
+
+      - action_id: "SMPL-004-A04"
+        description: "Enter sample information in ERP system"
+        verification: "System entry confirmation"
+
+      - action_id: "SMPL-004-A05"
+        description: "Generate test request"
+        verification: "Correct tests specified"
+
+    outputs:
+      - "Completed FORM-SMPL-001"
+      - "Initiated chain of custody"
+      - "ERP system record"
+      - "Photo documentation"
+
+    documentation:
+      - "FORM-SMPL-001"
+      - "FORM-COC-001"
+
+  - step_id: "SMPL-005"
+    step_name: "Sample Storage and Transfer"
+    description: "Store samples properly and transfer to laboratory"
+    responsible_role: "qc_sampling_tech"
+
+    inputs:
+      - "Documented samples"
+      - "Storage requirements"
+
+    actions:
+      - action_id: "SMPL-005-A01"
+        description: "Place samples in appropriate storage conditions"
+        verification: "Temperature and humidity per requirements"
+
+      - action_id: "SMPL-005-A02"
+        description: "Update sample tracking system"
+        verification: "Location recorded in ERP"
+
+      - action_id: "SMPL-005-A03"
+        description: "Prepare samples for laboratory transfer"
+        verification: "Chain of custody ready"
+
+      - action_id: "SMPL-005-A04"
+        description: "Transfer samples to laboratory"
+        verification: "Receipt signature obtained"
+
+      - action_id: "SMPL-005-A05"
+        description: "Update chain of custody and system"
+        verification: "Transfer timestamp recorded"
+
+    outputs:
+      - "Samples in laboratory custody"
+      - "Updated chain of custody"
+      - "Updated tracking system"
+
+    documentation:
+      - "FORM-COC-001"
+      - "ERP transfer record"
+
+# ==============================================================================
+# PARAMETERS & SPECIFICATIONS
+# ==============================================================================
+parameters:
+  statistical_sampling:
+    - batch_size: "1-50 units"
+      sample_size: 5
+      acceptance_number: 0
+      aql_level: "General Inspection Level II"
+
+    - batch_size: "51-150 units"
+      sample_size: 8
+      acceptance_number: 0
+      aql_level: "General Inspection Level II"
+
+    - batch_size: "151-500 units"
+      sample_size: 13
+      acceptance_number: 1
+      aql_level: "General Inspection Level II"
+
+    - batch_size: "501-1200 units"
+      sample_size: 20
+      acceptance_number: 1
+      aql_level: "General Inspection Level II"
+
+    - batch_size: "1201-3200 units"
+      sample_size: 32
+      acceptance_number: 2
+      aql_level: "General Inspection Level II"
+
+    - batch_size: ">3200 units"
+      sample_size: 50
+      acceptance_number: 3
+      aql_level: "General Inspection Level II"
+
+  storage_conditions:
+    - sample_type: "Dried Flower"
+      temperature: "-20°C (long-term retain)"
+      humidity: "<60% RH"
+      container: "Airtight glass"
+      max_storage: "2 years"
+      notes: "Light-protected, minimal headspace"
+
+    - sample_type: "Fresh Plant Tissue"
+      temperature: "4°C"
+      humidity: "As collected"
+      container: "Breathable bag"
+      max_storage: "24 hours"
+      notes: "Immediate analysis preferred"
+
+    - sample_type: "Extracts/Concentrates"
+      temperature: "-20°C"
+      humidity: "N/A"
+      container: "Amber glass"
+      max_storage: "1 year"
+      notes: "Minimize freeze-thaw cycles"
+
+    - sample_type: "Edibles"
+      temperature: "Per product requirements"
+      humidity: "Per product requirements"
+      container: "Original packaging"
+      max_storage: "Per stability data"
+      notes: "Follow product-specific storage"
+
+    - sample_type: "Water"
+      temperature: "4°C"
+      humidity: "N/A"
+      container: "Sterile glass"
+      max_storage: "48 hours"
+      notes: "Immediate analysis for microbials"
+
+# ==============================================================================
+# QUALITY CONTROLS
+# ==============================================================================
+quality_controls:
+  sampling_validation:
+    - control_type: "Precision Study"
+      description: "Assess sampling procedure repeatability"
+      method: "Multiple samples from same batch, statistical analysis of variation"
+      acceptance_criteria: "RSD <10% for quantitative parameters"
+      frequency: "During implementation of new procedures, annually"
+
+    - control_type: "Bias Assessment"
+      description: "Evaluate systematic error in sampling"
+      method: "Comparison with reference methods, spiked sample recovery"
+      acceptance_criteria: "90-110% recovery for spiked samples"
+      frequency: "During implementation of new procedures, annually"
+
+  sampler_qualification:
+    - qualification_element: "Theoretical Knowledge"
+      duration_hours: 4
+      topics:
+        - "Statistical sampling principles"
+        - "Sample representativeness"
+        - "GACP compliance requirements"
+        - "Chain of custody procedures"
+
+    - qualification_element: "Practical Demonstration"
+      duration_hours: 8
+      topics:
+        - "Sampling equipment use"
+        - "Aseptic technique"
+        - "Sample documentation"
+        - "ERP system operation"
+
+    - qualification_element: "Annual Requalification"
+      duration_hours: 2
+      topics:
+        - "Review of all core competencies"
+        - "Updates to procedures"
+        - "Corrective actions from deviations"
+
+# ==============================================================================
+# PERFORMANCE METRICS
+# ==============================================================================
+metrics:
+  - metric_id: "KPI-SMPL-001"
+    metric_name: "Sampling Timeliness"
+    target: "100% on schedule"
+    measurement: "Collection date vs. planned date"
+    frequency: "Weekly review"
+    responsible: "QC Manager"
+    escalation: "Any missed sampling requires immediate explanation"
+
+  - metric_id: "KPI-SMPL-002"
+    metric_name: "Sample Integrity"
+    target: "≥99.5% acceptable"
+    measurement: "Condition upon receipt / total samples"
+    frequency: "Monthly analysis"
+    responsible: "QC Manager"
+    escalation: ">2 integrity failures per month triggers review"
+
+  - metric_id: "KPI-SMPL-003"
+    metric_name: "Documentation Accuracy"
+    target: "100% complete"
+    measurement: "Audit findings / samples reviewed"
+    frequency: "Monthly audit"
+    responsible: "Quality Manager"
+    escalation: "Any incomplete documentation triggers investigation"
+
+  - metric_id: "KPI-SMPL-004"
+    metric_name: "Test Result Variability"
+    target: "RSD <10%"
+    measurement: "Statistical analysis of replicate samples"
+    frequency: "Monthly calculation"
+    responsible: "QC Manager"
+    escalation: "RSD >15% triggers procedure review"
+
+# ==============================================================================
+# CHANGE CONTROL
+# ==============================================================================
+change_control:
+  triggers:
+    - "Regulatory requirement changes"
+    - "Equipment modifications"
+    - "Procedure effectiveness issues"
+    - "Statistical review findings"
+    - "Technology improvements"
+
+  process: "All changes must follow SOP-CHG-001 Change Control procedures"
+
+  impact_assessment:
+    - "Effect on sample representativeness"
+    - "Training requirements"
+    - "Documentation updates"
+    - "Validation/qualification needs"
+    - "Regulatory notifications"
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+references:
+  internal:
+    - "SOP-ANLY-001: Analytical Methods"
+    - "SOP-EQCAL-001: Equipment Calibration"
+    - "SOP-OOS-001: Out of Specification Investigations"
+    - "SOP-COC-001: Chain of Custody"
+    - "SOP-DI-001: Data Integrity Management"
+    - "SOP-DEV-001: Deviation Management"
+    - "SOP-CAPA-001: Corrective and Preventive Actions"
+    - "SOP-AUDIT-001: Audit Trail and Electronic Signatures"
+    - "FORM-SMPL-001: Sample Collection Record"
+    - "CHKLST-SMPL-001: Pre-Sampling Preparation Checklist"
+
+  external:
+    - standard: "GACP Guidelines"
+      source: "WHO, EMA"
+      description: "Good Agricultural and Collection Practices"
+
+    - standard: "ASTM E122"
+      source: "ASTM International"
+      description: "Standard Practice for Calculating Sample Size to Estimate Average Quality"
+
+    - standard: "MIL-STD-105E"
+      source: "US Department of Defense"
+      description: "Sampling Procedures and Tables for Inspection by Attributes"
+
+    - standard: "ICH Q2(R1)"
+      source: "International Council for Harmonisation"
+      description: "Validation of Analytical Procedures"
+
+    - standard: "USP <1058>"
+      source: "United States Pharmacopeia"
+      description: "Analytical Instrument Qualification"
+
+# ==============================================================================
+# REVISION HISTORY
+# ==============================================================================
+revision_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    description: "Initial DSL version converted from SOP_Sampling.md v0.2 - English content"
+    author: "noise83"
+    changes:
+      - "Converted to DSL format"
+      - "Translated to English"
+      - "Added structured process steps"
+      - "Enhanced with statistical parameters"
+
+# ==============================================================================
+# ATTACHMENTS
+# ==============================================================================
+attachments:
+  forms:
+    - "FORM-SMPL-001: Sample Collection Record"
+    - "FORM-COC-001: Chain of Custody Form"
+
+  checklists:
+    - "CHKLST-SMPL-001: Pre-Sampling Preparation Checklist"
+
+  reports:
+    - "REPORT-SMPL-001: Monthly Sampling Performance Report"
+
+  training:
+    - "TRN-SMPL-001: QC Sampling Technician Training Program"

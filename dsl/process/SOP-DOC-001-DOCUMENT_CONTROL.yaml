@@ -1,0 +1,690 @@
+# DSL: Document Control and Management SOP
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+metadata:
+  id: "SOP-DOC-001"
+  process_type: "quality_system"
+  category: "document_control"
+  title: "Document Control and Management"
+  version: "1.0"
+  status: "active"
+  related_sops:
+    - "SOP-CHG-001"
+    - "SOP-AUDIT-001"
+    - "SOP-TRN-001"
+    - "SOP-CAPA-001"
+    - "SOP-DEV-001"
+  compliance_standards:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "ISO 9001:2015"
+    - "ALCOA+ principles"
+
+process_overview:
+  purpose: "Establish comprehensive document control system for managing all controlled documents throughout lifecycle, maintaining compliance with regulatory requirements including FDA 21 CFR Part 11, EU GMP Annex 11, and ALCOA+ principles"
+  scope: "All controlled documents within organization: SOPs, policies, specifications, forms, training materials, validation documents, quality manuals, work instructions, regulatory submissions, batch records, laboratory test methods"
+  process_owner: "ROLE-DOCCTRL-001"
+  dependencies:
+    - system: "Mayan-EDMS"
+      description: "Primary document management system integrated with GACP-ERP"
+    - system: "WorkflowEngine"
+      description: "Automated approval and review workflows"
+    - system: "AuditModule"
+      description: "Comprehensive audit trail generation"
+
+roles:
+  - role_id: "ROLE-DOCCTRL-001"
+    role_name: "Document Controller"
+    responsibilities:
+      - "Overall responsibility for document control system"
+      - "Document numbering and registration"
+      - "Distribution list management"
+      - "Document lifecycle oversight"
+      - "Mayan-EDMS system administration"
+      - "Training on document control procedures"
+      - "Audit support and compliance monitoring"
+    authority: "Manage document control system, assign document numbers, control document distribution, audit compliance"
+
+  - role_id: "ROLE-DOCAUTH-001"
+    role_name: "Document Author"
+    responsibilities:
+      - "Document creation and content development"
+      - "Technical accuracy and completeness"
+      - "Initial review and self-check"
+      - "Version control during development"
+      - "Collaboration with subject matter experts"
+      - "Incorporation of review comments"
+    authority: "Create and revise documents, request reviews, address comments"
+
+  - role_id: "ROLE-DOCREV-001"
+    role_name: "Document Reviewer"
+    responsibilities:
+      - "Technical and regulatory review"
+      - "Compliance verification"
+      - "Cross-reference validation"
+      - "Impact assessment on related documents"
+      - "Review comment documentation"
+      - "Sign-off on reviewed documents"
+    authority: "Review documents, provide technical input, approve for content, identify non-compliance"
+
+  - role_id: "ROLE-DOCAPP-001"
+    role_name: "Document Approver"
+    responsibilities:
+      - "Final approval authority"
+      - "Regulatory compliance confirmation"
+      - "Business impact assessment"
+      - "Resource allocation approval"
+      - "Implementation authorization"
+      - "Electronic signature application"
+    authority: "Approve documents for implementation, authorize resource allocation, confirm compliance"
+
+  - role_id: "ROLE-QA-002"
+    role_name: "Quality Assurance Manager"
+    responsibilities:
+      - "Document control system oversight"
+      - "Audit and compliance monitoring"
+      - "Process improvement initiatives"
+      - "Training program coordination"
+      - "Deviation investigation support"
+    authority: "Audit document control system, approve process changes, direct improvements, investigate non-compliance"
+
+  - role_id: "ROLE-ITMGR-001"
+    role_name: "IT Administrator"
+    responsibilities:
+      - "Mayan-EDMS system maintenance"
+      - "User access management"
+      - "System backup and recovery"
+      - "Integration with ERP modules"
+      - "Technical support and troubleshooting"
+    authority: "Manage system access, perform maintenance, restore backups, configure integrations"
+
+document_classification:
+  categories:
+    - category_id: "CAT-A"
+      category_name: "Critical GMP Documents"
+      description: "Critical GMP documents requiring formal review"
+      review_requirements: "Full formal review by QA and SME"
+      examples:
+        - "SOPs for GMP-critical processes"
+        - "Validation protocols and reports"
+        - "Master batch records"
+        - "Analytical test methods"
+
+    - category_id: "CAT-B"
+      category_name: "Important Operational Documents"
+      description: "Important operational documents with simplified review"
+      review_requirements: "Functional review by Department Head and QA"
+      examples:
+        - "Work instructions"
+        - "Forms and templates"
+        - "Job descriptions"
+        - "Standard reports"
+
+    - category_id: "CAT-C"
+      category_name: "Supporting Documents"
+      description: "Supporting documents with minimal review requirements"
+      review_requirements: "Peer review by SME"
+      examples:
+        - "Training materials"
+        - "Guidelines and recommendations"
+        - "Presentations"
+        - "User manuals"
+
+    - category_id: "CAT-D"
+      category_name: "Reference Documents"
+      description: "Reference documents and external standards"
+      review_requirements: "Verification of currency and applicability"
+      examples:
+        - "Regulatory guidance documents"
+        - "Industry standards"
+        - "Vendor documentation"
+        - "Compendia monographs"
+
+document_numbering:
+  format: "[ORG]-[CATEGORY]-[TYPE]-[NUMBER]-[VERSION]"
+  examples:
+    - "GACP-SOP-QMS-001-v1.0 (Quality Management SOP)"
+    - "GACP-WI-PROD-015-v2.1 (Production Work Instruction)"
+    - "GACP-FORM-LAB-008-v1.2 (Laboratory Form)"
+    - "GACP-SPEC-EQU-003-v3.0 (Equipment Specification)"
+  version_control:
+    major_version: "x.0 - Significant changes requiring revalidation"
+    minor_version: "x.y - Editorial changes and corrections"
+    draft_version: "x.y-DRAFT - Under development or review"
+
+document_status:
+  statuses:
+    - status_code: "DRAFT"
+      description: "Under development or revision"
+    - status_code: "UNDER_REVIEW"
+      description: "Formal review in progress"
+    - status_code: "APPROVED"
+      description: "Effective and current"
+    - status_code: "SUPERSEDED"
+      description: "Replaced by newer version"
+    - status_code: "OBSOLETE"
+      description: "No longer applicable"
+    - status_code: "ARCHIVED"
+      description: "Retained for historical purposes"
+
+process_steps:
+  - step_id: "STEP-001"
+    step_name: "Document Creation Initiation"
+    step_order: 1
+    responsible_role: "ROLE-DOCCTRL-001"
+    description: "Initiate document creation process based on business need"
+
+    inputs:
+      - "Business need identification"
+      - "Stakeholder consultation results"
+      - "Resource availability"
+
+    activities:
+      - "Document request submission (FORM-DOC-001)"
+      - "Template selection based on document type"
+      - "Author assignment based on subject matter expertise"
+      - "Timeline establishment"
+      - "Resource allocation"
+
+    outputs:
+      - "Document creation request approved"
+      - "Author assigned"
+      - "Template provided"
+      - "Timeline established"
+
+    quality_controls:
+      - control: "Verify appropriate template selected"
+        frequency: "per_document"
+      - control: "Confirm author has subject matter expertise"
+        frequency: "per_document"
+      - control: "Validate resource availability"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "2_business_days"
+      maximum_duration: "5_business_days"
+
+  - step_id: "STEP-002"
+    step_name: "Content Development"
+    step_order: 2
+    responsible_role: "ROLE-DOCAUTH-001"
+    description: "Develop document content with technical accuracy and compliance"
+
+    inputs:
+      - "Approved document request"
+      - "Document template"
+      - "Source materials and references"
+
+    activities:
+      - "Research and information gathering"
+      - "Technical content creation"
+      - "Cross-reference validation"
+      - "Regulatory requirement incorporation"
+      - "Internal review and self-check"
+      - "Peer review coordination"
+      - "Format compliance verification using CHKLST-DOC-001"
+
+    outputs:
+      - "Draft document completed"
+      - "Metadata fields populated"
+      - "Cross-references validated"
+      - "Self-check performed"
+
+    quality_controls:
+      - control: "Content accuracy self-review"
+        frequency: "per_document"
+      - control: "Template compliance check using CHKLST-DOC-001"
+        frequency: "per_document"
+      - control: "Numbering system compliance"
+        frequency: "per_document"
+      - control: "Metadata completeness verification"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: null # Varies by document complexity
+      maximum_duration: null # Defined in document creation request
+
+  - step_id: "STEP-003"
+    step_name: "Formal Review"
+    step_order: 3
+    responsible_role: "ROLE-DOCREV-001"
+    description: "Conduct comprehensive formal review for technical accuracy, regulatory compliance, and cross-reference validation"
+
+    inputs:
+      - "Draft document"
+      - "Review checklist (CHKLST-DOC-002)"
+      - "Related documents for cross-reference"
+
+    activities:
+      - "Reviewer assignment based on expertise"
+      - "Technical content evaluation"
+      - "Regulatory compliance verification"
+      - "Cross-reference validation"
+      - "Impact assessment on related documents"
+      - "Comment compilation"
+      - "Conflict resolution and consensus building"
+      - "Review report generation"
+
+    outputs:
+      - "Review comments documented"
+      - "Review checklist (CHKLST-DOC-002) completed"
+      - "Approval recommendation or return for revision"
+
+    quality_controls:
+      - control: "Reviewer qualifications verified"
+        frequency: "per_document"
+      - control: "All review criteria addressed"
+        frequency: "per_document"
+      - control: "Cross-references validated"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "5_business_days"
+      maximum_duration: "10_business_days"
+
+  - step_id: "STEP-004"
+    step_name: "Review Comment Incorporation"
+    step_order: 4
+    responsible_role: "ROLE-DOCAUTH-001"
+    description: "Address all review comments and update document"
+
+    inputs:
+      - "Review comments and recommendations"
+      - "Draft document"
+
+    activities:
+      - "Review comment analysis"
+      - "Document revision based on comments"
+      - "Disputed comment resolution with reviewers"
+      - "Final document preparation"
+      - "Comment resolution documentation"
+
+    outputs:
+      - "Revised document"
+      - "Comment resolution log"
+      - "Document ready for approval"
+
+    quality_controls:
+      - control: "All comments addressed or justified"
+        frequency: "per_document"
+      - control: "Disputed comments resolved with reviewer"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "3_business_days"
+      maximum_duration: "7_business_days"
+
+  - step_id: "STEP-005"
+    step_name: "Formal Approval"
+    step_order: 5
+    responsible_role: "ROLE-DOCAPP-001"
+    description: "Final approval by authorized approver with electronic signature"
+
+    inputs:
+      - "Reviewed and revised document"
+      - "Review reports and comment resolution log"
+      - "Approval checklist (CHKLST-DOC-003)"
+
+    activities:
+      - "Automated workflow initiation"
+      - "Approver notification"
+      - "Document review by approver"
+      - "Business impact assessment"
+      - "Regulatory compliance confirmation"
+      - "Electronic signature application per 21 CFR Part 11"
+      - "Approval completion and status update"
+
+    outputs:
+      - "Document approved with electronic signature"
+      - "Approval date and timestamp recorded"
+      - "Document status changed to APPROVED"
+
+    quality_controls:
+      - control: "Approver authority verified"
+        frequency: "per_document"
+      - control: "All review comments resolved"
+        frequency: "per_document"
+      - control: "Electronic signature meets 21 CFR Part 11"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "3_business_days"
+      maximum_duration: "7_business_days"
+
+  - step_id: "STEP-006"
+    step_name: "Distribution and Implementation"
+    step_order: 6
+    responsible_role: "ROLE-DOCCTRL-001"
+    description: "Distribute approved document and coordinate implementation"
+
+    inputs:
+      - "Approved document"
+      - "Distribution list"
+
+    activities:
+      - "Distribution list creation based on roles"
+      - "Document publication in Mayan-EDMS"
+      - "Automated notification generation"
+      - "Previous version supersession"
+      - "Training requirement assessment (FORM-DOC-002)"
+      - "Training material preparation if needed"
+      - "Implementation support coordination"
+
+    outputs:
+      - "Document published and accessible"
+      - "Stakeholders notified"
+      - "Previous version superseded"
+      - "Training requirements identified"
+
+    quality_controls:
+      - control: "Correct distribution list applied"
+        frequency: "per_document"
+      - control: "Previous version properly superseded"
+        frequency: "per_document"
+      - control: "Training requirements identified"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "1_business_day"
+      maximum_duration: "2_business_days"
+
+  - step_id: "STEP-007"
+    step_name: "Controlled Use and Training"
+    step_order: 7
+    responsible_role: "ROLE-TRN-001"
+    description: "Ensure personnel trained on new/revised documents before use"
+
+    inputs:
+      - "Approved document"
+      - "Training requirements assessment"
+
+    activities:
+      - "Training session coordination"
+      - "Training material distribution"
+      - "Q&A session facilitation"
+      - "Competency assessment"
+      - "Training record documentation"
+      - "Feedback collection"
+
+    outputs:
+      - "Personnel trained and competent"
+      - "Training records documented"
+      - "Document effective in practice"
+
+    quality_controls:
+      - control: "Training completion before document use"
+        frequency: "per_person"
+      - control: "Competency assessment passed"
+        frequency: "per_person"
+      - control: "Training records complete"
+        frequency: "per_person"
+
+    temporal_parameters:
+      target_duration: null # Varies by document and # of personnel
+      maximum_duration: "30_days_from_approval"
+
+  - step_id: "STEP-008"
+    step_name: "Periodic Review"
+    step_order: 8
+    responsible_role: "ROLE-DOCCTRL-001"
+    description: "Conduct periodic review to ensure document currency and accuracy"
+
+    inputs:
+      - "Current approved document"
+      - "Document performance data"
+      - "Regulatory changes"
+      - "User feedback"
+
+    activities:
+      - "Review schedule monitoring (Annual/Biennial/Triennial)"
+      - "Review notification to document owner"
+      - "Document currency assessment"
+      - "Regulatory compliance verification"
+      - "User feedback analysis"
+      - "Decision: Reaffirm, Revise, or Retire"
+      - "Review documentation"
+
+    outputs:
+      - "Periodic review completed and documented"
+      - "Decision recorded: Reaffirm, Revise, or Retire"
+      - "Change request initiated if revision needed"
+
+    quality_controls:
+      - control: "Review completed within scheduled timeframe"
+        frequency: "per_review_cycle"
+      - control: "All review criteria assessed"
+        frequency: "per_review_cycle"
+      - control: "Review decision documented"
+        frequency: "per_review_cycle"
+
+    temporal_parameters:
+      target_duration: null
+      review_frequency:
+        - "Critical documents (Category A): Annual"
+        - "Standard documents (Category B): Biennial"
+        - "Supporting documents (Category C): Triennial"
+        - "Reference documents (Category D): As needed"
+
+  - step_id: "STEP-009"
+    step_name: "Document Revision"
+    step_order: 9
+    responsible_role: "ROLE-DOCAUTH-001"
+    description: "Revise document based on periodic review, change request, or other trigger"
+
+    inputs:
+      - "Change request or periodic review decision"
+      - "Current approved document"
+      - "Change justification"
+
+    activities:
+      - "Change impact assessment"
+      - "Version number update (major vs minor)"
+      - "Document revision per change request"
+      - "Change tracking and comparison with previous version"
+      - "Re-enter formal review and approval process (STEP-003 through STEP-007)"
+
+    outputs:
+      - "Revised document version"
+      - "Change description documented"
+      - "Previous version superseded"
+
+    quality_controls:
+      - control: "Change justification documented"
+        frequency: "per_revision"
+      - control: "Version numbering correct (major/minor)"
+        frequency: "per_revision"
+      - control: "All changes tracked"
+        frequency: "per_revision"
+
+    temporal_parameters:
+      target_duration: null # Similar to STEP-002, varies by complexity
+      maximum_duration: null # Per change request timeline
+
+  - step_id: "STEP-010"
+    step_name: "Document Archival and Retention"
+    step_order: 10
+    responsible_role: "ROLE-DOCCTRL-001"
+    description: "Archive superseded/obsolete documents per retention requirements"
+
+    inputs:
+      - "Superseded or obsolete document"
+      - "Retention requirements"
+
+    activities:
+      - "Document status change to ARCHIVED"
+      - "Retention period determination"
+      - "Archive location assignment"
+      - "Access control update (read-only)"
+      - "Disposal date calculation and scheduling"
+      - "Audit trail preservation"
+
+    outputs:
+      - "Document archived with retention period"
+      - "Disposal date scheduled"
+      - "Access limited to read-only for authorized users"
+
+    quality_controls:
+      - control: "Retention period correctly determined"
+        frequency: "per_document"
+      - control: "Archive location secure and accessible"
+        frequency: "per_document"
+      - control: "Audit trail preserved"
+        frequency: "per_document"
+
+    temporal_parameters:
+      retention_periods:
+        - "GMP Critical Documents: 10+ years or product lifecycle + 1 year"
+        - "Quality Records: 7 years minimum"
+        - "Training Records: Employment duration + 3 years"
+        - "Technical Documents: 5-10 years depending on type"
+        - "Reference Documents: Until superseded + 2 years"
+
+  - step_id: "STEP-011"
+    step_name: "Document Disposal"
+    step_order: 11
+    responsible_role: "ROLE-DOCCTRL-001"
+    description: "Securely dispose of documents after retention period"
+
+    inputs:
+      - "Archived document with expired retention period"
+      - "Disposal authorization"
+
+    activities:
+      - "Retention period verification"
+      - "Legal hold assessment"
+      - "Regulatory requirement confirmation"
+      - "Formal disposal request"
+      - "Management approval"
+      - "Secure data destruction"
+      - "Certificate of destruction generation"
+      - "Audit trail completion"
+
+    outputs:
+      - "Document securely destroyed"
+      - "Certificate of destruction issued"
+      - "Disposal recorded in audit trail"
+
+    quality_controls:
+      - control: "Retention period expired"
+        frequency: "per_document"
+      - control: "No legal holds in place"
+        frequency: "per_document"
+      - control: "Disposal authorization obtained"
+        frequency: "per_document"
+      - control: "Secure destruction verified"
+        frequency: "per_document"
+
+    temporal_parameters:
+      target_duration: "Within 30 days of retention expiration"
+
+alcoa_compliance:
+  attributable: "All document actions (creation, review, approval, distribution, revision, archival) recorded with user ID, date, time, electronic signature per 21 CFR Part 11"
+  legible: "Documents stored in readable formats (PDF/A for long-term archival), version control maintains readability across time"
+  contemporaneous: "Real-time recording of all document lifecycle events in Mayan-EDMS audit trail"
+  original: "Mayan-EDMS is system of record, original documents preserved, copies clearly marked"
+  accurate: "Review and approval process ensures content accuracy, version control prevents unauthorized changes"
+  complete: "All document metadata, review comments, approval records, distribution lists, training records retained"
+  consistent: "Standardized templates, numbering system, workflow processes ensure consistency"
+  enduring: "Documents archived in PDF/A format, backup and recovery procedures, retention periods enforced"
+  available: "Controlled access via Mayan-EDMS, availability throughout retention period, disaster recovery procedures"
+
+technology_stack:
+  - system: "Mayan-EDMS"
+    role: "Primary document management system"
+    integration: "Integrated with GACP-ERP WorkflowEngine, AuditModule"
+    features:
+      - "Centralized document repository"
+      - "Version control and tracking"
+      - "Workflow automation"
+      - "Electronic signatures"
+      - "Audit trail generation"
+      - "Search and retrieval"
+      - "Access control and permissions"
+      - "Retention and disposition management"
+
+  - system: "WorkflowEngine"
+    role: "Automated review and approval workflows"
+    integration: "Mayan-EDMS integration for document routing"
+
+  - system: "AuditModule"
+    role: "Comprehensive audit trail"
+    integration: "Captures all document lifecycle events"
+
+emergency_procedures:
+  system_failure:
+    immediate_response_0_30min:
+      - "System status assessment"
+      - "Impact evaluation"
+      - "Stakeholder notification"
+      - "Alternative process activation (manual document control)"
+    short_term_mitigation_30min_4hr:
+      - "Manual process implementation using FORM-DOC-003 Emergency Document Log"
+      - "Critical document access provision (read-only copies)"
+      - "Workflow continuity maintenance"
+      - "Recovery planning initiation"
+    recovery_4_24hr:
+      - "System restoration from backups (RTO: 4 hours, RPO: 1 hour)"
+      - "Data integrity verification"
+      - "User access restoration"
+      - "Manual records reconciliation"
+      - "Normal operation resumption"
+  business_continuity:
+    - "Alternative document access: Local PDF copies of critical documents"
+    - "Manual approval processes using FORM-DOC-003"
+    - "Critical document identification and priority list"
+    - "Communication procedures via email and phone tree"
+    - "Recovery priority: Category A > Category B > Category C > Category D"
+
+kpis:
+  - kpi_id: "KPI-DOC-001"
+    kpi_name: "Document Approval Cycle Time"
+    target: "< 21 calendar days from submission to approval"
+    measurement_frequency: "monthly"
+    reported_in: "REPORT-DOC-001"
+
+  - kpi_id: "KPI-DOC-002"
+    kpi_name: "Review Completion Rate"
+    target: "> 95% of reviews completed within target duration"
+    measurement_frequency: "monthly"
+    reported_in: "REPORT-DOC-001"
+
+  - kpi_id: "KPI-DOC-003"
+    kpi_name: "Training Compliance"
+    target: "100% of affected personnel trained within 30 days of document approval"
+    measurement_frequency: "monthly"
+    reported_in: "REPORT-DOC-001"
+
+  - kpi_id: "KPI-DOC-004"
+    kpi_name: "Periodic Review On-Time Completion"
+    target: "> 95% of periodic reviews completed on schedule"
+    measurement_frequency: "quarterly"
+    reported_in: "REPORT-DOC-001"
+
+  - kpi_id: "KPI-DOC-005"
+    kpi_name: "System Availability"
+    target: "> 99.5% uptime"
+    measurement_frequency: "daily"
+    reported_in: "REPORT-DOC-001"
+
+  - kpi_id: "KPI-DOC-006"
+    kpi_name: "Document Control Audit Findings"
+    target: "0 critical findings, < 3 major findings per year"
+    measurement_frequency: "per_audit"
+    reported_in: "REPORT-DOC-001"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_DocumentControl.md v2.0"
+    approved_by: "Pending"

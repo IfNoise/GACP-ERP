@@ -1,0 +1,507 @@
+# DSL: Change Control Process
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+metadata:
+  process_id: "SOP-CHG-001"
+  title: "Change Control Management"
+  version: "2.0"
+  effective_date: "2025-10-17"
+  status: "active"
+  category: "quality_management"
+  subcategory: "change_control"
+  related_sops:
+    - "SOP-DOC-001"
+    - "SOP-DEV-001"
+    - "SOP-CAPA-001"
+    - "SOP-AUDIT-001"
+    - "SOP-TRN-001"
+    - "SOP-VAL-001"
+  regulatory_references:
+    - standard: "FDA_21_CFR_Part_11"
+      section: "Electronic Records and Signatures"
+      applicability: "System and software changes"
+    - standard: "EU_GMP_Annex_11"
+      section: "Computerized Systems"
+      applicability: "IT system modifications"
+    - standard: "ICH_Q9"
+      section: "Quality Risk Management"
+      applicability: "Change risk assessment"
+    - standard: "ICH_Q10"
+      section: "Pharmaceutical Quality System"
+      applicability: "Change management framework"
+    - standard: "GAMP_5"
+      section: "Good Automated Manufacturing Practice"
+      applicability: "System validation and change control"
+    - standard: "ALCOA_PLUS"
+      section: "Data Integrity Principles"
+      applicability: "System changes affecting data integrity"
+
+process_definition:
+  purpose: "Establish controlled, systematic approach for managing changes to systems, processes, equipment, procedures, products, and organizational structure to ensure changes do not adversely impact product quality, patient safety, data integrity, or regulatory compliance"
+  scope:
+    applies_to:
+      - "Systems and Technology: GACP-ERP, LIMS, MES, environmental monitoring, security systems, audit trails, network infrastructure, databases, APIs, integrations"
+      - "Infrastructure and Equipment: Production equipment, laboratory instruments, HVAC systems, facility infrastructure, utilities, cleaning equipment, material handling, storage systems"
+      - "Processes and Procedures: SOPs, manufacturing procedures, QC test methods, analytical methods, cleaning procedures, training programs, supplier qualification"
+      - "Products and Materials: Product formulations, packaging materials, raw material specifications, finished product specifications, labeling, stability protocols"
+      - "Organizational Structure: Personnel roles and responsibilities, reporting relationships, QMS elements, regulatory frameworks, risk management approaches, supplier relationships"
+    exclusions:
+      - "Routine preventive maintenance per approved schedules (unless impacting validated systems)"
+      - "Consumable replacements with identical specifications"
+      - "Administrative data entry corrections (covered by SOP-AUDIT-001)"
+
+roles_responsibilities:
+  - role_id: "ROLE-CHGREQ-001"
+    role_title: "Change Requestor"
+    responsibilities:
+      - "Identify need for change and initiate change request"
+      - "Provide comprehensive change description and justification"
+      - "Support impact assessment with technical details"
+      - "Participate in change review and approval process"
+      - "Assist with implementation as needed"
+
+  - role_id: "ROLE-CHGOWN-001"
+    role_title: "Change Owner"
+    responsibilities:
+      - "Coordinate all change control activities"
+      - "Conduct or facilitate impact and risk assessments"
+      - "Develop detailed implementation plan"
+      - "Lead implementation team and activities"
+      - "Monitor change implementation progress"
+      - "Verify change effectiveness and document closure"
+
+  - role_id: "ROLE-QA-002"
+    role_title: "Quality Manager"
+    responsibilities:
+      - "Review all change requests for quality and compliance impact"
+      - "Approve changes affecting quality systems, procedures, products"
+      - "Determine validation/qualification requirements"
+      - "Verify ALCOA+ compliance for system changes"
+      - "Participate in Change Control Board"
+      - "Approve change closure and documentation"
+
+  - role_id: "ROLE-CCB-001"
+    role_title: "Change Control Board (CCB)"
+    members:
+      - "Quality Manager (Chair)"
+      - "General Manager"
+      - "Production Manager"
+      - "QC Laboratory Manager"
+      - "IT Manager"
+      - "Regulatory Affairs Manager"
+      - "Compliance Officer"
+    responsibilities:
+      - "Evaluate and approve critical and high-impact changes"
+      - "Conduct cross-functional impact assessment"
+      - "Make resource prioritization and allocation decisions"
+      - "Determine risk tolerance and mitigation adequacy"
+      - "Verify strategic alignment of changes"
+      - "Provide governance oversight for change program"
+
+  - role_id: "ROLE-DEPTHEAD-001"
+    role_title: "Department Heads"
+    responsibilities:
+      - "Assess departmental impact of proposed changes"
+      - "Approve resource allocation within department"
+      - "Coordinate departmental training and implementation support"
+      - "Monitor performance and compliance within area"
+      - "Approve major changes affecting their department"
+
+  - role_id: "ROLE-ITMGR-001"
+    role_title: "IT Manager"
+    responsibilities:
+      - "Assess technical feasibility of system changes"
+      - "Evaluate system architecture, security, and data integrity impacts"
+      - "Plan and execute technical implementations"
+      - "Coordinate system testing and validation"
+      - "Maintain technical documentation"
+
+  - role_id: "ROLE-REGMGR-001"
+    role_title: "Regulatory Affairs Manager"
+    responsibilities:
+      - "Assess regulatory impact of changes"
+      - "Determine submission and notification requirements"
+      - "Prepare regulatory change notifications"
+      - "Ensure ongoing compliance"
+      - "Coordinate post-market surveillance"
+
+procedure:
+  steps:
+    - step_id: "STEP-001"
+      step_number: 1
+      step_title: "Change Initiation"
+      responsible_role: "ROLE-CHGREQ-001"
+      step_description: "Identify need for change and submit change request with initial assessment"
+      instructions:
+        - "Identify change source: process improvement, regulatory requirement, CAPA, deviation, technology advancement, customer feedback, audit finding, supplier recommendation"
+        - "Develop preliminary business case: problem statement, proposed solution, expected benefits"
+        - "Complete Change Request Form (FORM-CHG-001): unique ID (CR-YYYY-NNNN), description, scope, justification, benefits, preliminary resources, timeline, initial risk"
+        - "Attach supporting documentation: technical specs, vendor proposals, regulatory guidance, research, cost-benefit analysis"
+        - "Submit change request to Change Owner for assessment"
+      inputs:
+        - "Need identification from various sources"
+        - "Business case and justification"
+        - "Technical specifications or proposals"
+      outputs:
+        - "Completed Change Request Form (FORM-CHG-001)"
+        - "Supporting documentation package"
+      quality_controls:
+        - "Change request completeness check"
+        - "Business justification adequacy"
+      related_documents:
+        - "FORM-CHG-001: Change Request Form"
+
+    - step_id: "STEP-002"
+      step_number: 2
+      step_title: "Change Classification"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Classify change by criticality level and type to determine approval authority and documentation requirements"
+      instructions:
+        - "Assess change criticality: Critical (safety/efficacy/quality/regulatory impact), Major (significant operational impact), Minor (limited scope/low risk), Emergency (immediate safety/security/compliance threat)"
+        - "Determine change type: Hardware, Software, Process, Documentation, Product, Organizational"
+        - "Identify approval authority based on criticality: Critical→CCB+QA, Major→Dept Head+QA, Minor→Supervisor+Change Owner, Emergency→QA Mgr+General Mgr"
+        - "Define documentation requirements based on classification"
+        - "Assign Change Owner if not self-owned"
+        - "Update Change Request with classification"
+      inputs:
+        - "Change Request Form (FORM-CHG-001)"
+        - "Change classification criteria"
+      outputs:
+        - "Change classification determination"
+        - "Approval routing identification"
+        - "Change Owner assignment"
+      quality_controls:
+        - "Classification criteria adherence"
+        - "Appropriate approval authority identification"
+      temporal_parameters:
+        duration: "1 business day"
+      related_documents:
+        - "FORM-CHG-001: Change Request Form - Classification section"
+
+    - step_id: "STEP-003"
+      step_number: 3
+      step_title: "Impact Assessment"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Conduct comprehensive multi-disciplinary impact assessment across technical, quality, regulatory, and operational dimensions"
+      instructions:
+        - "Technical Impact: Assess system functionality, performance, integrations, data integrity, security, backup/recovery implications"
+        - "Quality Impact: Evaluate product quality effects, process capability, specifications, testing criteria, validation/qualification needs"
+        - "Regulatory Impact: Determine compliance impacts, submission obligations, authority notifications, license/permit effects, post-market surveillance"
+        - "Operational Impact: Assess workflow changes, training requirements, resource needs, performance metrics, business continuity"
+        - "Financial Impact: Estimate implementation costs, ongoing costs, ROI, cost avoidance"
+        - "Complete Impact Assessment Form (FORM-CHG-002) or sections in CHG-001"
+        - "Engage subject matter experts and affected departments"
+        - "Document all assumptions and dependencies"
+      inputs:
+        - "Change Request Form with classification"
+        - "Technical specifications"
+        - "Current system/process documentation"
+      outputs:
+        - "Comprehensive Impact Assessment (FORM-CHG-002)"
+        - "SME input and recommendations"
+      quality_controls:
+        - "All impact categories assessed"
+        - "SME review and sign-off"
+        - "Data integrity impact verified (ALCOA+ principles)"
+      temporal_parameters:
+        duration: "3-10 business days depending on complexity"
+      related_documents:
+        - "FORM-CHG-002: Impact Assessment Form"
+        - "CHKLST-CHG-001: Impact Assessment Checklist"
+
+    - step_id: "STEP-004"
+      step_number: 4
+      step_title: "Risk Assessment"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Perform structured risk assessment to identify, analyze, and plan mitigation for change-related risks"
+      instructions:
+        - "Risk Identification: Identify technical risks, quality/compliance risks, operational/business risks, security/safety risks, timeline/resource risks"
+        - "Risk Analysis: Assess probability (High/Medium/Low) and severity (Critical/Major/Minor) for each risk, calculate risk level using matrix"
+        - "Risk Evaluation: Determine risk acceptability based on risk tolerance, prioritize risks for mitigation"
+        - "Risk Mitigation Planning: Develop preventive measures, contingency plans, monitoring/control procedures, rollback plan, emergency response"
+        - "Document all risks, analysis, and mitigation strategies in risk assessment section"
+        - "For high risks, require CCB review regardless of change criticality"
+      inputs:
+        - "Change Request and Impact Assessment"
+        - "Risk assessment criteria and matrix"
+      outputs:
+        - "Risk Assessment documentation"
+        - "Risk mitigation plan"
+        - "Rollback plan"
+      quality_controls:
+        - "All risk categories evaluated"
+        - "Mitigation strategies defined for all medium/high risks"
+        - "Rollback plan adequacy verified"
+      related_documents:
+        - "FORM-CHG-002: Risk Assessment section"
+
+    - step_id: "STEP-005"
+      step_number: 5
+      step_title: "Implementation Planning"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Develop detailed implementation plan including project plan, testing strategy, training, and communication"
+      instructions:
+        - "Develop Project Plan: Work breakdown structure, task dependencies, resource allocation, schedule, milestones, quality gates"
+        - "Define Testing & Validation Strategy: Test plan, validation protocol, UAT criteria, performance benchmarks, rollback triggers"
+        - "Create Communication Plan: Stakeholder identification, communication schedule, training requirements, change readiness assessment, feedback mechanisms"
+        - "Identify Resource Requirements: Personnel, equipment, systems, time, budget"
+        - "Establish Success Criteria: Measurable objectives, performance targets, acceptance criteria"
+        - "Document complete implementation plan in change request"
+      inputs:
+        - "Impact Assessment"
+        - "Risk Assessment and Mitigation Plan"
+      outputs:
+        - "Detailed Implementation Plan"
+        - "Testing and Validation Strategy"
+        - "Communication and Training Plan"
+      quality_controls:
+        - "Plan completeness verification"
+        - "Resource availability confirmation"
+        - "Timeline feasibility assessment"
+      temporal_parameters:
+        duration: "5-15 business days depending on complexity"
+
+    - step_id: "STEP-006"
+      step_number: 6
+      step_title: "Review and Approval"
+      responsible_role: "ROLE-QA-002 / ROLE-CCB-001"
+      step_description: "Conduct technical and quality review, obtain required approvals per change classification"
+      instructions:
+        - "Technical Review: SME assessment of feasibility, best practice adherence, alternative evaluation"
+        - "Cross-Functional Review: Multi-disciplinary evaluation of integration impacts, resource conflicts, timeline feasibility"
+        - "Quality & Compliance Review: GMP/GDP compliance verification, product quality impact, validation requirements, regulatory compliance"
+        - "Route for Approval per Classification: Critical→CCB meeting, Major→Dept Head+QA, Minor→Supervisor+Change Owner, Emergency→QA Mgr+General Mgr verbal"
+        - "Approval Decision: Approve, Reject, or Conditional Approval with specific conditions and timeline"
+        - "Document approval decision with signatures, date, conditions (if any)"
+        - "Notify Change Owner and stakeholders of decision"
+      inputs:
+        - "Complete Change Request package"
+        - "Impact and Risk Assessments"
+        - "Implementation Plan"
+      outputs:
+        - "Approval decision with signatures"
+        - "Conditional requirements (if applicable)"
+        - "Authorization to proceed with implementation"
+      quality_controls:
+        - "All required reviews completed"
+        - "Appropriate approval authority obtained"
+        - "Conditions clearly documented"
+        - "QA approval for all quality-impacting changes"
+      temporal_parameters:
+        duration: "2-10 business days (Critical changes require CCB meeting scheduling)"
+      related_documents:
+        - "FORM-CHG-001: Approval section"
+        - "CHKLST-CHG-002: Change Approval Checklist"
+
+    - step_id: "STEP-007"
+      step_number: 7
+      step_title: "Change Implementation"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Execute change implementation per approved plan with testing, monitoring, and issue management"
+      instructions:
+        - "Pre-Implementation: Create system backups, setup test environment, provision resources, prepare tools, configure access, assign implementation team, deliver training, notify stakeholders"
+        - "Implementation Execution: Follow approved implementation plan step-by-step, monitor progress in real-time, identify and resolve issues, track progress, verify quality checkpoints"
+        - "Testing & Verification: Execute unit testing, integration testing, system testing, user acceptance testing (UAT), performance verification, security assessment, data integrity confirmation"
+        - "Issue Management: Identify and categorize problems, perform root cause analysis, develop and implement solutions, assess and communicate impact, escalate when necessary"
+        - "Document all implementation activities, testing results, issues and resolutions"
+      inputs:
+        - "Approved Change Request"
+        - "Implementation Plan"
+        - "Testing Strategy and Validation Protocol"
+      outputs:
+        - "Implemented change in production"
+        - "Testing and verification results"
+        - "Issue resolution documentation"
+        - "Implementation completion sign-off"
+      quality_controls:
+        - "Adherence to approved plan"
+        - "All test cases executed and passed"
+        - "Quality checkpoints verified"
+        - "Issues resolved before production deployment"
+        - "Rollback plan ready if needed"
+      temporal_parameters:
+        duration: "Varies by change complexity: Minor 1-5 days, Major 1-4 weeks, Critical 2-12 weeks"
+      related_documents:
+        - "Testing protocols and validation documents"
+        - "Implementation log and progress reports"
+
+    - step_id: "STEP-008"
+      step_number: 8
+      step_title: "Post-Implementation Verification"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Verify change implementation success, conduct training, monitor performance, document results"
+      instructions:
+        - "Verification & Validation: Verify functionality per acceptance criteria, validate performance against targets, assess security controls, confirm data integrity (ALCOA+), verify regulatory compliance"
+        - "Training & Support: Deliver end-user training, assess competency, distribute support documentation, activate help desk, collect and analyze feedback"
+        - "Performance Monitoring: Track key metrics, analyze performance trends, identify and resolve issues, assess optimization opportunities, measure stakeholder satisfaction"
+        - "Prepare post-implementation report: Summary of activities, test results, issues resolved, performance data, user feedback, lessons learned"
+        - "Monitor for minimum 30 days or 3 production cycles (whichever longer) before closure"
+      inputs:
+        - "Implemented change in production"
+        - "Testing and verification results"
+      outputs:
+        - "Post-implementation verification report"
+        - "Training completion records"
+        - "Performance monitoring data"
+        - "User feedback summary"
+      quality_controls:
+        - "Success criteria achieved"
+        - "Training completion 100%"
+        - "Performance within acceptable range"
+        - "No critical issues outstanding"
+      temporal_parameters:
+        duration: "30 days minimum monitoring period"
+
+    - step_id: "STEP-009"
+      step_number: 9
+      step_title: "Documentation and Closure"
+      responsible_role: "ROLE-CHGOWN-001"
+      step_description: "Complete change documentation, update system documentation, verify compliance, close change"
+      instructions:
+        - "Change Verification: Confirm objective achievement, verify performance targets met, validate quality standards compliance, confirm user satisfaction, verify business benefit realization"
+        - "Compliance Verification: Verify regulatory adherence, confirm quality system integration, check documentation completeness, verify training completion, confirm audit trail integrity"
+        - "Documentation Updates: Update technical documentation (system config, architecture, specs), revise procedures and work instructions, modify training materials, update user guides/manuals"
+        - "Prepare Change Closure Report: Implementation summary, lessons learned, issue/resolution log, performance data, stakeholder feedback, recommendations for future changes"
+        - "Archive Records: Change request and approval, implementation and testing records, training records, performance data, compliance verification evidence"
+        - "Obtain Quality Manager approval for change closure"
+        - "Update change status to Closed, notify stakeholders"
+      inputs:
+        - "Post-implementation verification report"
+        - "Updated documentation"
+        - "Performance monitoring data"
+      outputs:
+        - "Change Closure Report"
+        - "Updated system and procedure documentation"
+        - "Archived change control records"
+        - "Lessons learned documentation"
+      quality_controls:
+        - "All success criteria verified"
+        - "Documentation completely updated"
+        - "QA approval obtained"
+        - "Records properly archived"
+      temporal_parameters:
+        duration: "5-10 business days after monitoring period"
+      related_documents:
+        - "Change Closure Report"
+        - "Updated SOPs, specifications, drawings"
+
+equipment_materials:
+  - item_id: "EQP-001"
+    item_name: "Change Management System (ERP Module)"
+    purpose: "Electronic change request, workflow, approval tracking"
+    specifications: "21 CFR Part 11 compliant, audit trail, e-signatures"
+
+  - item_id: "EQP-002"
+    item_name: "Test and Validation Environments"
+    purpose: "Isolated environments for testing changes before production"
+    specifications: "Mirror production configuration, secure access control"
+
+quality_controls:
+  - control_id: "QC-001"
+    control_type: "process"
+    description: "Change Request Completeness"
+    acceptance_criteria: "100% of required fields completed before classification"
+    monitoring_frequency: "per_change"
+
+  - control_id: "QC-002"
+    control_type: "review"
+    description: "Impact Assessment Adequacy"
+    acceptance_criteria: "All impact categories assessed with SME input"
+    monitoring_frequency: "per_change"
+
+  - control_id: "QC-003"
+    control_type: "approval"
+    description: "Appropriate Approval Authority"
+    acceptance_criteria: "100% changes approved per classification matrix"
+    monitoring_frequency: "per_change"
+
+  - control_id: "QC-004"
+    control_type: "testing"
+    description: "Testing Completion Before Production"
+    acceptance_criteria: "100% test cases passed, UAT approved"
+    monitoring_frequency: "per_change"
+
+  - control_id: "QC-005"
+    control_type: "performance"
+    description: "Change Success Rate"
+    acceptance_criteria: "> 95% changes meet success criteria within 30 days"
+    monitoring_frequency: "monthly"
+
+  - control_id: "QC-006"
+    control_type: "timeliness"
+    description: "Change Cycle Time"
+    acceptance_criteria: "Minor <30d, Major <90d, Critical <180d from approval to closure"
+    monitoring_frequency: "monthly"
+
+training_requirements:
+  - requirement_id: "TRN-001"
+    training_title: "Change Control System Training (TRN-CHG-001)"
+    target_audience: "All personnel initiating or implementing changes"
+    frequency: "Initial + every 24 months"
+    duration_hours: 4
+
+  - requirement_id: "TRN-002"
+    training_title: "CCB Member Training"
+    target_audience: "Change Control Board members"
+    frequency: "Initial + as assigned"
+    duration_hours: 2
+
+records_retention:
+  - record_type: "Change Request Forms (FORM-CHG-001)"
+    retention_period: "30_years"
+    storage_location: "Electronic change management system"
+
+  - record_type: "Impact and Risk Assessments (FORM-CHG-002)"
+    retention_period: "30_years"
+    storage_location: "Electronic change management system"
+
+  - record_type: "Approval Records and Signatures"
+    retention_period: "30_years"
+    storage_location: "Electronic change management system"
+
+  - record_type: "Implementation and Testing Records"
+    retention_period: "30_years"
+    storage_location: "Electronic change management system + validation archive"
+
+  - record_type: "Training Records"
+    retention_period: "30_years"
+    storage_location: "Learning Management System"
+
+  - record_type: "Change Closure Reports"
+    retention_period: "30_years"
+    storage_location: "Electronic change management system"
+
+references:
+  internal:
+    - "SOP-DOC-001: Document Control"
+    - "SOP-DEV-001: Deviation Management"
+    - "SOP-CAPA-001: Corrective and Preventive Actions"
+    - "SOP-AUDIT-001: Audit Trail Management"
+    - "SOP-TRN-001: Training Management"
+    - "SOP-VAL-001: Computer System Validation"
+
+  external:
+    - "FDA 21 CFR Part 11: Electronic Records; Electronic Signatures"
+    - "EU GMP Annex 11: Computerized Systems"
+    - "ICH Q9: Quality Risk Management"
+    - "ICH Q10: Pharmaceutical Quality System"
+    - "GAMP 5: A Risk-Based Approach to Compliant GxP Computerized Systems"
+    - "ISPE GAMP Good Practice Guide: Change Control"
+
+change_history:
+  - version: "1.0"
+    date: "2023-10-17"
+    author: "Quality Management Team"
+    description: "Initial SOP creation"
+    approved_by: "Quality Director"
+
+  - version: "2.0"
+    date: "2025-10-17"
+    author: "Quality Management Team"
+    description: "Major revision: Added emergency change process, enhanced risk assessment, added data integrity requirements, updated for GACP-ERP implementation"
+    approved_by: "Quality Director"

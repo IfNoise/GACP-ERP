@@ -1,0 +1,274 @@
+# DSL: Monthly Data Integrity Report
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 9.3
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "REPORT-AUD-003"
+  report_type: "data_integrity"
+  category: "quality"
+  confidentiality: "internal"
+
+  title: "Monthly Data Integrity Report"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "MHRA Data Integrity Guidance"
+    - "ALCOA+ Principles"
+    - "WHO GACP Guidelines"
+
+# ==============================================================================
+# REPORT CONTEXT
+# ==============================================================================
+report_context:
+  purpose: "Provide monthly assessment of audit trail data integrity, including ALCOA+ compliance metrics, hash verification results, and data quality indicators"
+
+  reporting_period: "monthly"
+  frequency: "monthly"
+  report_due_date: "3rd business day of following month"
+
+  responsible_roles:
+    - role: "ROLE-QA-001"
+      responsibility: "Primary author and data integrity assessment"
+    - role: "ROLE-IT-001"
+      responsibility: "Technical metrics and verification results"
+
+  distribution:
+    - "Quality Manager"
+    - "Compliance Officer"
+    - "IT Administrator"
+    - "Database Administrator"
+
+# ==============================================================================
+# REPORT STRUCTURE
+# ==============================================================================
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "ALCOA+ Compliance Metrics"
+      section_order: 1
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Individual Principle Scores"
+          data_sources:
+            - "CHKLST-AUD-001 monthly checklist"
+
+          fields:
+            - field_id: "ALC-001"
+              field_label: "Attributable"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-002"
+              field_label: "Legible"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-003"
+              field_label: "Contemporaneous"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-004"
+              field_label: "Original"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-005"
+              field_label: "Accurate"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-006"
+              field_label: "Complete"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-007"
+              field_label: "Consistent"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-008"
+              field_label: "Enduring"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-009"
+              field_label: "Available"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "ALC-010"
+              field_label: "Overall ALCOA+ Score"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+    - section_id: "SEC-002"
+      section_title: "Hash Integrity Verification"
+      section_order: 2
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Verification Results"
+          data_sources:
+            - "ImmuDB hash verification system"
+
+          fields:
+            - field_id: "HASH-001"
+              field_label: "Total Records Verified"
+              field_type: "integer"
+
+            - field_id: "HASH-002"
+              field_label: "Successful Verifications"
+              field_type: "integer"
+
+            - field_id: "HASH-003"
+              field_label: "Failed Verifications"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "HASH-004"
+              field_label: "Verification Success Rate"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.99%"
+
+            - field_id: "HASH-005"
+              field_label: "Hash Mismatch Incidents"
+              field_type: "table"
+              columns:
+                - "Record ID"
+                - "Detection Date"
+                - "Investigation Status"
+                - "Root Cause"
+                - "Resolution"
+
+    - section_id: "SEC-003"
+      section_title: "Data Completeness Assessment"
+      section_order: 3
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Event Coverage"
+          data_sources:
+            - "Event matrix compliance check"
+
+          fields:
+            - field_id: "COMP-001"
+              field_label: "Event Categories Captured"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+            - field_id: "COMP-002"
+              field_label: "Missing Event Types"
+              field_type: "bullet_list"
+              acceptance_criteria: "None"
+
+            - field_id: "COMP-003"
+              field_label: "Sequence Gaps Detected"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "COMP-004"
+              field_label: "Failed Logging Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+    - section_id: "SEC-004"
+      section_title: "Data Quality Issues"
+      section_order: 4
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Issues and Resolution"
+          data_sources:
+            - "Data quality monitoring system"
+            - "CAPA system"
+
+          fields:
+            - field_id: "QUAL-001"
+              field_label: "Data Quality Issues Table"
+              field_type: "table"
+              columns:
+                - "Issue ID"
+                - "Description"
+                - "Impact Assessment"
+                - "CAPA Number"
+                - "Status"
+                - "Target Resolution Date"
+
+    - section_id: "SEC-005"
+      section_title: "Trend Analysis"
+      section_order: 5
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Data Integrity Trends"
+          data_sources:
+            - "Historical data integrity metrics"
+
+          fields:
+            - field_id: "TREND-001"
+              field_label: "ALCOA+ Score Trend (Last 6 Months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or improving"
+
+            - field_id: "TREND-002"
+              field_label: "Hash Verification Success Trend"
+              field_type: "line_chart"
+              acceptance_criteria: "Consistently >= 99.99%"
+
+            - field_id: "TREND-003"
+              field_label: "Event Coverage Trend"
+              field_type: "line_chart"
+              acceptance_criteria: "Consistently 100%"
+
+# ==============================================================================
+# GENERATION AND AUTOMATION
+# ==============================================================================
+generation:
+  automated: true
+
+  automation_details:
+    data_collection: "Automated queries to ImmuDB, CHKLST-AUD-001 results, monitoring systems"
+    report_generation: "Semi-automated with Quality Manager review"
+    manual_sections:
+      - "SEC-004: Data Quality Issues (manual investigation details)"
+      - "SEC-005: Trend Analysis (Quality Manager interpretation)"
+
+  scheduling:
+    generation_date: "1st of month"
+    review_period: "Days 1-2"
+    approval_deadline: "3rd business day"
+
+# ==============================================================================
+# STORAGE
+# ==============================================================================
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

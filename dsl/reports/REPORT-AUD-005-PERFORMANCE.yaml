@@ -1,0 +1,407 @@
+# DSL: Quarterly Performance Report
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 9.5
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "REPORT-AUD-005"
+  report_type: "performance"
+  category: "operational"
+  confidentiality: "internal"
+
+  title: "Quarterly Audit Trail System Performance Report"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+
+# ==============================================================================
+# REPORT CONTEXT
+# ==============================================================================
+report_context:
+  purpose: "Provide quarterly technical performance assessment of audit trail system, including system metrics, capacity planning, optimization opportunities, and infrastructure health"
+
+  reporting_period: "quarterly"
+  frequency: "quarterly"
+  report_due_date: "10th business day of following quarter"
+
+  responsible_roles:
+    - role: "ROLE-IT-001"
+      responsibility: "Primary author and technical analysis"
+    - role: "ROLE-SYSADM-001"
+      responsibility: "Infrastructure metrics"
+    - role: "ROLE-DBA-001"
+      responsibility: "Database performance analysis"
+
+  distribution:
+    - "IT Administrator"
+    - "System Administrator"
+    - "Database Administrator"
+    - "Quality Manager"
+    - "Management Team"
+
+# ==============================================================================
+# REPORT STRUCTURE
+# ==============================================================================
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Key Performance Indicators"
+          data_sources:
+            - "Monitoring dashboards"
+
+          fields:
+            - field_id: "KPI-001"
+              field_label: "Overall System Health Rating"
+              field_type: "categorical"
+              allowed_values:
+                - "Excellent (all targets met)"
+                - "Good (minor deviations)"
+                - "Fair (action items identified)"
+                - "Poor (immediate action required)"
+
+            - field_id: "KPI-002"
+              field_label: "Uptime Achievement"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.9%"
+
+            - field_id: "KPI-003"
+              field_label: "Performance Targets Met"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+
+            - field_id: "KPI-004"
+              field_label: "Critical Incidents"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+    - section_id: "SEC-002"
+      section_title: "System Availability"
+      section_order: 2
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Uptime Metrics"
+          data_sources:
+            - "System monitoring logs"
+
+          fields:
+            - field_id: "AVAIL-001"
+              field_label: "Total Uptime Percentage"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.9%"
+
+            - field_id: "AVAIL-002"
+              field_label: "Planned Downtime Hours"
+              field_type: "decimal"
+
+            - field_id: "AVAIL-003"
+              field_label: "Unplanned Downtime Hours"
+              field_type: "decimal"
+              acceptance_criteria: "< 2 hours per quarter"
+
+            - field_id: "AVAIL-004"
+              field_label: "Downtime Incidents Table"
+              field_type: "table"
+              columns:
+                - "Date"
+                - "Duration"
+                - "Type (Planned/Unplanned)"
+                - "Root Cause"
+                - "Impact"
+                - "Resolution"
+
+    - section_id: "SEC-003"
+      section_title: "Performance Metrics"
+      section_order: 3
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Latency Analysis"
+          data_sources:
+            - "Performance monitoring system"
+
+          fields:
+            - field_id: "PERF-001"
+              field_label: "Average Logging Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 5 seconds"
+
+            - field_id: "PERF-002"
+              field_label: "95th Percentile Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 8 seconds"
+
+            - field_id: "PERF-003"
+              field_label: "99th Percentile Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 10 seconds"
+
+            - field_id: "PERF-004"
+              field_label: "Max Latency"
+              field_type: "seconds"
+
+            - field_id: "PERF-005"
+              field_label: "Average Search Response Time"
+              field_type: "seconds"
+              acceptance_criteria: "< 2 seconds"
+
+            - field_id: "PERF-006"
+              field_label: "Elasticsearch Query Performance"
+              field_type: "seconds"
+              acceptance_criteria: "< 1 second"
+
+        - subsection_id: "SEC-003-02"
+          subsection_title: "Throughput Analysis"
+          data_sources:
+            - "Kafka metrics"
+            - "ImmuDB write statistics"
+
+          fields:
+            - field_id: "PERF-007"
+              field_label: "Average Events Per Second"
+              field_type: "integer"
+
+            - field_id: "PERF-008"
+              field_label: "Peak Events Per Second"
+              field_type: "integer"
+
+            - field_id: "PERF-009"
+              field_label: "Kafka Queue Lag (Max)"
+              field_type: "integer"
+              acceptance_criteria: "< 1000 messages"
+
+            - field_id: "PERF-010"
+              field_label: "ImmuDB Write Throughput"
+              field_type: "integer"
+              unit: "transactions per second"
+
+    - section_id: "SEC-004"
+      section_title: "Storage and Capacity"
+      section_order: 4
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Storage Utilization"
+          data_sources:
+            - "Storage monitoring"
+
+          fields:
+            - field_id: "STOR-001"
+              field_label: "ImmuDB Storage Used"
+              field_type: "percentage"
+              acceptance_criteria: "< 80%"
+
+            - field_id: "STOR-002"
+              field_label: "ImmuDB Total Size (GB)"
+              field_type: "decimal"
+
+            - field_id: "STOR-003"
+              field_label: "Elasticsearch Index Size (GB)"
+              field_type: "decimal"
+
+            - field_id: "STOR-004"
+              field_label: "Backup Storage Used (GB)"
+              field_type: "decimal"
+
+            - field_id: "STOR-005"
+              field_label: "Archive Storage Used (GB)"
+              field_type: "decimal"
+
+            - field_id: "STOR-006"
+              field_label: "Growth Rate (GB per month)"
+              field_type: "decimal"
+
+            - field_id: "STOR-007"
+              field_label: "Projected Capacity Exhaustion Date"
+              field_type: "date"
+              acceptance_criteria: "> 6 months from report date"
+
+    - section_id: "SEC-005"
+      section_title: "Infrastructure Health"
+      section_order: 5
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Component Status"
+          data_sources:
+            - "Infrastructure monitoring"
+
+          fields:
+            - field_id: "INFRA-001"
+              field_label: "ImmuDB Health Status"
+              field_type: "categorical"
+              allowed_values: ["Healthy", "Degraded", "Critical"]
+              acceptance_criteria: "Healthy"
+
+            - field_id: "INFRA-002"
+              field_label: "Kafka Health Status"
+              field_type: "categorical"
+              allowed_values: ["Healthy", "Degraded", "Critical"]
+              acceptance_criteria: "Healthy"
+
+            - field_id: "INFRA-003"
+              field_label: "Elasticsearch Health Status"
+              field_type: "categorical"
+              allowed_values: ["Healthy", "Degraded", "Critical"]
+              acceptance_criteria: "Healthy"
+
+            - field_id: "INFRA-004"
+              field_label: "NTP Sync Status"
+              field_type: "categorical"
+              allowed_values: ["Synced", "Drift Detected", "Unsynchronized"]
+              acceptance_criteria: "Synced"
+
+            - field_id: "INFRA-005"
+              field_label: "NTP Time Drift (ms)"
+              field_type: "integer"
+              acceptance_criteria: "< 100ms"
+
+    - section_id: "SEC-006"
+      section_title: "Optimization Opportunities"
+      section_order: 6
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "Performance Improvements"
+          data_sources:
+            - "IT Administrator analysis"
+
+          fields:
+            - field_id: "OPT-001"
+              field_label: "Identified Bottlenecks"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "OPT-002"
+              field_label: "Recommended Optimizations"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "OPT-003"
+              field_label: "Estimated Performance Gain"
+              field_type: "text"
+
+    - section_id: "SEC-007"
+      section_title: "Capacity Planning"
+      section_order: 7
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Forecasting"
+          data_sources:
+            - "Historical growth data"
+            - "Business projections"
+
+          fields:
+            - field_id: "CAP-001"
+              field_label: "Projected Storage Needs (Next Quarter)"
+              field_type: "decimal"
+              unit: "GB"
+
+            - field_id: "CAP-002"
+              field_label: "Projected Storage Needs (Next Year)"
+              field_type: "decimal"
+              unit: "GB"
+
+            - field_id: "CAP-003"
+              field_label: "Infrastructure Expansion Required"
+              field_type: "boolean"
+
+            - field_id: "CAP-004"
+              field_label: "Recommended Actions"
+              field_type: "bullet_list"
+              max_items: 5
+
+    - section_id: "SEC-008"
+      section_title: "Backup and Recovery"
+      section_order: 8
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "Backup Performance"
+          data_sources:
+            - "Backup logs"
+
+          fields:
+            - field_id: "BACK-001"
+              field_label: "Successful Backups"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+            - field_id: "BACK-002"
+              field_label: "Failed Backups"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "BACK-003"
+              field_label: "Average Backup Duration"
+              field_type: "decimal"
+              unit: "hours"
+
+            - field_id: "BACK-004"
+              field_label: "Last Restore Test Date"
+              field_type: "date"
+              acceptance_criteria: "Within last 90 days"
+
+            - field_id: "BACK-005"
+              field_label: "Restore Test Result"
+              field_type: "categorical"
+              allowed_values: ["Successful", "Failed", "Not Tested"]
+              acceptance_criteria: "Successful"
+
+# ==============================================================================
+# GENERATION AND AUTOMATION
+# ==============================================================================
+generation:
+  automated: false
+
+  automation_details:
+    data_collection: "Semi-automated with queries to monitoring systems, ImmuDB, Kafka, Elasticsearch"
+    report_generation: "Manual compilation by IT team with automated data gathering"
+    manual_sections:
+      - "SEC-001: Executive Summary"
+      - "SEC-006: Optimization Opportunities"
+      - "SEC-007: Capacity Planning (forecasting and recommendations)"
+
+  scheduling:
+    generation_period: "First 5 days of quarter"
+    review_period: "Days 6-8"
+    approval_deadline: "10th business day"
+
+# ==============================================================================
+# STORAGE
+# ==============================================================================
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "quarterly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

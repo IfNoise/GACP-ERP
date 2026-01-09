@@ -1,0 +1,232 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-OOS-008
+  title: CAPA Plan for OOS Investigation
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Control
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: Investigation Reference
+    fields:
+      - field_name: oos_number
+        field_type: text
+        required: true
+        description: OOS investigation number
+
+      - field_name: root_cause
+        field_type: textarea
+        required: true
+        description: Identified root cause from investigation
+
+      - field_name: capa_plan_date
+        field_type: date
+        required: true
+        description: CAPA plan creation date
+
+  - section_number: 2
+    section_title: Immediate Corrective Actions (Within 30 Days)
+    fields:
+      - field_name: corrective_action_1
+        field_type: textarea
+        required: true
+        description: Immediate corrective action 1
+
+      - field_name: ca1_owner
+        field_type: text
+        required: true
+        description: Responsible person for CA1
+
+      - field_name: ca1_target_date
+        field_type: date
+        required: true
+        description: Target completion date for CA1
+
+      - field_name: ca1_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Not Started
+            - In Progress
+            - Completed
+            - Overdue
+        description: Current status of CA1
+
+      - field_name: corrective_action_2
+        field_type: textarea
+        required: false
+        description: Immediate corrective action 2 (if applicable)
+
+      - field_name: ca2_owner
+        field_type: text
+        required: false
+        description: Responsible person for CA2
+
+      - field_name: ca2_target_date
+        field_type: date
+        required: false
+        description: Target completion date for CA2
+
+      - field_name: corrective_action_3
+        field_type: textarea
+        required: false
+        description: Immediate corrective action 3 (if applicable)
+
+      - field_name: ca3_owner
+        field_type: text
+        required: false
+        description: Responsible person for CA3
+
+      - field_name: ca3_target_date
+        field_type: date
+        required: false
+        description: Target completion date for CA3
+
+  - section_number: 3
+    section_title: Long-term Preventive Actions (Within 90 Days)
+    fields:
+      - field_name: preventive_action_1
+        field_type: textarea
+        required: true
+        description: Long-term preventive action 1
+
+      - field_name: pa1_owner
+        field_type: text
+        required: true
+        description: Responsible person for PA1
+
+      - field_name: pa1_target_date
+        field_type: date
+        required: true
+        description: Target completion date for PA1
+
+      - field_name: pa1_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Not Started
+            - In Progress
+            - Completed
+            - Overdue
+        description: Current status of PA1
+
+      - field_name: preventive_action_2
+        field_type: textarea
+        required: false
+        description: Long-term preventive action 2 (if applicable)
+
+      - field_name: pa2_owner
+        field_type: text
+        required: false
+        description: Responsible person for PA2
+
+      - field_name: pa2_target_date
+        field_type: date
+        required: false
+        description: Target completion date for PA2
+
+      - field_name: preventive_action_3
+        field_type: textarea
+        required: false
+        description: Long-term preventive action 3 (if applicable)
+
+      - field_name: pa3_owner
+        field_type: text
+        required: false
+        description: Responsible person for PA3
+
+      - field_name: pa3_target_date
+        field_type: date
+        required: false
+        description: Target completion date for PA3
+
+  - section_number: 4
+    section_title: Resource Requirements
+    fields:
+      - field_name: personnel_required
+        field_type: textarea
+        required: true
+        description: Personnel resources required
+
+      - field_name: budget_required
+        field_type: number
+        required: false
+        description: Estimated budget required
+
+      - field_name: equipment_required
+        field_type: textarea
+        required: false
+        description: Equipment or facility resources required
+
+      - field_name: timeline_overview
+        field_type: textarea
+        required: true
+        description: Overall CAPA implementation timeline and milestones
+
+  - section_number: 5
+    section_title: Effectiveness Verification Plan
+    fields:
+      - field_name: verification_method
+        field_type: textarea
+        required: true
+        description: Method for verifying CAPA effectiveness
+
+      - field_name: success_criteria
+        field_type: textarea
+        required: true
+        description: Success criteria for effectiveness verification
+
+      - field_name: verification_timeline
+        field_type: text
+        required: true
+        description: Timeline for effectiveness verification (e.g., 30, 90, 180 days)
+
+      - field_name: verification_responsible
+        field_type: text
+        required: true
+        description: Person responsible for effectiveness verification
+
+  - section_number: 6
+    section_title: Approval
+    fields:
+      - field_name: qc_manager_signature
+        field_type: signature
+        required: true
+        description: QC Manager signature
+
+      - field_name: qc_manager_date
+        field_type: date
+        required: true
+        description: QC Manager signature date
+
+      - field_name: qa_manager_signature
+        field_type: signature
+        required: true
+        description: QA Manager signature
+
+      - field_name: qa_manager_date
+        field_type: date
+        required: true
+        description: QA Manager signature date
+
+instructions:
+  - Develop CAPA plan addressing identified root cause
+  - Include both immediate corrective actions and long-term preventive actions
+  - Assign specific responsibility and target dates for each action
+  - Ensure actions are appropriate and effective for root cause
+  - Obtain QA approval before implementation
+  - Track implementation status and update form as actions completed
+  - Verify effectiveness after implementation per defined plan
+
+validation_rules:
+  - At least one corrective action and one preventive action required
+  - All actions must have assigned owner and target completion date
+  - Effectiveness verification plan must be defined
+  - QC and QA Manager approval required before implementation

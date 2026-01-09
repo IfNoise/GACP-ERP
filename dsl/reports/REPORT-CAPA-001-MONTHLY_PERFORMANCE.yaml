@@ -1,0 +1,361 @@
+# DSL: Monthly CAPA Performance Report
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-CAPA-001"
+  report_type: "performance"
+  category: "quality"
+  confidentiality: "internal"
+  title: "Monthly CAPA Performance Report"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CAPA-001"
+
+report_context:
+  purpose: "Track CAPA system performance, identify trends, and ensure timely closure of quality improvement actions"
+  reporting_period: "monthly"
+  frequency: "monthly"
+  report_due_date: "5th business day of following month"
+  responsible_roles:
+    - role: "ROLE-CAPAMGR-001"
+      responsibility: "Primary author and data analysis"
+    - role: "ROLE-QA-002"
+      responsibility: "Review and management recommendations"
+  distribution:
+    - "CAPA Manager"
+    - "Quality Manager"
+    - "Quality Director"
+    - "Department Managers"
+    - "Management Team"
+
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Key Metrics Overview"
+          data_sources:
+            - "CAPA management system"
+          fields:
+            - field_id: "EXEC-001"
+              field_label: "Total Active CAPAs"
+              field_type: "integer"
+            - field_id: "EXEC-002"
+              field_label: "CAPAs Initiated This Month"
+              field_type: "integer"
+            - field_id: "EXEC-003"
+              field_label: "CAPAs Closed This Month"
+              field_type: "integer"
+              acceptance_criteria: "≥ CAPAs initiated (steady or reducing backlog)"
+            - field_id: "EXEC-004"
+              field_label: "CAPA Effectiveness Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+            - field_id: "EXEC-005"
+              field_label: "On-Time Completion Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+            - field_id: "EXEC-006"
+              field_label: "Overdue CAPAs"
+              field_type: "integer"
+              acceptance_criteria: "< 5"
+
+    - section_id: "SEC-002"
+      section_title: "CAPA Portfolio Status"
+      section_order: 2
+      required: true
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "CAPAs by Status"
+          data_sources:
+            - "CAPA system status queries"
+          fields:
+            - field_id: "STAT-001"
+              field_label: "CAPA Status Distribution Table"
+              field_type: "table"
+              columns:
+                - "Status"
+                - "Count"
+                - "% of Total"
+                - "Avg Age (days)"
+            - field_id: "STAT-002"
+              field_label: "Status Distribution Pie Chart"
+              field_type: "pie_chart"
+              categories:
+                - "Investigation"
+                - "Action Planning"
+                - "Implementation"
+                - "Effectiveness Verification"
+                - "Awaiting Closure"
+
+    - section_id: "SEC-003"
+      section_title: "CAPA by Priority and Source"
+      section_order: 3
+      required: true
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Priority Distribution"
+          data_sources:
+            - "CAPA priority classification"
+          fields:
+            - field_id: "PRI-001"
+              field_label: "Priority 1 (Critical) CAPAs"
+              field_type: "integer"
+              acceptance_criteria: "All P1 CAPAs receive immediate attention"
+            - field_id: "PRI-002"
+              field_label: "Priority 2 (High) CAPAs"
+              field_type: "integer"
+            - field_id: "PRI-003"
+              field_label: "Priority 3 (Medium) CAPAs"
+              field_type: "integer"
+            - field_id: "PRI-004"
+              field_label: "Priority 4 (Low) CAPAs"
+              field_type: "integer"
+
+        - subsection_id: "SEC-003-02"
+          subsection_title: "CAPA Source Analysis"
+          data_sources:
+            - "CAPA trigger category"
+          fields:
+            - field_id: "SRC-001"
+              field_label: "CAPA Source Table"
+              field_type: "table"
+              columns:
+                - "Source Category"
+                - "Count"
+                - "% of Total"
+                - "Trend"
+
+    - section_id: "SEC-004"
+      section_title: "Timeliness and Completion"
+      section_order: 4
+      required: true
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Cycle Time Analysis"
+          data_sources:
+            - "CAPA timeline data"
+          fields:
+            - field_id: "TIME-001"
+              field_label: "Average Time: Initiation to Approval (days)"
+              field_type: "decimal"
+              acceptance_criteria: "< 5 days"
+            - field_id: "TIME-002"
+              field_label: "Average Investigation Duration (days)"
+              field_type: "decimal"
+              acceptance_criteria: "P1 <30d, P2 <60d, P3 <90d, P4 <120d"
+            - field_id: "TIME-003"
+              field_label: "Average Implementation Duration (days)"
+              field_type: "decimal"
+              acceptance_criteria: "< 90 days"
+            - field_id: "TIME-004"
+              field_label: "Average Total CAPA Cycle Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Trending down over time"
+            - field_id: "TIME-005"
+              field_label: "% CAPAs Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+
+        - subsection_id: "SEC-004-02"
+          subsection_title: "Overdue CAPAs"
+          data_sources:
+            - "CAPA due date tracking"
+          fields:
+            - field_id: "OVER-001"
+              field_label: "Overdue CAPAs Detail Table"
+              field_type: "table"
+              columns:
+                - "CAPA ID"
+                - "Priority"
+                - "Owner"
+                - "Current Phase"
+                - "Days Overdue"
+                - "Escalation Status"
+
+    - section_id: "SEC-005"
+      section_title: "CAPA by Department"
+      section_order: 5
+      required: true
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Departmental Performance"
+          data_sources:
+            - "CAPA owner department"
+          fields:
+            - field_id: "DEPT-001"
+              field_label: "Department CAPA Table"
+              field_type: "table"
+              columns:
+                - "Department"
+                - "Active CAPAs"
+                - "Closed This Month"
+                - "On-Time %"
+                - "Overdue"
+
+    - section_id: "SEC-006"
+      section_title: "Root Cause Trending"
+      section_order: 6
+      required: true
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "Root Cause Patterns"
+          data_sources:
+            - "Root cause analysis results"
+          fields:
+            - field_id: "RC-001"
+              field_label: "Top 5 Root Causes Table"
+              field_type: "table"
+              columns:
+                - "Root Cause Category"
+                - "Count"
+                - "% of Total"
+                - "6-Month Trend"
+            - field_id: "RC-002"
+              field_label: "Systemic Issues Analysis"
+              field_type: "text"
+              acceptance_criteria: "Identify patterns requiring proactive intervention"
+
+    - section_id: "SEC-007"
+      section_title: "Effectiveness Verification Results"
+      section_order: 7
+      required: true
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Effectiveness Metrics"
+          data_sources:
+            - "Effectiveness verification records"
+          fields:
+            - field_id: "EFF-001"
+              field_label: "CAPAs Verified This Month"
+              field_type: "integer"
+            - field_id: "EFF-002"
+              field_label: "Effective CAPAs"
+              field_type: "integer"
+            - field_id: "EFF-003"
+              field_label: "Ineffective/Partially Effective CAPAs"
+              field_type: "integer"
+              acceptance_criteria: "< 10% of total"
+            - field_id: "EFF-004"
+              field_label: "Overall Effectiveness Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+            - field_id: "EFF-005"
+              field_label: "Ineffective CAPA Analysis"
+              field_type: "text"
+              acceptance_criteria: "Root cause of ineffectiveness identified"
+
+    - section_id: "SEC-008"
+      section_title: "CAPA System Performance Indicators"
+      section_order: 8
+      required: true
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "Key Performance Indicators"
+          data_sources:
+            - "CAPA system metrics"
+          fields:
+            - field_id: "KPI-001"
+              field_label: "CAPA Backlog Ratio (Active/Monthly Closure Rate)"
+              field_type: "decimal"
+              acceptance_criteria: "< 3 (can close backlog in 3 months)"
+            - field_id: "KPI-002"
+              field_label: "Quality of Root Cause Analysis (QA assessment)"
+              field_type: "percentage"
+              acceptance_criteria: "> 95% adequate"
+            - field_id: "KPI-003"
+              field_label: "CAPA Recurrence Rate"
+              field_type: "percentage"
+              acceptance_criteria: "< 5%"
+            - field_id: "KPI-004"
+              field_label: "Training Completion for CAPA Actions"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+
+    - section_id: "SEC-009"
+      section_title: "Trending and Patterns"
+      section_order: 9
+      required: true
+      subsections:
+        - subsection_id: "SEC-009-01"
+          subsection_title: "6-Month Trend Analysis"
+          data_sources:
+            - "Historical CAPA data"
+          fields:
+            - field_id: "TREND-001"
+              field_label: "CAPA Initiation Trend (6 months)"
+              field_type: "line_chart"
+            - field_id: "TREND-002"
+              field_label: "CAPA Closure Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Closure rate ≥ initiation rate"
+            - field_id: "TREND-003"
+              field_label: "Effectiveness Rate Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or improving, > 90%"
+            - field_id: "TREND-004"
+              field_label: "Emerging Issues or Patterns"
+              field_type: "bullet_list"
+              max_items: 5
+
+    - section_id: "SEC-010"
+      section_title: "Recommendations and Action Items"
+      section_order: 10
+      required: true
+      subsections:
+        - subsection_id: "SEC-010-01"
+          subsection_title: "Quality Improvement Opportunities"
+          data_sources:
+            - "CAPA Manager and Quality Manager analysis"
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+            - field_id: "REC-002"
+              field_label: "Resource Needs Identified"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-003"
+              field_label: "Systemic Improvement Initiatives"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-004"
+              field_label: "CAPA Process Improvements"
+              field_type: "bullet_list"
+              max_items: 3
+
+generation:
+  automated: true
+  automation_details:
+    data_collection: "Automated queries to CAPA management system"
+    report_generation: "Semi-automated with CAPA Manager analysis"
+    manual_sections:
+      - "SEC-006-01: Root cause pattern analysis"
+      - "SEC-007-01: Ineffective CAPA analysis"
+      - "SEC-009-01: Emerging patterns identification"
+      - "SEC-010: All recommendations"
+  scheduling:
+    generation_date: "1st of month"
+    review_period: "Days 1-3"
+    approval_deadline: "5th business day"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

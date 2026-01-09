@@ -1,0 +1,507 @@
+---
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-SMPHAND-001"
+  title: "Sample Receipt Verification Checklist"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  checklist_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "ISO/IEC 17025"
+  frequency: "Every sample receipt"
+  estimated_duration: "15-20 minutes"
+
+purpose: "Systematic verification of sample receipt procedures to ensure all acceptance criteria met, documentation complete, and samples properly accessioned before acceptance into laboratory"
+
+target_audience:
+  - "Laboratory Technicians"
+  - "Sample Coordinators"
+  - "Laboratory Managers"
+
+when_to_use:
+  - "Upon arrival of every sample or sample batch"
+  - "Before accepting samples into laboratory custody"
+  - "When training new personnel on sample receipt procedures"
+  - "During internal audits of sample receipt process"
+
+completion_criteria: "All applicable items must be checked and any non-conformances documented before sample acceptance"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Pre-Receipt Preparation"
+    description: "Preparation activities before sample arrival"
+    required: true
+    items:
+      - item_id: "ITEM-001"
+        item_text: "Clean and organized sample receipt area prepared"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Receipt area clean, free of clutter, adequate space for sample inspection"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-002"
+        item_text: "Sample receipt supplies available (labels, barcodes, forms, camera)"
+        verification_method: "Inventory check"
+        acceptance_criteria: "All required supplies present and functional"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-003"
+        item_text: "LIMS system operational and accessible"
+        verification_method: "System check"
+        acceptance_criteria: "LIMS login successful, barcode scanner functional"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-004"
+        item_text: "Temperature monitoring devices available and calibrated"
+        verification_method: "Equipment check"
+        acceptance_criteria: "Thermometer available, within calibration date"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-005"
+        item_text: "Personal protective equipment (PPE) available and donned"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Lab coat, gloves available; worn as appropriate for sample type"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+  - section_id: "SEC-002"
+    section_name: "Initial Package Inspection"
+    description: "External inspection of shipping package or container"
+    required: true
+    items:
+      - item_id: "ITEM-006"
+        item_text: "Record exact date and time of sample arrival"
+        verification_method: "Timestamp documentation"
+        acceptance_criteria: "Timestamp recorded in receipt log and LIMS"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-007"
+        item_text: "Inspect outer packaging for damage, leaks, or tampering"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "No evidence of severe damage compromising sample integrity"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-008"
+        item_text: "Photograph outer packaging (all sides)"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Clear photographs of package from multiple angles"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-009"
+        item_text: "Verify shipment tracking information matches documentation"
+        verification_method: "Document review"
+        acceptance_criteria: "Tracking number on package matches chain of custody"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-010"
+        item_text: "Check for presence of required hazard labels (if applicable)"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Hazardous material labels present and legible if required"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-003"
+    section_name: "Temperature Verification (Cold Chain Samples)"
+    description: "Temperature control verification for temperature-sensitive samples"
+    required: false
+    conditional_trigger:
+      field: "sample_type"
+      condition: "requires_cold_chain"
+    items:
+      - item_id: "ITEM-011"
+        item_text: "Check for presence of temperature monitoring device"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Data logger, temperature indicator strip, or ice packs present"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-012"
+        item_text: "Record temperature from monitoring device or sample"
+        verification_method: "Temperature measurement"
+        acceptance_criteria: "Temperature recorded and documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-013"
+        item_text: "Verify temperature within acceptable range for sample type"
+        verification_method: "Temperature assessment"
+        acceptance_criteria: "Temperature meets specification (typically 0-10°C for cold chain)"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-014"
+        item_text: "If data logger present, download and review temperature history"
+        verification_method: "Data review"
+        acceptance_criteria: "No temperature excursions outside acceptable range during transit"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-015"
+        item_text: "Document any temperature excursions or issues"
+        verification_method: "Documentation"
+        acceptance_criteria: "Excursions documented with duration and impact assessment"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-004"
+    section_name: "Documentation Review"
+    description: "Review of accompanying documentation completeness"
+    required: true
+    items:
+      - item_id: "ITEM-016"
+        item_text: "Verify chain of custody (CoC) documentation present"
+        verification_method: "Document check"
+        acceptance_criteria: "CoC form included with samples"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-017"
+        item_text: "Check CoC completeness: all fields filled, signatures present"
+        verification_method: "Document review"
+        acceptance_criteria: "No blank fields, all required signatures and dates present"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-018"
+        item_text: "Verify CoC signatures are original (not photocopied)"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Original signatures evident (ink variation, pressure)"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-019"
+        item_text: "Check for test request or sample submission form"
+        verification_method: "Document check"
+        acceptance_criteria: "Test request form present with tests clearly specified"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-020"
+        item_text: "Verify MSDS/SDS provided if required for sample type"
+        verification_method: "Document check"
+        acceptance_criteria: "MSDS/SDS present for hazardous samples"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-021"
+        item_text: "Check number of samples listed on CoC matches samples received"
+        verification_method: "Count verification"
+        acceptance_criteria: "Sample count matches documentation"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-005"
+    section_name: "Sample Container Inspection"
+    description: "Physical inspection of sample containers"
+    required: true
+    items:
+      - item_id: "ITEM-022"
+        item_text: "Inspect all sample containers for cracks, leaks, or damage"
+        verification_method: "Visual and physical inspection"
+        acceptance_criteria: "Containers intact with no leaks or significant damage"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-023"
+        item_text: "Verify container closures are secure and properly sealed"
+        verification_method: "Physical inspection"
+        acceptance_criteria: "Lids tight, no evidence of opening during transit"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-024"
+        item_text: "Check tamper-evident seals if present"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Seals intact showing no tampering, or documented if broken"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-025"
+        item_text: "Verify sample container labels are legible"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "All text on labels readable, no water damage or fading"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-026"
+        item_text: "Check sample IDs on containers match CoC documentation"
+        verification_method: "Cross-reference verification"
+        acceptance_criteria: "Sample IDs on containers match CoC exactly"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-027"
+        item_text: "Photograph all sample containers (labels visible)"
+        verification_method: "Photographic documentation"
+        acceptance_criteria: "Clear photographs of each container showing labels"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-006"
+    section_name: "Sample Condition Assessment"
+    description: "Visual assessment of sample condition and integrity"
+    required: true
+    items:
+      - item_id: "ITEM-028"
+        item_text: "Visually inspect samples for contamination"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "No obvious contamination, foreign material, or mold visible"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-029"
+        item_text: "Assess sample appearance (color, texture, consistency)"
+        verification_method: "Visual assessment"
+        acceptance_criteria: "Appearance consistent with sample type, no degradation"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-030"
+        item_text: "Verify sufficient sample volume for all requested tests"
+        verification_method: "Visual estimation or measurement"
+        acceptance_criteria: "Adequate volume for all tests plus 20% overage recommended"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-031"
+        item_text: "Check sample odor (if safe to do so)"
+        verification_method: "Odor assessment"
+        acceptance_criteria: "Odor appropriate for sample type, no off-odors indicating degradation"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-032"
+        item_text: "Document any unusual observations about sample condition"
+        verification_method: "Documentation"
+        acceptance_criteria: "Any anomalies documented with photographs"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-007"
+    section_name: "Sample Acceptance Decision"
+    description: "Final decision on sample acceptance or rejection"
+    required: true
+    items:
+      - item_id: "ITEM-033"
+        item_text: "Review all inspection findings"
+        verification_method: "Review of checklist"
+        acceptance_criteria: "All critical items meet acceptance criteria"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-034"
+        item_text: "Make accept/reject decision based on inspection"
+        verification_method: "Professional judgment"
+        acceptance_criteria: "Decision documented with rationale if rejected"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-035"
+        item_text: "If rejected, notify client immediately"
+        verification_method: "Communication log"
+        acceptance_criteria: "Client contacted within 2 hours of receipt, notification documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-036"
+        item_text: "Document rejection reasons on Sample Receipt Record"
+        verification_method: "Documentation"
+        acceptance_criteria: "Detailed rejection reasons documented on FORM-SMPHAND-001"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-008"
+    section_name: "Sample Accessioning (For Accepted Samples)"
+    description: "Laboratory accessioning and LIMS entry for accepted samples"
+    required: true
+    conditional_trigger:
+      field: "sample_accepted"
+      condition: "equals"
+      value: true
+    items:
+      - item_id: "ITEM-037"
+        item_text: "Enter sample information into LIMS"
+        verification_method: "LIMS data entry"
+        acceptance_criteria: "All required fields completed in LIMS sample record"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-038"
+        item_text: "Generate and print laboratory sample ID barcode labels"
+        verification_method: "Label generation"
+        acceptance_criteria: "Labels printed with correct laboratory sample ID"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-039"
+        item_text: "Affix primary barcode label to sample container"
+        verification_method: "Physical verification"
+        acceptance_criteria: "Label affixed securely, barcode clearly visible and scannable"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-040"
+        item_text: "Affix secondary backup label to sample container"
+        verification_method: "Physical verification"
+        acceptance_criteria: "Backup label applied in different location on container"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-041"
+        item_text: "Perform two-person verification of sample ID and label"
+        verification_method: "Independent verification"
+        acceptance_criteria: "Second person verifies sample ID matches LIMS and barcode"
+        responsible_role: "Second Technician"
+        critical: true
+
+      - item_id: "ITEM-042"
+        item_text: "Scan barcode to verify readability"
+        verification_method: "Barcode scan test"
+        acceptance_criteria: "Barcode scans correctly and links to correct LIMS record"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-043"
+        item_text: "Update chain of custody with laboratory acceptance"
+        verification_method: "CoC documentation"
+        acceptance_criteria: "CoC signed and dated by receiving technician"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-044"
+        item_text: "Scan completed Sample Receipt Record and CoC into LIMS"
+        verification_method: "Electronic archival"
+        acceptance_criteria: "Documents scanned and linked to sample record in LIMS"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-009"
+    section_name: "Sample Storage Assignment"
+    description: "Determination and execution of appropriate storage"
+    required: true
+    conditional_trigger:
+      field: "sample_accepted"
+      condition: "equals"
+      value: true
+    items:
+      - item_id: "ITEM-045"
+        item_text: "Determine appropriate storage conditions for sample type"
+        verification_method: "Procedure reference"
+        acceptance_criteria: "Storage conditions match requirements in SOP-SMPHAND-001"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-046"
+        item_text: "Assign specific storage location in LIMS"
+        verification_method: "LIMS entry"
+        acceptance_criteria: "Storage unit, shelf, and position assigned in LIMS"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-047"
+        item_text: "Verify storage unit is operating within specifications"
+        verification_method: "Temperature check"
+        acceptance_criteria: "Storage unit temperature within ±2°C of target"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-048"
+        item_text: "Place sample in designated storage location"
+        verification_method: "Physical placement"
+        acceptance_criteria: "Sample placed in exact location specified in LIMS"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-049"
+        item_text: "Scan sample barcode and location barcode to link"
+        verification_method: "Barcode linking"
+        acceptance_criteria: "LIMS confirms sample location linkage"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-050"
+        item_text: "Set LIMS alert for maximum hold time before analysis"
+        verification_method: "LIMS configuration"
+        acceptance_criteria: "Hold time alert activated based on sample type"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-010"
+    section_name: "Final Review and Documentation"
+    description: "Final review by Sample Coordinator"
+    required: true
+    items:
+      - item_id: "ITEM-051"
+        item_text: "Sample Coordinator reviews completed Sample Receipt Record"
+        verification_method: "Document review"
+        acceptance_criteria: "All sections complete, no blank fields"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-052"
+        item_text: "Sample Coordinator verifies LIMS entry accuracy"
+        verification_method: "LIMS review"
+        acceptance_criteria: "LIMS data matches receipt documentation"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-053"
+        item_text: "Sample Coordinator verifies photographs complete and clear"
+        verification_method: "Image review"
+        acceptance_criteria: "Photographs clearly show package and sample condition"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-054"
+        item_text: "Sample Coordinator signs Sample Receipt Record"
+        verification_method: "Electronic signature"
+        acceptance_criteria: "Coordinator signature and timestamp present"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-055"
+        item_text: "File original CoC in secure location"
+        verification_method: "Filing"
+        acceptance_criteria: "Original CoC filed in chronological order in secure cabinet"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+non_conformance_handling:
+  - criterion: "Critical item fails acceptance criteria"
+    action: "Stop process, reject sample, notify supervisor and client, document rejection"
+  - criterion: "Non-critical item fails but sample integrity not compromised"
+    action: "Document issue, proceed with acceptance, note on Sample Receipt Record"
+  - criterion: "Temperature excursion detected"
+    action: "Notify Laboratory Manager, assess impact, make risk-based decision, document"
+  - criterion: "Documentation incomplete"
+    action: "Contact client for missing information before proceeding, document attempts"
+
+training_requirements:
+  - "Completion of TRN-SMPHAND-001: Sample Handling Technician Training"
+  - "Hands-on training with experienced technician (minimum 5 sample receipts)"
+  - "Competency assessment by Sample Coordinator"
+  - "Annual refresher training"
+
+record_retention: "Sample lifetime + 5 years"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "FORM-SMPHAND-001: Sample Receipt and Accessioning Record"
+  - "SOP-COC-001: Chain of Custody Management"
+  - "TRN-SMPHAND-001: Sample Handling Technician Training"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Receipt Verification Checklist"
+    author: "Laboratory Manager"

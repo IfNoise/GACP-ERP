@@ -1,0 +1,776 @@
+---
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-ANLY-001"
+  title: "Monthly Analytical Laboratory Performance Report"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_sop: "SOP-ANLY-001"
+  report_type: "performance_report"
+  report_category: "operational"
+  reporting_frequency: "Monthly"
+  report_owner: "Laboratory Manager"
+  distribution:
+    - "Quality Director"
+    - "Laboratory Manager"
+    - "QA Laboratory Specialist"
+    - "Senior Analysts"
+    - "Operations Management"
+
+purpose:
+  objective: "Provide comprehensive monthly assessment of analytical laboratory performance, quality metrics, and continuous improvement initiatives"
+  scope: "All analytical testing activities performed during the reporting month"
+  key_metrics:
+    - "Sample throughput and turnaround time"
+    - "Analytical quality control performance"
+    - "Method validation and technology advancement"
+    - "Instrument utilization and maintenance"
+    - "Personnel performance and training"
+    - "Deviations and OOS investigations"
+    - "Continuous improvement initiatives"
+
+sections:
+  - section_number: 1
+    section_title: "Executive Summary"
+    description: "High-level overview of laboratory performance for the reporting month"
+    data_fields:
+      - field_id: "reporting_month"
+        field_label: "Reporting Month"
+        field_type: "text"
+        data_source: "Manual input"
+        required: true
+      - field_id: "total_samples_tested"
+        field_label: "Total Samples Tested"
+        field_type: "numeric"
+        unit: "samples"
+        data_source: "LIMS"
+        required: true
+      - field_id: "total_tests_performed"
+        field_label: "Total Tests Performed"
+        field_type: "numeric"
+        unit: "tests"
+        data_source: "LIMS"
+        required: true
+      - field_id: "on_time_completion_rate"
+        field_label: "On-Time Completion Rate"
+        field_type: "percentage"
+        unit: "%"
+        data_source: "LIMS"
+        target: "≥95%"
+        required: true
+      - field_id: "qc_pass_rate"
+        field_label: "QC Sample Pass Rate"
+        field_type: "percentage"
+        unit: "%"
+        data_source: "LIMS"
+        target: "≥98%"
+        required: true
+      - field_id: "oos_investigations"
+        field_label: "OOS Investigations Opened"
+        field_type: "numeric"
+        unit: "investigations"
+        data_source: "LIMS, Deviation System"
+        required: true
+      - field_id: "key_achievements"
+        field_label: "Key Achievements This Month"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: false
+      - field_id: "key_challenges"
+        field_label: "Key Challenges This Month"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: false
+
+  - section_number: 2
+    section_title: "Sample Volume and Test Distribution"
+    description: "Breakdown of sample types and tests performed"
+    data_fields:
+      - field_id: "samples_by_type"
+        field_label: "Samples Tested by Type"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Sample Type"
+          - "Number of Samples"
+          - "% of Total"
+          - "Month-over-Month Change"
+      - field_id: "tests_by_category"
+        field_label: "Tests Performed by Category"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Test Category"
+          - "Number of Tests"
+          - "% of Total"
+          - "Average TAT (days)"
+      - field_id: "sample_source_distribution"
+        field_label: "Samples by Source/Submitter"
+        field_type: "table"
+        data_source: "LIMS"
+        required: false
+        table_columns:
+          - "Source/Department"
+          - "Number of Samples"
+          - "% of Total"
+    charts:
+      - chart_id: "sample_volume_trend"
+        chart_type: "line"
+        title: "Sample Volume Trend (12 months)"
+        x_axis: "Month"
+        y_axis: "Number of Samples"
+      - chart_id: "test_distribution_pie"
+        chart_type: "pie"
+        title: "Test Distribution by Category"
+        data_source: "tests_by_category"
+
+  - section_number: 3
+    section_title: "Turnaround Time Performance"
+    description: "Analysis of sample turnaround time metrics"
+    data_fields:
+      - field_id: "average_tat_overall"
+        field_label: "Average TAT - All Samples"
+        field_type: "numeric"
+        unit: "days"
+        data_source: "LIMS"
+        target: "Per method specifications"
+        required: true
+      - field_id: "tat_by_test_type"
+        field_label: "Average TAT by Test Type"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Test Type"
+          - "Average TAT (days)"
+          - "Target TAT"
+          - "% On-Time"
+          - "Month-over-Month"
+      - field_id: "late_samples_count"
+        field_label: "Samples Completed Late"
+        field_type: "numeric"
+        unit: "samples"
+        data_source: "LIMS"
+        required: true
+      - field_id: "late_samples_reasons"
+        field_label: "Reasons for Late Completion"
+        field_type: "table"
+        data_source: "LIMS, Manual input"
+        required: true
+        table_columns:
+          - "Reason Category"
+          - "Number of Samples"
+          - "% of Late Samples"
+          - "Corrective Actions"
+      - field_id: "expedited_samples"
+        field_label: "Expedited/Rush Samples"
+        field_type: "numeric"
+        unit: "samples"
+        data_source: "LIMS"
+        required: false
+    charts:
+      - chart_id: "tat_trend"
+        chart_type: "line"
+        title: "Average TAT Trend by Test Type"
+        x_axis: "Month"
+        y_axis: "Days"
+        target_line: "Target TAT"
+
+  - section_number: 4
+    section_title: "Quality Control Performance"
+    description: "QC sample results and control chart status"
+    data_fields:
+      - field_id: "total_qc_samples"
+        field_label: "Total QC Samples Analyzed"
+        field_type: "numeric"
+        unit: "QC samples"
+        data_source: "LIMS"
+        required: true
+      - field_id: "qc_pass_count"
+        field_label: "QC Samples Passed"
+        field_type: "numeric"
+        unit: "QC samples"
+        data_source: "LIMS"
+        required: true
+      - field_id: "qc_fail_count"
+        field_label: "QC Samples Failed"
+        field_type: "numeric"
+        unit: "QC samples"
+        data_source: "LIMS"
+        required: true
+      - field_id: "qc_performance_by_type"
+        field_label: "QC Performance by Type"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "QC Type"
+          - "Total Analyzed"
+          - "Passed"
+          - "Failed"
+          - "Pass Rate %"
+          - "Target"
+      - field_id: "qc_failures_summary"
+        field_label: "QC Failures Summary"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Date"
+          - "QC Type"
+          - "Method"
+          - "Failure Reason"
+          - "Corrective Action"
+          - "Status"
+      - field_id: "control_charts_status"
+        field_label: "Control Chart Status"
+        field_type: "table"
+        data_source: "LIMS, Manual review"
+        required: true
+        table_columns:
+          - "Method/Analyte"
+          - "QC Type"
+          - "Current Status"
+          - "Trends/Outliers"
+          - "Action Taken"
+      - field_id: "proficiency_testing"
+        field_label: "External Proficiency Testing Results"
+        field_type: "table"
+        data_source: "PT Provider, LIMS"
+        required: false
+        table_columns:
+          - "PT Program"
+          - "Test"
+          - "Result"
+          - "Z-Score"
+          - "Pass/Fail"
+    charts:
+      - chart_id: "qc_pass_rate_trend"
+        chart_type: "line"
+        title: "QC Pass Rate Trend (12 months)"
+        x_axis: "Month"
+        y_axis: "Pass Rate %"
+        target_line: "98% Target"
+      - chart_id: "qc_control_chart_example"
+        chart_type: "control_chart"
+        title: "Example Control Chart - THC QC Sample"
+        x_axis: "Date"
+        y_axis: "Concentration (mg/g)"
+        control_limits: "Mean ±2SD and ±3SD"
+
+  - section_number: 5
+    section_title: "First Time Analysis Success Rate"
+    description: "Percentage of samples analyzed successfully without re-analysis"
+    data_fields:
+      - field_id: "total_initial_analyses"
+        field_label: "Total Initial Analyses"
+        field_type: "numeric"
+        unit: "analyses"
+        data_source: "LIMS"
+        required: true
+      - field_id: "successful_first_time"
+        field_label: "Successful on First Attempt"
+        field_type: "numeric"
+        unit: "analyses"
+        data_source: "LIMS"
+        required: true
+      - field_id: "first_time_success_rate"
+        field_label: "First Time Success Rate"
+        field_type: "percentage"
+        unit: "%"
+        data_source: "LIMS"
+        target: "≥95%"
+        required: true
+      - field_id: "reanalysis_reasons"
+        field_label: "Reasons for Re-analysis"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Reason"
+          - "Number of Re-analyses"
+          - "% of Total Re-analyses"
+          - "Impact on TAT"
+          - "Preventive Actions"
+    charts:
+      - chart_id: "first_time_success_trend"
+        chart_type: "line"
+        title: "First Time Success Rate Trend"
+        x_axis: "Month"
+        y_axis: "Success Rate %"
+        target_line: "95% Target"
+
+  - section_number: 6
+    section_title: "Out of Specification (OOS) Investigations"
+    description: "OOS results and investigation status"
+    data_fields:
+      - field_id: "oos_opened_this_month"
+        field_label: "OOS Investigations Opened"
+        field_type: "numeric"
+        unit: "investigations"
+        data_source: "Deviation System"
+        required: true
+      - field_id: "oos_closed_this_month"
+        field_label: "OOS Investigations Closed"
+        field_type: "numeric"
+        unit: "investigations"
+        data_source: "Deviation System"
+        required: true
+      - field_id: "oos_open_backlog"
+        field_label: "Open OOS Investigations (Total)"
+        field_type: "numeric"
+        unit: "investigations"
+        data_source: "Deviation System"
+        required: true
+      - field_id: "oos_investigations_summary"
+        field_label: "OOS Investigations This Month"
+        field_type: "table"
+        data_source: "Deviation System, LIMS"
+        required: true
+        table_columns:
+          - "OOS ID"
+          - "Sample ID"
+          - "Test"
+          - "Result"
+          - "Limit"
+          - "Opened Date"
+          - "Status"
+          - "Root Cause"
+      - field_id: "oos_root_causes"
+        field_label: "OOS Root Cause Analysis"
+        field_type: "table"
+        data_source: "Deviation System"
+        required: true
+        table_columns:
+          - "Root Cause Category"
+          - "Number of OOS"
+          - "% of Total"
+          - "Corrective Actions"
+      - field_id: "average_oos_closure_time"
+        field_label: "Average OOS Investigation Closure Time"
+        field_type: "numeric"
+        unit: "days"
+        data_source: "Deviation System"
+        target: "≤10 business days"
+        required: true
+    charts:
+      - chart_id: "oos_trend"
+        chart_type: "line"
+        title: "OOS Investigations Trend"
+        x_axis: "Month"
+        y_axis: "Number of OOS"
+      - chart_id: "oos_root_cause_pie"
+        chart_type: "pie"
+        title: "OOS Root Cause Distribution"
+        data_source: "oos_root_causes"
+
+  - section_number: 7
+    section_title: "Instrument Utilization and Maintenance"
+    description: "Instrument uptime, utilization, and maintenance activities"
+    data_fields:
+      - field_id: "instrument_uptime_summary"
+        field_label: "Instrument Uptime Summary"
+        field_type: "table"
+        data_source: "Instrument logs, LIMS"
+        required: true
+        table_columns:
+          - "Instrument"
+          - "Total Available Hours"
+          - "Operational Hours"
+          - "Downtime Hours"
+          - "Uptime %"
+          - "Target"
+      - field_id: "downtime_reasons"
+        field_label: "Instrument Downtime by Reason"
+        field_type: "table"
+        data_source: "Instrument logs"
+        required: true
+        table_columns:
+          - "Reason"
+          - "Total Hours"
+          - "% of Downtime"
+          - "Instruments Affected"
+      - field_id: "pm_activities"
+        field_label: "Preventive Maintenance Activities"
+        field_type: "table"
+        data_source: "Maintenance logs, SOP-EQCAL-001"
+        required: true
+        table_columns:
+          - "Instrument"
+          - "PM Activity"
+          - "Scheduled Date"
+          - "Completed Date"
+          - "Status"
+          - "Next Due Date"
+      - field_id: "instrument_failures"
+        field_label: "Instrument Failures/Repairs"
+        field_type: "table"
+        data_source: "Maintenance logs"
+        required: false
+        table_columns:
+          - "Instrument"
+          - "Failure Date"
+          - "Issue Description"
+          - "Downtime (hours)"
+          - "Resolution"
+          - "Cost"
+      - field_id: "calibration_verifications"
+        field_label: "Instrument Calibration Verifications"
+        field_type: "table"
+        data_source: "SOP-EQCAL-001 records"
+        required: true
+        table_columns:
+          - "Instrument"
+          - "Calibration Type"
+          - "Last Verification"
+          - "Result"
+          - "Next Due Date"
+    charts:
+      - chart_id: "instrument_uptime"
+        chart_type: "bar"
+        title: "Instrument Uptime %"
+        x_axis: "Instrument"
+        y_axis: "Uptime %"
+        target_line: "95%"
+      - chart_id: "downtime_pareto"
+        chart_type: "pareto"
+        title: "Instrument Downtime Pareto Analysis"
+        data_source: "downtime_reasons"
+
+  - section_number: 8
+    section_title: "Method Validation and Development"
+    description: "Method validation activities and status"
+    data_fields:
+      - field_id: "ongoing_validations"
+        field_label: "Ongoing Method Validations"
+        field_type: "table"
+        data_source: "Project tracking, LIMS"
+        required: true
+        table_columns:
+          - "Method ID"
+          - "Method Description"
+          - "Validation Type"
+          - "Start Date"
+          - "Target Completion"
+          - "% Complete"
+          - "Status"
+      - field_id: "completed_validations"
+        field_label: "Validations Completed This Month"
+        field_type: "table"
+        data_source: "Document control, LIMS"
+        required: false
+        table_columns:
+          - "Method ID"
+          - "Method Description"
+          - "Completion Date"
+          - "QA Approval Date"
+          - "Implementation Date"
+      - field_id: "method_revalidations_due"
+        field_label: "Method Revalidations Due (Next 3 Months)"
+        field_type: "table"
+        data_source: "Document control"
+        required: false
+        table_columns:
+          - "Method ID"
+          - "Method Description"
+          - "Last Validation Date"
+          - "Revalidation Due Date"
+          - "Status"
+      - field_id: "method_deviations"
+        field_label: "Method Deviations This Month"
+        field_type: "table"
+        data_source: "Deviation system"
+        required: false
+        table_columns:
+          - "Method ID"
+          - "Deviation Type"
+          - "Description"
+          - "Impact Assessment"
+          - "CAPA Required"
+
+  - section_number: 9
+    section_title: "Personnel Performance and Training"
+    description: "Analyst performance metrics and training activities"
+    data_fields:
+      - field_id: "analyst_productivity"
+        field_label: "Analyst Productivity"
+        field_type: "table"
+        data_source: "LIMS"
+        required: true
+        table_columns:
+          - "Analyst Name"
+          - "Samples Analyzed"
+          - "Tests Performed"
+          - "QC Pass Rate %"
+          - "First Time Success %"
+          - "Deviations"
+      - field_id: "training_completed"
+        field_label: "Training Activities Completed"
+        field_type: "table"
+        data_source: "Training management system"
+        required: true
+        table_columns:
+          - "Personnel"
+          - "Training Course"
+          - "Completion Date"
+          - "Score/Assessment"
+          - "Next Retraining Due"
+      - field_id: "training_overdue"
+        field_label: "Overdue Training"
+        field_type: "table"
+        data_source: "Training management system"
+        required: false
+        table_columns:
+          - "Personnel"
+          - "Training Course"
+          - "Due Date"
+          - "Days Overdue"
+          - "Impact on Operations"
+      - field_id: "competency_assessments"
+        field_label: "Competency Assessments This Month"
+        field_type: "table"
+        data_source: "Training management system"
+        required: false
+        table_columns:
+          - "Personnel"
+          - "Method/Skill"
+          - "Assessment Date"
+          - "Result"
+          - "Next Assessment Due"
+      - field_id: "staffing_summary"
+        field_label: "Staffing Summary"
+        field_type: "table"
+        data_source: "HR, Manual input"
+        required: true
+        table_columns:
+          - "Position"
+          - "Authorized FTE"
+          - "Current FTE"
+          - "Vacancies"
+          - "Status"
+
+  - section_number: 10
+    section_title: "Deviations and CAPA"
+    description: "Laboratory deviations and corrective/preventive actions"
+    data_fields:
+      - field_id: "deviations_opened"
+        field_label: "Deviations Opened This Month"
+        field_type: "numeric"
+        unit: "deviations"
+        data_source: "Deviation system"
+        required: true
+      - field_id: "deviations_closed"
+        field_label: "Deviations Closed This Month"
+        field_type: "numeric"
+        unit: "deviations"
+        data_source: "Deviation system"
+        required: true
+      - field_id: "deviations_summary"
+        field_label: "Deviations Summary"
+        field_type: "table"
+        data_source: "Deviation system"
+        required: true
+        table_columns:
+          - "Deviation ID"
+          - "Type"
+          - "Description"
+          - "Opened Date"
+          - "Status"
+          - "CAPA Required"
+      - field_id: "deviation_categories"
+        field_label: "Deviations by Category"
+        field_type: "table"
+        data_source: "Deviation system"
+        required: true
+        table_columns:
+          - "Category"
+          - "Number"
+          - "% of Total"
+          - "Trend"
+      - field_id: "capa_status"
+        field_label: "CAPA Status"
+        field_type: "table"
+        data_source: "CAPA system"
+        required: true
+        table_columns:
+          - "CAPA ID"
+          - "Description"
+          - "Opened Date"
+          - "Target Completion"
+          - "Status"
+          - "Effectiveness Check"
+    charts:
+      - chart_id: "deviation_trend"
+        chart_type: "line"
+        title: "Monthly Deviation Trend"
+        x_axis: "Month"
+        y_axis: "Number of Deviations"
+      - chart_id: "deviation_category_pie"
+        chart_type: "pie"
+        title: "Deviations by Category"
+        data_source: "deviation_categories"
+
+  - section_number: 11
+    section_title: "Data Integrity and Audit Trail Review"
+    description: "Data integrity metrics and audit trail monitoring"
+    data_fields:
+      - field_id: "audit_trail_reviews"
+        field_label: "Audit Trail Reviews Performed"
+        field_type: "numeric"
+        unit: "reviews"
+        data_source: "LIMS, Manual logs"
+        required: true
+      - field_id: "audit_trail_findings"
+        field_label: "Audit Trail Findings"
+        field_type: "table"
+        data_source: "QA review records"
+        required: false
+        table_columns:
+          - "Date"
+          - "System"
+          - "Finding Description"
+          - "Severity"
+          - "Action Taken"
+          - "Status"
+      - field_id: "electronic_signature_compliance"
+        field_label: "Electronic Signature Compliance"
+        field_type: "percentage"
+        unit: "%"
+        data_source: "LIMS"
+        target: "100%"
+        required: true
+      - field_id: "data_integrity_incidents"
+        field_label: "Data Integrity Incidents"
+        field_type: "numeric"
+        unit: "incidents"
+        data_source: "Deviation system, QA"
+        required: true
+      - field_id: "data_backup_verification"
+        field_label: "Data Backup Verification Status"
+        field_type: "text"
+        data_source: "IT, LIMS"
+        required: true
+
+  - section_number: 12
+    section_title: "Continuous Improvement Initiatives"
+    description: "Ongoing improvement projects and efficiency initiatives"
+    data_fields:
+      - field_id: "improvement_projects"
+        field_label: "Active Improvement Projects"
+        field_type: "table"
+        data_source: "Project tracking, Manual input"
+        required: false
+        table_columns:
+          - "Project Name"
+          - "Objective"
+          - "Start Date"
+          - "Target Completion"
+          - "Status"
+          - "Key Milestones"
+      - field_id: "process_improvements_implemented"
+        field_label: "Process Improvements Implemented This Month"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: false
+      - field_id: "cost_savings_initiatives"
+        field_label: "Cost Savings Initiatives"
+        field_type: "table"
+        data_source: "Manual input"
+        required: false
+        table_columns:
+          - "Initiative"
+          - "Description"
+          - "Estimated Annual Savings"
+          - "Status"
+      - field_id: "technology_upgrades"
+        field_label: "Technology Upgrades Planned/In Progress"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: false
+
+  - section_number: 13
+    section_title: "Action Items and Next Month Priorities"
+    description: "Key action items and focus areas for next reporting period"
+    data_fields:
+      - field_id: "open_action_items"
+        field_label: "Open Action Items from Previous Month"
+        field_type: "table"
+        data_source: "Previous report, Manual input"
+        required: true
+        table_columns:
+          - "Action Item"
+          - "Owner"
+          - "Due Date"
+          - "Status"
+          - "Comments"
+      - field_id: "new_action_items"
+        field_label: "New Action Items for Next Month"
+        field_type: "table"
+        data_source: "Manual input"
+        required: true
+        table_columns:
+          - "Action Item"
+          - "Owner"
+          - "Due Date"
+          - "Priority"
+      - field_id: "next_month_priorities"
+        field_label: "Key Priorities for Next Month"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: true
+      - field_id: "resource_needs"
+        field_label: "Resource Needs/Requests"
+        field_type: "text_list"
+        data_source: "Manual input"
+        required: false
+
+approval_workflow:
+  steps:
+    - step: 1
+      role: "Laboratory Manager"
+      action: "Prepares report, reviews all data"
+      timeline: "By 5th business day of following month"
+    - step: 2
+      role: "QA Laboratory Specialist"
+      action: "Reviews report for accuracy and compliance"
+      timeline: "Within 2 business days of Lab Manager submission"
+    - step: 3
+      role: "Quality Director"
+      action: "Reviews and approves report"
+      timeline: "Within 3 business days of QA review"
+    - step: 4
+      role: "Laboratory Manager"
+      action: "Distributes approved report to stakeholders"
+      timeline: "Upon Quality Director approval"
+
+distribution_requirements:
+  primary_recipients:
+    - "Quality Director"
+    - "Operations Director"
+    - "Laboratory Manager"
+    - "QA Laboratory Specialist"
+  secondary_recipients:
+    - "All Senior Analysts"
+    - "Regulatory Affairs"
+    - "Executive Management (summary)"
+  format: "PDF and Excel (data tables)"
+  retention: "Permanent record per SOP-DOC-001"
+
+related_documents:
+  - "SOP-ANLY-001: Analytical Methods"
+  - "SOP-OOS-001: Out of Specification Investigations"
+  - "SOP-DEV-001: Deviation Management"
+  - "SOP-CAPA-001: Corrective and Preventive Actions"
+  - "SOP-EQCAL-001: Equipment Calibration"
+  - "SOP-DI-001: Data Integrity"
+  - "SOP-DOC-001: Document Control"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    description: "Initial release"
+    author: "Laboratory Manager"

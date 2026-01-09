@@ -1,0 +1,680 @@
+# DSL: Deviation Management and CAPA System
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  process_id: "SOP-DEV-001"
+  process_type: "sop"
+  version: "1.0"
+  status: "active"
+  domain: "quality"
+  classification: "critical"
+
+  effective_date: "2025-10-17"
+  supersedes: null
+  review_period_months: 12
+
+  related_processes:
+    - "SOP-CAPA-001"
+    - "SOP-CHG-001"
+    - "SOP-DOC-001"
+
+  regulatory_refs:
+    - "ICH Q9 Quality Risk Management"
+    - "ICH Q10 Pharmaceutical Quality System"
+    - "FDA OOS Guidance"
+    - "EU GMP"
+    - "WHO GACP"
+
+# ==============================================================================
+# PROCESS DEFINITION
+# ==============================================================================
+process:
+  purpose: "Establish systematic approach to managing deviations from established procedures, ensuring immediate identification, documentation, investigation, and correction to maintain product quality and GACP compliance"
+
+  scope_areas:
+    - "identification_and_classification_of_deviations"
+    - "immediate_actions_and_notifications"
+    - "investigation_and_root_cause_analysis"
+    - "assessment_of_quality_impact"
+    - "corrective_and_preventive_actions_capa"
+    - "trending_and_statistical_analysis"
+    - "documentation_and_archiving"
+
+  frequency: "as_needed"
+
+  prerequisites:
+    - "Personnel trained on deviation recognition"
+    - "Electronic Deviation Management System operational"
+    - "Investigation tools and resources available"
+
+  dependencies:
+    - "CAPA system (SOP-CAPA-001)"
+    - "Change control system (SOP-CHG-001)"
+    - "Document management (SOP-DOC-001)"
+
+  duration_estimate: null # UNDEFINED: Varies by deviation severity
+  critical_path: true
+
+# ==============================================================================
+# ROLES AND RESPONSIBILITIES
+# ==============================================================================
+roles:
+  - role_id: "ROLE-ALL-001"
+    role_name: "All Personnel"
+    qualifications:
+      required:
+        - "TRN-DEV-001 completion"
+        - "Deviation recognition training"
+      optional: []
+    responsibilities:
+      - action: "Immediate reporting of observed deviations"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-SUPER-001"
+    role_name: "Shift Supervisor"
+    qualifications:
+      required:
+        - "TRN-DEV-001 Advanced"
+        - "2+ years experience"
+      optional: []
+    responsibilities:
+      - action: "Primary assessment and immediate actions"
+        accountability: "accountable"
+        verification: "documented"
+      - action: "Initial deviation classification"
+        accountability: "responsible"
+        verification: "reviewed"
+
+  - role_id: "ROLE-QA-002"
+    role_name: "Quality Assurance Manager"
+    qualifications:
+      required:
+        - "QA degree or equivalent"
+        - "GMP/GACP training"
+        - "Investigation training"
+      optional: []
+    responsibilities:
+      - action: "Deviation classification approval"
+        accountability: "accountable"
+        verification: "approved"
+      - action: "Investigation oversight"
+        accountability: "accountable"
+        verification: "approved"
+
+  - role_id: "ROLE-QAINV-001"
+    role_name: "QA Investigator"
+    qualifications:
+      required:
+        - "Investigation methodology training"
+        - "Root cause analysis certification"
+      optional: []
+    responsibilities:
+      - action: "Conduct deviation investigations"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-PRODMGR-001"
+    role_name: "Production Manager"
+    qualifications:
+      required:
+        - "Production management experience"
+        - "Investigation training"
+      optional: []
+    responsibilities:
+      - action: "Lead production deviation investigations"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-LABMGR-001"
+    role_name: "Laboratory Manager"
+    qualifications:
+      required:
+        - "Laboratory science degree"
+        - "Analytical method expertise"
+      optional: []
+    responsibilities:
+      - action: "Lead laboratory deviation investigations (OOS/OOT)"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-SME-001"
+    role_name: "Subject Matter Expert"
+    qualifications:
+      required:
+        - "Domain expertise"
+        - "Technical certification"
+      optional: []
+    responsibilities:
+      - action: "Provide technical expertise for specific areas"
+        accountability: "consulted"
+        verification: "documented"
+
+  - role_id: "ROLE-QDIR-001"
+    role_name: "Quality Director"
+    qualifications:
+      required:
+        - "Quality management degree"
+        - "10+ years GxP experience"
+      optional: []
+    responsibilities:
+      - action: "CAPA approval and program oversight"
+        accountability: "accountable"
+        verification: "approved"
+
+# ==============================================================================
+# DEVIATION CLASSIFICATION
+# ==============================================================================
+parameters:
+  temporal:
+    critical_response_hours: 2
+    major_response_hours: 24
+    minor_response_hours: 72
+
+    critical_investigation_days: 5
+    major_investigation_days: 10
+    minor_investigation_days: 15
+
+    critical_report_days: 10
+    major_report_days: 15
+    minor_report_days: 20
+
+  severity_classification:
+    critical:
+      criteria:
+        - "Potential impact on product safety or efficacy"
+        - "Regulatory compliance violations"
+        - "GMP/GACP critical requirements breach"
+        - "Patient/consumer safety risk"
+      examples:
+        - "Microbiological contamination"
+        - "Unapproved changes to critical processes"
+        - "Sterility breaches"
+        - "Critical control system failures"
+        - "Improper returned product handling"
+      response_time: "Immediate (within 2 hours)"
+
+    major:
+      criteria:
+        - "Potential impact on product quality"
+        - "Non-critical GMP/GACP requirements breach"
+        - "Documentation discrepancies"
+        - "Equipment malfunction without safety impact"
+      examples:
+        - "Raw material specification deviations"
+        - "Documentation errors"
+        - "Equipment malfunctions without product impact"
+        - "Sampling procedure violations"
+        - "Storage condition deviations"
+      response_time: "Within 24 hours"
+
+    minor:
+      criteria:
+        - "No impact on product quality or safety"
+        - "Administrative or housekeeping issues"
+        - "Training documentation gaps"
+        - "Minor procedural variations"
+      examples:
+        - "Delayed documentation"
+        - "Cosmetic packaging damage"
+        - "Minor administrative errors"
+        - "Procedural variations without quality impact"
+      response_time: "Within 72 hours"
+
+# ==============================================================================
+# PROCEDURE STEPS
+# ==============================================================================
+procedure:
+  - step_number: 1
+    step_id: "DEV-001"
+    action: "Immediate discovery and reporting of deviation"
+
+    substeps:
+      - substep_id: "DEV-001-01"
+        action: "Discover deviation - identify departure from approved procedure/specification/standard"
+        parameters: null
+
+      - substep_id: "DEV-001-02"
+        action: "Secure/isolate affected materials to prevent further use or distribution"
+        parameters: null
+
+      - substep_id: "DEV-001-03"
+        action: "Document immediate observations - what, when, where, who"
+        parameters: null
+
+      - substep_id: "DEV-001-04"
+        action: "Notify supervisor and QA per severity classification timeframes"
+        parameters:
+          critical: "2 hours"
+          major: "24 hours"
+          minor: "72 hours"
+
+      - substep_id: "DEV-001-05"
+        action: "Implement immediate containment measures"
+        parameters: null
+
+      - substep_id: "DEV-001-06"
+        action: "Preserve evidence - samples, documentation, photos, witness information"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "reporting_timeliness"
+        acceptance_criteria: "Reported within timeframe per severity"
+        frequency: "per_occurrence"
+
+    documentation_required: true
+    forms:
+      - "FORM-DEV-001" # Deviation Report Form
+
+  - step_number: 2
+    step_id: "DEV-002"
+    action: "Perform initial classification and assessment"
+
+    substeps:
+      - substep_id: "DEV-002-01"
+        action: "Classify deviation severity: critical, major, or minor"
+        parameters: null
+
+      - substep_id: "DEV-002-02"
+        action: "Classify deviation area: production, QC, materials, facility, documentation"
+        parameters: null
+
+      - substep_id: "DEV-002-03"
+        action: "Assign investigation team based on deviation type"
+        parameters: null
+
+      - substep_id: "DEV-002-04"
+        action: "Generate unique Deviation ID in electronic system"
+        parameters: null
+
+      - substep_id: "DEV-002-05"
+        action: "Complete initial documentation in Electronic Deviation Management System (EDMS)"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "classification_accuracy"
+        acceptance_criteria: "QA Manager approval of classification"
+        frequency: "per_occurrence"
+
+    documentation_required: true
+    forms:
+      - "FORM-DEV-001" # Deviation Report (continued)
+
+  - step_number: 3
+    step_id: "DEV-003"
+    action: "Conduct systematic investigation and root cause analysis"
+
+    substeps:
+      - substep_id: "DEV-003-01"
+        action: "Plan investigation - assign lead investigator and team members"
+        parameters: null
+
+      - substep_id: "DEV-003-02"
+        action: "Collect evidence - physical samples, documentation, photos/videos, witness statements, data logs"
+        parameters: null
+
+      - substep_id: "DEV-003-03"
+        action: "Perform root cause analysis using Fishbone Diagram (Ishikawa)"
+        parameters: null
+
+      - substep_id: "DEV-003-04"
+        action: "Perform 5 Why Analysis to identify fundamental root cause"
+        parameters: null
+
+      - substep_id: "DEV-003-05"
+        action: "Perform Fault Tree Analysis if applicable for complex deviations"
+        parameters: null
+
+      - substep_id: "DEV-003-06"
+        action: "Document investigation findings in investigation report"
+        parameters: null
+
+    parameters:
+      critical_timeline: "Complete within 5 business days"
+      major_timeline: "Complete within 10 business days"
+      minor_timeline: "Complete within 15 business days"
+
+    controls:
+      - control_type: "verification"
+        parameter: "investigation_completeness"
+        acceptance_criteria: "All investigation checklist items addressed"
+        frequency: "per_occurrence"
+
+    documentation_required: true
+    forms:
+      - "CHKLST-DEV-001" # Investigation Checklist
+
+  - step_number: 4
+    step_id: "DEV-004"
+    action: "Assess impact on product quality and determine batch disposition"
+
+    substeps:
+      - substep_id: "DEV-004-01"
+        action: "Assess chemical composition impact - cannabinoid profiles, terpenes, impurities, stability"
+        parameters: null
+
+      - substep_id: "DEV-004-02"
+        action: "Assess microbiological impact - bioburden, pathogens, sterility, shelf life"
+        parameters: null
+
+      - substep_id: "DEV-004-03"
+        action: "Assess physical characteristics - appearance, moisture, particle size, package integrity"
+        parameters: null
+
+      - substep_id: "DEV-004-04"
+        action: "Apply batch disposition decision tree - critical impact → reject, additional testing required → perform testing, accept with conditions"
+        parameters: null
+
+      - substep_id: "DEV-004-05"
+        action: "Document disposition decision and justification"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "disposition_authority"
+        acceptance_criteria: "QA Manager approval for batch disposition"
+        frequency: "per_occurrence"
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 5
+    step_id: "DEV-005"
+    action: "Develop and implement Corrective and Preventive Actions (CAPA)"
+
+    substeps:
+      - substep_id: "DEV-005-01"
+        action: "Define immediate corrections to stop the deviation"
+        parameters: null
+
+      - substep_id: "DEV-005-02"
+        action: "Define corrective actions to eliminate root cause"
+        parameters: null
+
+      - substep_id: "DEV-005-03"
+        action: "Define preventive actions to prevent recurrence"
+        parameters: null
+
+      - substep_id: "DEV-005-04"
+        action: "Define risk mitigation actions to reduce probability/impact"
+        parameters: null
+
+      - substep_id: "DEV-005-05"
+        action: "Develop CAPA action plan - specific actions, responsible parties, target dates, success criteria, verification method, resources"
+        parameters: null
+
+      - substep_id: "DEV-005-06"
+        action: "Implement CAPA actions per plan"
+        parameters: null
+
+      - substep_id: "DEV-005-07"
+        action: "Verify CAPA effectiveness - quantitative and qualitative measures"
+        parameters: null
+
+    parameters:
+      capa_effectiveness_target: "Greater than 90% effective"
+
+    controls:
+      - control_type: "verification"
+        parameter: "capa_effectiveness"
+        acceptance_criteria: "Follow-up assessment confirms recurrence prevented"
+        frequency: "per_occurrence"
+
+    documentation_required: true
+    forms:
+      - "FORM-DEV-002" # CAPA Development Worksheet
+
+  - step_number: 6
+    step_id: "DEV-006"
+    action: "Perform statistical trending and analysis"
+
+    substeps:
+      - substep_id: "DEV-006-01"
+        action: "Collect monthly metrics - total deviations by category, rate per batch, time to resolution, repeat deviations, department distribution"
+        parameters: null
+
+      - substep_id: "DEV-006-02"
+        action: "Perform quarterly analysis - trend identification, root cause patterns, CAPA effectiveness review, resource utilization"
+        parameters: null
+
+      - substep_id: "DEV-006-03"
+        action: "Generate trend reports - executive dashboard (weekly), operational review (monthly), regulatory summary (quarterly)"
+        parameters: null
+
+    parameters: null
+
+    controls:
+      - control_type: "verification"
+        parameter: "trending_effectiveness"
+        acceptance_criteria: "Trends identified and addressed proactively"
+        frequency: "monthly"
+
+    documentation_required: true
+    forms:
+      - "REPORT-DEV-001" # Monthly Trend Report
+
+  - step_number: 7
+    step_id: "DEV-007"
+    action: "Complete final documentation and close deviation"
+
+    substeps:
+      - substep_id: "DEV-007-01"
+        action: "Compile final investigation report with all findings and evidence"
+        parameters: null
+
+      - substep_id: "DEV-007-02"
+        action: "Document CAPA implementation and effectiveness verification"
+        parameters: null
+
+      - substep_id: "DEV-007-03"
+        action: "Obtain QA Manager review and approval"
+        parameters: null
+
+      - substep_id: "DEV-007-04"
+        action: "Obtain Quality Director approval for critical deviations and significant CAPAs"
+        parameters: null
+
+      - substep_id: "DEV-007-05"
+        action: "Archive complete deviation file per retention requirements"
+        parameters: null
+
+      - substep_id: "DEV-007-06"
+        action: "Update knowledge base and lessons learned database"
+        parameters: null
+
+    parameters:
+      critical_final_report_days: 10
+      major_final_report_days: 15
+      minor_final_report_days: 20
+
+    controls: []
+
+    documentation_required: true
+    forms: []
+
+  - step_number: 8
+    step_id: "DEV-008"
+    action: "Conduct management review and continuous improvement"
+
+    substeps:
+      - substep_id: "DEV-008-01"
+        action: "Conduct monthly QA review - deviation summary, investigation status, CAPA progress, resource needs"
+        parameters: null
+
+      - substep_id: "DEV-008-02"
+        action: "Conduct quarterly management review - system effectiveness, trend analysis, resource allocation, strategic improvements"
+        parameters: null
+
+      - substep_id: "DEV-008-03"
+        action: "Implement continuous improvement initiatives based on review findings"
+        parameters: null
+
+    parameters: null
+
+    controls: []
+
+    documentation_required: true
+    forms: []
+
+# ==============================================================================
+# QUALITY CONTROLS
+# ==============================================================================
+quality_controls:
+  - control_id: "QC-DEV-001"
+    control_type: "measurement"
+    description: "Time to report deviations"
+    frequency: "per_occurrence"
+    acceptance_criteria: "Critical <2h, Major <24h, Minor <72h"
+    responsible_role: "ROLE-QA-002"
+    form_ref: null
+
+  - control_id: "QC-DEV-002"
+    control_type: "measurement"
+    description: "Investigation completion timeliness"
+    frequency: "monthly"
+    acceptance_criteria: "95% completed on-time"
+    responsible_role: "ROLE-QA-002"
+    form_ref: "REPORT-DEV-001"
+
+  - control_id: "QC-DEV-003"
+    control_type: "verification"
+    description: "CAPA effectiveness"
+    frequency: "per_occurrence"
+    acceptance_criteria: ">90% effective (no recurrence)"
+    responsible_role: "ROLE-QA-002"
+    form_ref: null
+
+  - control_id: "QC-DEV-004"
+    control_type: "inspection"
+    description: "Repeat deviation rate"
+    frequency: "monthly"
+    acceptance_criteria: "<5% of total deviations"
+    responsible_role: "ROLE-QA-002"
+    form_ref: "REPORT-DEV-001"
+
+# ==============================================================================
+# SAFETY REQUIREMENTS
+# ==============================================================================
+safety_requirements:
+  ppe: [] # UNDEFINED: Varies by deviation area
+
+  hazards:
+    - hazard_description: "Product quality compromise - deviation not properly investigated"
+      severity: "critical"
+      mitigation_measures:
+        - "Systematic investigation process"
+        - "Root cause analysis training"
+        - "QA oversight and approval"
+
+    - hazard_description: "Regulatory non-compliance - inadequate deviation management"
+      severity: "critical"
+      mitigation_measures:
+        - "ALCOA+ compliance"
+        - "Timely reporting"
+        - "Complete documentation"
+
+    - hazard_description: "Repeat deviations - ineffective CAPA"
+      severity: "high"
+      mitigation_measures:
+        - "CAPA effectiveness verification"
+        - "Trending and pattern recognition"
+        - "Continuous improvement"
+
+# ==============================================================================
+# RECORDS AND DOCUMENTATION
+# ==============================================================================
+records:
+  - record_id: "REC-DEV-001"
+    record_type: "deviation_reports"
+    description: "All deviation reports and investigations"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-DEV-002"
+    record_type: "capa_records"
+    description: "CAPA plans, implementation records, effectiveness verifications"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-DEV-003"
+    record_type: "trend_reports"
+    description: "Monthly, quarterly, annual trend analysis reports"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "monthly"
+
+  - record_id: "REC-DEV-004"
+    record_type: "management_reviews"
+    description: "Monthly QA reviews, quarterly management reviews"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "quarterly"
+
+# ==============================================================================
+# TRAINING REQUIREMENTS
+# ==============================================================================
+training_requirements:
+  required_courses:
+    - course_id: "TRN-DEV-001"
+      course_name: "Deviation Recognition and Reporting"
+      duration_hours: 2
+      recertification_months: 12
+
+    - course_id: "TRN-DEV-002"
+      course_name: "Deviation Investigation and Root Cause Analysis (Advanced)"
+      duration_hours: 16
+      recertification_months: 12
+      target_roles:
+        - "ROLE-QAINV-001"
+        - "ROLE-PRODMGR-001"
+        - "ROLE-LABMGR-001"
+
+  prerequisites:
+    - "TRN-GMP-001"
+
+# ==============================================================================
+# RELATED DOCUMENTS
+# ==============================================================================
+related_documents:
+  forms:
+    - "FORM-DEV-001" # Deviation Report Form
+    - "FORM-DEV-002" # CAPA Development Worksheet
+
+  checklists:
+    - "CHKLST-DEV-001" # Investigation Checklist
+
+  reports:
+    - "REPORT-DEV-001" # Monthly Deviation Trend Report
+
+  parent_sops: []
+  child_sops:
+    - "SOP-CAPA-001"
+    - "SOP-CHG-001"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_DeviationManagement.md v2.0"
+    approved_by: "Pending"

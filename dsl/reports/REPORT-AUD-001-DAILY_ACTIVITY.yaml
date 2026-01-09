@@ -1,0 +1,180 @@
+# DSL: Daily Audit Trail Activity Summary Report
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 9.1
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "REPORT-AUD-001"
+  report_type: "operational"
+  category: "daily_summary"
+  confidentiality: "internal"
+
+  title: "Daily Audit Trail Activity Summary"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+
+# ==============================================================================
+# REPORT CONTEXT
+# ==============================================================================
+report_context:
+  purpose: "Provide daily operational summary of audit trail system activity, including event volumes, system health, and immediate issues requiring attention"
+
+  reporting_period: "daily"
+  frequency: "daily"
+  report_due_date: "Next business day by 10:00 AM"
+
+  responsible_roles:
+    - role: "ROLE-IT-001"
+      responsibility: "Automated generation and review"
+    - role: "ROLE-SYSADM-001"
+      responsibility: "Issue investigation"
+
+  distribution:
+    - "IT Administrator"
+    - "System Administrator"
+    - "Quality Manager (summary only)"
+
+# ==============================================================================
+# REPORT STRUCTURE
+# ==============================================================================
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Event Volume Summary"
+      section_order: 1
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Total Events by Category"
+          data_sources:
+            - "ImmuDB event count queries"
+
+          fields:
+            - field_id: "VOL-001"
+              field_label: "Authentication Events"
+              field_type: "integer"
+
+            - field_id: "VOL-002"
+              field_label: "Business Data Changes"
+              field_type: "integer"
+
+            - field_id: "VOL-003"
+              field_label: "System Configuration"
+              field_type: "integer"
+
+            - field_id: "VOL-004"
+              field_label: "Security Events"
+              field_type: "integer"
+
+            - field_id: "VOL-005"
+              field_label: "Quality Events"
+              field_type: "integer"
+
+            - field_id: "VOL-006"
+              field_label: "Regulatory Actions"
+              field_type: "integer"
+
+            - field_id: "VOL-007"
+              field_label: "Total Events"
+              field_type: "integer"
+
+    - section_id: "SEC-002"
+      section_title: "System Health Metrics"
+      section_order: 2
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Performance"
+          data_sources:
+            - "Monitoring dashboards"
+
+          fields:
+            - field_id: "PERF-001"
+              field_label: "System Uptime"
+              field_type: "percentage"
+              acceptance_criteria: ">= 99.9%"
+
+            - field_id: "PERF-002"
+              field_label: "Average Logging Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 5 seconds"
+
+            - field_id: "PERF-003"
+              field_label: "Max Logging Latency"
+              field_type: "seconds"
+              acceptance_criteria: "< 10 seconds"
+
+            - field_id: "PERF-004"
+              field_label: "Storage Used"
+              field_type: "percentage"
+              acceptance_criteria: "< 80%"
+
+    - section_id: "SEC-003"
+      section_title: "Issues and Alerts"
+      section_order: 3
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Critical Issues"
+          data_sources:
+            - "Alert system"
+
+          fields:
+            - field_id: "ISSUE-001"
+              field_label: "Failed Logging Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "ISSUE-002"
+              field_label: "Hash Verification Failures"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+            - field_id: "ISSUE-003"
+              field_label: "System Errors"
+              field_type: "integer"
+              acceptance_criteria: "0"
+
+# ==============================================================================
+# GENERATION AND AUTOMATION
+# ==============================================================================
+generation:
+  automated: true
+
+  automation_details:
+    data_collection: "Automated queries to ImmuDB, monitoring system"
+    report_generation: "Automated daily at 01:00 AM"
+    manual_sections: []
+
+  scheduling:
+    generation_time: "01:00 AM"
+    delivery_time: "By 10:00 AM"
+
+# ==============================================================================
+# STORAGE
+# ==============================================================================
+storage:
+  location: "electronic"
+  retention_period: "2_years"
+  backup_requirement: "monthly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

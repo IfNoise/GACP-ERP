@@ -1,0 +1,384 @@
+# DSL: Emergency Audit Trail Access Request Form
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 7.4
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "FORM-AUD-001"
+  category: "access_request"
+  title: "Emergency Audit Trail Access Request"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "MHRA Data Integrity Guidance"
+
+# ==============================================================================
+# USAGE CONTEXT
+# ==============================================================================
+usage:
+  purpose: "Request authorized access to audit trail records outside normal business processes for emergency investigation, regulatory request, or incident response"
+
+  frequency: "as_needed"
+
+  trigger: "Emergency investigation, regulatory inspection, security incident, or compliance audit requiring immediate audit trail access"
+
+  responsible_roles:
+    - "ROLE-COMP-001" # Compliance Officer - Approver
+    - "ROLE-QA-001" # Quality Manager - Approver
+    - "ROLE-USER-001" # Requester
+
+# ==============================================================================
+# FORM STRUCTURE
+# ==============================================================================
+form_structure:
+  # ----------------------------------------------------------------------------
+  # HEADER
+  # ----------------------------------------------------------------------------
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "Form Number"
+        field_type: "auto_generated"
+        data_type: "string"
+        required: true
+        format: "FORM-AUD-001-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "Request Date"
+        field_type: "date"
+        data_type: "date"
+        required: true
+        format: "YYYY-MM-DD"
+
+      - field_id: "HDR-003"
+        label: "Request Time"
+        field_type: "time"
+        data_type: "time"
+        required: true
+        format: "HH:MM:SS"
+
+      - field_id: "HDR-004"
+        label: "Requestor Name"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-005"
+        label: "Requestor Role"
+        field_type: "dropdown"
+        data_type: "string"
+        required: true
+        options:
+          - "Compliance Officer"
+          - "Quality Manager"
+          - "Internal Auditor"
+          - "System Administrator"
+          - "Other (specify)"
+
+      - field_id: "HDR-006"
+        label: "Priority Level"
+        field_type: "radio"
+        data_type: "string"
+        required: true
+        options:
+          - "Critical (immediate access required)"
+          - "High (within 1 hour)"
+          - "Normal (within 4 hours)"
+
+  # ----------------------------------------------------------------------------
+  # SECTION 1: ACCESS REQUEST DETAILS
+  # ----------------------------------------------------------------------------
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Access Request Details"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "Purpose of Access"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Describe reason for emergency audit trail access (e.g., regulatory inspection, security incident, data integrity investigation)"
+
+        - field_id: "SEC-001-F02"
+          label: "Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Provide detailed business/regulatory justification"
+
+        - field_id: "SEC-001-F03"
+          label: "Related Incident Number"
+          field_type: "text"
+          data_type: "string"
+          required: false
+          max_length: 50
+          placeholder: "INC-YYYY-NNNN (if applicable)"
+
+        - field_id: "SEC-001-F04"
+          label: "Related CAPA Number"
+          field_type: "text"
+          data_type: "string"
+          required: false
+          max_length: 50
+          placeholder: "CAPA-YYYY-NNNN (if applicable)"
+
+    # --------------------------------------------------------------------------
+    # SECTION 2: DATA SCOPE
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-002"
+      section_title: "Data Scope and Search Criteria"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Event Categories"
+          field_type: "checkbox_group"
+          data_type: "array"
+          required: true
+          options:
+            - "Authentication Events"
+            - "Business Data Changes"
+            - "System Configuration"
+            - "Security Events"
+            - "Quality-Related Events"
+            - "Regulatory Actions"
+
+        - field_id: "SEC-002-F02"
+          label: "Date Range - Start"
+          field_type: "date"
+          data_type: "date"
+          required: true
+          format: "YYYY-MM-DD"
+
+        - field_id: "SEC-002-F03"
+          label: "Date Range - End"
+          field_type: "date"
+          data_type: "date"
+          required: true
+          format: "YYYY-MM-DD"
+
+        - field_id: "SEC-002-F04"
+          label: "User Filter"
+          field_type: "text"
+          data_type: "string"
+          required: false
+          max_length: 100
+          placeholder: "Specific username(s) if applicable"
+
+        - field_id: "SEC-002-F05"
+          label: "Module/System Area"
+          field_type: "dropdown"
+          data_type: "string"
+          required: false
+          options:
+            - "All Modules"
+            - "Cultivation Management"
+            - "Inventory/Materials"
+            - "Quality Control"
+            - "Manufacturing/Processing"
+            - "Distribution/Sales"
+            - "System Administration"
+
+        - field_id: "SEC-002-F06"
+          label: "Additional Search Criteria"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 300
+          placeholder: "Keywords, batch numbers, or other search criteria"
+
+    # --------------------------------------------------------------------------
+    # SECTION 3: ACCESS DURATION AND EXPORT
+    # --------------------------------------------------------------------------
+    - section_id: "SEC-003"
+      section_title: "Access Duration and Data Export"
+      section_order: 3
+
+      fields:
+        - field_id: "SEC-003-F01"
+          label: "Requested Access Duration"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "1 hour"
+            - "2 hours"
+            - "4 hours (maximum standard)"
+            - "Extended (requires special approval)"
+
+        - field_id: "SEC-003-F02"
+          label: "Export Required"
+          field_type: "radio"
+          data_type: "boolean"
+          required: true
+          options:
+            - "Yes"
+            - "No"
+
+        - field_id: "SEC-003-F03"
+          label: "Export Format"
+          field_type: "checkbox_group"
+          data_type: "array"
+          required: false
+          conditional_display:
+            depends_on: "SEC-003-F02"
+            show_if: "Yes"
+          options:
+            - "PDF Report"
+            - "CSV Data Export"
+            - "JSON Full Data"
+
+        - field_id: "SEC-003-F04"
+          label: "Export Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          conditional_display:
+            depends_on: "SEC-003-F02"
+            show_if: "Yes"
+          max_length: 300
+          placeholder: "Explain why data export is necessary"
+
+  # ----------------------------------------------------------------------------
+  # FOOTER: SIGNATURES
+  # ----------------------------------------------------------------------------
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "Requestor"
+        required_role: "ROLE-USER-001"
+        required: true
+        meaning: "I confirm the accuracy of this request and understand emergency access is logged and audited"
+        date_required: true
+        time_required: true
+
+      - signature_id: "SIG-002"
+        role: "Compliance Officer Approval"
+        required_role: "ROLE-COMP-001"
+        required: true
+        meaning: "I approve this emergency access request and confirm regulatory compliance"
+        date_required: true
+        time_required: true
+
+      - signature_id: "SIG-003"
+        role: "Quality Manager Approval"
+        required_role: "ROLE-QA-001"
+        required: true
+        meaning: "I approve this emergency access request from quality perspective"
+        date_required: true
+        time_required: true
+
+# ==============================================================================
+# VALIDATION RULES
+# ==============================================================================
+validation:
+  rules:
+    - rule_id: "VAL-001"
+      field_ref: "SEC-002-F03"
+      rule_type: "date_range"
+      condition: "End date must be >= Start date"
+      error_message: "End date cannot be before start date"
+
+    - rule_id: "VAL-002"
+      field_ref: "SEC-002-F03"
+      rule_type: "date_range"
+      condition: "Date range <= 90 days"
+      error_message: "Date range cannot exceed 90 days without special approval"
+
+    - rule_id: "VAL-003"
+      field_ref: "SEC-003-F04"
+      rule_type: "conditional_required"
+      condition: "Required if SEC-003-F02 = Yes"
+      error_message: "Export justification is required when export is requested"
+
+    - rule_id: "VAL-004"
+      field_ref: "SEC-003-F03"
+      rule_type: "conditional_required"
+      condition: "At least one format required if SEC-003-F02 = Yes"
+      error_message: "Select at least one export format"
+
+# ==============================================================================
+# WORKFLOW
+# ==============================================================================
+workflow:
+  states:
+    - state: "draft"
+      description: "Form being filled by requestor"
+      next_states: ["submitted"]
+
+    - state: "submitted"
+      description: "Awaiting approval"
+      next_states: ["approved", "rejected"]
+
+    - state: "approved"
+      description: "Access granted - token generated"
+      next_states: ["expired", "revoked"]
+
+    - state: "rejected"
+      description: "Request denied"
+      next_states: []
+
+    - state: "expired"
+      description: "Access token expired"
+      next_states: []
+
+    - state: "revoked"
+      description: "Access token revoked early"
+      next_states: []
+
+  notifications:
+    - trigger: "submitted"
+      recipients:
+        - "ROLE-COMP-001"
+        - "ROLE-QA-001"
+      message: "Emergency audit trail access request submitted for approval"
+
+    - trigger: "approved"
+      recipients:
+        - "requestor"
+      message: "Emergency access approved - access token valid for specified duration"
+
+    - trigger: "rejected"
+      recipients:
+        - "requestor"
+      message: "Emergency access request rejected - see approval comments"
+
+    - trigger: "expired"
+      recipients:
+        - "ROLE-COMP-001"
+      message: "Emergency access token expired - access logged"
+
+# ==============================================================================
+# STORAGE AND RETENTION
+# ==============================================================================
+storage:
+  location: "electronic"
+  system: "ERP Document Management"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+  record_type: "REC-AUD-002"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_AuditTrail.md Section 7.4"
+    approved_by: "Pending"

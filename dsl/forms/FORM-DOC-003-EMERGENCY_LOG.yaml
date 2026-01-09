@@ -1,0 +1,349 @@
+# DSL: Emergency Document Control Log Form
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-DOC-003"
+  form_type: "log"
+  title: "Emergency Document Control Log"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Maintain temporary manual document control records during Mayan-EDMS system failure or unavailability"
+  when_to_use: "Only during documented system failure when electronic document management system is unavailable"
+  completed_by: "ROLE-DOCCTRL-001 or designated backup"
+  reviewed_by: "ROLE-QA-002"
+  approved_by: null
+
+form_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Emergency Event Information"
+      section_order: 1
+      required: true
+
+      fields:
+        - field_id: "EVENT-001"
+          field_label: "Emergency Log Number"
+          field_type: "text"
+          required: true
+          format: "EMRG-LOG-YYYY-NNNN"
+          validation: null
+          help_text: "Unique emergency log identifier"
+
+        - field_id: "EVENT-002"
+          field_label: "System Failure Start Date/Time"
+          field_type: "datetime"
+          required: true
+          validation: null
+          help_text: "When did Mayan-EDMS become unavailable?"
+
+        - field_id: "EVENT-003"
+          field_label: "System Failure Description"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Brief description of system failure (server down, network outage, software error, etc.)"
+
+        - field_id: "EVENT-004"
+          field_label: "IT Incident Ticket Number"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "IT incident ticket tracking system failure"
+
+        - field_id: "EVENT-005"
+          field_label: "Emergency Backup Person Activated"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "Name of person maintaining manual log"
+
+    - section_id: "SEC-002"
+      section_title: "Document Activity Log"
+      section_order: 2
+      required: true
+
+      fields:
+        - field_id: "LOG-001"
+          field_label: "Document Activity Entries"
+          field_type: "table"
+          required: true
+          help_text: "Log all document-related activities during system outage"
+          columns:
+            - column_id: "COL-001"
+              column_label: "Entry #"
+              column_type: "integer"
+            - column_id: "COL-002"
+              column_label: "Date/Time"
+              column_type: "datetime"
+            - column_id: "COL-003"
+              column_label: "Activity Type"
+              column_type: "dropdown"
+              options:
+                - "Document Access Request"
+                - "Document Review"
+                - "Document Approval"
+                - "Document Distribution"
+                - "Document Revision Request"
+                - "Document Status Change"
+                - "Training Record"
+                - "Other"
+            - column_id: "COL-004"
+              column_label: "Document ID"
+              column_type: "text"
+            - column_id: "COL-005"
+              column_label: "Document Title"
+              column_type: "text"
+            - column_id: "COL-006"
+              column_label: "Version"
+              column_type: "text"
+            - column_id: "COL-007"
+              column_label: "Requestor/User Name"
+              column_type: "text"
+            - column_id: "COL-008"
+              column_label: "Activity Description"
+              column_type: "textarea"
+            - column_id: "COL-009"
+              column_label: "Action Taken"
+              column_type: "textarea"
+            - column_id: "COL-010"
+              column_label: "Signature"
+              column_type: "signature"
+          validation: "at_least_one_row"
+
+    - section_id: "SEC-003"
+      section_title: "Approvals Granted (Emergency)"
+      section_order: 3
+      required: false
+
+      fields:
+        - field_id: "APPR-001"
+          field_label: "Emergency Approvals Log"
+          field_type: "table"
+          required: false
+          help_text: "Record any document approvals granted during system outage (must be re-signed electronically upon system restoration)"
+          columns:
+            - column_id: "COL-101"
+              column_label: "Document ID"
+              column_type: "text"
+            - column_id: "COL-102"
+              column_label: "Document Title"
+              column_type: "text"
+            - column_id: "COL-103"
+              column_label: "Version"
+              column_type: "text"
+            - column_id: "COL-104"
+              column_label: "Approver Name"
+              column_type: "text"
+            - column_id: "COL-105"
+              column_label: "Approver Role"
+              column_type: "text"
+            - column_id: "COL-106"
+              column_label: "Approval Date/Time"
+              column_type: "datetime"
+            - column_id: "COL-107"
+              column_label: "Approval Method"
+              column_type: "dropdown"
+              options:
+                - "Verbal (phone)"
+                - "Email confirmation"
+                - "Manual signature on paper"
+            - column_id: "COL-108"
+              column_label: "Witness Name"
+              column_type: "text"
+            - column_id: "COL-109"
+              column_label: "Witness Signature"
+              column_type: "signature"
+
+    - section_id: "SEC-004"
+      section_title: "Documents Accessed (Read-Only)"
+      section_order: 4
+      required: false
+
+      fields:
+        - field_id: "ACCESS-001"
+          field_label: "Document Access Log"
+          field_type: "table"
+          required: false
+          help_text: "Record requests for document access (provided as PDF copies from backup)"
+          columns:
+            - column_id: "COL-201"
+              column_label: "Date/Time"
+              column_type: "datetime"
+            - column_id: "COL-202"
+              column_label: "Requestor Name"
+              column_type: "text"
+            - column_id: "COL-203"
+              column_label: "Document ID"
+              column_type: "text"
+            - column_id: "COL-204"
+              column_label: "Document Title"
+              column_type: "text"
+            - column_id: "COL-205"
+              column_label: "Purpose of Access"
+              column_type: "text"
+            - column_id: "COL-206"
+              column_label: "Copy Provided By"
+              column_type: "text"
+            - column_id: "COL-207"
+              column_label: "Signature"
+              column_type: "signature"
+
+    - section_id: "SEC-005"
+      section_title: "System Restoration and Reconciliation"
+      section_order: 5
+      required: true
+
+      fields:
+        - field_id: "RESTORE-001"
+          field_label: "System Restoration Date/Time"
+          field_type: "datetime"
+          required: true
+          validation: "after_EVENT-002"
+          help_text: "When was Mayan-EDMS restored and functional?"
+
+        - field_id: "RESTORE-002"
+          field_label: "Total System Downtime (hours)"
+          field_type: "decimal"
+          required: true
+          auto_calculated: true
+          validation: null
+          help_text: "Calculated from start to restoration"
+
+        - field_id: "RESTORE-003"
+          field_label: "Data Integrity Verification"
+          field_type: "radio"
+          required: true
+          options:
+            - "Verified - No data loss"
+            - "Partial loss - Backup restored"
+            - "Issues identified - See details"
+          validation: null
+          help_text: "Confirm system data integrity after restoration"
+
+        - field_id: "RESTORE-004"
+          field_label: "Data Integrity Details"
+          field_type: "textarea"
+          required: false
+          condition: "RESTORE-003 != 'Verified - No data loss'"
+          validation: null
+          help_text: "Describe any data integrity issues and resolution"
+
+        - field_id: "RESTORE-005"
+          field_label: "Manual Log Reconciliation Status"
+          field_type: "radio"
+          required: true
+          options:
+            - "Complete - All activities entered into system"
+            - "In Progress - Reconciliation ongoing"
+            - "Issues - See details"
+          validation: null
+          help_text: "Status of entering manual log entries into system"
+
+        - field_id: "RESTORE-006"
+          field_label: "Reconciliation Completion Date"
+          field_type: "date"
+          required: true
+          validation: "within_48_hours_of_restoration"
+          help_text: "All manual activities reconciled into system by this date (required within 48 hours)"
+
+        - field_id: "RESTORE-007"
+          field_label: "Emergency Approvals Re-Signed Electronically"
+          field_type: "radio"
+          required: true
+          options:
+            - "Yes - All approvals re-signed"
+            - "N/A - No approvals during outage"
+            - "Pending - Re-signature in progress"
+          validation: null
+          help_text: "Confirm all manual approvals formally re-signed electronically"
+
+        - field_id: "RESTORE-008"
+          field_label: "Reconciliation Notes"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "Any issues, discrepancies, or special circumstances during reconciliation"
+
+    - section_id: "SEC-006"
+      section_title: "Final Sign-Off"
+      section_order: 6
+      required: true
+
+      fields:
+        - field_id: "SIGN-001"
+          field_label: "Document Controller Signature"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Reconciliation Complete Confirmation"
+          help_text: "Document Controller confirms all manual activities reconciled into electronic system"
+
+        - field_id: "SIGN-002"
+          field_label: "Quality Manager Review and Approval"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Data Integrity Confirmation"
+            - "CAPA Required? (Y/N)"
+          help_text: "QA Manager reviews emergency log and confirms data integrity maintained"
+
+        - field_id: "SIGN-003"
+          field_label: "IT Manager Signature"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Root Cause Identified"
+            - "Preventive Actions Implemented"
+          help_text: "IT Manager confirms system failure root cause identified and preventive measures in place"
+
+instructions:
+  general:
+    - "Use this form ONLY during documented Mayan-EDMS system failure"
+    - "Log ALL document-related activities chronologically"
+    - "Be as detailed as possible - this is temporary system of record"
+    - "Keep log in secure location with limited access"
+    - "Upon system restoration, all entries MUST be reconciled into electronic system within 48 hours"
+
+  emergency_approvals:
+    - "Emergency approvals should be minimized during system outage"
+    - "If approval absolutely necessary: Obtain verbal or email approval, document with witness"
+    - "All emergency approvals MUST be formally re-signed electronically upon system restoration"
+    - "Do not implement critical changes during system outage if avoidable"
+
+  document_access:
+    - "Provide read-only PDF copies from most recent backup"
+    - "Mark copies as 'EMERGENCY COPY - VERIFY CURRENCY IN SYSTEM'"
+    - "Log all document access to maintain traceability"
+
+  reconciliation:
+    - "Within 48 hours of system restoration, enter all manual log entries into Mayan-EDMS"
+    - "Cross-reference emergency log entry numbers in system for traceability"
+    - "Have QA Manager review and approve reconciliation"
+    - "If emergency approvals granted, ensure formal electronic signatures obtained"
+    - "Investigate if CAPA needed based on system failure impact"
+
+storage:
+  location: "electronic_and_paper_backup"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

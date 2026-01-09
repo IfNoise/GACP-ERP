@@ -1,0 +1,596 @@
+# DSL: Change Control System Training Module
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-CHG-001"
+  training_type: "procedure"
+  category: "change_control"
+  title: "Change Control System Training"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+training_context:
+  purpose: "Train personnel on the change control system for managing controlled changes to systems, processes, equipment, procedures, products, and organizational structures"
+  applicable_roles:
+    - "ROLE-CHGREQ-001" # Anyone who initiates changes
+    - "ROLE-CHGOWN-001" # Change Owners
+    - "ROLE-QA-002" # Quality Managers
+    - "ROLE-CCB-001" # CCB Members
+    - "ROLE-DEPTHEAD-001" # Department Heads
+    - "ROLE-ITMGR-001" # IT Managers
+    - "ROLE-REGAFF-001" # Regulatory Affairs personnel
+  training_frequency: "annual"
+  retraining_triggers:
+    - "Major SOP revision"
+    - "Change in job role to one requiring change control knowledge"
+    - "Quality incident related to change management"
+    - "Change control audit findings"
+  prerequisites:
+    - "Basic GMP/GACP training"
+    - "SOP-DOC-001: Document Control"
+    - "SOP-AUDIT-001: Audit Trail and Electronic Signatures"
+
+training_delivery:
+  methods:
+    - method: "instructor_led"
+      duration_minutes: 240
+      class_size_max: 12
+    - method: "self_paced_online"
+      duration_minutes: 300
+      availability: "24/7"
+  materials:
+    - "Presentation slides"
+    - "SOP-CHG-001 printed copy"
+    - "Form templates (FORM-CHG-001, FORM-CHG-002)"
+    - "Checklist templates (CHKLST-CHG-001, CHKLST-CHG-002)"
+    - "Case study exercises"
+    - "Change control system demonstration"
+  trainer_qualifications:
+    - "Quality Manager or designee"
+    - "Minimum 2 years change control experience"
+    - "Completed train-the-trainer program"
+
+training_modules:
+  - module_id: "MOD-001"
+    module_title: "Introduction to Change Control"
+    module_order: 1
+    duration_minutes: 30
+
+    learning_objectives:
+      - "Explain the purpose and importance of change control in GMP/GACP environment"
+      - "Identify regulatory requirements for change control (21 CFR Part 11, EU GMP Annex 11, WHO GACP)"
+      - "Describe risks of uncontrolled changes"
+      - "List benefits of systematic change management"
+
+    topics:
+      - topic: "What is Change Control?"
+        subtopics:
+          - "Definition of change"
+          - "Controlled vs uncontrolled changes"
+          - "Change control as risk management"
+
+      - topic: "Regulatory Requirements"
+        subtopics:
+          - "FDA 21 CFR Part 11: Computer system changes"
+          - "EU GMP Annex 11: Validation and change management"
+          - "Health Canada: Change control expectations"
+          - "WHO GACP: Quality system changes"
+
+      - topic: "Why Change Control Matters"
+        subtopics:
+          - "Product quality protection"
+          - "Patient safety"
+          - "Data integrity"
+          - "Compliance maintenance"
+          - "Operational stability"
+
+      - topic: "Consequences of Poor Change Control"
+        subtopics:
+          - "Deviations and non-conformances"
+          - "Data integrity issues"
+          - "Regulatory findings"
+          - "Product recalls"
+          - "Business disruption"
+
+    assessment:
+      - question: "What regulatory standards require formal change control processes?"
+        type: "multiple_choice"
+        correct_answer: "FDA 21 CFR Part 11, EU GMP Annex 11, WHO GACP"
+      - question: "What is the primary purpose of change control?"
+        type: "multiple_choice"
+        correct_answer: "To assess and manage risks associated with changes to ensure quality and compliance"
+
+  - module_id: "MOD-002"
+    module_title: "Change Classification and Criticality"
+    module_order: 2
+    duration_minutes: 45
+
+    learning_objectives:
+      - "Classify changes by criticality level (Critical, Major, Minor, Emergency)"
+      - "Categorize changes by type (Systems, Infrastructure, Process, Product, Organizational)"
+      - "Determine appropriate approval authority based on classification"
+      - "Explain when emergency change process applies"
+
+    topics:
+      - topic: "Change Criticality Levels"
+        subtopics:
+          - "Critical: Significant impact on quality, safety, compliance, or efficacy"
+          - "Major: Moderate impact on operations, quality systems, or compliance"
+          - "Minor: Low impact, localized changes"
+          - "Emergency: Immediate action required to prevent/mitigate critical issue"
+
+      - topic: "Change Types and Areas"
+        subtopics:
+          - "Systems and Technology: ERP, LIMS, MES, Infrastructure"
+          - "Infrastructure and Equipment: Facilities, utilities, production equipment"
+          - "Processes and Procedures: SOPs, methods, workflows"
+          - "Products and Materials: Formulations, specifications, packaging"
+          - "Organizational Structure: Reporting lines, responsibilities, key personnel"
+
+      - topic: "Approval Authority Matrix"
+        subtopics:
+          - "Critical: CCB + Quality Manager"
+          - "Major: Department Head + Quality Manager"
+          - "Minor: Supervisor + Change Owner"
+          - "Emergency: QA Manager + General Manager (expedited)"
+
+      - topic: "Classification Decision Trees"
+        subtopics:
+          - "GxP impact assessment"
+          - "Product quality impact"
+          - "Regulatory submission implications"
+          - "Validation/qualification needs"
+
+    assessment:
+      - question: "A change to a validated computer system that affects data integrity would typically be classified as:"
+        type: "multiple_choice"
+        correct_answer: "Critical"
+      - question: "Which approval authority is required for a Minor change?"
+        type: "multiple_choice"
+        correct_answer: "Supervisor + Change Owner"
+      - question: "When should the emergency change process be used?"
+        type: "short_answer"
+        correct_answer: "When immediate action is required to prevent or mitigate a critical safety, quality, or compliance issue"
+
+  - module_id: "MOD-003"
+    module_title: "Change Request Initiation and Documentation"
+    module_order: 3
+    duration_minutes: 45
+
+    learning_objectives:
+      - "Complete FORM-CHG-001 Change Request Form accurately and comprehensively"
+      - "Write effective change justifications"
+      - "Identify affected systems, processes, and stakeholders"
+      - "Determine implementation timeline and resource requirements"
+
+    topics:
+      - topic: "Change Request Form (FORM-CHG-001)"
+        subtopics:
+          - "Unique change ID generation (CR-YYYY-NNNN)"
+          - "Change description: What, Where, When"
+          - "Justification: Why change is needed"
+          - "Expected benefits: Quality, compliance, efficiency, cost"
+          - "Affected areas and systems"
+          - "Initial classification"
+
+      - topic: "Writing Effective Justifications"
+        subtopics:
+          - "Problem statement"
+          - "Root cause (if applicable)"
+          - "Business or regulatory driver"
+          - "Consequences of not implementing change"
+          - "Alternatives considered"
+
+      - topic: "Stakeholder Identification"
+        subtopics:
+          - "Who is affected by the change?"
+          - "Who needs to review or approve?"
+          - "Who needs to be informed?"
+          - "Whose expertise is needed for impact assessment?"
+
+    practical_exercise:
+      - "Complete a sample change request for a minor SOP update"
+      - "Review and critique example change requests (good vs inadequate)"
+
+    assessment:
+      - question: "What information must be included in a change request?"
+        type: "checklist"
+        correct_answer: "Description, justification, affected areas, initial classification, expected benefits"
+      - question: "Complete FORM-CHG-001 for a given scenario"
+        type: "practical"
+        passing_criteria: "All required fields completed with adequate detail"
+
+  - module_id: "MOD-004"
+    module_title: "Impact Assessment and Risk Assessment"
+    module_order: 4
+    duration_minutes: 60
+
+    learning_objectives:
+      - "Conduct comprehensive impact assessment across all disciplines (Technical, Quality, Regulatory, Operational, Financial)"
+      - "Complete FORM-CHG-002 Impact Assessment Form"
+      - "Perform risk assessment using risk matrix"
+      - "Develop risk mitigation strategies"
+      - "Define rollback plans"
+
+    topics:
+      - topic: "Multi-Disciplinary Impact Assessment"
+        subtopics:
+          - "Technical Impact: Functionality, performance, integrations, data integrity (ALCOA+), security"
+          - "Quality Impact: Product quality, process capability, specifications, testing, validation"
+          - "Regulatory/Compliance: Submissions, notifications, licenses, standards compliance"
+          - "Operational Impact: Workflows, training, resources, performance metrics, business continuity"
+          - "Financial Impact: Implementation costs, ongoing costs, ROI, payback period"
+
+      - topic: "Risk Assessment Process"
+        subtopics:
+          - "Identify potential risks"
+          - "Assess severity (1-5: Negligible to Critical)"
+          - "Assess probability (1-5: Rare to Almost Certain)"
+          - "Calculate risk level: Severity × Probability"
+          - "Determine acceptability: Low (1-4), Medium (5-9), High (10-15), Very High (16-25)"
+
+      - topic: "Risk Mitigation"
+        subtopics:
+          - "Preventive measures (reduce probability)"
+          - "Detective controls (early identification)"
+          - "Corrective actions (reduce severity)"
+          - "Contingency plans"
+          - "Monitoring strategy"
+
+      - topic: "Rollback Planning"
+        subtopics:
+          - "Rollback triggers"
+          - "Rollback procedure steps"
+          - "Rollback testing"
+          - "Backups and recovery"
+          - "Communication during rollback"
+
+    practical_exercise:
+      - "Complete impact assessment for a validated system change"
+      - "Perform risk assessment using case study"
+      - "Develop rollback plan for a critical change"
+
+    assessment:
+      - question: "What are the five impact assessment categories?"
+        type: "multiple_choice"
+        correct_answer: "Technical, Quality, Regulatory, Operational, Financial"
+      - question: "Calculate risk level for Severity=4, Probability=3"
+        type: "calculation"
+        correct_answer: "12 (High Risk)"
+      - question: "Complete impact assessment and risk assessment for given scenario"
+        type: "practical"
+        passing_criteria: "All impact categories assessed, risks identified, mitigation strategies defined"
+
+  - module_id: "MOD-005"
+    module_title: "Implementation Planning and Execution"
+    module_order: 5
+    duration_minutes: 45
+
+    learning_objectives:
+      - "Develop comprehensive implementation plans"
+      - "Define testing and validation strategies"
+      - "Execute implementation following CHKLST-CHG-001"
+      - "Manage implementation quality gates"
+      - "Handle implementation issues and deviations"
+
+    topics:
+      - topic: "Implementation Planning"
+        subtopics:
+          - "Work breakdown structure"
+          - "Timeline and milestones"
+          - "Resource allocation"
+          - "Dependencies and prerequisites"
+          - "Quality gates and checkpoints"
+
+      - topic: "Testing and Validation Strategy"
+        subtopics:
+          - "Unit testing, integration testing, system testing"
+          - "User Acceptance Testing (UAT)"
+          - "Performance and security testing"
+          - "Validation protocol (IQ/OQ/PQ if required)"
+          - "Test documentation and pass/fail criteria"
+
+      - topic: "Implementation Checklist (CHKLST-CHG-001)"
+        subtopics:
+          - "Pre-implementation preparation (8 items)"
+          - "Implementation execution (5 items)"
+          - "Testing and verification (7 items)"
+          - "Production deployment (5 items)"
+          - "Post-implementation activities (5 items)"
+          - "Documentation and compliance (7 items)"
+
+      - topic: "Managing Implementation"
+        subtopics:
+          - "Quality checkpoints and gates"
+          - "Issue logging and resolution"
+          - "Progress monitoring and status reporting"
+          - "Data integrity verification"
+          - "Go/No-Go decision making"
+
+    practical_exercise:
+      - "Develop implementation plan for a moderate complexity change"
+      - "Walk through CHKLST-CHG-001 for a scenario"
+
+    assessment:
+      - question: "What are the six sections of the implementation checklist?"
+        type: "multiple_choice"
+        correct_answer: "Pre-implementation, Execution, Testing, Deployment, Post-implementation, Documentation"
+      - question: "When should a rollback be initiated?"
+        type: "short_answer"
+        correct_answer: "If critical issues found during deployment, stability not achieved, or acceptance criteria not met"
+
+  - module_id: "MOD-006"
+    module_title: "Change Approval Process"
+    module_order: 6
+    duration_minutes: 30
+
+    learning_objectives:
+      - "Describe the approval workflow for each criticality level"
+      - "Apply CHKLST-CHG-002 Approval Checklist"
+      - "Participate effectively in Change Control Board (CCB) reviews"
+      - "Address conditions from conditional approvals"
+
+    topics:
+      - topic: "Approval Workflow"
+        subtopics:
+          - "Change submission and completeness check"
+          - "Technical, quality, regulatory, operational reviews"
+          - "Approval routing based on criticality"
+          - "CCB review process for critical changes"
+          - "Approval decisions: Approve, Approve with Conditions, Reject, Defer"
+
+      - topic: "Approval Checklist (CHKLST-CHG-002)"
+        subtopics:
+          - "Change request completeness (4 items)"
+          - "Impact assessment review (7 items)"
+          - "Risk assessment review (5 items)"
+          - "Implementation planning review (6 items)"
+          - "Compliance and quality review (5 items)"
+          - "Approval authority verification (5 items)"
+          - "Final approval decision (4 items)"
+
+      - topic: "Change Control Board (CCB)"
+        subtopics:
+          - "CCB composition and roles"
+          - "When CCB review required"
+          - "CCB meeting process"
+          - "Presenting changes to CCB"
+          - "CCB decision documentation"
+
+      - topic: "Conditional Approvals"
+        subtopics:
+          - "When conditional approval is appropriate"
+          - "Documenting conditions"
+          - "Satisfying conditions"
+          - "Re-submission after conditions met"
+
+    assessment:
+      - question: "Which changes require CCB review?"
+        type: "multiple_choice"
+        correct_answer: "Critical changes"
+      - question: "What are the four possible approval decisions?"
+        type: "multiple_choice"
+        correct_answer: "Approve, Approve with Conditions, Reject, Defer"
+
+  - module_id: "MOD-007"
+    module_title: "Post-Implementation Verification and Closure"
+    module_order: 7
+    duration_minutes: 30
+
+    learning_objectives:
+      - "Verify successful implementation and benefits realization"
+      - "Conduct post-implementation reviews"
+      - "Complete change documentation and closure"
+      - "Transfer knowledge and updated procedures"
+
+    topics:
+      - topic: "Post-Implementation Verification"
+        subtopics:
+          - "Verify objectives achieved"
+          - "Confirm stability in production"
+          - "Validate benefits realized"
+          - "Check for unintended consequences"
+          - "User acceptance confirmation"
+
+      - topic: "Post-Implementation Review"
+        subtopics:
+          - "What went well?"
+          - "What could be improved?"
+          - "Lessons learned"
+          - "Documentation of actual vs planned"
+
+      - topic: "Change Closure"
+        subtopics:
+          - "All documentation complete"
+          - "Training completed and effective"
+          - "Updated SOPs distributed and controlled"
+          - "Quality sign-off"
+          - "Regulatory notifications completed if required"
+          - "Change record archived"
+
+      - topic: "Knowledge Transfer"
+        subtopics:
+          - "User training on new/changed processes"
+          - "Competency assessment"
+          - "Help desk/support plan"
+          - "Documentation updates"
+
+    assessment:
+      - question: "What must be verified before closing a change?"
+        type: "checklist"
+        correct_answer: "Objectives achieved, stability confirmed, benefits realized, training complete, documentation updated, quality sign-off obtained"
+
+  - module_id: "MOD-008"
+    module_title: "Emergency Changes and Special Situations"
+    module_order: 8
+    duration_minutes: 30
+
+    learning_objectives:
+      - "Recognize when emergency change process applies"
+      - "Execute emergency change with expedited approval"
+      - "Complete retrospective documentation"
+      - "Handle rejected or failed changes"
+
+    topics:
+      - topic: "Emergency Change Process"
+        subtopics:
+          - "Definition of emergency: Immediate action to prevent/mitigate critical issue"
+          - "Examples: Security breach, critical system failure, product recall, imminent regulatory deadline"
+          - "Expedited approval: QA Manager + General Manager (verbal OK, written follow-up)"
+          - "Retrospective documentation within 48 hours"
+          - "Post-emergency review and improvement"
+
+      - topic: "Failed Changes and Rollbacks"
+        subtopics:
+          - "Recognizing failure indicators"
+          - "Executing rollback plan"
+          - "Root cause investigation"
+          - "Preventing recurrence"
+          - "Re-planning if change still needed"
+
+      - topic: "Rejected Changes"
+        subtopics:
+          - "Understanding rejection rationale"
+          - "Options: Revise and resubmit, abandon, alternative approach"
+          - "Documentation of rejection"
+
+      - topic: "Change Cancellation"
+        subtopics:
+          - "When to cancel a change"
+          - "Cancellation approval requirements"
+          - "Documentation of cancellation rationale"
+
+    assessment:
+      - question: "When is the emergency change process appropriate?"
+        type: "short_answer"
+        correct_answer: "When immediate action is required to prevent or mitigate a critical safety, quality, or compliance issue"
+      - question: "What is the time limit for completing retrospective emergency change documentation?"
+        type: "multiple_choice"
+        correct_answer: "48 hours"
+
+  - module_id: "MOD-009"
+    module_title: "Change Control System Tools and Hands-On Practice"
+    module_order: 9
+    duration_minutes: 45
+
+    learning_objectives:
+      - "Navigate the change control system"
+      - "Create and submit a change request"
+      - "Complete impact and risk assessments"
+      - "Review and approve changes (for approvers)"
+      - "Track change status and generate reports"
+
+    topics:
+      - topic: "System Navigation"
+        subtopics:
+          - "Login and dashboard"
+          - "Change request list and filters"
+          - "My changes vs all changes"
+          - "Notification and alerts"
+
+      - topic: "Creating Change Requests"
+        subtopics:
+          - "New change request form"
+          - "Attachments and supporting documentation"
+          - "Submitting for review"
+          - "Status tracking"
+
+      - topic: "Assessments and Approvals"
+        subtopics:
+          - "Completing assessments"
+          - "Reviewer checklists"
+          - "Approval routing"
+          - "Electronic signatures"
+
+      - topic: "Reporting and Metrics"
+        subtopics:
+          - "My change dashboard"
+          - "Department change activity"
+          - "Monthly performance report (REPORT-CHG-001)"
+          - "Ad-hoc queries"
+
+    practical_exercise:
+      - "Hands-on system exercise: Create, assess, approve, and close a simulated change"
+      - "Complete end-to-end change workflow"
+
+    assessment:
+      - question: "Successfully create and submit a test change request in the system"
+        type: "practical"
+        passing_criteria: "Change request created with all required fields, submitted successfully"
+      - question: "Complete impact assessment for a test change"
+        type: "practical"
+        passing_criteria: "All five impact categories assessed with signatures"
+
+competency_assessment:
+  type: "comprehensive"
+  components:
+    - component: "Knowledge Test"
+      weight: 30
+      format: "multiple_choice_and_short_answer"
+      questions: 25
+      passing_score: 80
+      topics_covered:
+        - "Regulatory requirements"
+        - "Change classification"
+        - "Approval authorities"
+        - "Impact assessment categories"
+        - "Risk assessment methodology"
+        - "Implementation process"
+        - "Emergency change process"
+
+    - component: "Practical Exercise"
+      weight: 50
+      format: "scenario_based"
+      passing_score: 80
+      requirements:
+        - "Complete FORM-CHG-001 for a given scenario"
+        - "Conduct impact assessment (FORM-CHG-002)"
+        - "Perform risk assessment"
+        - "Develop implementation plan"
+        - "Navigate change control system"
+
+    - component: "System Proficiency"
+      weight: 20
+      format: "hands_on_system_test"
+      passing_score: 100
+      requirements:
+        - "Create change request in system"
+        - "Complete assessments"
+        - "Attach supporting documents"
+        - "Submit for approval"
+        - "Track change status"
+
+  overall_passing_score: 80
+  retake_policy: "One retake allowed within 30 days; if second attempt fails, additional training required"
+
+post_training:
+  effectiveness_monitoring:
+    - "On-the-job observation during first change request creation"
+    - "Quality Manager review of first 3 change requests"
+    - "Quarterly audit of change request quality"
+
+  refresher_requirements:
+    - frequency: "annual"
+    - triggers:
+        - "SOP major revision"
+        - "Quality incident related to change control"
+        - "Audit findings"
+        - "Poor change request quality"
+
+storage:
+  training_records_location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

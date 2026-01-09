@@ -1,0 +1,465 @@
+---
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-SMPHAND-002"
+  title: "Storage Condition Monitoring Checklist"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  checklist_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "ISO/IEC 17025, WHO GACP"
+  frequency: "Daily for all storage units"
+  estimated_duration: "30-45 minutes for all storage units"
+
+purpose: "Systematic daily monitoring of sample storage conditions to ensure sample integrity maintained, environmental parameters within specifications, and immediate detection of storage issues"
+
+target_audience:
+  - "Laboratory Technicians"
+  - "Sample Coordinators"
+  - "Laboratory Managers"
+
+when_to_use:
+  - "Daily at start of each business day"
+  - "After any storage unit alarm or temperature excursion"
+  - "Following power outages or facility issues"
+  - "During weekend and holiday checks"
+  - "During internal audits and inspections"
+
+completion_criteria: "All storage units checked, all parameters within specification, any deviations documented and resolved"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Refrigerated Storage (2-8°C)"
+    description: "Monitoring of refrigerated sample storage units"
+    required: true
+    items:
+      - item_id: "ITEM-001"
+        item_text: "Check refrigerator temperature display"
+        verification_method: "Visual reading"
+        acceptance_criteria: "Temperature between 2-8°C"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-002"
+        item_text: "Record temperature on monitoring log"
+        verification_method: "Documentation"
+        acceptance_criteria: "Temperature recorded with date, time, and initials"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-003"
+        item_text: "Verify independent temperature monitoring device reading"
+        verification_method: "Secondary device check"
+        acceptance_criteria: "Independent device reads within ±1°C of unit display"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-004"
+        item_text: "Check for alarm conditions or alerts"
+        verification_method: "Alarm status check"
+        acceptance_criteria: "No active alarms; any resolved alarms documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-005"
+        item_text: "Verify door seal integrity"
+        verification_method: "Visual and physical inspection"
+        acceptance_criteria: "Door gasket intact, no visible gaps, closes tightly"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-006"
+        item_text: "Check for frost buildup or condensation"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Minimal frost, no excessive condensation on samples"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-007"
+        item_text: "Verify adequate air circulation space"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Samples not blocking vents, air flow unobstructed"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-008"
+        item_text: "Check refrigerator unit cleanliness"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "No spills, leaks, or contamination visible"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+  - section_id: "SEC-002"
+    section_name: "Frozen Storage (-20°C)"
+    description: "Monitoring of frozen sample storage units"
+    required: true
+    items:
+      - item_id: "ITEM-009"
+        item_text: "Check freezer temperature display"
+        verification_method: "Visual reading"
+        acceptance_criteria: "Temperature at or below -20°C"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-010"
+        item_text: "Record temperature on monitoring log"
+        verification_method: "Documentation"
+        acceptance_criteria: "Temperature recorded with date, time, and initials"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-011"
+        item_text: "Verify independent temperature monitoring device reading"
+        verification_method: "Secondary device check"
+        acceptance_criteria: "Independent device reads within ±2°C of unit display"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-012"
+        item_text: "Check for alarm conditions or alerts"
+        verification_method: "Alarm status check"
+        acceptance_criteria: "No active alarms; any resolved alarms documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-013"
+        item_text: "Verify door seal integrity"
+        verification_method: "Visual and physical inspection"
+        acceptance_criteria: "Door gasket intact, no frost on gasket, closes tightly"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-014"
+        item_text: "Check for excessive frost buildup"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Normal frost level, not hindering door closure"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-015"
+        item_text: "Verify samples not frost-covered or freezer-burned"
+        verification_method: "Visual inspection of samples"
+        acceptance_criteria: "Sample containers visible, no excessive ice accumulation"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+  - section_id: "SEC-003"
+    section_name: "Ultra-Low Temperature Storage (-80°C)"
+    description: "Monitoring of ultra-low temperature freezers"
+    required: false
+    conditional_trigger:
+      field: "ultra_low_storage_present"
+      condition: "equals"
+      value: true
+    items:
+      - item_id: "ITEM-016"
+        item_text: "Check ultra-low freezer temperature display"
+        verification_method: "Visual reading"
+        acceptance_criteria: "Temperature at or below -80°C"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-017"
+        item_text: "Record temperature on monitoring log"
+        verification_method: "Documentation"
+        acceptance_criteria: "Temperature recorded with date, time, and initials"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-018"
+        item_text: "Verify chart recorder or data logger functioning"
+        verification_method: "Device check"
+        acceptance_criteria: "Continuous recording operational, paper/memory adequate"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-019"
+        item_text: "Check for alarm conditions"
+        verification_method: "Alarm status check"
+        acceptance_criteria: "No active alarms; battery backup functional"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-020"
+        item_text: "Verify liquid CO2 or LN2 backup system (if equipped)"
+        verification_method: "Backup system check"
+        acceptance_criteria: "Backup system armed and ready, adequate supply"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-021"
+        item_text: "Check door seal and vacuum integrity"
+        verification_method: "Physical inspection"
+        acceptance_criteria: "Door opens with resistance, vacuum maintained"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-004"
+    section_name: "Room Temperature Storage (15-25°C)"
+    description: "Monitoring of ambient temperature sample storage"
+    required: true
+    items:
+      - item_id: "ITEM-022"
+        item_text: "Check room temperature"
+        verification_method: "Thermometer reading"
+        acceptance_criteria: "Temperature between 15-25°C"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-023"
+        item_text: "Record temperature and humidity"
+        verification_method: "Documentation"
+        acceptance_criteria: "Temperature and %RH recorded on log"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-024"
+        item_text: "Verify humidity within acceptable range"
+        verification_method: "Hygrometer reading"
+        acceptance_criteria: "Relative humidity <60% (for cannabis products)"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-025"
+        item_text: "Check storage area for adequate lighting control"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Light-sensitive samples protected, amber containers used"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-026"
+        item_text: "Verify storage area cleanliness and organization"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "Area clean, organized, labels visible, aisles clear"
+        responsible_role: "Laboratory Technician"
+        critical: false
+
+      - item_id: "ITEM-027"
+        item_text: "Check for pest activity or contamination"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "No signs of pests, pest traps checked"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-005"
+    section_name: "Controlled Substance Vault"
+    description: "Monitoring of DEA-compliant controlled substance storage"
+    required: false
+    conditional_trigger:
+      field: "controlled_substance_storage"
+      condition: "equals"
+      value: true
+    items:
+      - item_id: "ITEM-028"
+        item_text: "Verify vault lock secure and functioning"
+        verification_method: "Physical check"
+        acceptance_criteria: "Lock engaged, combination known only to authorized personnel"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-029"
+        item_text: "Check vault access log for unauthorized entries"
+        verification_method: "Log review"
+        acceptance_criteria: "All entries authorized and documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-030"
+        item_text: "Verify temperature and humidity within specifications"
+        verification_method: "Measurement"
+        acceptance_criteria: "Per sample requirements, typically 15-25°C"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-031"
+        item_text: "Check surveillance camera operational status"
+        verification_method: "Video system check"
+        acceptance_criteria: "Camera recording, no obstructions, footage accessible"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-032"
+        item_text: "Perform sample inventory reconciliation"
+        verification_method: "Physical count vs. LIMS"
+        acceptance_criteria: "100% inventory accuracy, no discrepancies"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+  - section_id: "SEC-006"
+    section_name: "Automated Monitoring Systems"
+    description: "Verification of electronic monitoring and alert systems"
+    required: true
+    items:
+      - item_id: "ITEM-033"
+        item_text: "Review automated monitoring system dashboard"
+        verification_method: "System review"
+        acceptance_criteria: "All monitored units showing green/normal status"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-034"
+        item_text: "Check for any overnight alarms or alerts"
+        verification_method: "Alert history review"
+        acceptance_criteria: "Any alarms investigated and resolved, documented"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-035"
+        item_text: "Verify alert distribution list current"
+        verification_method: "System configuration check"
+        acceptance_criteria: "All key personnel on alert list, contact info current"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+      - item_id: "ITEM-036"
+        item_text: "Test alarm notification system (weekly)"
+        verification_method: "Test notification"
+        acceptance_criteria: "Test alarm received by all personnel on list"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+      - item_id: "ITEM-037"
+        item_text: "Download and archive temperature data logs (weekly)"
+        verification_method: "Data export"
+        acceptance_criteria: "Temperature data exported and backed up"
+        responsible_role: "LIMS Administrator"
+        critical: false
+
+  - section_id: "SEC-007"
+    section_name: "Equipment Maintenance Status"
+    description: "Verification of storage equipment maintenance current"
+    required: true
+    items:
+      - item_id: "ITEM-038"
+        item_text: "Verify all storage units within calibration/qualification period"
+        verification_method: "Calibration sticker check"
+        acceptance_criteria: "Calibration current, next cal date >30 days away"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-039"
+        item_text: "Check preventive maintenance schedule compliance"
+        verification_method: "Maintenance log review"
+        acceptance_criteria: "PM completed on schedule, no overdue maintenance"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+      - item_id: "ITEM-040"
+        item_text: "Verify backup power supply functional (UPS, generator)"
+        verification_method: "System status check"
+        acceptance_criteria: "Backup power ready, battery charge adequate"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-041"
+        item_text: "Check refrigerant levels and compressor operation (monthly)"
+        verification_method: "Equipment inspection"
+        acceptance_criteria: "Unit running smoothly, no unusual noises or vibrations"
+        responsible_role: "Maintenance Personnel"
+        critical: false
+
+  - section_id: "SEC-008"
+    section_name: "Sample Inventory Verification"
+    description: "Verification of sample inventory and location accuracy"
+    required: true
+    items:
+      - item_id: "ITEM-042"
+        item_text: "Perform random sample location verification (10 samples daily)"
+        verification_method: "Physical location check vs. LIMS"
+        acceptance_criteria: "100% of checked samples in correct locations"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-043"
+        item_text: "Check for samples approaching hold time limits"
+        verification_method: "LIMS report review"
+        acceptance_criteria: "Samples within 5 days of hold time flagged for priority"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-044"
+        item_text: "Verify no unlabeled or unidentified samples present"
+        verification_method: "Visual inspection"
+        acceptance_criteria: "All samples labeled with readable laboratory ID"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-045"
+        item_text: "Check for samples ready for disposal (retention period met)"
+        verification_method: "LIMS report review"
+        acceptance_criteria: "Disposal candidates identified and flagged"
+        responsible_role: "Sample Coordinator"
+        critical: false
+
+  - section_id: "SEC-009"
+    section_name: "Issue Documentation and Resolution"
+    description: "Documentation of any issues found and corrective actions"
+    required: true
+    items:
+      - item_id: "ITEM-046"
+        item_text: "Document any temperature excursions detected"
+        verification_method: "Deviation form"
+        acceptance_criteria: "Excursion documented with duration, samples affected, impact"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-047"
+        item_text: "Notify Laboratory Manager of critical issues immediately"
+        verification_method: "Communication"
+        acceptance_criteria: "Critical issues reported within 30 minutes of detection"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-048"
+        item_text: "Implement immediate corrective action for excursions"
+        verification_method: "Action execution"
+        acceptance_criteria: "Samples transferred to backup storage if needed"
+        responsible_role: "Laboratory Technician"
+        critical: true
+
+      - item_id: "ITEM-049"
+        item_text: "Initiate deviation investigation for significant issues"
+        verification_method: "Deviation report"
+        acceptance_criteria: "Deviation report initiated per SOP-DEV-001"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+      - item_id: "ITEM-050"
+        item_text: "Update LIMS with any sample status changes due to storage issues"
+        verification_method: "LIMS update"
+        acceptance_criteria: "Affected samples flagged, comments added"
+        responsible_role: "Sample Coordinator"
+        critical: true
+
+non_conformance_handling:
+  - criterion: "Temperature outside specification range"
+    action: "Immediately transfer samples to backup unit, notify Laboratory Manager, initiate deviation, assess sample integrity"
+  - criterion: "Equipment failure or malfunction"
+    action: "Transfer samples immediately, tag equipment out of service, notify maintenance, document in equipment log"
+  - criterion: "Power outage or facility issue"
+    action: "Monitor all storage units closely, document duration, assess impact when power restored, transfer samples if extended outage"
+  - criterion: "Inventory discrepancy (missing sample)"
+    action: "Conduct thorough search, check LIMS history, notify QA immediately, initiate investigation per SOP-DEV-001"
+
+training_requirements:
+  - "Completion of TRN-SMPHAND-001: Sample Handling Technician Training"
+  - "Training on storage unit operation and troubleshooting"
+  - "Training on temperature monitoring and alarm systems"
+  - "Annual competency verification"
+
+record_retention: "3 years minimum, or per regulatory requirement"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "SOP-EQCAL-001: Equipment Calibration"
+  - "SOP-DEV-001: Deviation Management"
+  - "Storage Unit Operation Manuals"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Storage Condition Monitoring Checklist"
+    author: "Laboratory Manager"

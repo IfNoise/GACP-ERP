@@ -1,0 +1,309 @@
+schema_version: "1.0.0"
+type: report
+metadata:
+  id: REPORT-EQCAL-001
+  title: Monthly Equipment Calibration Performance Report
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  frequency: Monthly
+  distribution:
+    - Engineering Manager
+    - Calibration Manager
+    - Quality Assurance Manager
+    - Operations Director
+
+sections:
+  - section_number: 1
+    section_title: Executive Summary
+    content_description: High-level overview of calibration program performance for the month
+    required_elements:
+      - Total equipment in calibration program inventory
+      - Equipment calibrated this month (scheduled and unscheduled)
+      - Schedule adherence percentage (target >98%)
+      - Out-of-tolerance equipment identified (target <5%)
+      - First-pass calibration rate (target >95%)
+      - Critical issues or concerns requiring management attention
+      - Overall program health assessment (Red/Yellow/Green status)
+    data_sources:
+      - Calibration database
+      - Monthly calibration records
+      - Schedule adherence tracking
+      - Non-conformance reports
+
+  - section_number: 2
+    section_title: Calibration Schedule Performance
+    content_description: Detailed analysis of schedule execution and adherence
+    required_elements:
+      - Equipment scheduled for calibration this month by classification (Class A/B/C)
+      - Equipment calibrated on time
+      - Equipment calibrated late (with days overdue)
+      - Equipment calibration postponed (with justification)
+      - Schedule adherence percentage by equipment class
+      - Trend analysis - schedule adherence over past 6 months
+      - Root causes of schedule delays
+      - Corrective actions for schedule adherence improvement
+    metrics:
+      - metric_name: Schedule Adherence Rate
+        calculation: (Equipment calibrated on time / Total equipment scheduled) × 100%
+        target: ">98%"
+        frequency: Monthly
+      - metric_name: Average Days Overdue
+        calculation: Sum of days overdue / Number of overdue equipment
+        target: "0 days"
+        frequency: Monthly
+      - metric_name: Critical Equipment On-Time Rate
+        calculation: (Class A equipment on time / Total Class A scheduled) × 100%
+        target: "100%"
+        frequency: Monthly
+
+  - section_number: 3
+    section_title: Calibration Results and Equipment Status
+    content_description: Summary of calibration results and equipment condition
+    required_elements:
+      - Total equipment calibrated (by equipment type and class)
+      - Equipment passing calibration as-found (within tolerance)
+      - Equipment requiring adjustment to pass
+      - Equipment failing calibration (out-of-tolerance)
+      - First-pass calibration rate by equipment type
+      - As-found vs as-left condition comparison
+      - Equipment condition trends over time
+      - Equipment requiring maintenance or replacement
+    metrics:
+      - metric_name: First-Pass Calibration Rate
+        calculation: (Equipment passing as-found / Total equipment calibrated) × 100%
+        target: ">95%"
+        frequency: Monthly
+      - metric_name: Out-of-Tolerance Rate
+        calculation: (Equipment failing calibration / Total equipment calibrated) × 100%
+        target: "<5%"
+        frequency: Monthly
+      - metric_name: Adjustment Rate
+        calculation: (Equipment requiring adjustment / Total equipment calibrated) × 100%
+        target: "<20%"
+        frequency: Monthly
+
+  - section_number: 4
+    section_title: Equipment Classification Analysis
+    content_description: Performance breakdown by equipment classification
+    required_elements:
+      - Class A (Critical) equipment performance summary
+      - Class B (Important) equipment performance summary
+      - Class C (Standard) equipment performance summary
+      - Classification distribution of calibration program
+      - Out-of-tolerance occurrences by equipment class
+      - Schedule adherence by equipment class
+      - Equipment reclassification recommendations based on performance
+    metrics:
+      - metric_name: Class A Schedule Adherence
+        calculation: Class A equipment calibrated on time / Total Class A scheduled × 100%
+        target: "100%"
+        frequency: Monthly
+      - metric_name: Class A OOT Rate
+        calculation: Class A equipment out-of-tolerance / Total Class A calibrated × 100%
+        target: "<2%"
+        frequency: Monthly
+
+  - section_number: 5
+    section_title: Calibration Standards Management
+    content_description: Status and performance of calibration standards
+    required_elements:
+      - Standards inventory summary (primary, secondary, working standards)
+      - Standards recertified this month
+      - Standards expiring within next 3 months
+      - Standards requiring replacement or repair
+      - Standards utilization rates
+      - Standards traceability verification status
+      - New standards procured or qualified
+    metrics:
+      - metric_name: Standards Current Certification Rate
+        calculation: (Standards with valid calibration / Total standards) × 100%
+        target: "100%"
+        frequency: Monthly
+
+  - section_number: 6
+    section_title: Out-of-Tolerance Equipment Investigations
+    content_description: Summary of equipment found out-of-tolerance and investigations
+    required_elements:
+      - Equipment identified out-of-tolerance this month (ID, type, classification)
+      - Investigation status for each OOT equipment
+      - Root causes identified
+      - Product impact assessments completed
+      - Affected lots or batches identified
+      - Corrective actions implemented
+      - CAPA status and effectiveness verification
+      - Trends in out-of-tolerance occurrences
+    data_sources:
+      - Deviation investigation reports
+      - CAPA tracking system
+      - Product impact assessments
+      - Calibration history database
+
+  - section_number: 7
+    section_title: Calibration Interval Optimization
+    content_description: Analysis of calibration intervals and optimization opportunities
+    required_elements:
+      - Equipment with intervals extended this month (with justification)
+      - Equipment with intervals shortened this month (with justification)
+      - Reliability analysis results for equipment under interval review
+      - Cost-benefit analysis for interval changes
+      - Equipment stability trends supporting interval decisions
+      - Interval optimization recommendations for next review period
+    metrics:
+      - metric_name: Average Calibration Interval
+        calculation: Sum of calibration intervals / Number of equipment items
+        target: Optimized based on risk and reliability
+        frequency: Monthly tracking
+
+  - section_number: 8
+    section_title: External Calibration Services
+    content_description: Performance and management of external calibration providers
+    required_elements:
+      - Equipment calibrated externally this month
+      - External lab performance (turnaround time, quality)
+      - External calibration costs this month
+      - Certifications and traceability verification for external calibrations
+      - External lab audits or assessments conducted
+      - Issues or non-conformances with external providers
+      - External lab qualification status
+    metrics:
+      - metric_name: External Calibration Turnaround Time
+        calculation: Average days from shipment to certificate receipt
+        target: "As per service agreement"
+        frequency: Monthly
+      - metric_name: External Calibration Cost per Unit
+        calculation: Total external calibration cost / Number of items calibrated
+        target: Within budget
+        frequency: Monthly
+
+  - section_number: 9
+    section_title: Personnel Training and Competency
+    content_description: Calibration technician training and performance
+    required_elements:
+      - Technician training completed this month
+      - Competency assessments conducted
+      - Training effectiveness evaluation
+      - Certification status for all technicians
+      - Cross-training progress
+      - Performance metrics by technician (schedule adherence, first-pass rate)
+      - Training needs identified for next period
+    metrics:
+      - metric_name: Technician Training Current Rate
+        calculation: (Technicians with current training / Total technicians) × 100%
+        target: "100%"
+        frequency: Monthly
+
+  - section_number: 10
+    section_title: Quality Assurance and Audit Findings
+    content_description: QA oversight and internal audit results
+    required_elements:
+      - Internal calibration audits conducted this month
+      - Audit findings and observations
+      - Corrective actions from previous audits - status
+      - Documentation completeness and accuracy assessment
+      - Procedure compliance observations
+      - Regulatory compliance verification
+      - Quality system improvements implemented
+    metrics:
+      - metric_name: Audit Finding Rate
+        calculation: Number of audit findings / Number of records audited
+        target: "<2 findings per 100 records"
+        frequency: Monthly
+      - metric_name: Documentation Accuracy Rate
+        calculation: (Records with no errors / Total records reviewed) × 100%
+        target: ">99%"
+        frequency: Monthly
+
+  - section_number: 11
+    section_title: Technology and Continuous Improvement
+    content_description: Innovation initiatives and process improvements
+    required_elements:
+      - Process improvements implemented this month
+      - Technology enhancements or IoT integration progress
+      - Automation initiatives status
+      - Predictive maintenance algorithm development
+      - Cost reduction achievements
+      - Efficiency gains realized
+      - Innovation projects planned or in progress
+      - Benchmarking activities and results
+    metrics:
+      - metric_name: Process Improvement Implementation Rate
+        calculation: Number of improvements implemented
+        target: "2 per quarter"
+        frequency: Quarterly cumulative
+      - metric_name: Cost Reduction Achievement
+        calculation: Cost savings realized from improvements
+        target: "3% annual reduction"
+        frequency: Monthly cumulative
+
+  - section_number: 12
+    section_title: Financial Performance
+    content_description: Cost analysis and budget performance
+    required_elements:
+      - Calibration program costs this month (labor, standards, external services)
+      - Budget variance analysis (actual vs budgeted)
+      - Cost per calibration by equipment type
+      - Cost trends over past 6 months
+      - Budget forecast for remainder of year
+      - Capital equipment needs for next period
+      - Cost optimization opportunities identified
+    metrics:
+      - metric_name: Cost per Calibration
+        calculation: Total calibration costs / Number of calibrations performed
+        target: Within budget
+        frequency: Monthly
+      - metric_name: Budget Variance
+        calculation: (Actual costs - Budgeted costs) / Budgeted costs × 100%
+        target: "±5%"
+        frequency: Monthly
+
+  - section_number: 13
+    section_title: Action Items and Priorities
+    content_description: Key action items and priorities for next period
+    required_elements:
+      - Open action items from previous month - status
+      - New action items identified this month
+      - Priorities for next month
+      - Resource needs or constraints
+      - Regulatory updates requiring action
+      - Equipment requiring attention (replacement, repair, recalibration)
+      - Schedule for next month (equipment due, standards recertification)
+      - Management decisions required
+
+approval:
+  - role: Calibration Manager
+    responsibility: Report preparation and accuracy
+    signature_required: true
+
+  - role: Engineering Manager
+    responsibility: Report review and approval
+    signature_required: true
+
+  - role: Quality Assurance Manager
+    responsibility: Compliance and quality review
+    signature_required: true
+
+distribution_requirements:
+  timing: Report completed by 5th business day of following month
+  method: Electronic distribution via document management system
+  recipients:
+    - Engineering Manager
+    - Calibration Manager
+    - Quality Assurance Manager
+    - Operations Director
+    - Site Management (summary)
+  retention: 7 years
+
+report_preparation_instructions:
+  - Compile data from calibration database by last day of month
+  - Calculate all metrics and compare to targets
+  - Analyze trends over past 6 months for context
+  - Identify and document root causes for any out-of-specification metrics
+  - Develop action plans for performance improvement
+  - Highlight critical issues requiring management attention
+  - Include visual data representation (charts, graphs) for key metrics
+  - Ensure all calculations are verified and accurate
+  - Obtain all required approvals before distribution
+  - Distribute by 5th business day of following month

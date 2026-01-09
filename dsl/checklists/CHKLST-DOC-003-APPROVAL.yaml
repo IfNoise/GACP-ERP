@@ -1,0 +1,383 @@
+# DSL: Document Approval Checklist
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-DOC-003"
+  checklist_type: "approval"
+  title: "Document Approval Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Verify document readiness for final approval and implementation, confirm all review and quality requirements met"
+  frequency: "per_document"
+  trigger: "Document reviewed and revised, ready for formal approval"
+  responsible_roles:
+    - "ROLE-DOCAPP-001"
+  estimated_duration_minutes: 30
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Approval Prerequisites"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "PRE-001"
+          item_text: "Document has completed formal review process"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All assigned reviewers have completed review"
+          evidence_required: true
+          guidance: "Check review records in Mayan-EDMS"
+
+        - item_id: "PRE-002"
+          item_text: "All review comments addressed by author"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Comment resolution log shows all comments resolved or justified"
+          evidence_required: true
+          guidance: "Review comment resolution log"
+
+        - item_id: "PRE-003"
+          item_text: "Reviewers approve revised document"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All reviewers sign off on final version"
+          evidence_required: true
+          guidance: "Verify reviewer sign-offs in system"
+
+        - item_id: "PRE-004"
+          item_text: "Document Controller confirms readiness for approval"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document Controller pre-approval check passed"
+          evidence_required: true
+          guidance: "Document Controller verifies all process steps complete"
+
+    - section_id: "SEC-002"
+      section_title: "Regulatory and Compliance Verification"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "REG-001"
+          item_text: "Applicable regulatory requirements met"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Document complies with FDA, Health Canada, EU GMP, provincial regulations"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents"
+
+        - item_id: "REG-002"
+          item_text: "GMP/GACP compliance confirmed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Good Manufacturing/Agricultural Practices followed"
+          evidence_required: false
+          guidance: "N/A for non-GxP documents"
+
+        - item_id: "REG-003"
+          item_text: "ALCOA+ data integrity principles verified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Data handling procedures ensure ALCOA+ compliance"
+          evidence_required: false
+          guidance: "N/A if no data capture/management"
+
+        - item_id: "REG-004"
+          item_text: "21 CFR Part 11 requirements addressed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Electronic records and signatures comply with Part 11"
+          evidence_required: false
+          guidance: "N/A if no electronic records/signatures"
+
+        - item_id: "REG-005"
+          item_text: "Audit trail and traceability adequate"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document specifies how activities will be traceable"
+          evidence_required: false
+          guidance: "All GxP activities must have audit trail"
+
+    - section_id: "SEC-003"
+      section_title: "Technical Content Verification"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "TECH-001"
+          item_text: "Technical content accurate and current"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Information factually correct, reflects current practices"
+          evidence_required: false
+          guidance: "Verify with SME if approver not technical expert"
+
+        - item_id: "TECH-002"
+          item_text: "Procedures feasible with available resources"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Equipment, personnel, materials, time available to perform procedures"
+          evidence_required: false
+          guidance: "Confirm resource allocation with department heads"
+
+        - item_id: "TECH-003"
+          item_text: "Safety and quality controls adequate"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Appropriate safety measures and quality checkpoints included"
+          evidence_required: false
+          guidance: "N/A if not procedural document"
+
+    - section_id: "SEC-004"
+      section_title: "Integration and Impact"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "INT-001"
+          item_text: "Document integrates with related procedures"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No conflicts with existing SOPs, seamless integration"
+          evidence_required: false
+          guidance: "Check cross-references and related documents"
+
+        - item_id: "INT-002"
+          item_text: "Impact on other documents identified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "List of documents requiring update provided"
+          evidence_required: false
+          guidance: "N/A if no impact on other documents"
+
+        - item_id: "INT-003"
+          item_text: "Training requirements assessed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Training needs identified in FORM-DOC-002"
+          evidence_required: true
+          guidance: "Verify training assessment completed"
+
+        - item_id: "INT-004"
+          item_text: "Implementation timeline realistic"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Effective date allows for training and preparation"
+          evidence_required: false
+          guidance: "Typically 30 days for training completion"
+
+    - section_id: "SEC-005"
+      section_title: "Business Impact and Resource Allocation"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "BUS-001"
+          item_text: "Business justification sound"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear business need or regulatory driver"
+          evidence_required: false
+          guidance: "Why is this document necessary?"
+
+        - item_id: "BUS-002"
+          item_text: "Resource requirements approved"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Budget, staffing, equipment commitments secured"
+          evidence_required: false
+          guidance: "N/A if no new resource requirements"
+
+        - item_id: "BUS-003"
+          item_text: "Operational impact acceptable"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Implementation will not cause unacceptable disruption"
+          evidence_required: false
+          guidance: "Coordinate with operations if significant changes"
+
+        - item_id: "BUS-004"
+          item_text: "Benefits justify costs and effort"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Value (compliance, quality, efficiency) justifies investment"
+          evidence_required: false
+          guidance: "Consider compliance, risk reduction, quality improvement"
+
+    - section_id: "SEC-006"
+      section_title: "Document Quality Standards"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "QUAL-001"
+          item_text: "Document complete and well-organized"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All required sections present, logical flow"
+          evidence_required: false
+          guidance: "Spot check for completeness"
+
+        - item_id: "QUAL-002"
+          item_text: "Language clear and professional"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Understandable by target audience, no ambiguity"
+          evidence_required: false
+          guidance: "Can personnel follow this document?"
+
+        - item_id: "QUAL-003"
+          item_text: "Format and style comply with template"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Standard template used correctly"
+          evidence_required: false
+          guidance: "Consistent formatting and structure"
+
+        - item_id: "QUAL-004"
+          item_text: "Grammar, spelling, punctuation correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Professional quality, no errors"
+          evidence_required: false
+          guidance: "Minor errors acceptable if not affecting meaning"
+
+    - section_id: "SEC-007"
+      section_title: "Version Control and Change Management"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "VERS-001"
+          item_text: "Document ID and version number correct"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Numbering follows standard, version incremented appropriately"
+          evidence_required: false
+          guidance: "Major change: x.0, Minor change: x.y"
+
+        - item_id: "VERS-002"
+          item_text: "Change history updated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Current version documented with summary of changes"
+          evidence_required: false
+          guidance: "Check change log section"
+
+        - item_id: "VERS-003"
+          item_text: "Superseded document identified (if revision)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Previous version clearly identified"
+          evidence_required: false
+          guidance: "N/A if new document (v1.0)"
+
+    - section_id: "SEC-008"
+      section_title: "Final Approval Decision"
+      section_order: 8
+      required: true
+
+      items:
+        - item_id: "DEC-001"
+          item_text: "All approval criteria met"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All critical checklist items pass"
+          evidence_required: false
+          guidance: "If any critical items fail, return for correction"
+
+        - item_id: "DEC-002"
+          item_text: "Approver authority appropriate for document criticality"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Approver has authorization per approval matrix"
+          evidence_required: false
+          guidance: "Category A: QA Manager, Category B: Dept Head, etc."
+
+        - item_id: "DEC-003"
+          item_text: "Ready for implementation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Document can be published and implemented"
+          evidence_required: false
+          guidance: "No outstanding issues preventing implementation"
+
+        - item_id: "DEC-004"
+          item_text: "Electronic signature applied per 21 CFR Part 11"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Approver signature meets regulatory requirements"
+          evidence_required: true
+          guidance: "System must capture name, date, meaning of signature"
+
+decision_criteria:
+  approve:
+    requirements:
+      - "All critical items pass"
+      - "No unresolved compliance or technical issues"
+      - "Resource commitments secured"
+      - "Business justification sound"
+    action: "Approve document for publication and implementation"
+
+  approve_with_conditions:
+    requirements:
+      - "Most criteria met"
+      - "Minor issues that can be addressed before distribution"
+      - "Conditions can be met within 5 business days"
+    action: "Conditional approval - specify conditions, approve upon condition satisfaction"
+
+  return_for_revision:
+    requirements:
+      - "Any critical item fails"
+      - "Significant technical, compliance, or quality issues"
+      - "Resource commitments not secured"
+      - "Business justification inadequate"
+    action: "Return to author/Document Controller with specific issues identified"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "PRE-001"
+    - "PRE-002"
+    - "PRE-003"
+    - "REG-001"
+    - "REG-005"
+    - "TECH-001"
+    - "INT-001"
+    - "BUS-001"
+    - "DEC-001"
+    - "DEC-004"
+  critical_item_requirement: "All critical items must pass for approval"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document deficiencies preventing approval"
+      - "Return to Document Controller or author"
+      - "Specify what must be corrected for approval"
+    follow_up_required:
+      - "Deficiencies corrected"
+      - "Re-submit for approval"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

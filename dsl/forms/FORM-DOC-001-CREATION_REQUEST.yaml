@@ -1,0 +1,349 @@
+# DSL: Document Creation Request Form
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-DOC-001"
+  form_type: "request"
+  title: "Document Creation Request Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Initiate creation of new controlled document or major revision of existing document"
+  when_to_use: "When business need identified for new document or significant document revision"
+  completed_by:
+    - "Any employee identifying document need"
+    - "Management requesting new procedure"
+    - "Quality Manager initiating compliance document"
+  reviewed_by: "ROLE-DOCCTRL-001"
+  approved_by: "ROLE-QA-002 or Department Head"
+
+form_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Request Information"
+      section_order: 1
+      required: true
+
+      fields:
+        - field_id: "REQ-001"
+          field_label: "Request ID"
+          field_type: "text"
+          required: true
+          auto_generated: true
+          format: "DCR-YYYY-NNNN"
+          validation: null
+          help_text: "Unique document creation request identifier (auto-generated)"
+
+        - field_id: "REQ-002"
+          field_label: "Request Date"
+          field_type: "date"
+          required: true
+          auto_generated: true
+          validation: null
+          help_text: "Date request submitted"
+
+        - field_id: "REQ-003"
+          field_label: "Requestor Name"
+          field_type: "text"
+          required: true
+          auto_generated: false
+          validation: "must_be_active_employee"
+          help_text: "Name of person requesting document"
+
+        - field_id: "REQ-004"
+          field_label: "Requestor Department"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Quality"
+            - "Production"
+            - "Laboratory"
+            - "Engineering"
+            - "Regulatory Affairs"
+            - "Supply Chain"
+            - "IT"
+            - "HR"
+            - "Finance"
+          validation: null
+          help_text: "Requestor's department"
+
+        - field_id: "REQ-005"
+          field_label: "Requestor Contact"
+          field_type: "email"
+          required: true
+          validation: "valid_email"
+          help_text: "Email address for request follow-up"
+
+    - section_id: "SEC-002"
+      section_title: "Document Information"
+      section_order: 2
+      required: true
+
+      fields:
+        - field_id: "DOC-001"
+          field_label: "Document Type"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "SOP (Standard Operating Procedure)"
+            - "Policy"
+            - "Work Instruction"
+            - "Form/Template"
+            - "Specification"
+            - "Validation Protocol"
+            - "Quality Manual"
+            - "Regulatory Submission"
+            - "Batch Record"
+            - "Laboratory Method"
+            - "Other"
+          validation: null
+          help_text: "Type of document to be created"
+
+        - field_id: "DOC-002"
+          field_label: "Proposed Document Title"
+          field_type: "text"
+          required: true
+          validation: "max_length_200"
+          help_text: "Clear, descriptive title for the document"
+
+        - field_id: "DOC-003"
+          field_label: "Document Category"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Category A: Critical GMP Document"
+            - "Category B: Important Operational Document"
+            - "Category C: Supporting Document"
+            - "Category D: Reference Document"
+          validation: null
+          help_text: "Document classification per SOP-DOC-001"
+
+        - field_id: "DOC-004"
+          field_label: "Regulatory Impact"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "GxP Critical"
+            - "GxP Related"
+            - "Non-GxP"
+          validation: null
+          help_text: "Does this document impact GxP regulated activities?"
+
+        - field_id: "DOC-005"
+          field_label: "Related Existing Documents"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "List any existing documents this new document will reference, supersede, or relate to"
+
+    - section_id: "SEC-003"
+      section_title: "Business Justification"
+      section_order: 3
+      required: true
+
+      fields:
+        - field_id: "JUST-001"
+          field_label: "Business Need/Problem Statement"
+          field_type: "textarea"
+          required: true
+          validation: "min_length_100"
+          help_text: "Describe the business need or problem this document will address"
+
+        - field_id: "JUST-002"
+          field_label: "Regulatory Driver"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "If applicable, cite regulatory requirement driving this document (FDA, Health Canada, EU GMP, etc.)"
+
+        - field_id: "JUST-003"
+          field_label: "Expected Benefits"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Describe expected benefits (compliance, quality improvement, efficiency, cost savings, risk reduction)"
+
+        - field_id: "JUST-004"
+          field_label: "Consequences of Not Creating Document"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "What are the risks or consequences if this document is not created?"
+
+    - section_id: "SEC-004"
+      section_title: "Scope and Content"
+      section_order: 4
+      required: true
+
+      fields:
+        - field_id: "SCOPE-001"
+          field_label: "Proposed Scope"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Define what is included and excluded from document scope"
+
+        - field_id: "SCOPE-002"
+          field_label: "Key Topics to Cover"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "List main topics, sections, or procedures the document should address"
+
+        - field_id: "SCOPE-003"
+          field_label: "Affected Departments/Roles"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Which departments or roles will use or be affected by this document?"
+
+        - field_id: "SCOPE-004"
+          field_label: "Affected Systems/Equipment"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "List any systems, equipment, or processes covered by this document"
+
+    - section_id: "SEC-005"
+      section_title: "Resource Requirements"
+      section_order: 5
+      required: true
+
+      fields:
+        - field_id: "RES-001"
+          field_label: "Proposed Author"
+          field_type: "text"
+          required: false
+          validation: null
+          help_text: "Suggested subject matter expert to author the document"
+
+        - field_id: "RES-002"
+          field_label: "Required Reviewers"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "List SMEs who should review (technical, quality, regulatory, etc.)"
+
+        - field_id: "RES-003"
+          field_label: "Approver"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Quality Manager"
+            - "Department Head"
+            - "General Manager"
+            - "Regulatory Affairs Manager"
+          validation: null
+          help_text: "Who should approve this document?"
+
+        - field_id: "RES-004"
+          field_label: "Requested Target Completion Date"
+          field_type: "date"
+          required: false
+          validation: "future_date"
+          help_text: "When is this document needed?"
+
+        - field_id: "RES-005"
+          field_label: "Estimated Complexity"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Low (Simple, < 10 pages)"
+            - "Medium (Moderate, 10-30 pages)"
+            - "High (Complex, > 30 pages or validation required)"
+          validation: null
+          help_text: "Estimate document complexity"
+
+        - field_id: "RES-006"
+          field_label: "Supporting Resources Needed"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "Any special resources needed (process data, equipment access, vendor info, etc.)"
+
+    - section_id: "SEC-006"
+      section_title: "Approval"
+      section_order: 6
+      required: true
+
+      fields:
+        - field_id: "APP-001"
+          field_label: "Document Controller Review"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Comments"
+          help_text: "Document Controller confirms request complete and appropriate"
+
+        - field_id: "APP-002"
+          field_label: "Quality Manager or Department Head Approval"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Decision (Approve/Reject/Defer)"
+            - "Assigned Author"
+            - "Target Completion Date"
+          help_text: "Approve creation request and assign resources"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "Request being prepared by requestor"
+    - state: "submitted"
+      description: "Request submitted to Document Controller"
+    - state: "under_review"
+      description: "Document Controller reviewing request"
+    - state: "pending_approval"
+      description: "Awaiting QA or Department Head approval"
+    - state: "approved"
+      description: "Request approved, author assigned"
+    - state: "rejected"
+      description: "Request rejected with rationale"
+    - state: "deferred"
+      description: "Request deferred pending additional information"
+
+  transitions:
+    - from: "draft"
+      to: "submitted"
+      trigger: "Requestor submits form"
+    - from: "submitted"
+      to: "under_review"
+      trigger: "Document Controller starts review"
+    - from: "under_review"
+      to: "pending_approval"
+      trigger: "Document Controller completes review"
+    - from: "under_review"
+      to: "submitted"
+      trigger: "Document Controller returns for correction"
+    - from: "pending_approval"
+      to: "approved"
+      trigger: "QA/Dept Head approves"
+    - from: "pending_approval"
+      to: "rejected"
+      trigger: "QA/Dept Head rejects"
+    - from: "pending_approval"
+      to: "deferred"
+      trigger: "QA/Dept Head defers"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

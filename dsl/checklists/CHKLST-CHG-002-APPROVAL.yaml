@@ -1,0 +1,425 @@
+# DSL: Change Approval Checklist
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-CHG-002"
+  checklist_type: "approval"
+  title: "Change Approval Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+usage:
+  purpose: "Ensure comprehensive review and appropriate approval of change requests before implementation authorization"
+  frequency: "per_change"
+  trigger: "Change request ready for approval review"
+  responsible_roles:
+    - "ROLE-QA-002"
+    - "ROLE-CCB-001"
+    - "ROLE-DEPTHEAD-001"
+  estimated_duration_minutes: 60
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Change Request Completeness"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "APP-001"
+          item_text: "Change request form (FORM-CHG-001) completely filled out"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All required fields completed with adequate detail"
+          evidence_required: false
+          guidance: "Review CR form for completeness and clarity"
+
+        - item_id: "APP-002"
+          item_text: "Change classification determined and documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Criticality (Critical/Major/Minor/Emergency) and Type clearly identified"
+          evidence_required: false
+          guidance: "Verify classification matches impact and risk"
+
+        - item_id: "APP-003"
+          item_text: "Business justification clearly articulated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear problem statement and rationale for change"
+          evidence_required: false
+          guidance: "Justification should demonstrate why change is necessary"
+
+        - item_id: "APP-004"
+          item_text: "Expected benefits quantified or clearly described"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Specific benefits with metrics where possible"
+          evidence_required: false
+          guidance: "Quality improvement, cost savings, compliance, efficiency"
+
+    - section_id: "SEC-002"
+      section_title: "Impact Assessment Review"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "APP-005"
+          item_text: "Comprehensive impact assessment completed (FORM-CHG-002)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All five impact categories assessed: Technical, Quality, Regulatory, Operational, Financial"
+          evidence_required: true
+          guidance: "Review FORM-CHG-002 for completeness"
+
+        - item_id: "APP-006"
+          item_text: "Technical impact assessed by qualified SME"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Technical SME signature and detailed assessment"
+          evidence_required: true
+          guidance: "System functionality, performance, integration, data integrity, security"
+
+        - item_id: "APP-007"
+          item_text: "Quality impact assessed by Quality Manager"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "QA Manager signature and product quality assessment"
+          evidence_required: true
+          guidance: "Product quality, process capability, specifications, validation needs"
+
+        - item_id: "APP-008"
+          item_text: "Regulatory impact assessed by Regulatory Affairs"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Regulatory Affairs signature and compliance assessment"
+          evidence_required: true
+          guidance: "Submission requirements, authority notifications, license impacts"
+
+        - item_id: "APP-009"
+          item_text: "Operational impact assessed by Department Head"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Department Head signature and operational assessment"
+          evidence_required: true
+          guidance: "Workflow, training, resources, business continuity"
+
+        - item_id: "APP-010"
+          item_text: "Financial impact estimated with cost-benefit analysis"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Implementation and ongoing costs quantified, ROI estimated"
+          evidence_required: false
+          guidance: "One-time costs, recurring costs, expected benefits"
+
+        - item_id: "APP-011"
+          item_text: "Data integrity impact evaluated (ALCOA+ principles)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "ALCOA+ compliance verified for system/data changes"
+          evidence_required: true
+          guidance: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+
+    - section_id: "SEC-003"
+      section_title: "Risk Assessment Review"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "APP-012"
+          item_text: "Risk assessment completed using risk matrix"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Severity and probability assessed, risk level calculated"
+          evidence_required: true
+          guidance: "Use standard risk matrix: Severity × Probability"
+
+        - item_id: "APP-013"
+          item_text: "Key risks identified and documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Top 3-5 risks clearly described"
+          evidence_required: false
+          guidance: "Technical, quality, compliance, operational, timeline risks"
+
+        - item_id: "APP-014"
+          item_text: "Risk mitigation strategies defined for all medium/high risks"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Specific mitigation actions for each significant risk"
+          evidence_required: false
+          guidance: "Preventive measures, contingency plans, monitoring"
+
+        - item_id: "APP-015"
+          item_text: "Rollback plan documented and adequate"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear rollback procedure with triggers and steps"
+          evidence_required: true
+          guidance: "How to return to pre-change state if implementation fails"
+
+        - item_id: "APP-016"
+          item_text: "Residual risk acceptable after mitigation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Risk level acceptable per risk tolerance policy"
+          evidence_required: false
+          guidance: "Residual risk must be within acceptable range"
+
+    - section_id: "SEC-004"
+      section_title: "Implementation Planning Review"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "APP-017"
+          item_text: "Detailed implementation plan developed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Work breakdown, timeline, milestones, quality gates"
+          evidence_required: true
+          guidance: "Plan should be actionable and realistic"
+
+        - item_id: "APP-018"
+          item_text: "Testing and validation strategy defined"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Test plan with UAT, performance testing if applicable, validation protocol if required"
+          evidence_required: true
+          guidance: "Testing must be adequate for change criticality"
+
+        - item_id: "APP-019"
+          item_text: "Training requirements identified and planned"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Training plan for all affected personnel"
+          evidence_required: false
+          guidance: "Who needs training, content, delivery method, timeline"
+
+        - item_id: "APP-020"
+          item_text: "Resource requirements identified and available"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Personnel, equipment, budget, time confirmed available"
+          evidence_required: false
+          guidance: "Resources must be committed before approval"
+
+        - item_id: "APP-021"
+          item_text: "Implementation timeline realistic and achievable"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Timeline considers complexity, resources, dependencies"
+          evidence_required: false
+          guidance: "Buffer time included for testing and issue resolution"
+
+        - item_id: "APP-022"
+          item_text: "Dependencies and prerequisites identified"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All dependencies documented, plan to address"
+          evidence_required: false
+          guidance: "Other changes, projects, resources that must be in place first"
+
+    - section_id: "SEC-005"
+      section_title: "Compliance and Quality Review"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "APP-023"
+          item_text: "Change complies with all applicable regulations"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "No regulatory violations identified"
+          evidence_required: false
+          guidance: "FDA, Health Canada, provincial, international requirements"
+
+        - item_id: "APP-024"
+          item_text: "GMP/GACP compliance maintained or improved"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Change does not compromise GMP/GACP compliance"
+          evidence_required: false
+          guidance: "Quality system integrity preserved"
+
+        - item_id: "APP-025"
+          item_text: "Validation/qualification requirements determined"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Validation protocol prepared if required (IQ/OQ/PQ)"
+          evidence_required: true
+          guidance: "Follow GAMP 5 risk-based approach"
+
+        - item_id: "APP-026"
+          item_text: "Document control requirements addressed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "SOPs, specifications, training materials updates planned"
+          evidence_required: false
+          guidance: "Follow SOP-DOC-001 for document updates"
+
+        - item_id: "APP-027"
+          item_text: "Audit trail and traceability maintained"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Change will be fully traceable and auditable"
+          evidence_required: false
+          guidance: "Electronic signature, timestamps, audit trail per 21 CFR Part 11"
+
+    - section_id: "SEC-006"
+      section_title: "Approval Authority Verification"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "APP-028"
+          item_text: "Correct approval authority identified per criticality"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Approval routing matches criticality: Critical→CCB+QA, Major→Dept+QA, Minor→Supv+Owner"
+          evidence_required: false
+          guidance: "Verify approval matrix followed"
+
+        - item_id: "APP-029"
+          item_text: "Quality Manager approval required and obtained"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "QA Manager signature for all quality-impacting changes"
+          evidence_required: true
+          guidance: "QA approval mandatory for all change requests"
+
+        - item_id: "APP-030"
+          item_text: "CCB approval obtained (if Critical change)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Change Control Board reviewed and approved in meeting"
+          evidence_required: true
+          guidance: "CCB meeting minutes document approval decision"
+
+        - item_id: "APP-031"
+          item_text: "Department Head approval obtained (if Major change)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Department Head signature confirms resource commitment"
+          evidence_required: true
+          guidance: "Dept Head approves resource allocation"
+
+        - item_id: "APP-032"
+          item_text: "Emergency approval properly authorized (if Emergency change)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "QA Manager + General Manager verbal/written approval"
+          evidence_required: true
+          guidance: "Emergency changes require expedited approval with retrospective documentation"
+
+    - section_id: "SEC-007"
+      section_title: "Final Approval Decision"
+      section_order: 7
+      required: true
+
+      items:
+        - item_id: "APP-033"
+          item_text: "All approval conditions met (if conditional approval)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All specified conditions satisfied"
+          evidence_required: true
+          guidance: "Review conditions from previous approval iteration"
+
+        - item_id: "APP-034"
+          item_text: "Benefits justify costs and risks"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Positive risk-benefit ratio"
+          evidence_required: false
+          guidance: "Consider quality improvement, compliance, business value"
+
+        - item_id: "APP-035"
+          item_text: "Organization ready to implement change"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Resources, expertise, time available"
+          evidence_required: false
+          guidance: "No competing priorities that would compromise quality"
+
+        - item_id: "APP-036"
+          item_text: "Approval decision documented with signatures and date"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Approved/Approved with Conditions/Rejected clearly documented"
+          evidence_required: true
+          guidance: "All approvers signed with date, conditions specified if applicable"
+
+decision_criteria:
+  approve:
+    requirements:
+      - "All critical items pass"
+      - "Impact and risk assessments complete and adequate"
+      - "Implementation plan realistic"
+      - "Resources committed"
+      - "Benefits justify costs/risks"
+    action: "Authorize implementation to proceed"
+
+  approve_with_conditions:
+    requirements:
+      - "Most criteria met"
+      - "Specific gaps identified that can be addressed"
+      - "Conditions can be met before implementation"
+    action: "Conditional approval with specified requirements"
+
+  reject:
+    requirements:
+      - "Critical deficiencies in assessment or planning"
+      - "Unacceptable risks"
+      - "Inadequate benefit justification"
+      - "Resources not available"
+    action: "Reject change request with rationale"
+
+  defer:
+    requirements:
+      - "More information or analysis needed"
+      - "Dependencies not yet resolved"
+      - "Timing not appropriate"
+    action: "Defer decision pending additional work"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "APP-001"
+    - "APP-005"
+    - "APP-007"
+    - "APP-012"
+    - "APP-015"
+    - "APP-023"
+    - "APP-029"
+    - "APP-036"
+  critical_item_requirement: "All critical items must pass for approval"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document deficiencies preventing approval"
+      - "Return to Change Owner for additional work"
+      - "Specify conditions that must be met for approval"
+    follow_up_required:
+      - "Change Owner addresses deficiencies"
+      - "Re-submit for approval when ready"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

@@ -1,0 +1,304 @@
+# DSL: Monthly Deviation Trend Report
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0 Section 9.1
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-DEV-001"
+  report_type: "trending"
+  category: "quality"
+  confidentiality: "internal"
+  title: "Monthly Deviation Trend Report"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DEV-001"
+
+report_context:
+  purpose: "Provide monthly trending analysis of deviations to identify patterns, recurring issues, and opportunities for systemic improvement"
+  reporting_period: "monthly"
+  frequency: "monthly"
+  report_due_date: "5th business day of following month"
+  responsible_roles:
+    - role: "ROLE-QA-002"
+      responsibility: "Primary author and trend analysis"
+    - role: "ROLE-QDIR-001"
+      responsibility: "Review and strategic recommendations"
+  distribution:
+    - "Quality Manager"
+    - "Quality Director"
+    - "Department Managers"
+    - "Production Manager"
+    - "Laboratory Manager"
+    - "Management Team"
+
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Key Metrics Summary"
+          data_sources:
+            - "Deviation management system"
+          fields:
+            - field_id: "EXEC-001"
+              field_label: "Total Deviations This Month"
+              field_type: "integer"
+            - field_id: "EXEC-002"
+              field_label: "Critical Deviations"
+              field_type: "integer"
+              acceptance_criteria: "Trending down or stable"
+            - field_id: "EXEC-003"
+              field_label: "Major Deviations"
+              field_type: "integer"
+            - field_id: "EXEC-004"
+              field_label: "Minor Deviations"
+              field_type: "integer"
+            - field_id: "EXEC-005"
+              field_label: "Deviation Rate per 100 Batches"
+              field_type: "decimal"
+              acceptance_criteria: "< industry benchmark"
+            - field_id: "EXEC-006"
+              field_label: "Repeat Deviation Count"
+              field_type: "integer"
+              acceptance_criteria: "< 5% of total"
+
+    - section_id: "SEC-002"
+      section_title: "Deviation by Category"
+      section_order: 2
+      required: true
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Category Distribution"
+          data_sources:
+            - "Deviation database queries"
+          fields:
+            - field_id: "CAT-001"
+              field_label: "Production Deviations"
+              field_type: "integer"
+            - field_id: "CAT-002"
+              field_label: "Quality Control Deviations"
+              field_type: "integer"
+            - field_id: "CAT-003"
+              field_label: "Materials Management Deviations"
+              field_type: "integer"
+            - field_id: "CAT-004"
+              field_label: "Facility/Utilities Deviations"
+              field_type: "integer"
+            - field_id: "CAT-005"
+              field_label: "Documentation Deviations"
+              field_type: "integer"
+            - field_id: "CAT-006"
+              field_label: "Category Distribution Chart"
+              field_type: "pie_chart"
+
+    - section_id: "SEC-003"
+      section_title: "Deviation by Department"
+      section_order: 3
+      required: true
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Department Performance"
+          data_sources:
+            - "Deviation database by department"
+          fields:
+            - field_id: "DEPT-001"
+              field_label: "Department Comparison Table"
+              field_type: "table"
+              columns:
+                - "Department"
+                - "Total Deviations"
+                - "Critical"
+                - "Major"
+                - "Minor"
+                - "Trend vs Last Month"
+
+    - section_id: "SEC-004"
+      section_title: "Time to Resolution Analysis"
+      section_order: 4
+      required: true
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Investigation Timeliness"
+          data_sources:
+            - "Deviation timeline data"
+          fields:
+            - field_id: "TIME-001"
+              field_label: "Average Time to Report (hours)"
+              field_type: "decimal"
+              acceptance_criteria: "Critical <2h, Major <24h, Minor <72h"
+            - field_id: "TIME-002"
+              field_label: "Average Investigation Duration (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Critical <5d, Major <10d, Minor <15d"
+            - field_id: "TIME-003"
+              field_label: "% Investigations Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: ">= 95%"
+            - field_id: "TIME-004"
+              field_label: "Average Time to CAPA Implementation (days)"
+              field_type: "decimal"
+            - field_id: "TIME-005"
+              field_label: "Overdue Deviations Count"
+              field_type: "integer"
+              acceptance_criteria: "< 5"
+
+    - section_id: "SEC-005"
+      section_title: "Root Cause Analysis"
+      section_order: 5
+      required: true
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Root Cause Patterns"
+          data_sources:
+            - "Investigation reports"
+          fields:
+            - field_id: "RCA-001"
+              field_label: "Top 5 Root Causes Table"
+              field_type: "table"
+              columns:
+                - "Root Cause Category"
+                - "Count"
+                - "% of Total"
+                - "Trend"
+            - field_id: "RCA-002"
+              field_label: "Root Cause Analysis"
+              field_type: "text"
+              acceptance_criteria: "Identify systemic issues requiring proactive CAPA"
+
+    - section_id: "SEC-006"
+      section_title: "CAPA Effectiveness"
+      section_order: 6
+      required: true
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "CAPA Performance Metrics"
+          data_sources:
+            - "CAPA system"
+          fields:
+            - field_id: "CAPA-001"
+              field_label: "CAPAs Generated This Month"
+              field_type: "integer"
+            - field_id: "CAPA-002"
+              field_label: "CAPAs Completed This Month"
+              field_type: "integer"
+            - field_id: "CAPA-003"
+              field_label: "CAPA Effectiveness Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+            - field_id: "CAPA-004"
+              field_label: "Open CAPAs (Total)"
+              field_type: "integer"
+            - field_id: "CAPA-005"
+              field_label: "Overdue CAPAs"
+              field_type: "integer"
+              acceptance_criteria: "< 5% of open CAPAs"
+
+    - section_id: "SEC-007"
+      section_title: "Repeat Deviation Analysis"
+      section_order: 7
+      required: true
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Recurrence Tracking"
+          data_sources:
+            - "Deviation linkage analysis"
+          fields:
+            - field_id: "REP-001"
+              field_label: "Repeat Deviations Table"
+              field_type: "table"
+              columns:
+                - "Original Deviation ID"
+                - "Repeat Deviation ID"
+                - "Days Since Original"
+                - "CAPA Status"
+                - "Action Required"
+            - field_id: "REP-002"
+              field_label: "Repeat Deviation Rate"
+              field_type: "percentage"
+              acceptance_criteria: "< 5%"
+            - field_id: "REP-003"
+              field_label: "Root Cause of Repeats"
+              field_type: "text"
+
+    - section_id: "SEC-008"
+      section_title: "Trending and Patterns"
+      section_order: 8
+      required: true
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "6-Month Trend Analysis"
+          data_sources:
+            - "Historical deviation data"
+          fields:
+            - field_id: "TREND-001"
+              field_label: "Total Deviations Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or decreasing"
+            - field_id: "TREND-002"
+              field_label: "Critical Deviations Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Decreasing"
+            - field_id: "TREND-003"
+              field_label: "Emerging Patterns Identified"
+              field_type: "bullet_list"
+              max_items: 5
+
+    - section_id: "SEC-009"
+      section_title: "Recommendations and Action Items"
+      section_order: 9
+      required: true
+      subsections:
+        - subsection_id: "SEC-009-01"
+          subsection_title: "Quality Improvement Opportunities"
+          data_sources:
+            - "Quality Manager analysis"
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+            - field_id: "REC-002"
+              field_label: "Systemic Issues Requiring Proactive CAPA"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-003"
+              field_label: "Training Needs Identified"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-004"
+              field_label: "Process Improvement Opportunities"
+              field_type: "bullet_list"
+              max_items: 3
+
+generation:
+  automated: true
+  automation_details:
+    data_collection: "Automated queries to deviation management system, CAPA system"
+    report_generation: "Semi-automated with Quality Manager analysis"
+    manual_sections:
+      - "SEC-005-01: Root Cause Analysis interpretation"
+      - "SEC-007-01: Repeat deviation root cause analysis"
+      - "SEC-008-01: Emerging patterns identification"
+      - "SEC-009: All recommendations (Quality Manager input)"
+  scheduling:
+    generation_date: "1st of month"
+    review_period: "Days 1-3"
+    approval_deadline: "5th business day"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

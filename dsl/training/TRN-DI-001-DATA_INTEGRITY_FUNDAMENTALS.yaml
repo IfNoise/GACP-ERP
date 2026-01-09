@@ -1,0 +1,691 @@
+# DSL: Data Integrity Fundamentals Training
+# Version: 1.0
+# Source: SOP_DataIntegrity.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-DI-001"
+  title: "Data Integrity Fundamentals Training Program"
+  version: "1.0"
+  status: "active"
+  training_type: "comprehensive_program"
+  related_sop: "SOP-DI-001"
+  department: "Quality Assurance"
+
+training_context:
+  purpose: "Provide comprehensive training on data integrity principles, regulatory requirements, and practical application to ensure all personnel understand their responsibilities for maintaining ALCOA+ compliant data throughout the GACP-ERP ecosystem"
+
+  target_audience:
+    primary:
+      - "All personnel with data entry responsibilities"
+      - "Laboratory analysts"
+      - "Production personnel"
+      - "Quality Assurance personnel"
+      - "IT personnel managing data systems"
+      - "Management with data oversight responsibilities"
+
+    secondary:
+      - "Vendors/contractors with access to data systems"
+      - "Auditors conducting data integrity assessments"
+
+  prerequisites:
+    - "GMP/GACP fundamentals training (recommended)"
+    - "Basic computer literacy"
+    - "Completion of new employee orientation"
+
+  training_frequency:
+    initial: "Within 30 days of hire or assignment to data role"
+    refresher: "Annual"
+    retraining_triggers:
+      - "Data integrity incident or deviation"
+      - "Audit finding related to data integrity"
+      - "Job role change involving data responsibilities"
+      - "SOP major revision"
+      - "New system implementation"
+      - "Failed assessment or observed non-compliance"
+
+program_overview:
+  total_duration: "240 minutes (4 hours)"
+  delivery_method: "blended"
+  delivery_options:
+    - "Instructor-led classroom training"
+    - "Virtual instructor-led training (VILT)"
+    - "Self-paced e-learning with virtual reality simulations"
+    - "Combination approach (e-learning + practical workshop)"
+
+  assessment_method: "multi_component"
+  assessment_components:
+    - component: "Written Test"
+      weight: 40
+      passing_score: 80
+      description: "Multiple choice and scenario-based questions"
+    - component: "Practical Demonstration"
+      weight: 40
+      passing_score: 100
+      description: "Demonstrate correct data entry and ALCOA+ application"
+    - component: "Case Study Analysis"
+      weight: 20
+      passing_score: 80
+      description: "Analyze data integrity scenarios and propose solutions"
+
+  overall_passing_criteria:
+    written_test: "≥80%"
+    practical_demonstration: "100% (all critical competencies)"
+    case_study: "≥80%"
+    overall_weighted: "≥85%"
+
+training_modules:
+  - module_id: "MOD-001"
+    module_title: "Introduction to Data Integrity"
+    module_order: 1
+    duration: "30 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Define data integrity and explain its importance in GMP/GACP operations"
+      - "Describe the consequences of poor data integrity (regulatory, business, ethical)"
+      - "Identify regulatory requirements for data integrity (FDA, EU GMP, WHO, MHRA)"
+      - "Explain individual responsibilities for data integrity"
+
+    content_outline:
+      - topic: "What is Data Integrity?"
+        subtopics:
+          - "Definition: Accuracy, completeness, consistency, reliability of data"
+          - "Data vs Information vs Knowledge"
+          - "Data lifecycle: Creation to disposal"
+          - "Critical vs non-critical data"
+
+      - topic: "Why Data Integrity Matters"
+        subtopics:
+          - "Patient safety: Decisions based on data"
+          - "Product quality: Data drives quality decisions"
+          - "Regulatory compliance: Legal and ethical obligations"
+          - "Business reputation: Trust and credibility"
+          - "Cost of poor data integrity: Recalls, fines, loss of license"
+
+      - topic: "Regulatory Landscape"
+        subtopics:
+          - "FDA 21 CFR Part 11: Electronic records and signatures"
+          - "EU GMP Annex 11: Computerized systems"
+          - "ALCOA+ principles (overview)"
+          - "MHRA and WHO data integrity guidelines"
+          - "Recent warning letters and enforcement actions (case studies)"
+
+      - topic: "Your Role and Responsibilities"
+        subtopics:
+          - "Individual accountability: You are responsible for your data"
+          - "Consequences of data integrity violations (personal and organizational)"
+          - "Speaking up: Reporting concerns and errors"
+          - "Continuous learning and vigilance"
+
+    assessment:
+      - type: "knowledge_check"
+        questions: 10
+        format: "multiple_choice"
+        passing: "8/10 correct"
+
+  - module_id: "MOD-002"
+    module_title: "ALCOA+ Principles: Attributable and Legible"
+    module_order: 2
+    duration: "25 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Explain the Attributable principle and how to ensure data attribution"
+      - "Explain the Legible principle and how to maintain data legibility"
+      - "Apply Attributable and Legible principles in practical scenarios"
+
+    content_outline:
+      - topic: "Attributable: Who Did It?"
+        subtopics:
+          - "Definition: Data attributable to the person who generated it"
+          - "Unique user accounts: No shared logins"
+          - "Strong authentication: Passwords, MFA"
+          - "Electronic signatures: Meaning, non-repudiation"
+          - "Session management: Timeouts and security"
+          - "Common violations: Shared accounts, borrowing credentials"
+          - "Practical tips: Logging out, protecting credentials, reporting shared accounts"
+
+      - topic: "Legible: Can It Be Read?"
+        subtopics:
+          - "Definition: Data readable throughout retention period"
+          - "Handwriting standards: Clear, indelible, not pencil"
+          - "Electronic data: Font size, resolution, format preservation"
+          - "Scanned documents: Minimum 300 DPI"
+          - "Long-term accessibility: Format migration, technology refresh"
+          - "Common violations: Illegible handwriting, low-quality scans, outdated formats"
+          - "Practical tips: Write clearly, use approved formats, verify scans"
+
+    practical_exercises:
+      - exercise: "Attributable Scenario Analysis"
+        description: "Review scenarios and identify attribution issues"
+        scenarios:
+          - "Shared 'lab user' account for multiple analysts"
+          - "Supervisor signing for analyst who's on vacation"
+          - "Borrowing colleague's login because 'mine isn't working'"
+
+      - exercise: "Legible Assessment"
+        description: "Review sample documents and assess legibility"
+        samples:
+          - "Handwritten batch record (good vs poor examples)"
+          - "Scanned documents at different resolutions"
+          - "Electronic data in obsolete format"
+
+    assessment:
+      - type: "scenario_quiz"
+        questions: 8
+        format: "scenario_based_multiple_choice"
+        passing: "7/8 correct"
+
+  - module_id: "MOD-003"
+    module_title: "ALCOA+ Principles: Contemporaneous and Original"
+    module_order: 3
+    duration: "25 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Explain the Contemporaneous principle and practice real-time recording"
+      - "Explain the Original principle and understand original data preservation"
+      - "Identify and avoid common contemporaneous and original data violations"
+
+    content_outline:
+      - topic: "Contemporaneous: When Was It Recorded?"
+        subtopics:
+          - "Definition: Data recorded at time of activity"
+          - "Real-time recording: Entering data as it happens"
+          - "Acceptable delays: Same shift, with justification"
+          - "Automated timestamps: System-generated, cannot be changed"
+          - "Workflow integration: Capture data at source"
+          - "Common violations: Backdating, reconstructing from memory, batch entry at end of week"
+          - "Practical tips: Record immediately, note delays, avoid reconstruction"
+
+      - topic: "Original: Is This the First Record?"
+        subtopics:
+          - "Definition: Original record or certified true copy"
+          - "Original data preservation: WORM storage, no overwriting"
+          - "True copies: Metadata, certification, link to original"
+          - "Version control: Complete history, all versions accessible"
+          - "Data migration: Preserving originality through changes"
+          - "Common violations: Overwriting original data, uncertified copies, lost original"
+          - "Practical tips: Never overwrite, create versions, certify copies"
+
+    practical_exercises:
+      - exercise: "Contemporaneous Recording Practice"
+        description: "Practice real-time data entry in simulated environment"
+        simulation: "VR simulation of laboratory or production activity"
+
+      - exercise: "Original Data Scenarios"
+        description: "Identify original vs copy, acceptable vs unacceptable practices"
+        scenarios:
+          - "Analyst transcribes instrument data to notebook at end of day"
+          - "System overwrites previous value when correcting error"
+          - "Printing report as 'original' when electronic record exists"
+
+    assessment:
+      - type: "scenario_quiz"
+        questions: 8
+        format: "scenario_based_multiple_choice"
+        passing: "7/8 correct"
+
+  - module_id: "MOD-004"
+    module_title: "ALCOA+ Principles: Accurate and Complete"
+    module_order: 4
+    duration: "25 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Explain the Accurate principle and how to ensure data accuracy"
+      - "Explain the Complete principle and how to ensure data completeness"
+      - "Recognize and prevent common accuracy and completeness errors"
+
+    content_outline:
+      - topic: "Accurate: Is the Data Correct?"
+        subtopics:
+          - "Definition: Data free from errors, reliable, truthful"
+          - "Input validation: Real-time checks, error prevention"
+          - "Verification: Double-checking critical data"
+          - "Calculation validation: Automated checks, independent review"
+          - "Error correction: Proper procedures, never cover up"
+          - "Common violations: Transcription errors, calculation mistakes, 'close enough' attitude"
+          - "Practical tips: Verify before submitting, use system validation, check calculations"
+
+      - topic: "Complete: Is All Required Data Present?"
+        subtopics:
+          - "Definition: All required information captured, no omissions"
+          - "Mandatory fields: System enforces completion"
+          - "Supporting documentation: Attachments required"
+          - "Audit trails: Complete activity history"
+          - "Context: Enough information to understand and reproduce"
+          - "Common violations: Skipping fields, missing attachments, incomplete documentation"
+          - "Practical tips: Complete all fields, attach supporting docs, provide context"
+
+    practical_exercises:
+      - exercise: "Accuracy Challenge"
+        description: "Spot the errors in sample data records"
+        samples:
+          - "Analytical result with transcription error"
+          - "Batch record with calculation mistake"
+          - "Temperature log with impossible values"
+
+      - exercise: "Completeness Assessment"
+        description: "Review records and identify missing information"
+        samples:
+          - "Incomplete batch record"
+          - "Test result without method reference"
+          - "Deviation without investigation details"
+
+    assessment:
+      - type: "error_identification_quiz"
+        questions: 10
+        format: "identify_errors_in_samples"
+        passing: "8/10 correct"
+
+  - module_id: "MOD-005"
+    module_title: "ALCOA+ Principles: Consistent, Enduring, and Available"
+    module_order: 5
+    duration: "20 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Explain the Consistent principle and practice data consistency"
+      - "Explain the Enduring principle and understand data preservation"
+      - "Explain the Available principle and ensure data accessibility"
+
+    content_outline:
+      - topic: "Consistent: Does It Make Sense Together?"
+        subtopics:
+          - "Definition: Data internally consistent and consistent across systems"
+          - "Format standardization: Dates, units, terminology"
+          - "Terminology: Controlled vocabulary"
+          - "Cross-system consistency: Data matches between systems"
+          - "Common violations: Mixing formats, inconsistent units, conflicting data"
+          - "Practical tips: Follow standards, use drop-downs, check cross-references"
+
+      - topic: "Enduring: Will It Last?"
+        subtopics:
+          - "Definition: Data preserved throughout retention period"
+          - "Retention requirements: 7+ years for quality data"
+          - "Storage management: HOT/WARM/COLD tiers"
+          - "Backup and redundancy: Multiple copies"
+          - "Integrity monitoring: Hash verification"
+          - "Format migration: Keeping data accessible"
+          - "Your role: Using systems properly, reporting issues"
+
+      - topic: "Available: Can We Access It?"
+        subtopics:
+          - "Definition: Data readily accessible for review, audit, inspection"
+          - "Search and retrieval: Finding data quickly"
+          - "Access controls: Security with accessibility"
+          - "System availability: 99.9% uptime"
+          - "Disaster recovery: Business continuity"
+          - "Your role: Using search tools, maintaining access rights"
+
+    assessment:
+      - type: "knowledge_check"
+        questions: 8
+        format: "multiple_choice"
+        passing: "7/8 correct"
+
+  - module_id: "MOD-006"
+    module_title: "Data Entry Best Practices"
+    module_order: 6
+    duration: "30 minutes"
+    delivery: "instructor_led_or_vr"
+
+    learning_objectives:
+      - "Demonstrate proper data entry techniques in GACP-ERP systems"
+      - "Apply ALCOA+ principles during data entry"
+      - "Identify and correct common data entry errors"
+      - "Use system validation and error handling features"
+
+    content_outline:
+      - topic: "Proper Data Entry Workflow"
+        subtopics:
+          - "Before entry: Prepare data, verify authorization, gather supporting docs"
+          - "During entry: Enter data contemporaneously, use validation, verify before submit"
+          - "After entry: Review confirmation, verify audit trail, maintain records"
+          - "Using system features: Drop-downs, auto-complete, validation messages"
+
+      - topic: "Error Handling and Correction"
+        subtopics:
+          - "Recognizing errors: Validation messages, visual cues"
+          - "Correcting errors: Before vs after submission"
+          - "Correction procedures: Document reason, obtain approval if needed"
+          - "Never: Delete data, overwrite, backdating"
+          - "Reporting persistent errors: IT support, management"
+
+      - topic: "Common Pitfalls and How to Avoid Them"
+        subtopics:
+          - "Transcription errors: Double-check, use copy-paste when appropriate"
+          - "Missing data: Complete all required fields, don't skip"
+          - "Delayed entry: Record promptly, document delays"
+          - "Shared accounts: Never share, report shared accounts"
+          - "Unclear data: Provide context, attach supporting documentation"
+
+    practical_exercises:
+      - exercise: "Data Entry Simulation"
+        description: "Practice data entry in simulated GACP-ERP environment"
+        scenarios:
+          - "Laboratory analytical result entry"
+          - "Batch production record completion"
+          - "Environmental monitoring data entry"
+          - "Deviation report documentation"
+        assessment_criteria:
+          - "Data entered accurately (100%)"
+          - "All required fields completed"
+          - "Proper use of validation features"
+          - "Errors corrected properly"
+          - "ALCOA+ principles applied"
+
+    assessment:
+      - type: "practical_demonstration"
+        scenarios: 3
+        passing: "100% (all critical competencies demonstrated)"
+        competencies:
+          - "Accurate data entry"
+          - "Completeness verification"
+          - "Proper error correction"
+          - "Contemporaneous recording"
+          - "System validation usage"
+
+  - module_id: "MOD-007"
+    module_title: "Audit Trails and Electronic Signatures"
+    module_order: 7
+    duration: "25 minutes"
+    delivery: "e-learning"
+
+    learning_objectives:
+      - "Understand the purpose and requirements of audit trails"
+      - "Explain 21 CFR Part 11 requirements for electronic signatures"
+      - "Properly use electronic signatures in GACP-ERP systems"
+      - "Review and interpret audit trails"
+
+    content_outline:
+      - topic: "Audit Trails: The Complete History"
+        subtopics:
+          - "What is an audit trail: Complete record of who, what, when, why"
+          - "Why audit trails matter: Traceability, accountability, compliance"
+          - "What's captured: Create, read, update, delete operations"
+          - "Audit trail immutability: Cannot be altered or deleted"
+          - "Reviewing audit trails: When and how to review"
+          - "Your responsibility: Creating complete audit trails through your actions"
+
+      - topic: "Electronic Signatures: Your Digital Identity"
+        subtopics:
+          - "21 CFR Part 11 requirements: Unique ID, non-repudiation, meaning"
+          - "Signature meaning: What are you signing (approval, review, acknowledgment)"
+          - "Signature components: User ID, name, meaning, timestamp"
+          - "When signatures required: Approvals, reviews, critical decisions"
+          - "Signature security: Password, biometrics, don't share"
+          - "Legal equivalence: E-signature = handwritten signature"
+          - "Your responsibility: Only sign for yourself, understand what you're signing"
+
+    practical_exercises:
+      - exercise: "Audit Trail Interpretation"
+        description: "Review audit trail and answer questions"
+        sample: "Batch record with multiple edits and approvals"
+        questions:
+          - "Who made the change?"
+          - "When was it changed?"
+          - "What was changed (before/after)?"
+          - "Why was it changed?"
+          - "Was proper approval obtained?"
+
+      - exercise: "Electronic Signature Practice"
+        description: "Practice applying electronic signatures correctly"
+        scenarios:
+          - "Approving a batch release"
+          - "Reviewing a deviation investigation"
+          - "Acknowledging training completion"
+
+    assessment:
+      - type: "scenario_quiz"
+        questions: 8
+        format: "audit_trail_interpretation"
+        passing: "7/8 correct"
+
+  - module_id: "MOD-008"
+    module_title: "Data Integrity Issues: Prevention and Response"
+    module_order: 8
+    duration: "30 minutes"
+    delivery: "instructor_led_or_case_study"
+
+    learning_objectives:
+      - "Identify common data integrity violations and red flags"
+      - "Understand consequences of data integrity breaches"
+      - "Know how to report data integrity concerns"
+      - "Apply preventive measures in daily work"
+
+    content_outline:
+      - topic: "Common Data Integrity Violations"
+        subtopics:
+          - "Backdating or predating data"
+          - "Data manipulation or falsification"
+          - "Shared user accounts"
+          - "Incomplete or missing data"
+          - "Unauthorized data modification"
+          - "Audit trail gaps or manipulation"
+          - "Poor record keeping practices"
+
+      - topic: "Red Flags and Warning Signs"
+        subtopics:
+          - "Pressure to manipulate data: 'Make it pass'"
+          - "Normalized deviance: 'Everyone does it this way'"
+          - "Shortcuts and workarounds"
+          - "Lack of oversight or review"
+          - "Unusual data patterns or results"
+          - "Missing documentation or audit trails"
+
+      - topic: "Consequences of Data Integrity Breaches"
+        subtopics:
+          - "Personal: Job loss, legal action, loss of professional reputation"
+          - "Organizational: Warning letters, consent decrees, loss of license"
+          - "Patient/Public: Product recalls, patient harm"
+          - "Financial: Fines, lost revenue, remediation costs"
+          - "Real-world case studies: Recent enforcement actions"
+
+      - topic: "Reporting and Speaking Up"
+        subtopics:
+          - "Duty to report: Ethical and regulatory obligation"
+          - "What to report: Violations, concerns, near-misses"
+          - "How to report: Supervisor, Quality, anonymous hotline"
+          - "Non-retaliation: Protection for good-faith reporting"
+          - "Culture of quality: Encouraging openness"
+
+      - topic: "Prevention: Your Daily Practices"
+        subtopics:
+          - "ALCOA+ checklist: Mental check before every data entry"
+          - "Question and challenge: Speak up when something seems wrong"
+          - "Continuous learning: Stay current with training"
+          - "Lead by example: Set the standard for your team"
+
+    case_studies:
+      - case: "Case Study 1: Ranbaxy Laboratories"
+        description: "Systematic data manipulation, FDA consent decree, loss of market"
+        discussion: "What went wrong? What could have prevented it? Individual responsibilities?"
+
+      - case: "Case Study 2: Shared User Accounts"
+        description: "Laboratory using shared 'labuser' account, cannot trace who did what"
+        discussion: "ALCOA+ violations? Consequences? How to fix?"
+
+      - case: "Case Study 3: Backdated Entries"
+        description: "Analyst backdates environmental monitoring data to avoid investigation"
+        discussion: "Ethical issues? Regulatory implications? Reporting obligations?"
+
+    assessment:
+      - type: "case_study_analysis"
+        cases: 2
+        passing: "≥80% on rubric"
+        rubric_criteria:
+          - "Correctly identifies violations"
+          - "Understands consequences"
+          - "Proposes appropriate solutions"
+          - "Demonstrates ethical reasoning"
+
+  - module_id: "MOD-009"
+    module_title: "Final Assessment and Competency Verification"
+    module_order: 9
+    duration: "30 minutes"
+    delivery: "assessment"
+
+    learning_objectives:
+      - "Demonstrate comprehensive understanding of data integrity principles"
+      - "Apply ALCOA+ principles to complex scenarios"
+      - "Demonstrate competency in data entry and error correction"
+
+    assessment_components:
+      - component: "Written Examination"
+        duration: "20 minutes"
+        format: "mixed_format"
+        questions:
+          - type: "multiple_choice"
+            count: 20
+            topics: "All ALCOA+ principles, regulatory requirements, best practices"
+          - type: "scenario_based"
+            count: 5
+            topics: "Complex data integrity scenarios requiring analysis"
+          - type: "true_false"
+            count: 10
+            topics: "Common misconceptions and best practices"
+        passing: "≥80% (28/35 correct)"
+
+      - component: "Practical Competency Demonstration"
+        duration: "10 minutes"
+        format: "hands_on"
+        tasks:
+          - task: "Proper data entry"
+            description: "Enter data for laboratory result accurately and completely"
+            pass_criteria: "100% accuracy, all fields complete, proper use of system"
+          - task: "Error correction"
+            description: "Identify error in previous entry and correct properly"
+            pass_criteria: "Error identified, correction procedure followed, documented"
+          - task: "Audit trail review"
+            description: "Review audit trail and answer questions"
+            pass_criteria: "Correctly interprets audit trail information"
+        passing: "100% (all critical competencies demonstrated)"
+
+      - component: "Ethics and Judgment Scenarios"
+        duration: "5 minutes"
+        format: "scenario_response"
+        scenarios:
+          - "Supervisor asks you to backdate data entry"
+          - "You discover colleague using your login credentials"
+          - "You realize you made an error yesterday"
+        passing: "≥80% (correct responses per answer rubric)"
+
+certification:
+  certificate_issued: true
+  certificate_title: "Data Integrity Fundamentals Certificate of Completion"
+  certificate_content:
+    - "Trainee name"
+    - "Training completion date"
+    - "Training version number"
+    - "Assessment scores"
+    - "Instructor/trainer name"
+    - "Certificate number (unique)"
+
+  certificate_validity: "12 months"
+  recertification_requirement: "Annual refresher training"
+
+  competency_record:
+    location: "Training Management System"
+    includes:
+      - "Training completion date"
+      - "Assessment scores"
+      - "Practical competency demonstration results"
+      - "Certificate number"
+      - "Next training due date"
+
+training_materials:
+  trainee_materials:
+    - "Training workbook (PDF)"
+    - "ALCOA+ quick reference card"
+    - "Data entry best practices checklist"
+    - "Reporting procedures guide"
+    - "Access to e-learning modules"
+    - "VR simulation access (if applicable)"
+
+  trainer_materials:
+    - "Instructor guide"
+    - "Presentation slides"
+    - "Case study details with discussion guides"
+    - "Assessment answer keys and rubrics"
+    - "Practical demonstration evaluation forms"
+    - "Training effectiveness evaluation form"
+
+training_effectiveness:
+  effectiveness_evaluation:
+    method: "multi_level_kirkpatrick"
+
+    level_1_reaction:
+      measure: "Post-training survey"
+      questions:
+        - "Training relevance to job"
+        - "Clarity of content"
+        - "Instructor effectiveness"
+        - "Quality of materials"
+      target: "≥4.0/5.0 average rating"
+
+    level_2_learning:
+      measure: "Assessment scores"
+      target: "≥85% average score, 100% passing rate"
+
+    level_3_behavior:
+      measure: "On-the-job observation, data quality metrics"
+      method: "Supervisor observation within 30 days of training, data quality audit"
+      target: "Demonstrated application of ALCOA+ principles, improved data quality scores"
+
+    level_4_results:
+      measure: "Organizational data integrity metrics"
+      metrics:
+        - "Data integrity incident rates (decrease)"
+        - "Audit findings related to data integrity (decrease)"
+        - "ALCOA+ compliance scores (increase)"
+        - "Data quality scores (increase)"
+      target: "Measurable improvement in organizational data integrity performance"
+
+continuous_improvement:
+  review_frequency: "annual"
+  review_criteria:
+    - "Training effectiveness evaluation results"
+    - "Changes in regulatory requirements"
+    - "Audit findings and data integrity incidents"
+    - "New systems or processes implemented"
+    - "Feedback from trainees and trainers"
+    - "Industry best practices and emerging trends"
+
+  update_process:
+    - step: 1
+      action: "Collect feedback and performance data"
+      responsibility: "Training Coordinator"
+    - step: 2
+      action: "Analyze training effectiveness"
+      responsibility: "Quality Assurance"
+    - step: 3
+      action: "Identify improvement opportunities"
+      responsibility: "Data Integrity Manager"
+    - step: 4
+      action: "Update training materials"
+      responsibility: "Training Developer"
+    - step: 5
+      action: "Review and approve updates"
+      responsibility: "Quality Manager"
+    - step: 6
+      action: "Deploy updated training"
+      responsibility: "Training Coordinator"
+
+storage:
+  training_records_location: "Training Management System"
+  training_materials_location: "Mayan-EDMS under Training Materials folder"
+  retention_period: "Duration of employment + 3 years"
+  backup_requirement: "automated_daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP-DI-001"
+    approved_by: "Pending"

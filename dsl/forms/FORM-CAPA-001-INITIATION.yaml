@@ -1,0 +1,334 @@
+# DSL: CAPA Initiation Form
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-CAPA-001"
+  category: "quality_action"
+  title: "CAPA Initiation Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CAPA-001"
+
+usage:
+  purpose: "Initiate corrective or preventive action to address identified quality issues, risks, or improvement opportunities"
+  frequency: "as_needed"
+  trigger: "Quality event, deviation, audit finding, risk assessment, trend analysis, or improvement opportunity identified"
+  responsible_roles:
+    - "ROLE-CAPAMGR-001"
+    - "ROLE-CAPACOOR-001"
+    - "ROLE-QA-002"
+
+form_structure:
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "CAPA ID"
+        field_type: "auto_generated"
+        data_type: "string"
+        required: true
+        format: "CAPA-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "Initiation Date"
+        field_type: "auto_date"
+        data_type: "date"
+        required: true
+        format: "YYYY-MM-DD"
+
+      - field_id: "HDR-003"
+        label: "Initiator Name"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-004"
+        label: "Initiator Department"
+        field_type: "dropdown"
+        data_type: "string"
+        required: true
+        options:
+          - "Quality Assurance"
+          - "Production"
+          - "Quality Control Laboratory"
+          - "Facilities"
+          - "Regulatory Affairs"
+          - "Compliance"
+          - "Other"
+
+  sections:
+    - section_id: "SEC-001"
+      section_title: "CAPA Source and Trigger"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "CAPA Type"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Corrective Action (CA) - Problem resolution"
+            - "Preventive Action (PA) - Risk mitigation"
+            - "Combined CAPA - Both corrective and preventive"
+
+        - field_id: "SEC-001-F02"
+          label: "CAPA Trigger Category"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "Deviation"
+            - "Customer Complaint"
+            - "Internal Audit Finding"
+            - "External Audit Finding"
+            - "Regulatory Inspection Finding"
+            - "Out of Specification (OOS)"
+            - "Equipment Malfunction"
+            - "Safety Incident"
+            - "Trend Analysis"
+            - "Risk Assessment"
+            - "Process Improvement Opportunity"
+            - "Supplier Quality Issue"
+            - "Other"
+
+        - field_id: "SEC-001-F03"
+          label: "Source Reference ID"
+          field_type: "text"
+          data_type: "string"
+          required: false
+          max_length: 50
+          placeholder: "e.g., DEV-2026-0015, AUDIT-2026-003"
+
+        - field_id: "SEC-001-F04"
+          label: "Description of Issue/Opportunity"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Comprehensive description of problem, risk, or improvement opportunity"
+
+    - section_id: "SEC-002"
+      section_title: "Impact and Priority"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Impact on Product Quality"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Critical - Direct impact on safety or efficacy"
+            - "Major - Potential impact on quality attributes"
+            - "Minor - Minimal or no quality impact"
+            - "Not Applicable"
+
+        - field_id: "SEC-002-F02"
+          label: "Impact on Compliance"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Critical - Regulatory violation or GMP breach"
+            - "Major - Non-conformance with standards"
+            - "Minor - Administrative non-conformance"
+            - "Not Applicable"
+
+        - field_id: "SEC-002-F03"
+          label: "Priority Level"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Priority 1 (Critical) - Immediate safety/regulatory threat (24h immediate action)"
+            - "Priority 2 (High) - Significant quality/business impact (30d investigation)"
+            - "Priority 3 (Medium) - Moderate impact (60d investigation)"
+            - "Priority 4 (Low) - Minor impact (90d investigation)"
+
+        - field_id: "SEC-002-F04"
+          label: "Complexity Assessment"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Simple - Single department, straightforward solution"
+            - "Moderate - Multi-department, standard investigation"
+            - "Complex - Cross-functional, extensive investigation"
+            - "Critical - Organization-wide, strategic importance"
+
+    - section_id: "SEC-003"
+      section_title: "Initial Risk Assessment"
+      section_order: 3
+
+      fields:
+        - field_id: "SEC-003-F01"
+          label: "Severity of Impact (if no action taken)"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Critical - Patient safety, regulatory action"
+            - "Major - Product quality, compliance breach"
+            - "Minor - Administrative, minimal impact"
+
+        - field_id: "SEC-003-F02"
+          label: "Probability of Recurrence/Occurrence"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High - Likely to occur frequently"
+            - "Medium - May occur occasionally"
+            - "Low - Rare occurrence"
+
+        - field_id: "SEC-003-F03"
+          label: "Risk Level (calculated)"
+          field_type: "auto_calculated"
+          data_type: "string"
+          required: true
+          calculation: "Based on Severity × Probability matrix"
+          possible_values:
+            - "High Risk"
+            - "Medium Risk"
+            - "Low Risk"
+
+        - field_id: "SEC-003-F04"
+          label: "Immediate Actions Taken (if any)"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1000
+          placeholder: "Containment or emergency measures already implemented"
+
+    - section_id: "SEC-004"
+      section_title: "CAPA Assignment"
+      section_order: 4
+
+      fields:
+        - field_id: "SEC-004-F01"
+          label: "CAPA Owner"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+          placeholder: "Person responsible for CAPA investigation and implementation"
+
+        - field_id: "SEC-004-F02"
+          label: "CAPA Owner Department"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "Quality Assurance"
+            - "Production"
+            - "Quality Control Laboratory"
+            - "Facilities"
+            - "Regulatory Affairs"
+            - "Compliance"
+            - "Other"
+
+        - field_id: "SEC-004-F03"
+          label: "Investigation Team Members"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 500
+          placeholder: "Names and roles of team members if cross-functional investigation"
+
+        - field_id: "SEC-004-F04"
+          label: "Target Investigation Completion Date"
+          field_type: "auto_calculated"
+          data_type: "date"
+          required: true
+          calculation: "Based on priority: P1=30d, P2=60d, P3=90d, P4=120d from initiation"
+
+        - field_id: "SEC-004-F05"
+          label: "Target CAPA Implementation Date"
+          field_type: "auto_calculated"
+          data_type: "date"
+          required: true
+          calculation: "Investigation date + 90 days"
+
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "CAPA Initiator"
+        required_role: "Any authorized role"
+        required: true
+        meaning: "I identified this quality issue/opportunity and initiate CAPA"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-002"
+        role: "CAPA Manager Review"
+        required_role: "ROLE-CAPAMGR-001"
+        required: true
+        meaning: "I reviewed CAPA initiation, assigned owner, and set priorities"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-003"
+        role: "Quality Manager Approval"
+        required_role: "ROLE-QA-002"
+        required: true
+        meaning: "I approve CAPA initiation and authorize investigation"
+        date_required: true
+        time_required: false
+
+validation:
+  rules:
+    - rule_id: "VAL-001"
+      field_ref: "SEC-001-F04"
+      rule_type: "min_length"
+      condition: "Description must be at least 50 characters"
+      error_message: "Provide detailed description of issue (minimum 50 characters)"
+
+    - rule_id: "VAL-002"
+      field_ref: "SEC-003-F03"
+      rule_type: "auto_calculation"
+      condition: "Risk level calculated from severity and probability"
+      error_message: "System will calculate risk level"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "CAPA being initiated"
+      next_states: ["submitted"]
+
+    - state: "submitted"
+      description: "Awaiting CAPA Manager review"
+      next_states: ["assigned", "rejected"]
+
+    - state: "assigned"
+      description: "CAPA owner assigned, investigation pending QA approval"
+      next_states: ["approved", "returned"]
+
+    - state: "approved"
+      description: "CAPA approved, investigation in progress"
+      next_states: ["investigation"]
+
+    - state: "investigation"
+      description: "Root cause analysis underway"
+      next_states: ["action_planning"]
+
+    - state: "rejected"
+      description: "CAPA initiation rejected, no action required"
+      next_states: []
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

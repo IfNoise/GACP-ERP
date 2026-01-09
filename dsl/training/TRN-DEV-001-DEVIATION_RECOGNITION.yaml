@@ -1,0 +1,279 @@
+# DSL: Deviation Training Module
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0 Section 11
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-DEV-001"
+  training_type: "mandatory"
+  category: "quality"
+  title: "Deviation Recognition and Reporting"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DEV-001"
+
+training_details:
+  purpose: "Ensure all personnel can recognize, report, and respond appropriately to deviations from established procedures and specifications"
+  target_audience:
+    - "All production personnel"
+    - "All quality control personnel"
+    - "All laboratory personnel"
+    - "Supervisors and managers"
+    - "New employees before starting work"
+  prerequisites:
+    - "TRN-GMP-001: Good Manufacturing Practice Basics"
+  duration_hours: 2
+  delivery_method: "blended"
+  delivery_components:
+    - "E-learning module (1 hour)"
+    - "Instructor-led examples (30 minutes)"
+    - "Practical scenarios (30 minutes)"
+  recertification_period_months: 12
+  passing_score: 80
+
+learning_objectives:
+  - objective_id: "LO-001"
+    objective: "Define deviation and identify examples in different work areas"
+    bloom_level: "understanding"
+
+  - objective_id: "LO-002"
+    objective: "Classify deviations by severity (critical, major, minor)"
+    bloom_level: "applying"
+
+  - objective_id: "LO-003"
+    objective: "Demonstrate proper immediate response to discovered deviations"
+    bloom_level: "applying"
+
+  - objective_id: "LO-004"
+    objective: "Complete deviation report form accurately and timely"
+    bloom_level: "applying"
+
+  - objective_id: "LO-005"
+    objective: "Explain importance of deviation management for product quality and compliance"
+    bloom_level: "understanding"
+
+training_modules:
+  - module_id: "MOD-001"
+    module_title: "Introduction to Deviation Management"
+    module_order: 1
+    duration_minutes: 20
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-001-T01"
+        topic_title: "What is a Deviation?"
+        content_summary: "Definition, importance for quality and compliance, consequences of ignoring deviations"
+        duration_minutes: 10
+      - topic_id: "MOD-001-T02"
+        topic_title: "Types of Deviations"
+        content_summary: "Production, quality control, materials, facility, documentation deviations with examples"
+        duration_minutes: 10
+    assessment:
+      - question_id: "MOD-001-Q01"
+        question_type: "multiple_choice"
+        question_text: "Which of the following is a deviation?"
+        correct_answer: "Any departure from approved procedure, specification, or standard"
+      - question_id: "MOD-001-Q02"
+        question_type: "multiple_select"
+        question_text: "Which areas can have deviations? (Select all that apply)"
+        correct_answer:
+          [
+            "Production",
+            "Quality Control",
+            "Materials Management",
+            "Facility/Utilities",
+            "Documentation",
+          ]
+
+  - module_id: "MOD-002"
+    module_title: "Deviation Severity Classification"
+    module_order: 2
+    duration_minutes: 30
+    delivery_method: "e-learning"
+    topics:
+      - topic_id: "MOD-002-T01"
+        topic_title: "Critical Deviations"
+        content_summary: "Safety/efficacy impact, regulatory violations, response time requirements"
+        duration_minutes: 10
+      - topic_id: "MOD-002-T02"
+        topic_title: "Major Deviations"
+        content_summary: "Quality impact, GMP breach, response time requirements"
+        duration_minutes: 10
+      - topic_id: "MOD-002-T03"
+        topic_title: "Minor Deviations"
+        content_summary: "No quality/safety impact, administrative issues, response time requirements"
+        duration_minutes: 10
+    assessment:
+      - question_id: "MOD-002-Q01"
+        question_type: "scenario"
+        question_text: "You discover microbiological contamination in a production batch. What severity is this?"
+        correct_answer: "Critical - potential safety impact, requires immediate response within 2 hours"
+      - question_id: "MOD-002-Q02"
+        question_type: "scenario"
+        question_text: "A document signature is missing from a completed batch record. What severity?"
+        correct_answer: "Major - documentation discrepancy, requires response within 24 hours"
+
+  - module_id: "MOD-003"
+    module_title: "Immediate Response to Deviations"
+    module_order: 3
+    duration_minutes: 20
+    delivery_method: "instructor-led"
+    topics:
+      - topic_id: "MOD-003-T01"
+        topic_title: "Immediate Actions Required"
+        content_summary: "Secure/isolate materials, document observations, notify supervisor/QA, implement containment, preserve evidence"
+        duration_minutes: 10
+      - topic_id: "MOD-003-T02"
+        topic_title: "What NOT to Do"
+        content_summary: "Do not continue process, do not destroy evidence, do not delay reporting, do not try to 'fix' without authorization"
+        duration_minutes: 10
+    assessment:
+      - question_id: "MOD-003-Q01"
+        question_type: "scenario"
+        question_text: "You notice equipment malfunction during production. What is your FIRST action?"
+        correct_answer: "Stop operation and secure affected materials to prevent further impact"
+      - question_id: "MOD-003-Q02"
+        question_type: "true_false"
+        question_text: "It is acceptable to continue production and report the deviation later if the impact seems minor"
+        correct_answer: "False - all deviations must be reported immediately and process stopped until evaluation"
+
+  - module_id: "MOD-004"
+    module_title: "Deviation Reporting Process"
+    module_order: 4
+    duration_minutes: 30
+    delivery_method: "instructor-led"
+    topics:
+      - topic_id: "MOD-004-T01"
+        topic_title: "Completing FORM-DEV-001"
+        content_summary: "Required fields, level of detail, accurate descriptions, timeline requirements"
+        duration_minutes: 15
+      - topic_id: "MOD-004-T02"
+        topic_title: "Electronic Deviation Management System"
+        content_summary: "System navigation, workflow, notifications, tracking status"
+        duration_minutes: 15
+    assessment:
+      - question_id: "MOD-004-Q01"
+        question_type: "multiple_choice"
+        question_text: "When should you report a critical deviation?"
+        correct_answer: "Within 2 hours of discovery"
+      - question_id: "MOD-004-Q02"
+        question_type: "multiple_choice"
+        question_text: "What information must be included in initial deviation report?"
+        correct_answer: "What happened, when, where, who was involved, immediate actions taken, affected materials"
+
+  - module_id: "MOD-005"
+    module_title: "Practical Scenarios and Role Play"
+    module_order: 5
+    duration_minutes: 30
+    delivery_method: "practical"
+    topics:
+      - topic_id: "MOD-005-T01"
+        topic_title: "Production Deviation Scenario"
+        content_summary: "Walk through production deviation example from discovery to reporting"
+        duration_minutes: 10
+      - topic_id: "MOD-005-T02"
+        topic_title: "Laboratory Deviation Scenario"
+        content_summary: "Walk through OOS result example and proper response"
+        duration_minutes: 10
+      - topic_id: "MOD-005-T03"
+        topic_title: "Role Play Exercise"
+        content_summary: "Practice deviation discovery, communication, and reporting"
+        duration_minutes: 10
+    assessment:
+      - question_id: "MOD-005-Q01"
+        question_type: "practical"
+        question_text: "Demonstrate: Discover deviation scenario, perform immediate actions, complete deviation report"
+        correct_answer: "Instructor observation checklist completed"
+
+assessment_strategy:
+  formative_assessment:
+    - "Quiz at end of each module"
+    - "Scenario-based questions"
+    - "Group discussion participation"
+  summative_assessment:
+    - assessment_id: "FINAL-001"
+      assessment_type: "final_exam"
+      format: "computer-based"
+      duration_minutes: 30
+      questions_count: 20
+      passing_score: 80
+      question_breakdown:
+        multiple_choice: 10
+        scenario_based: 8
+        true_false: 2
+  remediation:
+    on_fail: "Re-take failed modules and final exam after review with supervisor"
+    max_attempts: 3
+
+training_materials:
+  required_materials:
+    - "Training slides"
+    - "SOP-DEV-001 (reference copy)"
+    - "FORM-DEV-001 blank template"
+    - "Deviation examples and case studies"
+    - "Quick reference card for severity classification"
+  optional_materials:
+    - "Root cause analysis tools guide"
+    - "Investigation checklist"
+
+trainer_qualifications:
+  required:
+    - "Train-the-Trainer certification"
+    - "GMP/GACP knowledge"
+    - "Deviation management experience"
+  preferred:
+    - "Quality management background"
+    - "Investigation experience"
+
+training_record:
+  documentation_required:
+    - "Attendance record"
+    - "Final exam score"
+    - "Practical assessment result"
+    - "Trainer signature"
+    - "Trainee signature"
+  storage_location: "Learning Management System (LMS)"
+  retention_period: "30_years"
+  record_fields:
+    - field: "employee_id"
+      required: true
+    - field: "employee_name"
+      required: true
+    - field: "training_date"
+      required: true
+    - field: "final_exam_score"
+      required: true
+    - field: "practical_result"
+      required: true
+    - field: "trainer_name"
+      required: true
+    - field: "next_recertification_date"
+      required: true
+
+effectiveness_evaluation:
+  methods:
+    - method: "Post-training knowledge assessment"
+      timing: "Immediately after training"
+      target: ">= 80% average score"
+    - method: "On-the-job deviation reporting quality"
+      timing: "30 days post-training"
+      target: "Accurate and timely reporting"
+    - method: "Supervisor observation"
+      timing: "90 days post-training"
+      target: "Proper deviation response demonstrated"
+  continuous_improvement:
+    review_frequency: "annually"
+    responsible_role: "ROLE-QA-002"
+    update_triggers:
+      - "Procedure changes"
+      - "System updates"
+      - "Training effectiveness below target"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

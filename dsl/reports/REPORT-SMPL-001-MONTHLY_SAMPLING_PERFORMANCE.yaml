@@ -1,0 +1,566 @@
+# DSL: Monthly Sampling Performance Report
+# Version: 1.0
+# Related SOP: SOP-SMPL-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "REPORT-SMPL-001"
+  title: "Monthly Sampling Performance Report"
+  version: "1.0"
+  effective_date: "2026-01-08"
+  supersedes: null
+
+  report_type:
+    enum:
+      - performance_report
+
+  report_category:
+    enum:
+      - operational
+
+  confidentiality:
+    enum:
+      - internal
+
+  purpose: "Provide monthly analysis of sampling procedures effectiveness, including schedule compliance, sample integrity, documentation quality, result variability and improvement opportunities"
+  scope: "All sampling activities in GACP-ERP including raw materials, in-process, finished products, environmental monitoring and retain samples"
+
+  regulatory_compliance:
+    standards:
+      - "GACP Guidelines"
+      - "GMP Standards"
+      - "ISO/IEC 17025"
+    requirements:
+      - "Performance monitoring and trending"
+      - "Continuous improvement documentation"
+      - "Management review input"
+
+# ====================
+# 2. REPORT CONTEXT
+# ====================
+report_context:
+  reporting_period: "Calendar month"
+  preparation_frequency: "Monthly (by 5th of following month)"
+
+  prepared_by: "QC Manager"
+  reviewed_by: "Quality Manager"
+  approved_by: "Site Director"
+
+  distribution_list:
+    - "QC Manager"
+    - "Quality Manager"
+    - "Laboratory Manager"
+    - "Production Manager"
+    - "Site Director"
+    - "Compliance Officer"
+
+  related_sops:
+    - id: "SOP-SMPL-001"
+      title: "Sampling Procedures"
+    - id: "SOP-DEV-001"
+      title: "Deviation Management"
+    - id: "SOP-CAPA-001"
+      title: "Corrective and Preventive Actions"
+
+# ====================
+# 3. DATA SOURCES
+# ====================
+data_sources:
+  - source: "Sample Collection Records"
+    system: "GACP-ERP"
+    table: "FORM-SMPL-001 database"
+    fields:
+      - "sample_id"
+      - "sampling_date"
+      - "sample_type"
+      - "sampler_id"
+      - "batch_lot_number"
+
+  - source: "Chain of Custody Records"
+    system: "GACP-ERP"
+    table: "FORM-COC-001 database"
+    fields:
+      - "transfer_timestamps"
+      - "custody_signatures"
+      - "sample_condition"
+
+  - source: "Laboratory Receipt Records"
+    system: "LIMS"
+    table: "sample_intake"
+    fields:
+      - "receipt_timestamp"
+      - "condition_upon_receipt"
+      - "rejection_reason"
+
+  - source: "Deviation Reports"
+    system: "QMS"
+    table: "deviation_log"
+    fields:
+      - "deviation_id"
+      - "deviation_type"
+      - "severity"
+      - "root_cause"
+
+  - source: "Training Records"
+    system: "GACP-ERP"
+    table: "training_database"
+    fields:
+      - "employee_id"
+      - "training_status"
+      - "expiry_date"
+
+  - source: "Equipment Calibration Records"
+    system: "GACP-ERP"
+    table: "equipment_log"
+    fields:
+      - "equipment_id"
+      - "calibration_date"
+      - "next_calibration"
+
+# ====================
+# 4. REPORT STRUCTURE
+# ====================
+report_structure:
+  sections:
+    - section_id: "01"
+      section_title: "Executive Summary"
+      description: "High-level overview of monthly sampling performance"
+
+      content_elements:
+        - element: "Reporting Period"
+          data_type: "date_range"
+          format: "Month YYYY"
+
+        - element: "Total Samples Collected"
+          data_type: "number"
+          calculation: "COUNT(sample_id) for reporting period"
+
+        - element: "Key Performance Highlights"
+          data_type: "bullet_list"
+          items:
+            - "Schedule adherence percentage"
+            - "Sample integrity rate"
+            - "Critical deviations count"
+            - "Notable achievements or concerns"
+
+        - element: "Management Actions Required"
+          data_type: "action_list"
+          priority: "high"
+
+    - section_id: "02"
+      section_title: "Sampling Volume and Distribution"
+      description: "Breakdown of sampling activities by type and category"
+
+      data_fields:
+        - field_name: "Samples by Type"
+          data_type: "table"
+          columns:
+            - "Sample Type"
+            - "Count"
+            - "Percentage of Total"
+            - "Target vs. Actual"
+          rows:
+            - category: "Raw Material"
+              calculation: "COUNT(sample_id WHERE sample_type='raw_material')"
+            - category: "In-Process"
+              calculation: "COUNT(sample_id WHERE sample_type='in_process')"
+            - category: "Finished Product"
+              calculation: "COUNT(sample_id WHERE sample_type='finished_product')"
+            - category: "Environmental"
+              calculation: "COUNT(sample_id WHERE sample_type='environmental')"
+            - category: "Retain"
+              calculation: "COUNT(sample_id WHERE sample_type='retain')"
+
+        - field_name: "Samples by Category"
+          data_type: "table"
+          columns:
+            - "Sample Category"
+            - "Count"
+            - "YoY Trend"
+          include_chart: true
+          chart_type: "bar"
+
+        - field_name: "Sampling Distribution by Week"
+          data_type: "time_series"
+          x_axis: "Week of month"
+          y_axis: "Number of samples"
+          include_chart: true
+          chart_type: "line"
+
+    - section_id: "03"
+      section_title: "Schedule Compliance"
+      description: "Analysis of sampling timeliness against planned schedule"
+
+      kpis:
+        - kpi_name: "Sampling Timeliness"
+          target: "100% on schedule"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "(Samples collected on planned date / Total planned samples) * 100"
+          status_indicator: "Green if ≥95%, Yellow if 90-94%, Red if <90%"
+
+        - kpi_name: "Average Delay"
+          target: "0 days"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "AVG(actual_date - planned_date WHERE actual_date > planned_date)"
+          unit: "days"
+
+        - kpi_name: "Samples Missed"
+          target: "0"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "COUNT(planned samples not collected in period)"
+
+      data_fields:
+        - field_name: "Late Samples Details"
+          data_type: "table"
+          columns:
+            - "Sample ID"
+            - "Planned Date"
+            - "Actual Date"
+            - "Delay (days)"
+            - "Reason"
+            - "Impact"
+          filter: "WHERE actual_date > planned_date"
+
+        - field_name: "Delay Root Causes"
+          data_type: "pareto_chart"
+          x_axis: "Delay reason"
+          y_axis: "Frequency"
+
+    - section_id: "04"
+      section_title: "Sample Integrity"
+      description: "Assessment of sample condition throughout collection and transfer"
+
+      kpis:
+        - kpi_name: "Sample Integrity Rate"
+          target: "≥99.5%"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "(Samples accepted by lab / Total samples transferred) * 100"
+
+        - kpi_name: "Sample Rejections"
+          target: "0"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "COUNT(samples rejected by laboratory)"
+
+      data_fields:
+        - field_name: "Integrity Failures"
+          data_type: "table"
+          columns:
+            - "Sample ID"
+            - "Issue Type"
+            - "Detection Point"
+            - "Root Cause"
+            - "Corrective Action"
+          filter: "WHERE condition_upon_receipt != 'acceptable'"
+
+        - field_name: "Integrity Issues by Type"
+          data_type: "pie_chart"
+          categories:
+            - "Container damage"
+            - "Seal breach"
+            - "Temperature excursion"
+            - "Contamination"
+            - "Labeling error"
+            - "Other"
+
+        - field_name: "Storage Condition Compliance"
+          data_type: "table"
+          columns:
+            - "Sample Type"
+            - "Required Conditions"
+            - "Compliance Rate"
+            - "Excursions"
+
+    - section_id: "05"
+      section_title: "Documentation Quality"
+      description: "Completeness and accuracy of sampling documentation"
+
+      kpis:
+        - kpi_name: "Documentation Completeness"
+          target: "100%"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "(Forms with all required fields / Total forms) * 100"
+
+        - kpi_name: "Documentation Errors"
+          target: "0"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "COUNT(forms requiring correction)"
+
+      data_fields:
+        - field_name: "Incomplete Documentation"
+          data_type: "table"
+          columns:
+            - "Sample ID"
+            - "Missing Fields"
+            - "Sampler"
+            - "Date Identified"
+            - "Resolution Date"
+
+        - field_name: "Common Documentation Errors"
+          data_type: "frequency_table"
+          columns:
+            - "Error Type"
+            - "Frequency"
+            - "Trend vs. Last Month"
+
+        - field_name: "Chain of Custody Breaks"
+          data_type: "incident_list"
+          details: "Any interruptions in custody documentation"
+
+    - section_id: "06"
+      section_title: "Test Result Variability"
+      description: "Statistical analysis of sampling reproducibility"
+
+      kpis:
+        - kpi_name: "Replicate Sample Variability"
+          target: "RSD <10%"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "RSD of replicate sample results"
+
+        - kpi_name: "Composite Sample Homogeneity"
+          target: "RSD <15%"
+          actual: "CALCULATION_REQUIRED"
+          calculation: "RSD across sub-samples in composite"
+
+      data_fields:
+        - field_name: "High Variability Samples"
+          data_type: "table"
+          columns:
+            - "Sample ID"
+            - "Parameter"
+            - "RSD %"
+            - "Investigation Status"
+          filter: "WHERE RSD > 10%"
+
+        - field_name: "Variability Trend"
+          data_type: "control_chart"
+          x_axis: "Week"
+          y_axis: "Average RSD %"
+          control_limits: "±3 sigma"
+
+    - section_id: "07"
+      section_title: "Personnel Performance"
+      description: "Sampler qualification status and performance"
+
+      data_fields:
+        - field_name: "Sampler Qualification Status"
+          data_type: "table"
+          columns:
+            - "Sampler Name"
+            - "Employee ID"
+            - "Training Status"
+            - "Expiry Date"
+            - "Samples Collected"
+
+        - field_name: "Training Currency"
+          data_type: "status_summary"
+          categories:
+            - "Current (>3 months to expiry)"
+            - "Due Soon (1-3 months to expiry)"
+            - "Overdue"
+
+        - field_name: "Performance by Sampler"
+          data_type: "table"
+          columns:
+            - "Sampler"
+            - "Samples Collected"
+            - "Documentation Errors"
+            - "Integrity Issues"
+            - "Performance Score"
+
+    - section_id: "08"
+      section_title: "Deviations and Incidents"
+      description: "Summary of sampling-related deviations"
+
+      data_fields:
+        - field_name: "Deviation Summary"
+          data_type: "table"
+          columns:
+            - "Deviation ID"
+            - "Type"
+            - "Severity"
+            - "Date"
+            - "Root Cause"
+            - "CAPA Status"
+          source: "deviation_log WHERE area='sampling'"
+
+        - field_name: "Deviations by Category"
+          data_type: "bar_chart"
+          categories:
+            - "Insufficient sample size"
+            - "Contamination"
+            - "Chain of custody break"
+            - "Storage failure"
+            - "Documentation error"
+            - "Equipment failure"
+
+        - field_name: "Repeat Deviations"
+          data_type: "alert_table"
+          columns:
+            - "Deviation Type"
+            - "Occurrences This Month"
+            - "Last Month"
+            - "CAPA Effectiveness"
+          highlight: "WHERE occurrences > 2"
+
+    - section_id: "09"
+      section_title: "Equipment Performance"
+      description: "Sampling equipment calibration and maintenance status"
+
+      data_fields:
+        - field_name: "Equipment Calibration Status"
+          data_type: "table"
+          columns:
+            - "Equipment ID"
+            - "Equipment Type"
+            - "Last Calibration"
+            - "Next Due"
+            - "Status"
+
+        - field_name: "Overdue Calibrations"
+          data_type: "alert_list"
+          filter: "WHERE next_due < current_date"
+
+        - field_name: "Equipment Issues"
+          data_type: "incident_summary"
+          details: "Malfunctions, out-of-tolerance findings"
+
+    - section_id: "10"
+      section_title: "Improvement Opportunities"
+      description: "Identified areas for enhancement"
+
+      content_elements:
+        - element: "Process Improvements Identified"
+          data_type: "bullet_list"
+          source: "Analysis of trends and issues"
+
+        - element: "Technology Enhancements"
+          data_type: "bullet_list"
+          examples:
+            - "Automated sampling equipment"
+            - "Enhanced tracking systems"
+            - "Improved analytical methods"
+
+        - element: "Training Needs"
+          data_type: "bullet_list"
+          source: "Performance gaps analysis"
+
+        - element: "Recommended Actions"
+          data_type: "action_table"
+          columns:
+            - "Action"
+            - "Priority"
+            - "Owner"
+            - "Target Date"
+
+    - section_id: "11"
+      section_title: "Trend Analysis"
+      description: "Multi-month trending of key metrics"
+
+      data_fields:
+        - field_name: "KPI Trends (6 months)"
+          data_type: "multi_line_chart"
+          metrics:
+            - "Sampling timeliness %"
+            - "Sample integrity %"
+            - "Documentation completeness %"
+            - "Test result RSD %"
+
+        - field_name: "Volume Trends (12 months)"
+          data_type: "line_chart"
+          x_axis: "Month"
+          y_axis: "Number of samples"
+
+        - field_name: "Year-over-Year Comparison"
+          data_type: "comparison_table"
+          columns:
+            - "Metric"
+            - "Current Month"
+            - "Same Month Last Year"
+            - "% Change"
+
+    - section_id: "12"
+      section_title: "Conclusions and Recommendations"
+      description: "Summary and management actions"
+
+      content_elements:
+        - element: "Overall Assessment"
+          data_type: "narrative"
+          content: "Summary of sampling system performance"
+
+        - element: "Key Achievements"
+          data_type: "bullet_list"
+
+        - element: "Areas of Concern"
+          data_type: "bullet_list"
+
+        - element: "Management Actions Required"
+          data_type: "action_table"
+          columns:
+            - "Action"
+            - "Priority"
+            - "Owner"
+            - "Due Date"
+            - "Status"
+
+        - element: "Next Month Focus Areas"
+          data_type: "bullet_list"
+
+# ====================
+# 5. APPROVAL WORKFLOW
+# ====================
+approval:
+  workflow:
+    - step: 1
+      role: "QC Manager"
+      action: "Prepare and review report"
+      deadline: "3rd of following month"
+
+    - step: 2
+      role: "Quality Manager"
+      action: "Technical review and approval"
+      deadline: "5th of following month"
+
+    - step: 3
+      role: "Site Director"
+      action: "Final review and approval"
+      deadline: "7th of following month"
+
+    - step: 4
+      role: "Document Control"
+      action: "Distribution to stakeholders"
+      deadline: "Within 24 hours of approval"
+
+# ====================
+# 6. RETENTION AND DISTRIBUTION
+# ====================
+records:
+  retention_period: "7 years minimum"
+  storage_location: "GACP-ERP Document Management System"
+  backup: "Monthly backup to secure archive"
+
+  distribution:
+    method: "Electronic via ERP system"
+    recipients: "Per distribution list in metadata"
+    confidentiality: "Internal use only"
+
+# ====================
+# 7. REFERENCES
+# ====================
+references:
+  procedures:
+    - "SOP-SMPL-001: Sampling Procedures"
+    - "SOP-DEV-001: Deviation Management"
+    - "SOP-CAPA-001: Corrective and Preventive Actions"
+
+  forms:
+    - "FORM-SMPL-001: Sample Collection Record"
+
+  standards:
+    - "ISO/IEC 17025: Laboratory Quality Management"
+    - "GACP Guidelines"

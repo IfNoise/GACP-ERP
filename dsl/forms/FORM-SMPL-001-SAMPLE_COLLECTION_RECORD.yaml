@@ -1,0 +1,567 @@
+# DSL: Sample Collection Record Form
+# Version: 1.0
+# Related SOP: SOP-SMPL-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "FORM-SMPL-001"
+  title: "Sample Collection Record"
+  version: "1.0"
+  effective_date: "2026-01-08"
+  supersedes: null
+  category:
+    enum:
+      - record
+
+  purpose: "Document sample collection process to ensure full traceability, proper identification and GACP/GMP compliance"
+  scope: "All sample types in GACP-ERP system including raw materials, in-process, finished products, environmental monitoring"
+
+  regulatory_compliance:
+    standards:
+      - "GACP Guidelines (WHO, EMA)"
+      - "GMP Annex 11"
+      - "21 CFR Part 11"
+    requirements:
+      - "Sample traceability"
+      - "Chain of custody initiation"
+      - "ALCOA+ data integrity"
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  frequency: "Each sampling event"
+  location: "At sampling location (field, production area, warehouse)"
+  triggered_by: "Sampling plan schedule, batch release, investigation"
+
+  related_sops:
+    - id: "SOP-SMPL-001"
+      title: "Sampling Procedures"
+    - id: "SOP-COC-001"
+      title: "Chain of Custody"
+    - id: "SOP-DI-001"
+      title: "Data Integrity"
+
+  responsible_roles:
+    - role: "QC Sampling Technician"
+      qualification: "TRN-SMPL-001 certified, current qualification"
+    - role: "QC Manager"
+      qualification: "Review and approval authority"
+
+# ====================
+# 3. FORM STRUCTURE
+# ====================
+form_structure:
+  header:
+    fields:
+      - field_id: "form_number"
+        field_name: "Form Number"
+        field_type:
+          enum:
+            - text
+        required: true
+        default_value: "Auto-generated"
+        help_text: "Unique form identifier"
+
+      - field_id: "sampling_date"
+        field_name: "Sampling Date"
+        field_type:
+          enum:
+            - date
+        required: true
+        help_text: "Date sample was collected"
+
+      - field_id: "sampler_name"
+        field_name: "Sampler Name"
+        field_type:
+          enum:
+            - text
+        required: true
+        help_text: "Name of qualified sampler"
+
+      - field_id: "sampler_id"
+        field_name: "Sampler Employee ID"
+        field_type:
+          enum:
+            - text
+        required: true
+        help_text: "Employee identification number"
+
+  sections:
+    - section_id: "01"
+      section_title: "Sample Identification"
+      description: "Unique identification and classification of sample"
+
+      fields:
+        - field_id: "sample_id"
+          field_name: "Sample ID"
+          field_type:
+            enum:
+              - text
+          required: true
+          pattern: "^SMPL-[0-9]{6}$"
+          help_text: "Unique sample identifier (format: SMPL-NNNNNN)"
+
+        - field_id: "qr_barcode"
+          field_name: "QR Code / Barcode"
+          field_type:
+            enum:
+              - text
+          required: true
+          help_text: "Scannable code for sample tracking"
+
+        - field_id: "sample_type"
+          field_name: "Sample Type"
+          field_type:
+            enum:
+              - dropdown
+          required: true
+          options:
+            - value: "raw_material"
+              label: "Raw Material"
+            - value: "in_process"
+              label: "In-Process"
+            - value: "finished_product"
+              label: "Finished Product"
+            - value: "environmental"
+              label: "Environmental"
+            - value: "retain"
+              label: "Retain Sample"
+            - value: "reference"
+              label: "Reference Sample"
+
+        - field_id: "sample_category"
+          field_name: "Sample Category"
+          field_type:
+            enum:
+              - dropdown
+          required: true
+          options:
+            - value: "seeds_clones"
+              label: "Seeds/Clones"
+            - value: "substrate"
+              label: "Growing Media/Substrate"
+            - value: "nutrients"
+              label: "Fertilizers/Nutrients"
+            - value: "plant_tissue"
+              label: "Plant Tissue"
+            - value: "dried_flower"
+              label: "Dried Cannabis Flower"
+            - value: "extract_concentrate"
+              label: "Extract/Concentrate"
+            - value: "edible"
+              label: "Edible Product"
+            - value: "water"
+              label: "Water"
+            - value: "air"
+              label: "Air"
+
+    - section_id: "02"
+      section_title: "Source Information"
+      description: "Identification and details of material being sampled"
+
+      fields:
+        - field_id: "batch_lot_number"
+          field_name: "Batch/Lot Number"
+          field_type:
+            enum:
+              - text
+          required: true
+          help_text: "Source batch or lot identification"
+
+        - field_id: "product_description"
+          field_name: "Product Description"
+          field_type:
+            enum:
+              - multiline_text
+          required: true
+          max_length: 500
+          help_text: "Detailed description of sampled material"
+
+        - field_id: "strain_cultivar"
+          field_name: "Strain/Cultivar"
+          field_type:
+            enum:
+              - text
+          required: false
+          help_text: "Cannabis strain or cultivar name (if applicable)"
+
+        - field_id: "total_quantity"
+          field_name: "Total Available Quantity"
+          field_type:
+            enum:
+              - number
+          required: true
+          min: 0
+          unit: "kg"
+          help_text: "Total batch size available for sampling"
+
+        - field_id: "location"
+          field_name: "Location"
+          field_type:
+            enum:
+              - text
+          required: true
+          help_text: "Physical location of material (room, zone, GPS coordinates)"
+
+        - field_id: "supplier"
+          field_name: "Supplier"
+          field_type:
+            enum:
+              - text
+          required: false
+          help_text: "Supplier name and identification (for raw materials)"
+
+    - section_id: "03"
+      section_title: "Sampling Details"
+      description: "Specifics of sampling execution"
+
+      fields:
+        - field_id: "sampling_date"
+          field_name: "Sampling Date"
+          field_type:
+            enum:
+              - date
+          required: true
+          help_text: "Date sample was collected"
+
+        - field_id: "sampling_time"
+          field_name: "Sampling Time"
+          field_type:
+            enum:
+              - text
+          required: true
+          pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+          help_text: "Time sample was collected (HH:MM format)"
+
+        - field_id: "sampling_method"
+          field_name: "Sampling Method"
+          field_type:
+            enum:
+              - dropdown
+          required: true
+          options:
+            - value: "random"
+              label: "Random Sampling"
+            - value: "systematic"
+              label: "Systematic Sampling"
+            - value: "stratified"
+              label: "Stratified Sampling"
+            - value: "composite"
+              label: "Composite Sampling"
+            - value: "grab"
+              label: "Grab Sample"
+
+        - field_id: "number_of_sample_points"
+          field_name: "Number of Sample Points"
+          field_type:
+            enum:
+              - number
+          required: true
+          min: 1
+          help_text: "Total sampling points used"
+
+        - field_id: "sample_size_collected"
+          field_name: "Sample Size Collected"
+          field_type:
+            enum:
+              - number
+          required: true
+          min: 0
+          unit: "g"
+          help_text: "Total weight of sample collected"
+
+        - field_id: "sampling_equipment"
+          field_name: "Sampling Equipment Used"
+          field_type:
+            enum:
+              - multiline_text
+          required: true
+          max_length: 300
+          help_text: "List of equipment and calibration status"
+
+    - section_id: "04"
+      section_title: "Environmental Conditions"
+      description: "Conditions at time of sampling"
+
+      fields:
+        - field_id: "temperature"
+          field_name: "Temperature"
+          field_type:
+            enum:
+              - number
+          required: true
+          unit: "°C"
+          help_text: "Ambient temperature at sampling location"
+
+        - field_id: "humidity"
+          field_name: "Relative Humidity"
+          field_type:
+            enum:
+              - number
+          required: true
+          min: 0
+          max: 100
+          unit: "%"
+          help_text: "Ambient humidity at sampling location"
+
+        - field_id: "cleanliness_grade"
+          field_name: "Cleanliness Grade"
+          field_type:
+            enum:
+              - dropdown
+          required: false
+          options:
+            - value: "grade_a"
+              label: "Grade A (Sterile)"
+            - value: "grade_b"
+              label: "Grade B (Clean)"
+            - value: "grade_c"
+              label: "Grade C (Controlled)"
+            - value: "grade_d"
+              label: "Grade D (General)"
+            - value: "unclassified"
+              label: "Unclassified"
+
+    - section_id: "05"
+      section_title: "Sample Storage and Handling"
+      description: "Immediate post-collection handling"
+
+      fields:
+        - field_id: "container_type"
+          field_name: "Container Type"
+          field_type:
+            enum:
+              - text
+          required: true
+          help_text: "Description of sample container"
+
+        - field_id: "storage_conditions"
+          field_name: "Storage Conditions Required"
+          field_type:
+            enum:
+              - dropdown
+          required: true
+          options:
+            - value: "room_temp"
+              label: "Room Temperature (15-25°C)"
+            - value: "refrigerated"
+              label: "Refrigerated (2-8°C)"
+            - value: "frozen"
+              label: "Frozen (-20°C)"
+            - value: "ultra_frozen"
+              label: "Ultra-Frozen (-80°C)"
+            - value: "ambient"
+              label: "Ambient (as is)"
+
+        - field_id: "storage_location"
+          field_name: "Initial Storage Location"
+          field_type:
+            enum:
+              - text
+          required: true
+          help_text: "Where sample is stored before lab transfer"
+
+        - field_id: "expiry_stability"
+          field_name: "Expiry/Stability Date"
+          field_type:
+            enum:
+              - date
+          required: true
+          help_text: "Date by which sample must be analyzed"
+
+    - section_id: "06"
+      section_title: "Testing Requirements"
+      description: "Analytical tests requested"
+
+      fields:
+        - field_id: "tests_requested"
+          field_name: "Tests Requested"
+          field_type:
+            enum:
+              - checkbox
+          required: true
+          options:
+            - value: "cannabinoid_potency"
+              label: "Cannabinoid Potency (THC, CBD, etc.)"
+            - value: "terpene_profile"
+              label: "Terpene Profile"
+            - value: "microbial"
+              label: "Microbial Testing"
+            - value: "heavy_metals"
+              label: "Heavy Metals"
+            - value: "pesticides"
+              label: "Pesticide Residues"
+            - value: "residual_solvents"
+              label: "Residual Solvents"
+            - value: "moisture_content"
+              label: "Moisture Content"
+            - value: "water_activity"
+              label: "Water Activity"
+            - value: "foreign_matter"
+              label: "Foreign Matter"
+            - value: "visual_inspection"
+              label: "Visual Inspection"
+
+        - field_id: "test_priority"
+          field_name: "Test Priority"
+          field_type:
+            enum:
+              - dropdown
+          required: true
+          options:
+            - value: "routine"
+              label: "Routine"
+            - value: "rush"
+              label: "Rush (24-48 hours)"
+            - value: "emergency"
+              label: "Emergency (Immediate)"
+
+        - field_id: "expected_completion"
+          field_name: "Expected Completion Date"
+          field_type:
+            enum:
+              - date
+          required: true
+          help_text: "When results are needed"
+
+    - section_id: "07"
+      section_title: "Observations and Comments"
+      description: "Any notable observations during sampling"
+
+      fields:
+        - field_id: "visual_observations"
+          field_name: "Visual Observations"
+          field_type:
+            enum:
+              - multiline_text
+          required: false
+          max_length: 1000
+          help_text: "Appearance, color, odor, condition of material"
+
+        - field_id: "deviations_issues"
+          field_name: "Deviations or Issues"
+          field_type:
+            enum:
+              - multiline_text
+          required: false
+          max_length: 1000
+          help_text: "Any problems encountered during sampling"
+
+        - field_id: "additional_comments"
+          field_name: "Additional Comments"
+          field_type:
+            enum:
+              - multiline_text
+          required: false
+          max_length: 1000
+          help_text: "Any other relevant information"
+
+    - section_id: "08"
+      section_title: "Signatures and Approval"
+      description: "Authorization and accountability"
+
+      fields:
+        - field_id: "sampler_signature"
+          field_name: "Sampler Signature"
+          field_type:
+            enum:
+              - signature
+          required: true
+          help_text: "Electronic signature of person who collected sample"
+
+        - field_id: "sampler_signature_date"
+          field_name: "Signature Date/Time"
+          field_type:
+            enum:
+              - datetime
+          required: true
+          default_value: "Auto-timestamp"
+
+        - field_id: "witness_signature"
+          field_name: "Witness Signature"
+          field_type:
+            enum:
+              - signature
+          required: false
+          help_text: "Optional witness signature for critical samples"
+
+        - field_id: "qc_manager_review"
+          field_name: "QC Manager Review"
+          field_type:
+            enum:
+              - signature
+          required: false
+          help_text: "Required for deviation or special samples"
+
+# ====================
+# 4. VALIDATION RULES
+# ====================
+validation_rules:
+  - rule_id: "VAL-SMPL-001"
+    description: "Sample ID must be unique"
+    field: "sample_id"
+    logic: "Check against database for duplicates"
+
+  - rule_id: "VAL-SMPL-002"
+    description: "Sampler must be qualified"
+    field: "sampler_id"
+    logic: "Verify training record TRN-SMPL-001 is current"
+
+  - rule_id: "VAL-SMPL-003"
+    description: "Sample size must be adequate per statistical tables"
+    field: "sample_size_collected"
+    logic: "Verify against MIL-STD-105E requirements for batch size"
+
+  - rule_id: "VAL-SMPL-004"
+    description: "Storage conditions must match sample type"
+    field: "storage_conditions"
+    logic: "Cross-check sample_type with required storage per SOP-SMPL-001"
+
+# ====================
+# 5. COMPLETION INSTRUCTIONS
+# ====================
+instructions:
+  general: "Complete all required fields accurately at time of sampling. Use clear, legible entries. Do not leave required fields blank."
+
+  specific:
+    - "Sample ID is auto-generated by system - verify before proceeding"
+    - "QR code must be scanned to confirm sample identity"
+    - "All equipment used must have current calibration"
+    - "Document any deviations immediately in the deviations section"
+    - "Attach photos if any visual abnormalities observed"
+    - "Submit form within 4 hours of sample collection"
+
+# ====================
+# 6. RECORDS MANAGEMENT
+# ====================
+records:
+  retention_period: "Lifetime of product + 1 year minimum"
+  storage_location: "Electronic: GACP-ERP Document Management System"
+  backup: "Daily automated backup to secure cloud storage"
+  access_control: "Read: All QC staff; Write: Authorized samplers only; Approve: QC Manager"
+  audit_trail: "All entries and changes logged per 21 CFR Part 11"
+
+# ====================
+# 7. RELATED DOCUMENTS
+# ====================
+related_documents:
+  procedures:
+    - "SOP-SMPL-001: Sampling Procedures"
+    - "SOP-COC-001: Chain of Custody"
+    - "SOP-DI-001: Data Integrity"
+
+  forms:
+    - "FORM-COC-001: Chain of Custody Form"
+
+  checklists:
+    - "CHKLST-SMPL-001: Pre-Sampling Preparation"
+
+  training:
+    - "TRN-SMPL-001: QC Sampling Technician Training"

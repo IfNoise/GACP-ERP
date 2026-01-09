@@ -1,0 +1,501 @@
+schema_version: "1.0.0"
+type: training
+metadata:
+  id: TRN-OOS-001
+  title: Out of Specification (OOS) Investigation and Management Training Program
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Assurance
+  classification: Critical GMP Training
+
+training_info:
+  target_audience:
+    - Laboratory Analysts
+    - Laboratory Supervisors
+    - QC Managers
+    - QA Managers
+    - Quality Assurance Specialists
+    - Production Supervisors
+    - Production Managers
+    - Regulatory Affairs Personnel
+
+  prerequisites:
+    - GMP Fundamentals Training (completed)
+    - Data Integrity (ALCOA+) Training (completed)
+    - Laboratory operations or quality systems experience (6+ months)
+    - Familiarity with analytical testing methods (for laboratory personnel)
+    - Understanding of manufacturing processes (for production personnel)
+
+  training_duration:
+    total_hours: 40
+    classroom_instruction: 24 hours
+    hands_on_exercises: 8 hours
+    case_studies: 6 hours
+    assessment: 2 hours
+
+  retraining_frequency: Annually, or when SOP-OOS-001 significantly revised
+
+modules:
+  - module_number: 1
+    module_title: Introduction to OOS Management and Regulatory Framework
+    duration_hours: 3
+    learning_objectives:
+      - Define Out of Specification (OOS) results and distinguish from Out of Trend (OOT) and Out of Expected Range (OER)
+      - Explain regulatory requirements for OOS investigations (FDA, EU GMP, ICH)
+      - Describe the importance of OOS management in pharmaceutical quality systems
+      - Identify potential consequences of inadequate OOS investigations (regulatory, patient safety, business)
+      - Understand the role of OOS investigations in continuous improvement and risk management
+    topics:
+      - Definitions and terminology (OOS, OOT, OER, Initial OOS, Confirmed OOS)
+      - Regulatory framework (FDA 21 CFR Part 211, EU GMP Chapter 6, ICH Q2(R1), ICH Q10)
+      - FDA guidance on OOS investigations (historical and current guidance)
+      - Warning letters and regulatory observations related to OOS
+      - Quality risk management principles applied to OOS
+      - OOS investigation program objectives and expectations
+    teaching_methods:
+      - Lecture with presentation slides
+      - Regulatory document review
+      - Discussion of warning letter examples
+      - Group discussion on patient safety and quality impact
+    assessment_methods:
+      - Written quiz (10 questions, multiple choice and short answer)
+      - Minimum passing score 80%
+
+  - module_number: 2
+    module_title: Roles and Responsibilities in OOS Investigations
+    duration_hours: 2
+    learning_objectives:
+      - Identify roles and responsibilities of personnel involved in OOS investigations
+      - Understand the independence and authority requirements for OOS investigations
+      - Describe the escalation process for OOS events
+      - Explain the communication requirements during OOS investigations
+      - Understand cross-functional collaboration in full (Phase II) investigations
+    topics:
+      - Laboratory Analyst responsibilities (detection, notification, documentation, participation)
+      - Laboratory Supervisor role (verification, coordination, Phase I report)
+      - QC Manager role (oversight, team assignment, approval, trending)
+      - QA Manager role (independent review, CAPA assessment, compliance, disposition authority)
+      - Production Manager role (manufacturing data, Phase II participation, corrective actions)
+      - Regulatory Affairs Manager role (regulatory guidance, reporting, authority liaison)
+      - Senior Management involvement (critical OOS, resource decisions)
+      - External expert consultation (when and how to engage)
+    teaching_methods:
+      - Lecture with organizational charts and responsibility matrices
+      - Role-play scenarios demonstrating interactions between roles
+      - Case study showing cross-functional investigation
+    assessment_methods:
+      - Written quiz (10 questions)
+      - Role identification exercise
+      - Minimum passing score 80%
+
+  - module_number: 3
+    module_title: Immediate Response and Initial Assessment
+    duration_hours: 3
+    learning_objectives:
+      - Execute immediate notification procedures upon OOS detection (within 24 hours)
+      - Perform initial assessment and criticality classification
+      - Implement containment actions to prevent distribution of affected material
+      - Preserve documentation and evidence for investigation
+      - Assign investigation team and establish timeline
+      - Complete FORM-OOS-001 Notification and Assessment form accurately
+    topics:
+      - OOS detection and recognition criteria
+      - Immediate notification chain (Analyst → Supervisor → QC Manager → QA Manager)
+      - Containment actions (quarantine, hold, inventory tracking)
+      - Criticality classification (Critical, Major, Minor based on impact matrix)
+      - Investigation priority and timeline establishment
+      - Documentation preservation (raw data, equipment logs, environmental records)
+      - Investigation team selection and resource allocation
+      - Stakeholder communication (production, senior management, regulatory if needed)
+    teaching_methods:
+      - Lecture with workflow diagrams
+      - Hands-on exercise: Complete FORM-OOS-001 for sample scenarios
+      - Simulation: Notification and containment process
+    assessment_methods:
+      - Practical demonstration: Perform notification procedure
+      - Form completion exercise: FORM-OOS-001 with accuracy check
+      - Minimum passing score 85%
+
+  - module_number: 4
+    module_title: Phase I Laboratory Investigation
+    duration_hours: 6
+    learning_objectives:
+      - Conduct comprehensive Phase I laboratory investigation per SOP-OOS-001
+      - Perform systematic data review and verification (calculations, transcriptions, data integrity)
+      - Evaluate method compliance and suitability
+      - Assess sample integrity and chain of custody
+      - Review equipment calibration, maintenance, and performance
+      - Evaluate environmental factors affecting test results
+      - Develop and execute appropriate re-testing strategy
+      - Document investigation findings using FORM-OOS-003 and CHKLST-OOS-001
+    topics:
+      - Raw data review techniques (chromatograms, spectra, instrument printouts)
+      - Calculation verification (dilutions, response factors, concentrations, units)
+      - Transcription accuracy checks (instrument to worksheet to report)
+      - Data integrity assessment (ALCOA+ compliance, audit trail review)
+      - Method compliance evaluation (procedure adherence, parameter ranges)
+      - Method suitability and validation status review
+      - Sample identity confirmation and chain of custody verification
+      - Storage condition assessment and sample preparation review
+      - Equipment calibration status and maintenance record review
+      - System suitability test evaluation
+      - Reference standard verification
+      - Environmental condition review (temperature, humidity, air quality)
+      - Cross-contamination risk assessment
+      - Re-testing decision criteria and scientific justification
+      - Independent analyst and equipment selection for re-testing
+      - Statistical analysis of re-test results
+      - Laboratory investigation conclusion and Phase II determination
+    teaching_methods:
+      - Lecture with detailed examples
+      - Hands-on workshop: Review actual chromatograms and data for errors
+      - Practical exercise: Verify calculations and transcriptions
+      - Case study: Complete Phase I investigation for example OOS
+      - Group exercise: Use CHKLST-OOS-001 to evaluate investigation completeness
+    assessment_methods:
+      - Practical demonstration: Perform data review and identify errors
+      - Written case study: Complete FORM-OOS-003 for sample OOS
+      - Checklist application: Complete CHKLST-OOS-001 for case study
+      - Minimum passing score 85%
+
+  - module_number: 5
+    module_title: Phase II Full Investigation
+    duration_hours: 4
+    learning_objectives:
+      - Determine when Phase II full investigation is required
+      - Review manufacturing batch records and process parameters
+      - Analyze historical data and trends for comparative evaluation
+      - Conduct cross-functional investigation with production and engineering
+      - Assess process capability and variation
+      - Integrate Phase I and Phase II findings into comprehensive investigation
+      - Document Phase II investigation findings and conclusions
+    topics:
+      - Phase II initiation criteria (Phase I inconclusive, no laboratory cause identified)
+      - Manufacturing batch record review (weighing, mixing, processing, packaging)
+      - Process parameter analysis (temperatures, times, speeds, pressures)
+      - Raw material evaluation (specifications, vendor performance, lot variation)
+      - Equipment performance assessment (calibration, maintenance, capability)
+      - Historical data analysis (previous batches, trending, control charts)
+      - Comparative studies (similar products, time periods, locations)
+      - Seasonal or cyclical pattern identification
+      - Process capability assessment (Cp, Cpk, process variation)
+      - Cross-functional investigation meetings and collaboration
+      - Integration of Phase I and Phase II findings
+      - Comprehensive investigation report preparation
+    teaching_methods:
+      - Lecture with manufacturing examples
+      - Case study: Full Phase II investigation scenario
+      - Group exercise: Batch record review activity
+      - Historical data analysis workshop
+    assessment_methods:
+      - Written case study: Develop Phase II investigation plan
+      - Batch record review exercise with findings documentation
+      - Minimum passing score 85%
+
+  - module_number: 6
+    module_title: Root Cause Analysis Techniques
+    duration_hours: 6
+    learning_objectives:
+      - Apply systematic root cause analysis methodology
+      - Use multiple root cause analysis tools effectively (Fishbone, 5 Why, FMEA, Fault Tree)
+      - Differentiate between symptoms and root causes
+      - Verify root cause through experimental testing or evaluation
+      - Document root cause analysis with supporting evidence
+      - Conduct peer review of root cause conclusions
+    topics:
+      - Root cause vs symptom identification
+      - Problem definition and scope establishment
+      - Fishbone (Ishikawa) diagrams (Man, Machine, Method, Material, Measurement, Environment)
+      - 5 Why analysis technique (iterative questioning)
+      - Failure Mode and Effects Analysis (FMEA) application
+      - Fault tree analysis for complex problems
+      - Pareto analysis (80/20 rule) for prioritization
+      - Statistical analysis methods (hypothesis testing, correlation, regression)
+      - Designed experiments for root cause verification
+      - Hypothesis development and testing
+      - Evidence collection and documentation
+      - Peer review process for scientific soundness validation
+      - Common pitfalls in root cause analysis (jumping to conclusions, bias, insufficient data)
+    teaching_methods:
+      - Lecture with tool demonstrations
+      - Hands-on workshop: Create Fishbone diagram for sample problem
+      - Practical exercise: Apply 5 Why technique to OOS scenarios
+      - Group activity: FMEA development for analytical process
+      - Case studies: Multiple examples with different root causes
+      - Peer review simulation
+    assessment_methods:
+      - Practical demonstration: Apply 2+ root cause tools to assigned OOS scenario
+      - Written documentation: Root cause report with supporting evidence
+      - Peer review exercise: Evaluate another trainee's root cause analysis
+      - Minimum passing score 85%
+
+  - module_number: 7
+    module_title: CAPA Development, Implementation, and Verification
+    duration_hours: 5
+    learning_objectives:
+      - Develop effective corrective and preventive actions based on root cause
+      - Differentiate between corrective and preventive actions
+      - Create comprehensive CAPA implementation plan with timelines and resources
+      - Monitor CAPA implementation progress
+      - Conduct CAPA effectiveness verification
+      - Complete FORM-OOS-008 CAPA Plan and CHKLST-OOS-002 CAPA Effectiveness Verification
+    topics:
+      - Corrective action definition and purpose (immediate problem resolution)
+      - Preventive action definition and purpose (prevent recurrence and similar issues)
+      - CAPA development based on root cause (directly addressing identified cause)
+      - Immediate corrective actions (containment, risk mitigation, process stabilization)
+      - Long-term preventive actions (process improvements, system enhancements, training)
+      - SMART criteria for CAPA (Specific, Measurable, Achievable, Relevant, Time-bound)
+      - CAPA implementation planning (steps, milestones, resources, responsibilities)
+      - Risk assessment for CAPA (implementation risks, residual risk)
+      - Training requirements identification and competency assessment
+      - Communication plan development
+      - Cost-benefit analysis
+      - CAPA monitoring and progress tracking
+      - Effectiveness criteria definition (measurable outcomes)
+      - Effectiveness verification methodology (data collection, analysis)
+      - Effectiveness verification timeline (typically 3-12 months post-implementation)
+      - Follow-up actions for partially effective or ineffective CAPAs
+    teaching_methods:
+      - Lecture with CAPA examples (effective vs ineffective)
+      - Workshop: Develop CAPA plan for case study OOS
+      - Group exercise: Identify effectiveness criteria and verification methods
+      - Case study: Evaluate CAPA effectiveness using real data
+      - Form completion exercise: FORM-OOS-008 and CHKLST-OOS-002
+    assessment_methods:
+      - Written case study: Develop complete CAPA plan with verification strategy
+      - Form completion: FORM-OOS-008 with accuracy assessment
+      - Effectiveness evaluation exercise: Apply CHKLST-OOS-002 to sample data
+      - Minimum passing score 85%
+
+  - module_number: 8
+    module_title: Investigation Documentation and Reporting
+    duration_hours: 3
+    learning_objectives:
+      - Compile complete investigation file with all required documentation
+      - Prepare clear and comprehensive investigation report
+      - Understand technical review and approval process
+      - Meet documentation requirements for regulatory inspections
+      - Maintain investigation records per retention requirements
+    topics:
+      - Investigation file components (administrative info, technical documentation, analysis, supporting evidence)
+      - Executive summary preparation (concise overview for management)
+      - Detailed technical report writing (methodology, findings, conclusions, recommendations)
+      - Root cause documentation requirements
+      - CAPA summary in investigation report
+      - Supporting documentation attachment (data files, chromatograms, equipment logs, training records)
+      - Technical review process (methodology evaluation, data integrity verification, conclusion validation)
+      - QA approval requirements
+      - Management sign-off for disposition decisions
+      - Documentation standards (clear, accurate, complete, contemporaneous)
+      - Record retention requirements (regulatory, company policy)
+      - Electronic documentation and 21 CFR Part 11 compliance
+    teaching_methods:
+      - Lecture with report examples (good vs poor)
+      - Workshop: Write investigation summary for case study
+      - Group critique: Evaluate sample investigation reports
+      - Documentation standards review
+    assessment_methods:
+      - Written exercise: Prepare investigation report for assigned OOS scenario
+      - Report evaluation using quality criteria checklist
+      - Minimum passing score 85%
+
+  - module_number: 9
+    module_title: Batch Disposition and Release Decisions
+    duration_hours: 2
+    learning_objectives:
+      - Evaluate batch disposition criteria based on investigation findings
+      - Understand disposition options (release, reject/destroy, rework/reprocess)
+      - Perform risk assessment for disposition decisions
+      - Document disposition rationale and obtain required approvals
+      - Understand regulatory notification requirements for batch disposition
+    topics:
+      - Batch disposition decision framework
+      - Release criteria (laboratory error confirmed, specification compliance via alternative testing, acceptable risk)
+      - Rejection/destruction criteria (confirmed OOS, unacceptable patient safety risk, regulatory violations)
+      - Rework/reprocessing options (technical feasibility, regulatory approval, validation requirements)
+      - Risk-benefit analysis for disposition
+      - Patient safety considerations
+      - Regulatory compliance assessment
+      - Business impact evaluation
+      - Disposition documentation requirements
+      - Approval authority (QA Manager, QA Director, Regulatory Affairs input)
+      - Customer communication for distribution holds or recalls
+      - Regulatory notification requirements (when batch rejected or recall initiated)
+    teaching_methods:
+      - Lecture with decision tree diagrams
+      - Case studies: Multiple scenarios with different disposition outcomes
+      - Group discussion: Risk assessment for complex cases
+      - Decision-making simulation
+    assessment_methods:
+      - Written case studies: Make disposition decisions for 3 OOS scenarios with justification
+      - Risk assessment documentation
+      - Minimum passing score 85%
+
+  - module_number: 10
+    module_title: Trending, Pattern Analysis, and Continuous Improvement
+    duration_hours: 4
+    learning_objectives:
+      - Use OOS database for comprehensive event recording and trending
+      - Perform statistical analysis of OOS data
+      - Identify patterns and trends requiring action
+      - Interpret trend reports and dashboards
+      - Apply alert thresholds for proactive issue identification
+      - Contribute to continuous improvement initiatives
+      - Prepare and interpret REPORT-OOS-001 Monthly Trend Analysis Report
+    topics:
+      - OOS database structure and data elements
+      - Comprehensive OOS event recording (all investigation data, outcomes, CAPAs)
+      - Statistical analysis methods (frequency, rate, distribution, trends)
+      - Pareto analysis for root cause prioritization
+      - Control chart application for OOS trending
+      - Pattern recognition (product-specific, method-specific, seasonal, recurring issues)
+      - Alert threshold establishment (frequency-based, trend-based, pattern-based)
+      - Alert Level 1 (Monitor), Level 2 (Investigate), Level 3 (Action Required)
+      - Monthly trend report interpretation (REPORT-OOS-001)
+      - Key performance indicators (KPIs) for OOS program (investigation time, root cause identification rate, CAPA effectiveness, recurrence rate)
+      - Benchmarking against industry standards
+      - Continuous improvement opportunities identification
+      - Preventive strategies to reduce OOS occurrence
+      - Innovation and technology adoption (automation, predictive analytics, AI)
+    teaching_methods:
+      - Lecture with trend analysis examples
+      - Hands-on exercise: Query OOS database and generate trend report
+      - Workshop: Analyze sample OOS data and identify patterns
+      - Statistical analysis practice using software tools
+      - Case study: Interpret REPORT-OOS-001 and develop action plan
+    assessment_methods:
+      - Practical exercise: Perform trend analysis on provided dataset
+      - Written interpretation: Analyze REPORT-OOS-001 and identify issues requiring action
+      - Presentation: Summarize findings and recommendations
+      - Minimum passing score 85%
+
+  - module_number: 11
+    module_title: Regulatory Compliance and Audit Readiness
+    duration_hours: 2
+    learning_objectives:
+      - Understand regulatory expectations for OOS investigations (FDA, EU, other authorities)
+      - Prepare for regulatory inspections related to OOS
+      - Respond to inspector questions and requests effectively
+      - Understand common inspection observations and how to prevent them
+      - Maintain compliance with OOS investigation requirements
+    topics:
+      - FDA 21 CFR Part 211.192 (production record review)
+      - FDA 21 CFR Part 211.194 (laboratory records)
+      - EU GMP Chapter 6 (Quality Control)
+      - ICH Q2(R1) (Analytical Validation)
+      - ICH Q10 (Pharmaceutical Quality System)
+      - USP <1010> (Analytical Data - Interpretation and Treatment)
+      - FDA guidance on OOS investigations (October 2006)
+      - Common warning letter observations related to OOS (inadequate investigations, lack of independence, invalid retesting, premature conclusions)
+      - Inspection preparation (document organization, investigator availability, response protocols)
+      - Responding to inspector questions (honest, direct, factual, no speculation)
+      - Document requests during inspections
+      - Post-inspection follow-up and CAPA
+      - Internal audit program for OOS investigations
+      - Audit checklist and audit process
+    teaching_methods:
+      - Lecture with regulatory document review
+      - Warning letter case studies
+      - Mock inspection simulation
+      - Q&A practice session
+      - Audit checklist review
+    assessment_methods:
+      - Written exam: Regulatory requirements knowledge (20 questions)
+      - Role-play: Respond to inspector questions scenario
+      - Minimum passing score 85%
+
+assessment:
+  written_exam:
+    format: Multiple choice, short answer, case-based questions
+    total_questions: 50
+    passing_score: 80%
+    time_allowed: 90 minutes
+    topics_covered: All modules with emphasis on practical application
+
+  practical_demonstration:
+    tasks:
+      - Perform OOS notification and initial assessment (FORM-OOS-001 completion)
+      - Conduct Phase I laboratory investigation (data review, equipment check, re-testing strategy)
+      - Apply root cause analysis tools (Fishbone and 5 Why minimum)
+      - Develop CAPA plan (FORM-OOS-008 completion)
+      - Evaluate CAPA effectiveness (CHKLST-OOS-002 application)
+    passing_score: 85%
+    evaluation_criteria: Accuracy, completeness, scientific rigor, regulatory compliance
+
+  case_study_evaluation:
+    scenario: Complex OOS investigation requiring Phase I and Phase II investigation, root cause analysis, CAPA development, and disposition decision
+    deliverables:
+      - Completed investigation forms (FORM-OOS-001, FORM-OOS-003, FORM-OOS-008)
+      - Completed checklists (CHKLST-OOS-001, CHKLST-OOS-002)
+      - Investigation report summary
+      - Root cause analysis documentation
+      - Disposition recommendation with rationale
+    passing_score: 85%
+    evaluation_criteria: Scientific soundness, regulatory compliance, documentation quality, decision-making rationale
+
+  overall_passing_requirements:
+    - Written exam ≥80%
+    - Practical demonstration ≥85%
+    - Case study evaluation ≥85%
+    - Attendance requirement: ≥90% of training sessions
+
+competency_verification:
+  initial_competency:
+    - Successful completion of all assessments
+    - Supervisor observation of first 2 OOS investigations
+    - Documentation review and approval by QA Manager
+
+  ongoing_competency:
+    - Annual retraining and reassessment
+    - Periodic supervisor observation and evaluation
+    - Investigation quality metrics monitoring
+    - Participation in continuing education (conferences, webinars, literature review)
+
+training_delivery:
+  delivery_method:
+    - In-person classroom instruction (preferred for initial training)
+    - Virtual instructor-led training (acceptable for retraining or remote personnel)
+    - Blended learning (combination of online modules and instructor-led sessions)
+
+  instructor_qualifications:
+    - Minimum 5 years experience in pharmaceutical quality systems
+    - Extensive experience conducting OOS investigations
+    - Knowledge of regulatory requirements (FDA, EU GMP, ICH)
+    - Training delivery experience or certification
+
+  training_materials:
+    - Participant workbook with slides, exercises, and reference materials
+    - SOP-OOS-001 and related forms/checklists
+    - Regulatory guidance documents (FDA, EU GMP, ICH)
+    - Case study materials
+    - Assessment tools
+
+  training_environment:
+    - Classroom with presentation equipment
+    - Access to laboratory or mock laboratory for practical exercises
+    - Computer access for database and form completion exercises
+    - Reference materials and regulatory documents
+
+documentation:
+  training_records:
+    - Attendance records (sign-in sheets with dates)
+    - Assessment results (written exam, practical demonstration, case study scores)
+    - Competency verification documentation
+    - Retraining records
+    - Retention period: Duration of employment + 3 years minimum
+
+  training_effectiveness:
+    - Post-training evaluation survey (content, delivery, materials, instructor)
+    - Investigation quality metrics (before and after training)
+    - Audit findings related to OOS investigations
+    - Supervisor feedback on trainee performance
+    - Continuous improvement of training program based on feedback
+
+regulatory_compliance:
+  - Training conducted per GMP requirements
+  - Training records maintained per 21 CFR Part 211.25
+  - Competency documented and verified
+  - Retraining conducted as needed
+  - Training program reviewed and updated periodically

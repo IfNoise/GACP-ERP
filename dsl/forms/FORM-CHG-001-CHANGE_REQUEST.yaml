@@ -1,0 +1,539 @@
+# DSL: Change Request Form
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-CHG-001"
+  category: "change_control"
+  title: "Change Request Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+usage:
+  purpose: "Initiate, document, and track proposed changes to systems, processes, equipment, procedures, products, or organizational structure through approval, implementation, and closure"
+  frequency: "as_needed"
+  trigger: "Need for change identified from any source (improvement, regulatory, CAPA, deviation, technology, feedback, audit, supplier)"
+  responsible_roles:
+    - "ROLE-CHGREQ-001"
+    - "ROLE-CHGOWN-001"
+    - "ROLE-QA-002"
+    - "ROLE-CCB-001"
+
+form_structure:
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "Change Request ID"
+        field_type: "auto_generated"
+        data_type: "string"
+        required: true
+        format: "CR-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "Date Submitted"
+        field_type: "auto_date"
+        data_type: "date"
+        required: true
+        format: "YYYY-MM-DD"
+
+      - field_id: "HDR-003"
+        label: "Change Requestor Name"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-004"
+        label: "Requestor Department"
+        field_type: "dropdown"
+        data_type: "string"
+        required: true
+        options:
+          - "Production"
+          - "Quality Assurance"
+          - "Quality Control Laboratory"
+          - "IT/Systems"
+          - "Facilities/Engineering"
+          - "Regulatory Affairs"
+          - "Supply Chain"
+          - "Compliance"
+          - "Other"
+
+      - field_id: "HDR-005"
+        label: "Change Owner"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-006"
+        label: "Current Status"
+        field_type: "auto_status"
+        data_type: "string"
+        required: true
+        options:
+          - "Draft"
+          - "Submitted"
+          - "Under Review"
+          - "Pending Approval"
+          - "Approved"
+          - "In Implementation"
+          - "In Verification"
+          - "Closed"
+          - "Rejected"
+
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Change Description and Justification"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "Change Title"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 200
+          placeholder: "Concise descriptive title of proposed change"
+
+        - field_id: "SEC-001-F02"
+          label: "Change Source Category"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "Process Improvement Opportunity"
+            - "Regulatory Requirement Change"
+            - "Technology Advancement"
+            - "Corrective Action (CAPA)"
+            - "Preventive Action (CAPA)"
+            - "Deviation Investigation"
+            - "Customer Feedback/Complaint"
+            - "Supplier Recommendation"
+            - "Internal Audit Finding"
+            - "External Audit Finding"
+            - "Risk Mitigation"
+            - "Cost Reduction"
+            - "Other"
+
+        - field_id: "SEC-001-F03"
+          label: "Related Document ID"
+          field_type: "text"
+          data_type: "string"
+          required: false
+          max_length: 50
+          placeholder: "e.g., CAPA-2026-0015, DEV-2026-0023, AUDIT-2026-003"
+
+        - field_id: "SEC-001-F04"
+          label: "Detailed Change Description"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 3000
+          placeholder: "Comprehensive description: What is being changed? Current state vs proposed state? Scope and boundaries?"
+
+        - field_id: "SEC-001-F05"
+          label: "Business Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 2000
+          placeholder: "Why is this change needed? What problem does it solve? What opportunity does it address?"
+
+        - field_id: "SEC-001-F06"
+          label: "Expected Benefits"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "Quality improvements, cost savings, compliance enhancements, efficiency gains, risk reductions"
+
+    - section_id: "SEC-002"
+      section_title: "Change Classification"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Change Criticality"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Critical - Direct impact on product safety/efficacy/quality/regulatory compliance"
+            - "Major - Significant operational impact, limited quality implications"
+            - "Minor - Local improvement, minimal risk, limited scope"
+            - "Emergency - Immediate safety/security/compliance threat requiring urgent action"
+
+        - field_id: "SEC-002-F02"
+          label: "Change Type"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "Hardware (equipment, instruments, infrastructure)"
+            - "Software (applications, configurations, databases)"
+            - "Process (manufacturing, QC, procedures)"
+            - "Documentation (SOPs, forms, specifications)"
+            - "Product (formulation, packaging, materials, specifications)"
+            - "Organizational (roles, responsibilities, structure)"
+
+        - field_id: "SEC-002-F03"
+          label: "Affected Areas/Systems"
+          field_type: "checkbox"
+          data_type: "array"
+          required: true
+          options:
+            - "GACP-ERP System"
+            - "LIMS"
+            - "MES"
+            - "Environmental Monitoring"
+            - "Security Systems"
+            - "Audit Trail"
+            - "Production Equipment"
+            - "Laboratory Instruments"
+            - "HVAC Systems"
+            - "Facility Infrastructure"
+            - "Manufacturing Processes"
+            - "QC Testing Methods"
+            - "Product Specifications"
+            - "SOPs and Procedures"
+            - "Training Programs"
+            - "Quality Management System"
+
+        - field_id: "SEC-002-F04"
+          label: "GxP Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "GxP Critical - Directly impacts product quality, patient safety, or data integrity"
+            - "GxP Related - Indirectly impacts GxP systems or processes"
+            - "Non-GxP - No impact on GxP systems or processes"
+
+    - section_id: "SEC-003"
+      section_title: "Impact Assessment Summary"
+      section_order: 3
+
+      fields:
+        - field_id: "SEC-003-F01"
+          label: "Product Quality Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Direct impact - Changes product quality attributes"
+            - "Indirect impact - May affect quality through process changes"
+            - "No impact - Does not affect product quality"
+
+        - field_id: "SEC-003-F02"
+          label: "Data Integrity Impact (ALCOA+)"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High impact - Affects data capture, storage, or retrieval"
+            - "Medium impact - May affect audit trail or data controls"
+            - "Low impact - Minimal or no data integrity considerations"
+
+        - field_id: "SEC-003-F03"
+          label: "Regulatory/Compliance Impact"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Regulatory submission or notification required"
+            - "Affects compliance but no submission required"
+            - "No regulatory impact"
+
+        - field_id: "SEC-003-F04"
+          label: "Validation/Qualification Required?"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Full validation required (IQ/OQ/PQ)"
+            - "Partial validation/verification required"
+            - "Impact assessment only"
+            - "Not required"
+
+        - field_id: "SEC-003-F05"
+          label: "Training Required?"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - Formal training program required"
+            - "Yes - Briefing/awareness session sufficient"
+            - "No - No training required"
+
+        - field_id: "SEC-003-F06"
+          label: "Estimated Implementation Cost"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "< $5,000"
+            - "$5,000 - $25,000"
+            - "$25,000 - $100,000"
+            - "> $100,000"
+            - "To be determined"
+
+    - section_id: "SEC-004"
+      section_title: "Risk Assessment Summary"
+      section_order: 4
+
+      fields:
+        - field_id: "SEC-004-F01"
+          label: "Overall Risk Level (if change NOT implemented)"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High Risk - Significant safety, quality, or compliance risk"
+            - "Medium Risk - Moderate operational or business risk"
+            - "Low Risk - Minimal risk, primarily opportunity loss"
+
+        - field_id: "SEC-004-F02"
+          label: "Implementation Risk Level"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "High Risk - Complex change, significant potential for issues"
+            - "Medium Risk - Moderate complexity, manageable risks"
+            - "Low Risk - Simple change, minimal risk"
+
+        - field_id: "SEC-004-F03"
+          label: "Key Risks Identified"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "Top 3-5 risks associated with implementing this change"
+
+        - field_id: "SEC-004-F04"
+          label: "Mitigation Strategies"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1500
+          placeholder: "How will identified risks be mitigated?"
+
+        - field_id: "SEC-004-F05"
+          label: "Rollback Plan Required?"
+          field_type: "radio"
+          data_type: "string"
+          required: true
+          options:
+            - "Yes - Detailed rollback plan required before implementation"
+            - "Yes - Simple rollback procedure sufficient"
+            - "No - Rollback not feasible or necessary"
+
+    - section_id: "SEC-005"
+      section_title: "Implementation Planning"
+      section_order: 5
+
+      fields:
+        - field_id: "SEC-005-F01"
+          label: "Proposed Implementation Start Date"
+          field_type: "date"
+          data_type: "date"
+          required: true
+          format: "YYYY-MM-DD"
+
+        - field_id: "SEC-005-F02"
+          label: "Estimated Implementation Duration"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "< 1 week"
+            - "1-2 weeks"
+            - "2-4 weeks"
+            - "1-2 months"
+            - "2-3 months"
+            - "3-6 months"
+            - "> 6 months"
+
+        - field_id: "SEC-005-F03"
+          label: "Target Completion Date"
+          field_type: "date"
+          data_type: "date"
+          required: true
+          format: "YYYY-MM-DD"
+
+        - field_id: "SEC-005-F04"
+          label: "Implementation Team Members"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1000
+          placeholder: "Key personnel who will support implementation"
+
+        - field_id: "SEC-005-F05"
+          label: "Resource Requirements Summary"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Personnel, equipment, systems, budget, time"
+
+        - field_id: "SEC-005-F06"
+          label: "Dependencies and Prerequisites"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 1000
+          placeholder: "Other changes, projects, or resources that must be in place first"
+
+    - section_id: "SEC-006"
+      section_title: "Approvals"
+      section_order: 6
+
+      fields:
+        - field_id: "SEC-006-F01"
+          label: "Required Approval Authority"
+          field_type: "auto_calculated"
+          data_type: "string"
+          required: true
+          calculation: "Based on criticality: Critical→CCB+QA, Major→Dept Head+QA, Minor→Supervisor+Owner, Emergency→QA Mgr+General Mgr"
+
+        - field_id: "SEC-006-F02"
+          label: "Approval Decision"
+          field_type: "radio"
+          data_type: "string"
+          required: false
+          options:
+            - "Approved"
+            - "Approved with Conditions"
+            - "Rejected"
+            - "Deferred - More Information Needed"
+
+        - field_id: "SEC-006-F03"
+          label: "Conditions or Comments"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 2000
+          placeholder: "Approval conditions, additional requirements, or rejection rationale"
+
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "Change Requestor"
+        required_role: "ROLE-CHGREQ-001"
+        required: true
+        meaning: "I submitted this change request and attest to accuracy of information"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-002"
+        role: "Change Owner"
+        required_role: "ROLE-CHGOWN-001"
+        required: true
+        meaning: "I accept ownership and responsibility for this change"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-003"
+        role: "Quality Manager Approval"
+        required_role: "ROLE-QA-002"
+        required: true
+        meaning: "I reviewed for quality and compliance impact and approve this change"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-004"
+        role: "Department Head Approval (if Major change)"
+        required_role: "ROLE-DEPTHEAD-001"
+        required: false
+        meaning: "I approve resource allocation and departmental implementation"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-005"
+        role: "CCB Approval (if Critical change)"
+        required_role: "ROLE-CCB-001"
+        required: false
+        meaning: "Change Control Board reviewed and approved this critical change"
+        date_required: true
+        time_required: false
+
+validation:
+  rules:
+    - rule_id: "VAL-001"
+      field_ref: "SEC-001-F04"
+      rule_type: "min_length"
+      condition: "Description must be at least 100 characters"
+      error_message: "Provide comprehensive change description (minimum 100 characters)"
+
+    - rule_id: "VAL-002"
+      field_ref: "SEC-001-F05"
+      rule_type: "min_length"
+      condition: "Justification must be at least 50 characters"
+      error_message: "Provide clear business justification (minimum 50 characters)"
+
+    - rule_id: "VAL-003"
+      field_ref: "SEC-005-F03"
+      rule_type: "date_validation"
+      condition: "Target date must be after start date"
+      error_message: "Target completion date must be after implementation start date"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "Change request being prepared"
+      next_states: ["submitted"]
+
+    - state: "submitted"
+      description: "Awaiting classification and assessment"
+      next_states: ["under_review"]
+
+    - state: "under_review"
+      description: "Impact and risk assessment in progress"
+      next_states: ["pending_approval"]
+
+    - state: "pending_approval"
+      description: "Awaiting required approvals"
+      next_states: ["approved", "rejected", "deferred"]
+
+    - state: "approved"
+      description: "Approved for implementation"
+      next_states: ["in_implementation"]
+
+    - state: "in_implementation"
+      description: "Change being implemented"
+      next_states: ["in_verification"]
+
+    - state: "in_verification"
+      description: "Post-implementation verification in progress"
+      next_states: ["closed"]
+
+    - state: "closed"
+      description: "Change successfully completed"
+      next_states: []
+
+    - state: "rejected"
+      description: "Change request rejected"
+      next_states: []
+
+    - state: "deferred"
+      description: "Change deferred pending more information"
+      next_states: ["under_review", "rejected"]
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

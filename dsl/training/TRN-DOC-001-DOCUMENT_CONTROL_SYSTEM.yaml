@@ -1,0 +1,825 @@
+# DSL: Document Control System Training Module
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-DOC-001"
+  training_type: "system"
+  category: "document_control"
+  title: "Document Control System Training"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+training_context:
+  purpose: "Train personnel on document control system, Mayan-EDMS usage, document lifecycle management, regulatory requirements, and role-specific procedures"
+  applicable_roles:
+    - "ROLE-DOCCTRL-001" # Document Controller
+    - "ROLE-DOCAUTH-001" # Document Authors
+    - "ROLE-DOCREV-001" # Document Reviewers
+    - "ROLE-DOCAPP-001" # Document Approvers
+    - "ROLE-QA-002" # Quality Managers
+    - "All_Personnel" # General awareness for all staff
+  training_frequency: "annual_refresher"
+  retraining_triggers:
+    - "New hire requiring document control system access"
+    - "Role change involving document responsibilities"
+    - "Major system upgrade or SOP revision"
+    - "Audit finding related to document control"
+    - "Document control deviation"
+  prerequisites:
+    - "Basic GMP/GACP training"
+    - "Computer literacy"
+    - "SOP-AUDIT-001: Audit Trail and Electronic Signatures (for authors/reviewers/approvers)"
+
+training_delivery:
+  methods:
+    - method: "instructor_led"
+      duration_minutes: 240
+      class_size_max: 15
+      target_roles:
+        - "ROLE-DOCCTRL-001"
+        - "ROLE-DOCAUTH-001"
+        - "ROLE-DOCREV-001"
+        - "ROLE-DOCAPP-001"
+    - method: "computer_based_training"
+      duration_minutes: 120
+      availability: "24/7"
+      target_roles:
+        - "All_Personnel"
+    - method: "hands_on_practical"
+      duration_minutes: 120
+      class_size_max: 8
+      target_roles:
+        - "ROLE-DOCAUTH-001"
+        - "ROLE-DOCREV-001"
+  materials:
+    - "Presentation slides"
+    - "SOP-DOC-001 printed copy"
+    - "Quick reference guides"
+    - "Mayan-EDMS user manual"
+    - "Form templates"
+    - "Checklist templates"
+    - "Case study exercises"
+    - "Hands-on practice scenarios"
+  trainer_qualifications:
+    - "Document Controller or Quality Manager"
+    - "Minimum 2 years document control experience"
+    - "Proficiency in Mayan-EDMS"
+    - "Completed train-the-trainer program"
+
+training_modules:
+  - module_id: "MOD-001"
+    module_title: "Introduction to Document Control"
+    module_order: 1
+    duration_minutes: 30
+    target_roles: "all"
+
+    learning_objectives:
+      - "Explain purpose and importance of document control in GMP/GACP environment"
+      - "Identify regulatory requirements for document control (FDA 21 CFR Part 11, EU GMP Annex 11, ISO 9001)"
+      - "Describe risks of inadequate document control"
+      - "List benefits of robust document management"
+
+    topics:
+      - topic: "What is Document Control?"
+        subtopics:
+          - "Definition and scope"
+          - "Controlled vs uncontrolled documents"
+          - "Document lifecycle overview"
+
+      - topic: "Regulatory Requirements"
+        subtopics:
+          - "FDA 21 CFR Part 11: Electronic records and signatures"
+          - "EU GMP Annex 11: Computerized systems"
+          - "ISO 9001:2015: Document control requirements"
+          - "Health Canada: Document management expectations"
+          - "ALCOA+ principles for document integrity"
+
+      - topic: "Why Document Control Matters"
+        subtopics:
+          - "Ensuring consistency and standardization"
+          - "Regulatory compliance and inspection readiness"
+          - "Quality assurance and product safety"
+          - "Knowledge management and institutional memory"
+          - "Risk management and traceability"
+
+      - topic: "Consequences of Poor Document Control"
+        subtopics:
+          - "Regulatory findings and warning letters"
+          - "Quality issues and deviations"
+          - "Inconsistent practices"
+          - "Loss of knowledge"
+          - "Inefficiency and confusion"
+
+    assessment:
+      - question: "What regulatory standards require formal document control?"
+        type: "multiple_choice"
+        correct_answer: "FDA 21 CFR Part 11, EU GMP Annex 11, ISO 9001"
+      - question: "What are ALCOA+ principles?"
+        type: "short_answer"
+        correct_answer: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+
+  - module_id: "MOD-002"
+    module_title: "Document Classification and Hierarchy"
+    module_order: 2
+    duration_minutes: 30
+    target_roles: "all"
+
+    learning_objectives:
+      - "Classify documents by category (A, B, C, D) and apply appropriate controls"
+      - "Identify document types and their purposes"
+      - "Explain document numbering system and version control"
+      - "Navigate document hierarchy structure"
+
+    topics:
+      - topic: "Document Categories"
+        subtopics:
+          - "Category A: Critical GMP documents - formal review required"
+          - "Category B: Important operational documents - simplified review"
+          - "Category C: Supporting documents - minimal review"
+          - "Category D: Reference documents - external standards"
+
+      - topic: "Document Types"
+        subtopics:
+          - "SOPs (Standard Operating Procedures)"
+          - "Policies and quality manuals"
+          - "Work instructions and job aids"
+          - "Forms and templates"
+          - "Specifications and protocols"
+          - "Validation documents"
+          - "Batch records and laboratory methods"
+          - "Regulatory submissions"
+
+      - topic: "Document Numbering System"
+        subtopics:
+          - "Format: [ORG]-[CATEGORY]-[TYPE]-[NUMBER]-[VERSION]"
+          - "Examples: GACP-SOP-QMS-001-v1.0"
+          - "Version control: Major (x.0) vs Minor (x.y)"
+          - "Draft versions: x.y-DRAFT"
+
+      - topic: "Document Status Indicators"
+        subtopics:
+          - "DRAFT: Under development"
+          - "UNDER_REVIEW: Formal review in progress"
+          - "APPROVED: Current and effective"
+          - "SUPERSEDED: Replaced by newer version"
+          - "OBSOLETE: No longer applicable"
+          - "ARCHIVED: Retained for historical purposes"
+
+    assessment:
+      - question: "A validated computer system SOP would be classified as:"
+        type: "multiple_choice"
+        correct_answer: "Category A: Critical GMP document"
+      - question: "Decode this document ID: GACP-WI-PROD-015-v2.1"
+        type: "short_answer"
+        correct_answer: "GACP organization, Work Instruction, Production, number 15, version 2.1 (minor revision)"
+
+  - module_id: "MOD-003"
+    module_title: "Document Lifecycle Overview"
+    module_order: 3
+    duration_minutes: 45
+    target_roles: "all"
+
+    learning_objectives:
+      - "Describe all phases of document lifecycle from creation to disposal"
+      - "Identify roles and responsibilities in each lifecycle phase"
+      - "Explain approval workflows for different document categories"
+      - "Understand periodic review requirements and retention periods"
+
+    topics:
+      - topic: "11-Step Document Lifecycle"
+        subtopics:
+          - "Step 1: Creation Initiation (FORM-DOC-001)"
+          - "Step 2: Content Development"
+          - "Step 3: Formal Review (CHKLST-DOC-002)"
+          - "Step 4: Review Comment Incorporation"
+          - "Step 5: Formal Approval (CHKLST-DOC-003)"
+          - "Step 6: Distribution and Implementation"
+          - "Step 7: Controlled Use and Training"
+          - "Step 8: Periodic Review"
+          - "Step 9: Document Revision"
+          - "Step 10: Archival and Retention"
+          - "Step 11: Secure Disposal"
+
+      - topic: "Roles in Document Lifecycle"
+        subtopics:
+          - "Document Controller: System administrator, numbering, oversight"
+          - "Document Author: Content creation, accuracy"
+          - "Document Reviewer: Technical review, compliance verification"
+          - "Document Approver: Final authority, business impact"
+          - "Quality Manager: System oversight, audit, compliance"
+          - "All Personnel: Follow current approved documents"
+
+      - topic: "Approval Workflows"
+        subtopics:
+          - "Category A: Multi-level SME review + QA Manager approval"
+          - "Category B: Department review + Department Head approval"
+          - "Category C: Peer review + Supervisor approval"
+          - "Electronic signatures per 21 CFR Part 11"
+
+      - topic: "Periodic Review and Retention"
+        subtopics:
+          - "Critical documents (Cat A): Annual review"
+          - "Standard documents (Cat B): Biennial review"
+          - "Supporting documents (Cat C): Triennial review"
+          - "Retention periods: 10+ years for GMP critical, 7 years for quality records"
+
+    assessment:
+      - question: "What are the 11 steps of document lifecycle?"
+        type: "ordering"
+        correct_answer: "Initiation, Development, Review, Incorporation, Approval, Distribution, Training, Periodic Review, Revision, Archival, Disposal"
+      - question: "How often must Category A critical GMP documents be reviewed?"
+        type: "multiple_choice"
+        correct_answer: "Annually"
+
+  - module_id: "MOD-004"
+    module_title: "Mayan-EDMS System Navigation (All Users)"
+    module_order: 4
+    duration_minutes: 45
+    target_roles: "all"
+
+    learning_objectives:
+      - "Log in to Mayan-EDMS and navigate user interface"
+      - "Search for and access documents"
+      - "View document metadata and version history"
+      - "Understand access permissions and document security"
+      - "Acknowledge read-and-understand training"
+
+    topics:
+      - topic: "System Access and Login"
+        subtopics:
+          - "URL and login credentials"
+          - "Password requirements and security"
+          - "Two-factor authentication (if applicable)"
+          - "Session timeout and secure logout"
+
+      - topic: "Dashboard and Navigation"
+        subtopics:
+          - "Home dashboard overview"
+          - "Document library navigation"
+          - "Folder structure (by department, by type)"
+          - "Recent documents and favorites"
+          - "Notifications and alerts"
+
+      - topic: "Document Search and Access"
+        subtopics:
+          - "Quick search vs advanced search"
+          - "Search by document ID, title, category, type"
+          - "Metadata filters"
+          - "Opening and viewing documents (PDF)"
+          - "Printing documents (controlled)"
+
+      - topic: "Document Metadata and Version History"
+        subtopics:
+          - "Viewing document properties"
+          - "Version history and change log"
+          - "Approval signatures and dates"
+          - "Related documents"
+          - "Audit trail access (if authorized)"
+
+      - topic: "Access Permissions and Security"
+        subtopics:
+          - "Role-based access control"
+          - "Read-only vs edit permissions"
+          - "Confidential documents"
+          - "Audit trail of document access"
+
+      - topic: "Read and Acknowledge Training"
+        subtopics:
+          - "Training assignment notifications"
+          - "Completing read-and-acknowledge"
+          - "Electronic signature for training completion"
+          - "Training record generation"
+
+    practical_exercise:
+      - "Log in to Mayan-EDMS"
+      - "Search for a specific SOP by ID and title"
+      - "View document metadata and version history"
+      - "Complete a read-and-acknowledge training for a test document"
+
+    assessment:
+      - question: "Successfully log in and search for SOP-DOC-001"
+        type: "practical"
+        passing_criteria: "Document found and opened"
+      - question: "View version history and identify most recent change"
+        type: "practical"
+        passing_criteria: "Correct version and change summary identified"
+
+  - module_id: "MOD-005"
+    module_title: "Document Creation and Authoring (Authors)"
+    module_order: 5
+    duration_minutes: 60
+    target_roles:
+      - "ROLE-DOCAUTH-001"
+
+    learning_objectives:
+      - "Initiate document creation request (FORM-DOC-001)"
+      - "Select and use appropriate document templates"
+      - "Develop high-quality document content following standards"
+      - "Complete document quality checklist (CHKLST-DOC-001)"
+      - "Submit document for formal review"
+
+    topics:
+      - topic: "Document Creation Request Process"
+        subtopics:
+          - "Identifying need for new document"
+          - "Completing FORM-DOC-001 Document Creation Request"
+          - "Business justification and scope definition"
+          - "Resource and timeline estimation"
+          - "Approval by Document Controller and QA"
+
+      - topic: "Template Selection and Usage"
+        subtopics:
+          - "Accessing templates from Mayan-EDMS"
+          - "SOP template, Work Instruction template, Form template, etc."
+          - "Template sections and required fields"
+          - "Customizing templates appropriately (no format changes)"
+          - "Metadata completion"
+
+      - topic: "Content Development Best Practices"
+        subtopics:
+          - "Writing clear purpose and scope"
+          - "Defining roles and responsibilities"
+          - "Developing step-by-step procedures (action-oriented, numbered)"
+          - "Technical accuracy and completeness"
+          - "Regulatory compliance integration"
+          - "Cross-referencing related documents"
+          - "Using visual aids (flowcharts, tables)"
+
+      - topic: "Document Quality Standards"
+        subtopics:
+          - "Language: Clear, concise, professional"
+          - "Format: Consistent with template"
+          - "Completeness: All required sections"
+          - "Accuracy: Factually correct"
+          - "Usability: Target audience can follow procedures"
+
+      - topic: "Quality Checklist (CHKLST-DOC-001)"
+        subtopics:
+          - "Document identification and metadata"
+          - "Content quality and completeness"
+          - "Format and style compliance"
+          - "Language and readability"
+          - "Cross-references and integration"
+          - "Regulatory and compliance"
+          - "Change control and version management"
+          - "Final readiness check"
+
+      - topic: "Submitting for Review"
+        subtopics:
+          - "Uploading draft to Mayan-EDMS"
+          - "Initiating review workflow"
+          - "Assigning reviewers"
+          - "Setting review timeline"
+
+    practical_exercise:
+      - "Complete FORM-DOC-001 for a hypothetical new work instruction"
+      - "Draft a simple work instruction using template"
+      - "Complete CHKLST-DOC-001 quality checklist"
+      - "Submit document for review in Mayan-EDMS (training environment)"
+
+    assessment:
+      - question: "Create a document creation request for given scenario"
+        type: "practical"
+        passing_criteria: "FORM-DOC-001 completed with all required fields"
+      - question: "Draft a 2-page work instruction and pass quality checklist"
+        type: "practical"
+        passing_criteria: "CHKLST-DOC-001 score ≥ 95%"
+
+  - module_id: "MOD-006"
+    module_title: "Document Review Process (Reviewers)"
+    module_order: 6
+    duration_minutes: 60
+    target_roles:
+      - "ROLE-DOCREV-001"
+
+    learning_objectives:
+      - "Conduct comprehensive technical and regulatory review"
+      - "Use document review checklist (CHKLST-DOC-002) effectively"
+      - "Provide clear, actionable review comments"
+      - "Validate cross-references and integration"
+      - "Make review recommendation (Approve, Approve with Minor Revisions, Return for Major Revisions)"
+
+    topics:
+      - topic: "Reviewer Responsibilities"
+        subtopics:
+          - "Technical accuracy verification"
+          - "Regulatory compliance confirmation"
+          - "Cross-reference validation"
+          - "Impact assessment"
+          - "Timely review completion (target: 5 business days)"
+
+      - topic: "Review Checklist (CHKLST-DOC-002)"
+        subtopics:
+          - "Reviewer qualifications and scope"
+          - "Document completeness"
+          - "Technical accuracy and content"
+          - "Regulatory and compliance"
+          - "Cross-reference validation"
+          - "Roles and responsibilities clarity"
+          - "Clarity and usability"
+          - "Format and style"
+          - "Impact assessment"
+          - "Final review decision"
+
+      - topic: "Providing Effective Review Comments"
+        subtopics:
+          - "Be specific and actionable"
+          - "Reference section/page/line"
+          - "Explain why change needed"
+          - "Suggest alternatives when possible"
+          - "Distinguish major vs minor comments"
+          - "Use constructive tone"
+
+      - topic: "Cross-Reference Validation"
+        subtopics:
+          - "Verify referenced documents exist in Mayan-EDMS"
+          - "Check versions are current (not obsolete)"
+          - "Identify conflicts or gaps"
+          - "Ensure seamless integration"
+
+      - topic: "Review Decision Making"
+        subtopics:
+          - "Approve: All criteria met, ready for approval"
+          - "Approve with Minor Revisions: Editorial changes only, no re-review"
+          - "Return for Major Revisions: Technical/compliance issues, re-review required"
+          - "Documenting decision and rationale"
+
+      - topic: "Using Mayan-EDMS Review Workflow"
+        subtopics:
+          - "Receiving review assignment notification"
+          - "Accessing document for review"
+          - "Entering comments in system"
+          - "Completing CHKLST-DOC-002 in system"
+          - "Submitting review with electronic signature"
+
+    practical_exercise:
+      - "Review a sample SOP using CHKLST-DOC-002"
+      - "Identify technical errors and compliance gaps"
+      - "Provide structured review comments"
+      - "Make and document review recommendation"
+
+    assessment:
+      - question: "Review a test document and complete CHKLST-DOC-002"
+        type: "practical"
+        passing_criteria: "All critical items assessed, clear decision documented"
+      - question: "What are the three possible review decisions?"
+        type: "multiple_choice"
+        correct_answer: "Approve, Approve with Minor Revisions, Return for Major Revisions"
+
+  - module_id: "MOD-007"
+    module_title: "Document Approval Process (Approvers)"
+    module_order: 7
+    duration_minutes: 45
+    target_roles:
+      - "ROLE-DOCAPP-001"
+
+    learning_objectives:
+      - "Understand approver authority and responsibilities"
+      - "Use document approval checklist (CHKLST-DOC-003)"
+      - "Verify all approval prerequisites met"
+      - "Assess business impact and resource commitments"
+      - "Apply electronic signature per 21 CFR Part 11"
+      - "Make final approval decision"
+
+    topics:
+      - topic: "Approver Responsibilities"
+        subtopics:
+          - "Final approval authority"
+          - "Regulatory compliance confirmation"
+          - "Business impact assessment"
+          - "Resource allocation approval"
+          - "Implementation authorization"
+          - "Target approval time: 3-7 business days"
+
+      - topic: "Approval Checklist (CHKLST-DOC-003)"
+        subtopics:
+          - "Approval prerequisites (review complete, comments addressed)"
+          - "Regulatory and compliance verification"
+          - "Technical content verification"
+          - "Integration and impact"
+          - "Business impact and resources"
+          - "Document quality standards"
+          - "Version control and change management"
+          - "Final approval decision"
+
+      - topic: "Business Impact Assessment"
+        subtopics:
+          - "Business justification evaluation"
+          - "Resource requirements (budget, staffing, equipment)"
+          - "Operational impact and timing"
+          - "Benefits vs costs and effort"
+          - "Risk vs benefit analysis"
+
+      - topic: "Approval Decision Making"
+        subtopics:
+          - "Approve: All criteria met, authorize implementation"
+          - "Approve with Conditions: Minor conditions to satisfy within 5 days"
+          - "Return for Revision: Critical issues, not ready for approval"
+
+      - topic: "Electronic Signature Application"
+        subtopics:
+          - "21 CFR Part 11 requirements"
+          - "User authentication (password or biometric)"
+          - 'Signature meaning: "I approve this document for implementation"'
+          - "Signature capture: Name, Date, Meaning"
+          - "Non-repudiation and audit trail"
+
+      - topic: "Using Mayan-EDMS Approval Workflow"
+        subtopics:
+          - "Receiving approval request notification"
+          - "Accessing document package (document, reviews, comments)"
+          - "Completing CHKLST-DOC-003"
+          - "Entering approval decision"
+          - "Applying electronic signature"
+          - "System auto-routes to distribution upon approval"
+
+    practical_exercise:
+      - "Review approval package for a test SOP"
+      - "Complete CHKLST-DOC-003 approval checklist"
+      - "Make approval decision with justification"
+      - "Apply electronic signature in system"
+
+    assessment:
+      - question: "Complete approval checklist for test document"
+        type: "practical"
+        passing_criteria: "All critical items assessed, decision documented"
+      - question: "What information must an electronic signature capture per 21 CFR Part 11?"
+        type: "short_answer"
+        correct_answer: "Signer name, date/time, meaning of signature (I approve...)"
+
+  - module_id: "MOD-008"
+    module_title: "Periodic Review and Document Maintenance"
+    module_order: 8
+    duration_minutes: 30
+    target_roles:
+      - "ROLE-DOCCTRL-001"
+      - "ROLE-DOCAUTH-001"
+      - "ROLE-QA-002"
+
+    learning_objectives:
+      - "Explain periodic review schedule by document category"
+      - "Conduct periodic review and determine document currency"
+      - "Make review decision: Reaffirm, Revise, or Retire"
+      - "Initiate document revision process"
+      - "Understand archival and retention requirements"
+
+    topics:
+      - topic: "Periodic Review Schedule"
+        subtopics:
+          - "Category A (Critical GMP): Annual"
+          - "Category B (Operational): Biennial (every 2 years)"
+          - "Category C (Supporting): Triennial (every 3 years)"
+          - "Category D (Reference): As needed"
+          - "Triggered reviews: Regulatory change, process change, incident"
+
+      - topic: "Periodic Review Process"
+        subtopics:
+          - "Document Controller monitors review schedule"
+          - "Notification to document owner/author"
+          - "Review for currency, accuracy, relevance"
+          - "Regulatory update check"
+          - "User feedback consideration"
+          - "Review decision and documentation"
+
+      - topic: "Review Decisions"
+        subtopics:
+          - "Reaffirm: No changes, extend for another review period"
+          - "Revise: Minor or major changes needed, initiate revision"
+          - "Retire: No longer applicable, change status to OBSOLETE"
+
+      - topic: "Document Revision Process"
+        subtopics:
+          - "Initiate revision (change request or periodic review)"
+          - "Version numbering (major x.0 or minor x.y)"
+          - "Re-enter lifecycle: Development, Review, Approval, Distribution"
+          - "Previous version superseded upon new version approval"
+          - "Change history updated"
+
+      - topic: "Archival and Retention"
+        subtopics:
+          - "Superseded documents: Status SUPERSEDED, archived"
+          - "Obsolete documents: Status OBSOLETE, archived"
+          - "Retention periods: GMP 10+yrs, Quality 7yrs, Training employment+3yrs"
+          - "Read-only access maintained during retention"
+          - "Secure disposal after retention expiration (with authorization)"
+
+    assessment:
+      - question: "How often must a Category A critical GMP SOP be reviewed?"
+        type: "multiple_choice"
+        correct_answer: "Annually"
+      - question: "What are the three periodic review decisions?"
+        type: "multiple_choice"
+        correct_answer: "Reaffirm, Revise, Retire"
+
+  - module_id: "MOD-009"
+    module_title: "Audit Trail, Electronic Signatures, and Compliance"
+    module_order: 9
+    duration_minutes: 30
+    target_roles:
+      - "ROLE-DOCCTRL-001"
+      - "ROLE-QA-002"
+      - "ROLE-DOCAUTH-001"
+      - "ROLE-DOCREV-001"
+      - "ROLE-DOCAPP-001"
+
+    learning_objectives:
+      - "Explain audit trail requirements per 21 CFR Part 11"
+      - "Describe ALCOA+ principles for document integrity"
+      - "Understand electronic signature compliance"
+      - "Access and interpret audit trail data"
+      - "Ensure compliance in daily document control activities"
+
+    topics:
+      - topic: "21 CFR Part 11 Electronic Records and Signatures"
+        subtopics:
+          - "Electronic records: Equivalent to paper records"
+          - "Electronic signatures: Legally binding, non-repudiation"
+          - "Audit trail: Complete history of document lifecycle"
+          - "System validation and controls"
+          - "Accessibility: Available for FDA inspection"
+
+      - topic: "ALCOA+ Principles"
+        subtopics:
+          - "Attributable: Who performed action, electronic signature"
+          - "Legible: Readable throughout retention period"
+          - "Contemporaneous: Recorded at time of activity"
+          - "Original: First capture, system of record"
+          - "Accurate: Correct and reliable"
+          - "Complete: All data captured and retained"
+          - "Consistent: Chronological, uniform format"
+          - "Enduring: Durable, permanent records"
+          - "Available: Accessible throughout retention"
+
+      - topic: "Audit Trail Requirements"
+        subtopics:
+          - "User identification (who)"
+          - "Date and time stamps (when)"
+          - "Action description (what)"
+          - "Before and after values for changes (from/to)"
+          - "Reason for change"
+          - "Cannot be deleted or modified"
+          - "Retained for document lifecycle + retention period"
+
+      - topic: "Electronic Signature Compliance"
+        subtopics:
+          - "Unique user ID and strong password (or biometric)"
+          - "Signature meaning clearly defined"
+          - "Non-repudiation: Cannot be falsified or denied"
+          - "System captures: Name, Date, Meaning"
+          - "Signature linked to record permanently"
+
+      - topic: "Accessing and Interpreting Audit Trails"
+        subtopics:
+          - "Audit trail queries in Mayan-EDMS"
+          - "Filtering by document, user, action, date range"
+          - "Reviewing document history"
+          - "Investigating anomalies"
+          - "Supporting audits and inspections"
+
+    assessment:
+      - question: "What are ALCOA+ principles?"
+        type: "multiple_choice"
+        correct_answer: "Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available"
+      - question: "Can an audit trail be modified or deleted?"
+        type: "multiple_choice"
+        correct_answer: "No, audit trails must be immutable and retained"
+
+  - module_id: "MOD-010"
+    module_title: "Hands-On Practice and System Proficiency"
+    module_order: 10
+    duration_minutes: 60
+    target_roles:
+      - "ROLE-DOCAUTH-001"
+      - "ROLE-DOCREV-001"
+      - "ROLE-DOCAPP-001"
+      - "ROLE-DOCCTRL-001"
+
+    learning_objectives:
+      - "Navigate Mayan-EDMS with proficiency"
+      - "Complete end-to-end document lifecycle (create, review, approve, distribute)"
+      - "Use all relevant forms and checklists"
+      - "Troubleshoot common issues"
+      - "Demonstrate competency in role-specific tasks"
+
+    practical_exercises:
+      - exercise_id: "EX-001"
+        exercise_title: "Document Author Exercise"
+        target_roles:
+          - "ROLE-DOCAUTH-001"
+        steps:
+          - "Create document creation request (FORM-DOC-001)"
+          - "Draft a work instruction using template"
+          - "Complete quality checklist (CHKLST-DOC-001)"
+          - "Upload to Mayan-EDMS and submit for review"
+
+      - exercise_id: "EX-002"
+        exercise_title: "Document Reviewer Exercise"
+        target_roles:
+          - "ROLE-DOCREV-001"
+        steps:
+          - "Access document assigned for review"
+          - "Review using CHKLST-DOC-002"
+          - "Provide structured comments"
+          - "Submit review recommendation with signature"
+
+      - exercise_id: "EX-003"
+        exercise_title: "Document Approver Exercise"
+        target_roles:
+          - "ROLE-DOCAPP-001"
+        steps:
+          - "Access document approval package"
+          - "Review using CHKLST-DOC-003"
+          - "Make approval decision"
+          - "Apply electronic signature"
+
+      - exercise_id: "EX-004"
+        exercise_title: "Document Controller Exercise"
+        target_roles:
+          - "ROLE-DOCCTRL-001"
+        steps:
+          - "Process document creation request"
+          - "Assign document number and author"
+          - "Monitor workflow progress"
+          - "Distribute approved document"
+          - "Complete training needs assessment (FORM-DOC-002)"
+          - "Schedule periodic review"
+
+    assessment:
+      - question: "Complete end-to-end document lifecycle exercise in training environment"
+        type: "practical"
+        passing_criteria: "All role-specific tasks completed successfully, forms/checklists used correctly"
+
+competency_assessment:
+  type: "role_specific"
+  components:
+    - component: "Knowledge Test"
+      weight: 30
+      format: "multiple_choice_and_short_answer"
+      questions: 30
+      passing_score: 80
+      topics_covered:
+        - "Regulatory requirements (21 CFR Part 11, ISO 9001, ALCOA+)"
+        - "Document classification and numbering"
+        - "Document lifecycle phases"
+        - "Roles and responsibilities"
+        - "Review and approval criteria"
+        - "Periodic review requirements"
+        - "Audit trail and electronic signatures"
+
+    - component: "System Proficiency Test"
+      weight: 40
+      format: "hands_on_practical"
+      passing_score: 100
+      requirements:
+        - "Log in to Mayan-EDMS"
+        - "Search for and access documents"
+        - "Complete role-specific tasks (author, review, approve)"
+        - "Use forms and checklists correctly"
+        - "Apply electronic signature"
+        - "Access audit trail"
+
+    - component: "Case Study Exercise"
+      weight: 30
+      format: "written_or_oral"
+      passing_score: 80
+      requirements:
+        - "Analyze a document control scenario"
+        - "Identify issues and non-compliances"
+        - "Recommend corrective actions"
+        - "Demonstrate understanding of regulatory requirements"
+
+  overall_passing_score: 80
+  retake_policy: "One retake allowed within 30 days; if second attempt fails, additional training and coaching required"
+
+post_training:
+  effectiveness_monitoring:
+    - "On-the-job observation during first document activity"
+    - "Document Controller review of first deliverable (created document, review, approval)"
+    - "Quarterly audit of document quality"
+    - "User feedback surveys"
+
+  refresher_requirements:
+    - frequency: "annual"
+    - triggers:
+        - "SOP major revision"
+        - "System upgrade"
+        - "Audit finding or deviation"
+        - "Poor document quality or compliance issue"
+
+storage:
+  training_records_location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

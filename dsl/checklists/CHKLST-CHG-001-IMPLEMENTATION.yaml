@@ -1,0 +1,396 @@
+# DSL: Change Implementation Checklist
+# Version: 1.0
+# Source: SOP_ChangeControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-CHG-001"
+  checklist_type: "implementation"
+  title: "Change Implementation Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-CHG-001"
+
+usage:
+  purpose: "Ensure systematic and complete change implementation with all required pre-implementation, implementation, testing, and post-implementation activities completed"
+  frequency: "per_change"
+  trigger: "Change approved and ready for implementation"
+  responsible_roles:
+    - "ROLE-CHGOWN-001"
+    - "ROLE-ITMGR-001"
+    - "ROLE-QA-002"
+  estimated_duration_minutes: 180
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Pre-Implementation Preparation"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "IMPL-001"
+          item_text: "Change request approved by all required authorities"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All signatures obtained per criticality matrix"
+          evidence_required: true
+          guidance: "Verify CR-YYYY-NNNN has all required approvals"
+
+        - item_id: "IMPL-002"
+          item_text: "Implementation plan documented and approved"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Detailed implementation plan with tasks, timeline, resources"
+          evidence_required: true
+          guidance: "Plan includes work breakdown, milestones, quality gates"
+
+        - item_id: "IMPL-003"
+          item_text: "System backups created for all affected systems"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Full backups verified and tested"
+          evidence_required: true
+          guidance: "Database, configuration, data backups with verification"
+
+        - item_id: "IMPL-004"
+          item_text: "Test environment setup and configuration verified"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Test environment mirrors production"
+          evidence_required: false
+          guidance: "Non-production testing environment prepared"
+
+        - item_id: "IMPL-005"
+          item_text: "Required resources provisioned (personnel, equipment, licenses)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All resources available per plan"
+          evidence_required: false
+          guidance: "Personnel assigned, equipment ready, licenses acquired"
+
+        - item_id: "IMPL-006"
+          item_text: "Implementation team trained and briefed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Team understands roles, tasks, procedures"
+          evidence_required: false
+          guidance: "Kick-off meeting conducted, roles clarified"
+
+        - item_id: "IMPL-007"
+          item_text: "Stakeholders notified of implementation schedule and impact"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All affected stakeholders notified at least 48 hours in advance"
+          evidence_required: true
+          guidance: "Email notification with schedule, downtime, support contacts"
+
+        - item_id: "IMPL-008"
+          item_text: "Rollback plan documented and resources ready"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear rollback procedure with trigger criteria"
+          evidence_required: true
+          guidance: "Rollback plan tested in non-production environment if possible"
+
+    - section_id: "SEC-002"
+      section_title: "Implementation Execution"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "IMPL-009"
+          item_text: "Implementation follows approved plan step-by-step"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All steps executed in planned sequence"
+          evidence_required: true
+          guidance: "Document completion of each step with timestamp"
+
+        - item_id: "IMPL-010"
+          item_text: "Quality checkpoints verified at designated milestones"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All quality gates passed before proceeding"
+          evidence_required: true
+          guidance: "Quality gate checklist completed at each milestone"
+
+        - item_id: "IMPL-011"
+          item_text: "Issues identified during implementation logged and resolved"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Issue log maintained, all critical issues resolved"
+          evidence_required: true
+          guidance: "Issue tracking system updated in real-time"
+
+        - item_id: "IMPL-012"
+          item_text: "Change Owner monitoring progress and communicating status"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Regular status updates provided to stakeholders"
+          evidence_required: false
+          guidance: "Status updates at minimum daily during active implementation"
+
+        - item_id: "IMPL-013"
+          item_text: "Data integrity controls verified (ALCOA+ compliance)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Audit trail functioning, timestamps accurate, access controls verified"
+          evidence_required: true
+          guidance: "For system changes, verify all ALCOA+ principles maintained"
+
+    - section_id: "SEC-003"
+      section_title: "Testing and Verification"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "IMPL-014"
+          item_text: "Unit testing completed with all test cases passed"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "100% unit test cases executed and passed"
+          evidence_required: true
+          guidance: "Unit test results documented with pass/fail for each case"
+
+        - item_id: "IMPL-015"
+          item_text: "Integration testing completed successfully"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All system interfaces tested and functioning"
+          evidence_required: true
+          guidance: "Test data flows across integrated systems"
+
+        - item_id: "IMPL-016"
+          item_text: "System testing completed with acceptance criteria met"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "End-to-end business processes tested successfully"
+          evidence_required: true
+          guidance: "Test realistic scenarios matching production use"
+
+        - item_id: "IMPL-017"
+          item_text: "User Acceptance Testing (UAT) completed and approved"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Business users confirm system meets requirements"
+          evidence_required: true
+          guidance: "UAT sign-off by business process owners"
+
+        - item_id: "IMPL-018"
+          item_text: "Performance testing completed (if applicable)"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "Performance benchmarks met or exceeded"
+          evidence_required: true
+          guidance: "Load testing, stress testing, response time verification"
+
+        - item_id: "IMPL-019"
+          item_text: "Security testing completed (if applicable)"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "No critical security vulnerabilities identified"
+          evidence_required: true
+          guidance: "Penetration testing, vulnerability scanning, access control testing"
+
+        - item_id: "IMPL-020"
+          item_text: "Validation activities completed per protocol (if required)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "IQ/OQ/PQ completed with QA approval"
+          evidence_required: true
+          guidance: "Formal validation per SOP-VAL-001 if GxP critical"
+
+    - section_id: "SEC-004"
+      section_title: "Production Deployment"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "IMPL-021"
+          item_text: "Production deployment plan reviewed and approved"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Deployment steps documented, QA approved"
+          evidence_required: true
+          guidance: "Deployment checklist with rollback triggers"
+
+        - item_id: "IMPL-022"
+          item_text: "Production deployment executed per plan"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All deployment steps completed successfully"
+          evidence_required: true
+          guidance: "Document timestamp and completion of each deployment step"
+
+        - item_id: "IMPL-023"
+          item_text: "Smoke testing completed in production environment"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Critical functionality verified in production"
+          evidence_required: true
+          guidance: "Test top 5-10 critical business processes immediately post-deployment"
+
+        - item_id: "IMPL-024"
+          item_text: "No critical issues identified in initial production use"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "System stable, no show-stopper issues"
+          evidence_required: true
+          guidance: "Monitor first 1-2 hours of production use intensively"
+
+        - item_id: "IMPL-025"
+          item_text: "Rollback decision point - proceed or rollback?"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Decision made based on predefined criteria"
+          evidence_required: true
+          guidance: "If critical issues, execute rollback plan immediately"
+
+    - section_id: "SEC-005"
+      section_title: "Post-Implementation Activities"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "IMPL-026"
+          item_text: "End-user training delivered to all affected personnel"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "100% of affected users trained"
+          evidence_required: true
+          guidance: "Training attendance records, materials distributed"
+
+        - item_id: "IMPL-027"
+          item_text: "Competency assessment completed for trained personnel"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "Users demonstrate competency per assessment criteria"
+          evidence_required: true
+          guidance: "Quiz, practical demonstration, or observation"
+
+        - item_id: "IMPL-028"
+          item_text: "Support documentation updated and distributed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "User guides, job aids, FAQs available to users"
+          evidence_required: true
+          guidance: "Documents accessible in shared location"
+
+        - item_id: "IMPL-029"
+          item_text: "Help desk/support activated and ready"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Support team trained, contact info communicated"
+          evidence_required: false
+          guidance: "Support hours, escalation procedures defined"
+
+        - item_id: "IMPL-030"
+          item_text: "Stakeholders notified of successful implementation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Implementation completion announcement sent"
+          evidence_required: true
+          guidance: "Email with go-live confirmation, key changes, support contacts"
+
+    - section_id: "SEC-006"
+      section_title: "Documentation and Compliance"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "IMPL-031"
+          item_text: "Technical documentation updated (system configs, architecture)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All technical docs reflect current state"
+          evidence_required: true
+          guidance: "Configuration docs, architecture diagrams, interface specs"
+
+        - item_id: "IMPL-032"
+          item_text: "Procedures and work instructions updated (SOPs)"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "All affected SOPs revised per document control"
+          evidence_required: true
+          guidance: "Follow SOP-DOC-001 for document updates"
+
+        - item_id: "IMPL-033"
+          item_text: "Training materials updated to reflect changes"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Training content matches current system/process"
+          evidence_required: true
+          guidance: "Updated materials available for future training"
+
+        - item_id: "IMPL-034"
+          item_text: "Implementation log completed with all activities documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Comprehensive log of all implementation activities"
+          evidence_required: true
+          guidance: "Include timestamps, who performed, what was done, results"
+
+        - item_id: "IMPL-035"
+          item_text: "Test results and evidence compiled and archived"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Complete test evidence package"
+          evidence_required: true
+          guidance: "Unit, integration, system, UAT, validation results"
+
+        - item_id: "IMPL-036"
+          item_text: "Issue log with all issues and resolutions documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All issues tracked from identification to resolution"
+          evidence_required: true
+          guidance: "Issue ID, description, resolution, status"
+
+        - item_id: "IMPL-037"
+          item_text: "Quality Manager review and sign-off obtained"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "QA Manager signature on implementation completion"
+          evidence_required: true
+          guidance: "QA review of all implementation documentation"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "IMPL-001"
+    - "IMPL-003"
+    - "IMPL-008"
+    - "IMPL-013"
+    - "IMPL-017"
+    - "IMPL-020"
+    - "IMPL-025"
+    - "IMPL-037"
+  critical_item_requirement: "All critical items must pass"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document implementation deficiencies"
+      - "Complete missing activities"
+      - "Execute rollback if critical failure"
+    follow_up_required:
+      - "Investigate root cause of incomplete implementation"
+      - "Re-submit for QA review after corrections"
+      - "Update implementation procedures if systematic gaps"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

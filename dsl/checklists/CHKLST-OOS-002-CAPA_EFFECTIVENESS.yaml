@@ -1,0 +1,293 @@
+schema_version: "1.0.0"
+type: checklist
+metadata:
+  id: CHKLST-OOS-002
+  title: CAPA Effectiveness Verification Checklist
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Assurance
+  classification: Critical
+  frequency: Per CAPA Closure
+
+sections:
+  - section_number: 1
+    section_title: CAPA Implementation Verification
+    items:
+      - item_number: 1.1
+        description: All immediate corrective actions implemented per FORM-OOS-008
+        verification_method: Review CAPA implementation records
+        acceptance_criteria: All immediate actions completed with evidence
+        responsible_role: CAPA Owner
+
+      - item_number: 1.2
+        description: All long-term preventive actions implemented per plan
+        verification_method: Verify completion of each preventive action
+        acceptance_criteria: All preventive actions completed or justified
+        responsible_role: CAPA Owner
+
+      - item_number: 1.3
+        description: Implementation timeline met or delays justified
+        verification_method: Compare actual vs planned completion dates
+        acceptance_criteria: All milestones met or delay justifications documented
+        responsible_role: Quality Assurance Manager
+
+      - item_number: 1.4
+        description: All required training completed per training plan
+        verification_method: Review training records and competency assessments
+        acceptance_criteria: 100% of identified personnel trained and qualified
+        responsible_role: Training Coordinator
+
+  - section_number: 2
+    section_title: Problem Recurrence Assessment
+    items:
+      - item_number: 2.1
+        description: OOS database reviewed for similar results post-CAPA (minimum 3 months data)
+        verification_method: Query OOS database for same product/test/issue
+        acceptance_criteria: No recurrence of same OOS issue
+        responsible_role: Quality Assurance Analyst
+
+      - item_number: 2.2
+        description: Trend analysis performed for related parameters
+        verification_method: Statistical analysis of results for affected parameters
+        acceptance_criteria: Trending shows improvement or stability
+        responsible_role: QC Manager
+
+      - item_number: 2.3
+        description: Control charts reviewed for process stability
+        verification_method: Evaluate control chart data post-CAPA
+        acceptance_criteria: Process in statistical control, improved capability
+        responsible_role: Quality Assurance Analyst
+
+  - section_number: 3
+    section_title: Process Capability and Improvement
+    items:
+      - item_number: 3.1
+        description: Process capability indices calculated (Cp, Cpk) if applicable
+        verification_method: Statistical calculation using post-CAPA data
+        acceptance_criteria: Cpk improved or maintained at acceptable level (≥1.33)
+        responsible_role: Quality Assurance Analyst
+
+      - item_number: 3.2
+        description: Process variation reduced compared to pre-CAPA baseline
+        verification_method: Compare standard deviation before and after CAPA
+        acceptance_criteria: Variation reduced or stable at acceptable level
+        responsible_role: Quality Assurance Analyst
+
+      - item_number: 3.3
+        description: Specification compliance rate improved
+        verification_method: Calculate % passing results before vs after CAPA
+        acceptance_criteria: Compliance rate improved or maintained at 100%
+        responsible_role: QC Manager
+
+  - section_number: 4
+    section_title: Quality Metrics and KPIs
+    items:
+      - item_number: 4.1
+        description: First-time pass rate improved for affected tests
+        verification_method: Compare pass rates before and after CAPA
+        acceptance_criteria: Pass rate improved or maintained at target (≥95%)
+        responsible_role: QC Manager
+
+      - item_number: 4.2
+        description: Investigation cycle time improved (if CAPA addressed investigation process)
+        verification_method: Compare average investigation time before vs after
+        acceptance_criteria: Investigation time reduced or maintained within target
+        responsible_role: QA Manager
+
+      - item_number: 4.3
+        description: Root cause identification rate improved (if CAPA addressed investigation tools)
+        verification_method: Compare % investigations with identified root cause
+        acceptance_criteria: Identification rate improved or maintained at target (≥80%)
+        responsible_role: QA Manager
+
+  - section_number: 5
+    section_title: Monitoring Results Review
+    items:
+      - item_number: 5.1
+        description: Monitoring data collected per effectiveness monitoring plan
+        verification_method: Review monitoring records and frequency
+        acceptance_criteria: All planned monitoring completed with documented results
+        responsible_role: CAPA Owner
+
+      - item_number: 5.2
+        description: All effectiveness criteria from FORM-OOS-008 evaluated
+        verification_method: Assess each effectiveness criterion from monitoring plan
+        acceptance_criteria: All criteria met or non-conformances addressed
+        responsible_role: Quality Assurance Manager
+
+      - item_number: 5.3
+        description: KPI targets achieved per effectiveness monitoring plan
+        verification_method: Compare actual KPIs to targets
+        acceptance_criteria: KPI targets met or improvement demonstrated
+        responsible_role: Quality Assurance Analyst
+
+      - item_number: 5.4
+        description: Adverse trends or unexpected results investigated
+        verification_method: Review monitoring data for adverse trends
+        acceptance_criteria: Any adverse trends investigated and addressed
+        responsible_role: CAPA Owner
+
+  - section_number: 6
+    section_title: Risk Assessment
+    items:
+      - item_number: 6.1
+        description: Residual risk assessed post-CAPA implementation
+        verification_method: Perform risk assessment using same methodology as initial
+        acceptance_criteria: Residual risk reduced to acceptable level (Low or Medium)
+        responsible_role: Quality Risk Manager
+
+      - item_number: 6.2
+        description: Unintended consequences or new risks evaluated
+        verification_method: Review for new issues arising from CAPA implementation
+        acceptance_criteria: No unacceptable new risks introduced
+        responsible_role: Quality Risk Manager
+
+      - item_number: 6.3
+        description: Patient safety impact reassessed
+        verification_method: Evaluate patient safety considerations post-CAPA
+        acceptance_criteria: Patient safety improved or maintained, no new concerns
+        responsible_role: Quality Assurance Manager
+
+  - section_number: 7
+    section_title: Regulatory Compliance
+    items:
+      - item_number: 7.1
+        description: All regulatory commitments fulfilled
+        verification_method: Review regulatory correspondence and commitments
+        acceptance_criteria: All commitments met with documented evidence
+        responsible_role: Regulatory Affairs Manager
+
+      - item_number: 7.2
+        description: Regulatory reporting completed if required
+        verification_method: Verify completion of required regulatory notifications
+        acceptance_criteria: All required reports submitted on time
+        responsible_role: Regulatory Affairs Manager
+
+      - item_number: 7.3
+        description: Compliance with relevant standards maintained (FDA, EU GMP, ICH)
+        verification_method: Assess continued compliance with applicable regulations
+        acceptance_criteria: Compliance maintained or improved
+        responsible_role: Quality Assurance Manager
+
+  - section_number: 8
+    section_title: Documentation Review
+    items:
+      - item_number: 8.1
+        description: All CAPA documentation complete and accurate
+        verification_method: Review all CAPA-related records and forms
+        acceptance_criteria: Complete documentation package with no gaps
+        responsible_role: Quality Assurance Analyst
+
+      - item_number: 8.2
+        description: Supporting evidence attached (data, reports, training records)
+        verification_method: Verify all supporting documentation attached to CAPA
+        acceptance_criteria: All referenced evidence present and accessible
+        responsible_role: CAPA Owner
+
+      - item_number: 8.3
+        description: Changes to SOPs or documentation implemented and effective
+        verification_method: Review document change control records
+        acceptance_criteria: All required document changes completed and trained
+        responsible_role: Document Control Coordinator
+
+  - section_number: 9
+    section_title: Stakeholder Feedback
+    items:
+      - item_number: 9.1
+        description: Feedback obtained from affected departments (QC, Production, etc.)
+        verification_method: Collect stakeholder input on CAPA effectiveness
+        acceptance_criteria: Stakeholders confirm CAPA addresses issue effectively
+        responsible_role: CAPA Owner
+
+      - item_number: 9.2
+        description: Any concerns or improvement suggestions documented
+        verification_method: Review stakeholder feedback for concerns
+        acceptance_criteria: All concerns addressed or documented for future action
+        responsible_role: Quality Assurance Manager
+
+  - section_number: 10
+    section_title: Closure Recommendation
+    items:
+      - item_number: 10.1
+        description: All checklist items completed satisfactorily
+        verification_method: Review entire checklist for completion
+        acceptance_criteria: All items checked and verified
+        responsible_role: Quality Assurance Manager
+
+      - item_number: 10.2
+        description: CAPA effectiveness confirmed based on objective evidence
+        verification_method: Evaluate cumulative evidence from all verification activities
+        acceptance_criteria: Objective evidence supports effectiveness conclusion
+        responsible_role: Quality Assurance Manager
+
+      - item_number: 10.3
+        description: No follow-up actions required, or follow-up actions documented
+        verification_method: Review for any additional actions needed
+        acceptance_criteria: No open actions or actions documented in new CAPA
+        responsible_role: Quality Assurance Manager
+
+      - item_number: 10.4
+        description: CAPA closure approved by QA Manager
+        verification_method: Obtain QA Manager signature on closure form
+        acceptance_criteria: Signed approval obtained with date
+        responsible_role: Quality Assurance Manager
+
+completion:
+  - field_name: verifier_name
+    field_type: text
+    required: true
+    description: QA Analyst/Specialist conducting effectiveness verification
+
+  - field_name: verification_date
+    field_type: date
+    required: true
+    description: Date effectiveness verification completed
+
+  - field_name: verifier_signature
+    field_type: signature
+    required: true
+    description: QA Analyst electronic signature
+
+  - field_name: effectiveness_confirmed
+    field_type: enum
+    required: true
+    enum:
+      - Effective - Recommend Closure
+      - Partially Effective - Additional Actions Required
+      - Not Effective - CAPA Revision Required
+    description: Overall effectiveness determination
+
+  - field_name: follow_up_actions
+    field_type: textarea
+    required: false
+    description: Any follow-up actions required (if not fully effective)
+
+  - field_name: qa_manager_approval
+    field_type: signature
+    required: true
+    description: QA Manager approval signature for CAPA closure
+
+  - field_name: closure_date
+    field_type: date
+    required: true
+    description: Official CAPA closure date
+
+instructions:
+  - Conduct effectiveness verification minimum 3 months after CAPA implementation
+  - For CAPAs with longer-term actions, verification period may be extended (6-12 months)
+  - Collect objective evidence for all effectiveness criteria defined in FORM-OOS-008
+  - Complete all checklist items before making effectiveness determination
+  - If CAPA not fully effective, document specific deficiencies and required actions
+  - Partially effective CAPAs require revision and new verification timeline
+  - Not effective CAPAs must be reopened with new CAPA actions developed
+  - Cannot close CAPA without QA Manager approval
+  - Attach completed checklist to FORM-OOS-008 Section 10 (CAPA Effectiveness Verification)
+
+validation_rules:
+  - All checklist items must be completed before effectiveness determination
+  - Effectiveness determination must be supported by objective evidence
+  - Cannot select "Effective - Recommend Closure" if any critical items are unsatisfactory
+  - Follow-up actions required if "Partially Effective" selected
+  - QA Manager approval required for all CAPA closures
+  - Minimum 3-month monitoring period must elapse before effectiveness verification

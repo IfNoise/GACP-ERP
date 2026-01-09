@@ -1,0 +1,476 @@
+---
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-ANLY-001"
+  title: "Analytical Test Request Form"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_sop: "SOP-ANLY-001"
+  category: "record"
+  form_purpose: "Request analytical testing services for cannabis samples"
+  required_for: "All samples submitted to laboratory for testing"
+  approvers:
+    - "Laboratory Manager"
+    - "QA Laboratory Specialist"
+
+sections:
+  - section_number: 1
+    section_title: "Sample Submitter Information"
+    instructions: "Complete all fields identifying the person submitting samples for testing"
+    fields:
+      - field_id: "submitter_name"
+        field_label: "Submitter Name"
+        field_type: "text"
+        required: true
+        validation:
+          min_length: 2
+          max_length: 100
+      - field_id: "submitter_department"
+        field_label: "Department/Organization"
+        field_type: "text"
+        required: true
+        validation:
+          min_length: 2
+          max_length: 100
+      - field_id: "submitter_contact"
+        field_label: "Contact Phone/Email"
+        field_type: "text"
+        required: true
+        validation:
+          pattern: "^[\\w\\d\\s\\-\\(\\)\\.@]+$"
+      - field_id: "submission_date"
+        field_label: "Submission Date"
+        field_type: "date"
+        required: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "requested_completion_date"
+        field_label: "Requested Completion Date"
+        field_type: "date"
+        required: true
+        validation:
+          format: "YYYY-MM-DD"
+          min_days_from_today: 1
+      - field_id: "priority_level"
+        field_label: "Priority Level"
+        field_type: "dropdown"
+        required: true
+        options:
+          - "Routine"
+          - "Expedited"
+          - "Rush (Additional Fees Apply)"
+          - "Research (Non-GMP)"
+
+  - section_number: 2
+    section_title: "Sample Identification"
+    instructions: "Provide complete identification for all samples submitted"
+    fields:
+      - field_id: "sample_id"
+        field_label: "Sample ID/Number"
+        field_type: "text"
+        required: true
+        validation:
+          pattern: "^[A-Z0-9\\-]+$"
+          min_length: 5
+          max_length: 50
+      - field_id: "sample_name"
+        field_label: "Sample Name/Description"
+        field_type: "text"
+        required: true
+        validation:
+          min_length: 3
+          max_length: 200
+      - field_id: "sample_type"
+        field_label: "Sample Type"
+        field_type: "dropdown"
+        required: true
+        options:
+          - "Raw Cannabis Flower"
+          - "Dried Cannabis Flower"
+          - "Cannabis Trim"
+          - "Cannabis Extract (Solvent)"
+          - "Cannabis Extract (Solventless)"
+          - "Cannabis Oil"
+          - "Cannabis Tincture"
+          - "Infused Product"
+          - "Environmental Sample"
+          - "Stability Sample"
+          - "Retained Sample"
+          - "Reference Material"
+          - "Other (Specify)"
+      - field_id: "sample_type_other"
+        field_label: "If Other, Specify"
+        field_type: "text"
+        required: false
+        conditional_display:
+          field: "sample_type"
+          value: "Other (Specify)"
+        validation:
+          max_length: 100
+      - field_id: "batch_lot_number"
+        field_label: "Batch/Lot Number"
+        field_type: "text"
+        required: true
+        validation:
+          pattern: "^[A-Z0-9\\-]+$"
+          max_length: 50
+      - field_id: "quantity_submitted"
+        field_label: "Quantity Submitted"
+        field_type: "text"
+        required: true
+        validation:
+          pattern: "^[0-9\\.]+\\s*(g|kg|mL|L|units)$"
+      - field_id: "collection_date"
+        field_label: "Sample Collection Date"
+        field_type: "date"
+        required: true
+        validation:
+          format: "YYYY-MM-DD"
+          max_date: "today"
+      - field_id: "storage_conditions"
+        field_label: "Storage Conditions Before Submission"
+        field_type: "dropdown"
+        required: true
+        options:
+          - "Room Temperature (20-25°C)"
+          - "Refrigerated (2-8°C)"
+          - "Frozen (-20°C)"
+          - "Frozen (-80°C)"
+          - "Unknown"
+
+  - section_number: 3
+    section_title: "Tests Requested"
+    instructions: "Select all tests to be performed on the submitted sample(s)"
+    fields:
+      - field_id: "test_cannabinoids"
+        field_label: "Cannabinoid Analysis (HPLC)"
+        field_type: "checkbox"
+        required: false
+        sub_options:
+          - "THC"
+          - "THCA"
+          - "Total THC (THC + THCA)"
+          - "CBD"
+          - "CBDA"
+          - "Total CBD (CBD + CBDA)"
+          - "CBG"
+          - "CBN"
+          - "CBC"
+          - "Full Cannabinoid Panel"
+      - field_id: "test_terpenes"
+        field_label: "Terpene Analysis (GC-MS)"
+        field_type: "checkbox"
+        required: false
+        sub_options:
+          - "Major Terpenes (7 terpenes)"
+          - "Full Terpene Profile (15+ terpenes)"
+      - field_id: "test_microbiology"
+        field_label: "Microbiological Testing"
+        field_type: "checkbox"
+        required: false
+        sub_options:
+          - "Total Aerobic Count"
+          - "Total Yeast and Mold"
+          - "E. coli"
+          - "Salmonella spp."
+          - "STEC E. coli"
+          - "Full Microbiology Panel"
+      - field_id: "test_heavy_metals"
+        field_label: "Heavy Metals (ICP-MS)"
+        field_type: "checkbox"
+        required: false
+        sub_options:
+          - "Lead (Pb)"
+          - "Cadmium (Cd)"
+          - "Mercury (Hg)"
+          - "Arsenic (As)"
+          - "Full Heavy Metals Panel"
+      - field_id: "test_pesticides"
+        field_label: "Pesticide Residue Screening (LC-MS/MS)"
+        field_type: "checkbox"
+        required: false
+      - field_id: "test_residual_solvents"
+        field_label: "Residual Solvents (GC-FID)"
+        field_type: "checkbox"
+        required: false
+        sub_options:
+          - "Class 1 Solvents (Butane, Propane, Ethanol)"
+          - "Class 2 Solvents (Hexane, Methanol)"
+      - field_id: "test_moisture"
+        field_label: "Moisture Content"
+        field_type: "checkbox"
+        required: false
+      - field_id: "test_water_activity"
+        field_label: "Water Activity"
+        field_type: "checkbox"
+        required: false
+      - field_id: "test_other"
+        field_label: "Other Tests (Specify)"
+        field_type: "textarea"
+        required: false
+        validation:
+          max_length: 500
+      - field_id: "validation_testing"
+        field_label: "Is this for Method Validation?"
+        field_type: "radio"
+        required: true
+        options:
+          - "No - Routine Testing"
+          - "Yes - Method Validation"
+          - "Yes - Method Verification"
+
+  - section_number: 4
+    section_title: "Specifications and Requirements"
+    instructions: "Provide specifications or limits that apply to this sample"
+    fields:
+      - field_id: "specifications_applicable"
+        field_label: "Are Product Specifications Applicable?"
+        field_type: "radio"
+        required: true
+        options:
+          - "Yes"
+          - "No"
+      - field_id: "specification_reference"
+        field_label: "Specification Document Reference"
+        field_type: "text"
+        required: false
+        conditional_display:
+          field: "specifications_applicable"
+          value: "Yes"
+        validation:
+          max_length: 100
+      - field_id: "target_potency"
+        field_label: "Target Cannabinoid Potency (if applicable)"
+        field_type: "text"
+        required: false
+        placeholder: "e.g., 15-20% THC"
+        validation:
+          max_length: 100
+      - field_id: "regulatory_requirement"
+        field_label: "Regulatory Testing Required?"
+        field_type: "radio"
+        required: true
+        options:
+          - "Yes - State/Provincial Compliance"
+          - "Yes - Export/Import"
+          - "No - Internal QC Only"
+      - field_id: "reporting_requirements"
+        field_label: "Special Reporting Requirements"
+        field_type: "textarea"
+        required: false
+        placeholder: "Specify any special reporting needs, formats, or certifications required"
+        validation:
+          max_length: 500
+
+  - section_number: 5
+    section_title: "Sample History and Background"
+    instructions: "Provide relevant background information about the sample"
+    fields:
+      - field_id: "production_site"
+        field_label: "Production/Cultivation Site"
+        field_type: "text"
+        required: false
+        validation:
+          max_length: 100
+      - field_id: "strain_genetics"
+        field_label: "Strain/Genetics"
+        field_type: "text"
+        required: false
+        validation:
+          max_length: 100
+      - field_id: "harvest_date"
+        field_label: "Harvest Date (if applicable)"
+        field_type: "date"
+        required: false
+        validation:
+          format: "YYYY-MM-DD"
+          max_date: "today"
+      - field_id: "processing_method"
+        field_label: "Processing Method"
+        field_type: "dropdown"
+        required: false
+        options:
+          - "Not Applicable"
+          - "Air Dried"
+          - "Freeze Dried"
+          - "Solvent Extraction (Ethanol)"
+          - "Solvent Extraction (Hydrocarbon)"
+          - "CO2 Extraction"
+          - "Rosin Press"
+          - "Distillation"
+          - "Other (See Notes)"
+      - field_id: "known_issues"
+        field_label: "Known Issues or Concerns"
+        field_type: "textarea"
+        required: false
+        placeholder: "Describe any known quality issues, suspected contamination, or special concerns"
+        validation:
+          max_length: 500
+      - field_id: "previous_testing"
+        field_label: "Previous Testing Results Available?"
+        field_type: "radio"
+        required: false
+        options:
+          - "Yes - Attached"
+          - "No"
+
+  - section_number: 6
+    section_title: "Chain of Custody"
+    instructions: "Document transfer of samples to laboratory"
+    fields:
+      - field_id: "relinquished_by_name"
+        field_label: "Relinquished By (Name)"
+        field_type: "text"
+        required: true
+        validation:
+          min_length: 2
+          max_length: 100
+      - field_id: "relinquished_date_time"
+        field_label: "Date and Time Relinquished"
+        field_type: "datetime"
+        required: true
+        validation:
+          format: "YYYY-MM-DD HH:MM"
+      - field_id: "relinquished_by_signature"
+        field_label: "Relinquished By Signature"
+        field_type: "signature"
+        required: true
+      - field_id: "received_by_name"
+        field_label: "Received By Laboratory (Name)"
+        field_type: "text"
+        required: true
+        validation:
+          min_length: 2
+          max_length: 100
+      - field_id: "received_date_time"
+        field_label: "Date and Time Received"
+        field_type: "datetime"
+        required: true
+        validation:
+          format: "YYYY-MM-DD HH:MM"
+      - field_id: "received_by_signature"
+        field_label: "Received By Signature"
+        field_type: "signature"
+        required: true
+      - field_id: "sample_condition_receipt"
+        field_label: "Sample Condition Upon Receipt"
+        field_type: "dropdown"
+        required: true
+        options:
+          - "Acceptable - No Issues"
+          - "Acceptable - Minor Issues Noted Below"
+          - "Not Acceptable - See Comments"
+      - field_id: "sample_condition_notes"
+        field_label: "Sample Condition Notes"
+        field_type: "textarea"
+        required: false
+        placeholder: "Describe any issues with sample packaging, labeling, temperature, integrity, etc."
+        validation:
+          max_length: 500
+
+  - section_number: 7
+    section_title: "Laboratory Use Only"
+    instructions: "This section to be completed by laboratory staff"
+    fields:
+      - field_id: "lab_sample_id"
+        field_label: "Laboratory Sample ID (LIMS)"
+        field_type: "text"
+        required: false
+        readonly: true
+      - field_id: "sample_receipt_date"
+        field_label: "Sample Receipt Date"
+        field_type: "date"
+        required: false
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "assigned_analyst"
+        field_label: "Assigned Analyst"
+        field_type: "text"
+        required: false
+        readonly: true
+      - field_id: "expected_completion_date"
+        field_label: "Expected Completion Date"
+        field_type: "date"
+        required: false
+        readonly: true
+        validation:
+          format: "YYYY-MM-DD"
+      - field_id: "sample_storage_location"
+        field_label: "Sample Storage Location"
+        field_type: "text"
+        required: false
+        readonly: true
+      - field_id: "lab_manager_approval"
+        field_label: "Laboratory Manager Approval"
+        field_type: "signature"
+        required: false
+        readonly: true
+
+  - section_number: 8
+    section_title: "Additional Notes and Instructions"
+    instructions: "Provide any additional information relevant to this testing request"
+    fields:
+      - field_id: "special_instructions"
+        field_label: "Special Instructions"
+        field_type: "textarea"
+        required: false
+        placeholder: "Any special handling, analysis parameters, or instructions for laboratory"
+        validation:
+          max_length: 1000
+      - field_id: "attachments_list"
+        field_label: "Attachments"
+        field_type: "file_upload"
+        required: false
+        accepted_file_types:
+          - "pdf"
+          - "docx"
+          - "xlsx"
+          - "jpg"
+          - "png"
+        max_file_size_mb: 10
+        multiple_files: true
+
+completion_instructions:
+  steps:
+    - "Complete Sections 1-6 fully before submitting samples to laboratory"
+    - "Ensure sample containers are properly labeled with Sample ID matching this form"
+    - "Attach any relevant specifications, previous test results, or supporting documentation"
+    - "Obtain all required signatures in Chain of Custody section"
+    - "Submit completed form with samples to laboratory sample receiving area"
+    - "Retain copy of completed form for your records"
+    - "Laboratory will complete Section 7 upon sample acceptance and entry into LIMS"
+  required_signatures:
+    - "Sample Submitter"
+    - "Laboratory Receiver"
+  electronic_submission: "Form can be submitted electronically via Laboratory Portal with electronic signatures"
+
+validation_rules:
+  critical_fields:
+    - "submitter_name"
+    - "sample_id"
+    - "batch_lot_number"
+    - "At least one test must be selected"
+    - "relinquished_by_signature"
+    - "received_by_signature"
+  warnings:
+    - condition: "requested_completion_date < today + 3 days"
+      message: "Rush testing may require additional fees and approval"
+    - condition: "priority_level = 'Rush (Additional Fees Apply)'"
+      message: "Laboratory Manager approval required for rush requests"
+    - condition: "sample_condition_receipt != 'Acceptable - No Issues'"
+      message: "Sample condition issues must be documented and may affect testing"
+
+related_documents:
+  - "SOP-ANLY-001: Analytical Methods"
+  - "SOP-SMPL-001: Sampling Procedures"
+  - "SOP-COC-001: Chain of Custody"
+  - "FORM-ANLY-002: Certificate of Analysis"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    description: "Initial release"
+    author: "Laboratory Manager"

@@ -1,0 +1,540 @@
+# DSL: Monthly Document Control Performance Report
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-DOC-001"
+  report_type: "performance"
+  category: "document_control"
+  confidentiality: "internal"
+  title: "Monthly Document Control Performance Report"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+report_context:
+  purpose: "Monitor document control system performance, track key metrics, identify trends, and drive continuous improvement of document management processes"
+  reporting_period: "monthly"
+  frequency: "monthly"
+  report_due_date: "5th business day of following month"
+  responsible_roles:
+    - role: "ROLE-DOCCTRL-001"
+      responsibility: "Primary author, data compilation, analysis"
+    - role: "ROLE-QA-002"
+      responsibility: "Review, approval, recommendations"
+  distribution:
+    - "Quality Manager"
+    - "Quality Director"
+    - "Document Controller"
+    - "Department Managers"
+    - "Management Team"
+
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Executive Summary"
+      section_order: 1
+      required: true
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Key Metrics Overview"
+          data_sources:
+            - "Mayan-EDMS analytics"
+          fields:
+            - field_id: "EXEC-001"
+              field_label: "Total Active Documents"
+              field_type: "integer"
+            - field_id: "EXEC-002"
+              field_label: "Documents Created This Month"
+              field_type: "integer"
+            - field_id: "EXEC-003"
+              field_label: "Documents Approved This Month"
+              field_type: "integer"
+            - field_id: "EXEC-004"
+              field_label: "Documents Revised This Month"
+              field_type: "integer"
+            - field_id: "EXEC-005"
+              field_label: "Average Approval Cycle Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "< 21 calendar days"
+            - field_id: "EXEC-006"
+              field_label: "System Availability %"
+              field_type: "percentage"
+              acceptance_criteria: "> 99.5%"
+
+    - section_id: "SEC-002"
+      section_title: "Document Portfolio Status"
+      section_order: 2
+      required: true
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Documents by Status"
+          data_sources:
+            - "Mayan-EDMS status queries"
+          fields:
+            - field_id: "STAT-001"
+              field_label: "Document Status Distribution Table"
+              field_type: "table"
+              columns:
+                - "Status"
+                - "Count"
+                - "% of Total"
+            - field_id: "STAT-002"
+              field_label: "Status Distribution Pie Chart"
+              field_type: "pie_chart"
+              categories:
+                - "Draft"
+                - "Under Review"
+                - "Approved"
+                - "Superseded"
+                - "Obsolete"
+                - "Archived"
+
+        - subsection_id: "SEC-002-02"
+          subsection_title: "Documents by Category"
+          data_sources:
+            - "Document classification data"
+          fields:
+            - field_id: "CAT-001"
+              field_label: "Category A (Critical GMP) Documents"
+              field_type: "integer"
+            - field_id: "CAT-002"
+              field_label: "Category B (Operational) Documents"
+              field_type: "integer"
+            - field_id: "CAT-003"
+              field_label: "Category C (Supporting) Documents"
+              field_type: "integer"
+            - field_id: "CAT-004"
+              field_label: "Category D (Reference) Documents"
+              field_type: "integer"
+
+        - subsection_id: "SEC-002-03"
+          subsection_title: "Documents by Type"
+          data_sources:
+            - "Document type metadata"
+          fields:
+            - field_id: "TYPE-001"
+              field_label: "Document Type Distribution Table"
+              field_type: "table"
+              columns:
+                - "Document Type"
+                - "Count"
+                - "% of Total"
+              rows:
+                - "SOPs"
+                - "Work Instructions"
+                - "Forms"
+                - "Specifications"
+                - "Validation Protocols"
+                - "Batch Records"
+                - "Lab Methods"
+                - "Other"
+
+    - section_id: "SEC-003"
+      section_title: "Document Approval Cycle Time"
+      section_order: 3
+      required: true
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Cycle Time Analysis"
+          data_sources:
+            - "Workflow timeline tracking"
+          fields:
+            - field_id: "TIME-001"
+              field_label: "Average Time: Creation Request to Author Assignment (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 5 days"
+            - field_id: "TIME-002"
+              field_label: "Average Time: Author Assignment to Review Submission (days)"
+              field_type: "decimal"
+              acceptance_criteria: "Per request timeline"
+            - field_id: "TIME-003"
+              field_label: "Average Time: Review Submission to Review Completion (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 10 days"
+            - field_id: "TIME-004"
+              field_label: "Average Time: Review Completion to Approval (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 7 days"
+            - field_id: "TIME-005"
+              field_label: "Average Total Approval Cycle Time (days)"
+              field_type: "decimal"
+              acceptance_criteria: "< 21 calendar days"
+            - field_id: "TIME-006"
+              field_label: "% Documents Approved Within Target Cycle Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 80%"
+
+        - subsection_id: "SEC-003-02"
+          subsection_title: "Overdue Documents"
+          data_sources:
+            - "Document workflow tracking"
+          fields:
+            - field_id: "OVER-001"
+              field_label: "Overdue Documents Detail Table"
+              field_type: "table"
+              columns:
+                - "Document ID"
+                - "Title"
+                - "Current Phase"
+                - "Responsible Person"
+                - "Days Overdue"
+                - "Reason/Blocker"
+
+    - section_id: "SEC-004"
+      section_title: "Review and Approval Performance"
+      section_order: 4
+      required: true
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Review Metrics"
+          data_sources:
+            - "Review workflow data"
+          fields:
+            - field_id: "REV-001"
+              field_label: "Reviews Completed This Month"
+              field_type: "integer"
+            - field_id: "REV-002"
+              field_label: "Reviews Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 95%"
+            - field_id: "REV-003"
+              field_label: "First-Pass Review Approval Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 75%"
+            - field_id: "REV-004"
+              field_label: "Documents Returned for Major Revisions"
+              field_type: "integer"
+            - field_id: "REV-005"
+              field_label: "Average # of Review Iterations"
+              field_type: "decimal"
+              acceptance_criteria: "< 2.0"
+
+        - subsection_id: "SEC-004-02"
+          subsection_title: "Approval Metrics"
+          data_sources:
+            - "Approval workflow data"
+          fields:
+            - field_id: "APP-001"
+              field_label: "Approvals Completed This Month"
+              field_type: "integer"
+            - field_id: "APP-002"
+              field_label: "Approvals Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 95%"
+            - field_id: "APP-003"
+              field_label: "First-Pass Approval Rate"
+              field_type: "percentage"
+              acceptance_criteria: "> 90%"
+            - field_id: "APP-004"
+              field_label: "Conditional Approvals"
+              field_type: "integer"
+            - field_id: "APP-005"
+              field_label: "Documents Rejected"
+              field_type: "integer"
+              acceptance_criteria: "< 5% of submissions"
+
+    - section_id: "SEC-005"
+      section_title: "Document Activity by Department"
+      section_order: 5
+      required: true
+      subsections:
+        - subsection_id: "SEC-005-01"
+          subsection_title: "Departmental Document Activity"
+          data_sources:
+            - "Document author department"
+          fields:
+            - field_id: "DEPT-001"
+              field_label: "Department Activity Table"
+              field_type: "table"
+              columns:
+                - "Department"
+                - "Documents Created"
+                - "Documents Revised"
+                - "Documents Approved"
+                - "Avg Cycle Time (days)"
+
+    - section_id: "SEC-006"
+      section_title: "Periodic Review Compliance"
+      section_order: 6
+      required: true
+      subsections:
+        - subsection_id: "SEC-006-01"
+          subsection_title: "Periodic Review Status"
+          data_sources:
+            - "Document review schedule"
+          fields:
+            - field_id: "PERI-001"
+              field_label: "Documents Due for Periodic Review This Month"
+              field_type: "integer"
+            - field_id: "PERI-002"
+              field_label: "Periodic Reviews Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 95%"
+            - field_id: "PERI-003"
+              field_label: "Overdue Periodic Reviews"
+              field_type: "integer"
+              acceptance_criteria: "< 5 documents"
+            - field_id: "PERI-004"
+              field_label: "Overdue Review Detail Table"
+              field_type: "table"
+              columns:
+                - "Document ID"
+                - "Title"
+                - "Review Due Date"
+                - "Days Overdue"
+                - "Document Owner"
+            - field_id: "PERI-005"
+              field_label: "Periodic Review Outcomes"
+              field_type: "table"
+              columns:
+                - "Outcome"
+                - "Count"
+              rows:
+                - "Reaffirmed (no changes)"
+                - "Minor revision required"
+                - "Major revision required"
+                - "Retire/Obsolete"
+
+    - section_id: "SEC-007"
+      section_title: "Training Compliance"
+      section_order: 7
+      required: true
+      subsections:
+        - subsection_id: "SEC-007-01"
+          subsection_title: "Training Metrics"
+          data_sources:
+            - "Training records system"
+          fields:
+            - field_id: "TRN-001"
+              field_label: "Documents Requiring Training This Month"
+              field_type: "integer"
+            - field_id: "TRN-002"
+              field_label: "Training Completion Rate"
+              field_type: "percentage"
+              acceptance_criteria: "100% within 30 days of document approval"
+            - field_id: "TRN-003"
+              field_label: "Average Time to Complete Training (days)"
+              field_type: "decimal"
+              acceptance_criteria: "≤ 20 days"
+            - field_id: "TRN-004"
+              field_label: "Personnel with Overdue Training"
+              field_type: "integer"
+              acceptance_criteria: "0"
+            - field_id: "TRN-005"
+              field_label: "Documents with Incomplete Training Table"
+              field_type: "table"
+              columns:
+                - "Document ID"
+                - "Title"
+                - "Approval Date"
+                - "# Personnel Trained"
+                - "# Pending Training"
+                - "Days Since Approval"
+
+    - section_id: "SEC-008"
+      section_title: "System Performance and Availability"
+      section_order: 8
+      required: true
+      subsections:
+        - subsection_id: "SEC-008-01"
+          subsection_title: "Mayan-EDMS System Metrics"
+          data_sources:
+            - "System monitoring logs"
+          fields:
+            - field_id: "SYS-001"
+              field_label: "System Uptime %"
+              field_type: "percentage"
+              acceptance_criteria: "> 99.5%"
+            - field_id: "SYS-002"
+              field_label: "Total Downtime (hours)"
+              field_type: "decimal"
+            - field_id: "SYS-003"
+              field_label: "# Unplanned Outages"
+              field_type: "integer"
+              acceptance_criteria: "0"
+            - field_id: "SYS-004"
+              field_label: "Average Response Time (seconds)"
+              field_type: "decimal"
+              acceptance_criteria: "< 2.0 seconds"
+            - field_id: "SYS-005"
+              field_label: "# Active Users"
+              field_type: "integer"
+            - field_id: "SYS-006"
+              field_label: "# User Access Requests"
+              field_type: "integer"
+            - field_id: "SYS-007"
+              field_label: "# Support Tickets"
+              field_type: "integer"
+            - field_id: "SYS-008"
+              field_label: "Average Ticket Resolution Time (hours)"
+              field_type: "decimal"
+              acceptance_criteria: "< 24 hours"
+
+        - subsection_id: "SEC-008-02"
+          subsection_title: "Backup and Recovery"
+          data_sources:
+            - "Backup logs"
+          fields:
+            - field_id: "BACK-001"
+              field_label: "Successful Daily Backups"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+            - field_id: "BACK-002"
+              field_label: "Backup Integrity Tests Passed"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+            - field_id: "BACK-003"
+              field_label: "# Recovery Tests Performed"
+              field_type: "integer"
+              acceptance_criteria: "≥ 1 per month"
+
+    - section_id: "SEC-009"
+      section_title: "Audit Trail and Compliance"
+      section_order: 9
+      required: true
+      subsections:
+        - subsection_id: "SEC-009-01"
+          subsection_title: "Audit Trail Metrics"
+          data_sources:
+            - "Audit trail logs"
+          fields:
+            - field_id: "AUD-001"
+              field_label: "Audit Trail Completeness"
+              field_type: "percentage"
+              acceptance_criteria: "100%"
+            - field_id: "AUD-002"
+              field_label: "# Electronic Signatures Captured"
+              field_type: "integer"
+            - field_id: "AUD-003"
+              field_label: "Electronic Signature Compliance"
+              field_type: "percentage"
+              acceptance_criteria: "100% meet 21 CFR Part 11"
+            - field_id: "AUD-004"
+              field_label: "# Audit Trail Queries"
+              field_type: "integer"
+            - field_id: "AUD-005"
+              field_label: "Average Query Response Time (seconds)"
+              field_type: "decimal"
+              acceptance_criteria: "< 5 seconds"
+
+    - section_id: "SEC-010"
+      section_title: "Quality Issues and Deviations"
+      section_order: 10
+      required: true
+      subsections:
+        - subsection_id: "SEC-010-01"
+          subsection_title: "Quality Metrics"
+          data_sources:
+            - "Quality incident records"
+          fields:
+            - field_id: "QUAL-001"
+              field_label: "Document Control Deviations"
+              field_type: "integer"
+              acceptance_criteria: "0"
+            - field_id: "QUAL-002"
+              field_label: "Audit Findings (Internal/External)"
+              field_type: "integer"
+              acceptance_criteria: "0 critical, < 3 major"
+            - field_id: "QUAL-003"
+              field_label: "CAPAs Open Related to Document Control"
+              field_type: "integer"
+            - field_id: "QUAL-004"
+              field_label: "% CAPAs Completed On-Time"
+              field_type: "percentage"
+              acceptance_criteria: "> 95%"
+            - field_id: "QUAL-005"
+              field_label: "Quality Issues Detail Table"
+              field_type: "table"
+              columns:
+                - "Issue Type"
+                - "Count"
+                - "Status"
+                - "Target Resolution Date"
+
+    - section_id: "SEC-011"
+      section_title: "Trending and Analysis"
+      section_order: 11
+      required: true
+      subsections:
+        - subsection_id: "SEC-011-01"
+          subsection_title: "6-Month Trend Analysis"
+          data_sources:
+            - "Historical performance data"
+          fields:
+            - field_id: "TREND-001"
+              field_label: "Document Creation Volume Trend (6 months)"
+              field_type: "line_chart"
+            - field_id: "TREND-002"
+              field_label: "Approval Cycle Time Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or decreasing"
+            - field_id: "TREND-003"
+              field_label: "First-Pass Approval Rate Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Stable or improving"
+            - field_id: "TREND-004"
+              field_label: "System Availability Trend (6 months)"
+              field_type: "line_chart"
+              acceptance_criteria: "Consistent > 99.5%"
+            - field_id: "TREND-005"
+              field_label: "Emerging Patterns or Concerns"
+              field_type: "bullet_list"
+              max_items: 5
+
+    - section_id: "SEC-012"
+      section_title: "Recommendations and Action Items"
+      section_order: 12
+      required: true
+      subsections:
+        - subsection_id: "SEC-012-01"
+          subsection_title: "Process Improvements"
+          data_sources:
+            - "Document Controller and QA Manager analysis"
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Recommendations"
+              field_type: "bullet_list"
+              max_items: 5
+            - field_id: "REC-002"
+              field_label: "Process Bottlenecks Identified"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-003"
+              field_label: "Training Needs"
+              field_type: "bullet_list"
+              max_items: 3
+            - field_id: "REC-004"
+              field_label: "Technology/System Improvements"
+              field_type: "bullet_list"
+              max_items: 3
+
+generation:
+  automated: true
+  automation_details:
+    data_collection: "Automated queries to Mayan-EDMS, training system, audit logs"
+    report_generation: "Semi-automated with Document Controller and QA Manager analysis"
+    manual_sections:
+      - "SEC-010-01: Quality issues detail and CAPA status"
+      - "SEC-011-01: Emerging patterns analysis"
+      - "SEC-012: All recommendations"
+  scheduling:
+    generation_date: "1st of month"
+    review_period: "Days 1-3"
+    approval_deadline: "5th business day"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "monthly"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

@@ -1,0 +1,211 @@
+# DSL: Weekly Security Report
+# Version: 1.0
+# Source: SOP_AuditTrail.md v2.0 Section 9.2
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+metadata:
+  id: "REPORT-AUD-002"
+  report_type: "security"
+  category: "security_monitoring"
+  confidentiality: "confidential"
+
+  title: "Weekly Security Event Report"
+  version: "1.0"
+  status: "active"
+
+  related_sop: "SOP-AUDIT-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+
+# ==============================================================================
+# REPORT CONTEXT
+# ==============================================================================
+report_context:
+  purpose: "Provide weekly summary of security-related audit trail events, including failed access attempts, suspicious activity patterns, and security posture assessment"
+
+  reporting_period: "weekly"
+  frequency: "weekly"
+  report_due_date: "Monday by 12:00 PM"
+
+  responsible_roles:
+    - role: "ROLE-IT-001"
+      responsibility: "Report generation and analysis"
+    - role: "ROLE-COMP-001"
+      responsibility: "Review and escalation"
+
+  distribution:
+    - "IT Administrator"
+    - "Compliance Officer"
+    - "Quality Manager"
+    - "Management (if critical incidents)"
+
+# ==============================================================================
+# REPORT STRUCTURE
+# ==============================================================================
+report_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Security Event Statistics"
+      section_order: 1
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-001-01"
+          subsection_title: "Authentication Events"
+          data_sources:
+            - "Authentication audit logs"
+
+          fields:
+            - field_id: "SEC-001"
+              field_label: "Successful Logins"
+              field_type: "integer"
+
+            - field_id: "SEC-002"
+              field_label: "Failed Login Attempts"
+              field_type: "integer"
+              acceptance_criteria: "< threshold for investigation"
+
+            - field_id: "SEC-003"
+              field_label: "Account Lockouts"
+              field_type: "integer"
+
+            - field_id: "SEC-004"
+              field_label: "Password Reset Requests"
+              field_type: "integer"
+
+        - subsection_id: "SEC-001-02"
+          subsection_title: "Authorization Events"
+          data_sources:
+            - "Access control audit logs"
+
+          fields:
+            - field_id: "SEC-005"
+              field_label: "Unauthorized Access Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0 or all investigated"
+
+            - field_id: "SEC-006"
+              field_label: "Privilege Escalation Attempts"
+              field_type: "integer"
+              acceptance_criteria: "0 or all investigated"
+
+            - field_id: "SEC-007"
+              field_label: "Emergency Access Requests (FORM-AUD-001)"
+              field_type: "integer"
+
+            - field_id: "SEC-008"
+              field_label: "Emergency Access Approvals"
+              field_type: "integer"
+
+    - section_id: "SEC-002"
+      section_title: "Critical Security Incidents"
+      section_order: 2
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-002-01"
+          subsection_title: "Incident Details"
+          data_sources:
+            - "Security incident system"
+            - "CAPA system"
+
+          fields:
+            - field_id: "INC-001"
+              field_label: "Critical Incidents Table"
+              field_type: "table"
+              columns:
+                - "Incident ID"
+                - "Date/Time"
+                - "Event Type"
+                - "User/System"
+                - "Description"
+                - "Status"
+                - "CAPA Reference"
+
+    - section_id: "SEC-003"
+      section_title: "Pattern Analysis"
+      section_order: 3
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-003-01"
+          subsection_title: "Anomalous Activity Detection"
+          data_sources:
+            - "Pattern recognition system"
+
+          fields:
+            - field_id: "PAT-001"
+              field_label: "Unusual Login Times"
+              field_type: "integer"
+
+            - field_id: "PAT-002"
+              field_label: "Unusual Access Patterns"
+              field_type: "integer"
+
+            - field_id: "PAT-003"
+              field_label: "High-Risk User Activity"
+              field_type: "integer"
+
+    - section_id: "SEC-004"
+      section_title: "Recommendations"
+      section_order: 4
+      required: true
+
+      subsections:
+        - subsection_id: "SEC-004-01"
+          subsection_title: "Security Improvements"
+          data_sources:
+            - "IT Administrator analysis"
+
+          fields:
+            - field_id: "REC-001"
+              field_label: "High Priority Actions"
+              field_type: "bullet_list"
+              max_items: 5
+
+            - field_id: "REC-002"
+              field_label: "Medium Priority Actions"
+              field_type: "bullet_list"
+              max_items: 5
+
+# ==============================================================================
+# GENERATION AND AUTOMATION
+# ==============================================================================
+generation:
+  automated: true
+
+  automation_details:
+    data_collection: "Automated queries to security audit logs"
+    report_generation: "Automated Monday 06:00 AM"
+    manual_sections:
+      - "SEC-004: Recommendations (IT Administrator analysis)"
+
+  scheduling:
+    generation_day: "monday"
+    generation_time: "06:00 AM"
+    delivery_deadline: "12:00 PM"
+
+# ==============================================================================
+# STORAGE
+# ==============================================================================
+storage:
+  location: "electronic"
+  retention_period: "7_years"
+  backup_requirement: "monthly"
+
+# ==============================================================================
+# CHANGE HISTORY
+# ==============================================================================
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

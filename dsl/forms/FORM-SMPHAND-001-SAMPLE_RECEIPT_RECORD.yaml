@@ -1,0 +1,811 @@
+---
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-SMPHAND-001"
+  title: "Sample Receipt and Accessioning Record"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  form_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "ISO/IEC 17025, 21 CFR Part 11"
+  electronic_enabled: true
+  signature_required: true
+
+purpose: "Document receipt, inspection, and accessioning of all samples arriving at the laboratory, ensuring complete chain of custody and sample integrity verification"
+
+instructions:
+  - "Complete this form immediately upon sample arrival"
+  - "Inspect samples and containers thoroughly before acceptance"
+  - "Photograph samples and containers to document arrival condition"
+  - "Reject samples not meeting acceptance criteria and notify submitter"
+  - "Complete all sections; use 'N/A' for non-applicable fields"
+  - "All signatures must be dated and include printed names"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Sample Receipt Information"
+    description: "Basic information about sample arrival and receipt"
+    fields:
+      - field_id: "receipt_date_time"
+        field_label: "Receipt Date and Time"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Exact date and time sample arrived at laboratory"
+
+      - field_id: "received_by"
+        field_label: "Received By"
+        field_type: "user_lookup"
+        data_type: "string"
+        required: true
+        validation:
+          type: "user_id"
+        help_text: "Laboratory technician receiving the samples"
+
+      - field_id: "delivery_method"
+        field_label: "Delivery Method"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Hand Delivery"
+          - "Courier Service"
+          - "Mail (USPS/FedEx/UPS)"
+          - "Internal Transfer"
+          - "Vendor Delivery"
+        help_text: "Method by which samples arrived at laboratory"
+
+      - field_id: "courier_name"
+        field_label: "Courier/Delivery Person Name"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        conditional_display:
+          field: "delivery_method"
+          condition: "in"
+          values:
+            - "Courier Service"
+            - "Mail (USPS/FedEx/UPS)"
+        help_text: "Name of courier or delivery person (if applicable)"
+
+      - field_id: "tracking_number"
+        field_label: "Shipping/Tracking Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "delivery_method"
+          condition: "in"
+          values:
+            - "Courier Service"
+            - "Mail (USPS/FedEx/UPS)"
+        help_text: "Shipping tracking number from carrier"
+
+  - section_id: "SEC-002"
+    section_name: "Sample Identification"
+    description: "Information about the samples being received"
+    fields:
+      - field_id: "client_sample_id"
+        field_label: "Client/Submitter Sample ID"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Sample ID provided by client or sample submitter"
+
+      - field_id: "number_of_samples"
+        field_label: "Number of Sample Containers"
+        field_type: "number"
+        data_type: "integer"
+        required: true
+        validation:
+          type: "range"
+          min: 1
+          max: 1000
+        help_text: "Total number of sample containers received"
+
+      - field_id: "sample_type"
+        field_label: "Sample Type/Matrix"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Cannabis Flower"
+          - "Cannabis Trim"
+          - "Cannabis Extract/Concentrate"
+          - "Edible Product"
+          - "Topical Product"
+          - "Raw Material"
+          - "Environmental Sample"
+          - "Water/Solvent"
+          - "Reference Standard"
+          - "Quality Control Sample"
+        help_text: "Type of sample matrix received"
+
+      - field_id: "client_name"
+        field_label: "Client Name"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 200
+        help_text: "Name of client or organization submitting samples"
+
+      - field_id: "project_id"
+        field_label: "Project/Batch ID"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Project or batch identifier if applicable"
+
+  - section_id: "SEC-003"
+    section_name: "Packaging and Container Inspection"
+    description: "Assessment of outer packaging and sample container condition"
+    fields:
+      - field_id: "outer_package_condition"
+        field_label: "Outer Packaging Condition"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Intact - No Damage"
+          - "Minor Damage - Samples Not Affected"
+          - "Damaged - Potential Sample Impact"
+          - "Severely Damaged"
+        help_text: "Condition of outer shipping container or packaging"
+
+      - field_id: "package_damage_description"
+        field_label: "Package Damage Description"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "outer_package_condition"
+          condition: "in"
+          values:
+            - "Minor Damage - Samples Not Affected"
+            - "Damaged - Potential Sample Impact"
+            - "Severely Damaged"
+        help_text: "Describe any damage observed to outer packaging"
+
+      - field_id: "container_integrity"
+        field_label: "Sample Container Integrity"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "All Containers Intact"
+          - "Minor Container Damage - Samples Not Affected"
+          - "Container Damage - Sample Integrity Compromised"
+          - "Container Leaking or Broken"
+        help_text: "Integrity of sample containers themselves"
+
+      - field_id: "container_damage_description"
+        field_label: "Container Damage Description"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "container_integrity"
+          condition: "in"
+          values:
+            - "Minor Container Damage - Samples Not Affected"
+            - "Container Damage - Sample Integrity Compromised"
+            - "Container Leaking or Broken"
+        help_text: "Describe any damage observed to sample containers"
+
+      - field_id: "tamper_evident_seal_status"
+        field_label: "Tamper-Evident Seal Status"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Seal Intact - No Tampering"
+          - "No Seal Present"
+          - "Seal Broken - No Tampering Evidence"
+          - "Seal Broken - Tampering Suspected"
+        help_text: "Status of tamper-evident seals if present"
+
+      - field_id: "container_labels_legible"
+        field_label: "Container Labels Legible"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Yes - All Labels Clear and Legible"
+          - "Partially - Some Labels Damaged or Faded"
+          - "No - Labels Illegible or Missing"
+        help_text: "Legibility of sample container labels"
+
+  - section_id: "SEC-004"
+    section_name: "Temperature Control Verification"
+    description: "Verification of temperature control for cold chain samples"
+    fields:
+      - field_id: "temperature_control_required"
+        field_label: "Temperature Control Required?"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Does this sample type require temperature control?"
+
+      - field_id: "temperature_monitoring_device"
+        field_label: "Temperature Monitoring Device Present"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Data Logger Present"
+          - "Temperature Indicator Strip"
+          - "Ice Packs/Dry Ice Present"
+          - "No Temperature Control"
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Type of temperature monitoring or control device present"
+
+      - field_id: "arrival_temperature"
+        field_label: "Arrival Temperature (°C)"
+        field_type: "number"
+        data_type: "decimal"
+        required: false
+        validation:
+          type: "range"
+          min: -100
+          max: 50
+          decimal_places: 1
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Temperature of sample or cooler on arrival"
+
+      - field_id: "temperature_acceptable"
+        field_label: "Temperature Within Acceptable Range?"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Was arrival temperature within acceptable range for sample type?"
+
+      - field_id: "temperature_excursion_details"
+        field_label: "Temperature Excursion Details"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "temperature_acceptable"
+          condition: "equals"
+          value: "No"
+        help_text: "Describe temperature excursion and potential impact"
+
+  - section_id: "SEC-005"
+    section_name: "Documentation Review"
+    description: "Review of accompanying documentation completeness"
+    fields:
+      - field_id: "coc_documentation_present"
+        field_label: "Chain of Custody Documentation Present"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is chain of custody documentation included with samples?"
+
+      - field_id: "coc_complete"
+        field_label: "Chain of Custody Complete and Legible"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "coc_documentation_present"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Are all required CoC fields completed and signatures present?"
+
+      - field_id: "coc_issues"
+        field_label: "Chain of Custody Issues"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "coc_complete"
+          condition: "equals"
+          value: "No"
+        help_text: "Describe issues with chain of custody documentation"
+
+      - field_id: "test_request_present"
+        field_label: "Test Request/Submission Form Present"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is analytical test request or sample submission form included?"
+
+      - field_id: "msds_required"
+        field_label: "MSDS/SDS Required?"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Does sample type require Material Safety Data Sheet?"
+
+      - field_id: "msds_present"
+        field_label: "MSDS/SDS Present"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "msds_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Is MSDS/SDS documentation included?"
+
+  - section_id: "SEC-006"
+    section_name: "Sample Condition Assessment"
+    description: "Visual and physical assessment of sample condition"
+    fields:
+      - field_id: "sample_volume_sufficient"
+        field_label: "Sample Volume/Amount Sufficient"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+          - "Unknown - Volume Check Required"
+        help_text: "Is sample volume/amount adequate for all requested tests?"
+
+      - field_id: "visual_contamination"
+        field_label: "Visual Contamination Observed"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "No"
+          - "Yes"
+        help_text: "Any visual evidence of contamination?"
+
+      - field_id: "contamination_description"
+        field_label: "Contamination Description"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "visual_contamination"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Describe observed contamination"
+
+      - field_id: "sample_appearance"
+        field_label: "Sample Appearance"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Normal - As Expected"
+          - "Acceptable with Minor Variations"
+          - "Unusual Appearance"
+          - "Degraded or Decomposed"
+        help_text: "Overall visual appearance of sample"
+
+      - field_id: "appearance_notes"
+        field_label: "Appearance Notes"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        help_text: "Additional notes about sample appearance"
+
+      - field_id: "odor_assessment"
+        field_label: "Odor Assessment"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Normal - Expected Odor"
+          - "Unusual Odor"
+          - "Off Odor - Possible Degradation"
+          - "Strong Chemical Odor"
+          - "No Odor Detected"
+        help_text: "Assessment of sample odor if applicable"
+
+  - section_id: "SEC-007"
+    section_name: "Photographic Documentation"
+    description: "Photographic evidence of sample condition on arrival"
+    fields:
+      - field_id: "photos_taken"
+        field_label: "Photographs Taken"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Were photographs taken to document sample arrival condition?"
+
+      - field_id: "photo_ids"
+        field_label: "Photo File IDs"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 200
+        conditional_display:
+          field: "photos_taken"
+          condition: "equals"
+          value: "Yes"
+        help_text: "List photo file names or IDs (comma separated)"
+
+      - field_id: "photos_include"
+        field_label: "Photographs Include"
+        field_type: "checkbox"
+        data_type: "array"
+        required: false
+        options: enum:
+          - "Outer Packaging"
+          - "Sample Containers"
+          - "Container Labels"
+          - "Tamper-Evident Seals"
+          - "Temperature Monitoring Device"
+          - "Documentation"
+          - "Damage or Issues"
+        conditional_display:
+          field: "photos_taken"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Select all items photographed"
+
+  - section_id: "SEC-008"
+    section_name: "Sample Acceptance Decision"
+    description: "Final decision on sample acceptance or rejection"
+    fields:
+      - field_id: "sample_accepted"
+        field_label: "Sample Accepted?"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes - Accept All Samples"
+          - "Partial - Accept Some Samples"
+          - "No - Reject All Samples"
+        help_text: "Final decision on sample acceptance"
+
+      - field_id: "rejection_reason"
+        field_label: "Rejection Reason"
+        field_type: "checkbox"
+        data_type: "array"
+        required: false
+        options: enum:
+          - "Damaged Container - Sample Integrity Compromised"
+          - "Temperature Excursion"
+          - "Incomplete Documentation"
+          - "Missing Chain of Custody"
+          - "Insufficient Sample Volume"
+          - "Visual Contamination"
+          - "Expired Hold Time"
+          - "Incorrect Sample Type"
+          - "Tamper Evidence"
+          - "Other (See Comments)"
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Partial - Accept Some Samples"
+            - "No - Reject All Samples"
+        help_text: "Select all applicable rejection reasons"
+
+      - field_id: "rejection_comments"
+        field_label: "Rejection Comments"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 1000
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Partial - Accept Some Samples"
+            - "No - Reject All Samples"
+        help_text: "Detailed explanation of rejection or partial acceptance"
+
+      - field_id: "client_notified"
+        field_label: "Client Notified of Rejection"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Partial - Accept Some Samples"
+            - "No - Reject All Samples"
+        help_text: "Has client been notified of sample rejection?"
+
+      - field_id: "notification_method"
+        field_label: "Notification Method"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Phone Call"
+          - "Email"
+          - "LIMS Notification"
+          - "Written Letter"
+        conditional_display:
+          field: "client_notified"
+          condition: "equals"
+          value: "Yes"
+        help_text: "How was client notified?"
+
+  - section_id: "SEC-009"
+    section_name: "Laboratory Accessioning (For Accepted Samples)"
+    description: "Assignment of laboratory IDs and LIMS entry for accepted samples"
+    fields:
+      - field_id: "laboratory_sample_id"
+        field_label: "Laboratory Sample ID"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Yes - Accept All Samples"
+            - "Partial - Accept Some Samples"
+        help_text: "Unique laboratory-assigned sample ID"
+
+      - field_id: "lims_entry_complete"
+        field_label: "LIMS Entry Complete"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Yes - Accept All Samples"
+            - "Partial - Accept Some Samples"
+        help_text: "Has sample been entered into LIMS?"
+
+      - field_id: "barcode_labels_applied"
+        field_label: "Barcode Labels Applied"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Yes - Accept All Samples"
+            - "Partial - Accept Some Samples"
+        help_text: "Have barcode labels been affixed to samples?"
+
+      - field_id: "storage_location_assigned"
+        field_label: "Storage Location Assigned"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Yes - Accept All Samples"
+            - "Partial - Accept Some Samples"
+        help_text: "Storage unit and location (e.g., FRIDGE-A-SHELF2-POS10)"
+
+      - field_id: "samples_stored"
+        field_label: "Samples Placed in Storage"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "sample_accepted"
+          condition: "in"
+          values:
+            - "Yes - Accept All Samples"
+            - "Partial - Accept Some Samples"
+        help_text: "Have samples been placed in designated storage?"
+
+  - section_id: "SEC-010"
+    section_name: "Comments and Additional Information"
+    description: "Any additional notes or comments about sample receipt"
+    fields:
+      - field_id: "additional_comments"
+        field_label: "Additional Comments"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 2000
+        help_text: "Any additional information, observations, or comments"
+
+      - field_id: "special_handling_required"
+        field_label: "Special Handling Required"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Does this sample require special handling?"
+
+      - field_id: "special_handling_instructions"
+        field_label: "Special Handling Instructions"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "special_handling_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Describe special handling requirements"
+
+  - section_id: "SEC-011"
+    section_name: "Signatures and Approvals"
+    description: "Required signatures for sample receipt"
+    fields:
+      - field_id: "receiving_technician_signature"
+        field_label: "Receiving Technician Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "Electronic signature of technician who received samples"
+
+      - field_id: "receiving_technician_date"
+        field_label: "Signature Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Date and time of signature"
+
+      - field_id: "sample_coordinator_review"
+        field_label: "Sample Coordinator Review Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "Sample Coordinator verification signature"
+
+      - field_id: "coordinator_review_date"
+        field_label: "Coordinator Review Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Date and time of Sample Coordinator review"
+
+workflow:
+  trigger: "Sample arrival at laboratory"
+  steps:
+    - step: 1
+      action: "Laboratory Technician completes Sections 1-8 upon sample arrival"
+      responsible: "Laboratory Technician"
+    - step: 2
+      action: "Laboratory Technician photographs samples and documents condition"
+      responsible: "Laboratory Technician"
+    - step: 3
+      action: "Laboratory Technician makes acceptance decision based on inspection"
+      responsible: "Laboratory Technician"
+    - step: 4
+      action: "If accepted, Laboratory Technician completes Section 9 for accessioning"
+      responsible: "Laboratory Technician"
+    - step: 5
+      action: "Laboratory Technician signs and timestamps form"
+      responsible: "Laboratory Technician"
+    - step: 6
+      action: "Sample Coordinator reviews form for completeness and accuracy"
+      responsible: "Sample Coordinator"
+    - step: 7
+      action: "Sample Coordinator signs and timestamps form"
+      responsible: "Sample Coordinator"
+    - step: 8
+      action: "Form archived electronically in LIMS and document management system"
+      responsible: "LIMS System"
+
+validation_rules:
+  - rule: "If sample_accepted is 'Partial' or 'No', rejection_reason must be completed"
+  - rule: "If temperature_control_required is 'Yes', arrival_temperature must be recorded"
+  - rule: "If temperature_acceptable is 'No', temperature_excursion_details must be completed"
+  - rule: "If sample_accepted is 'Yes' or 'Partial', laboratory_sample_id must be assigned"
+  - rule: "Receiving_technician_signature cannot be same as sample_coordinator_review"
+  - rule: "Both signatures required before form can be finalized"
+
+retention: "Sample lifetime + 5 years"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "SOP-COC-001: Chain of Custody Management"
+  - "FORM-ANLY-001: Analytical Test Request"
+  - "CHKLST-SMPHAND-001: Sample Receipt Verification Checklist"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Receipt and Accessioning Record"
+    author: "Laboratory Manager"

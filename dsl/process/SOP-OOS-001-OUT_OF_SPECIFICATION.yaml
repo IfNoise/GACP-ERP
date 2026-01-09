@@ -1,0 +1,721 @@
+schema_version: "1.0.0"
+type: sop_process
+metadata:
+  process_id: SOP-OOS-001
+  title: Out of Specification Investigation and Management
+  version: "1.0"
+  effective_date: "2025-09-14"
+  review_date: "2026-09-14"
+  department: Quality Control
+  category: Quality Management
+  classification: Critical
+  compliance_requirements:
+    - FDA 21 CFR Part 11
+    - EU GMP Annex 11
+    - ICH Q2(R1)
+    - ALCOA+ principles
+    - EU-GMP Chapter 6
+    - FDA Guidance on Investigating OOS Test Results
+    - USP <1010> Analytical Data Interpretation
+  approved_by: Quality Assurance Manager
+  approved_date: "2025-09-14"
+
+purpose:
+  primary: Establish systematic approach for investigating, documenting, and managing Out of Specification (OOS) results in analytical testing to ensure thorough investigation in accordance with regulatory requirements and implementation of appropriate corrective and preventive actions to prevent recurrence
+  scope: All analytical testing activities including raw material testing and release, in-process monitoring and control, finished product testing and release, stability testing programs, environmental monitoring, equipment qualification testing, method validation and verification, cleaning validation, water system monitoring, and microbial testing
+  objectives:
+    - Ensure all OOS results are thoroughly investigated regardless of potential impact
+    - Conduct scientifically sound and unbiased investigations with objective evidence
+    - Identify and address root causes of OOS occurrences
+    - Implement appropriate and effective corrective and preventive actions
+    - Maintain regulatory compliance with FDA, EU GMP, and ICH requirements
+    - Protect product quality and patient safety through proper batch disposition
+    - Enable trending and pattern analysis for continuous improvement
+    - Maintain complete documentation per ALCOA+ and 21 CFR Part 11 requirements
+
+roles:
+  - name: Quality Control Manager
+    responsibilities:
+      - Overall responsibility for OOS investigation program management
+      - Assignment of investigation teams and resource allocation
+      - Review and approval of investigation reports
+      - Decision-making authority for batch disposition
+      - Escalation to senior management when required
+      - Trending and pattern analysis oversight
+      - Training program coordination and competency verification
+      - Regulatory reporting coordination and communication
+    qualifications:
+      - Bachelor's degree in Chemistry, Pharmaceutical Sciences, or related field
+      - Minimum 5 years experience in analytical testing and quality control
+      - Knowledge of FDA, EU GMP, and ICH requirements for OOS investigations
+      - Strong leadership and decision-making skills
+
+  - name: Laboratory Analyst
+    responsibilities:
+      - Immediate notification of OOS results to supervisor
+      - Performance of re-testing and confirmatory testing as directed
+      - Complete documentation of all testing activities and raw data
+      - Participation in laboratory investigation (Phase I)
+      - Maintenance of raw data and laboratory records per ALCOA+
+      - Adherence to analytical procedures and methods
+      - Sample handling and chain of custody maintenance
+      - Equipment maintenance and calibration verification
+    qualifications:
+      - Technical degree or Bachelor's in Chemistry or related field
+      - Training in analytical methods and laboratory practices
+      - Understanding of GMP and data integrity requirements
+      - Competency in assigned analytical methods
+
+  - name: Laboratory Supervisor
+    responsibilities:
+      - Verification of analytical procedures and methods used
+      - Review of analyst work and data integrity verification
+      - Coordination of laboratory investigation activities (Phase I)
+      - Assignment of qualified personnel for re-testing
+      - Equipment and method verification and troubleshooting
+      - Laboratory investigation report preparation and submission
+      - Analyst training and competency assessment
+      - Resource allocation and planning for investigations
+    qualifications:
+      - Bachelor's degree in Chemistry or related field
+      - Minimum 3 years experience in analytical laboratory
+      - Supervisory experience and leadership skills
+      - Knowledge of OOS investigation requirements
+
+  - name: Quality Assurance Manager
+    responsibilities:
+      - Independent review of all OOS investigations for completeness
+      - Verification of investigation adequacy and scientific soundness
+      - Assessment of CAPA effectiveness and implementation
+      - Regulatory compliance oversight and audit readiness
+      - Trend analysis and pattern identification across organization
+      - Communication with regulatory authorities as needed
+      - Final disposition authority for critical cases
+      - System improvement initiatives and quality enhancement
+    qualifications:
+      - Bachelor's degree in related field, advanced degree preferred
+      - Minimum 5 years QA experience in regulated industry
+      - Knowledge of regulatory requirements and inspection experience
+      - Audit and investigation expertise
+
+  - name: Production Manager
+    responsibilities:
+      - Provision of manufacturing data and batch records for investigation
+      - Participation in full investigation (Phase II) when required
+      - Implementation of immediate containment actions for affected materials
+      - Support for root cause identification from manufacturing perspective
+      - Manufacturing process review and assessment
+      - Implementation of corrective actions in production areas
+      - Personnel training and competency verification
+      - Equipment and facility investigation support
+    qualifications:
+      - Bachelor's degree in Engineering or related field
+      - Manufacturing experience in regulated environment
+      - Knowledge of GMP and process controls
+      - Understanding of quality systems and investigations
+
+  - name: Regulatory Affairs Manager
+    responsibilities:
+      - Regulatory guidance and interpretation of requirements
+      - Assessment of regulatory reporting requirements
+      - Preparation and submission of regulatory notifications
+      - Liaison with regulatory authorities and communication
+      - Impact assessment on product registration and approvals
+      - Review of investigation documentation for regulatory adequacy
+      - Support for regulatory inspections and responses
+      - Maintenance of regulatory intelligence and updates
+    qualifications:
+      - Bachelor's degree, advanced degree preferred
+      - Experience in regulatory affairs and compliance
+      - Knowledge of FDA, EU, and other regulatory requirements
+      - Excellent communication and documentation skills
+
+equipment_materials:
+  equipment:
+    - name: Analytical Instruments
+      specifications: All instruments used in analytical testing (HPLC, GC-MS, spectrophotometers, balances, pH meters, etc.)
+      calibration_frequency: Per equipment calibration SOP
+      maintenance_requirements: Per preventive maintenance schedule
+
+    - name: Reference Standards
+      specifications: Certified reference materials with NIST traceability
+      storage_conditions: Per certificate of analysis requirements
+      expiration_tracking: Yes - before use verification required
+
+    - name: Sample Storage Equipment
+      specifications: Refrigerators, freezers, stability chambers maintaining required conditions
+      temperature_monitoring: Continuous with alarm systems
+      calibration_frequency: Per equipment calibration SOP
+
+  materials:
+    - name: Analytical Reagents
+      specifications: Reagent grade or higher, meeting method requirements
+      quality_verification: Certificate of analysis review before use
+      storage_conditions: Per SDS and manufacturer recommendations
+
+    - name: Documentation Supplies
+      specifications: OOS investigation forms, worksheets, labels (OOS HOLD, QUARANTINE)
+      availability: Readily accessible to laboratory and QC personnel
+
+procedures:
+  - step_number: 1
+    title: Immediate Response to OOS Results (Within 24 Hours)
+    description: Rapidly respond to OOS results with notification, containment, and initial assessment to protect product quality and enable effective investigation
+    substeps:
+      - substep_number: 1.1
+        action: Execute immediate notification protocol
+        details: |
+          Upon identification of OOS result:
+          
+          Laboratory Analyst immediately notifies Laboratory Supervisor verbally and through LIMS system alert. Laboratory Supervisor notifies QC Manager within 2 hours. QC Manager notifies QA Manager within 4 hours. Production Manager notified if batch/lot related (within 4 hours). Senior management notification for critical cases (patient safety, regulatory significance, business impact). Customer notification assessment conducted by QA and Regulatory Affairs.
+          
+          Document all notifications in OOS tracking system with timestamps and recipient acknowledgments. Use FORM-OOS-001 OOS Notification and Initial Assessment to record all initial communications.
+        acceptance_criteria: All required notifications completed within specified timeframes, documented in OOS tracking system
+        documentation: FORM-OOS-001 OOS Notification and Initial Assessment, OOS tracking system entries
+
+      - substep_number: 1.2
+        action: Implement containment actions
+        details: |
+          Immediate containment within 8 hours of OOS identification:
+          
+          Sample and Material Quarantine: Apply OOS HOLD labels to affected sample and related samples. Quarantine related batches/lots in inventory system with electronic hold. Segregate suspect materials physically in designated quarantine area. Update inventory system with quarantine status and reason. Document all quarantine actions with timestamp and responsible person.
+          
+          Documentation Preservation: Preserve all raw data including chromatograms, spectra, instrument printouts, handwritten notes. Secure equipment logs, maintenance records, and environmental monitoring data. Lock laboratory notebook entries per SOP requirements. Verify chain of custody documentation complete and intact. Photograph critical data or conditions if appropriate.
+          
+          Distribution Hold: Immediately stop distribution of affected lots if already released. Recall assessment if distributed to customers. Implement inventory system holds preventing inadvertent release.
+        acceptance_criteria: All affected materials quarantined, all documentation preserved, distribution prevented
+        documentation: Quarantine labels, inventory system holds, documentation preservation checklist
+
+      - substep_number: 1.3
+        action: Conduct initial assessment and assign investigation team
+        details: |
+          Within 24 hours of OOS identification, QC Manager conducts criticality evaluation:
+          
+          Criticality Evaluation using four factors: (1) Patient Safety Impact - assess if OOS relates to safety parameter or critical quality attribute; (2) Regulatory Significance - determine if regulatory reporting required, inspection implications; (3) Business Impact - evaluate production/release delays, customer impact, financial consequences; (4) Resource Requirements - estimate investigation complexity, personnel needs, timeline.
+          
+          Classify as High/Medium/Low criticality. High criticality: immediate senior management notification, maximum resource allocation, 5-day investigation target. Medium criticality: QA Manager notification, standard resources, 10-day target. Low criticality: routine investigation, 15-day target.
+          
+          Investigation Team Assignment: Designate Investigation Leader (Laboratory Supervisor for Phase I). Identify team members based on expertise needed (analysts, supervisors, manufacturing personnel if Phase II). Allocate resources including personnel time, equipment access, budget. Establish investigation timeline with milestones. Document team composition and responsibilities in FORM-OOS-002.
+        acceptance_criteria: Criticality assessment completed, investigation team assigned, timeline established within 24 hours
+        documentation: FORM-OOS-001 Section 4 Criticality Assessment, FORM-OOS-002 Investigation Team Assignment
+
+    quality_controls:
+      - All notifications documented with timestamps
+      - Containment verified through physical inspection and system checks
+      - Investigation team qualifications verified
+    estimated_duration: 24 hours maximum for initial response completion
+    responsible_role: Quality Control Manager
+    reviewer_role: Quality Assurance Manager
+
+  - step_number: 2
+    title: Phase I - Laboratory Investigation
+    description: Conduct comprehensive laboratory investigation to determine if OOS result is due to analytical errors, laboratory practices, equipment issues, or method-related factors
+    substeps:
+      - substep_number: 2.1
+        action: Perform data review and verification
+        details: |
+          Laboratory Supervisor and assigned analyst conduct thorough raw data examination:
+          
+          Raw Data Review: Examine all analytical records including chromatograms, spectra, instrument printouts, peak integration data, and calculations. Verify all calculations manually - verify dilution factors, response factors, concentration calculations, and unit conversions. Check all transcriptions from instrument to worksheet to report for accuracy. Assess data integrity and completeness - verify signatures, dates, initials per ALCOA+ requirements. Identify any anomalies, irregularities, or unusual observations.
+          
+          Method Compliance Review: Verify method adherence at every step - sample preparation, instrument conditions, system suitability criteria, analysis sequence. Assess method suitability for sample tested - matrix compatibility, concentration range appropriateness. Review recent method changes or revisions that might affect results. Evaluate method validation status and any deviations from validated parameters.
+          
+          Sample Integrity Assessment: Verify chain of custody from collection through analysis. Confirm sample identification through labels, barcodes, and documentation. Evaluate storage conditions between collection and analysis. Review sample preparation procedures for errors or deviations. Assess sample stability and holding time compliance.
+          
+          Document all findings in FORM-OOS-003 Laboratory Investigation Worksheet with supporting evidence attached.
+        acceptance_criteria: Complete data review documented, all calculations verified, method compliance confirmed, sample integrity assessed
+        documentation: FORM-OOS-003 Laboratory Investigation Worksheet Sections 1-3
+
+      - substep_number: 2.2
+        action: Review equipment and instrumentation performance
+        details: |
+          Conduct comprehensive equipment performance verification:
+          
+          Equipment Performance: Check calibration status of analytical instrument - verify last calibration date, next due date, calibration within specifications. Review maintenance records for past 3 months - identify any recent repairs, parts replacements, performance issues. Execute performance check using reference standard - verify instrument response within expected range. Review error logs for instrument alarms, warnings, or malfunctions during sample analysis period.
+          
+          System Suitability Assessment: Review system suitability test results run with sample batch - verify all parameters (resolution, tailing, plate count, retention time) met acceptance criteria. Evaluate performance standards and quality control samples analyzed with batch. Verify reference standards current and properly prepared - check expiration dates, preparation records. Review control charts for instrument performance trends - identify any drift or unusual patterns.
+          
+          Environmental Factors: Review temperature and humidity logs for analysis period - verify within method specifications. Check air quality monitoring data for laboratory - particulate counts, microbial monitoring (if applicable). Review cleaning and sanitization records for instrument and laboratory area. Check facility maintenance logs for HVAC performance, utility issues.
+          
+          Cross-Contamination Assessment: Evaluate laboratory workflow and sample sequence - check for potential carryover from previous samples. Verify sample tracking through laboratory - no mix-ups or mislabeling. Check equipment cleaning procedures and verification - ensure proper cleaning between samples. Review personnel movement and gowning procedures during analysis.
+        acceptance_criteria: Equipment performance verified, system suitability confirmed, environmental factors assessed, cross-contamination ruled out
+        documentation: FORM-OOS-003 Section 4 Equipment and Instrumentation Review, equipment performance check records
+
+      - substep_number: 2.3
+        action: Execute re-testing and confirmatory testing strategy
+        details: |
+          If laboratory investigation does not identify clear assignable cause, consider re-testing with proper justification:
+          
+          Re-testing Strategy: Re-testing can be performed to confirm OOS result but CANNOT be used to invalidate original result. All results (original and retest) must be reported and evaluated. Re-testing must be scientifically justified based on investigation findings.
+          
+          Sample Preparation for Re-test: Use same sample portion if sufficient quantity available and sample stability confirmed. Prepare independent sample aliquot using careful technique and different glassware if possible. Assign different analyst than original testing (if qualified analyst available). Document all sample preparation activities in detail.
+          
+          Testing Execution: Use same validated analytical method as original test. Use different analytical instrument if available and qualified for method. Perform analysis independently with no reference to original result. Execute complete system suitability testing. Analyze appropriate controls and reference standards. Document all testing activities completely per GMP requirements.
+          
+          Result Evaluation: Perform statistical analysis of all results (original + retest). Calculate mean, standard deviation, relative standard deviation. Compare results and identify any patterns or trends. Consider measurement uncertainty in evaluation. If retest result is within specification but original OOS, continue investigation to identify root cause of original OOS result - do not simply average results.
+          
+          Re-testing Limitations: Maximum of two retests unless scientifically justified. Cannot perform multiple retests hoping to get passing result. Investigation focus must remain on identifying root cause, not generating passing results.
+        acceptance_criteria: Re-testing scientifically justified, properly executed, all results documented and evaluated, investigation continued to identify root cause
+        documentation: FORM-OOS-003 Section 5 Re-testing Strategy and Results, complete analytical records for retest
+
+      - substep_number: 2.4
+        action: Document laboratory investigation conclusions
+        details: |
+          Laboratory Supervisor prepares comprehensive laboratory investigation report:
+          
+          Executive Summary: Brief overview of OOS event (product, test, specification, OOS value). Summary of investigation timeline and activities. Key findings and conclusions from laboratory investigation. Determination if assignable cause identified in laboratory. Recommended next steps (close investigation if cause found, proceed to Phase II if no cause found).
+          
+          Detailed Investigation Activities: Chronological sequence of investigation events with dates/times. Complete data review findings and verification results. Equipment and method evaluation results. Re-testing results and statistical analysis. Environmental factor assessment. All supporting documentation referenced with location.
+          
+          Root Cause Analysis (if laboratory cause identified): Specific root cause identified (e.g., analyst error in dilution, equipment malfunction, reagent contamination). Evidence supporting root cause conclusion. Verification of root cause through testing or evaluation. Why root cause was not detected initially. Measures to prevent recurrence.
+          
+          Recommendations: If laboratory cause identified - implement immediate corrective action, training needs, procedure updates, CAPA required. If no laboratory cause identified - recommendation to proceed to Phase II full investigation with manufacturing/process focus. Resources needed for Phase II. Estimated timeline for Phase II completion.
+          
+          Report Review and Approval: Laboratory Supervisor prepares report and submits to QC Manager. QC Manager reviews for completeness and scientific soundness. QA Manager conducts independent review for regulatory compliance. All reviewers sign and date report. Report becomes part of permanent OOS investigation file.
+        acceptance_criteria: Complete investigation report prepared with all required sections, scientifically sound conclusions supported by evidence, appropriate recommendations, all required approvals obtained
+        documentation: FORM-OOS-004 Laboratory Investigation Report, all supporting documentation attached
+
+    quality_controls:
+      - Independent verification of all calculations
+      - QA review of data integrity and ALCOA+ compliance
+      - Technical review of investigation methodology
+      - Second analyst verification of critical findings
+    estimated_duration: 5-10 business days depending on complexity
+    responsible_role: Laboratory Supervisor
+    reviewer_role: Quality Control Manager and Quality Assurance Manager
+
+  - step_number: 3
+    title: Phase II - Full Investigation (If Phase I Inconclusive)
+    description: Conduct comprehensive investigation extending beyond laboratory to include manufacturing operations, raw materials, process parameters, and historical data when laboratory investigation fails to identify assignable cause
+    substeps:
+      - substep_number: 3.1
+        action: Expand investigation scope to manufacturing operations
+        details: |
+          QC Manager assigns expanded investigation team including Production Manager, Engineering, and other SMEs.
+          
+          Batch Record Evaluation: Obtain complete batch production record for affected batch. Review manufacturing instructions compliance - verify all steps executed per procedure. Check all process parameters against specifications - temperatures, pressures, mixing times, hold times. Review all deviations and exceptions documented during manufacturing. Verify equipment usage documentation - cleaning verification, calibration status, maintenance logs. Check for any unusual occurrences or observations noted by operators.
+          
+          Raw Material Assessment: Review certificates of analysis for all raw materials used in batch. Evaluate supplier performance history - any recent quality issues, complaints, changes. Verify raw material storage conditions maintained per specifications. Review raw material testing results including identity, purity, impurities. Assess any raw material lot changes or new suppliers.
+          
+          Process Parameter Analysis: Analyze critical process parameters over time using control charts. Compare batch process data to historical trends and patterns. Evaluate environmental conditions during manufacturing - temperature, humidity, particulate levels. Review equipment performance during batch production. Assess process capability indices (Cpk) for critical parameters.
+          
+          Personnel and Training Review: Verify personnel qualifications and training current for all involved. Review personnel performance history - any recent issues or corrective actions. Assess if any new personnel or recent training conducted. Check for procedural understanding through interviews if appropriate.
+          
+          Document all findings in FORM-OOS-005 Full Investigation Worksheet.
+        acceptance_criteria: Complete manufacturing review conducted, all relevant data collected and evaluated, no stone left unturned in search for root cause
+        documentation: FORM-OOS-005 Full Investigation Worksheet, batch production records, raw material CoAs, process data
+
+      - substep_number: 3.2
+        action: Conduct historical data and trend analysis
+        details: |
+          Perform comprehensive trending to identify patterns:
+          
+          Historical Result Patterns: Query database for same product/test going back 2 years minimum. Calculate mean, standard deviation, and control limits for historical data. Plot control chart of historical results including current OOS result. Identify any trends, shifts, or cycles in data. Determine if current OOS is isolated incident or part of pattern.
+          
+          Seasonal Variation Assessment: Evaluate if any seasonal patterns exist in historical data. Correlate with environmental conditions (temperature, humidity) if relevant. Assess if time of year affects raw material quality or process performance. Check for holiday periods or staffing changes that correlate with results.
+          
+          Process Trend Evaluation: Review process parameter trends over same historical period. Correlate product quality results with process parameter data. Identify any process changes, equipment upgrades, or facility modifications during period. Assess raw material changes, supplier changes, or formulation updates.
+          
+          Comparative Studies: Compare affected batch to similar batches produced under similar conditions. Identify batches with passing results and compare all parameters. Statistical comparison using t-tests or ANOVA as appropriate. Determine if differences are statistically significant.
+          
+          Statistical Significance Testing: Apply appropriate statistical tests to determine if OOS represents true shift in process or product quality versus normal variation. Calculate probability that result is due to random chance. Consider measurement uncertainty and method variability.
+        acceptance_criteria: Comprehensive trend analysis completed, patterns identified if present, statistical significance determined
+        documentation: FORM-OOS-005 Section 3 Historical Data Analysis, statistical analysis reports, trend charts
+
+      - substep_number: 3.3
+        action: Perform root cause analysis using systematic methodology
+        details: |
+          Investigation team conducts formal root cause analysis:
+          
+          Problem Definition: Develop clear, concise problem statement describing OOS event. Define scope of impact - single batch, multiple batches, single test, multiple tests. Establish success criteria for investigation - what constitutes successful root cause identification. Assess resource requirements for in-depth investigation.
+          
+          Data Collection and Analysis: Gather comprehensive data from all potential sources - laboratory, manufacturing, materials, equipment, environmental, personnel. Verify data accuracy and completeness from multiple independent sources. Analyze data for patterns, correlations, and relationships. Identify gaps in data and conduct additional testing/evaluation to fill gaps.
+          
+          Cause Hypothesis Development: Brainstorm all potential causes using cross-functional team. Categorize potential causes: laboratory-related, manufacturing-related, material-related, equipment-related, environmental, human factors. Prioritize potential causes based on likelihood and available evidence. Develop testable hypotheses for high-priority potential causes.
+          
+          Root Cause Analysis Tools: Apply appropriate RCA tools based on problem complexity:
+          - Fishbone (Ishikawa) Diagram: Categorize potential causes into main categories (Man, Machine, Method, Material, Measurement, Environment)
+          - 5 Why Analysis: Ask "why" iteratively to drill down to fundamental cause
+          - Fault Tree Analysis: Map logical relationships between potential causes and effect
+          - Failure Mode Effects Analysis (FMEA): Systematic evaluation of potential failure modes
+          - Statistical Analysis: Correlation studies, regression analysis, design of experiments
+          - Process Mapping: Flowchart process to identify failure points
+          
+          Cause Verification: Design experiments or evaluations to test cause hypotheses. Execute verification studies with proper controls. Analyze verification data objectively. Verify that identified cause can produce observed OOS result. Confirm cause through independent verification or peer review.
+          
+          Document complete RCA process in FORM-OOS-006 Root Cause Analysis Report.
+        acceptance_criteria: Systematic RCA methodology applied, root cause identified and verified with evidence, peer review confirms conclusions
+        documentation: FORM-OOS-006 Root Cause Analysis Report, RCA tool outputs (fishbone diagrams, 5 Why analysis, etc.), verification study data
+
+      - substep_number: 3.4
+        action: Document full investigation report and conclusions
+        details: |
+          Investigation Leader prepares comprehensive full investigation report:
+          
+          Investigation Summary Report: Executive summary with key findings, conclusions, and recommendations. Investigation methodology overview describing approach taken. Team composition and qualifications. Timeline of investigation activities with major milestones.
+          
+          Detailed Technical Report: Complete Phase I laboratory investigation results (summary from earlier report). Full Phase II investigation activities documented in detail. Manufacturing operations review findings. Historical data and trend analysis results. Root cause analysis process and results. All supporting evidence referenced and attached.
+          
+          Root Cause Determination: Clear statement of identified root cause with supporting evidence. Explanation of how root cause led to OOS result observed. Verification that root cause has been confirmed. Assessment of why root cause was not prevented by existing systems. Evaluation of potential for recurrence without corrective action.
+          
+          Impact Assessment: Scope of impact on other batches, products, or operations. Risk assessment for patient safety and product quality. Regulatory implications and reporting requirements. Business impact including costs, delays, customer impact.
+          
+          Recommendations: Immediate corrective actions to address root cause. Long-term preventive actions to prevent recurrence. Process improvements and system enhancements. Training requirements and competency development. Timeline and resources required for CAPA implementation. Proposed verification of CAPA effectiveness.
+          
+          Review and Approval: Investigation Leader prepares report. QC Manager reviews technical content and conclusions. QA Manager reviews for regulatory compliance and adequacy. Production Manager reviews manufacturing-related findings (if applicable). Senior Management approval for critical cases. All approvals documented with signatures and dates.
+        acceptance_criteria: Comprehensive investigation report completed with all required elements, scientifically sound conclusions, appropriate recommendations, all approvals obtained
+        documentation: FORM-OOS-007 Full Investigation Report, all attachments and supporting documentation
+
+    quality_controls:
+      - Cross-functional team review of investigation approach
+      - Independent QA review of investigation adequacy
+      - Peer review of root cause analysis conclusions
+      - Management review of business impact and recommendations
+    estimated_duration: 10-20 business days depending on complexity
+    responsible_role: Investigation Leader (QC Manager assigned)
+    reviewer_role: Quality Assurance Manager and Senior Management
+
+  - step_number: 4
+    title: Corrective and Preventive Action (CAPA) Development and Implementation
+    description: Develop, approve, implement, and verify effectiveness of corrective and preventive actions to address root cause and prevent recurrence
+    substeps:
+      - substep_number: 4.1
+        action: Develop comprehensive CAPA plan
+        details: |
+          Investigation team develops detailed CAPA plan addressing root cause:
+          
+          Immediate Corrective Actions (within 30 days): Problem containment measures to prevent further OOS occurrences. Risk mitigation activities to protect current operations. Process stabilization actions to ensure short-term quality. Quality assurance measures for ongoing production. Specific actions with assigned responsibility and target completion dates.
+          
+          Long-term Preventive Actions (within 90 days): Process improvements to eliminate root cause systematically. System enhancements to prevent similar issues. Training and competency development programs. Technology upgrades if appropriate. Procedure updates and documentation improvements. Supplier management improvements if material-related.
+          
+          Action Prioritization Criteria: Patient safety and regulatory compliance (highest priority). Business impact and criticality to operations. Resource requirements and availability for implementation. Implementation complexity and technical feasibility. Risk reduction effectiveness and quantifiable benefit. Timeline achievable with available resources.
+          
+          CAPA Plan Documentation: Use FORM-OOS-008 CAPA Plan. List all corrective actions with specific descriptions. List all preventive actions with specific descriptions. Assign responsibility for each action (name and title). Set target completion date for each action. Define success criteria and verification method for each action. Estimate resources required (budget, personnel, equipment). Identify dependencies and implementation sequence.
+          
+          CAPA Plan Approval: QC Manager reviews CAPA plan for appropriateness to root cause. QA Manager reviews for regulatory adequacy and risk mitigation. Department managers approve actions affecting their areas. Senior Management approval for major investments or resource commitments. Budget approval obtained before implementation begins.
+        acceptance_criteria: Comprehensive CAPA plan addressing all identified causes, appropriate actions prioritized, resources allocated, approvals obtained
+        documentation: FORM-OOS-008 CAPA Plan with all approvals
+
+      - substep_number: 4.2
+        action: Implement CAPA according to plan
+        details: |
+          Assigned owners implement CAPA actions per approved plan:
+          
+          Implementation Planning: Develop detailed implementation project plan for complex CAPAs. Define milestones and deliverables. Assign sub-tasks and responsibilities. Allocate budget and resources. Establish communication plan with stakeholders.
+          
+          Project Management: Hold regular status meetings (weekly or bi-weekly). Track progress against milestones. Identify and resolve implementation issues promptly. Manage risks and obstacles to implementation. Adjust timeline if needed with QA Manager approval. Communicate status to investigation team and management.
+          
+          Quality Assurance During Implementation: Verify implementation follows approved plan. Review any deviations from plan with QA before proceeding. Ensure proper documentation of all implementation activities. Verify training completed before process changes implemented. Conduct installation qualification (IQ), operational qualification (OQ), performance qualification (PQ) for equipment changes. Update procedures, work instructions, and controlled documents. Verify change control process followed for all changes.
+          
+          Implementation Verification: Verify each action completed per plan. Collect evidence of completion (photos, documents, training records, validation reports). Update CAPA tracking system with completion status. Obtain sign-off from action owner and verifier. Document any implementation challenges or lessons learned.
+        acceptance_criteria: All CAPA actions implemented per approved plan, implementation documented and verified, change control followed
+        documentation: FORM-OOS-008 CAPA implementation sections, implementation evidence (training records, validation reports, photos, updated procedures)
+
+      - substep_number: 4.3
+        action: Verify CAPA effectiveness
+        details: |
+          QA Manager verifies that implemented CAPA achieves intended effectiveness:
+          
+          Effectiveness Criteria: Problem recurrence prevention - no repeat OOS for same root cause. Process capability improvement - process Cpk improved if applicable. Compliance enhancement - improved adherence to procedures. Risk reduction achievement - measured risk level reduced. Performance indicator improvement - KPIs show sustained improvement.
+          
+          Verification Methods for Different CAPA Types:
+          
+          For Process Changes: Monitor process performance for defined period (typically 3-6 months). Collect and analyze process data using control charts. Compare before and after process capability indices. Conduct statistical analysis to confirm improvement significance.
+          
+          For Training CAPAs: Assess competency through written testing or practical demonstration. Observe personnel performing tasks using new procedures. Review performance metrics for trained personnel. Verify no repeat errors after training completed.
+          
+          For Equipment/System Changes: Review equipment performance data post-implementation. Verify equipment capability through qualification studies. Monitor failure rates and maintenance issues. Assess if new equipment meets performance specifications.
+          
+          For Procedure Updates: Audit compliance with updated procedures. Interview personnel to verify understanding. Review documentation for proper completion. Track deviations to assess effectiveness of procedure changes.
+          
+          Follow-up Evaluation Schedule: Initial effectiveness check at 30 days post-implementation. Interim effectiveness review at 90 days. Final effectiveness verification at 6 months. Periodic monitoring continues through trending program.
+          
+          Effectiveness Documentation: Use FORM-OOS-009 CAPA Effectiveness Verification. Document verification methods used. Present data and analysis supporting effectiveness. State conclusion on effectiveness (Effective / Partially Effective / Not Effective). If not effective, identify need for additional actions. Obtain QA Manager approval of effectiveness verification.
+        acceptance_criteria: CAPA effectiveness verified through objective evidence, sustained improvement demonstrated, QA Manager approval obtained
+        documentation: FORM-OOS-009 CAPA Effectiveness Verification with supporting data and analysis
+
+    quality_controls:
+      - QA review and approval of CAPA plan before implementation
+      - Implementation verification at each milestone
+      - Independent QA assessment of effectiveness verification
+      - Management review of effectiveness results
+    estimated_duration: 30-180 days depending on CAPA complexity
+    responsible_role: CAPA Action Owners (assigned per plan)
+    reviewer_role: Quality Assurance Manager
+
+  - step_number: 5
+    title: Batch Disposition and Release Decision
+    description: Make informed, risk-based batch disposition decision based on investigation results, quality assessment, and regulatory requirements
+    substeps:
+      - substep_number: 5.1
+        action: Evaluate disposition options based on investigation outcome
+        details: |
+          QA Manager leads disposition decision process considering all investigation findings:
+          
+          Decision Criteria: Investigation outcome and root cause identification. Impact assessment results on batch quality. Risk evaluation conclusions for patient safety and product efficacy. Regulatory requirement compliance status. Customer contractual obligations. Business considerations within regulatory constraints.
+          
+          Disposition Options:
+          
+          Option 1 - Release for Distribution: Investigation conclusively identifies laboratory error (analyst error, equipment malfunction, calculation error) AND re-testing with proper controls demonstrates batch meets all specifications AND risk assessment supports release with no patient safety concerns AND regulatory requirements allow release (no reporting required or notification approved) AND QA Manager determines quality is assured. Document specific justification for release decision.
+          
+          Option 2 - Rejection and Disposal: Investigation confirms true OOS result not due to laboratory error AND batch quality does not meet specifications AND quality risk to patients unacceptable even if retested results pass AND regulatory requirements prohibit release (e.g., sterility failure, safety parameter failure) AND investigation inconclusive but significant risk exists that cannot be mitigated. Document specific justification for rejection decision.
+          
+          Option 3 - Rework or Reprocessing: Technical feasibility of rework/reprocess confirmed through scientific evaluation AND regulatory approval obtained for rework/reprocess approach (if required) AND quality standards will be maintained after rework/reprocess AND process validation completed for rework/reprocess steps AND OOS result can be corrected through rework without compromising quality AND all regulatory requirements for rework documentation met. Document detailed rework plan and justification.
+          
+          Option 4 - Additional Testing: Alternative test method available that is validated and approved AND alternative method provides additional assurance of quality AND original method suspected to have suitability issue AND additional testing scientifically justified based on investigation. Cannot use additional testing to "average away" OOS result - must be scientifically sound approach.
+          
+          Option 5 - Hold for Further Investigation: Investigation requires additional time for complex root cause determination AND immediate disposition decision would be premature AND no immediate patient safety risk identified AND material can be safely held while investigation continues AND defined timeline for investigation completion established. Document hold reason and expected resolution date.
+        acceptance_criteria: Disposition decision made based on objective evaluation of all factors, properly justified with documentation, appropriate approvals obtained
+        documentation: FORM-OOS-010 Batch Disposition Decision Record
+
+      - substep_number: 5.2
+        action: Obtain required approvals and document disposition
+        details: |
+          Complete disposition decision approval process:
+          
+          Disposition Documentation: Document complete investigation summary in disposition record. State disposition decision clearly (Release, Reject, Rework, Additional Testing, Hold). Provide detailed justification for disposition decision with supporting evidence. Reference investigation report and all relevant data. Address regulatory requirements and compliance. Assess customer notification needs and communication plan. Evaluate business impact and alternatives considered.
+          
+          Approval Requirements by Disposition Type:
+          
+          For Release Decision: QA Manager approval required (mandatory). QC Manager review and concurrence. Senior Management approval for high-risk or high-value products. Regulatory Affairs review if any regulatory questions. Document that all specifications met after proper investigation.
+          
+          For Rejection Decision: QA Manager approval required (mandatory). QC Manager concurrence. Production Manager notification of disposal. Finance notification for inventory write-off. Environmental Health & Safety involved if hazardous material. Document disposal method and verification.
+          
+          For Rework Decision: QA Manager approval required (mandatory). Production Manager approval for rework plan. Regulatory Affairs review and pre-approval if required by regulations. Validation of rework process if not previously validated. Quality Control re-testing plan approval. Document complete rework process and verification.
+          
+          Regulatory Notification Assessment: Evaluate if OOS event requires regulatory notification based on: product type and registration status, nature of OOS (safety vs quality), patient risk assessment, local regulatory requirements, contractual obligations to customers. If notification required, Regulatory Affairs prepares and submits per timelines. Document notification decision and rationale in disposition record.
+          
+          Customer Communication: Assess if customers need to be notified based on: contractual requirements, customer right-to-know policies, potential impact on customer operations, recall implications if already distributed. If notification required, prepare customer communication with QA/RA review. Document customer communication and responses.
+          
+          Final Disposition Execution: Update inventory system with disposition decision. Execute disposition physically (release, quarantine, disposal, rework). Verify disposition completed correctly. Document verification of disposition execution. Close OOS investigation in tracking system with disposition recorded.
+        acceptance_criteria: All required approvals obtained and documented, disposition executed and verified, investigation formally closed
+        documentation: FORM-OOS-010 with all approval signatures, regulatory notification (if required), customer communication (if required), disposition execution verification
+
+    quality_controls:
+      - Independent QA review of disposition justification
+      - Regulatory Affairs review of compliance
+      - Senior Management review for critical cases
+      - Post-disposition verification of execution
+    estimated_duration: 3-5 business days for disposition decision and approvals
+    responsible_role: Quality Assurance Manager
+    reviewer_role: Senior Management (for critical cases)
+
+  - step_number: 6
+    title: Trending, Pattern Analysis, and Continuous Improvement
+    description: Maintain comprehensive OOS database, perform trending and pattern analysis, and drive continuous improvement through data-driven insights
+    substeps:
+      - substep_number: 6.1
+        action: Maintain OOS database and generate regular reports
+        details: |
+          QC Manager ensures comprehensive OOS data management:
+          
+          OOS Database Maintenance: Record all OOS results in centralized database immediately upon occurrence. Document investigation outcomes, root causes, and dispositions. Categorize root causes using standardized classification system (laboratory error, equipment, method, manufacturing, material, environmental, unknown). Track CAPA status and implementation for each OOS. Calculate performance metrics automatically from database. Ensure data integrity and ALCOA+ compliance for database.
+          
+          Root Cause Classification System: Laboratory Errors (analyst error, calculation error, transcription error). Equipment Issues (malfunction, calibration failure, contamination). Method-Related (method suitability, interference, stability). Manufacturing Process (process deviation, parameter excursion, environmental). Raw Material (material quality, supplier issue, contamination). Environmental (facility conditions, contamination, utilities). Unknown (investigation inconclusive despite thorough investigation).
+          
+          Regular Reporting Schedule: Monthly OOS Summary Report - total OOS count, investigation status, disposition summary, trending highlights. Quarterly Trend Analysis Report - detailed trend analysis by product, test, root cause. Annual Comprehensive Review - year-over-year comparison, program effectiveness, improvement initiatives. Ad-hoc Analysis - as requested by management or for specific issues.
+          
+          Report Content: Total OOS count and rate (OOS per 1000 tests). OOS by product, test method, and specification parameter. Investigation completion timeliness metrics. Root cause distribution (laboratory vs non-laboratory). Disposition outcome distribution (release, reject, rework). CAPA implementation status and effectiveness. Comparison to historical data and trends. Action items and recommendations for improvement.
+        acceptance_criteria: Database current and accurate, regular reports generated on schedule, reports distributed to stakeholders
+        documentation: OOS database, Monthly OOS Summary Reports, Quarterly Trend Analysis Reports, Annual Comprehensive Review
+
+      - substep_number: 6.2
+        action: Perform pattern recognition and statistical analysis
+        details: |
+          QA Manager conducts advanced trending and pattern analysis:
+          
+          Statistical Analysis Methods: Calculate OOS rate over time with control charts. Perform frequency analysis by product, test, analyst, instrument. Identify seasonal patterns or time-based correlations. Conduct correlation studies between OOS and process variables. Apply statistical process control to identify special cause variation. Use Pareto analysis to identify most significant contributors.
+          
+          Alert Thresholds for Pattern Recognition: Frequency-based alerts: 2 OOS results for same product/test in 30 days, 3 OOS results in 90 days, 5% OOS rate for any product/test over 6 months. Trend-based notifications: sustained upward trend in OOS rate, shift in control chart suggesting process change. Pattern recognition triggers: same root cause identified in multiple investigations, OOS clustered by analyst, instrument, or time period. Risk-based escalation: any OOS related to critical quality attribute or patient safety parameter, any OOS requiring regulatory notification.
+          
+          Pattern Investigation: When alert threshold exceeded, initiate systematic pattern evaluation. Assess pattern significance using statistical methods. Develop hypothesis about underlying systemic cause. Allocate investigation resources appropriate to pattern significance. Establish timeline for pattern investigation completion. Document pattern investigation in FORM-OOS-011 Pattern Investigation Report.
+          
+          Response Actions for Identified Patterns: Process improvement initiatives to address systemic issues. Method enhancement projects if method-related patterns identified. Training program development for personnel-related patterns. System upgrade planning for technology-related patterns. Supplier management improvements for material-related patterns. Cross-functional team formation for complex pattern investigations.
+        acceptance_criteria: Regular statistical analysis performed, patterns identified and investigated, appropriate response actions implemented
+        documentation: FORM-OOS-011 Pattern Investigation Report, statistical analysis charts and data, pattern response action plans
+
+      - substep_number: 6.3
+        action: Implement continuous improvement initiatives
+        details: |
+          Drive ongoing OOS program enhancement and organizational learning:
+          
+          Performance Monitoring: Track key performance indicators: investigation completion time (target: 80% completed within 15 business days), root cause identification rate (target: >90% of investigations identify root cause), CAPA effectiveness percentage (target: >95% effective on first verification), recurrence rate reduction (target: <2% recurrence of same root cause), regulatory compliance score (target: 100% compliant investigations).
+          
+          Benchmarking: Compare performance to industry standards and best practices. Participate in industry consortia and data sharing programs. Benchmark against internal historical performance. Identify performance gaps and improvement opportunities. Set stretch goals based on benchmark data.
+          
+          Innovation and Technology: Evaluate new analytical technology to improve method robustness. Assess automation opportunities for routine testing to reduce analyst errors. Implement digital transformation initiatives (electronic lab notebooks, LIMS enhancements). Apply artificial intelligence for predictive analytics and pattern recognition. Develop risk-based testing strategies to focus resources on high-risk areas.
+          
+          Process Innovation: Enhance investigation methodology based on lessons learned. Develop new root cause analysis tools and techniques. Implement predictive analytics to prevent OOS before occurrence. Apply risk-based decision making frameworks for disposition decisions. Integrate OOS program with overall quality management system.
+          
+          Stakeholder Feedback: Collect investigation team input on process improvements needed. Solicit management feedback on investigation quality and timeliness. Facilitate cross-functional collaboration to address systemic issues. Maintain employee suggestion program for OOS investigations. Obtain regulatory authority guidance on expectations and best practices. Seek customer input on quality issues and concerns. Consult industry experts and consultants for specialized expertise.
+          
+          Program Review and Enhancement: Annual comprehensive OOS program review by senior management. Assess overall program effectiveness against objectives. Identify systemic issues requiring attention. Update procedures and training based on lessons learned. Allocate resources for improvement initiatives. Set annual goals and objectives for OOS program.
+        acceptance_criteria: Continuous improvement culture established, regular enhancements implemented, performance metrics show sustained improvement
+        documentation: KPI tracking reports, benchmarking studies, innovation project plans, annual program review reports
+
+    quality_controls:
+      - Monthly validation of database accuracy
+      - Quarterly review of trending analysis by QA Manager
+      - Annual program assessment by senior management
+      - Independent verification of statistical analysis methods
+    estimated_duration: Ongoing program management activity
+    responsible_role: Quality Control Manager with Quality Assurance Manager oversight
+    reviewer_role: Senior Management (annual review)
+
+quality_assurance:
+  - check: All OOS results investigated regardless of impact
+    frequency: Per occurrence (100% of OOS)
+    acceptance_criteria: No uninvestigated OOS results, all investigations documented
+    responsible_role: Laboratory Supervisor
+
+  - check: Investigation completion timeliness
+    frequency: Weekly monitoring
+    acceptance_criteria: 80% of investigations completed within 15 business days
+    responsible_role: Quality Control Manager
+
+  - check: Investigation adequacy and scientific soundness
+    frequency: 100% of investigations
+    acceptance_criteria: Thorough investigation, objective evidence supports conclusions, QA approval obtained
+    responsible_role: Quality Assurance Manager
+
+  - check: CAPA implementation status
+    frequency: Monthly review
+    acceptance_criteria: All CAPAs on track per approved timeline, overdue CAPAs <5%
+    responsible_role: Quality Assurance Manager
+
+  - check: CAPA effectiveness verification
+    frequency: Per CAPA after implementation
+    acceptance_criteria: >95% of CAPAs verified effective on first check
+    responsible_role: Quality Assurance Manager
+
+  - check: Regulatory compliance of investigations
+    frequency: Sample-based monthly audit (20% of closed investigations)
+    acceptance_criteria: 100% compliant with FDA/EU GMP/ICH requirements
+    responsible_role: Quality Assurance Manager
+
+  - check: OOS trending and pattern analysis
+    frequency: Monthly (trending), Quarterly (patterns)
+    acceptance_criteria: Trending analysis completed on schedule, patterns identified and investigated
+    responsible_role: Quality Control Manager with Quality Assurance Manager review
+
+documentation:
+  required_records:
+    - OOS Notification and Initial Assessment (FORM-OOS-001)
+    - Investigation Team Assignment (FORM-OOS-002)
+    - Laboratory Investigation Worksheet (FORM-OOS-003)
+    - Laboratory Investigation Report (FORM-OOS-004)
+    - Full Investigation Worksheet (FORM-OOS-005)
+    - Root Cause Analysis Report (FORM-OOS-006)
+    - Full Investigation Report (FORM-OOS-007)
+    - CAPA Plan (FORM-OOS-008)
+    - CAPA Effectiveness Verification (FORM-OOS-009)
+    - Batch Disposition Decision Record (FORM-OOS-010)
+    - Pattern Investigation Report (FORM-OOS-011)
+    - Monthly OOS Summary Reports
+    - Quarterly Trend Analysis Reports
+    - Annual Comprehensive Review
+    - All original analytical data and records
+    - All re-testing and confirmatory testing data
+    - Equipment and method verification records
+    - Batch production records (if Phase II)
+    - Raw material certificates of analysis
+    - Regulatory notifications (if required)
+    - Customer communications (if applicable)
+
+  retention_period: 7 years minimum, longer if regulatory requirement or product lifecycle requires
+
+  storage_location: Electronic records in validated LIMS and quality management system with 21 CFR Part 11 compliance, paper records (if any) in controlled QC records archive with restricted access
+
+change_control:
+  - Procedure revisions require QA review and approval
+  - Investigation process changes require validation of impact on data integrity
+  - LIMS or system changes require change control and validation
+  - Disposition criteria changes require regulatory assessment and senior management approval
+  - Training materials updated whenever procedures changed
+
+training_requirements:
+  initial_training:
+    - OOS investigation regulatory requirements (FDA, EU GMP, ICH) - 8 hours
+    - OOS investigation process (Phase I and Phase II) - 16 hours
+    - Root cause analysis methodology and tools - 12 hours
+    - Data integrity and ALCOA+ principles - 4 hours
+    - Documentation requirements and electronic records - 4 hours
+    - CAPA development and effectiveness verification - 8 hours
+    - Batch disposition decision making - 4 hours
+    - Trending and statistical analysis - 8 hours
+    - Total: 64 hours with practical exercises and case studies
+  
+  annual_refresher:
+    - Regulatory updates and guidance - 2 hours
+    - Procedure changes and enhancements - 2 hours
+    - Case study reviews and lessons learned - 4 hours
+    - Advanced topics and tools - 4 hours
+    - Total: 12 hours annually
+  
+  competency_assessment:
+    - Written examination on OOS investigation process (80% pass required)
+    - Case study evaluation demonstrating investigation skills (85% pass required)
+    - Practical demonstration of root cause analysis techniques
+    - Documentation review for completeness and accuracy
+
+  role_specific_training:
+    - Laboratory Analysts: Initial OOS identification and notification, proper documentation practices
+    - Laboratory Supervisors: Laboratory investigation leadership, report writing, re-testing strategy
+    - QC Managers: Overall program management, trending and analysis, regulatory reporting
+    - QA Personnel: Investigation adequacy review, CAPA oversight, disposition approval
+    - Production Personnel: Phase II investigation participation, manufacturing data provision
+
+references:
+  sops:
+    - SOP_CAPA.md
+    - SOP_DeviationManagement.md
+    - SOP_ChangeControl.md
+    - SOP_InternalAudits.md
+    - SOP_AnalyticalMethods.md
+    - SOP_DataIntegrity.md
+    - SOP_TrainingManagement.md
+    - SOP_DocumentControl.md
+  
+  regulatory_standards:
+    - FDA Guidance: Investigating Out-of-Specification (OOS) Test Results for Pharmaceutical Production (2006)
+    - EU GMP Chapter 6: Quality Control
+    - ICH Q2(R1): Validation of Analytical Procedures: Text and Methodology
+    - ICH Q10: Pharmaceutical Quality System
+    - USP <1010>: Analytical Data - Interpretation and Treatment
+    - FDA 21 CFR Part 11: Electronic Records and Electronic Signatures
+    - EU GMP Annex 11: Computerised Systems
+    - ALCOA+ Data Integrity Principles
+  
+  internal_documents:
+    - URS-QC-001: Quality Control System User Requirements
+    - FS-QC-001: Quality Control Functional Specification
+    - VMP-QC-001: Quality Control Validation Master Plan
+    - RA-QC-001: Quality Control Risk Assessment
+
+revision_history:
+  - version: "1.0"
+    date: "2025-09-14"
+    changes: Initial comprehensive SOP development covering OOS investigation process (Phase I laboratory investigation and Phase II full investigation), CAPA development and effectiveness verification, batch disposition decision making, trending and pattern analysis, continuous improvement. DSL conversion from source SOP_OutOfSpecification.md.
+    approved_by: Quality Assurance Manager
+
+attachments:
+  - FORM-OOS-001: OOS Notification and Initial Assessment
+  - FORM-OOS-002: Investigation Team Assignment
+  - FORM-OOS-003: Laboratory Investigation Worksheet
+  - FORM-OOS-004: Laboratory Investigation Report
+  - FORM-OOS-005: Full Investigation Worksheet
+  - FORM-OOS-006: Root Cause Analysis Report
+  - FORM-OOS-007: Full Investigation Report
+  - FORM-OOS-008: CAPA Plan
+  - FORM-OOS-009: CAPA Effectiveness Verification
+  - FORM-OOS-010: Batch Disposition Decision Record
+  - FORM-OOS-011: Pattern Investigation Report
+  - CHKLST-OOS-001: Laboratory Investigation Checklist
+  - CHKLST-OOS-002: Full Investigation Checklist
+  - CHKLST-OOS-003: CAPA Implementation Verification Checklist
+  - REPORT-OOS-001: Monthly OOS Summary Report
+  - REPORT-OOS-002: Quarterly Trend Analysis Report
+  - TRN-OOS-001: OOS Investigation Training Program
+  - Root Cause Analysis Tools and Templates
+  - Statistical Analysis Methods Guide
+  - Regulatory Reporting Templates

@@ -1,0 +1,521 @@
+# DSL: Pre-Sampling Preparation Checklist
+# Version: 1.0
+# Related SOP: SOP-SMPL-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "CHKLST-SMPL-001"
+  title: "Pre-Sampling Preparation Checklist"
+  version: "1.0"
+  effective_date: "2026-01-08"
+  supersedes: null
+
+  checklist_type:
+    enum:
+      - pre_operational
+
+  purpose: "Ensure complete readiness for sample collection before procedure begins, including personnel qualification, equipment calibration, materials availability and environmental conditions compliance"
+  scope: "All sampling procedures in GACP-ERP for raw materials, in-process, finished products and environmental samples"
+
+  regulatory_compliance:
+    standards:
+      - "GACP Guidelines"
+      - "GMP Standards"
+      - "ISO/IEC 17025"
+    requirements:
+      - "Personnel qualification verification"
+      - "Equipment calibration status"
+      - "Sample integrity assurance"
+      - "Documentation readiness"
+
+# ====================
+# 2. USAGE CONTEXT
+# ====================
+usage:
+  when_to_use: "Before every sampling activity"
+  frequency: "Per sampling event"
+  responsible_role: "QC Sampling Technician"
+  reviewer_role: "QC Manager (for critical or deviation samples)"
+
+  completion_time: "10-15 minutes"
+  mandatory: true
+
+  related_documents:
+    - id: "SOP-SMPL-001"
+      title: "Sampling Procedures"
+    - id: "FORM-SMPL-001"
+      title: "Sample Collection Record"
+    - id: "TRN-SMPL-001"
+      title: "QC Sampling Technician Training"
+
+# ====================
+# 3. CHECKLIST SECTIONS
+# ====================
+sections:
+  - section_id: "01"
+    section_title: "Personnel Qualifications"
+    description: "Verify sampler qualifications and training currency"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-01-01"
+        item_text: "Sampler has completed TRN-SMPL-001 training"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Training certificate valid"
+        reference: "Training database"
+
+      - item_id: "CHKLST-SMPL-001-01-02"
+        item_text: "Training is current (within last 12 months)"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Not expired"
+        reference: "Training records"
+
+      - item_id: "CHKLST-SMPL-001-01-03"
+        item_text: "Sampler is qualified for this sample type"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Competency demonstrated"
+        reference: "Qualification matrix"
+
+      - item_id: "CHKLST-SMPL-001-01-04"
+        item_text: "No outstanding corrective actions for sampler"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Clean record"
+        reference: "CAPA system"
+
+  - section_id: "02"
+    section_title: "Documentation Readiness"
+    description: "Verify all required documentation is available and current"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-02-01"
+        item_text: "SOP-SMPL-001 is current and accessible"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Current version available"
+        reference: "Document control system"
+
+      - item_id: "CHKLST-SMPL-001-02-02"
+        item_text: "Blank FORM-SMPL-001 is available"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Electronic or paper form ready"
+        reference: "Form repository"
+
+      - item_id: "CHKLST-SMPL-001-02-03"
+        item_text: "Sampling plan is reviewed and understood"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Requirements clear"
+        reference: "Sampling schedule"
+
+      - item_id: "CHKLST-SMPL-001-02-04"
+        item_text: "Batch documentation is available for review"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Batch records accessible"
+        reference: "Production records"
+
+      - item_id: "CHKLST-SMPL-001-02-05"
+        item_text: "Chain of custody forms are prepared"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - FORM-COC-001 ready"
+        reference: "COC form template"
+
+  - section_id: "03"
+    section_title: "Equipment Calibration and Availability"
+    description: "Verify all required equipment is calibrated and functional"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-03-01"
+        item_text: "Sampling scoops/probes are clean and calibrated"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Visually clean, calibration current"
+        reference: "Equipment log"
+
+      - item_id: "CHKLST-SMPL-001-03-02"
+        item_text: "Digital scale is calibrated"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Calibration within last 12 months"
+        reference: "Calibration certificate"
+
+      - item_id: "CHKLST-SMPL-001-03-03"
+        item_text: "Thermometer/hygrometer is functional and calibrated"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Reading stable, calibration current"
+        reference: "Calibration records"
+
+      - item_id: "CHKLST-SMPL-001-03-04"
+        item_text: "Camera/tablet for documentation is charged and functional"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Device operational, >50% battery"
+        reference: "Visual check"
+
+      - item_id: "CHKLST-SMPL-001-03-05"
+        item_text: "Barcode/QR code scanner is functional"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Scanner reads test codes"
+        reference: "Functionality test"
+
+  - section_id: "04"
+    section_title: "Sample Containers and Materials"
+    description: "Verify containers and consumables are appropriate and available"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-04-01"
+        item_text: "Sample containers are appropriate for sample type"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Correct material (glass/plastic), size adequate"
+        reference: "SOP-SMPL-001 Section 5.2"
+
+      - item_id: "CHKLST-SMPL-001-04-02"
+        item_text: "Containers are clean and/or sterile as required"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Visually clean, sterility indicator OK"
+        reference: "Visual inspection"
+
+      - item_id: "CHKLST-SMPL-001-04-03"
+        item_text: "Sufficient containers available for all samples"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Quantity adequate + 10% extra"
+        reference: "Sampling plan"
+
+      - item_id: "CHKLST-SMPL-001-04-04"
+        item_text: "Tamper-evident seals are available"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Sufficient quantity"
+        reference: "Visual check"
+
+      - item_id: "CHKLST-SMPL-001-04-05"
+        item_text: "Sample labels with QR codes are printed and ready"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Labels match sample IDs in system"
+        reference: "Label printer output"
+
+      - item_id: "CHKLST-SMPL-001-04-06"
+        item_text: "Appropriate PPE is available and in good condition"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Gloves, lab coat, safety glasses intact"
+        reference: "PPE inspection"
+
+  - section_id: "05"
+    section_title: "Environmental Conditions"
+    description: "Verify sampling location meets environmental requirements"
+    criticality:
+      enum:
+        - major
+
+    items:
+      - item_id: "CHKLST-SMPL-001-05-01"
+        item_text: "Sampling area is clean and organized"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - No visible contamination, clutter-free"
+        reference: "Visual inspection"
+
+      - item_id: "CHKLST-SMPL-001-05-02"
+        item_text: "Temperature in acceptable range"
+        item_type:
+          enum:
+            - measurement
+        required: true
+        acceptance_criteria: "15-25°C (unless specified otherwise)"
+        measurement_value: null
+        unit: "°C"
+        reference: "Thermometer reading"
+
+      - item_id: "CHKLST-SMPL-001-05-03"
+        item_text: "Humidity in acceptable range"
+        item_type:
+          enum:
+            - measurement
+        required: true
+        acceptance_criteria: "<60% RH (unless specified otherwise)"
+        measurement_value: null
+        unit: "% RH"
+        reference: "Hygrometer reading"
+
+      - item_id: "CHKLST-SMPL-001-05-04"
+        item_text: "Adequate lighting for sampling activities"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Clear visibility"
+        reference: "Visual assessment"
+
+      - item_id: "CHKLST-SMPL-001-05-05"
+        item_text: "No incompatible activities in vicinity"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - No cross-contamination risk"
+        reference: "Area observation"
+
+  - section_id: "06"
+    section_title: "Batch/Material Verification"
+    description: "Verify batch is ready and properly identified for sampling"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-06-01"
+        item_text: "Batch/lot number matches documentation"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Numbers match exactly"
+        reference: "Label vs. records"
+
+      - item_id: "CHKLST-SMPL-001-06-02"
+        item_text: "Batch is in appropriate location"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Location as documented"
+        reference: "Inventory system"
+
+      - item_id: "CHKLST-SMPL-001-06-03"
+        item_text: "Batch appears homogeneous"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - No visible segregation"
+        reference: "Visual inspection"
+
+      - item_id: "CHKLST-SMPL-001-06-04"
+        item_text: "No visible signs of contamination or damage"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Material appears intact"
+        reference: "Visual inspection"
+
+      - item_id: "CHKLST-SMPL-001-06-05"
+        item_text: "Batch quantity matches records"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Within ±5% of documented amount"
+        reference: "Weighing or counting"
+
+  - section_id: "07"
+    section_title: "Safety and Access"
+    description: "Verify safety requirements and access permissions"
+    criticality:
+      enum:
+        - critical
+
+    items:
+      - item_id: "CHKLST-SMPL-001-07-01"
+        item_text: "Sampler has appropriate access authorization"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Badge/keycard grants access"
+        reference: "Access control system"
+
+      - item_id: "CHKLST-SMPL-001-07-02"
+        item_text: "Safety hazards identified and mitigated"
+        item_type:
+          enum:
+            - conformance
+        required: true
+        acceptance_criteria: "Conforming - Risk assessment complete, controls in place"
+        reference: "Safety assessment"
+
+      - item_id: "CHKLST-SMPL-001-07-03"
+        item_text: "Emergency contact information is accessible"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Contact list posted/available"
+        reference: "Visual confirmation"
+
+      - item_id: "CHKLST-SMPL-001-07-04"
+        item_text: "First aid kit is accessible"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Location known, not expired"
+        reference: "Visual check"
+
+  - section_id: "08"
+    section_title: "System and Communication Readiness"
+    description: "Verify electronic systems and communication channels"
+    criticality:
+      enum:
+        - major
+
+    items:
+      - item_id: "CHKLST-SMPL-001-08-01"
+        item_text: "ERP system is accessible and functional"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Can login and access sampling module"
+        reference: "System test"
+
+      - item_id: "CHKLST-SMPL-001-08-02"
+        item_text: "Network/internet connection is stable"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Data sync working"
+        reference: "Connectivity test"
+
+      - item_id: "CHKLST-SMPL-001-08-03"
+        item_text: "Communication with laboratory is established"
+        item_type:
+          enum:
+            - yes_no
+        required: true
+        acceptance_criteria: "Yes - Lab notified of incoming samples"
+        reference: "Confirmation received"
+
+      - item_id: "CHKLST-SMPL-001-08-04"
+        item_text: "QC Manager notified if required"
+        item_type:
+          enum:
+            - yes_no
+        required: false
+        acceptance_criteria: "Yes - For critical/special samples only"
+        reference: "Notification log"
+
+# ====================
+# 4. COMPLETION CRITERIA
+# ====================
+completion_criteria:
+  minimum_required: "100% of critical items must pass"
+  major_items: "≥95% of major items must pass"
+  minor_items: "≥90% of minor/moderate items must pass"
+
+  failure_action: "If any critical item fails, sampling must not proceed. Investigate and resolve before continuing. Document in deviation system if timeline impacted."
+
+  approval_required:
+    - condition: "Any critical item fails"
+      approver: "QC Manager"
+    - condition: "Emergency or rush sampling"
+      approver: "QC Manager"
+    - condition: "Sampling for investigation/complaint"
+      approver: "QC Manager and Quality Manager"
+
+# ====================
+# 5. DOCUMENTATION
+# ====================
+documentation:
+  completion_record: "Complete this checklist electronically in ERP system or on paper form"
+  retention: "Attach to FORM-SMPL-001 for each sampling event"
+  retention_period: "Lifetime of product + 1 year"
+
+  audit_trail: "All electronic entries timestamped and attributed per 21 CFR Part 11"
+
+  deviation_handling: "Any checklist item that fails must be documented in deviation system per SOP-DEV-001"
+
+# ====================
+# 6. REFERENCES
+# ====================
+references:
+  procedures:
+    - "SOP-SMPL-001: Sampling Procedures"
+    - "SOP-EQCAL-001: Equipment Calibration"
+    - "SOP-DEV-001: Deviation Management"
+    - "SOP-DI-001: Data Integrity"
+
+  forms:
+    - "FORM-SMPL-001: Sample Collection Record"
+    - "FORM-COC-001: Chain of Custody"
+
+  training:
+    - "TRN-SMPL-001: QC Sampling Technician Training"
+
+  standards:
+    - "GACP Guidelines"
+    - "ISO/IEC 17025"
+    - "ASTM E122"

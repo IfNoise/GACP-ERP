@@ -1,0 +1,627 @@
+---
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-SMPHAND-002"
+  title: "Sample Transfer and Chain of Custody Record"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  form_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "ISO/IEC 17025, 21 CFR Part 11, DEA Chain of Custody"
+  electronic_enabled: true
+  signature_required: true
+
+purpose: "Document all sample transfers and movements to maintain unbroken chain of custody from receipt through disposal, ensuring sample traceability and accountability"
+
+instructions:
+  - "Complete this form for every sample transfer between personnel or locations"
+  - "Both relinquishing and receiving parties must sign simultaneously when possible"
+  - "If simultaneous signature not possible, note time gap and secure sample during gap"
+  - "For multiple samples in single transfer, may use one form with sample list attachment"
+  - "For controlled substances, both parties must witness seal verification"
+  - "Scan completed form into LIMS immediately after transfer"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Sample Identification"
+    description: "Identification of sample(s) being transferred"
+    fields:
+      - field_id: "laboratory_sample_id"
+        field_label: "Laboratory Sample ID"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Unique laboratory-assigned sample identifier"
+
+      - field_id: "client_sample_id"
+        field_label: "Client Sample ID"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Original client or submitter sample ID"
+
+      - field_id: "sample_type"
+        field_label: "Sample Type/Matrix"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: 
+          enum:
+          - "Cannabis Flower"
+          - "Cannabis Extract/Concentrate"
+          - "Edible Product"
+          - "Raw Material"
+          - "Environmental Sample"
+          - "Reference Standard"
+          - "Quality Control Sample"
+          - "Aliquot/Sub-sample"
+        help_text: "Type of sample being transferred"
+
+      - field_id: "number_of_containers"
+        field_label: "Number of Containers"
+        field_type: "number"
+        data_type: "integer"
+        required: true
+        validation:
+          type: "range"
+          min: 1
+          max: 100
+        help_text: "Number of containers being transferred"
+
+      - field_id: "controlled_substance"
+        field_label: "Controlled Substance (DEA Schedule I-V)"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is this a DEA controlled substance requiring special handling?"
+
+      - field_id: "dea_schedule"
+        field_label: "DEA Schedule"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Schedule I"
+          - "Schedule II"
+          - "Schedule III"
+          - "Schedule IV"
+          - "Schedule V"
+        conditional_display:
+          field: "controlled_substance"
+          condition: "equals"
+          value: "Yes"
+        help_text: "DEA schedule classification if controlled substance"
+
+  - section_id: "SEC-002"
+    section_name: "Transfer Details"
+    description: "Details of the transfer transaction"
+    fields:
+      - field_id: "transfer_type"
+        field_label: "Transfer Type"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Person to Person (Same Location)"
+          - "Location to Location (Internal)"
+          - "To External Shipping"
+          - "From Storage to Analysis"
+          - "From Analysis to Storage"
+          - "To Disposal"
+          - "Other"
+        help_text: "Type of transfer being performed"
+
+      - field_id: "transfer_purpose"
+        field_label: "Transfer Purpose"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Analysis/Testing"
+          - "Storage"
+          - "Sub-sampling/Aliquoting"
+          - "Transfer to Another Laboratory"
+          - "Return to Client"
+          - "Long-term Storage"
+          - "Disposal"
+          - "Investigation/Re-test"
+        help_text: "Purpose of this sample transfer"
+
+      - field_id: "transfer_reason_details"
+        field_label: "Transfer Reason Details"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        help_text: "Additional details about transfer reason if needed"
+
+  - section_id: "SEC-003"
+    section_name: "Relinquishing Party"
+    description: "Person transferring custody of sample"
+    fields:
+      - field_id: "relinquished_by_name"
+        field_label: "Relinquished By (Name)"
+        field_type: "user_lookup"
+        data_type: "string"
+        required: true
+        validation:
+          type: "user_id"
+        help_text: "Name of person transferring sample custody"
+
+      - field_id: "relinquished_by_title"
+        field_label: "Relinquished By (Job Title)"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        help_text: "Job title of relinquishing party"
+
+      - field_id: "relinquished_from_location"
+        field_label: "Relinquished From Location"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        help_text: "Specific location sample being transferred from (e.g., Fridge-A-Shelf-2)"
+
+      - field_id: "relinquished_date_time"
+        field_label: "Relinquished Date/Time"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Exact date and time custody relinquished"
+
+      - field_id: "relinquishing_signature"
+        field_label: "Relinquishing Party Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "Electronic signature of person relinquishing custody"
+
+  - section_id: "SEC-004"
+    section_name: "Receiving Party"
+    description: "Person receiving custody of sample"
+    fields:
+      - field_id: "received_by_name"
+        field_label: "Received By (Name)"
+        field_type: "user_lookup"
+        data_type: "string"
+        required: true
+        validation:
+          type: "user_id"
+        help_text: "Name of person receiving sample custody"
+
+      - field_id: "received_by_title"
+        field_label: "Received By (Job Title)"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        help_text: "Job title of receiving party"
+
+      - field_id: "received_at_location"
+        field_label: "Received At Location"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        help_text: "Specific location sample being transferred to"
+
+      - field_id: "received_date_time"
+        field_label: "Received Date/Time"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Exact date and time custody received"
+
+      - field_id: "receiving_signature"
+        field_label: "Receiving Party Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "Electronic signature of person receiving custody"
+
+      - field_id: "time_gap_between_signatures"
+        field_label: "Time Gap Between Signatures (minutes)"
+        field_type: "number"
+        data_type: "integer"
+        required: false
+        validation:
+          type: "range"
+          min: 0
+          max: 1440
+        help_text: "Calculated time between relinquish and receive signatures (auto-calculated)"
+
+  - section_id: "SEC-005"
+    section_name: "Sample Condition Verification"
+    description: "Verification of sample condition during transfer"
+    fields:
+      - field_id: "container_seal_intact"
+        field_label: "Container Seal/Closure Intact"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is container seal or closure intact?"
+
+      - field_id: "seal_issues"
+        field_label: "Seal/Closure Issues"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "container_seal_intact"
+          condition: "equals"
+          value: "No"
+        help_text: "Describe seal or closure issues"
+
+      - field_id: "tamper_evident_seal_status"
+        field_label: "Tamper-Evident Seal Status"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Seal Intact - No Tampering"
+          - "No Seal Present"
+          - "Seal Broken - Authorized Access"
+          - "Seal Broken - Unauthorized or Unknown"
+        help_text: "Status of tamper-evident seal if present"
+
+      - field_id: "label_legibility"
+        field_label: "Label Legibility"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Legible"
+          - "Damaged or Illegible"
+        help_text: "Is sample label readable?"
+
+      - field_id: "sample_condition"
+        field_label: "Sample Condition"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Acceptable - No Issues"
+          - "Acceptable with Minor Issues"
+          - "Questionable - Review Required"
+          - "Unacceptable - Investigation Required"
+        help_text: "Overall condition of sample"
+
+      - field_id: "condition_notes"
+        field_label: "Condition Notes"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        help_text: "Notes about sample condition, issues, or observations"
+
+  - section_id: "SEC-006"
+    section_name: "Temperature Control (if applicable)"
+    description: "Temperature verification for temperature-sensitive samples"
+    fields:
+      - field_id: "temperature_control_required"
+        field_label: "Temperature Control Required During Transfer"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Does this sample require temperature control?"
+
+      - field_id: "temperature_at_transfer"
+        field_label: "Temperature at Transfer (°C)"
+        field_type: "number"
+        data_type: "decimal"
+        required: false
+        validation:
+          type: "range"
+          min: -100
+          max: 50
+          decimal_places: 1
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Sample or storage temperature at time of transfer"
+
+      - field_id: "temperature_control_method"
+        field_label: "Temperature Control Method During Transfer"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Insulated Container with Ice Packs"
+          - "Insulated Container with Dry Ice"
+          - "Temperature-Controlled Transport"
+          - "Hand Carry in Climate-Controlled Area"
+          - "Other"
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Method used to maintain temperature during transfer"
+
+      - field_id: "temperature_acceptable"
+        field_label: "Temperature Within Acceptable Range"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        conditional_display:
+          field: "temperature_control_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Was temperature maintained within acceptable range?"
+
+  - section_id: "SEC-007"
+    section_name: "Special Requirements"
+    description: "Special handling or security requirements"
+    fields:
+      - field_id: "security_escort_required"
+        field_label: "Security Escort Required"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Was security escort required for this transfer?"
+
+      - field_id: "security_escort_name"
+        field_label: "Security Escort Name"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        conditional_display:
+          field: "security_escort_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Name of security escort if required"
+
+      - field_id: "dual_custody_required"
+        field_label: "Dual Custody Required (DEA)"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Was dual custody required per DEA regulations?"
+
+      - field_id: "witness_name"
+        field_label: "Witness Name (Dual Custody)"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        conditional_display:
+          field: "dual_custody_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Name of witness for dual custody transfer"
+
+      - field_id: "witness_signature"
+        field_label: "Witness Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: false
+        validation:
+          type: "electronic_signature"
+        conditional_display:
+          field: "dual_custody_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Witness signature for dual custody transfer"
+
+  - section_id: "SEC-008"
+    section_name: "Transportation Details (if applicable)"
+    description: "Details for samples being transported or shipped"
+    fields:
+      - field_id: "transportation_required"
+        field_label: "Transportation/Shipping Involved"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Does this transfer involve transportation or shipping?"
+
+      - field_id: "transport_method"
+        field_label: "Transportation Method"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Hand Carry"
+          - "Internal Pneumatic Tube"
+          - "Internal Cart/Trolley"
+          - "Company Vehicle"
+          - "Courier Service"
+          - "Common Carrier (FedEx/UPS/USPS)"
+          - "Other"
+        conditional_display:
+          field: "transportation_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Method used to transport sample"
+
+      - field_id: "tracking_number"
+        field_label: "Tracking Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "transportation_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Shipping tracking number if applicable"
+
+      - field_id: "estimated_transit_time"
+        field_label: "Estimated Transit Time (hours)"
+        field_type: "number"
+        data_type: "decimal"
+        required: false
+        validation:
+          type: "range"
+          min: 0
+          max: 240
+          decimal_places: 1
+        conditional_display:
+          field: "transportation_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Expected time in transit"
+
+      - field_id: "temperature_monitoring_during_transit"
+        field_label: "Temperature Monitoring During Transit"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes - Data Logger Included"
+          - "Yes - Temperature Indicator"
+          - "No"
+        conditional_display:
+          field: "transportation_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Temperature monitoring device included with shipment?"
+
+  - section_id: "SEC-009"
+    section_name: "Additional Comments"
+    description: "Any additional information about the transfer"
+    fields:
+      - field_id: "comments"
+        field_label: "Additional Comments"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 1000
+        help_text: "Any additional notes, observations, or comments"
+
+      - field_id: "deviation_or_issue"
+        field_label: "Deviation or Issue Occurred"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Did any deviation or issue occur during transfer?"
+
+      - field_id: "deviation_number"
+        field_label: "Deviation Report Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "deviation_or_issue"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Deviation report number if deviation initiated"
+
+workflow:
+  trigger: "Sample transfer between personnel or locations"
+  steps:
+    - step: 1
+      action: "Relinquishing party initiates form and completes relinquishing information"
+      responsible: "Relinquishing Party"
+    - step: 2
+      action: "Both parties verify sample identity and condition together if possible"
+      responsible: "Both Parties"
+    - step: 3
+      action: "Relinquishing party signs and timestamps form"
+      responsible: "Relinquishing Party"
+    - step: 4
+      action: "Receiving party accepts sample, verifies condition"
+      responsible: "Receiving Party"
+    - step: 5
+      action: "Receiving party completes receiving information and signs"
+      responsible: "Receiving Party"
+    - step: 6
+      action: "For controlled substances, witness verifies and signs"
+      responsible: "Witness (if required)"
+    - step: 7
+      action: "Form scanned and archived in LIMS"
+      responsible: "Either Party"
+    - step: 8
+      action: "LIMS automatically updates sample location"
+      responsible: "LIMS System"
+
+validation_rules:
+  - rule: "Relinquishing signature must be before receiving signature"
+  - rule: "Time gap between signatures should be <15 minutes for internal transfers"
+  - rule: "If controlled_substance is 'Yes', dual_custody_required must be answered"
+  - rule: "If container_seal_intact is 'No', seal_issues must be completed"
+  - rule: "If sample_condition is 'Unacceptable', deviation_or_issue must be 'Yes'"
+  - rule: "Relinquishing and receiving parties cannot be the same person"
+
+retention: "Sample lifetime + 5 years, or per regulatory requirement (DEA: 2 years minimum)"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "SOP-COC-001: Chain of Custody Management"
+  - "DEA Regulations: Controlled Substances Handling"
+  - "FORM-SMPHAND-001: Sample Receipt and Accessioning Record"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Transfer and Chain of Custody Record"
+    author: "Laboratory Manager"

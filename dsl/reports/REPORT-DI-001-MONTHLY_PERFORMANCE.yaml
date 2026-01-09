@@ -1,0 +1,689 @@
+# DSL: Monthly Data Integrity Performance Report
+# Version: 1.0
+# Source: SOP_DataIntegrity.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "report"
+
+metadata:
+  id: "REPORT-DI-001"
+  title: "Monthly Data Integrity Performance Report"
+  version: "1.0"
+  status: "active"
+  report_type: "performance_metrics"
+  related_sop: "SOP-DI-001"
+  department: "Quality Assurance"
+
+report_context:
+  purpose: "Monitor data integrity system performance, track key performance indicators, identify trends, and drive continuous improvement of data integrity controls"
+
+  scope:
+    - "ALCOA+ compliance metrics across all systems"
+    - "Data quality scores by department and data type"
+    - "Data integrity incident tracking and trending"
+    - "System availability and performance metrics"
+    - "Training compliance status"
+    - "Audit findings and CAPA effectiveness"
+
+  frequency: "monthly"
+  generation_method: "semi_automated"
+  automation_level: "Automated data collection with manual analysis and recommendations"
+
+  report_schedule:
+    generation_start: "1st of month"
+    data_review_period: "1st-3rd"
+    quality_manager_review: "4th"
+    distribution: "5th business day"
+
+report_sections:
+  - section_id: "SEC-001"
+    section_title: "Executive Summary"
+    section_order: 1
+    data_source: "manual"
+
+    content:
+      - element_id: "ES-001"
+        element_type: "summary_text"
+        element_title: "Overall Data Integrity Status"
+        description: "High-level summary of data integrity posture for the month"
+        content_guidelines:
+          - "Overall ALCOA+ compliance status"
+          - "Significant improvements or degradations"
+          - "Critical issues or achievements"
+          - "Key trends identified"
+          - "Major initiatives underway"
+
+        target_metrics:
+          - metric: "ALCOA+ Compliance Rate"
+            target: ">99%"
+            alert_threshold: "<95%"
+          - metric: "Data Quality Score"
+            target: ">95%"
+            alert_threshold: "<90%"
+          - metric: "Critical Data Integrity Incidents"
+            target: "0"
+            alert_threshold: ">0"
+          - metric: "System Availability"
+            target: ">99.9%"
+            alert_threshold: "<99.5%"
+          - metric: "Training Compliance"
+            target: "100%"
+            alert_threshold: "<95%"
+
+      - element_id: "ES-002"
+        element_type: "summary_table"
+        element_title: "Key Metrics at a Glance"
+        columns:
+          - "Metric"
+          - "Current Month"
+          - "Target"
+          - "Status (On Target / Alert / Critical)"
+          - "Trend vs Previous Month"
+        rows:
+          - "ALCOA+ Compliance Rate"
+          - "Data Quality Score"
+          - "Data Integrity Incidents (Critical/Major/Moderate/Minor)"
+          - "System Availability %"
+          - "Audit Trail Completeness"
+          - "Training Compliance %"
+
+  - section_id: "SEC-002"
+    section_title: "ALCOA+ Compliance Metrics"
+    section_order: 2
+    data_source: "automated"
+
+    content:
+      - element_id: "ALCOA-001"
+        element_type: "metric_dashboard"
+        element_title: "Overall ALCOA+ Compliance Rate"
+        description: "Percentage of data passing all ALCOA+ validation checks"
+        data_source: "DataIntegrityModule.alcoa_compliance_monitor"
+        calculation: "(Data records passing all ALCOA+ checks / Total data records) × 100"
+        target: ">99%"
+        visualization: "line_chart_with_trend"
+        time_period: "Last 12 months"
+
+      - element_id: "ALCOA-002"
+        element_type: "principle_breakdown"
+        element_title: "Compliance by ALCOA+ Principle"
+        description: "Detailed breakdown of compliance for each principle"
+        visualization: "bar_chart"
+
+        principles:
+          - principle: "Attributable"
+            metric: "% data with complete user attribution"
+            target: "100%"
+            critical: true
+          - principle: "Legible"
+            metric: "% data meeting legibility standards"
+            target: "100%"
+            critical: false
+          - principle: "Contemporaneous"
+            metric: "% data recorded contemporaneously"
+            target: ">95%"
+            critical: true
+          - principle: "Original"
+            metric: "% original data preserved"
+            target: "100%"
+            critical: true
+          - principle: "Accurate"
+            metric: "% data passing accuracy validation"
+            target: ">99%"
+            critical: true
+          - principle: "Complete"
+            metric: "% data with all required fields"
+            target: "100%"
+            critical: true
+          - principle: "Consistent"
+            metric: "% data meeting consistency standards"
+            target: ">98%"
+            critical: false
+          - principle: "Enduring"
+            metric: "% data with verified integrity in storage"
+            target: "100%"
+            critical: true
+          - principle: "Available"
+            metric: "% data accessible within SLA"
+            target: ">99.9%"
+            critical: true
+
+      - element_id: "ALCOA-003"
+        element_type: "trend_analysis"
+        element_title: "ALCOA+ Compliance Trend"
+        description: "6-month trend of ALCOA+ compliance by principle"
+        visualization: "multi_line_chart"
+        time_period: "Last 6 months"
+        analysis_required: "Identify improving, declining, or stable trends"
+
+      - element_id: "ALCOA-004"
+        element_type: "non_compliance_detail"
+        element_title: "ALCOA+ Non-Compliance Summary"
+        description: "Detailed breakdown of non-compliant data records"
+
+        table_columns:
+          - "ALCOA+ Principle"
+          - "# Non-Compliant Records"
+          - "% of Total"
+          - "Top 3 Root Causes"
+          - "Corrective Actions Initiated"
+
+        drill_down: "Link to specific data integrity issue reports (FORM-DI-002)"
+
+  - section_id: "SEC-003"
+    section_title: "Data Quality Metrics"
+    section_order: 3
+    data_source: "automated"
+
+    content:
+      - element_id: "DQ-001"
+        element_type: "overall_quality_score"
+        element_title: "Overall Data Quality Score"
+        description: "Weighted composite score based on accuracy, completeness, and consistency"
+        calculation: "Weighted average: Accuracy (50%), Completeness (30%), Consistency (20%)"
+        target: ">95%"
+        visualization: "gauge_chart"
+
+      - element_id: "DQ-002"
+        element_type: "quality_by_department"
+        element_title: "Data Quality by Department"
+        description: "Data quality scores broken down by department"
+        visualization: "bar_chart"
+
+        table_columns:
+          - "Department"
+          - "Data Quality Score"
+          - "Accuracy %"
+          - "Completeness %"
+          - "Consistency %"
+          - "Trend vs Previous Month"
+
+        departments:
+          - "Laboratory/Quality Control"
+          - "Production"
+          - "Quality Assurance"
+          - "Warehouse/Inventory"
+          - "IT/Systems"
+          - "Regulatory Affairs"
+          - "Finance"
+
+      - element_id: "DQ-003"
+        element_type: "quality_by_data_type"
+        element_title: "Data Quality by Data Type"
+        description: "Data quality scores for different data categories"
+        visualization: "horizontal_bar_chart"
+
+        data_types:
+          - "Analytical/Laboratory Data"
+          - "Batch Production Records"
+          - "Equipment/Calibration Records"
+          - "Environmental Monitoring"
+          - "Quality Events (Deviations, CAPAs)"
+          - "Training Records"
+          - "Validation Documentation"
+          - "Inventory/Supply Chain"
+          - "Audit Trail/System Logs"
+
+      - element_id: "DQ-004"
+        element_type: "validation_failure_analysis"
+        element_title: "Data Validation Failure Analysis"
+        description: "Analysis of data validation failures"
+
+        metrics:
+          - metric: "Total Validation Failures"
+            description: "Number of times data entry validation failed"
+          - metric: "Failure Rate"
+            calculation: "(Validation failures / Total data entries) × 100"
+            target: "<5%"
+          - metric: "Top 5 Validation Error Types"
+            visualization: "pie_chart"
+          - metric: "Validation Failures by User/Department"
+            visualization: "table"
+            analysis: "Identify training needs"
+
+  - section_id: "SEC-004"
+    section_title: "Data Integrity Incidents"
+    section_order: 4
+    data_source: "quality_management_system"
+
+    content:
+      - element_id: "INC-001"
+        element_type: "incident_summary"
+        element_title: "Data Integrity Incidents Summary"
+        description: "Overview of data integrity incidents reported during the month"
+
+        metrics:
+          - metric: "Total Incidents"
+            breakdown: "Critical / Major / Moderate / Minor"
+          - metric: "Incidents by Category"
+            categories:
+              - "Missing Data"
+              - "Inaccurate Data"
+              - "Backdated Data Entry"
+              - "Unauthorized Modification"
+              - "Audit Trail Gap"
+              - "System Malfunction"
+              - "Access Control Violation"
+              - "Electronic Signature Non-Compliance"
+              - "Other"
+            visualization: "bar_chart"
+
+      - element_id: "INC-002"
+        element_type: "incident_detail_table"
+        element_title: "Detailed Incident Log"
+        description: "Detailed list of all data integrity incidents"
+
+        table_columns:
+          - "Incident ID"
+          - "Discovery Date"
+          - "Severity"
+          - "Category"
+          - "Affected ALCOA+ Principles"
+          - "System/Process"
+          - "Status (Open/Investigating/CAPA/Closed)"
+          - "Target Closure Date"
+
+        filters:
+          - "Filter by Severity"
+          - "Filter by Status"
+          - "Filter by Department"
+
+      - element_id: "INC-003"
+        element_type: "incident_trending"
+        element_title: "Data Integrity Incident Trending"
+        description: "6-month trend of data integrity incidents"
+        visualization: "stacked_bar_chart"
+        time_period: "Last 6 months"
+        analysis_required: "Identify increasing trends, recurring issues, effectiveness of CAPAs"
+
+      - element_id: "INC-004"
+        element_type: "capa_status"
+        element_title: "CAPA Status for Data Integrity Issues"
+        description: "Status of CAPAs associated with data integrity incidents"
+
+        metrics:
+          - "Total CAPAs Open"
+          - "CAPAs On-Time (target >95%)"
+          - "CAPAs Overdue"
+          - "CAPAs Completed This Month"
+          - "Effectiveness Verification Pending"
+          - "Effectiveness Verified"
+
+        table: "List of open CAPAs with target dates and status"
+
+  - section_id: "SEC-005"
+    section_title: "System Performance and Availability"
+    section_order: 5
+    data_source: "automated"
+
+    content:
+      - element_id: "SYSP-001"
+        element_type: "system_availability"
+        element_title: "System Availability"
+        description: "Overall system uptime and availability"
+
+        metrics:
+          - metric: "Overall System Availability"
+            target: ">99.9%"
+            calculation: "(Total uptime / Total time) × 100"
+            visualization: "gauge_chart"
+          - metric: "Total Downtime"
+            unit: "hours"
+            target: "<0.73 hours/month (8.76 hours/year)"
+          - metric: "Planned Maintenance Downtime"
+            unit: "hours"
+          - metric: "Unplanned Outages"
+            count: "Number of unplanned outages"
+            target: "0"
+            detail: "Cause, duration, impact, resolution"
+
+      - element_id: "SYSP-002"
+        element_type: "performance_metrics"
+        element_title: "System Performance Metrics"
+        description: "Data retrieval and processing performance"
+
+        metrics:
+          - metric: "HOT Storage Retrieval Time"
+            target: "<1 second (95th percentile)"
+            current: "[VALUE]"
+          - metric: "WARM Storage Retrieval Time"
+            target: "<10 seconds (95th percentile)"
+            current: "[VALUE]"
+          - metric: "COLD Storage Retrieval Time"
+            target: "<5 minutes (95th percentile)"
+            current: "[VALUE]"
+          - metric: "Search Response Time"
+            target: "<2 seconds (95% of queries)"
+            current: "[VALUE]"
+          - metric: "Concurrent Users"
+            description: "Peak and average concurrent users"
+            capacity: "1000+ users supported"
+
+      - element_id: "SYSP-003"
+        element_type: "backup_and_recovery"
+        element_title: "Backup and Recovery Metrics"
+        description: "Backup success and disaster recovery readiness"
+
+        metrics:
+          - metric: "Backup Success Rate"
+            target: "100%"
+            current: "[VALUE]"
+          - metric: "Failed Backups"
+            count: "Number of failed backups"
+            target: "0"
+            detail: "Reason, resolution"
+          - metric: "Backup Integrity Verification"
+            target: "100% monthly"
+            description: "Percentage of backups verified for integrity"
+          - metric: "Disaster Recovery Testing"
+            requirement: "Quarterly"
+            last_test: "[DATE]"
+            result: "Pass/Fail"
+            rto_achieved: "[TIME]"
+            rpo_achieved: "[TIME]"
+
+  - section_id: "SEC-006"
+    section_title: "Audit Trail and Electronic Signature Compliance"
+    section_order: 6
+    data_source: "automated"
+
+    content:
+      - element_id: "AUD-001"
+        element_type: "audit_trail_metrics"
+        element_title: "Audit Trail Completeness"
+        description: "Comprehensive audit trail capture and integrity"
+
+        metrics:
+          - metric: "Audit Trail Completeness"
+            target: "100%"
+            description: "Percentage of activities with complete audit trail"
+          - metric: "Audit Trail Integrity"
+            target: "100%"
+            description: "Percentage of audit trails passing hash verification"
+          - metric: "Audit Trail Gaps Identified"
+            count: "Number of gaps"
+            target: "0"
+            action: "Immediate investigation per FORM-DI-002"
+          - metric: "Audit Trail Query Response Time"
+            target: "<5 seconds"
+            description: "95th percentile query performance"
+
+      - element_id: "AUD-002"
+        element_type: "electronic_signature_compliance"
+        element_title: "Electronic Signature Compliance (21 CFR Part 11)"
+        description: "Electronic signature compliance metrics"
+
+        metrics:
+          - metric: "E-Signatures Captured"
+            count: "Total electronic signatures this month"
+          - metric: "E-Signature Compliance Rate"
+            target: "100%"
+            description: "% of e-signatures meeting 21 CFR Part 11 (user ID, name, meaning, timestamp, non-repudiation)"
+          - metric: "Non-Compliant E-Signatures"
+            count: "Number of non-compliant signatures"
+            target: "0"
+            action: "Investigation required"
+          - metric: "E-Signature Audit Trail"
+            description: "100% of e-signatures have immutable audit trail"
+
+      - element_id: "AUD-003"
+        element_type: "access_review"
+        element_title: "Data Access Summary"
+        description: "Overview of data access patterns and anomalies"
+
+        metrics:
+          - metric: "Total Data Access Events"
+            count: "Number of data access events"
+          - metric: "Unauthorized Access Attempts"
+            count: "Failed access attempts"
+            target: "Monitor for trends"
+            analysis: "Investigate spikes"
+          - metric: "Access Pattern Anomalies"
+            description: "AI/ML detected unusual access patterns"
+            action: "Review and investigate"
+
+  - section_id: "SEC-007"
+    section_title: "Training Compliance"
+    section_order: 7
+    data_source: "training_management_system"
+
+    content:
+      - element_id: "TRN-001"
+        element_type: "training_compliance_summary"
+        element_title: "Data Integrity Training Compliance"
+        description: "Training compliance status for data integrity requirements"
+
+        metrics:
+          - metric: "Overall Training Compliance"
+            target: "100%"
+            calculation: "(Personnel current on training / Total personnel requiring training) × 100"
+          - metric: "Personnel Requiring Training"
+            count: "Total number"
+          - metric: "Personnel Current on Training"
+            count: "Number current"
+          - metric: "Personnel Overdue on Training"
+            count: "Number overdue"
+            target: "0"
+            action: "Training escalation per SOP_Training"
+
+      - element_id: "TRN-002"
+        element_type: "training_by_role"
+        element_title: "Training Compliance by Role"
+        description: "Training compliance broken down by role category"
+        visualization: "bar_chart"
+
+        roles:
+          - "Data Entry Personnel"
+          - "Laboratory Analysts"
+          - "Quality Assurance"
+          - "IT Personnel"
+          - "Management"
+
+        table_columns:
+          - "Role"
+          - "Total Personnel"
+          - "Current %"
+          - "Overdue"
+          - "Next Due"
+
+      - element_id: "TRN-003"
+        element_type: "training_effectiveness"
+        element_title: "Training Effectiveness Indicators"
+        description: "Indicators of training effectiveness"
+
+        metrics:
+          - metric: "Average Training Assessment Score"
+            target: ">80%"
+            description: "Average score on data integrity training assessments"
+          - metric: "First-Time Pass Rate"
+            target: ">90%"
+            description: "Percentage passing training assessment on first attempt"
+          - metric: "Correlation Analysis"
+            description: "Correlation between training completion and data quality/incident rates"
+
+  - section_id: "SEC-008"
+    section_title: "Audit Findings and Regulatory Compliance"
+    section_order: 8
+    data_source: "quality_management_system"
+
+    content:
+      - element_id: "AUDF-001"
+        element_type: "audit_findings_summary"
+        element_title: "Data Integrity Audit Findings"
+        description: "Summary of internal and external audit findings related to data integrity"
+
+        metrics:
+          - metric: "Internal Audit Findings"
+            breakdown: "Critical / Major / Minor"
+            target: "0 Critical, <3 Major per quarter"
+          - metric: "External Audit Findings"
+            breakdown: "Critical / Major / Minor"
+            source: "Regulatory inspections, certification audits"
+          - metric: "Self-Inspection Findings"
+            description: "Findings from routine data integrity reviews"
+
+      - element_id: "AUDF-002"
+        element_type: "findings_detail_table"
+        element_title: "Open Audit Findings"
+        description: "Detailed list of open audit findings related to data integrity"
+
+        table_columns:
+          - "Finding ID"
+          - "Audit Type"
+          - "Date Identified"
+          - "Severity"
+          - "Description"
+          - "CAPA Reference"
+          - "Target Closure"
+          - "Status"
+
+        action: "Escalate overdue findings to Quality Director"
+
+      - element_id: "AUDF-003"
+        element_type: "regulatory_compliance_status"
+        element_title: "Regulatory Compliance Status"
+        description: "Overall compliance with data integrity regulatory requirements"
+
+        regulations:
+          - regulation: "FDA 21 CFR Part 11"
+            compliance_status: "Compliant / Non-Compliant / Under Review"
+            last_assessment: "[DATE]"
+            next_assessment: "[DATE]"
+          - regulation: "EU GMP Annex 11"
+            compliance_status: "Compliant / Non-Compliant / Under Review"
+            last_assessment: "[DATE]"
+            next_assessment: "[DATE]"
+          - regulation: "MHRA Data Integrity"
+            compliance_status: "Compliant / Non-Compliant / Under Review"
+            last_assessment: "[DATE]"
+            next_assessment: "[DATE]"
+          - regulation: "WHO Data Integrity"
+            compliance_status: "Compliant / Non-Compliant / Under Review"
+            last_assessment: "[DATE]"
+            next_assessment: "[DATE]"
+
+  - section_id: "SEC-009"
+    section_title: "Continuous Improvement Initiatives"
+    section_order: 9
+    data_source: "manual"
+
+    content:
+      - element_id: "IMPR-001"
+        element_type: "improvement_initiatives"
+        element_title: "Active Data Integrity Improvement Initiatives"
+        description: "Status of ongoing continuous improvement projects"
+
+        table_columns:
+          - "Initiative"
+          - "Objective"
+          - "Status"
+          - "Completion %"
+          - "Target Completion"
+          - "Expected Benefits"
+
+        examples:
+          - "AI-powered data quality enhancement"
+          - "Blockchain integration expansion"
+          - "Mobile data integrity app"
+          - "Automated ALCOA+ monitoring dashboard"
+
+      - element_id: "IMPR-002"
+        element_type: "innovation_tracking"
+        element_title: "Innovation and Technology Updates"
+        description: "New technologies or approaches evaluated or implemented"
+
+        content:
+          - "Emerging technologies evaluated this month"
+          - "Pilot programs initiated or completed"
+          - "Industry best practices adopted"
+          - "Regulatory guidance updates reviewed"
+
+      - element_id: "IMPR-003"
+        element_type: "lessons_learned"
+        element_title: "Lessons Learned and Knowledge Sharing"
+        description: "Key lessons learned from incidents, audits, or projects"
+
+        content:
+          - "Summary of key lessons learned this month"
+          - "Knowledge articles created or updated"
+          - "Training materials updated based on lessons learned"
+          - "Process improvements implemented"
+
+  - section_id: "SEC-010"
+    section_title: "Recommendations and Action Items"
+    section_order: 10
+    data_source: "manual"
+
+    content:
+      - element_id: "REC-001"
+        element_type: "recommendations"
+        element_title: "Recommendations for Management"
+        description: "Key recommendations based on monthly performance data"
+
+        recommendation_categories:
+          - category: "High Priority"
+            description: "Urgent actions required, significant risk or opportunity"
+          - category: "Process Improvements"
+            description: "Enhancements to current processes or controls"
+          - category: "Resource Needs"
+            description: "Additional resources (staffing, technology, budget)"
+          - category: "Training and Awareness"
+            description: "Training needs identified"
+          - category: "Technology and Innovation"
+            description: "Technology upgrades or innovations to consider"
+
+      - element_id: "REC-002"
+        element_type: "action_items_table"
+        element_title: "Action Items from This Report"
+        description: "Specific action items identified with ownership and timelines"
+
+        table_columns:
+          - "Action Item"
+          - "Priority (High/Medium/Low)"
+          - "Responsible Party"
+          - "Target Completion"
+          - "Status"
+
+        follow_up: "Track action items in monthly report cycle"
+
+distribution:
+  primary_recipients:
+    - role: "Quality Manager"
+      action: "Review and approve"
+    - role: "Quality Director"
+      action: "Review and strategic guidance"
+    - role: "Data Integrity Manager"
+      action: "Compile and analyze"
+    - role: "Senior Management"
+      action: "Review and decision-making"
+    - role: "IT Manager"
+      action: "Review system performance sections"
+
+  secondary_recipients:
+    - role: "Department Managers"
+      action: "Review department-specific sections"
+    - role: "Quality Assurance Team"
+      action: "Informational"
+    - role: "Regulatory Affairs"
+      action: "Compliance review"
+
+  distribution_method: "Electronic via email and Mayan-EDMS"
+  confidentiality: "Internal Use Only - Confidential"
+
+approval:
+  prepared_by: "Data Integrity Manager"
+  reviewed_by: "Quality Manager"
+  approved_by: "Quality Director"
+  approval_deadline: "5th business day of month"
+
+storage:
+  location: "Mayan-EDMS under Data Integrity Reports folder"
+  retention_period: "7_years"
+  backup_requirement: "automated_daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP-DI-001"
+    approved_by: "Pending"

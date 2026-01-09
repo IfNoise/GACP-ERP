@@ -1,0 +1,394 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-EQCAL-002
+  title: Calibration Standards Inventory and Traceability Record
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  retention_period: Life of standard + 7 years
+
+sections:
+  - section_number: 1
+    section_title: Standard Identification
+    fields:
+      - field_name: standard_id
+        field_type: text
+        required: true
+        description: Unique standard identifier code
+
+      - field_name: standard_description
+        field_type: text
+        required: true
+        description: Description of calibration standard
+
+      - field_name: standard_type
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Mass Standard (Weights)
+            - Temperature Standard (RTD, Thermometer)
+            - Pressure Standard (Dead Weight Tester, Gauge)
+            - pH Standard (Reference Buffers)
+            - Conductivity Standard (Reference Solutions)
+            - Electrical Standard (Multimeter, Voltmeter)
+            - Length Standard (Gauge Blocks, Calipers)
+            - Volume Standard (Pipettes, Flasks)
+            - Other
+
+      - field_name: standard_hierarchy_level
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Primary Standard (Direct NIST Traceability)
+            - Secondary Standard (Calibrated Against Primary)
+            - Working Standard (Calibrated Against Secondary)
+        description: Level in calibration standards hierarchy
+
+      - field_name: manufacturer
+        field_type: text
+        required: true
+        description: Standard manufacturer name
+
+      - field_name: model_number
+        field_type: text
+        required: true
+        description: Manufacturer model/part number
+
+      - field_name: serial_number
+        field_type: text
+        required: true
+        description: Serial number (if applicable)
+
+  - section_number: 2
+    section_title: Technical Specifications
+    fields:
+      - field_name: measurement_range
+        field_type: text
+        required: true
+        description: Measurement range and units (e.g., 1mg to 20kg, -50°C to 300°C)
+
+      - field_name: accuracy_class
+        field_type: text
+        required: true
+        description: Accuracy class or specification (e.g., Class E1, ±0.1°C, 4.5 digit)
+
+      - field_name: resolution
+        field_type: text
+        required: false
+        description: Display or measurement resolution
+
+      - field_name: measurement_uncertainty
+        field_type: text
+        required: true
+        description: Stated measurement uncertainty from calibration certificate
+
+      - field_name: nominal_values
+        field_type: textarea
+        required: false
+        description: Nominal values for multi-point standards (e.g., weight set: 1mg, 2mg, 5mg, 10mg...)
+
+  - section_number: 3
+    section_title: Calibration and Traceability Information
+    fields:
+      - field_name: calibration_date
+        field_type: date
+        required: true
+        description: Most recent calibration date
+
+      - field_name: calibration_due_date
+        field_type: date
+        required: true
+        description: Next calibration due date
+
+      - field_name: calibration_frequency
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Monthly
+            - Quarterly
+            - Semi-Annual
+            - Annual
+            - Biennial
+        description: Required calibration/recertification frequency
+
+      - field_name: calibration_lab
+        field_type: text
+        required: true
+        description: Name of calibration laboratory or service provider
+
+      - field_name: lab_accreditation
+        field_type: text
+        required: true
+        description: Laboratory accreditation (ISO/IEC 17025, A2LA number, etc.)
+
+      - field_name: certificate_number
+        field_type: text
+        required: true
+        description: Calibration certificate number
+
+      - field_name: nist_traceability
+        field_type: textarea
+        required: true
+        description: Complete traceability chain to NIST or other National Metrology Institute
+
+      - field_name: traceability_document_location
+        field_type: text
+        required: true
+        description: File location of calibration certificate and traceability documentation
+
+  - section_number: 4
+    section_title: Usage and Application
+    fields:
+      - field_name: intended_use
+        field_type: textarea
+        required: true
+        description: Intended use and application of standard (which equipment calibrated)
+
+      - field_name: equipment_calibrated
+        field_type: textarea
+        required: false
+        description: List of equipment IDs that this standard is used to calibrate
+
+      - field_name: usage_frequency
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Daily
+            - Weekly
+            - Monthly
+            - Quarterly
+            - As Needed
+            - Rarely
+        description: Typical frequency of standard usage
+
+      - field_name: accuracy_ratio
+        field_type: text
+        required: true
+        description: Accuracy ratio to equipment being calibrated (should be 3:1 or 4:1 minimum)
+
+  - section_number: 5
+    section_title: Storage and Handling Requirements
+    fields:
+      - field_name: storage_location
+        field_type: text
+        required: true
+        description: Designated storage location for standard
+
+      - field_name: storage_temperature
+        field_type: text
+        required: true
+        description: Required storage temperature range
+
+      - field_name: storage_humidity
+        field_type: text
+        required: true
+        description: Required storage humidity range
+
+      - field_name: special_storage_requirements
+        field_type: textarea
+        required: false
+        description: Special storage conditions (vibration isolation, light protection, orientation, etc.)
+
+      - field_name: handling_requirements
+        field_type: textarea
+        required: false
+        description: Special handling requirements (gloves required, anti-static precautions, etc.)
+
+      - field_name: access_restrictions
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Unrestricted - General Use
+            - Controlled - Calibration Personnel Only
+            - Restricted - Calibration Manager Approval Required
+        description: Access control level for standard
+
+  - section_number: 6
+    section_title: Standard Condition and Verification
+    fields:
+      - field_name: physical_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Excellent - No wear or damage
+            - Good - Minor wear, fully functional
+            - Fair - Noticeable wear, functional
+            - Poor - Significant wear or damage
+        description: Current physical condition assessment
+
+      - field_name: last_inspection_date
+        field_type: date
+        required: true
+        description: Date of last physical condition inspection
+
+      - field_name: verification_frequency
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Before Each Use
+            - Daily
+            - Weekly
+            - Monthly
+            - Quarterly
+            - Not Required
+        description: Frequency of intermediate verification checks
+
+      - field_name: verification_method
+        field_type: textarea
+        required: false
+        description: Method for intermediate verification (cross-check with another standard, known reference, etc.)
+
+      - field_name: last_verification_date
+        field_type: date
+        required: false
+        description: Date of last intermediate verification check
+
+      - field_name: last_verification_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass - Within Tolerance
+            - Marginal - Near Limits
+            - Fail - Out of Tolerance
+            - Not Applicable
+        description: Result of last verification check
+
+  - section_number: 7
+    section_title: Standard History and Performance
+    fields:
+      - field_name: acquisition_date
+        field_type: date
+        required: true
+        description: Date standard acquired/placed in service
+
+      - field_name: acquisition_cost
+        field_type: number
+        required: false
+        description: Acquisition cost (for asset management)
+
+      - field_name: stability_trend
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Stable - No drift observed
+            - Acceptable - Minor drift within specifications
+            - Marginal - Approaching limits
+            - Unstable - Frequent adjustments needed
+        description: Long-term stability trend assessment
+
+      - field_name: calibration_history_notes
+        field_type: textarea
+        required: false
+        description: Summary of calibration history, trends, or issues observed over time
+
+      - field_name: maintenance_history
+        field_type: textarea
+        required: false
+        description: Maintenance, repairs, or modifications performed on standard
+
+      - field_name: expected_service_life
+        field_type: text
+        required: false
+        description: Expected remaining service life or replacement date
+
+  - section_number: 8
+    section_title: Standard Status and Disposition
+    fields:
+      - field_name: current_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - In Service - Current Calibration
+            - In Service - Calibration Due Soon
+            - Out of Service - Calibration Expired
+            - Out of Service - Under Calibration
+            - Out of Service - Repair/Maintenance
+            - Quarantined - Investigation Required
+            - Retired - Removed from Service
+        description: Current operational status of standard
+
+      - field_name: status_effective_date
+        field_type: date
+        required: true
+        description: Date current status became effective
+
+      - field_name: status_reason
+        field_type: textarea
+        required: false
+        description: Reason for current status (if not in normal service)
+
+      - field_name: backup_standard_available
+        field_type: yes_no
+        required: true
+        description: Is backup standard available if this standard is unavailable?
+
+      - field_name: backup_standard_id
+        field_type: text
+        required: false
+        description: ID of backup standard (if applicable)
+
+  - section_number: 9
+    section_title: Review and Approval
+    fields:
+      - field_name: record_date
+        field_type: date
+        required: true
+        description: Date record created or updated
+
+      - field_name: recorded_by_name
+        field_type: text
+        required: true
+        description: Name of person creating/updating record
+
+      - field_name: recorded_by_signature
+        field_type: signature
+        required: true
+        description: Electronic signature of person creating record
+
+      - field_name: calibration_manager_review_date
+        field_type: date
+        required: true
+        description: Calibration Manager review date
+
+      - field_name: calibration_manager_signature
+        field_type: signature
+        required: true
+        description: Calibration Manager electronic signature
+
+      - field_name: next_review_date
+        field_type: date
+        required: true
+        description: Next scheduled record review date
+
+instructions:
+  - Maintain inventory record for all calibration standards (primary, secondary, and working)
+  - Update record when standard is calibrated, verified, or status changes
+  - Review and update inventory records quarterly minimum
+  - Ensure all standards have valid calibration certificates with complete traceability to NIST
+  - Remove expired standards from service immediately and update status
+  - Plan standard recertification 30 days before due date to avoid expiration
+  - Maintain backup standards for critical measurement types
+  - Document complete traceability chain for all standards
+  - Conduct annual assessment of standards adequacy and performance
+  - Replace or retire standards that show instability or degraded performance
+
+validation_rules:
+  - Calibration due date must be after calibration date
+  - Primary standards must have direct NIST traceability documented
+  - Standards with expired calibration must have status "Out of Service - Calibration Expired"
+  - Accuracy ratio to equipment being calibrated must be documented
+  - All environmental storage requirements must be specified
+  - Next review date must be within 3 months of record date

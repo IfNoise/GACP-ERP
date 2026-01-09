@@ -1,0 +1,315 @@
+# DSL: CAPA Development Worksheet
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-DEV-002"
+  category: "quality_action"
+  title: "CAPA Development Worksheet"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DEV-001"
+
+usage:
+  purpose: "Develop comprehensive corrective and preventive action plan following deviation investigation"
+  frequency: "as_needed"
+  trigger: "Root cause identified for deviation requiring CAPA"
+  responsible_roles:
+    - "ROLE-QAINV-001"
+    - "ROLE-PRODMGR-001"
+    - "ROLE-QA-002"
+
+form_structure:
+  header:
+    fields:
+      - field_id: "HDR-001"
+        label: "Related Deviation ID"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        format: "DEV-YYYY-NNNN"
+
+      - field_id: "HDR-002"
+        label: "CAPA ID"
+        field_type: "auto_generated"
+        data_type: "string"
+        required: true
+        format: "CAPA-YYYY-NNNN"
+
+      - field_id: "HDR-003"
+        label: "CAPA Owner"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        max_length: 100
+
+      - field_id: "HDR-004"
+        label: "Date Prepared"
+        field_type: "date"
+        data_type: "date"
+        required: true
+        format: "YYYY-MM-DD"
+
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Root Cause Summary"
+      section_order: 1
+
+      fields:
+        - field_id: "SEC-001-F01"
+          label: "Root Cause Statement"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Fundamental reason for deviation occurrence"
+
+        - field_id: "SEC-001-F02"
+          label: "Contributing Factors"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Additional factors that contributed to deviation"
+
+    - section_id: "SEC-002"
+      section_title: "Immediate Corrections"
+      section_order: 2
+
+      fields:
+        - field_id: "SEC-002-F01"
+          label: "Immediate Actions Taken"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Emergency measures already implemented to contain problem"
+
+        - field_id: "SEC-002-F02"
+          label: "Effectiveness of Immediate Actions"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Assessment of containment effectiveness"
+
+    - section_id: "SEC-003"
+      section_title: "Corrective Actions"
+      section_order: 3
+
+      fields:
+        - field_id: "SEC-003-F01"
+          label: "Corrective Actions Table"
+          field_type: "table"
+          required: true
+          columns:
+            - "Action Description"
+            - "Responsible Person"
+            - "Target Date"
+            - "Resources Required"
+            - "Success Criteria"
+          min_rows: 1
+
+        - field_id: "SEC-003-F02"
+          label: "Corrective Action Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Explain how corrective actions eliminate root cause"
+
+    - section_id: "SEC-004"
+      section_title: "Preventive Actions"
+      section_order: 4
+
+      fields:
+        - field_id: "SEC-004-F01"
+          label: "Preventive Actions Table"
+          field_type: "table"
+          required: true
+          columns:
+            - "Action Description"
+            - "Responsible Person"
+            - "Target Date"
+            - "Resources Required"
+            - "Success Criteria"
+          min_rows: 1
+
+        - field_id: "SEC-004-F02"
+          label: "Preventive Action Justification"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 1000
+          placeholder: "Explain how preventive actions prevent recurrence"
+
+    - section_id: "SEC-005"
+      section_title: "Risk Mitigation"
+      section_order: 5
+
+      fields:
+        - field_id: "SEC-005-F01"
+          label: "Residual Risk Assessment"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Remaining risks after CAPA implementation"
+
+        - field_id: "SEC-005-F02"
+          label: "Additional Controls"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 500
+          placeholder: "Additional monitoring or controls to reduce residual risk"
+
+    - section_id: "SEC-006"
+      section_title: "Implementation Plan"
+      section_order: 6
+
+      fields:
+        - field_id: "SEC-006-F01"
+          label: "Implementation Timeline"
+          field_type: "table"
+          required: true
+          columns:
+            - "Milestone"
+            - "Target Date"
+            - "Dependencies"
+            - "Status"
+
+        - field_id: "SEC-006-F02"
+          label: "Resource Requirements"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Budget, personnel, equipment, time required"
+
+        - field_id: "SEC-006-F03"
+          label: "Training Requirements"
+          field_type: "textarea"
+          data_type: "string"
+          required: false
+          max_length: 500
+          placeholder: "Training needed to support CAPA implementation"
+
+    - section_id: "SEC-007"
+      section_title: "Effectiveness Verification Plan"
+      section_order: 7
+
+      fields:
+        - field_id: "SEC-007-F01"
+          label: "Verification Method"
+          field_type: "dropdown"
+          data_type: "string"
+          required: true
+          options:
+            - "Data trending and statistical analysis"
+            - "Process monitoring and inspection"
+            - "Testing and validation"
+            - "Audit and assessment"
+            - "Combination of methods"
+
+        - field_id: "SEC-007-F02"
+          label: "Verification Timeline"
+          field_type: "text"
+          data_type: "string"
+          required: true
+          max_length: 100
+          placeholder: "e.g., 30 days post-implementation, 3-month monitoring"
+
+        - field_id: "SEC-007-F03"
+          label: "Success Metrics"
+          field_type: "textarea"
+          data_type: "string"
+          required: true
+          max_length: 500
+          placeholder: "Quantitative and qualitative measures of effectiveness"
+
+  footer:
+    signatures:
+      - signature_id: "SIG-001"
+        role: "CAPA Owner/Preparer"
+        required_role: "ROLE-QAINV-001"
+        required: true
+        meaning: "I prepared this CAPA plan based on investigation findings"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-002"
+        role: "Department Manager Review"
+        required_role: "ROLE-PRODMGR-001"
+        required: true
+        meaning: "I reviewed CAPA plan and commit resources for implementation"
+        date_required: true
+        time_required: false
+
+      - signature_id: "SIG-003"
+        role: "Quality Manager Approval"
+        required_role: "ROLE-QA-002"
+        required: true
+        meaning: "I approve this CAPA plan for implementation"
+        date_required: true
+        time_required: false
+
+validation:
+  rules:
+    - rule_id: "VAL-001"
+      field_ref: "SEC-003-F01"
+      rule_type: "min_rows"
+      condition: "At least one corrective action required"
+      error_message: "Must define at least one corrective action"
+
+    - rule_id: "VAL-002"
+      field_ref: "SEC-004-F01"
+      rule_type: "min_rows"
+      condition: "At least one preventive action required"
+      error_message: "Must define at least one preventive action"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "CAPA plan being developed"
+      next_states: ["submitted"]
+
+    - state: "submitted"
+      description: "Awaiting management review"
+      next_states: ["approved", "returned"]
+
+    - state: "approved"
+      description: "CAPA plan approved for implementation"
+      next_states: ["in_progress"]
+
+    - state: "in_progress"
+      description: "Actions being implemented"
+      next_states: ["verification"]
+
+    - state: "verification"
+      description: "Effectiveness being verified"
+      next_states: ["closed", "ineffective"]
+
+    - state: "ineffective"
+      description: "CAPA ineffective, requires re-investigation"
+      next_states: ["draft"]
+
+    - state: "closed"
+      description: "CAPA effective and closed"
+      next_states: []
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

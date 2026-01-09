@@ -1,0 +1,652 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-EQCAL-003
+  title: Analytical Balance Calibration Record
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: Equipment and Calibration Information
+    fields:
+      - field_name: equipment_id
+        field_type: text
+        required: true
+        description: Unique equipment identifier
+
+      - field_name: equipment_description
+        field_type: text
+        required: true
+        description: Balance description and model
+
+      - field_name: location
+        field_type: text
+        required: true
+        description: Equipment location
+
+      - field_name: serial_number
+        field_type: text
+        required: true
+        description: Manufacturer serial number
+
+      - field_name: capacity
+        field_type: text
+        required: true
+        description: Maximum weighing capacity with units
+
+      - field_name: readability
+        field_type: text
+        required: true
+        description: Smallest scale division/readability
+
+      - field_name: calibration_date
+        field_type: date
+        required: true
+        description: Date of calibration
+
+      - field_name: calibration_time
+        field_type: time
+        required: true
+        description: Time calibration started
+
+      - field_name: technician_name
+        field_type: text
+        required: true
+        description: Calibration technician name
+
+      - field_name: procedure_reference
+        field_type: text
+        required: true
+        description: Calibration procedure reference number and version
+
+  - section_number: 2
+    section_title: Environmental Conditions
+    fields:
+      - field_name: temperature_start
+        field_type: number
+        required: true
+        description: Temperature at calibration start (°C)
+        validation: Must be 20±2°C (18-22°C range)
+
+      - field_name: temperature_end
+        field_type: number
+        required: true
+        description: Temperature at calibration end (°C)
+
+      - field_name: humidity_start
+        field_type: number
+        required: true
+        description: Relative humidity at start (%)
+        validation: Must be 45-65% RH
+
+      - field_name: humidity_end
+        field_type: number
+        required: true
+        description: Relative humidity at end (%)
+
+      - field_name: barometric_pressure
+        field_type: number
+        required: false
+        description: Barometric pressure (if applicable)
+
+      - field_name: vibration_check
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Acceptable - Minimal vibration
+            - Marginal - Some vibration present
+            - Unacceptable - Excessive vibration
+        description: Vibration assessment
+
+      - field_name: air_currents_check
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Acceptable - No air currents
+            - Unacceptable - Air currents present
+        description: Air current assessment
+
+  - section_number: 3
+    section_title: Calibration Standards Used
+    fields:
+      - field_name: standard_set_id
+        field_type: text
+        required: true
+        description: Calibration weight set ID
+
+      - field_name: standard_certificate_number
+        field_type: text
+        required: true
+        description: Certificate number for weight set
+
+      - field_name: standard_calibration_date
+        field_type: date
+        required: true
+        description: Date weight set last calibrated
+
+      - field_name: standard_due_date
+        field_type: date
+        required: true
+        description: Weight set calibration due date
+
+      - field_name: nist_traceability
+        field_type: text
+        required: true
+        description: NIST traceability reference
+
+      - field_name: weight_class
+        field_type: text
+        required: true
+        description: Weight class (ASTM/OIML class)
+
+  - section_number: 4
+    section_title: Pre-Calibration Checks
+    fields:
+      - field_name: warm_up_time
+        field_type: number
+        required: true
+        description: Warm-up time in minutes (minimum 30 minutes)
+        validation: Must be ≥30 minutes
+
+      - field_name: level_check
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Level - Bubble centered
+            - Adjusted - Leveling feet adjusted to center bubble
+        description: Balance level verification
+
+      - field_name: cleanliness_check
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Clean - No debris or contamination
+            - Cleaned - Cleaning performed before calibration
+        description: Weighing pan cleanliness
+
+      - field_name: internal_calibration
+        field_type: yes_no
+        required: true
+        description: Internal calibration performed (if available)?
+
+      - field_name: internal_calibration_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass
+            - Fail
+            - Not Applicable
+        description: Internal calibration result
+
+  - section_number: 5
+    section_title: Zero/Tare Test
+    fields:
+      - field_name: zero_test_reading_1
+        field_type: number
+        required: true
+        description: Zero reading 1
+
+      - field_name: zero_test_reading_2
+        field_type: number
+        required: true
+        description: Zero reading 2
+
+      - field_name: zero_test_reading_3
+        field_type: number
+        required: true
+        description: Zero reading 3
+
+      - field_name: zero_test_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria (typically ±2 divisions)
+
+      - field_name: zero_test_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Zero test result
+
+  - section_number: 6
+    section_title: Sensitivity Test (10% Capacity)
+    fields:
+      - field_name: sensitivity_nominal_weight
+        field_type: number
+        required: true
+        description: Nominal weight value (10% of capacity)
+
+      - field_name: sensitivity_reading_1
+        field_type: number
+        required: true
+        description: Sensitivity reading 1
+
+      - field_name: sensitivity_reading_2
+        field_type: number
+        required: true
+        description: Sensitivity reading 2
+
+      - field_name: sensitivity_reading_3
+        field_type: number
+        required: true
+        description: Sensitivity reading 3
+
+      - field_name: sensitivity_average
+        field_type: number
+        required: true
+        description: Average of three readings
+
+      - field_name: sensitivity_error
+        field_type: number
+        required: true
+        description: Error (average - nominal)
+
+      - field_name: sensitivity_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria
+
+      - field_name: sensitivity_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Sensitivity test result
+
+  - section_number: 7
+    section_title: Linearity Test - Ascending
+    fields:
+      - field_name: linearity_point1_nominal
+        field_type: number
+        required: true
+        description: Point 1 nominal value (10% capacity)
+
+      - field_name: linearity_point1_reading
+        field_type: number
+        required: true
+        description: Point 1 reading
+
+      - field_name: linearity_point1_error
+        field_type: number
+        required: true
+        description: Point 1 error
+
+      - field_name: linearity_point2_nominal
+        field_type: number
+        required: true
+        description: Point 2 nominal value (50% capacity)
+
+      - field_name: linearity_point2_reading
+        field_type: number
+        required: true
+        description: Point 2 reading
+
+      - field_name: linearity_point2_error
+        field_type: number
+        required: true
+        description: Point 2 error
+
+      - field_name: linearity_point3_nominal
+        field_type: number
+        required: true
+        description: Point 3 nominal value (100% capacity)
+
+      - field_name: linearity_point3_reading
+        field_type: number
+        required: true
+        description: Point 3 reading
+
+      - field_name: linearity_point3_error
+        field_type: number
+        required: true
+        description: Point 3 error
+
+      - field_name: linearity_acceptance
+        field_type: text
+        required: true
+        description: Linearity acceptance criteria (typically ±2 divisions)
+
+      - field_name: linearity_ascending_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Linearity ascending result
+
+  - section_number: 8
+    section_title: Linearity Test - Descending
+    fields:
+      - field_name: linearity_desc_point1_nominal
+        field_type: number
+        required: true
+        description: Point 1 nominal (100% capacity)
+
+      - field_name: linearity_desc_point1_reading
+        field_type: number
+        required: true
+        description: Point 1 reading
+
+      - field_name: linearity_desc_point2_nominal
+        field_type: number
+        required: true
+        description: Point 2 nominal (50% capacity)
+
+      - field_name: linearity_desc_point2_reading
+        field_type: number
+        required: true
+        description: Point 2 reading
+
+      - field_name: linearity_desc_point3_nominal
+        field_type: number
+        required: true
+        description: Point 3 nominal (10% capacity)
+
+      - field_name: linearity_desc_point3_reading
+        field_type: number
+        required: true
+        description: Point 3 reading
+
+      - field_name: hysteresis_check
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass - Within 0.2% hysteresis
+            - Fail - Exceeds 0.2% hysteresis
+        description: Hysteresis assessment (ascending vs descending comparison)
+
+  - section_number: 9
+    section_title: Repeatability Test (10 Measurements at 50% Capacity)
+    fields:
+      - field_name: repeatability_nominal
+        field_type: number
+        required: true
+        description: Nominal weight (50% capacity)
+
+      - field_name: repeatability_reading_1
+        field_type: number
+        required: true
+        description: Reading 1
+
+      - field_name: repeatability_reading_2
+        field_type: number
+        required: true
+        description: Reading 2
+
+      - field_name: repeatability_reading_3
+        field_type: number
+        required: true
+        description: Reading 3
+
+      - field_name: repeatability_reading_4
+        field_type: number
+        required: true
+        description: Reading 4
+
+      - field_name: repeatability_reading_5
+        field_type: number
+        required: true
+        description: Reading 5
+
+      - field_name: repeatability_reading_6
+        field_type: number
+        required: true
+        description: Reading 6
+
+      - field_name: repeatability_reading_7
+        field_type: number
+        required: true
+        description: Reading 7
+
+      - field_name: repeatability_reading_8
+        field_type: number
+        required: true
+        description: Reading 8
+
+      - field_name: repeatability_reading_9
+        field_type: number
+        required: true
+        description: Reading 9
+
+      - field_name: repeatability_reading_10
+        field_type: number
+        required: true
+        description: Reading 10
+
+      - field_name: repeatability_average
+        field_type: number
+        required: true
+        description: Average of 10 readings
+
+      - field_name: repeatability_std_dev
+        field_type: number
+        required: true
+        description: Standard deviation
+
+      - field_name: repeatability_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria (typically ±2 divisions)
+
+      - field_name: repeatability_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Repeatability test result
+
+  - section_number: 10
+    section_title: Eccentricity Test (Off-Center Loading)
+    fields:
+      - field_name: eccentricity_nominal
+        field_type: number
+        required: true
+        description: Nominal weight used for eccentricity test
+
+      - field_name: eccentricity_center
+        field_type: number
+        required: true
+        description: Reading at center position
+
+      - field_name: eccentricity_front
+        field_type: number
+        required: true
+        description: Reading at front position
+
+      - field_name: eccentricity_back
+        field_type: number
+        required: true
+        description: Reading at back position
+
+      - field_name: eccentricity_left
+        field_type: number
+        required: true
+        description: Reading at left position
+
+      - field_name: eccentricity_right
+        field_type: number
+        required: true
+        description: Reading at right position
+
+      - field_name: eccentricity_max_deviation
+        field_type: number
+        required: true
+        description: Maximum deviation from center reading
+
+      - field_name: eccentricity_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria (typically ±2 divisions)
+
+      - field_name: eccentricity_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Eccentricity test result
+
+  - section_number: 11
+    section_title: Statistical Analysis
+    fields:
+      - field_name: accuracy_calculation
+        field_type: number
+        required: true
+        description: Overall accuracy as percentage of true value
+
+      - field_name: accuracy_acceptance
+        field_type: text
+        required: true
+        description: Accuracy acceptance criteria (±0.5% for Class A)
+
+      - field_name: precision_calculation
+        field_type: number
+        required: true
+        description: Overall precision (standard deviation as % of range)
+
+      - field_name: precision_acceptance
+        field_type: text
+        required: true
+        description: Precision acceptance criteria (<0.3% for Class A)
+
+      - field_name: linearity_r_squared
+        field_type: number
+        required: true
+        description: Correlation coefficient R² for linearity
+
+      - field_name: linearity_r_squared_acceptance
+        field_type: text
+        required: true
+        description: R² acceptance criteria (>0.999 typically)
+
+  - section_number: 12
+    section_title: As-Found and As-Left Condition
+    fields:
+      - field_name: as_found_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance - No adjustment needed
+            - Out of Tolerance - Adjustment required
+            - Marginal - Near limits
+        description: Condition before calibration adjustments
+
+      - field_name: adjustments_made
+        field_type: textarea
+        required: false
+        description: Description of any calibration adjustments performed
+
+      - field_name: as_left_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance - Pass
+            - Out of Tolerance - Fail
+        description: Condition after calibration
+
+  - section_number: 13
+    section_title: Calibration Result and Equipment Status
+    fields:
+      - field_name: overall_calibration_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass - All tests within acceptance criteria
+            - Pass with Limitations - Some tests marginal, restrictions apply
+            - Fail - One or more tests outside acceptance criteria
+        description: Overall calibration determination
+
+      - field_name: limitations_restrictions
+        field_type: textarea
+        required: false
+        description: Any limitations or restrictions on equipment use
+
+      - field_name: equipment_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - IN CALIBRATION - Released for Use
+            - OUT OF CALIBRATION - Remove from Service
+            - LIMITED USE - Restrictions Apply
+        description: Equipment operational status
+
+      - field_name: next_calibration_due
+        field_type: date
+        required: true
+        description: Next calibration due date
+
+      - field_name: label_applied
+        field_type: yes_no
+        required: true
+        description: Calibration label applied to equipment?
+
+  - section_number: 14
+    section_title: Review and Approval
+    fields:
+      - field_name: technician_signature
+        field_type: signature
+        required: true
+        description: Calibration technician electronic signature
+
+      - field_name: technician_signature_date
+        field_type: date
+        required: true
+        description: Technician signature date
+
+      - field_name: reviewer_name
+        field_type: text
+        required: true
+        description: QA reviewer name (required for Class A equipment)
+
+      - field_name: reviewer_signature
+        field_type: signature
+        required: true
+        description: QA reviewer electronic signature
+
+      - field_name: reviewer_signature_date
+        field_type: date
+        required: true
+        description: Reviewer signature date
+
+instructions:
+  - Ensure 30-minute warm-up before starting calibration
+  - Verify environmental conditions within specifications before proceeding
+  - Use only calibration standards with valid, current certifications
+  - Record all measurements exactly as displayed - do not round
+  - Perform all tests in sequence as specified
+  - If any test fails, mark equipment OUT OF CALIBRATION and notify supervisor immediately
+  - Calculate all statistical parameters and verify against acceptance criteria
+  - Apply appropriate calibration label showing next due date
+  - QA review required for all Class A analytical balances
+  - Upload completed record to calibration database same day
+
+validation_rules:
+  - Environmental conditions must be within specifications (18-22°C, 45-65% RH)
+  - Calibration standards must have valid certification (not expired)
+  - All test results must be Pass for overall Pass determination
+  - Statistical parameters must meet acceptance criteria for equipment class
+  - Next calibration due date must be calculated based on equipment classification frequency
+  - QA review and approval required for all Class A balances

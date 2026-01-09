@@ -1,0 +1,570 @@
+schema_version: "1.0.0"
+type: form
+metadata:
+  id: FORM-EQCAL-004
+  title: Temperature Equipment Calibration Record
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  retention_period: 7 years
+
+sections:
+  - section_number: 1
+    section_title: Equipment Information
+    fields:
+      - field_name: equipment_id
+        field_type: text
+        required: true
+        description: Unique equipment identifier
+
+      - field_name: equipment_type
+        field_type: select
+        required: true
+        options:
+          enum:
+            - RTD Temperature Probe
+            - Thermocouple
+            - Digital Thermometer
+            - Temperature Sensor
+            - Infrared Thermometer
+            - Temperature Controller
+            - Environmental Monitor
+            - Data Logger with Temperature
+        description: Type of temperature equipment
+
+      - field_name: equipment_description
+        field_type: text
+        required: true
+        description: Equipment description and model
+
+      - field_name: location
+        field_type: text
+        required: true
+        description: Equipment location
+
+      - field_name: serial_number
+        field_type: text
+        required: true
+        description: Serial number
+
+      - field_name: measurement_range
+        field_type: text
+        required: true
+        description: Temperature measurement range
+
+      - field_name: resolution
+        field_type: text
+        required: true
+        description: Display resolution
+
+      - field_name: calibration_date
+        field_type: date
+        required: true
+        description: Calibration date
+
+      - field_name: technician_name
+        field_type: text
+        required: true
+        description: Calibration technician name
+
+      - field_name: procedure_reference
+        field_type: text
+        required: true
+        description: Calibration procedure reference
+
+  - section_number: 2
+    section_title: Environmental Conditions
+    fields:
+      - field_name: ambient_temperature
+        field_type: number
+        required: true
+        description: Ambient temperature (°C)
+
+      - field_name: ambient_humidity
+        field_type: number
+        required: true
+        description: Ambient humidity (% RH)
+
+      - field_name: barometric_pressure
+        field_type: number
+        required: false
+        description: Barometric pressure (if applicable)
+
+  - section_number: 3
+    section_title: Reference Standards Used
+    fields:
+      - field_name: reference_standard_id
+        field_type: text
+        required: true
+        description: Reference thermometer/RTD ID
+
+      - field_name: reference_certificate_number
+        field_type: text
+        required: true
+        description: Reference standard certificate number
+
+      - field_name: reference_calibration_date
+        field_type: date
+        required: true
+        description: Reference standard calibration date
+
+      - field_name: reference_due_date
+        field_type: date
+        required: true
+        description: Reference standard due date
+
+      - field_name: reference_uncertainty
+        field_type: text
+        required: true
+        description: Reference standard uncertainty
+
+      - field_name: nist_traceability
+        field_type: text
+        required: true
+        description: NIST traceability information
+
+  - section_number: 4
+    section_title: Calibration Bath Setup
+    fields:
+      - field_name: bath_type
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Water Bath
+            - Oil Bath
+            - Sand Bath
+            - Dry Block Calibrator
+            - Temperature Chamber
+        description: Type of calibration bath used
+
+      - field_name: bath_medium
+        field_type: text
+        required: true
+        description: Bath medium description
+
+      - field_name: stirring_method
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Mechanical Stirring
+            - Circulation Pump
+            - Natural Convection
+            - Forced Air
+        description: Method for temperature uniformity
+
+      - field_name: sensor_immersion_depth
+        field_type: text
+        required: true
+        description: Immersion depth of sensors in bath
+
+  - section_number: 5
+    section_title: Calibration Point 1 (Low Temperature)
+    fields:
+      - field_name: point1_target_temperature
+        field_type: number
+        required: true
+        description: Target temperature for Point 1
+
+      - field_name: point1_stabilization_time
+        field_type: number
+        required: true
+        description: Stabilization time (minutes, minimum 15)
+        validation: Must be ≥15 minutes
+
+      - field_name: point1_reference_reading
+        field_type: number
+        required: true
+        description: Reference standard reading
+
+      - field_name: point1_test_reading_1
+        field_type: number
+        required: true
+        description: Test equipment reading 1
+
+      - field_name: point1_test_reading_2
+        field_type: number
+        required: true
+        description: Test equipment reading 2
+
+      - field_name: point1_test_reading_3
+        field_type: number
+        required: true
+        description: Test equipment reading 3
+
+      - field_name: point1_test_average
+        field_type: number
+        required: true
+        description: Average of test readings
+
+      - field_name: point1_error
+        field_type: number
+        required: true
+        description: Error (test average - reference)
+
+      - field_name: point1_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria (typically ±0.5°C)
+
+      - field_name: point1_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Point 1 result
+
+  - section_number: 6
+    section_title: Calibration Point 2 (Mid Temperature)
+    fields:
+      - field_name: point2_target_temperature
+        field_type: number
+        required: true
+        description: Target temperature for Point 2
+
+      - field_name: point2_stabilization_time
+        field_type: number
+        required: true
+        description: Stabilization time (minutes)
+
+      - field_name: point2_reference_reading
+        field_type: number
+        required: true
+        description: Reference standard reading
+
+      - field_name: point2_test_reading_1
+        field_type: number
+        required: true
+        description: Test equipment reading 1
+
+      - field_name: point2_test_reading_2
+        field_type: number
+        required: true
+        description: Test equipment reading 2
+
+      - field_name: point2_test_reading_3
+        field_type: number
+        required: true
+        description: Test equipment reading 3
+
+      - field_name: point2_test_average
+        field_type: number
+        required: true
+        description: Average of test readings
+
+      - field_name: point2_error
+        field_type: number
+        required: true
+        description: Error (test average - reference)
+
+      - field_name: point2_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria
+
+      - field_name: point2_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Point 2 result
+
+  - section_number: 7
+    section_title: Calibration Point 3 (High Temperature)
+    fields:
+      - field_name: point3_target_temperature
+        field_type: number
+        required: true
+        description: Target temperature for Point 3
+
+      - field_name: point3_stabilization_time
+        field_type: number
+        required: true
+        description: Stabilization time (minutes)
+
+      - field_name: point3_reference_reading
+        field_type: number
+        required: true
+        description: Reference standard reading
+
+      - field_name: point3_test_reading_1
+        field_type: number
+        required: true
+        description: Test equipment reading 1
+
+      - field_name: point3_test_reading_2
+        field_type: number
+        required: true
+        description: Test equipment reading 2
+
+      - field_name: point3_test_reading_3
+        field_type: number
+        required: true
+        description: Test equipment reading 3
+
+      - field_name: point3_test_average
+        field_type: number
+        required: true
+        description: Average of test readings
+
+      - field_name: point3_error
+        field_type: number
+        required: true
+        description: Error (test average - reference)
+
+      - field_name: point3_acceptance
+        field_type: text
+        required: true
+        description: Acceptance criteria
+
+      - field_name: point3_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass
+            - Fail
+        description: Point 3 result
+
+  - section_number: 8
+    section_title: Additional Calibration Points (If Required)
+    fields:
+      - field_name: additional_points_required
+        field_type: yes_no
+        required: true
+        description: Are additional calibration points required?
+
+      - field_name: point4_data
+        field_type: textarea
+        required: false
+        description: Point 4 data (target, reference, test readings, error, result)
+
+      - field_name: point5_data
+        field_type: textarea
+        required: false
+        description: Point 5 data (if applicable)
+
+  - section_number: 9
+    section_title: Response Time Test
+    fields:
+      - field_name: response_time_test_required
+        field_type: yes_no
+        required: true
+        description: Is response time test required for this equipment class?
+
+      - field_name: response_start_temperature
+        field_type: number
+        required: false
+        description: Starting temperature for response test
+
+      - field_name: response_end_temperature
+        field_type: number
+        required: false
+        description: Ending temperature for response test
+
+      - field_name: temperature_step_size
+        field_type: number
+        required: false
+        description: Temperature step size (°C)
+
+      - field_name: time_to_90_percent
+        field_type: number
+        required: false
+        description: Time to reach 90% of temperature step (seconds)
+
+      - field_name: response_time_acceptance
+        field_type: text
+        required: false
+        description: Response time acceptance criteria (typically <30 seconds for Class A)
+
+      - field_name: response_time_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass
+            - Fail
+            - Not Applicable
+        description: Response time test result
+
+  - section_number: 10
+    section_title: Stability Test
+    fields:
+      - field_name: stability_test_required
+        field_type: yes_no
+        required: true
+        description: Is stability test required for this equipment class?
+
+      - field_name: stability_temperature
+        field_type: number
+        required: false
+        description: Temperature for stability test
+
+      - field_name: stability_initial_reading
+        field_type: number
+        required: false
+        description: Initial reading
+
+      - field_name: stability_15min_reading
+        field_type: number
+        required: false
+        description: Reading at 15 minutes
+
+      - field_name: stability_30min_reading
+        field_type: number
+        required: false
+        description: Reading at 30 minutes
+
+      - field_name: stability_drift
+        field_type: number
+        required: false
+        description: Total drift over 30 minutes
+
+      - field_name: stability_acceptance
+        field_type: text
+        required: false
+        description: Stability acceptance criteria (typically ±0.1°C per 30 min)
+
+      - field_name: stability_result
+        field_type: select
+        required: false
+        options:
+          enum:
+            - Pass
+            - Fail
+            - Not Applicable
+        description: Stability test result
+
+  - section_number: 11
+    section_title: Calibration Results and Analysis
+    fields:
+      - field_name: maximum_error_observed
+        field_type: number
+        required: true
+        description: Maximum error observed at any calibration point
+
+      - field_name: accuracy_specification
+        field_type: text
+        required: true
+        description: Equipment accuracy specification
+
+      - field_name: measurement_uncertainty
+        field_type: number
+        required: true
+        description: Calculated measurement uncertainty (±°C)
+
+      - field_name: as_found_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance
+            - Out of Tolerance
+            - Marginal
+        description: As-found condition before adjustments
+
+      - field_name: adjustments_made
+        field_type: textarea
+        required: false
+        description: Description of adjustments or corrections made
+
+      - field_name: as_left_condition
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Within Tolerance - Pass
+            - Out of Tolerance - Fail
+        description: As-left condition after calibration
+
+  - section_number: 12
+    section_title: Overall Calibration Result
+    fields:
+      - field_name: overall_result
+        field_type: select
+        required: true
+        options:
+          enum:
+            - Pass - All points within tolerance
+            - Pass with Limitations - Some points marginal
+            - Fail - One or more points out of tolerance
+        description: Overall calibration determination
+
+      - field_name: limitations
+        field_type: textarea
+        required: false
+        description: Any use limitations or restrictions
+
+      - field_name: equipment_status
+        field_type: select
+        required: true
+        options:
+          enum:
+            - IN CALIBRATION - Released for Use
+            - OUT OF CALIBRATION - Remove from Service
+            - LIMITED USE - Restrictions Apply
+        description: Equipment operational status
+
+      - field_name: next_calibration_due
+        field_type: date
+        required: true
+        description: Next calibration due date
+
+      - field_name: label_applied
+        field_type: yes_no
+        required: true
+        description: Calibration label applied?
+
+  - section_number: 13
+    section_title: Review and Approval
+    fields:
+      - field_name: technician_signature
+        field_type: signature
+        required: true
+        description: Technician electronic signature
+
+      - field_name: technician_date
+        field_type: date
+        required: true
+        description: Technician signature date
+
+      - field_name: reviewer_name
+        field_type: text
+        required: true
+        description: Reviewer name (required for Class A equipment)
+
+      - field_name: reviewer_signature
+        field_type: signature
+        required: true
+        description: Reviewer electronic signature
+
+      - field_name: reviewer_date
+        field_type: date
+        required: true
+        description: Reviewer signature date
+
+instructions:
+  - Allow minimum 15-minute stabilization at each calibration point
+  - Ensure reference sensor and test sensor at same depth and position in bath
+  - Use calibration bath appropriate for temperature range being tested
+  - Perform calibration points in ascending temperature order
+  - Take minimum 3 readings at each point after stabilization
+  - Response time and stability tests required for Class A temperature equipment
+  - If any test fails, mark equipment OUT OF CALIBRATION
+  - QA review required for Class A equipment
+  - Apply calibration label showing next due date
+  - Upload record to database same day
+
+validation_rules:
+  - Reference standard must have valid calibration (not expired)
+  - Stabilization time must be ≥15 minutes at each point
+  - All calibration points must Pass for overall Pass result
+  - Next calibration due date must align with equipment classification
+  - QA review required for Class A temperature equipment

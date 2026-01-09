@@ -1,0 +1,772 @@
+# DSL: QC Sampling Technician Training Program
+# Version: 1.0
+# Related SOP: SOP-SMPL-001
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "training"
+
+# ====================
+# 1. METADATA
+# ====================
+metadata:
+  id: "TRN-SMPL-001"
+  title: "QC Sampling Technician Training Program"
+  version: "1.0"
+  effective_date: "2026-01-08"
+  supersedes: null
+
+  training_type:
+    enum:
+      - initial
+
+  level:
+    enum:
+      - basic
+
+  duration:
+    estimated_hours: 16
+    validity_period: "12 months"
+
+  purpose: "Provide comprehensive training to QC Sampling Technicians to ensure competent execution of sampling procedures per SOP-SMPL-001, with emphasis on statistical principles, GMP/GACP requirements, sample integrity and documentation quality"
+
+  scope: "All aspects of sample collection for cannabis products including raw materials, in-process, finished products, environmental monitoring and retain samples"
+
+  regulatory_requirements:
+    standards:
+      - "GACP Guidelines"
+      - "GMP Standards"
+      - "ISO/IEC 17025"
+    mandatory_for:
+      - role: "QC Sampling Technician"
+        requirement: "Required before independent sampling activities"
+      - role: "QC Manager"
+        requirement: "Recommended for oversight responsibilities"
+
+# ====================
+# 2. PREREQUISITES
+# ====================
+prerequisites:
+  required_training:
+    - "GMP Awareness Training"
+    - "Laboratory Safety Fundamentals"
+    - "Data Integrity Basics (TRN-DI-001)"
+
+  required_qualifications:
+    - "High school diploma or equivalent"
+    - "Basic laboratory experience (preferred)"
+
+  required_skills:
+    - "Basic computer literacy"
+    - "Attention to detail"
+    - "Manual dexterity"
+    - "Good communication skills"
+
+# ====================
+# 3. LEARNING OBJECTIVES
+# ====================
+learning_objectives:
+  - "Understand principles of representative sampling and statistical sampling methods"
+  - "Demonstrate proper use and maintenance of sampling equipment"
+  - "Execute sampling procedures for different material types according to SOP-SMPL-001"
+  - "Complete accurate documentation including sample records and chain of custody"
+  - "Identify and respond appropriately to deviations and sample integrity issues"
+  - "Apply ALCOA+ principles to sampling activities"
+  - "Recognize contamination risks and implement contamination control measures"
+
+# ====================
+# 4. TRAINING MODULES
+# ====================
+modules:
+  - module_id: "MOD-01"
+    module_title: "Introduction to Sampling in Cannabis Industry"
+    duration_minutes: 120
+
+    topics:
+      - topic_title: "Role of Sampling in Quality Control"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Purpose of sampling in GMP/GACP context"
+          - "Impact of sampling on product quality decisions"
+          - "Regulatory requirements for sampling"
+          - "Consequences of poor sampling practices"
+        materials_needed:
+          - material: "Presentation slides"
+            quantity: "Digital file"
+          - material: "GACP Guidelines extract"
+            quantity: "One per participant"
+
+      - topic_title: "Overview of SOP-SMPL-001"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Structure and sections of SOP-SMPL-001"
+          - "When and how to use the SOP"
+          - "Related procedures and documents"
+          - "Revision history and change control"
+
+      - topic_title: "Sample Types and Categories"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Raw materials (seeds, clones, substrates, nutrients)"
+          - "In-process samples (vegetative, flowering stages)"
+          - "Finished products (dried flower, extracts, edibles)"
+          - "Environmental samples (air, water, surfaces)"
+          - "Retain and reference samples"
+
+  - module_id: "MOD-02"
+    module_title: "Statistical Sampling Principles"
+    duration_minutes: 180
+
+    topics:
+      - topic_title: "Representative Sampling Concepts"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Definition of representative sample"
+          - "Factors affecting representativeness"
+          - "Batch homogeneity assessment"
+          - "Sampling bias and how to avoid it"
+
+      - topic_title: "Sample Size Determination"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Statistical sampling tables (MIL-STD-105E)"
+          - "Relationship between batch size and sample size"
+          - "Acceptance quality limits (AQL)"
+          - "Confidence levels and risk"
+        materials_needed:
+          - material: "Statistical sampling tables"
+            quantity: "One per participant"
+          - material: "Calculator"
+            quantity: "One per participant"
+
+      - topic_title: "Sampling Methods"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Random sampling"
+          - "Systematic sampling"
+          - "Stratified sampling"
+          - "Composite sampling"
+          - "When to use each method"
+
+    practical_exercises:
+      - exercise_id: "STAT-001"
+        exercise_title: "Calculate Sample Size"
+        description: "Given various batch sizes, determine appropriate sample sizes using statistical tables"
+        steps:
+          - step_number: 1
+            instruction: "Identify batch size range in table"
+          - step_number: 2
+            instruction: "Determine General Inspection Level II sample size"
+          - step_number: 3
+            instruction: "Verify AQL and acceptance number"
+        success_criteria:
+          - criterion: "Correct sample size selected for all scenarios"
+          - criterion: "Proper use of statistical tables demonstrated"
+
+  - module_id: "MOD-03"
+    module_title: "Sampling Equipment and Materials"
+    duration_minutes: 120
+
+    topics:
+      - topic_title: "Sampling Tools and Equipment"
+        content_type:
+          enum:
+            - demonstration
+        key_points:
+          - "Sample scoops and probes"
+          - "Digital scales"
+          - "Thermometers and hygrometers"
+          - "pH meters (for liquids)"
+          - "Barcode scanners and tablets"
+        materials_needed:
+          - material: "Actual sampling equipment"
+            quantity: "One set per 2 participants"
+
+      - topic_title: "Equipment Calibration and Maintenance"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Calibration requirements and frequency"
+          - "How to verify calibration status"
+          - "Basic maintenance procedures"
+          - "When to report equipment issues"
+
+      - topic_title: "Sample Containers and Labeling"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Container types (glass vs. plastic)"
+          - "Sterility requirements"
+          - "Tamper-evident seals"
+          - "Label requirements (QR codes, sample ID)"
+          - "Proper container selection for sample type"
+
+    practical_exercises:
+      - exercise_id: "EQUIP-001"
+        exercise_title: "Equipment Inspection and Setup"
+        description: "Inspect sampling equipment and prepare for sampling activity"
+        steps:
+          - step_number: 1
+            instruction: "Verify equipment calibration status"
+          - step_number: 2
+            instruction: "Inspect for cleanliness and damage"
+          - step_number: 3
+            instruction: "Set up equipment for sampling"
+          - step_number: 4
+            instruction: "Prepare sample containers and labels"
+        success_criteria:
+          - criterion: "All equipment calibrations verified"
+          - criterion: "Containers properly selected and labeled"
+
+  - module_id: "MOD-04"
+    module_title: "Sampling Procedures - Raw Materials"
+    duration_minutes: 180
+
+    topics:
+      - topic_title: "Seeds and Clones Sampling"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Visual inspection procedures"
+          - "Random selection technique"
+          - "Sample size for genetic material"
+          - "Special handling requirements"
+
+      - topic_title: "Growing Media and Nutrients"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Composite sampling for bulk materials"
+          - "Sample point selection"
+          - "Mixing and subsampling"
+          - "Container filling techniques"
+
+      - topic_title: "Documentation for Raw Materials"
+        content_type:
+          enum:
+            - demonstration
+        key_points:
+          - "Completing FORM-SMPL-001 for raw materials"
+          - "Supplier information requirements"
+          - "Special observations to document"
+
+    practical_exercises:
+      - exercise_id: "RAW-001"
+        exercise_title: "Simulated Raw Material Sampling"
+        description: "Collect samples from mock raw material batches"
+        steps:
+          - step_number: 1
+            instruction: "Review batch documentation"
+          - step_number: 2
+            instruction: "Calculate required sample size"
+          - step_number: 3
+            instruction: "Collect samples from multiple points"
+          - step_number: 4
+            instruction: "Label and document samples"
+        success_criteria:
+          - criterion: "Sample size statistically adequate"
+          - criterion: "Representative sampling points selected"
+          - criterion: "Documentation complete and accurate"
+
+  - module_id: "MOD-05"
+    module_title: "Sampling Procedures - In-Process"
+    duration_minutes: 180
+
+    topics:
+      - topic_title: "Plant Tissue Sampling"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Vegetative stage sampling (leaf tissue)"
+          - "Flowering stage sampling (bud samples)"
+          - "Plant selection criteria (which plants to sample)"
+          - "Tissue preservation for analysis"
+
+      - topic_title: "Environmental Monitoring"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Air sampling (settle plates, active sampling)"
+          - "Water sampling (sterile technique)"
+          - "Surface sampling (swabs, contact plates)"
+          - "Aseptic technique importance"
+
+      - topic_title: "Contamination Control"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Sources of contamination"
+          - "Personal hygiene requirements"
+          - "Gowning and PPE"
+          - "Equipment cleaning between samples"
+
+    practical_exercises:
+      - exercise_id: "PROC-001"
+        exercise_title: "In-Process Sampling Simulation"
+        description: "Collect environmental and plant tissue samples"
+        steps:
+          - step_number: 1
+            instruction: "Don appropriate PPE"
+          - step_number: 2
+            instruction: "Set up environmental monitoring equipment"
+          - step_number: 3
+            instruction: "Collect water sample aseptically"
+          - step_number: 4
+            instruction: "Collect plant tissue sample"
+        success_criteria:
+          - criterion: "Aseptic technique maintained"
+          - criterion: "Samples collected without contamination"
+
+  - module_id: "MOD-06"
+    module_title: "Sampling Procedures - Finished Products"
+    duration_minutes: 240
+
+    topics:
+      - topic_title: "Dried Cannabis Flower Sampling"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Batch definition and homogeneity"
+          - "Multi-point sampling strategy"
+          - "Composite sample preparation"
+          - "Gentle mixing techniques"
+          - "Subsampling for different tests"
+
+      - topic_title: "Extracts and Concentrates"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Sample from beginning, middle, end of run"
+          - "Homogenization requirements"
+          - "Appropriate container selection"
+          - "Minimize volatilization"
+
+      - topic_title: "Edibles and Infused Products"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Unit sampling vs. composite"
+          - "Homogeneity verification"
+          - "Storage condition considerations"
+
+      - topic_title: "Retain Samples"
+        content_type:
+          enum:
+            - demonstration
+        key_points:
+          - "Purpose of retain samples"
+          - "Required retention quantity"
+          - "Long-term storage requirements"
+          - "Retention period determination"
+
+    practical_exercises:
+      - exercise_id: "FIN-001"
+        exercise_title: "Finished Product Sampling - Full Procedure"
+        description: "Complete sampling of simulated finished product batch"
+        steps:
+          - step_number: 1
+            instruction: "Complete pre-sampling checklist"
+          - step_number: 2
+            instruction: "Verify batch identification"
+          - step_number: 3
+            instruction: "Determine and mark sampling points"
+          - step_number: 4
+            instruction: "Collect sub-samples"
+          - step_number: 5
+            instruction: "Prepare composite sample"
+          - step_number: 6
+            instruction: "Subsample for testing and retain"
+          - step_number: 7
+            instruction: "Label all samples"
+          - step_number: 8
+            instruction: "Complete documentation"
+        success_criteria:
+          - criterion: "All procedure steps followed correctly"
+          - criterion: "Samples properly labeled and documented"
+          - criterion: "Chain of custody initiated"
+
+  - module_id: "MOD-07"
+    module_title: "Documentation and Data Integrity"
+    duration_minutes: 120
+
+    topics:
+      - topic_title: "Completing Sample Collection Records"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "FORM-SMPL-001 field-by-field instructions"
+          - "Required vs. optional fields"
+          - "Electronic vs. paper forms"
+          - "Signatures and timestamps"
+
+      - topic_title: "Chain of Custody Procedures"
+        content_type:
+          enum:
+            - demonstration
+        key_points:
+          - "Purpose of chain of custody"
+          - "Initiating COC documentation"
+          - "Transfer procedures"
+          - "What to do if COC is broken"
+
+      - topic_title: "ALCOA+ Principles in Sampling"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Attributable: Who did what when"
+          - "Legible: Clear, readable entries"
+          - "Contemporaneous: Real-time documentation"
+          - "Original: First recording of data"
+          - "Accurate: Correct and complete"
+          - "Complete: All required information"
+          - "Consistent: No contradictions"
+          - "Enduring: Permanent record"
+          - "Available: Accessible when needed"
+
+      - topic_title: "ERP System Use for Sampling"
+        content_type:
+          enum:
+            - hands_on
+        key_points:
+          - "Logging into sampling module"
+          - "Creating sample records"
+          - "Scanning barcodes/QR codes"
+          - "Entering environmental data"
+          - "Generating test requests"
+
+    practical_exercises:
+      - exercise_id: "DOC-001"
+        exercise_title: "Documentation Exercise"
+        description: "Complete all required documentation for sampling event"
+        steps:
+          - step_number: 1
+            instruction: "Complete FORM-SMPL-001 for given scenario"
+          - step_number: 2
+            instruction: "Initiate chain of custody"
+          - step_number: 3
+            instruction: "Enter data in ERP system"
+          - step_number: 4
+            instruction: "Generate and print labels"
+        success_criteria:
+          - criterion: "All required fields completed"
+          - criterion: "ALCOA+ principles demonstrated"
+          - criterion: "Electronic records match paper records"
+
+  - module_id: "MOD-08"
+    module_title: "Deviations and Problem Solving"
+    duration_minutes: 120
+
+    topics:
+      - topic_title: "Common Sampling Deviations"
+        content_type:
+          enum:
+            - case_study
+        key_points:
+          - "Insufficient sample size"
+          - "Sample contamination"
+          - "Chain of custody breaks"
+          - "Storage condition failures"
+          - "Documentation errors"
+
+      - topic_title: "Deviation Response Procedures"
+        content_type:
+          enum:
+            - lecture
+        key_points:
+          - "Immediate actions when deviation occurs"
+          - "Who to notify"
+          - "Documentation requirements"
+          - "Investigation process"
+          - "When resampling is required"
+
+      - topic_title: "Troubleshooting Scenarios"
+        content_type:
+          enum:
+            - discussion
+        key_points:
+          - "Batch not homogeneous - what to do?"
+          - "Equipment malfunction during sampling"
+          - "Sample integrity compromised"
+          - "Documentation lost or damaged"
+
+    practical_exercises:
+      - exercise_id: "DEV-001"
+        exercise_title: "Deviation Scenarios"
+        description: "Respond to simulated deviation situations"
+        steps:
+          - step_number: 1
+            instruction: "Read scenario description"
+          - step_number: 2
+            instruction: "Identify the deviation"
+          - step_number: 3
+            instruction: "Describe immediate actions"
+          - step_number: 4
+            instruction: "Complete deviation documentation"
+        success_criteria:
+          - criterion: "Deviation correctly identified"
+          - criterion: "Appropriate response demonstrated"
+          - criterion: "Documentation complete"
+
+# ====================
+# 5. ASSESSMENTS
+# ====================
+assessments:
+  theoretical_assessment:
+    type:
+      enum:
+        - written_exam
+
+    passing_score: 80
+
+    questions:
+      - question_id: "Q001"
+        question_type:
+          enum:
+            - multiple_choice
+        question_text: "What is the primary purpose of representative sampling?"
+        options:
+          - option: "To collect as much sample as possible"
+            correct: false
+          - option: "To ensure sample characteristics reflect the entire batch"
+            correct: true
+          - option: "To minimize sampling time"
+            correct: false
+          - option: "To reduce testing costs"
+            correct: false
+        points: 2
+        rationale: "Representative sampling ensures the sample accurately reflects the properties of the entire batch, which is fundamental to quality control"
+
+      - question_id: "Q002"
+        question_type:
+          enum:
+            - multiple_choice
+        question_text: "According to MIL-STD-105E, what is the sample size for a batch of 300 units at General Inspection Level II?"
+        options:
+          - option: "5 units"
+            correct: false
+          - option: "8 units"
+            correct: false
+          - option: "13 units"
+            correct: true
+          - option: "20 units"
+            correct: false
+        points: 2
+        rationale: "For batch sizes 151-500 units, the sample size is 13 units"
+
+      - question_id: "Q003"
+        question_type:
+          enum:
+            - true_false
+        question_text: "Chain of custody documentation must include signatures and timestamps for every transfer"
+        correct_answer: "True"
+        points: 1
+        rationale: "Chain of custody requires complete documentation of all transfers with signatures and timestamps"
+
+      - question_id: "Q004"
+        question_type:
+          enum:
+            - short_answer
+        question_text: "List three ALCOA+ principles and explain their importance in sampling documentation"
+        points: 6
+        rationale: "Demonstrates understanding of data integrity principles"
+
+  practical_assessment:
+    type:
+      enum:
+        - skill_demonstration
+
+    evaluation_criteria:
+      - criterion: "Pre-sampling preparation and checklist completion"
+        weight: 15
+        performance_levels:
+          - level: "Proficient"
+            description: "Completes checklist thoroughly, identifies all required items"
+            score: 100
+          - level: "Competent"
+            description: "Completes checklist with minor omissions"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Significant checklist items missed"
+            score: 70
+
+      - criterion: "Statistical sample size determination"
+        weight: 10
+        performance_levels:
+          - level: "Proficient"
+            description: "Correctly determines sample size using tables"
+            score: 100
+          - level: "Competent"
+            description: "Determines sample size with minor calculation errors"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Significant errors in sample size determination"
+            score: 70
+
+      - criterion: "Sampling technique execution"
+        weight: 25
+        performance_levels:
+          - level: "Proficient"
+            description: "Demonstrates proper technique, maintains contamination control"
+            score: 100
+          - level: "Competent"
+            description: "Adequate technique with minor deviations"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Poor technique, contamination risk"
+            score: 70
+
+      - criterion: "Equipment use and maintenance"
+        weight: 10
+        performance_levels:
+          - level: "Proficient"
+            description: "Proper equipment use, verifies calibration"
+            score: 100
+          - level: "Competent"
+            description: "Adequate equipment use, occasional verification lapses"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Improper equipment use or no verification"
+            score: 70
+
+      - criterion: "Sample labeling and identification"
+        weight: 15
+        performance_levels:
+          - level: "Proficient"
+            description: "All samples correctly labeled, QR codes functional"
+            score: 100
+          - level: "Competent"
+            description: "Labels mostly correct, minor errors"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Significant labeling errors"
+            score: 70
+
+      - criterion: "Documentation completion"
+        weight: 20
+        performance_levels:
+          - level: "Proficient"
+            description: "All documentation complete, accurate, ALCOA+ compliant"
+            score: 100
+          - level: "Competent"
+            description: "Documentation mostly complete, minor errors"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Incomplete or inaccurate documentation"
+            score: 70
+
+      - criterion: "Deviation recognition and response"
+        weight: 5
+        performance_levels:
+          - level: "Proficient"
+            description: "Identifies deviations immediately, responds appropriately"
+            score: 100
+          - level: "Competent"
+            description: "Identifies most deviations, adequate response"
+            score: 85
+          - level: "Needs Improvement"
+            description: "Fails to recognize deviations"
+            score: 70
+
+    minimum_passing_score: 85
+
+# ====================
+# 6. TRAINING DELIVERY
+# ====================
+training_delivery:
+  delivery_methods:
+    - method:
+        enum:
+          - classroom
+      percentage: 40
+
+    - method:
+        enum:
+          - hands_on
+      percentage: 50
+
+    - method:
+        enum:
+          - self_paced
+      percentage: 10
+
+  instructor_requirements:
+    qualifications:
+      - "Qualified QC Manager or Senior QC Technician"
+      - "Minimum 2 years sampling experience"
+      - "Train-the-trainer certification"
+    training_required: "Instructor qualification program"
+
+  class_size: "Maximum 6 participants per session for adequate hands-on supervision"
+
+  location: "Training laboratory with sampling equipment and simulated materials"
+
+# ====================
+# 7. REQUALIFICATION
+# ====================
+requalification:
+  frequency: "Annual"
+  duration_hours: 4
+
+  content:
+    - "Review of sampling procedures and any updates"
+    - "Case studies of recent deviations"
+    - "Refresher on statistical principles"
+    - "Practical demonstration of sampling technique"
+
+  assessment: "Abbreviated practical assessment (key skills only)"
+  passing_score: 85
+
+# ====================
+# 8. RECORDS
+# ====================
+records:
+  training_record_includes:
+    - "Participant name and employee ID"
+    - "Training dates and duration"
+    - "Modules completed"
+    - "Assessment scores (theoretical and practical)"
+    - "Instructor name and signature"
+    - "Training certificate number"
+
+  retention_period: "Duration of employment + 3 years"
+  storage: "GACP-ERP Training Management System"
+
+# ====================
+# 9. REFERENCES
+# ====================
+references:
+  procedures:
+    - "SOP-SMPL-001: Sampling Procedures"
+    - "SOP-EQCAL-001: Equipment Calibration"
+    - "SOP-COC-001: Chain of Custody"
+    - "SOP-DI-001: Data Integrity"
+
+  standards:
+    - "GACP Guidelines (WHO, EMA)"
+    - "ISO/IEC 17025"
+    - "ASTM E122: Sample Size Calculation"
+    - "MIL-STD-105E: Sampling Tables"

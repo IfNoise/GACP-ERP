@@ -1,0 +1,627 @@
+---
+schema_version: "1.0.0"
+schema_type: "training"
+
+metadata:
+  id: "TRN-SMPHAND-001"
+  title: "Sample Handling and Chain of Custody Training Program"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  training_category: "technical_operations"
+  classification: "required"
+  regulatory_requirement: "ISO/IEC 17025, WHO GACP, DEA Training Requirements"
+  target_roles:
+    - "Laboratory Technician"
+    - "Sample Coordinator"
+    - "Laboratory Analyst"
+    - "Laboratory Manager"
+
+training_objectives:
+  primary:
+    - "Demonstrate proficiency in sample receipt, inspection, and accessioning procedures"
+    - "Execute proper chain of custody documentation and sample transfer protocols"
+    - "Maintain sample integrity through proper storage, handling, and environmental control"
+    - "Perform sample preparation and aliquoting techniques"
+    - "Execute compliant sample disposal procedures including controlled substances"
+  secondary:
+    - "Operate LIMS for sample tracking and documentation"
+    - "Recognize and respond to sample handling deviations and issues"
+    - "Apply regulatory requirements for sample handling (DEA, EPA, ISO/IEC 17025)"
+    - "Participate in continuous improvement of sample handling processes"
+
+prerequisites:
+  required:
+    - "Laboratory Safety Training completed"
+    - "Good Documentation Practices (GDP) training completed"
+    - "LIMS Basic User Training completed"
+    - "High school diploma or equivalent"
+  recommended:
+    - "Prior laboratory experience"
+    - "Understanding of cannabis products and testing"
+    - "Basic understanding of Good Laboratory Practices (GLP)"
+
+total_duration: "40 hours"
+
+delivery_methods:
+  - "Instructor-led classroom training (16 hours)"
+  - "Hands-on practical training (20 hours)"
+  - "Self-paced e-learning modules (4 hours)"
+  - "On-the-job supervised practice"
+
+modules:
+  - module_id: "MODULE-001"
+    module_name: "Introduction to Sample Handling and Chain of Custody"
+    duration: "4 hours"
+    delivery_method: "Instructor-led classroom"
+    learning_objectives:
+      - "Explain the importance of sample handling in analytical laboratory quality"
+      - "Define chain of custody and its regulatory requirements"
+      - "Identify key regulations governing sample handling (ISO/IEC 17025, DEA, EPA)"
+      - "Describe the sample lifecycle from receipt through disposal"
+      - "Recognize the impact of sample handling errors on analytical results"
+    topics:
+      - topic: "Introduction to Laboratory Sample Management"
+        content:
+          - "Role of sample handling in laboratory quality system"
+          - "Sample integrity and traceability concepts"
+          - "Regulatory framework (ISO/IEC 17025, WHO GACP, DEA, EPA)"
+          - "Consequences of sample handling failures"
+        duration: "1 hour"
+      - topic: "Chain of Custody Fundamentals"
+        content:
+          - "Definition and purpose of chain of custody"
+          - "Legal and regulatory requirements"
+          - "Chain of custody documentation requirements"
+          - "Maintaining unbroken custody"
+          - "Electronic vs. paper chain of custody"
+        duration: "1.5 hours"
+      - topic: "Sample Lifecycle Overview"
+        content:
+          - "Sample collection and transport to laboratory"
+          - "Sample receipt and accessioning"
+          - "Sample storage and preservation"
+          - "Sample analysis and sub-sampling"
+          - "Sample disposal and destruction"
+        duration: "1 hour"
+      - topic: "Laboratory Tour and Orientation"
+        content:
+          - "Sample receipt area orientation"
+          - "Storage facilities tour (refrigerators, freezers, controlled substance vault)"
+          - "Sample preparation areas"
+          - "Safety and security features"
+        duration: "0.5 hours"
+    assessment:
+      type: "Written exam"
+      passing_score: "≥80%"
+      questions: 20
+    materials:
+      - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+      - "ISO/IEC 17025 standard (relevant sections)"
+      - "Chain of Custody documentation examples"
+      - "Sample handling flowcharts"
+
+  - module_id: "MODULE-002"
+    module_name: "Sample Receipt, Inspection, and Accessioning"
+    duration: "6 hours"
+    delivery_method: "Mixed (2 hours classroom + 4 hours hands-on)"
+    learning_objectives:
+      - "Perform complete sample receipt inspection using checklist"
+      - "Evaluate sample acceptance criteria and make accept/reject decisions"
+      - "Complete sample receipt documentation accurately"
+      - "Accession samples into LIMS with correct information"
+      - "Generate and apply barcode labels correctly"
+    topics:
+      - topic: "Sample Receipt Procedures"
+        content:
+          - "Preparing for sample arrival"
+          - "Package and container inspection"
+          - "Temperature verification for cold chain samples"
+          - "Documentation review (CoC, test request forms)"
+          - "Photographic documentation requirements"
+        duration: "1.5 hours classroom"
+      - topic: "Sample Acceptance Criteria"
+        content:
+          - "Container integrity evaluation"
+          - "Labeling legibility and completeness"
+          - "Sample volume sufficiency"
+          - "Hold time compliance"
+          - "Contamination assessment"
+          - "Making reject decisions and client notification"
+        duration: "0.5 hours classroom"
+      - topic: "Sample Accessioning in LIMS"
+        content:
+          - "LIMS sample entry procedures"
+          - "Laboratory sample ID generation"
+          - "Barcode label generation and application"
+          - "Two-person verification procedures"
+          - "Chain of custody electronic updates"
+        duration: "2 hours hands-on"
+      - topic: "Practical Exercise: Sample Receipt"
+        content:
+          - "Receive and inspect sample packages"
+          - "Complete FORM-SMPHAND-001 Sample Receipt Record"
+          - "Accession samples into LIMS"
+          - "Apply barcode labels"
+          - "Update chain of custody"
+        duration: "2 hours hands-on"
+    assessment:
+      type: "Practical demonstration"
+      passing_score: "≥85%"
+      tasks:
+        - "Receive and inspect 3 sample packages"
+        - "Complete documentation error-free"
+        - "Accession samples into LIMS correctly"
+        - "Apply labels and verify accuracy"
+    materials:
+      - "FORM-SMPHAND-001: Sample Receipt and Accessioning Record"
+      - "CHKLST-SMPHAND-001: Sample Receipt Verification Checklist"
+      - "LIMS Sample Entry User Guide"
+      - "Practice sample packages"
+
+  - module_id: "MODULE-003"
+    module_name: "Sample Storage and Environmental Control"
+    duration: "5 hours"
+    delivery_method: "Mixed (2 hours classroom + 3 hours hands-on)"
+    learning_objectives:
+      - "Determine appropriate storage conditions for different sample types"
+      - "Place samples in correct storage locations"
+      - "Monitor storage conditions and respond to alarms"
+      - "Perform sample inventory and location verification"
+      - "Recognize and respond to storage deviations"
+    topics:
+      - topic: "Sample Storage Requirements"
+        content:
+          - "Storage conditions by sample type (refrigerated, frozen, ultra-low, room temp)"
+          - "Environmental control parameters (temperature, humidity, light)"
+          - "Storage container selection"
+          - "Sample stability and preservation"
+          - "Hold time requirements"
+        duration: "1 hour classroom"
+      - topic: "Storage Equipment Operation"
+        content:
+          - "Refrigerator and freezer operation"
+          - "Temperature monitoring systems"
+          - "Alarm systems and response procedures"
+          - "Backup power systems"
+          - "Equipment maintenance and calibration"
+        duration: "1 hour classroom"
+      - topic: "Hands-On: Sample Storage Placement"
+        content:
+          - "Assign storage locations in LIMS"
+          - "Place samples in designated storage"
+          - "Scan barcodes to link sample to location"
+          - "Verify storage unit temperatures"
+          - "Set hold time alerts in LIMS"
+        duration: "1.5 hours hands-on"
+      - topic: "Hands-On: Storage Condition Monitoring"
+        content:
+          - "Perform daily storage unit checks"
+          - "Complete CHKLST-SMPHAND-002 Storage Monitoring Checklist"
+          - "Review temperature logs"
+          - "Respond to simulated temperature alarm"
+          - "Conduct sample inventory spot check"
+        duration: "1.5 hours hands-on"
+    assessment:
+      type: "Practical demonstration"
+      passing_score: "≥85%"
+      tasks:
+        - "Correctly assign storage for 5 different sample types"
+        - "Complete daily monitoring checklist without errors"
+        - "Demonstrate proper alarm response procedures"
+    materials:
+      - "Storage condition specifications table"
+      - "CHKLST-SMPHAND-002: Storage Condition Monitoring Checklist"
+      - "Storage unit operation manuals"
+      - "Temperature monitoring system user guide"
+
+  - module_id: "MODULE-004"
+    module_name: "Chain of Custody Documentation and Sample Transfers"
+    duration: "5 hours"
+    delivery_method: "Mixed (1.5 hours classroom + 3.5 hours hands-on)"
+    learning_objectives:
+      - "Complete chain of custody documentation accurately"
+      - "Execute proper sample transfer procedures"
+      - "Maintain unbroken chain of custody during transfers"
+      - "Recognize and resolve chain of custody issues"
+      - "Apply special requirements for controlled substances"
+    topics:
+      - topic: "Chain of Custody Documentation Requirements"
+        content:
+          - "Required information on CoC forms"
+          - "Signature and timestamp requirements"
+          - "Electronic vs. paper CoC"
+          - "CoC audit trails in LIMS"
+          - "Common CoC errors and how to prevent them"
+        duration: "1 hour classroom"
+      - topic: "Sample Transfer Procedures"
+        content:
+          - "Relinquishing and receiving procedures"
+          - "Sample condition verification during transfer"
+          - "Time gap management between signatures"
+          - "Temperature control during transfers"
+          - "Special requirements for controlled substances (dual custody)"
+        duration: "0.5 hours classroom"
+      - topic: "Hands-On: Sample Transfer Execution"
+        content:
+          - "Complete FORM-SMPHAND-002 Sample Transfer Record"
+          - "Execute sample transfers with proper custody documentation"
+          - "Practice dual-custody transfers for controlled substances"
+          - "Document sample condition during transfer"
+          - "Update LIMS with transfer information"
+        duration: "2 hours hands-on"
+      - topic: "Hands-On: Chain of Custody Troubleshooting"
+        content:
+          - "Review CoC documentation for completeness"
+          - "Identify and correct CoC errors"
+          - "Resolve simulated CoC issues (missing signatures, time gaps)"
+          - "Document CoC breaks and initiate investigations"
+        duration: "1.5 hours hands-on"
+    assessment:
+      type: "Practical demonstration + Written scenarios"
+      passing_score: "≥85%"
+      tasks:
+        - "Execute 3 sample transfers with complete documentation"
+        - "Correctly resolve 5 CoC issue scenarios"
+        - "Demonstrate dual-custody transfer for controlled substance"
+    materials:
+      - "FORM-SMPHAND-002: Sample Transfer and Chain of Custody Record"
+      - "Chain of custody examples (good and bad)"
+      - "Controlled substance handling procedures"
+      - "DEA dual-custody requirements"
+
+  - module_id: "MODULE-005"
+    module_name: "Sample Preparation and Aliquoting"
+    duration: "6 hours"
+    delivery_method: "Hands-on practical training"
+    learning_objectives:
+      - "Retrieve samples from storage safely and accurately"
+      - "Homogenize heterogeneous samples properly"
+      - "Prepare aliquots with proper technique"
+      - "Label and track aliquots in LIMS"
+      - "Maintain sample integrity during preparation"
+    topics:
+      - topic: "Sample Retrieval and Preparation"
+        content:
+          - "LIMS work order review"
+          - "Sample retrieval from storage"
+          - "Temperature equilibration procedures"
+          - "Sample identity verification"
+          - "Work area setup and contamination prevention"
+        duration: "1 hour hands-on"
+      - topic: "Homogenization Techniques"
+        content:
+          - "Grinding and milling techniques"
+          - "Blending and mixing procedures"
+          - "Temperature control during homogenization"
+          - "Preventing cross-contamination"
+          - "Homogeneity verification"
+        duration: "1.5 hours hands-on"
+      - topic: "Aliquoting Procedures"
+        content:
+          - "Aliquot size determination"
+          - "Representative sampling technique"
+          - "Aliquot container selection"
+          - "Aliquot labeling with sub-sample IDs"
+          - "QC aliquot preparation"
+        duration: "2 hours hands-on"
+      - topic: "LIMS Aliquot Tracking"
+        content:
+          - "Linking aliquots to parent samples in LIMS"
+          - "Aliquot barcode generation"
+          - "Test assignment to aliquots"
+          - "Parent sample return to storage"
+          - "Aliquot delivery to analysts"
+        duration: "1.5 hours hands-on"
+    assessment:
+      type: "Practical demonstration"
+      passing_score: "≥85%"
+      tasks:
+        - "Homogenize 2 different sample types correctly"
+        - "Prepare 5 aliquots with proper labeling and LIMS tracking"
+        - "Demonstrate contamination prevention techniques"
+    materials:
+      - "Sample preparation equipment"
+      - "Aliquot containers and labels"
+      - "LIMS aliquot tracking procedures"
+      - "Practice samples for homogenization"
+
+  - module_id: "MODULE-006"
+    module_name: "Sample Transportation and Security"
+    duration: "4 hours"
+    delivery_method: "Mixed (1.5 hours classroom + 2.5 hours hands-on)"
+    learning_objectives:
+      - "Execute internal sample transportation safely"
+      - "Prepare samples for external shipping"
+      - "Apply security protocols for controlled substances"
+      - "Maintain chain of custody during transport"
+      - "Respond to transport incidents"
+    topics:
+      - topic: "Internal Sample Transportation"
+        content:
+          - "Hand-carry procedures"
+          - "Pneumatic tube system use (if applicable)"
+          - "Temperature control during internal transport"
+          - "Transport documentation requirements"
+          - "Incident response (spills, breakage)"
+        duration: "0.5 hours classroom"
+      - topic: "External Shipping Procedures"
+        content:
+          - "Packaging requirements (DOT, IATA)"
+          - "Temperature control for cold chain shipments"
+          - "Hazardous materials shipping (if applicable)"
+          - "Carrier selection and tracking"
+          - "Shipping documentation and manifests"
+        duration: "1 hour classroom"
+      - topic: "Controlled Substance Security"
+        content:
+          - "DEA security requirements"
+          - "Controlled substance vault access procedures"
+          - "Dual-custody requirements"
+          - "Inventory reconciliation"
+          - "Incident reporting (loss, theft)"
+        duration: "1 hour hands-on"
+      - topic: "Hands-On: Sample Transport Exercise"
+        content:
+          - "Prepare sample for external shipment"
+          - "Complete shipping documentation"
+          - "Execute controlled substance dual-custody transport"
+          - "Respond to simulated transport incident"
+        duration: "1.5 hours hands-on"
+    assessment:
+      type: "Practical demonstration"
+      passing_score: "≥85%"
+      tasks:
+        - "Properly package and document external shipment"
+        - "Execute dual-custody controlled substance transfer"
+        - "Correctly respond to transport incident scenario"
+    materials:
+      - "Shipping containers and packaging materials"
+      - "DOT/IATA shipping regulations summary"
+      - "DEA controlled substance security requirements"
+      - "Transport incident response procedures"
+
+  - module_id: "MODULE-007"
+    module_name: "Sample Disposal and Regulatory Compliance"
+    duration: "6 hours"
+    delivery_method: "Mixed (2 hours classroom + 4 hours hands-on)"
+    learning_objectives:
+      - "Classify waste types correctly (cannabis, hazardous, controlled)"
+      - "Execute compliant disposal procedures for each waste type"
+      - "Complete regulatory disposal documentation (DEA Form 41, EPA manifest)"
+      - "Perform DEA-witnessed controlled substance destruction"
+      - "Maintain complete disposal records with photographic evidence"
+    topics:
+      - topic: "Waste Classification and Regulatory Requirements"
+        content:
+          - "Cannabis waste regulations (state-specific)"
+          - "EPA hazardous waste classification"
+          - "DEA controlled substance disposal requirements"
+          - "Mixed waste (cannabis + hazardous)"
+          - "Disposal method selection by waste type"
+        duration: "1.5 hours classroom"
+      - topic: "Regulatory Documentation Requirements"
+        content:
+          - "DEA Form 41 completion"
+          - "EPA Uniform Hazardous Waste Manifest"
+          - "State track-and-trace reporting"
+          - "Certificate of destruction"
+          - "Photographic documentation requirements"
+        duration: "0.5 hours classroom"
+      - topic: "Hands-On: Cannabis Waste Disposal"
+        content:
+          - "Render cannabis samples unusable (mixing with inedible material)"
+          - "Complete FORM-SMPHAND-003 Disposal Record"
+          - "Photograph disposal process"
+          - "Update LIMS and state tracking system"
+        duration: "1.5 hours hands-on"
+      - topic: "Hands-On: Controlled Substance Disposal Simulation"
+        content:
+          - "Complete DEA Form 41"
+          - "Execute witnessed destruction procedure"
+          - "Document destruction with photographs and witness signatures"
+          - "Reconcile controlled substance inventory"
+        duration: "1.5 hours hands-on"
+      - topic: "Hands-On: Hazardous Waste Disposal"
+        content:
+          - "Assign EPA waste codes"
+          - "Complete hazardous waste manifest"
+          - "Containerize and label hazardous waste properly"
+          - "Arrange licensed disposal"
+        duration: "1 hour hands-on"
+    assessment:
+      type: "Practical demonstration + Written exam"
+      passing_score: "≥85%"
+      tasks:
+        - "Correctly classify 10 different waste samples"
+        - "Complete DEA Form 41 without errors"
+        - "Execute witnessed destruction with complete documentation"
+        - "Complete EPA hazardous waste manifest correctly"
+    materials:
+      - "FORM-SMPHAND-003: Sample Disposal and Destruction Record"
+      - "CHKLST-SMPHAND-003: Sample Disposal Verification Checklist"
+      - "DEA Form 41 (blank and examples)"
+      - "EPA Uniform Hazardous Waste Manifest (blank and examples)"
+      - "State cannabis waste disposal regulations"
+      - "Disposal supplies (rendering materials, containers)"
+
+  - module_id: "MODULE-008"
+    module_name: "Deviation Management and Continuous Improvement"
+    duration: "4 hours"
+    delivery_method: "Mixed (2 hours classroom + 2 hours case studies)"
+    learning_objectives:
+      - "Recognize sample handling deviations and non-conformances"
+      - "Initiate deviation investigations appropriately"
+      - "Implement corrective actions for common sample handling issues"
+      - "Participate in root cause analysis"
+      - "Contribute to continuous improvement initiatives"
+    topics:
+      - topic: "Common Sample Handling Deviations"
+        content:
+          - "Temperature excursions"
+          - "Chain of custody breaks"
+          - "Sample loss or misplacement"
+          - "Labeling errors"
+          - "Hold time exceedances"
+          - "Contamination events"
+        duration: "1 hour classroom"
+      - topic: "Deviation Response and Investigation"
+        content:
+          - "Immediate actions when deviation detected"
+          - "Deviation reporting procedures (SOP-DEV-001)"
+          - "Impact assessment on samples and results"
+          - "Root cause analysis participation"
+          - "Corrective and preventive actions (CAPA)"
+        duration: "1 hour classroom"
+      - topic: "Case Study Analysis"
+        content:
+          - "Case 1: Temperature excursion - Response and investigation"
+          - "Case 2: Chain of custody break - Resolution procedures"
+          - "Case 3: Sample misplacement - Investigation and prevention"
+          - "Case 4: Repeat deviation - Root cause and CAPA"
+        duration: "2 hours case studies"
+    assessment:
+      type: "Case study analysis and written responses"
+      passing_score: "≥80%"
+      tasks:
+        - "Analyze 4 case studies and propose appropriate responses"
+        - "Identify root causes for deviation scenarios"
+        - "Recommend effective corrective actions"
+    materials:
+      - "SOP-DEV-001: Deviation Management"
+      - "SOP-CAPA-001: Corrective and Preventive Action"
+      - "Case study scenarios with supporting documentation"
+      - "Root cause analysis tools (fishbone diagram, 5 Whys)"
+
+final_assessment:
+  type: "Comprehensive practical and written examination"
+  components:
+    - component: "Written Examination"
+      questions: 50
+      topics:
+        - "Sample handling procedures (20%)"
+        - "Chain of custody requirements (20%)"
+        - "Storage and environmental control (15%)"
+        - "Sample preparation and aliquoting (15%)"
+        - "Disposal and regulatory compliance (20%)"
+        - "Deviation management (10%)"
+      passing_score: "≥80%"
+      duration: "2 hours"
+
+    - component: "Practical Demonstration"
+      tasks:
+        - "Receive, inspect, and accession a sample package"
+        - "Complete all required documentation error-free"
+        - "Place sample in appropriate storage"
+        - "Execute sample transfer with chain of custody"
+        - "Prepare aliquots from a sample"
+        - "Execute compliant sample disposal"
+      passing_score: "≥85%"
+      duration: "3 hours"
+      evaluation_criteria:
+        - "Technical accuracy"
+        - "Documentation completeness"
+        - "Compliance with procedures"
+        - "Safety practices"
+        - "Time management"
+
+competency_verification:
+  initial: "Within 30 days of training completion"
+  ongoing: "Annually"
+  methods:
+    - "Direct observation of sample handling activities"
+    - "Review of documentation accuracy"
+    - "Error rate monitoring"
+    - "Competency assessment checklist completion"
+  retraining_triggers:
+    - "Competency assessment failure"
+    - "Repeat deviations in sample handling"
+    - "Significant procedure changes"
+    - "Extended absence from sample handling duties (>6 months)"
+
+certification:
+  certificate_issued: "Upon successful completion of all modules and final assessment"
+  certificate_valid: "1 year"
+  recertification_requirements:
+    - "Annual refresher training (4 hours)"
+    - "Annual competency verification"
+    - "Review of procedure updates"
+
+training_records:
+  documentation_required:
+    - "Training attendance records"
+    - "Module assessment scores"
+    - "Final examination results"
+    - "Practical demonstration evaluation"
+    - "Competency verification records"
+    - "Training certificate"
+  retention: "Duration of employment + 3 years"
+  location: "Training records database and personnel files"
+
+instructors:
+  qualifications:
+    - "Laboratory Manager, Sample Coordinator, or Senior Technician"
+    - "Minimum 3 years sample handling experience"
+    - "Completed train-the-trainer program"
+    - "Current on all sample handling procedures"
+  responsibilities:
+    - "Deliver training per approved curriculum"
+    - "Evaluate trainee performance objectively"
+    - "Document training completion and assessment results"
+    - "Provide feedback to trainees and management"
+    - "Recommend additional training if needed"
+
+resources_required:
+  facilities:
+    - "Classroom with projector and whiteboard"
+    - "Computer lab with LIMS access"
+    - "Sample receipt area access"
+    - "Sample storage facilities access"
+    - "Controlled substance vault access (for appropriate modules)"
+  materials:
+    - "Training manual (printed or electronic)"
+    - "Practice samples (various types)"
+    - "Sample containers and labeling materials"
+    - "Barcode scanner and label printer"
+    - "Disposal supplies (rendering materials)"
+    - "Forms and checklists (blank copies)"
+  equipment:
+    - "Sample preparation equipment"
+    - "Storage units (refrigerator, freezer)"
+    - "Temperature monitoring devices"
+    - "Shipping containers"
+
+continuous_improvement:
+  training_effectiveness_metrics:
+    - "Post-training competency scores"
+    - "Error rates for trained personnel"
+    - "Deviation rates related to sample handling"
+    - "Trainee feedback and evaluations"
+  review_frequency: "Annually"
+  update_triggers:
+    - "Procedure changes"
+    - "New regulatory requirements"
+    - "Recurring training gaps identified"
+    - "New equipment or technology implementation"
+    - "Audit findings"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "FORM-SMPHAND-001: Sample Receipt and Accessioning Record"
+  - "FORM-SMPHAND-002: Sample Transfer and Chain of Custody Record"
+  - "FORM-SMPHAND-003: Sample Disposal and Destruction Record"
+  - "CHKLST-SMPHAND-001: Sample Receipt Verification Checklist"
+  - "CHKLST-SMPHAND-002: Storage Condition Monitoring Checklist"
+  - "CHKLST-SMPHAND-003: Sample Disposal Verification Checklist"
+  - "SOP-DEV-001: Deviation Management"
+  - "SOP-CAPA-001: Corrective and Preventive Action"
+  - "DEA Controlled Substance Regulations"
+  - "EPA Hazardous Waste Regulations"
+  - "ISO/IEC 17025 Standard"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Handling and Chain of Custody Training Program"
+    author: "Laboratory Manager"
+    approved_by: "Quality Director"

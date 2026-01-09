@@ -1,0 +1,433 @@
+# DSL: Training Requirement Assessment Form
+# Version: 1.0
+# Source: SOP_DocumentControl.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-DOC-002"
+  form_type: "assessment"
+  title: "Training Requirement Assessment Form"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DOC-001"
+
+usage:
+  purpose: "Assess training requirements for new or revised controlled documents and plan training implementation"
+  when_to_use: "Upon approval of new or revised document, before distribution"
+  completed_by: "ROLE-DOCCTRL-001"
+  reviewed_by: "ROLE-TRN-001"
+  approved_by: "ROLE-QA-002"
+
+form_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Document Information"
+      section_order: 1
+      required: true
+
+      fields:
+        - field_id: "DOC-001"
+          field_label: "Document ID"
+          field_type: "text"
+          required: true
+          validation: "valid_document_id"
+          help_text: "Controlled document identifier"
+
+        - field_id: "DOC-002"
+          field_label: "Document Title"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "Full document title"
+
+        - field_id: "DOC-003"
+          field_label: "Document Version"
+          field_type: "text"
+          required: true
+          validation: "version_format"
+          help_text: "Document version number"
+
+        - field_id: "DOC-004"
+          field_label: "Document Type"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "SOP"
+            - "Policy"
+            - "Work Instruction"
+            - "Form"
+            - "Specification"
+            - "Validation Protocol"
+            - "Batch Record"
+            - "Laboratory Method"
+            - "Other"
+          validation: null
+          help_text: "Type of document"
+
+        - field_id: "DOC-005"
+          field_label: "Approval Date"
+          field_type: "date"
+          required: true
+          validation: null
+          help_text: "Date document approved"
+
+        - field_id: "DOC-006"
+          field_label: "Change Type"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "New Document"
+            - "Major Revision (content changes)"
+            - "Minor Revision (editorial only)"
+            - "Periodic Reaffirmation (no changes)"
+          validation: null
+          help_text: "Type of change to document"
+
+    - section_id: "SEC-002"
+      section_title: "Training Need Assessment"
+      section_order: 2
+      required: true
+
+      fields:
+        - field_id: "NEED-001"
+          field_label: "Is Training Required?"
+          field_type: "radio"
+          required: true
+          options:
+            - "Yes - Formal training required"
+            - "No - Read and acknowledge sufficient"
+            - "N/A - No training (reference document)"
+          validation: null
+          help_text: "Determine if training beyond read-and-acknowledge is required"
+
+        - field_id: "NEED-002"
+          field_label: "Training Justification"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Explain rationale for training decision. Consider: complexity, GxP impact, risk, user skill level, change significance"
+
+        - field_id: "NEED-003"
+          field_label: "GxP Impact"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "GxP Critical (High)"
+            - "GxP Related (Medium)"
+            - "Non-GxP (Low)"
+          validation: null
+          help_text: "Level of GxP impact"
+
+        - field_id: "NEED-004"
+          field_label: "Risk Level if Not Trained"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "High (Quality/Safety/Compliance risk)"
+            - "Medium (Operational/Efficiency risk)"
+            - "Low (Minimal risk)"
+          validation: null
+          help_text: "Risk if personnel not properly trained"
+
+        - field_id: "NEED-005"
+          field_label: "Document Complexity"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "High (Complex procedure, technical skill required)"
+            - "Medium (Moderate complexity)"
+            - "Low (Simple, straightforward)"
+          validation: null
+          help_text: "Document complexity level"
+
+    - section_id: "SEC-003"
+      section_title: "Affected Personnel"
+      section_order: 3
+      required: true
+
+      fields:
+        - field_id: "PERS-001"
+          field_label: "Target Audience (Roles/Departments)"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "List all roles, job titles, or departments who must use this document"
+
+        - field_id: "PERS-002"
+          field_label: "Estimated Number of Personnel"
+          field_type: "integer"
+          required: true
+          validation: "positive_integer"
+          help_text: "Approximate number of people requiring training"
+
+        - field_id: "PERS-003"
+          field_label: "Training Prerequisites"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "Any prerequisite training or qualifications required before this training"
+
+        - field_id: "PERS-004"
+          field_label: "Current Competency Level"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Expert (Familiar with topic)"
+            - "Intermediate (Some knowledge)"
+            - "Novice (New to topic)"
+          validation: null
+          help_text: "General competency level of target audience"
+
+    - section_id: "SEC-004"
+      section_title: "Training Plan"
+      section_order: 4
+      required: true
+      condition: "NEED-001 == 'Yes - Formal training required' OR NEED-001 == 'No - Read and acknowledge sufficient'"
+
+      fields:
+        - field_id: "PLAN-001"
+          field_label: "Training Method"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Instructor-Led Classroom"
+            - "Hands-On Practical Training"
+            - "Computer-Based Training (CBT)"
+            - "Self-Paced Online Module"
+            - "Read and Acknowledge"
+            - "One-on-One Coaching"
+            - "Combination (describe in notes)"
+          validation: null
+          help_text: "Primary training delivery method"
+
+        - field_id: "PLAN-002"
+          field_label: "Training Duration (minutes)"
+          field_type: "integer"
+          required: true
+          validation: "positive_integer"
+          help_text: "Estimated training duration per person"
+
+        - field_id: "PLAN-003"
+          field_label: "Competency Assessment Method"
+          field_type: "dropdown"
+          required: true
+          options:
+            - "Written Test"
+            - "Practical Demonstration"
+            - "Observed Performance"
+            - "Read and Acknowledge (no assessment)"
+            - "Combination (describe in notes)"
+          validation: null
+          help_text: "How will competency be verified?"
+
+        - field_id: "PLAN-004"
+          field_label: "Passing Criteria"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "Define passing criteria (e.g., 80% on test, successful demonstration, acknowledgement signature)"
+
+        - field_id: "PLAN-005"
+          field_label: "Training Materials to Develop"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "List training materials needed (slides, job aids, videos, exercises, assessments)"
+
+        - field_id: "PLAN-006"
+          field_label: "Trainer(s)"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "Who will deliver the training? (SME, Trainer, Supervisor)"
+
+        - field_id: "PLAN-007"
+          field_label: "Training Location"
+          field_type: "text"
+          required: false
+          validation: null
+          help_text: "Where will training occur? (Classroom, LMS, workstation, production floor)"
+
+    - section_id: "SEC-005"
+      section_title: "Training Schedule"
+      section_order: 5
+      required: true
+
+      fields:
+        - field_id: "SCHED-001"
+          field_label: "Training Material Development Start Date"
+          field_type: "date"
+          required: true
+          validation: "future_or_today"
+          help_text: "When will training material development begin?"
+
+        - field_id: "SCHED-002"
+          field_label: "Training Material Completion Date"
+          field_type: "date"
+          required: true
+          validation: "after_SCHED-001"
+          help_text: "Target date for training materials ready"
+
+        - field_id: "SCHED-003"
+          field_label: "Training Start Date"
+          field_type: "date"
+          required: true
+          validation: "after_SCHED-002"
+          help_text: "When will personnel training begin?"
+
+        - field_id: "SCHED-004"
+          field_label: "Training Completion Deadline"
+          field_type: "date"
+          required: true
+          validation: "within_30_days_of_approval"
+          help_text: "All personnel must complete training by this date (typically within 30 days of document approval)"
+
+        - field_id: "SCHED-005"
+          field_label: "Document Effective Date"
+          field_type: "date"
+          required: true
+          validation: "on_or_after_training_completion"
+          help_text: "Document becomes effective (must be after training complete)"
+
+    - section_id: "SEC-006"
+      section_title: "Resources and Support"
+      section_order: 6
+      required: true
+
+      fields:
+        - field_id: "RES-001"
+          field_label: "Training Budget Required"
+          field_type: "currency"
+          required: false
+          validation: "positive_number"
+          help_text: "Estimated cost for materials, trainer time, etc."
+
+        - field_id: "RES-002"
+          field_label: "Training Coordinator"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "Person responsible for coordinating training logistics"
+
+        - field_id: "RES-003"
+          field_label: "Special Equipment or Facility Needs"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "Any special resources needed (equipment, software, facility access)"
+
+        - field_id: "RES-004"
+          field_label: "Support Resources"
+          field_type: "textarea"
+          required: false
+          validation: null
+          help_text: "Job aids, quick reference guides, help desk support"
+
+    - section_id: "SEC-007"
+      section_title: "Training Effectiveness Monitoring"
+      section_order: 7
+      required: true
+
+      fields:
+        - field_id: "EFFECT-001"
+          field_label: "How Will Training Effectiveness Be Evaluated?"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Methods to verify training was effective (observation, metrics, audit, feedback)"
+
+        - field_id: "EFFECT-002"
+          field_label: "Effectiveness Evaluation Timeline"
+          field_type: "text"
+          required: true
+          validation: null
+          help_text: "When will effectiveness be evaluated? (e.g., 30 days post-training, quarterly audit)"
+
+        - field_id: "EFFECT-003"
+          field_label: "Success Criteria"
+          field_type: "textarea"
+          required: true
+          validation: null
+          help_text: "Define what successful training looks like (e.g., no procedure deviations, competent performance, positive feedback)"
+
+    - section_id: "SEC-008"
+      section_title: "Approval"
+      section_order: 8
+      required: true
+
+      fields:
+        - field_id: "APP-001"
+          field_label: "Document Controller Signature"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+          help_text: "Document Controller confirms assessment complete"
+
+        - field_id: "APP-002"
+          field_label: "Training Coordinator Signature"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Training Feasibility Confirmed"
+          help_text: "Training Coordinator confirms plan feasible and resources available"
+
+        - field_id: "APP-003"
+          field_label: "Quality Manager Approval"
+          field_type: "signature"
+          required: true
+          signature_fields:
+            - "Name"
+            - "Date"
+            - "Approval Decision"
+          help_text: "Quality Manager approves training plan"
+
+workflow:
+  states:
+    - state: "draft"
+      description: "Assessment being prepared"
+    - state: "under_review"
+      description: "Training Coordinator reviewing feasibility"
+    - state: "pending_approval"
+      description: "Awaiting QA approval"
+    - state: "approved"
+      description: "Training plan approved, ready for implementation"
+    - state: "training_in_progress"
+      description: "Training being delivered"
+    - state: "training_complete"
+      description: "All personnel trained"
+
+  transitions:
+    - from: "draft"
+      to: "under_review"
+      trigger: "Document Controller submits assessment"
+    - from: "under_review"
+      to: "pending_approval"
+      trigger: "Training Coordinator confirms feasibility"
+    - from: "pending_approval"
+      to: "approved"
+      trigger: "Quality Manager approves"
+    - from: "approved"
+      to: "training_in_progress"
+      trigger: "Training delivery begins"
+    - from: "training_in_progress"
+      to: "training_complete"
+      trigger: "All personnel complete training and pass assessment"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

@@ -1,0 +1,358 @@
+schema_version: "1.0.0"
+type: checklist
+metadata:
+  id: CHKLST-EQCAL-001
+  title: Pre-Calibration Preparation Checklist
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-EQCAL-001
+  department: Engineering
+  classification: Critical
+  frequency: Before Each Calibration
+
+sections:
+  - section_number: 1
+    section_title: Equipment Visual Inspection
+    items:
+      - item_number: 1.1
+        description: Equipment is clean and free of visible damage
+        verification_method: Visual inspection of equipment exterior and interior
+        acceptance_criteria: No damage, cracks, corrosion, or contamination visible
+        responsible_role: Calibration Technician
+
+      - item_number: 1.2
+        description: All cables and connections are secure and in good condition
+        verification_method: Check all power cables, signal cables, and connectors
+        acceptance_criteria: All connections tight, no frayed wires or damaged connectors
+        responsible_role: Calibration Technician
+
+      - item_number: 1.3
+        description: Display or readout is clear and functional
+        verification_method: Power on equipment and verify display
+        acceptance_criteria: Display clear, all segments functional, no error messages
+        responsible_role: Calibration Technician
+
+      - item_number: 1.4
+        description: Equipment identification label is present and legible
+        verification_method: Verify equipment ID label
+        acceptance_criteria: ID label matches equipment record, clearly legible
+        responsible_role: Calibration Technician
+
+      - item_number: 1.5
+        description: Previous calibration label is present and reviewed
+        verification_method: Check existing calibration label
+        acceptance_criteria: Previous calibration date visible, next due date noted
+        responsible_role: Calibration Technician
+
+  - section_number: 2
+    section_title: Documentation Preparation
+    items:
+      - item_number: 2.1
+        description: Previous calibration record retrieved and reviewed
+        verification_method: Access calibration database or file
+        acceptance_criteria: Previous record available showing history and results
+        responsible_role: Calibration Technician
+
+      - item_number: 2.2
+        description: Equipment maintenance history reviewed
+        verification_method: Check maintenance records
+        acceptance_criteria: Recent maintenance noted, no open maintenance issues
+        responsible_role: Calibration Technician
+
+      - item_number: 2.3
+        description: Applicable calibration procedure identified and current
+        verification_method: Verify procedure number and version
+        acceptance_criteria: Correct procedure for equipment type, current version
+        responsible_role: Calibration Technician
+
+      - item_number: 2.4
+        description: Calibration worksheet prepared with equipment information
+        verification_method: Review worksheet completeness
+        acceptance_criteria: Equipment ID, location, serial number, date pre-filled
+        responsible_role: Calibration Technician
+
+      - item_number: 2.5
+        description: Equipment user manual available (if needed for reference)
+        verification_method: Check for user manual access
+        acceptance_criteria: Manual available electronically or hard copy
+        responsible_role: Calibration Technician
+
+  - section_number: 3
+    section_title: Environmental Conditions Verification
+    items:
+      - item_number: 3.1
+        description: Calibration area temperature within specifications
+        verification_method: Measure ambient temperature with calibrated thermometer
+        acceptance_criteria: Temperature 20±2°C (18-22°C range) for critical instruments
+        responsible_role: Calibration Technician
+
+      - item_number: 3.2
+        description: Calibration area humidity within specifications
+        verification_method: Measure relative humidity with calibrated hygrometer
+        acceptance_criteria: Humidity 45-65% RH for critical instruments
+        responsible_role: Calibration Technician
+
+      - item_number: 3.3
+        description: Environmental conditions stable for past 30 minutes
+        verification_method: Review environmental monitoring records
+        acceptance_criteria: Temperature and humidity stable within ±1°C and ±5% RH
+        responsible_role: Calibration Technician
+
+      - item_number: 3.4
+        description: Vibration levels acceptable for sensitive equipment
+        verification_method: Visual and physical assessment of vibration
+        acceptance_criteria: No noticeable vibration, isolation pads in place if required
+        responsible_role: Calibration Technician
+
+      - item_number: 3.5
+        description: Air currents controlled (for balances and sensitive equipment)
+        verification_method: Visual check for air movement, doors/windows closed
+        acceptance_criteria: No air currents observed, draft shields in place
+        responsible_role: Calibration Technician
+
+      - item_number: 3.6
+        description: Lighting adequate but not generating heat near equipment
+        verification_method: Check lighting placement
+        acceptance_criteria: Adequate visibility, lights not directly over equipment
+        responsible_role: Calibration Technician
+
+  - section_number: 4
+    section_title: Power and Warm-up Requirements
+    items:
+      - item_number: 4.1
+        description: Power supply stable and within voltage specifications
+        verification_method: Check voltage with multimeter or power line monitor
+        acceptance_criteria: Voltage within ±5% of rated voltage
+        responsible_role: Calibration Technician
+
+      - item_number: 4.2
+        description: UPS or line conditioner operational (if required)
+        verification_method: Verify UPS status indicators
+        acceptance_criteria: UPS on battery backup, line conditioning active
+        responsible_role: Calibration Technician
+
+      - item_number: 4.3
+        description: Equipment powered on for required warm-up period
+        verification_method: Record power-on time and monitor warm-up
+        acceptance_criteria: Minimum warm-up time per procedure (typically 30 minutes for analytical instruments)
+        responsible_role: Calibration Technician
+
+      - item_number: 4.4
+        description: Equipment internal self-test passed (if applicable)
+        verification_method: Run equipment self-test routine
+        acceptance_criteria: Self-test passes with no error codes
+        responsible_role: Calibration Technician
+
+      - item_number: 4.5
+        description: Equipment display stable (no drifting)
+        verification_method: Monitor display for stability
+        acceptance_criteria: Display readings stable after warm-up period
+        responsible_role: Calibration Technician
+
+  - section_number: 5
+    section_title: Calibration Standards Verification
+    items:
+      - item_number: 5.1
+        description: Required calibration standards identified and available
+        verification_method: Check standards list against procedure requirements
+        acceptance_criteria: All required standards present (mass, temperature, pH, etc.)
+        responsible_role: Calibration Technician
+
+      - item_number: 5.2
+        description: Calibration standards have valid, current certifications
+        verification_method: Check certificate expiration dates
+        acceptance_criteria: All standards within calibration due date, no expired certificates
+        responsible_role: Calibration Technician
+
+      - item_number: 5.3
+        description: Standards NIST traceability verified
+        verification_method: Review calibration certificates for traceability information
+        acceptance_criteria: Complete traceability chain to NIST documented
+        responsible_role: Calibration Technician
+
+      - item_number: 5.4
+        description: Standards physical condition acceptable
+        verification_method: Visual inspection of standards (weights, probes, buffers)
+        acceptance_criteria: No damage, corrosion, contamination, or degradation visible
+        responsible_role: Calibration Technician
+
+      - item_number: 5.5
+        description: Standards cleaned and prepared per requirements
+        verification_method: Clean standards per procedure
+        acceptance_criteria: Standards clean, handled with gloves if required
+        responsible_role: Calibration Technician
+
+      - item_number: 5.6
+        description: Accuracy ratio of standards to equipment is adequate
+        verification_method: Calculate accuracy ratio (standard/equipment)
+        acceptance_criteria: Minimum 3:1 ratio for working standards, 4:1 for critical equipment
+        responsible_role: Calibration Technician
+
+      - item_number: 5.7
+        description: Standards brought to equilibrium with calibration environment
+        verification_method: Allow standards to acclimate to room temperature
+        acceptance_criteria: Standards at same temperature as equipment (typically 1-2 hours for weights)
+        responsible_role: Calibration Technician
+
+  - section_number: 6
+    section_title: Consumables and Supplies
+    items:
+      - item_number: 6.1
+        description: Fresh calibration buffers or solutions prepared (if applicable)
+        verification_method: Check buffer expiration dates and lot numbers
+        acceptance_criteria: Buffers not expired, proper storage conditions maintained
+        responsible_role: Calibration Technician
+
+      - item_number: 6.2
+        description: Cleaning supplies available (lint-free wipes, solvent, DI water)
+        verification_method: Check cleaning supplies inventory
+        acceptance_criteria: Adequate cleaning supplies available
+        responsible_role: Calibration Technician
+
+      - item_number: 6.3
+        description: Calibration labels prepared (IN CALIBRATION, OUT OF CALIBRATION)
+        verification_method: Check label inventory
+        acceptance_criteria: Adequate supply of calibration labels available
+        responsible_role: Calibration Technician
+
+      - item_number: 6.4
+        description: Data recording tools functional (computer, tablet, data logger)
+        verification_method: Test data recording system
+        acceptance_criteria: System operational, able to enter and save data
+        responsible_role: Calibration Technician
+
+  - section_number: 7
+    section_title: Safety and Personal Protective Equipment
+    items:
+      - item_number: 7.1
+        description: Appropriate PPE identified and available
+        verification_method: Review procedure for PPE requirements
+        acceptance_criteria: Safety glasses, gloves, lab coat available as required
+        responsible_role: Calibration Technician
+
+      - item_number: 7.2
+        description: Electrical safety precautions implemented
+        verification_method: Check for proper grounding, no damaged cords
+        acceptance_criteria: Equipment properly grounded, no electrical hazards
+        responsible_role: Calibration Technician
+
+      - item_number: 7.3
+        description: Chemical hazards identified (pH buffers, cleaning solvents)
+        verification_method: Review SDS for chemicals in use
+        acceptance_criteria: SDS available, hazards understood, spill kit available
+        responsible_role: Calibration Technician
+
+      - item_number: 7.4
+        description: Lifting or ergonomic hazards assessed (heavy equipment)
+        verification_method: Assess equipment weight and lifting needs
+        acceptance_criteria: Lifting assistance available if equipment >25 lbs
+        responsible_role: Calibration Technician
+
+  - section_number: 8
+    section_title: Equipment-Specific Pre-Calibration Checks
+    items:
+      - item_number: 8.1
+        description: Balance leveling verified (for balances and scales)
+        verification_method: Check bubble level indicator
+        acceptance_criteria: Bubble centered in level indicator
+        responsible_role: Calibration Technician
+
+      - item_number: 8.2
+        description: pH electrode condition assessed (for pH meters)
+        verification_method: Visual inspection of electrode bulb and junction
+        acceptance_criteria: Electrode clean, no cracks, stored properly in solution
+        responsible_role: Calibration Technician
+
+      - item_number: 8.3
+        description: Temperature bath prepared and stabilized (for temperature equipment)
+        verification_method: Check bath temperature stability
+        acceptance_criteria: Bath at target temperature ±0.1°C for 15 minutes
+        responsible_role: Calibration Technician
+
+      - item_number: 8.4
+        description: Pressure system leak-checked (for pressure equipment)
+        verification_method: Pressurize and monitor for leaks
+        acceptance_criteria: No pressure drop over 5-minute period
+        responsible_role: Calibration Technician
+
+      - item_number: 8.5
+        description: Analytical instrument system suitability verified (HPLC, GC-MS)
+        verification_method: Run system suitability test per method
+        acceptance_criteria: All system suitability parameters within specifications
+        responsible_role: Calibration Technician
+
+  - section_number: 9
+    section_title: Final Pre-Calibration Verification
+    items:
+      - item_number: 9.1
+        description: All prerequisite checks completed and documented
+        verification_method: Review completed checklist
+        acceptance_criteria: All items checked with acceptable results
+        responsible_role: Calibration Technician
+
+      - item_number: 9.2
+        description: No conditions exist that would invalidate calibration
+        verification_method: Overall assessment of readiness
+        acceptance_criteria: All conditions suitable, no impediments to proceeding
+        responsible_role: Calibration Technician
+
+      - item_number: 9.3
+        description: Time allocated adequate to complete calibration
+        verification_method: Verify time availability
+        acceptance_criteria: Sufficient time to complete calibration without rushing
+        responsible_role: Calibration Technician
+
+      - item_number: 9.4
+        description: Supervisor notified of any issues or concerns
+        verification_method: Communication with Calibration Manager
+        acceptance_criteria: Manager aware of any unusual conditions or constraints
+        responsible_role: Calibration Technician
+
+completion:
+  - field_name: checklist_completed_by
+    field_type: text
+    required: true
+    description: Name of technician completing checklist
+
+  - field_name: completion_date
+    field_type: date
+    required: true
+    description: Date checklist completed
+
+  - field_name: completion_time
+    field_type: time
+    required: true
+    description: Time checklist completed
+
+  - field_name: technician_signature
+    field_type: signature
+    required: true
+    description: Technician electronic signature
+
+  - field_name: ready_to_proceed
+    field_type: yes_no
+    required: true
+    description: All pre-calibration checks satisfactory, ready to proceed with calibration?
+
+  - field_name: issues_identified
+    field_type: textarea
+    required: false
+    description: Any issues or concerns identified during pre-calibration checks
+
+instructions:
+  - Complete this checklist before beginning every equipment calibration
+  - All items must have acceptable results before proceeding with calibration
+  - If any item fails, resolve issue before proceeding or escalate to supervisor
+  - Document any deviations or unusual conditions in issues section
+  - Attach completed checklist to calibration record
+  - Do not proceed with calibration if environmental conditions are outside specifications
+  - Ensure all required calibration standards have valid, current certifications
+  - For critical Class A equipment, have supervisor review checklist before proceeding
+
+validation_rules:
+  - All checklist items must be checked and verified
+  - Environmental conditions must be within specified ranges
+  - All calibration standards must have valid, non-expired certifications
+  - Equipment must pass visual inspection and operational checks
+  - Ready to proceed must be "Yes" before calibration can start
+  - If ready to proceed is "No", issues must be documented and resolved

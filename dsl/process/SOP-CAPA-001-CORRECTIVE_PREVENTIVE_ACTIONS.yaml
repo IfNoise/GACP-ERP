@@ -1,0 +1,412 @@
+# DSL: CAPA (Corrective and Preventive Actions)
+# Version: 1.0
+# Source: SOP_CAPA.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "sop_process"
+
+metadata:
+  process_id: "SOP-CAPA-001"
+  process_type: "sop"
+  version: "1.0"
+  status: "active"
+  domain: "quality"
+  classification: "critical"
+  effective_date: "2025-10-17"
+  supersedes: null
+  review_period_months: 12
+  related_processes:
+    - "SOP-DEV-001"
+    - "SOP-CHG-001"
+    - "SOP-DOC-001"
+  regulatory_refs:
+    - "FDA 21 CFR Part 11"
+    - "EU GMP Annex 11"
+    - "ICH Q9 Quality Risk Management"
+    - "ICH Q10 Pharmaceutical Quality System"
+    - "ISO 9001:2015"
+
+process:
+  purpose: "Establish comprehensive, systematic, risk-based approach to identifying, investigating, implementing, and monitoring Corrective and Preventive Actions to prevent recurrence and enhance operational excellence"
+  scope_areas:
+    - "corrective_actions_eliminate_existing_nonconformances"
+    - "preventive_actions_eliminate_potential_nonconformances"
+    - "root_cause_analysis_and_investigation"
+    - "action_implementation_and_tracking"
+    - "effectiveness_verification"
+    - "trending_and_continuous_improvement"
+  frequency: "as_needed"
+  prerequisites:
+    - "CAPA system operational"
+    - "Personnel trained on CAPA process"
+  dependencies:
+    - "Deviation management (SOP-DEV-001)"
+    - "Change control (SOP-CHG-001)"
+  duration_estimate: null
+  critical_path: true
+
+roles:
+  - role_id: "ROLE-CAPAMGR-001"
+    role_name: "CAPA Manager"
+    qualifications:
+      required:
+        - "Quality management degree"
+        - "CAPA system expertise"
+        - "Root cause analysis certification"
+      optional: []
+    responsibilities:
+      - action: "Overall CAPA system management and oversight"
+        accountability: "accountable"
+        verification: "approved"
+
+  - role_id: "ROLE-QA-003"
+    role_name: "Quality Manager"
+    qualifications:
+      required:
+        - "QA degree or equivalent"
+        - "GMP/GACP training"
+      optional: []
+    responsibilities:
+      - action: "CAPA quality review and approval"
+        accountability: "accountable"
+        verification: "approved"
+
+  - role_id: "ROLE-DEPTMGR-001"
+    role_name: "Department Manager"
+    qualifications:
+      required:
+        - "Management experience"
+        - "Process knowledge"
+      optional: []
+    responsibilities:
+      - action: "CAPA identification, investigation, and implementation"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-CAPACOORD-001"
+    role_name: "CAPA Coordinator"
+    qualifications:
+      required:
+        - "CAPA system training"
+        - "Project coordination skills"
+      optional: []
+    responsibilities:
+      - action: "Daily CAPA operation management and workflow coordination"
+        accountability: "responsible"
+        verification: "documented"
+
+  - role_id: "ROLE-SME-002"
+    role_name: "Subject Matter Expert"
+    qualifications:
+      required:
+        - "Domain expertise"
+        - "Technical certification"
+      optional: []
+    responsibilities:
+      - action: "Technical expertise and root cause analysis leadership"
+        accountability: "consulted"
+        verification: "documented"
+
+parameters:
+  temporal:
+    immediate_action_hours: 24
+    investigation_completion_days: 30
+    action_implementation_days: 90
+    effectiveness_check_days: 30
+
+  risk_assessment:
+    severity_levels:
+      - "Critical (high patient/product safety impact)"
+      - "Major (significant quality/compliance impact)"
+      - "Minor (low impact on quality/compliance)"
+    probability_levels:
+      - "High (likely to occur)"
+      - "Medium (may occur)"
+      - "Low (unlikely to occur)"
+
+procedure:
+  - step_number: 1
+    step_id: "CAPA-001"
+    action: "Identify and initiate CAPA"
+    substeps:
+      - substep_id: "CAPA-001-01"
+        action: "Identify triggering event - deviation, audit finding, customer complaint, risk assessment, improvement opportunity"
+        parameters: null
+      - substep_id: "CAPA-001-02"
+        action: "Create CAPA request in system with unique ID (CAPA-YYYY-NNNN)"
+        parameters: null
+      - substep_id: "CAPA-001-03"
+        action: "Document problem statement, scope, and initial assessment"
+        parameters: null
+      - substep_id: "CAPA-001-04"
+        action: "Perform initial risk assessment - severity and probability"
+        parameters: null
+      - substep_id: "CAPA-001-05"
+        action: "Assign CAPA owner and investigation team"
+        parameters: null
+    parameters: null
+    controls:
+      - control_type: "verification"
+        parameter: "timeliness"
+        acceptance_criteria: "CAPA initiated within 24 hours of trigger"
+        frequency: "per_occurrence"
+    documentation_required: true
+    forms: []
+
+  - step_number: 2
+    step_id: "CAPA-002"
+    action: "Perform root cause analysis investigation"
+    substeps:
+      - substep_id: "CAPA-002-01"
+        action: "Collect and analyze data - review records, interview personnel, inspect materials/equipment"
+        parameters: null
+      - substep_id: "CAPA-002-02"
+        action: "Apply root cause analysis tools - Fishbone Diagram, 5 Whys, Fault Tree Analysis, FMEA"
+        parameters: null
+      - substep_id: "CAPA-002-03"
+        action: "Identify root cause(s) - fundamental reasons for nonconformance"
+        parameters: null
+      - substep_id: "CAPA-002-04"
+        action: "Document investigation findings and evidence"
+        parameters: null
+      - substep_id: "CAPA-002-05"
+        action: "Obtain Quality Manager review and approval of root cause"
+        parameters: null
+    parameters:
+      completion_timeline: "30 days from initiation"
+    controls:
+      - control_type: "verification"
+        parameter: "investigation_completeness"
+        acceptance_criteria: "All investigation elements documented and approved"
+        frequency: "per_occurrence"
+    documentation_required: true
+    forms: []
+
+  - step_number: 3
+    step_id: "CAPA-003"
+    action: "Develop corrective and preventive action plan"
+    substeps:
+      - substep_id: "CAPA-003-01"
+        action: "Define corrective actions to eliminate existing root cause"
+        parameters: null
+      - substep_id: "CAPA-003-02"
+        action: "Define preventive actions to prevent recurrence and similar issues"
+        parameters: null
+      - substep_id: "CAPA-003-03"
+        action: "Define immediate containment actions if not already implemented"
+        parameters: null
+      - substep_id: "CAPA-003-04"
+        action: "Assign responsible parties and target completion dates"
+        parameters: null
+      - substep_id: "CAPA-003-05"
+        action: "Define success criteria and effectiveness measures"
+        parameters: null
+      - substep_id: "CAPA-003-06"
+        action: "Assess resource requirements - budget, personnel, equipment, time"
+        parameters: null
+      - substep_id: "CAPA-003-07"
+        action: "Obtain management approval for action plan"
+        parameters: null
+    parameters: null
+    controls: []
+    documentation_required: true
+    forms: []
+
+  - step_number: 4
+    step_id: "CAPA-004"
+    action: "Implement corrective and preventive actions"
+    substeps:
+      - substep_id: "CAPA-004-01"
+        action: "Execute actions per approved plan"
+        parameters: null
+      - substep_id: "CAPA-004-02"
+        action: "Document implementation activities, progress, and issues"
+        parameters: null
+      - substep_id: "CAPA-004-03"
+        action: "Update procedures, work instructions, or specifications if required (link to SOP-CHG-001)"
+        parameters: null
+      - substep_id: "CAPA-004-04"
+        action: "Provide training if actions involve process or system changes"
+        parameters: null
+      - substep_id: "CAPA-004-05"
+        action: "Monitor progress against timeline and escalate delays"
+        parameters: null
+    parameters:
+      implementation_timeline: "90 days from approval"
+    controls:
+      - control_type: "verification"
+        parameter: "implementation_completeness"
+        acceptance_criteria: "All planned actions completed as designed"
+        frequency: "per_occurrence"
+    documentation_required: true
+    forms: []
+
+  - step_number: 5
+    step_id: "CAPA-005"
+    action: "Verify effectiveness of implemented actions"
+    substeps:
+      - substep_id: "CAPA-005-01"
+        action: "Define effectiveness check method - data review, observation, testing, trending"
+        parameters: null
+      - substep_id: "CAPA-005-02"
+        action: "Wait appropriate time period for effectiveness demonstration (typically 30-90 days)"
+        parameters: null
+      - substep_id: "CAPA-005-03"
+        action: "Collect effectiveness data - KPIs, metrics, observations, test results"
+        parameters: null
+      - substep_id: "CAPA-005-04"
+        action: "Analyze effectiveness - compare before/after, assess recurrence, verify improvement"
+        parameters: null
+      - substep_id: "CAPA-005-05"
+        action: "Document effectiveness check results and conclusion"
+        parameters: null
+      - substep_id: "CAPA-005-06"
+        action: "If ineffective, re-investigate and develop additional actions"
+        parameters: null
+    parameters:
+      effectiveness_check_period: "30 days post-implementation"
+    controls:
+      - control_type: "verification"
+        parameter: "effectiveness"
+        acceptance_criteria: "No recurrence of issue, improvement sustained"
+        frequency: "per_occurrence"
+    documentation_required: true
+    forms: []
+
+  - step_number: 6
+    step_id: "CAPA-006"
+    action: "Close CAPA and update knowledge base"
+    substeps:
+      - substep_id: "CAPA-006-01"
+        action: "Compile final CAPA report - investigation, actions, effectiveness"
+        parameters: null
+      - substep_id: "CAPA-006-02"
+        action: "Obtain Quality Manager approval for closure"
+        parameters: null
+      - substep_id: "CAPA-006-03"
+        action: "Update lessons learned database"
+        parameters: null
+      - substep_id: "CAPA-006-04"
+        action: "Communicate results to stakeholders"
+        parameters: null
+      - substep_id: "CAPA-006-05"
+        action: "Archive CAPA file per retention requirements"
+        parameters: null
+    parameters: null
+    controls: []
+    documentation_required: true
+    forms: []
+
+  - step_number: 7
+    step_id: "CAPA-007"
+    action: "Perform trending and continuous improvement analysis"
+    substeps:
+      - substep_id: "CAPA-007-01"
+        action: "Collect CAPA metrics - volume, category, timeliness, effectiveness"
+        parameters: null
+      - substep_id: "CAPA-007-02"
+        action: "Analyze trends - recurring issues, systemic problems, improvement opportunities"
+        parameters: null
+      - substep_id: "CAPA-007-03"
+        action: "Generate monthly/quarterly CAPA trend reports"
+        parameters: null
+      - substep_id: "CAPA-007-04"
+        action: "Present findings to management review"
+        parameters: null
+      - substep_id: "CAPA-007-05"
+        action: "Initiate proactive preventive CAPAs based on trends"
+        parameters: null
+    parameters: null
+    controls: []
+    documentation_required: true
+    forms: []
+
+quality_controls:
+  - control_id: "QC-CAPA-001"
+    control_type: "measurement"
+    description: "CAPA initiation timeliness"
+    frequency: "per_occurrence"
+    acceptance_criteria: "Initiated within 24 hours of trigger"
+    responsible_role: "ROLE-CAPACOORD-001"
+    form_ref: null
+
+  - control_id: "QC-CAPA-002"
+    control_type: "measurement"
+    description: "Investigation completion on time"
+    frequency: "monthly"
+    acceptance_criteria: "90% completed within 30 days"
+    responsible_role: "ROLE-CAPAMGR-001"
+    form_ref: null
+
+  - control_id: "QC-CAPA-003"
+    control_type: "verification"
+    description: "CAPA effectiveness rate"
+    frequency: "quarterly"
+    acceptance_criteria: ">90% effective (no recurrence)"
+    responsible_role: "ROLE-QA-003"
+    form_ref: null
+
+  - control_id: "QC-CAPA-004"
+    control_type: "inspection"
+    description: "Overdue CAPA count"
+    frequency: "weekly"
+    acceptance_criteria: "<5% of total CAPAs overdue"
+    responsible_role: "ROLE-CAPACOORD-001"
+    form_ref: null
+
+safety_requirements:
+  ppe: []
+  hazards:
+    - hazard_description: "Quality risk - ineffective CAPA allowing issue recurrence"
+      severity: "critical"
+      mitigation_measures:
+        - "Thorough root cause analysis"
+        - "Effectiveness verification"
+        - "Trending and monitoring"
+    - hazard_description: "Compliance risk - inadequate CAPA system"
+      severity: "critical"
+      mitigation_measures:
+        - "Regulatory compliance checks"
+        - "Management oversight"
+        - "Internal audits"
+
+records:
+  - record_id: "REC-CAPA-001"
+    record_type: "capa_records"
+    description: "All CAPA requests, investigations, action plans, effectiveness checks"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "daily"
+
+  - record_id: "REC-CAPA-002"
+    record_type: "trend_reports"
+    description: "Monthly and quarterly CAPA trend analysis reports"
+    retention_period: "30_years"
+    storage_location: "electronic"
+    backup_requirement: "monthly"
+
+training_requirements:
+  required_courses:
+    - course_id: "TRN-CAPA-001"
+      course_name: "CAPA System and Root Cause Analysis"
+      duration_hours: 8
+      recertification_months: 12
+  prerequisites:
+    - "TRN-GMP-001"
+
+related_documents:
+  forms: []
+  checklists: []
+  reports: []
+  parent_sops: []
+  child_sops:
+    - "SOP-DEV-001"
+    - "SOP-CHG-001"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion from SOP_CAPA.md v2.0"
+    approved_by: "Pending"

@@ -1,0 +1,275 @@
+# DSL: Deviation Investigation Checklist
+# Version: 1.0
+# Source: SOP_DeviationManagement.md v2.0
+# Date: 2026-01-08
+
+schema_version: "1.0.0"
+schema_type: "checklist"
+
+metadata:
+  id: "CHKLST-DEV-001"
+  checklist_type: "investigation"
+  title: "Deviation Investigation Checklist"
+  version: "1.0"
+  status: "active"
+  related_sop: "SOP-DEV-001"
+
+usage:
+  purpose: "Ensure systematic and complete investigation of deviations with all required elements addressed"
+  frequency: "per_deviation"
+  trigger: "Deviation investigation initiated"
+  responsible_roles:
+    - "ROLE-QAINV-001"
+    - "ROLE-PRODMGR-001"
+    - "ROLE-LABMGR-001"
+  estimated_duration_minutes: 180
+
+checklist_structure:
+  sections:
+    - section_id: "SEC-001"
+      section_title: "Investigation Planning"
+      section_order: 1
+      required: true
+
+      items:
+        - item_id: "INV-001"
+          item_text: "Investigation team assigned with appropriate expertise"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Team includes QA investigator, process owner, and SME"
+          evidence_required: true
+          guidance: "Document team members, roles, and qualifications"
+
+        - item_id: "INV-002"
+          item_text: "Investigation timeline established per deviation severity"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Critical: 5 days, Major: 10 days, Minor: 15 days"
+          evidence_required: false
+          guidance: "Set milestones and target completion date"
+
+        - item_id: "INV-003"
+          item_text: "Investigation scope and objectives defined"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear scope statement and investigation objectives documented"
+          evidence_required: false
+          guidance: "What questions need to be answered?"
+
+    - section_id: "SEC-002"
+      section_title: "Evidence Collection"
+      section_order: 2
+      required: true
+
+      items:
+        - item_id: "INV-004"
+          item_text: "Physical samples secured and chain of custody established"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Samples properly labeled, stored, and tracked"
+          evidence_required: true
+          guidance: "Use chain of custody form if physical samples involved"
+
+        - item_id: "INV-005"
+          item_text: "All relevant documentation collected and reviewed"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Batch records, SOPs, specifications, test results, maintenance logs"
+          evidence_required: true
+          guidance: "Create evidence log listing all documents reviewed"
+
+        - item_id: "INV-006"
+          item_text: "Photographic/video evidence captured if applicable"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Clear photos/videos with date/time stamps and descriptions"
+          evidence_required: true
+          guidance: "Document visual evidence of deviation scene, equipment, materials"
+
+        - item_id: "INV-007"
+          item_text: "Witness interviews conducted and documented"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All relevant personnel interviewed, statements documented"
+          evidence_required: true
+          guidance: "Use structured interview format, document verbatim responses"
+
+        - item_id: "INV-008"
+          item_text: "System data logs and audit trails extracted"
+          response_type: "pass_fail_na"
+          required: true
+          acceptance_criteria: "Relevant ERP logs, equipment logs, environmental monitoring data"
+          evidence_required: true
+          guidance: "Export data for relevant time period with timestamps"
+
+    - section_id: "SEC-003"
+      section_title: "Root Cause Analysis"
+      section_order: 3
+      required: true
+
+      items:
+        - item_id: "INV-009"
+          item_text: "Fishbone Diagram (Ishikawa) completed for deviation"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "All six categories explored: Methods, Machines, Materials, Manpower, Measurement, Environment"
+          evidence_required: true
+          guidance: "Brainstorm all possible causes in each category"
+
+        - item_id: "INV-010"
+          item_text: "5 Why Analysis performed to identify root cause"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "At least 5 levels of 'why' questioned, fundamental root cause identified"
+          evidence_required: true
+          guidance: "Keep asking 'why' until fundamental cause reached"
+
+        - item_id: "INV-011"
+          item_text: "Fault Tree Analysis completed if applicable (complex deviations)"
+          response_type: "pass_fail_na"
+          required: false
+          acceptance_criteria: "Logical tree showing how basic events lead to top event"
+          evidence_required: true
+          guidance: "Use for complex deviations with multiple contributing factors"
+
+        - item_id: "INV-012"
+          item_text: "Root cause validated with supporting evidence"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Evidence demonstrates root cause is true fundamental reason"
+          evidence_required: true
+          guidance: "Can you demonstrate that eliminating this cause prevents recurrence?"
+
+    - section_id: "SEC-004"
+      section_title: "Impact Assessment"
+      section_order: 4
+      required: true
+
+      items:
+        - item_id: "INV-013"
+          item_text: "Product quality impact assessed (chemical composition, microbiological, physical)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Comprehensive assessment of quality attributes"
+          evidence_required: true
+          guidance: "Review cannabinoid profiles, terpenes, impurities, bioburden, appearance"
+
+        - item_id: "INV-014"
+          item_text: "Batch disposition decision documented with justification"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear decision: Release, Release with conditions, Reject, Additional testing"
+          evidence_required: true
+          guidance: "Use batch disposition decision tree from SOP"
+
+        - item_id: "INV-015"
+          item_text: "Other batches/materials potentially affected identified"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Investigation scope expanded if needed to cover similar batches"
+          evidence_required: false
+          guidance: "Consider same timeframe, same equipment, same materials"
+
+        - item_id: "INV-016"
+          item_text: "Regulatory impact assessed (reportability determination)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Determination if regulatory notification required"
+          evidence_required: false
+          guidance: "Consult regulatory affairs if critical deviation or product safety concern"
+
+    - section_id: "SEC-005"
+      section_title: "Risk Assessment"
+      section_order: 5
+      required: true
+
+      items:
+        - item_id: "INV-017"
+          item_text: "Risk assessment completed using risk matrix"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Severity and probability evaluated, risk level determined"
+          evidence_required: true
+          guidance: "Use TOOL-DEV-001 Risk Assessment Matrix"
+
+        - item_id: "INV-018"
+          item_text: "Risk of recurrence if no action taken evaluated"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Probability and impact of recurrence documented"
+          evidence_required: false
+          guidance: "What happens if we do nothing?"
+
+    - section_id: "SEC-006"
+      section_title: "Investigation Documentation"
+      section_order: 6
+      required: true
+
+      items:
+        - item_id: "INV-019"
+          item_text: "Investigation report compiled with all findings"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Report includes: timeline, evidence, analysis, root cause, impact, recommendations"
+          evidence_required: true
+          guidance: "Use standard investigation report template"
+
+        - item_id: "INV-020"
+          item_text: "All evidence attached or referenced in investigation file"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Complete evidence package with cross-references"
+          evidence_required: false
+          guidance: "Ensure traceability from findings to supporting evidence"
+
+        - item_id: "INV-021"
+          item_text: "CAPA recommendations documented (link to FORM-DEV-002)"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "Clear corrective and preventive action recommendations"
+          evidence_required: false
+          guidance: "What actions will eliminate root cause and prevent recurrence?"
+
+        - item_id: "INV-022"
+          item_text: "Investigation approved by Quality Manager"
+          response_type: "pass_fail"
+          required: true
+          acceptance_criteria: "QA Manager signature and date on investigation report"
+          evidence_required: true
+          guidance: "Obtain final QA approval before closing investigation"
+
+scoring_method:
+  method: "percentage"
+  passing_score: 100
+  critical_items:
+    - "INV-001"
+    - "INV-005"
+    - "INV-009"
+    - "INV-010"
+    - "INV-012"
+    - "INV-013"
+    - "INV-014"
+    - "INV-022"
+  critical_item_requirement: "All critical items must pass"
+
+corrective_action:
+  on_fail:
+    immediate_actions:
+      - "Document deficiencies"
+      - "Complete missing investigation elements"
+      - "Obtain additional expertise if needed"
+    follow_up_required:
+      - "Re-submit investigation for QA review"
+      - "Update investigation procedures if systematic gaps identified"
+
+storage:
+  location: "electronic"
+  retention_period: "30_years"
+  backup_requirement: "daily"
+
+change_history:
+  - version: "1.0"
+    date: "2026-01-08"
+    author: "DSL Conversion Team"
+    description: "Initial DSL conversion"
+    approved_by: "Pending"

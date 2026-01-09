@@ -1,0 +1,281 @@
+schema_version: "1.0.0"
+type: report
+metadata:
+  id: REPORT-OOS-001
+  title: Monthly OOS Trend Analysis Report
+  version: "1.0"
+  effective_date: "2025-09-14"
+  related_process: SOP-OOS-001
+  department: Quality Assurance
+  classification: Critical
+  frequency: Monthly
+  distribution:
+    - Quality Assurance Management
+    - Quality Control Management
+    - Production Management
+    - Senior Management
+    - Regulatory Affairs
+
+report_structure:
+  - section_number: 1
+    section_title: Executive Summary
+    content_requirements:
+      - Monthly OOS summary (total OOS events, comparison to previous month, year-to-date)
+      - Key findings and significant trends identified
+      - Critical issues requiring immediate attention
+      - Overall OOS performance status (improvement, stable, declining)
+      - High-level recommendations for management action
+
+  - section_number: 2
+    section_title: OOS Statistics and Metrics
+    content_requirements:
+      - Total OOS events for reporting period
+      - OOS events by product/material category
+      - OOS events by test method/parameter
+      - OOS events by laboratory/testing location
+      - Comparison to previous periods (month, quarter, year)
+      - OOS rate calculation (OOS events per total tests performed)
+      - Critical vs Major vs Minor OOS classification breakdown
+
+    required_charts:
+      - chart_type: Bar Chart
+        chart_title: OOS Events by Product Category
+        x_axis: Product Category
+        y_axis: Number of OOS Events
+        data_series:
+          - Current Month
+          - Previous Month
+          - Monthly Average (YTD)
+
+      - chart_type: Line Chart
+        chart_title: Monthly OOS Trend (12-Month Rolling)
+        x_axis: Month
+        y_axis: Number of OOS Events
+        data_series:
+          - Total OOS
+          - Critical OOS
+          - Trend Line
+
+      - chart_type: Pie Chart
+        chart_title: OOS Events by Test Parameter
+        data_labels: Test Parameter Name
+        data_values: Number of OOS Events
+
+  - section_number: 3
+    section_title: Investigation Performance Analysis
+    content_requirements:
+      - Average investigation completion time (Phase I and Phase II separately)
+      - Percentage of investigations completed within target timeline
+      - Root cause identification rate (% investigations with identified root cause)
+      - Ratio of Phase I vs Phase II investigations
+      - Average time from OOS detection to investigation initiation
+      - Number of investigations pending (open) at end of reporting period
+      - Comparison of performance metrics to previous periods and targets
+
+    key_performance_indicators:
+      - kpi_name: Phase I Investigation Cycle Time
+        target: ≤10 business days
+        measurement: Average days from OOS notification to Phase I completion
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: Root Cause Identification Rate
+        target: ≥80%
+        measurement: Percentage of investigations with confirmed root cause
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: Investigation Timeline Compliance
+        target: ≥90%
+        measurement: Percentage of investigations completed within target timeline
+        trend: Current month, 3-month average, 12-month average
+
+      - kpi_name: Laboratory Error Rate
+        target: ≤30%
+        measurement: Percentage of OOS caused by laboratory errors
+        trend: Current month, 3-month average, 12-month average
+
+  - section_number: 4
+    section_title: Root Cause Analysis Summary
+    content_requirements:
+      - Root cause categories distribution (laboratory errors, equipment, method, sample, process, material)
+      - Detailed breakdown of laboratory errors (calculation, transcription, sample handling, equipment operation)
+      - Equipment-related OOS causes (calibration, malfunction, performance)
+      - Method-related issues (suitability, validation, compliance)
+      - Manufacturing process-related causes
+      - Raw material or component-related causes
+      - Unknown/uninvestigated root causes (with justification)
+
+    required_charts:
+      - chart_type: Pareto Chart
+        chart_title: Root Cause Categories (Descending Order)
+        x_axis: Root Cause Category
+        y_axis: Number of OOS Events
+        secondary_y_axis: Cumulative Percentage
+
+  - section_number: 5
+    section_title: CAPA Status and Effectiveness
+    content_requirements:
+      - Number of CAPAs initiated from OOS investigations
+      - Number of CAPAs completed during reporting period
+      - Number of CAPAs pending/overdue
+      - CAPA implementation timeline compliance
+      - CAPA effectiveness verification results (effective, partially effective, not effective)
+      - Recurrence rate for issues with implemented CAPAs
+      - Follow-up actions required from effectiveness verifications
+
+    metrics:
+      - metric_name: CAPA Implementation Rate
+        calculation: (CAPAs completed / CAPAs due) × 100%
+        target: ≥95%
+        current_value: [To be calculated]
+
+      - metric_name: CAPA Effectiveness Rate
+        calculation: (Effective CAPAs / Total verified CAPAs) × 100%
+        target: ≥85%
+        current_value: [To be calculated]
+
+      - metric_name: Issue Recurrence Rate
+        calculation: (Recurring OOS / Total OOS with completed CAPA) × 100%
+        target: ≤5%
+        current_value: [To be calculated]
+
+  - section_number: 6
+    section_title: Batch Disposition Outcomes
+    content_requirements:
+      - Total batches affected by OOS results
+      - Batch disposition breakdown (released, rejected/destroyed, reworked/reprocessed)
+      - Disposition decision rationale summary
+      - Financial impact of OOS events (rejected material value, rework costs)
+      - Disposition timeline (time from OOS to disposition decision)
+      - Regulatory notifications made related to batch dispositions
+
+    required_charts:
+      - chart_type: Stacked Bar Chart
+        chart_title: Batch Disposition Outcomes
+        x_axis: Month
+        y_axis: Number of Batches
+        data_series:
+          - Released (Lab Error Confirmed)
+          - Rejected/Destroyed
+          - Reworked/Reprocessed
+
+  - section_number: 7
+    section_title: Pattern Analysis and Trends
+    content_requirements:
+      - Seasonal patterns identified (if applicable)
+      - Recurring issues across multiple products or tests
+      - Product-specific trends (products with increasing OOS frequency)
+      - Method-specific trends (test methods with performance issues)
+      - Equipment-specific trends (instruments with recurring problems)
+      - Analyst-specific patterns (training or competency concerns)
+      - Systemic issues identified (affecting multiple products/methods)
+
+    trend_identification:
+      - Alert Level 1 (Monitor): 2 OOS for same product/test in 3 months
+      - Alert Level 2 (Investigate): 3 OOS for same product/test in 3 months
+      - Alert Level 3 (Action Required): 4+ OOS for same product/test in 3 months, or increasing trend over 3 consecutive months
+
+  - section_number: 8
+    section_title: Regulatory Compliance and Reporting
+    content_requirements:
+      - Regulatory inspections or audits during reporting period related to OOS
+      - Regulatory notifications made (FDA, health authorities)
+      - Regulatory responses or follow-up actions required
+      - Compliance with OOS investigation timelines per regulations
+      - Changes to regulatory requirements affecting OOS management
+      - Industry guidance or warning letters reviewed and applicability assessed
+
+  - section_number: 9
+    section_title: Training and Competency
+    content_requirements:
+      - OOS investigation training conducted during reporting period
+      - Personnel trained (number, roles)
+      - Competency assessment results
+      - Training effectiveness indicators (e.g., investigation quality improvement)
+      - Training needs identified from investigation performance
+      - Upcoming training planned
+
+  - section_number: 10
+    section_title: Continuous Improvement Initiatives
+    content_requirements:
+      - Process improvements implemented during reporting period
+      - Technology enhancements or system upgrades
+      - Investigation methodology improvements
+      - Preventive measures implemented to reduce OOS occurrence
+      - Benchmarking against industry standards
+      - Innovation projects underway (automation, analytics, predictive tools)
+
+  - section_number: 11
+    section_title: Recommendations and Action Items
+    content_requirements:
+      - Prioritized recommendations for management action
+      - Resource needs identified (personnel, equipment, training, system enhancements)
+      - Process improvement opportunities
+      - High-risk areas requiring immediate attention
+      - Systemic issues requiring cross-functional initiatives
+      - Action item assignments with responsible parties and target dates
+
+data_requirements:
+  - data_source: OOS Database (LIMS)
+    data_elements:
+      - OOS event ID and date
+      - Product/material and batch number
+      - Test parameter and specification
+      - Actual result and deviation magnitude
+      - Investigation outcome and root cause
+      - CAPA ID and status
+      - Batch disposition decision
+
+  - data_source: Investigation Records
+    data_elements:
+      - Investigation start and completion dates
+      - Investigation phase (I or II)
+      - Root cause identification (Yes/No)
+      - Investigation findings and conclusions
+      - Approvals and sign-offs
+
+  - data_source: CAPA System
+    data_elements:
+      - CAPA initiation and target dates
+      - CAPA implementation status
+      - Effectiveness verification results
+      - CAPA closure dates
+
+  - data_source: Batch Records
+    data_elements:
+      - Batch disposition decisions
+      - Disposition dates
+      - Financial impact data
+
+analysis_methods:
+  - Descriptive statistics (counts, frequencies, percentages, averages)
+  - Trend analysis (time series, moving averages)
+  - Pareto analysis (80/20 rule for root cause prioritization)
+  - Control chart analysis (process stability assessment)
+  - Comparative analysis (month-over-month, year-over-year)
+  - Pattern recognition (seasonality, cyclical patterns)
+  - Risk-based analysis (severity × frequency matrix)
+
+report_timeline:
+  - data_collection_period: 1st day to last day of calendar month
+  - report_generation: Within 10 business days of month end
+  - management_review: Within 15 business days of month end
+  - action_items_due: As assigned, typically within 30-60 days
+
+approval_requirements:
+  - prepared_by: QA Analyst/Specialist (report author)
+  - reviewed_by: QA Manager (technical review)
+  - approved_by: QA Director or VP Quality (final approval)
+
+distribution_and_retention:
+  - Primary distribution: Electronic via quality management system
+  - Meeting presentation: Monthly Quality Management Review
+  - Retention period: Minimum 3 years (or per regulatory requirements)
+  - Archive location: Quality Management System - Trending Reports folder
+
+validation_rules:
+  - All data must be extracted from validated systems (LIMS, CAPA system)
+  - Data completeness verified before analysis (no missing OOS events)
+  - Calculations verified by second person
+  - Charts and graphs accurately represent data
+  - Trends compared against statistical significance thresholds
+  - Report reviewed and approved before distribution

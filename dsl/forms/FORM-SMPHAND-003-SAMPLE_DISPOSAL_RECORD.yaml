@@ -1,0 +1,734 @@
+---
+schema_version: "1.0.0"
+schema_type: "form"
+
+metadata:
+  id: "FORM-SMPHAND-003"
+  title: "Sample Disposal and Destruction Record"
+  version: "1.0"
+  effective_date: "2025-01-15"
+  related_process: "SOP-SMPHAND-001"
+  form_category: "sample_handling"
+  classification: "critical"
+  regulatory_requirement: "DEA Regulations, EPA Hazardous Waste, ISO/IEC 17025"
+  electronic_enabled: true
+  signature_required: true
+
+purpose: "Document proper disposal and destruction of laboratory samples in compliance with regulatory requirements, ensuring proper waste characterization, disposal method selection, and witness verification"
+
+instructions:
+  - "Complete this form for all sample disposal activities"
+  - "For controlled substances (DEA Schedule I-V), witness verification required"
+  - "For hazardous waste, complete waste characterization and EPA documentation"
+  - "Photograph disposal process and destroyed samples as evidence"
+  - "Obtain all required signatures before finalizing disposal"
+  - "Archive completed form with photographs in document management system"
+
+sections:
+  - section_id: "SEC-001"
+    section_name: "Sample Identification and Authorization"
+    description: "Identification of samples being disposed and authorization"
+    fields:
+      - field_id: "disposal_batch_id"
+        field_label: "Disposal Batch ID"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Unique identifier for this disposal batch"
+
+      - field_id: "laboratory_sample_ids"
+        field_label: "Laboratory Sample ID(s)"
+        field_type: "textarea"
+        data_type: "text"
+        required: true
+        validation:
+          type: "text"
+          max_length: 2000
+        help_text: "List all laboratory sample IDs being disposed (one per line or comma-separated)"
+
+      - field_id: "number_of_samples"
+        field_label: "Number of Samples"
+        field_type: "number"
+        data_type: "integer"
+        required: true
+        validation:
+          type: "range"
+          min: 1
+          max: 1000
+        help_text: "Total number of samples in this disposal batch"
+
+      - field_id: "sample_types"
+        field_label: "Sample Types Included"
+        field_type: "checkbox"
+        data_type: "array"
+        required: true
+        options: enum:
+          - "Cannabis Flower"
+          - "Cannabis Extract/Concentrate"
+          - "Edible Product"
+          - "Raw Material"
+          - "Environmental Sample"
+          - "Reference Standard"
+          - "Quality Control Sample"
+          - "Other"
+        help_text: "Select all sample types included in disposal batch"
+
+      - field_id: "disposal_authorization"
+        field_label: "Disposal Authorized By"
+        field_type: "user_lookup"
+        data_type: "string"
+        required: true
+        validation:
+          type: "user_id"
+        help_text: "Laboratory Manager or authorized person approving disposal"
+
+      - field_id: "authorization_date"
+        field_label: "Authorization Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Date and time disposal authorized"
+
+  - section_id: "SEC-002"
+    section_name: "Disposal Eligibility Verification"
+    description: "Verification that samples are eligible for disposal"
+    fields:
+      - field_id: "all_testing_complete"
+        field_label: "All Testing Complete"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Have all requested tests been completed?"
+
+      - field_id: "results_reported"
+        field_label: "Results Reported to Client"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+          - "N/A - No Client"
+        help_text: "Have results been reported to client?"
+
+      - field_id: "no_holds_or_investigations"
+        field_label: "No Active Holds or Investigations"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Confirmed - No Holds"
+          - "Hold Present - Cannot Dispose"
+        help_text: "Confirm no active holds or investigations requiring sample retention"
+
+      - field_id: "retention_period_met"
+        field_label: "Retention Period Requirements Met"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes - Retention Period Expired"
+          - "No - Early Disposal Authorized"
+        help_text: "Have minimum retention requirements been met?"
+
+      - field_id: "early_disposal_justification"
+        field_label: "Early Disposal Justification"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        conditional_display:
+          field: "retention_period_met"
+          condition: "equals"
+          value: "No - Early Disposal Authorized"
+        help_text: "Justification for disposal before retention period expired"
+
+  - section_id: "SEC-003"
+    section_name: "Waste Classification"
+    description: "Classification of waste type for proper disposal method selection"
+    fields:
+      - field_id: "waste_classification"
+        field_label: "Waste Classification"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Non-Hazardous Cannabis Waste"
+          - "Hazardous Waste (EPA Regulated)"
+          - "Controlled Substance (DEA Schedule I-V)"
+          - "Biological/Infectious Waste"
+          - "Mixed Waste (Cannabis + Hazardous)"
+          - "Universal Waste (e.g., Mercury)"
+          - "Non-Hazardous General Waste"
+        help_text: "Primary waste classification for disposal"
+
+      - field_id: "controlled_substance_schedule"
+        field_label: "DEA Schedule (if controlled substance)"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Schedule I"
+          - "Schedule II"
+          - "Schedule III"
+          - "Schedule IV"
+          - "Schedule V"
+        conditional_display:
+          field: "waste_classification"
+          condition: "equals"
+          value: "Controlled Substance (DEA Schedule I-V)"
+        help_text: "DEA schedule for controlled substances"
+
+      - field_id: "hazardous_waste_codes"
+        field_label: "EPA Hazardous Waste Codes"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 200
+        conditional_display:
+          field: "waste_classification"
+          condition: "in"
+          values:
+            - "Hazardous Waste (EPA Regulated)"
+            - "Mixed Waste (Cannabis + Hazardous)"
+        help_text: "EPA waste codes (e.g., D001, F003) - separate multiple codes with commas"
+
+      - field_id: "waste_hazards"
+        field_label: "Waste Hazards"
+        field_type: "checkbox"
+        data_type: "array"
+        required: false
+        options: enum:
+          - "Ignitable"
+          - "Corrosive"
+          - "Reactive"
+          - "Toxic"
+          - "Flammable Solvents"
+          - "Biological"
+          - "None"
+        help_text: "Select all applicable hazard characteristics"
+
+  - section_id: "SEC-004"
+    section_name: "Disposal Method and Execution"
+    description: "Method used for disposal and execution details"
+    fields:
+      - field_id: "disposal_method"
+        field_label: "Disposal Method"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: true
+        options: enum:
+          - "Incineration (High Temperature)"
+          - "Chemical Treatment/Neutralization"
+          - "Autoclave Sterilization + Landfill"
+          - "Rendering Unusable + Landfill"
+          - "Reverse Distributor (DEA)"
+          - "Licensed Hazardous Waste Facility"
+          - "Secure Landfill"
+          - "Other (Specify)"
+        help_text: "Primary disposal method used"
+
+      - field_id: "disposal_method_details"
+        field_label: "Disposal Method Details"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 500
+        help_text: "Additional details about disposal method"
+
+      - field_id: "disposal_location"
+        field_label: "Disposal Location/Facility"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "text"
+          max_length: 200
+        help_text: "Name and location of disposal facility or on-site location"
+
+      - field_id: "disposal_date"
+        field_label: "Disposal Date"
+        field_type: "date"
+        data_type: "date"
+        required: true
+        validation:
+          type: "date"
+        help_text: "Date disposal executed"
+
+      - field_id: "disposal_time"
+        field_label: "Disposal Time"
+        field_type: "time"
+        data_type: "time"
+        required: true
+        validation:
+          type: "time"
+        help_text: "Time disposal executed"
+
+      - field_id: "rendering_method"
+        field_label: "Rendering Method (if applicable)"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Mixed with Inedible Material (Kitty Litter)"
+          - "Mixed with Inedible Material (Dirt/Gravel)"
+          - "Chemical Deactivation"
+          - "Physical Destruction (Grinding)"
+          - "Not Applicable"
+        conditional_display:
+          field: "disposal_method"
+          condition: "equals"
+          value: "Rendering Unusable + Landfill"
+        help_text: "Method used to render cannabis waste unusable"
+
+  - section_id: "SEC-005"
+    section_name: "Personnel and Witness Verification"
+    description: "Personnel performing disposal and witness verification"
+    fields:
+      - field_id: "disposed_by_name"
+        field_label: "Disposed By (Name)"
+        field_type: "user_lookup"
+        data_type: "string"
+        required: true
+        validation:
+          type: "user_id"
+        help_text: "Name of person executing disposal"
+
+      - field_id: "disposed_by_title"
+        field_label: "Disposed By (Job Title)"
+        field_type: "text"
+        data_type: "string"
+        required: true
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        help_text: "Job title of person executing disposal"
+
+      - field_id: "witness_required"
+        field_label: "Witness Required"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is witness required for this disposal (DEA controlled substances require witness)?"
+
+      - field_id: "witness_name"
+        field_label: "Witness Name"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        conditional_display:
+          field: "witness_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Name of witness observing disposal"
+
+      - field_id: "witness_title"
+        field_label: "Witness Title/Role"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 100
+        conditional_display:
+          field: "witness_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Job title or role of witness"
+
+      - field_id: "witness_affiliation"
+        field_label: "Witness Affiliation"
+        field_type: "dropdown"
+        data_type: "enum"
+        required: false
+        options: enum:
+          - "Laboratory Staff"
+          - "DEA Representative"
+          - "Law Enforcement"
+          - "Regulatory Inspector"
+          - "Third Party Disposal Company"
+          - "Other"
+        conditional_display:
+          field: "witness_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Organization affiliation of witness"
+
+  - section_id: "SEC-006"
+    section_name: "Regulatory Documentation"
+    description: "Regulatory forms and documentation for disposal"
+    fields:
+      - field_id: "dea_form_41_required"
+        field_label: "DEA Form 41 Required"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is DEA Form 41 required for controlled substance disposal?"
+
+      - field_id: "dea_form_41_number"
+        field_label: "DEA Form 41 Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "dea_form_41_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "DEA Form 41 reference number"
+
+      - field_id: "hazardous_waste_manifest"
+        field_label: "Hazardous Waste Manifest Required"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Is EPA hazardous waste manifest required?"
+
+      - field_id: "manifest_number"
+        field_label: "Hazardous Waste Manifest Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "hazardous_waste_manifest"
+          condition: "equals"
+          value: "Yes"
+        help_text: "EPA manifest tracking number"
+
+      - field_id: "disposal_company_name"
+        field_label: "Disposal Company Name"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "text"
+          max_length: 200
+        help_text: "Name of licensed disposal company if applicable"
+
+      - field_id: "disposal_company_license"
+        field_label: "Disposal Company License Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Disposal company EPA or state license number"
+
+  - section_id: "SEC-007"
+    section_name: "Photographic and Physical Evidence"
+    description: "Photographic documentation of disposal process"
+    fields:
+      - field_id: "photos_taken"
+        field_label: "Photographs Taken"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Were photographs taken documenting disposal?"
+
+      - field_id: "photo_ids"
+        field_label: "Photo File IDs"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 500
+        conditional_display:
+          field: "photos_taken"
+          condition: "equals"
+          value: "Yes"
+        help_text: "List photo file names or IDs (comma separated)"
+
+      - field_id: "photos_include"
+        field_label: "Photographs Include"
+        field_type: "checkbox"
+        data_type: "array"
+        required: false
+        options: enum:
+          - "Samples Before Disposal"
+          - "Samples Being Destroyed"
+          - "Destroyed/Rendered Unusable Samples"
+          - "Disposal Equipment"
+          - "Witness Present"
+          - "Disposal Container/Dumpster"
+          - "Disposal Facility"
+        conditional_display:
+          field: "photos_taken"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Select all items photographed"
+
+      - field_id: "video_documentation"
+        field_label: "Video Documentation"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Was video documentation recorded?"
+
+      - field_id: "video_file_id"
+        field_label: "Video File ID"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 200
+        conditional_display:
+          field: "video_documentation"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Video file name or identifier"
+
+  - section_id: "SEC-008"
+    section_name: "Disposal Verification"
+    description: "Confirmation of complete destruction and disposal"
+    fields:
+      - field_id: "disposal_complete"
+        field_label: "Disposal Complete and Verified"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No - Partial Disposal"
+        help_text: "Confirm all samples in batch completely disposed"
+
+      - field_id: "samples_rendered_unusable"
+        field_label: "Samples Rendered Completely Unusable"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Confirm samples cannot be recovered or used"
+
+      - field_id: "certificate_of_destruction"
+        field_label: "Certificate of Destruction Received"
+        field_type: "radio"
+        data_type: "boolean"
+        required: false
+        options: enum:
+          - "Yes"
+          - "No"
+          - "N/A"
+        help_text: "For third-party disposal, was certificate of destruction received?"
+
+      - field_id: "certificate_number"
+        field_label: "Certificate Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        help_text: "Certificate of destruction reference number"
+
+  - section_id: "SEC-009"
+    section_name: "Comments and Issues"
+    description: "Additional comments or issues during disposal"
+    fields:
+      - field_id: "comments"
+        field_label: "Comments"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 1000
+        help_text: "Any additional notes or comments about disposal"
+
+      - field_id: "issues_or_deviations"
+        field_label: "Issues or Deviations Occurred"
+        field_type: "radio"
+        data_type: "boolean"
+        required: true
+        options: enum:
+          - "Yes"
+          - "No"
+        help_text: "Did any issues or deviations occur during disposal?"
+
+      - field_id: "issue_description"
+        field_label: "Issue Description"
+        field_type: "textarea"
+        data_type: "text"
+        required: false
+        validation:
+          type: "text"
+          max_length: 1000
+        conditional_display:
+          field: "issues_or_deviations"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Describe any issues or deviations"
+
+      - field_id: "deviation_report_number"
+        field_label: "Deviation Report Number"
+        field_type: "text"
+        data_type: "string"
+        required: false
+        validation:
+          type: "alphanumeric"
+          max_length: 50
+        conditional_display:
+          field: "issues_or_deviations"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Deviation report number if initiated"
+
+  - section_id: "SEC-010"
+    section_name: "Signatures and Approvals"
+    description: "Required signatures for disposal record"
+    fields:
+      - field_id: "disposal_technician_signature"
+        field_label: "Disposal Technician Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "Signature of person who executed disposal"
+
+      - field_id: "technician_signature_date"
+        field_label: "Technician Signature Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Date and time of technician signature"
+
+      - field_id: "witness_signature"
+        field_label: "Witness Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: false
+        validation:
+          type: "electronic_signature"
+        conditional_display:
+          field: "witness_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Signature of witness (required for controlled substances)"
+
+      - field_id: "witness_signature_date"
+        field_label: "Witness Signature Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: false
+        validation:
+          type: "timestamp"
+        conditional_display:
+          field: "witness_required"
+          condition: "equals"
+          value: "Yes"
+        help_text: "Date and time of witness signature"
+
+      - field_id: "qa_review_signature"
+        field_label: "QA Review Signature"
+        field_type: "signature"
+        data_type: "signature"
+        required: true
+        validation:
+          type: "electronic_signature"
+        help_text: "QA review and approval signature"
+
+      - field_id: "qa_signature_date"
+        field_label: "QA Signature Date"
+        field_type: "datetime"
+        data_type: "timestamp"
+        required: true
+        validation:
+          type: "timestamp"
+        help_text: "Date and time of QA signature"
+
+workflow:
+  trigger: "Samples ready for disposal after testing complete and retention period met"
+  steps:
+    - step: 1
+      action: "Laboratory Manager authorizes disposal"
+      responsible: "Laboratory Manager"
+    - step: 2
+      action: "Verify samples eligible for disposal (testing complete, no holds)"
+      responsible: "Sample Coordinator"
+    - step: 3
+      action: "Classify waste type and determine disposal method"
+      responsible: "Laboratory Technician"
+    - step: 4
+      action: "Prepare regulatory documentation (DEA Form 41, manifests)"
+      responsible: "Laboratory Technician"
+    - step: 5
+      action: "Execute disposal with witness present if required"
+      responsible: "Laboratory Technician + Witness"
+    - step: 6
+      action: "Photograph disposal process and destroyed samples"
+      responsible: "Laboratory Technician"
+    - step: 7
+      action: "Complete disposal record with all signatures"
+      responsible: "Laboratory Technician + Witness + QA"
+    - step: 8
+      action: "Update LIMS to mark samples as disposed"
+      responsible: "Laboratory Technician"
+    - step: 9
+      action: "Archive disposal record with photographs"
+      responsible: "Document Control"
+
+validation_rules:
+  - rule: "If waste_classification is 'Controlled Substance', witness_required must be 'Yes'"
+  - rule: "If waste_classification is 'Hazardous Waste', hazardous_waste_codes must be completed"
+  - rule: "If witness_required is 'Yes', witness_signature must be present"
+  - rule: "All signatures must be present before disposal record can be finalized"
+  - rule: "Disposal_date cannot be before authorization_date"
+  - rule: "Technician_signature must be before or same time as witness_signature"
+
+retention: "Permanent for controlled substances (DEA), 5 years for hazardous waste (EPA), sample lifetime + 5 years for all others"
+
+related_documents:
+  - "SOP-SMPHAND-001: Sample Handling and Chain of Custody"
+  - "DEA Form 41: Registrant's Inventory of Drugs Surrendered"
+  - "EPA Hazardous Waste Manifest"
+  - "SOP-DEV-001: Deviation Management"
+
+revision_history:
+  - version: "1.0"
+    date: "2025-01-15"
+    changes: "Initial release of Sample Disposal and Destruction Record"
+    author: "Laboratory Manager"
