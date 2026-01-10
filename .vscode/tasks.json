@@ -1,0 +1,182 @@
+{
+  // GACP-ERP VSCode Tasks
+  // Version: 1.0.0
+  // Date: 2026-01-09
+  
+  "version": "2.0.0",
+  "tasks": [
+    // ========================================================================
+    // DSL Validation Task
+    // ========================================================================
+    {
+      "label": "Validate DSL Schema",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/dsl/validate_schema.py",
+        "${file}"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": {
+        "owner": "yaml",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    },
+    
+    // ========================================================================
+    // Validate All DSL Files
+    // ========================================================================
+    {
+      "label": "Validate All DSL Files",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/dsl/validate_schema.py",
+        "--all"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": {
+        "owner": "yaml",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    },
+    
+    // ========================================================================
+    // Git Commit DSL Changes
+    // ========================================================================
+    {
+      "label": "Git: Commit DSL Changes",
+      "type": "shell",
+      "command": "git",
+      "args": [
+        "add",
+        "dsl/",
+        "&&",
+        "git",
+        "commit",
+        "-m",
+        "\"feat(dsl): ${input:commitMessage}\""
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
+    
+    // ========================================================================
+    // Count DSL Files
+    // ========================================================================
+    {
+      "label": "Count DSL Files",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "\"Process files: $(find dsl/process -name '*.yaml' | wc -l)\"",
+        "&&",
+        "echo",
+        "\"Form files: $(find dsl/forms -name '*.yaml' | wc -l)\"",
+        "&&",
+        "echo",
+        "\"Checklist files: $(find dsl/checklists -name '*.yaml' | wc -l)\"",
+        "&&",
+        "echo",
+        "\"Report files: $(find dsl/reports -name '*.yaml' | wc -l)\"",
+        "&&",
+        "echo",
+        "\"Training files: $(find dsl/training -name '*.yaml' | wc -l)\""
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    
+    // ========================================================================
+    // Check DSL File Structure
+    // ========================================================================
+    {
+      "label": "Check DSL File Structure",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "echo '=== Checking ${file} ===' && grep -E '^(metadata:|process:|roles:|procedure:|quality_controls:|safety:|documentation:|deviations:)' ${file} || echo 'ERROR: Missing required sections!'"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    
+    // ========================================================================
+    // Generate DSL File from Template
+    // ========================================================================
+    {
+      "label": "Generate DSL from Template",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "\"Use Copilot to generate DSL - ensure you read the schema first!\""
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    }
+  ],
+  
+  // ========================================================================
+  // Input Definitions
+  // ========================================================================
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Commit message for DSL changes",
+      "default": "Update DSL files"
+    }
+  ]
+}

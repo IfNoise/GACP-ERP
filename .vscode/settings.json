@@ -1,0 +1,190 @@
+{
+  // GACP-ERP Project Settings
+  // Version: 1.0.0
+  // Date: 2026-01-09
+  
+  // ============================================================================
+  // GitHub Copilot Configuration
+  // ============================================================================
+  
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "markdown": true
+  },
+  
+  // ============================================================================
+  // Copilot Instructions - DSL Generation Rules
+  // ============================================================================
+  
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "# CRITICAL DSL GENERATION RULES FOR GACP-ERP\n\n## MANDATORY: Read Before Any DSL Creation\n\nWhen generating ANY DSL file for this project:\n\n1. **ALWAYS READ THE SCHEMA FIRST**:\n   - Process files: Read `/home/noise83/Projects/GACP-ERP/dsl/schemas/sop_schema.yaml`\n   - Form files: Read `/home/noise83/Projects/GACP-ERP/dsl/schemas/form_schema.yaml`\n   - Checklist files: Read `/home/noise83/Projects/GACP-ERP/dsl/schemas/checklist_schema.yaml`\n   - Report files: Read `/home/noise83/Projects/GACP-ERP/dsl/schemas/report_schema.yaml`\n   - Training files: Read `/home/noise83/Projects/GACP-ERP/dsl/schemas/training_schema.yaml`\n\n2. **REVIEW THE GOLDEN EXAMPLE**: `/home/noise83/Projects/GACP-ERP/dsl/process/SOP-AUDIT-001-AUDIT_TRAIL.yaml`\n\n3. **FOLLOW COMPLETE RULES**: `/home/noise83/Projects/GACP-ERP/dsl/DSL_GENERATION_RULES.md`\n\n## Process File (sop_process) Critical Requirements:\n\n### METADATA (REQUIRED FIELDS):\n- `process_id`: \"SOP-XXX-001\"\n- `process_type`: sop | work_instruction | policy\n- `version`: \"1.0\"\n- `status`: draft | active | deprecated\n- `domain`: cultivation | processing | quality_control | sanitation | equipment | safety | security | documentation | training | compliance\n- `classification`: critical | important | standard\n\n❌ FORBIDDEN: `title`, `department` fields\n\n### PROCESS (REQUIRED):\n- `purpose`: Short declarative statement\n- `scope_areas`: Array of applicable areas\n- `frequency`: Execution frequency\n\n### ROLES (REQUIRED):\nMUST be array of objects with:\n- `role_id`: Unique identifier\n- `role_name`: Role title\n- `qualifications`: Object with `required` and `optional` arrays\n- `responsibilities`: Array with `action`, `accountability`, `verification`\n\n❌ FORBIDDEN: Roles as strings in procedure steps\n\n### PROCEDURE (REQUIRED - SINGULAR!):\nUse `procedure:` NOT `procedures:`\nEach step must have:\n- `step_number`, `step_id`, `action`\n- `substeps`, `parameters`, `controls`\n- `documentation_required`, `forms`\n- `safety_considerations`, `critical_step`, `verification_method`\n\n### REQUIRED SECTIONS:\n- `quality_controls`: Array of control objects\n- `safety`: Object with `ppe_required`, `hazards`, `training_required`\n- `documentation`: Object with `records_generated`, `data_integrity_requirements`, `review_requirements`\n- `deviations`: Object with `deviation_handling`\n\n## Validation Checklist:\nBefore completing ANY DSL file, verify:\n✅ All required metadata fields present\n✅ No forbidden fields (title, department)\n✅ All enum values from schema (not invented)\n✅ `procedure` is SINGULAR\n✅ Roles are structured objects, not strings\n✅ All required sections present\n✅ Proper YAML formatting (2-space indentation)\n\n## If Schema Violation Detected:\n1. STOP immediately\n2. Re-read the appropriate schema file\n3. Compare structure line-by-line\n4. Fix ALL violations before proceeding\n5. Validate against checklist\n\nREMEMBER: User will call out schema violations. Avoid frustration by following rules EXACTLY."
+    }
+  ],
+  
+  // ============================================================================
+  // File Associations and Language Settings
+  // ============================================================================
+  
+  "files.associations": {
+    "*.yaml": "yaml",
+    "**/dsl/**/*.yaml": "yaml",
+    "**/dsl/**/*.md": "markdown"
+  },
+  
+  "yaml.schemas": {
+    "./dsl/schemas/sop_schema.yaml": [
+      "dsl/process/SOP-*.yaml"
+    ],
+    "./dsl/schemas/form_schema.yaml": [
+      "dsl/forms/FORM-*.yaml"
+    ],
+    "./dsl/schemas/checklist_schema.yaml": [
+      "dsl/checklists/CHKLST-*.yaml"
+    ],
+    "./dsl/schemas/report_schema.yaml": [
+      "dsl/reports/REPORT-*.yaml"
+    ],
+    "./dsl/schemas/training_schema.yaml": [
+      "dsl/training/TRN-*.yaml"
+    ]
+  },
+  
+  // ============================================================================
+  // YAML Validation Settings
+  // ============================================================================
+  
+  "yaml.validate": true,
+  "yaml.format.enable": true,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  
+  // ============================================================================
+  // Editor Settings for DSL Files
+  // ============================================================================
+  
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "full",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  
+  // ============================================================================
+  // Files to Watch
+  // ============================================================================
+  
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
+  },
+  
+  // ============================================================================
+  // Search Settings for DSL Files
+  // ============================================================================
+  
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/dist": true,
+    "**/build": true
+  },
+  
+  // ============================================================================
+  // File Explorer Settings
+  // ============================================================================
+  
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.yaml": "${capture}.md",
+    "SOP-*.yaml": "FORM-${capture}*.yaml, CHKLST-${capture}*.yaml, REPORT-${capture}*.yaml, TRN-${capture}*.yaml"
+  },
+  
+  // ============================================================================
+  // Copilot Chat Settings
+  // ============================================================================
+  
+  "github.copilot.chat.localeOverride": "ru",
+  "github.copilot.chat.welcomeMessage": "always",
+  
+  // ============================================================================
+  // Quick Suggestions for DSL Development
+  // ============================================================================
+  
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  
+  // ============================================================================
+  // Breadcrumbs for DSL Navigation
+  // ============================================================================
+  
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.filePath": "on",
+  "breadcrumbs.symbolPath": "on",
+  
+  // ============================================================================
+  // Workspace Recommended Extensions
+  // ============================================================================
+  
+  "extensions.ignoreRecommendations": false,
+  
+  // ============================================================================
+  // Git Settings for DSL Files
+  // ============================================================================
+  
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  
+  // ============================================================================
+  // Terminal Settings
+  // ============================================================================
+  
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.fontSize": 14,
+  
+  // ============================================================================
+  // Code Spell Checker - DSL Terms
+  // ============================================================================
+  
+  "cSpell.words": [
+    "ALCOA",
+    "GACP",
+    "ImmuDB",
+    "SCADA",
+    "CMMS",
+    "WORM",
+    "substeps",
+    "substep",
+    "accountable",
+    "consulted",
+    "informed",
+    "kpa",
+    "lpm",
+    "celsius",
+    "lux"
+  ],
+  
+  // ============================================================================
+  // Problem Matchers
+  // ============================================================================
+  
+  "problems.autoReveal": true,
+  "problems.decorations.enabled": true,
+  
+  // ============================================================================
+  // Tasks Configuration
+  // ============================================================================
+  
+  "task.autoDetect": "on",
+  "task.quickOpen.skip": false
+}

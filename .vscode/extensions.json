@@ -1,0 +1,65 @@
+{
+  // GACP-ERP Recommended VSCode Extensions
+  // Version: 1.0.0
+  // Date: 2026-01-09
+  
+  "recommendations": [
+    // ========================================================================
+    // GitHub Copilot - AI Assistant (REQUIRED)
+    // ========================================================================
+    "github.copilot",
+    "github.copilot-chat",
+    
+    // ========================================================================
+    // YAML Support (REQUIRED for DSL)
+    // ========================================================================
+    "redhat.vscode-yaml",
+    
+    // ========================================================================
+    // Markdown Support (for Documentation)
+    // ========================================================================
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    
+    // ========================================================================
+    // Code Spell Checker (for Quality)
+    // ========================================================================
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-russian",
+    
+    // ========================================================================
+    // Git Support (Enhanced)
+    // ========================================================================
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    
+    // ========================================================================
+    // File Management
+    // ========================================================================
+    "christian-kohler.path-intellisense",
+    "wayou.vscode-todo-highlight",
+    
+    // ========================================================================
+    // Productivity Tools
+    // ========================================================================
+    "aaron-bond.better-comments",
+    "oderwat.indent-rainbow",
+    "mechatroner.rainbow-csv",
+    
+    // ========================================================================
+    // YAML Validation and Schema Support
+    // ========================================================================
+    "redhat.vscode-yaml",
+    
+    // ========================================================================
+    // Documentation Preview
+    // ========================================================================
+    "shd101wyy.markdown-preview-enhanced"
+  ],
+  
+  // Unwanted extensions for this workspace
+  "unwantedRecommendations": [
+    "ms-python.python",
+    "ms-vscode.cpptools"
+  ]
+}

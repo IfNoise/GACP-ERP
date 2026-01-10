@@ -1,0 +1,291 @@
+{
+  // GACP-ERP DSL Code Snippets
+  // Version: 1.0.0
+  // Date: 2026-01-09
+  
+  // ==========================================================================
+  // PROCESS FILE SNIPPETS
+  // ==========================================================================
+  
+  "DSL Process File Template": {
+    "prefix": "dsl-process",
+    "body": [
+      "# DSL: ${1:Process Name}",
+      "# Version: ${2:1.0}",
+      "# Source: ${3:SOP_FileName.md} v${4:2.0}",
+      "# Date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+      "",
+      "schema_version: \"1.0.0\"",
+      "schema_type: \"sop_process\"",
+      "",
+      "# ==============================================================================",
+      "# METADATA",
+      "# ==============================================================================",
+      "metadata:",
+      "  process_id: \"${5:SOP-XXX-001}\"",
+      "  process_type: \"${6|sop,work_instruction,policy|}\"",
+      "  version: \"${2:1.0}\"",
+      "  status: \"${7|draft,active,deprecated|}\"",
+      "  domain: \"${8|cultivation,processing,quality_control,sanitation,equipment,safety,security,documentation,training,compliance|}\"",
+      "  classification: \"${9|critical,important,standard|}\"",
+      "",
+      "  effective_date: \"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}\"",
+      "  supersedes: null",
+      "  review_period_months: 12",
+      "",
+      "  related_processes:",
+      "    - \"${10:SOP-REF-001}\"",
+      "",
+      "  regulatory_refs:",
+      "    - \"${11:WHO GACP Guidelines}\"",
+      "",
+      "# ==============================================================================",
+      "# PROCESS DEFINITION",
+      "# ==============================================================================",
+      "process:",
+      "  purpose: \"${12:Short declarative statement of process objective}\"",
+      "",
+      "  scope_areas:",
+      "    - \"${13:area_1}\"",
+      "    - \"${14:area_2}\"",
+      "",
+      "  frequency: \"${15:continuous}\"",
+      "",
+      "  prerequisites:",
+      "    - \"${16:prerequisite_1}\"",
+      "",
+      "  dependencies:",
+      "    - \"${17:dependency_1}\"",
+      "",
+      "  duration_estimate: ${18:null}",
+      "  critical_path: ${19:true}",
+      "",
+      "# ==============================================================================",
+      "# ROLES AND RESPONSIBILITIES",
+      "# ==============================================================================",
+      "roles:",
+      "  - role_id: \"ROLE-${20:XXX}-001\"",
+      "    role_name: \"${21:Role Name}\"",
+      "    qualifications:",
+      "      required:",
+      "        - \"${22:Qualification 1}\"",
+      "      optional: []",
+      "    responsibilities:",
+      "      - action: \"${23:Responsibility description}\"",
+      "        accountability: \"${24|responsible,accountable,consulted,informed|}\"",
+      "        verification: \"${25|none,documented,witnessed,approved|}\"",
+      "",
+      "$0"
+    ],
+    "description": "Complete DSL process file template with all required sections"
+  },
+  
+  "DSL Role Entry": {
+    "prefix": "dsl-role",
+    "body": [
+      "- role_id: \"ROLE-${1:XXX}-${2:001}\"",
+      "  role_name: \"${3:Role Name}\"",
+      "  qualifications:",
+      "    required:",
+      "      - \"${4:Required qualification}\"",
+      "    optional:",
+      "      - \"${5:Optional qualification}\"",
+      "  responsibilities:",
+      "    - action: \"${6:Responsibility description}\"",
+      "      accountability: \"${7|responsible,accountable,consulted,informed|}\"",
+      "      verification: \"${8|none,documented,witnessed,approved|}\"",
+      "$0"
+    ],
+    "description": "Single role entry with proper structure"
+  },
+  
+  "DSL Procedure Step": {
+    "prefix": "dsl-step",
+    "body": [
+      "- step_number: ${1:1}",
+      "  step_id: \"${2:PROC-XXX-001}\"",
+      "  action: \"${3:Imperative verb + object description}\"",
+      "",
+      "  substeps:",
+      "    - substep_id: \"${2:PROC-XXX-001}-01\"",
+      "      action: \"${4:Substep action}\"",
+      "      parameters: null",
+      "",
+      "  parameters:",
+      "    ${5:parameter_name}: ${6:value}",
+      "",
+      "  controls:",
+      "    - control_type: \"${7|visual,measurement,documentation,verification|}\"",
+      "      parameter: \"${8:parameter_being_controlled}\"",
+      "      acceptance_criteria: \"${9:Specific criteria}\"",
+      "      frequency: \"${10|continuous,per_batch,periodic,as_needed|}\"",
+      "",
+      "  documentation_required: ${11:true}",
+      "  forms:",
+      "    - \"${12:FORM-XXX-001}\"",
+      "",
+      "  safety_considerations:",
+      "    - \"${13:Safety point}\"",
+      "",
+      "  critical_step: ${14:true}",
+      "  verification_method: \"${15:Method description}\"",
+      "$0"
+    ],
+    "description": "Complete procedure step with all fields"
+  },
+  
+  "DSL Quality Control": {
+    "prefix": "dsl-qc",
+    "body": [
+      "- control_id: \"QC-${1:XXX}-${2:001}\"",
+      "  control_type: \"${3|continuous,periodic,event_based|}\"",
+      "  parameter: \"${4:Parameter name}\"",
+      "  method: \"${5:Test/verification method}\"",
+      "  frequency: \"${6:Daily}\"",
+      "  acceptance_criteria: \"${7:Specific criteria}\"",
+      "  documentation_form: \"${8:FORM-XXX-001}\"",
+      "  out_of_spec_action: \"${9:SOP-OOS-001}\"",
+      "$0"
+    ],
+    "description": "Quality control entry"
+  },
+  
+  "DSL Safety Section": {
+    "prefix": "dsl-safety",
+    "body": [
+      "safety:",
+      "  ppe_required:",
+      "    head_protection: ${1:false}",
+      "    eye_protection: ${2:true}",
+      "    respiratory_protection: ${3:false}",
+      "    hand_protection: \"${4:gloves}\"",
+      "    body_protection: \"${5:lab_coat}\"",
+      "    foot_protection: ${6:true}",
+      "",
+      "  hazards:",
+      "    - hazard_type: \"${7|chemical,biological,physical,ergonomic,environmental|}\"",
+      "      hazard_description: \"${8:Description}\"",
+      "      risk_level: \"${9|low,medium,high,critical|}\"",
+      "      mitigation_measures:",
+      "        - \"${10:Mitigation measure}\"",
+      "      emergency_procedure_ref: \"${11:SOP-EMERGENCY-001}\"",
+      "",
+      "  training_required:",
+      "    - training_id: \"TRN-${12:XXX}-001\"",
+      "      training_name: \"${13:Training name}\"",
+      "      frequency_months: ${14:12}",
+      "      certification_required: ${15:true}",
+      "$0"
+    ],
+    "description": "Complete safety section"
+  },
+  
+  "DSL Documentation Section": {
+    "prefix": "dsl-docs",
+    "body": [
+      "documentation:",
+      "  records_generated:",
+      "    - record_id: \"REC-${1:XXX}-001\"",
+      "      record_name: \"${2:Record name}\"",
+      "      record_type: \"${3|log,form,report,certificate,batch_record|}\"",
+      "      form_ref: \"${4:FORM-XXX-001}\"",
+      "      retention_years: ${5:7}",
+      "      storage_location: \"${6|electronic,paper,both|}\"",
+      "      access_control: \"${7|public,restricted,confidential|}\"",
+      "",
+      "  data_integrity_requirements:",
+      "    alcoa_plus_compliance: ${8:true}",
+      "    electronic_signature_required: ${9:true}",
+      "    audit_trail_required: ${10:true}",
+      "    backup_required: ${11:true}",
+      "",
+      "  review_requirements:",
+      "    review_frequency: \"${12:monthly}\"",
+      "    reviewer_role: \"${13:QA Manager}\"",
+      "    approval_required: ${14:true}",
+      "    approver_role: \"${15:Quality Director}\"",
+      "$0"
+    ],
+    "description": "Complete documentation section"
+  },
+  
+  "DSL Equipment Entry": {
+    "prefix": "dsl-equipment",
+    "body": [
+      "- equipment_id: \"EQP-${1:XXX}-${2:001}\"",
+      "  equipment_name: \"${3:Equipment Name}\"",
+      "  equipment_type: \"${4|measuring_instrument,cleaning_tool,protective_equipment,monitoring_device,processing_equipment,safety_equipment|}\"",
+      "  calibration_required: ${5:true}",
+      "  calibration_frequency_days: ${6:90}",
+      "  specifications:",
+      "    accuracy: \"${7:±0.1%}\"",
+      "    range: \"${8:0-100 units}\"",
+      "    resolution: \"${9:0.01 units}\"",
+      "  maintenance_ref: \"${10:SOP-EQMAINT-001}\"",
+      "$0"
+    ],
+    "description": "Equipment entry with specifications"
+  },
+  
+  "DSL Material Entry": {
+    "prefix": "dsl-material",
+    "body": [
+      "- material_id: \"MAT-${1:XXX}-${2:001}\"",
+      "  material_name: \"${3:Material Name}\"",
+      "  cas_number: \"${4:123-45-6}\"",
+      "  concentration: \"${5:70% v/v}\"",
+      "  volume_ml: ${6:1000}",
+      "  quantity: \"${7:defined_by_operator}\"",
+      "  preparation:",
+      "    method: \"${8:defined_by_manufacturer}\"",
+      "    dilution_ratio: \"${9:1:10}\"",
+      "    mixing_order:",
+      "      - \"${10:Step 1}\"",
+      "  safety_class: \"${11|hazardous,irritant,corrosive,safe|}\"",
+      "  storage_requirements: \"${12:Cool, dry place}\"",
+      "  disposal_method: \"${13:SOP-WASTE-001}\"",
+      "$0"
+    ],
+    "description": "Material/chemical entry"
+  },
+  
+  // ==========================================================================
+  // VALIDATION SNIPPETS
+  // ==========================================================================
+  
+  "DSL Validation Checklist Comment": {
+    "prefix": "dsl-validate",
+    "body": [
+      "# ==============================================================================",
+      "# VALIDATION CHECKLIST",
+      "# ==============================================================================",
+      "# ✅ Metadata: process_id, process_type, version, status, domain, classification",
+      "# ✅ Process: purpose, scope_areas, frequency",
+      "# ✅ Roles: Array of objects with role_id, qualifications, responsibilities",
+      "# ✅ Procedure: SINGULAR, not procedures",
+      "# ✅ Quality Controls: Present",
+      "# ✅ Safety: Present with ppe_required, hazards, training_required",
+      "# ✅ Documentation: Present",
+      "# ✅ Deviations: Present",
+      "# ❌ NO title field in metadata",
+      "# ❌ NO department field (use domain instead)",
+      "$0"
+    ],
+    "description": "Validation checklist as comment"
+  },
+  
+  // ==========================================================================
+  // SECTION SEPARATORS
+  // ==========================================================================
+  
+  "DSL Section Separator": {
+    "prefix": "dsl-sep",
+    "body": [
+      "# ==============================================================================",
+      "# ${1:SECTION NAME}",
+      "# ==============================================================================",
+      "$0"
+    ],
+    "description": "Section separator comment"
+  }
+}
