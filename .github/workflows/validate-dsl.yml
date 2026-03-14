@@ -1,0 +1,42 @@
+name: Validate DSL Files
+
+on:
+  push:
+    paths:
+      - 'dsl/**'
+    branches: [main, develop]
+  pull_request:
+    paths:
+      - 'dsl/**'
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate-dsl:
+    name: Validate DSL Schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pyyaml jsonschema
+
+      - name: Validate all DSL files
+        run: python3 dsl/validate_schema.py --all
+
+      - name: Report DSL file counts
+        if: always()
+        run: |
+          echo "=== DSL File Counts ==="
+          echo "Process files: $(find dsl/process -name '*.yaml' 2>/dev/null | wc -l)"
+          echo "Form files: $(find dsl/forms -name '*.yaml' 2>/dev/null | wc -l)"
+          echo "Checklist files: $(find dsl/checklists -name '*.yaml' 2>/dev/null | wc -l)"
+          echo "Report files: $(find dsl/reports -name '*.yaml' 2>/dev/null | wc -l)"
+          echo "Training files: $(find dsl/training -name '*.yaml' 2>/dev/null | wc -l)"

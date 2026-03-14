@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged on staged files
+pnpm lint-staged
+
+# Validate commit message format
+# Format: feat|fix|docs|test|refactor|compliance(<scope>): <subject>
+COMMIT_MSG=$(git log --format="%s" -n 1 HEAD 2>/dev/null || cat .git/COMMIT_EDITMSG)
+PATTERN="^(feat|fix|docs|test|refactor|compliance|chore|perf|ci|build|revert)(\([a-z0-9/-]+\))?: .{1,100}$"
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+  echo "❌ Commit message does not match the required format."
+  echo "   Required: <type>(<scope>): <subject>"
+  echo "   Types: feat | fix | docs | test | refactor | compliance | chore | perf | ci | build | revert"
+  echo "   Example: feat(cultivation): add plant lifecycle state machine"
+  exit 1
+fi
