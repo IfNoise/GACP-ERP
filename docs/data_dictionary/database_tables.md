@@ -10,49 +10,82 @@
 
 **Описание**: Основная таблица растений
 
-| Поле                   | SQL Тип     | Ограничения              | Описание                 |
-| ---------------------- | ----------- | ------------------------ | ------------------------ |
-| `plant_id`             | UUID        | PRIMARY KEY              | Уникальный идентификатор |
-| `plant_code`           | VARCHAR(20) | UNIQUE NOT NULL          | Код растения             |
-| `strain_id`            | UUID        | FOREIGN KEY → strains    | Сорт растения            |
-| `stage`                | plant_stage | NOT NULL                 | Стадия роста             |
-| `current_health_score` | INTEGER     | CHECK (0-100)            | Оценка здоровья          |
-| `facility_id`          | UUID        | FOREIGN KEY → facilities | Объект                   |
-| `room_id`              | UUID        | FOREIGN KEY → rooms      | Помещение                |
-| `zone_id`              | UUID        | FOREIGN KEY → zones      | Зона                     |
-| `coordinates`          | JSONB       | NOT NULL                 | Координаты x,y,z         |
-| `created_at`           | TIMESTAMP   | DEFAULT now()            | Время создания           |
-| `updated_at`           | TIMESTAMP   | AUTO UPDATE              | Время изменения          |
+| Поле                   | SQL Тип     | Ограничения              | Описание                                           |
+| ---------------------- | ----------- | ------------------------ | -------------------------------------------------- |
+| `id`                   | UUID        | PRIMARY KEY              | Уникальный идентификатор                           |
+| `plant_code`           | VARCHAR(20) | UNIQUE NOT NULL          | Структурированный код: PLANT-YYYY-NNN              |
+| `batch_id`             | UUID        | FK → batches, NOT NULL   | Партия                                             |
+| `strain_id`            | UUID        | FK → strains, NOT NULL   | Сорт растения                                      |
+| `current_stage`        | growth_stage| NOT NULL DEFAULT 'SEED'  | Текущая стадия жизненного цикла                    |
+| `current_health_score` | INTEGER     | CHECK (0-100)            | Оценка здоровья (0=критично, 100=отлично)          |
+| `facility_id`          | UUID        | FK → facilities, NOT NULL| Объект                                             |
+| `room_id`              | UUID        | FK → rooms, NULLABLE     | Помещение                                          |
+| `zone_id`              | UUID        | FK → zones, NULLABLE     | Зона выращивания                                   |
+| `coordinates`          | JSONB       | NULLABLE                 | Физические координаты (x, y, z) внутри зоны        |
+| `last_stage_change_at` | TIMESTAMP   | NULLABLE                 | Время последнего изменения стадии                  |
+| `last_operation_at`    | TIMESTAMP   | NULLABLE                 | Денормализованное время последней plant_operation  |
+| `notes`                | TEXT        | NULLABLE                 | Примечания                                         |
+| `created_at`           | TIMESTAMP   | DEFAULT now()            | Время создания                                     |
+| `updated_at`           | TIMESTAMP   | DEFAULT now()            | Время изменения                                    |
+| `created_by`           | UUID        | FK → users, NOT NULL     | Кто создал                                         |
+| `updated_by`           | UUID        | FK → users, NOT NULL     | Кто изменил                                        |
+| `is_deleted`           | BOOLEAN     | DEFAULT false            | Мягкое удаление (21 CFR Part 11 §11.10(e))         |
 
 **Индексы**:
 
-- `idx_plants_batch_id` ON (batch_id)
-- `idx_plants_stage` ON (stage)
-- `idx_plants_zone_id` ON (current_zone_id)
+- `plants_code_idx` UNIQUE ON (plant_code)
+- `plants_batch_idx` ON (batch_id)
+- `plants_strain_idx` ON (strain_id)
+- `plants_stage_idx` ON (current_stage)
+- `plants_facility_zone_idx` ON (facility_id, zone_id)
+- `plants_health_idx` ON (current_health_score)
 
-#### plant_events (DS-PLM-002)
+> **`last_operation_at`** — денормализованное поле. Обновляется сервисом при каждой вставке в `plant_operations`. Используется для сортировки/фильтрации по активности без агрегации.
 
-**Описание**: Журнал всех событий растений  
-**Источник**: `docs/validation/DS.md`
+#### plant_operations (DS-PLM-002)
 
-| Поле             | Тип           | Ограничения          | Описание                 |
-| ---------------- | ------------- | -------------------- | ------------------------ |
-| `event_id`       | UUID          | PRIMARY KEY          | Уникальный идентификатор |
-| `plant_id`       | UUID          | FOREIGN KEY → plants | Растение                 |
-| `event_type`     | VARCHAR(50)   | NOT NULL             | Тип события              |
-| `event_data`     | JSONB         | NOT NULL             | Детали события           |
-| `performed_by`   | UUID          | FOREIGN KEY → users  | Исполнитель              |
-| `performed_at`   | TIMESTAMP     | NOT NULL             | Время выполнения         |
-| `labour_cost`    | DECIMAL(10,2) | ≥ 0                  | Трудозатраты             |
-| `material_cost`  | DECIMAL(10,2) | ≥ 0                  | Материальные затраты     |
-| `equipment_cost` | DECIMAL(10,2) | ≥ 0                  | Затраты на оборудование  |
-| `audit_version`  | INTEGER       | NOT NULL             | Версия аудита            |
+**Описание**: Append-only журнал физических операций над растениями.  
+**Правило**: только INSERT — никаких UPDATE/DELETE. Основа ALCOA+ аудита.  
+**НЕ путать** с domain events в Kafka (`libs/shared/events`).
+
+| Поле                      | Тип               | Ограничения              | Описание                                               |
+| ------------------------- | ----------------- | ------------------------ | ------------------------------------------------------ |
+| `id`                      | UUID              | PRIMARY KEY              | Уникальный идентификатор                               |
+| `plant_id`                | UUID              | FK → plants, NOT NULL    | Растение                                               |
+| `operation_type`          | plant_operation_type | NOT NULL              | Тип операции (stage_change, pest_treatment, и др.)     |
+| `operation_data`          | JSONB             | NOT NULL DEFAULT '{}'    | Параметры операции                                     |
+| `performed_by`            | UUID              | FK → users, NOT NULL     | **Исполнитель** — кто физически провёл операцию        |
+| `performed_at`            | TIMESTAMP         | NOT NULL DEFAULT now()   | Время выполнения                                       |
+| `authorized_by`           | UUID              | FK → users, NULLABLE     | **Авторизующий** — supervisor/shift-lead. ОБЯЗАТЕЛЕН для: pest_treatment, destruction, harvest |
+| `authorized_at`           | TIMESTAMP         | NULLABLE                 | Время авторизации                                      |
+| `authorization_signature` | JSONB             | NULLABLE                 | Электронная подпись авторизующего (21 CFR §11.50)      |
+| `qa_reviewed_by`          | UUID              | FK → users, NULLABLE     | **QA ревьюер** — ОБЯЗАТЕЛЕН для: pest_treatment, destruction |
+| `qa_reviewed_at`          | TIMESTAMP         | NULLABLE                 | Время QA проверки                                      |
+| `qa_signature`            | JSONB             | NULLABLE                 | Электронная подпись QA (21 CFR §11.50)                 |
+| `labour_cost`             | DECIMAL(10,2)     | ≥ 0, NULLABLE            | Трудозатраты                                           |
+| `material_cost`           | DECIMAL(10,2)     | ≥ 0, NULLABLE            | Материальные затраты                                   |
+| `equipment_cost`          | DECIMAL(10,2)     | ≥ 0, NULLABLE            | Затраты на оборудование                                |
+| `created_at`              | TIMESTAMP         | DEFAULT now()            | Время создания записи                                  |
 
 **Индексы**:
 
-- `idx_plant_events_plant_id` ON (plant_id)
-- `idx_plant_events_type` ON (event_type)
-- `idx_plant_events_performed_at` ON (performed_at)
+- `plant_operations_plant_idx` ON (plant_id)
+- `plant_operations_type_idx` ON (operation_type)
+- `plant_operations_performed_at_idx` ON (performed_at)
+- `plant_operations_performed_by_idx` ON (performed_by)
+- `plant_operations_authorized_by_idx` ON (authorized_by) — для запросов «неавторизованные операции»
+- `plant_operations_qa_reviewed_by_idx` ON (qa_reviewed_by) — для запросов «ожидает QA проверки»
+
+**Цепочка ответственности** (ALCOA+ Attributable, SOP-COC-001):
+
+| Роль | Поле | Когда обязательно |
+|------|------|---------|
+| Исполнитель (Operator) | `performed_by` | Всегда |
+| Авторизующий (Supervisor) | `authorized_by` + `authorization_signature` | `pest_treatment`, `destruction`, `harvest` |
+| QA ревьюер | `qa_reviewed_by` + `qa_signature` | `pest_treatment`, `destruction` |
+
+**Enum `plant_operation_type`**:
+`stage_change`, `transplant`, `pruning`, `watering`, `fertilizing`, `health_check`, `pest_treatment`, `harvest`, `destruction`, `observation`
 
 #### batches (DS-PLM-003)
 
@@ -73,6 +106,32 @@
 | `created_at`             | TIMESTAMP     | DEFAULT now()                   | Время создания             |
 | `updated_at`             | TIMESTAMP     | AUTO UPDATE                     | Время изменения            |
 | `compliance_status`      | enum          | (pending, approved, rejected)   | Статус соответствия        |
+
+#### stage_records
+
+**Описание**: Журнал переходов между стадиями жизненного цикла растения.  
+**Правило**: только INSERT — запись неизменяема.
+
+| Поле                      | Тип       | Ограничения              | Описание                                                 |
+| ------------------------- | --------- | ------------------------ | -------------------------------------------------------- |
+| `id`                      | UUID      | PRIMARY KEY              | Уникальный идентификатор                                 |
+| `plant_id`                | UUID      | FK → plants, NOT NULL    | Растение                                                 |
+| `from_stage`              | growth_stage | NOT NULL              | Исходная стадия                                          |
+| `to_stage`                | growth_stage | NOT NULL              | Целевая стадия                                           |
+| `transitioned_by`         | UUID      | FK → users, NOT NULL     | **Исполнитель** — кто выполнил переход                   |
+| `authorized_by`           | UUID      | FK → users, NULLABLE     | **Авторизующий** — обязателен для HARVESTING, DESTROYED  |
+| `authorized_at`           | TIMESTAMP | NULLABLE                 | Время авторизации                                        |
+| `electronic_signature`    | JSONB     | NULLABLE                 | Э/подпись исполнителя (21 CFR §11.50)                    |
+| `authorization_signature` | JSONB     | NULLABLE                 | Э/подпись авторизующего супервайзера                     |
+| `notes`                   | TEXT      | NULLABLE                 | Примечания                                               |
+| `transitioned_at`         | TIMESTAMP | NOT NULL DEFAULT now()   | Время перехода                                           |
+| `created_at`              | TIMESTAMP | DEFAULT now()            | Время создания записи                                    |
+
+**Индексы**:
+
+- `stage_records_plant_idx` ON (plant_id)
+- `stage_records_transitioned_at_idx` ON (transitioned_at)
+- `stage_records_authorized_by_idx` ON (authorized_by)
 
 ### 🏭 Facility & Spatial Tables
 
