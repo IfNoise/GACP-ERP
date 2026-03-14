@@ -1,0 +1,215 @@
+{
+  "realm": "gacp-erp",
+  "displayName": "GACP-ERP",
+  "displayNameHtml": "<b>GACP-ERP</b>",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 5,
+  "passwordPolicy": "length(12) and upperCase(1) and digits(1) and specialChars(1) and notUsername and notEmail and passwordHistory(5)",
+  "accessTokenLifespan": 300,
+  "refreshTokenMaxReuse": 0,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "offlineSessionIdleTimeout": 2592000,
+  "roles": {
+    "realm": [
+      {
+        "name": "SUPER_ADMIN",
+        "description": "Full system access — QA, compliance, all modules",
+        "composite": false
+      },
+      {
+        "name": "QUALITY_MANAGER",
+        "description": "Quality control, CAPA, deviations, audit trail review",
+        "composite": false
+      },
+      {
+        "name": "CULTIVATION_MANAGER",
+        "description": "Plant lifecycle, batch management, harvesting",
+        "composite": false
+      },
+      {
+        "name": "OPERATOR",
+        "description": "Day-to-day operations: data entry, stage transitions",
+        "composite": false
+      },
+      {
+        "name": "AUDITOR",
+        "description": "Read-only audit trail and compliance reports",
+        "composite": false
+      },
+      {
+        "name": "READONLY",
+        "description": "Read-only access to non-sensitive data",
+        "composite": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "api-gateway",
+      "name": "GACP-ERP API Gateway",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "api-gateway-secret-change-in-prod",
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "defaultClientScopes": ["profile", "email", "roles"],
+      "optionalClientScopes": ["offline_access"],
+      "attributes": {
+        "access.token.lifespan": "300"
+      }
+    },
+    {
+      "clientId": "web-portal",
+      "name": "GACP-ERP Web Portal",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "redirectUris": ["http://localhost:3100/*", "http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3100", "http://localhost:3000"],
+      "defaultClientScopes": ["profile", "email", "roles"],
+      "optionalClientScopes": ["offline_access"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "email": "admin@gacp-erp.local",
+      "firstName": "System",
+      "lastName": "Administrator",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin@2026!",
+          "temporary": true
+        }
+      ],
+      "realmRoles": ["SUPER_ADMIN"]
+    },
+    {
+      "username": "qa_manager",
+      "email": "qa@gacp-erp.local",
+      "firstName": "Quality",
+      "lastName": "Manager",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Quality@2026!",
+          "temporary": true
+        }
+      ],
+      "realmRoles": ["QUALITY_MANAGER"]
+    },
+    {
+      "username": "cultivator",
+      "email": "cultivator@gacp-erp.local",
+      "firstName": "Cultivation",
+      "lastName": "Manager",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Cultivator@2026!",
+          "temporary": true
+        }
+      ],
+      "realmRoles": ["CULTIVATION_MANAGER"]
+    },
+    {
+      "username": "operator",
+      "email": "operator@gacp-erp.local",
+      "firstName": "Field",
+      "lastName": "Operator",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Operator@2026!",
+          "temporary": true
+        }
+      ],
+      "realmRoles": ["OPERATOR"]
+    },
+    {
+      "username": "auditor",
+      "email": "auditor@gacp-erp.local",
+      "firstName": "External",
+      "lastName": "Auditor",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Auditor@2026!",
+          "temporary": true
+        }
+      ],
+      "realmRoles": ["AUDITOR"]
+    }
+  ],
+  "requiredActions": [
+    {
+      "alias": "CONFIGURE_TOTP",
+      "name": "Configure OTP",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 10
+    },
+    {
+      "alias": "UPDATE_PASSWORD",
+      "name": "Update Password",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 30
+    },
+    {
+      "alias": "VERIFY_EMAIL",
+      "name": "Verify Email",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 50
+    }
+  ],
+  "browserSecurityHeaders": {
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xContentTypeOptions": "nosniff",
+    "xRobotsTag": "none",
+    "xFrameOptions": "SAMEORIGIN",
+    "strictTransportSecurity": "max-age=31536000; includeSubDomains"
+  }
+}
