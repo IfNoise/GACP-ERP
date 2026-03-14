@@ -1,0 +1,11 @@
+node_modules
+dist
+.nx
+coverage
+tmp
+*.min.js
+*.min.css
+dsl/
+docs/
+landing/
+.husky/_

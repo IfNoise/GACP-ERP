@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - libs/**/*
+  - tools/*
+
+ignoredBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - esbuild
+  - nx
+  - sharp

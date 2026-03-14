@@ -1,0 +1,79 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.spec.tsx",
+      "!{projectRoot}/**/*.test.ts",
+      "!{projectRoot}/**/*.test.tsx",
+      "!{projectRoot}/jest.config.{ts,js}",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/src/test-setup.ts"
+    ],
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json", "{workspaceRoot}/jest.preset.js"]
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "typecheck": {
+      "cache": true,
+      "inputs": ["default", "^default"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.base.json"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+    }
+  },
+  "generators": {
+    "@nx/react": {
+      "library": {
+        "unitTestRunner": "jest",
+        "style": "none"
+      },
+      "component": {
+        "style": "none"
+      }
+    },
+    "@nx/next": {
+      "application": {
+        "style": "none",
+        "linter": "eslint"
+      }
+    },
+    "@nx/nest": {
+      "application": {
+        "linter": "eslint"
+      }
+    },
+    "@nx/node": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  }
+}

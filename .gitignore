@@ -1,0 +1,53 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# NX
+.nx/cache/
+.nx/workspace-data/
+
+# Coverage
+coverage/
+lcov-report/
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+!docker/.env.example
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test
+jest_0/
+
+# Temp
+tmp/
+temp/
+
+# Docker volumes (local)
+docker/volumes/
+docker/data/
