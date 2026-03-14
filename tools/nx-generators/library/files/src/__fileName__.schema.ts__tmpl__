@@ -1,0 +1,17 @@
+import { z } from 'zod';
+
+// ─── SCHEMA ──────────────────────────────────────────────────────────────────
+// Zod-First: define schema first, derive TypeScript type from it
+export const <%= className %>Schema = z.object({
+  id: z.string().uuid(),
+  // TODO: add fields
+});
+
+// ─── TYPES ───────────────────────────────────────────────────────────────────
+export type <%= className %> = z.infer<typeof <%= className %>Schema>;
+
+export const Create<%= className %>Schema = <%= className %>Schema.omit({ id: true });
+export type Create<%= className %> = z.infer<typeof Create<%= className %>Schema>;
+
+export const Update<%= className %>Schema = Create<%= className %>Schema.partial();
+export type Update<%= className %> = z.infer<typeof Update<%= className %>Schema>;

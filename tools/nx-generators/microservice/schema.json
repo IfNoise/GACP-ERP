@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "cli": "nx",
+  "id": "microservice",
+  "title": "GACP-ERP Microservice Generator",
+  "description": "Creates a NestJS microservice with compliance scaffold",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Microservice name (kebab-case, e.g. cultivation-service)",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "What is the microservice name?"
+    },
+    "port": {
+      "type": "number",
+      "description": "HTTP port for the service",
+      "default": 3001
+    },
+    "database": {
+      "type": "boolean",
+      "description": "Include PostgreSQL/DrizzleORM integration",
+      "default": true,
+      "x-prompt": "Include database integration (PostgreSQL + DrizzleORM)?"
+    },
+    "withAuditTrail": {
+      "type": "boolean",
+      "description": "Include Kafka audit trail publishing",
+      "default": true,
+      "x-prompt": "Include audit trail (Kafka publish on mutations)?"
+    },
+    "withObservability": {
+      "type": "boolean",
+      "description": "Include OpenTelemetry + metrics scaffolding",
+      "default": true
+    },
+    "complianceLevel": {
+      "type": "string",
+      "description": "GxP compliance level",
+      "enum": ["HIGH", "MEDIUM", "LOW"],
+      "default": "HIGH",
+      "x-prompt": {
+        "message": "Compliance level for this service?",
+        "type": "list",
+        "items": [
+          { "value": "HIGH", "label": "HIGH — critical process data (requires e-signature)" },
+          { "value": "MEDIUM", "label": "MEDIUM — business data (requires audit trail)" },
+          { "value": "LOW", "label": "LOW — reference/config data" }
+        ]
+      }
+    },
+    "tags": {
+      "type": "string",
+      "description": "Extra comma-separated NX tags",
+      "default": ""
+    }
+  },
+  "required": ["name"]
+}

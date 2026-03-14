@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "cli": "nx",
+  "id": "api-module",
+  "title": "GACP-ERP API Module Generator",
+  "description": "Creates a NestJS module with ts-rest contracts, service, controller",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Module name (kebab-case, e.g. plants)",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "What is the module name?"
+    },
+    "app": {
+      "type": "string",
+      "description": "Target app name (e.g. cultivation-service)",
+      "x-prompt": "Target app (e.g. api-gateway)?"
+    },
+    "withCrud": {
+      "type": "boolean",
+      "description": "Generate full CRUD (create, read, update, delete)",
+      "default": true,
+      "x-prompt": "Generate full CRUD operations?"
+    },
+    "authRequired": {
+      "type": "boolean",
+      "description": "Require authentication (JWT guard)",
+      "default": true
+    },
+    "auditLevel": {
+      "type": "string",
+      "description": "Audit trail level for mutations",
+      "enum": ["FULL", "MINIMAL", "NONE"],
+      "default": "FULL",
+      "x-prompt": {
+        "message": "Audit level for this module?",
+        "type": "list",
+        "items": [
+          { "value": "FULL", "label": "FULL — every mutation audited with e-signature support" },
+          { "value": "MINIMAL", "label": "MINIMAL — only create/delete mutations audited" },
+          { "value": "NONE", "label": "NONE — no audit trail" }
+        ]
+      }
+    }
+  },
+  "required": ["name", "app"]
+}

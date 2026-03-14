@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/generators-schema.json",
+  "generators": {
+    "library": {
+      "factory": "./library/generator",
+      "schema": "./library/schema.json",
+      "description": "Generate a shared library (Zod-First)",
+      "aliases": ["lib"]
+    },
+    "microservice": {
+      "factory": "./microservice/generator",
+      "schema": "./microservice/schema.json",
+      "description": "Generate a NestJS microservice with compliance scaffold",
+      "aliases": ["svc"]
+    },
+    "api-module": {
+      "factory": "./api-module/generator",
+      "schema": "./api-module/schema.json",
+      "description": "Generate an API module with contracts, service, controller",
+      "aliases": ["module"]
+    }
+  }
+}
