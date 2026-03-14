@@ -1,0 +1,31 @@
+{
+  "name": "shared-schemas",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "root": "libs/shared/schemas",
+  "sourceRoot": "libs/shared/schemas/src",
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --project libs/shared/schemas/tsconfig.json --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/schemas/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/schemas"],
+      "options": {
+        "jestConfig": "libs/shared/schemas/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:utility", "scope:shared", "domain:schemas"]
+}
