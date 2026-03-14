@@ -1,0 +1,28 @@
+{
+  "name": "cultivation-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GACP-ERP Cultivation Service — Plant lifecycle, batches, QR codes",
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-fastify": "^11.0.0",
+    "@nestjs/config": "^3.3.0",
+    "@nestjs/microservices": "^11.0.0",
+    "kafkajs": "^2.2.4",
+    "drizzle-orm": "^0.38.0",
+    "pg": "^8.13.0",
+    "zod": "^3.23.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "qrcode": "^1.5.4",
+    "crypto": "*",
+    "uuid": "^11.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/uuid": "^10.0.0"
+  }
+}

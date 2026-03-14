@@ -1,0 +1,44 @@
+{
+  "name": "cultivation-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cultivation-service/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:nestjs", "domain:cultivation", "compliance:high"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/cultivation-service",
+        "main": "apps/cultivation-service/src/main.ts",
+        "tsConfig": "apps/cultivation-service/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": { "buildTarget": "cultivation-service:build" },
+      "configurations": {
+        "development": { "buildTarget": "cultivation-service:build:development" },
+        "production": { "buildTarget": "cultivation-service:build:production" }
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/cultivation-service"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/cultivation-service/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/cultivation-service"],
+      "options": { "jestConfig": "apps/cultivation-service/jest.config.ts" }
+    }
+  }
+}
