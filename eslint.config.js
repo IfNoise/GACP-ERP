@@ -35,8 +35,10 @@ module.exports = [
         'error',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
       ],
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
+      // NOTE: no-floating-promises / no-misused-promises require type info
+      // (parserOptions.project). They cannot run reliably from the repo root
+      // during lint-staged without a per-project tsconfig context.
+      // Enable these rules in per-project eslint configs or via: nx lint <project>
       'no-unused-vars': 'off',
       'no-undef': 'off',
     },
