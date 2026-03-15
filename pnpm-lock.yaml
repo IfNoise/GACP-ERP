@@ -290,6 +290,12 @@ importers:
         specifier: ^3.4.0
         version: 3.4.19(yaml@2.8.2)
 
+  libs/shared/config:
+    dependencies:
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+
   libs/shared/contracts:
     devDependencies:
       '@ts-rest/core':
