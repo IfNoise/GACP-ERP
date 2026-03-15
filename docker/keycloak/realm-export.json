@@ -4,6 +4,8 @@
   "displayNameHtml": "<b>GACP-ERP</b>",
   "enabled": true,
   "sslRequired": "none",
+  "browserFlow": "gacp-erp browser",
+  "directGrantFlow": "direct grant",
   "registrationAllowed": false,
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,
@@ -18,6 +20,13 @@
   "maxDeltaTimeSeconds": 43200,
   "failureFactor": 5,
   "passwordPolicy": "length(12) and upperCase(1) and digits(1) and specialChars(1) and notUsername and notEmail and passwordHistory(5)",
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyInitialCounter": 0,
+  "otpPolicyDigits": 6,
+  "otpPolicyLookAheadWindow": 1,
+  "otpPolicyPeriod": 30,
+  "otpPolicyCodeReusable": false,
   "accessTokenLifespan": 300,
   "refreshTokenMaxReuse": 0,
   "ssoSessionIdleTimeout": 1800,
@@ -28,27 +37,42 @@
       {
         "name": "SUPER_ADMIN",
         "description": "Full system access — QA, compliance, all modules",
-        "composite": false
+        "composite": true,
+        "composites": {
+          "realm": ["QUALITY_MANAGER", "CULTIVATION_MANAGER", "OPERATOR", "AUDITOR", "READONLY"]
+        }
       },
       {
         "name": "QUALITY_MANAGER",
         "description": "Quality control, CAPA, deviations, audit trail review",
-        "composite": false
+        "composite": true,
+        "composites": {
+          "realm": ["CULTIVATION_MANAGER", "OPERATOR", "AUDITOR", "READONLY"]
+        }
       },
       {
         "name": "CULTIVATION_MANAGER",
         "description": "Plant lifecycle, batch management, harvesting",
-        "composite": false
+        "composite": true,
+        "composites": {
+          "realm": ["OPERATOR", "READONLY"]
+        }
       },
       {
         "name": "OPERATOR",
         "description": "Day-to-day operations: data entry, stage transitions",
-        "composite": false
+        "composite": true,
+        "composites": {
+          "realm": ["READONLY"]
+        }
       },
       {
         "name": "AUDITOR",
         "description": "Read-only audit trail and compliance reports",
-        "composite": false
+        "composite": true,
+        "composites": {
+          "realm": ["READONLY"]
+        }
       },
       {
         "name": "READONLY",
@@ -108,6 +132,7 @@
       "lastName": "Administrator",
       "enabled": true,
       "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
       "credentials": [
         {
           "type": "password",
@@ -124,6 +149,7 @@
       "lastName": "Manager",
       "enabled": true,
       "emailVerified": true,
+      "requiredActions": ["CONFIGURE_TOTP"],
       "credentials": [
         {
           "type": "password",
@@ -203,6 +229,87 @@
       "enabled": true,
       "defaultAction": false,
       "priority": 50
+    }
+  ],
+  "authenticationFlows": [
+    {
+      "id": "a1b2c3d4-0001-0000-0000-000000000001",
+      "alias": "gacp-erp browser",
+      "description": "GACP-ERP browser flow with conditional TOTP for critical roles",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-spnego",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 20,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": "gacp-erp browser forms",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "id": "a1b2c3d4-0002-0000-0000-000000000002",
+      "alias": "gacp-erp browser forms",
+      "description": "Username, Password, then conditional OTP",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "flowAlias": "gacp-erp conditional otp",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "id": "a1b2c3d4-0003-0000-0000-000000000003",
+      "alias": "gacp-erp conditional otp",
+      "description": "Require OTP if the user has it configured (critical users are forced to configure it via requiredActions)",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-otp-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false
+        }
+      ]
     }
   ],
   "browserSecurityHeaders": {

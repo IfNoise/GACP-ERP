@@ -216,7 +216,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test]
+    needs: [lint, typecheck, test, build-go]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -249,3 +249,35 @@ jobs:
 
       - name: Build affected
         run: pnpm nx affected --target=build --base=$NX_BASE --head=$NX_HEAD --configuration=production
+
+  # ─── Go: Audit Consumer ───────────────────────────────────────────
+  build-go:
+    name: Audit Consumer (Go)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/audit-consumer
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/audit-consumer/go.mod
+          cache-dependency-path: apps/audit-consumer/go.sum
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test -race -coverprofile=coverage.out ./...
+
+      - name: Build
+        run: go build -o /dev/null ./...
+
+      - name: Upload Go coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: apps/audit-consumer/coverage.out
+          flags: go-unittests
+          fail_ci_if_error: false
