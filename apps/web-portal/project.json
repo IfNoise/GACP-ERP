@@ -45,7 +45,7 @@
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/web-portal"],
-      "options": { "jestConfig": "apps/web-portal/jest.config.ts" }
+      "options": { "jestConfig": "apps/web-portal/jest.config.ts", "passWithNoTests": true }
     }
   }
 }

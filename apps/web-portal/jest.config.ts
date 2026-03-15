@@ -1,22 +1,19 @@
-import { type Config } from 'jest';
 import { pathsToModuleNameMapper } from 'ts-jest';
 
 const { compilerOptions } = require('../../tsconfig.base.json') as {
   compilerOptions: { paths: Record<string, string[]> };
 };
 
-const config: Config = {
-  displayName: 'api-gateway',
+export default {
+  displayName: 'web-portal',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
+    '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
   },
-  moduleFileExtensions: ['js', 'json', 'ts'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/../../',
   }),
-  coverageDirectory: '../../coverage/apps/api-gateway',
+  coverageDirectory: '../../coverage/apps/web-portal',
 };
-
-export default config;
