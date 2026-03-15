@@ -5,9 +5,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/gacp-erp/audit-consumer/internal/config"
 	"github.com/gacp-erp/audit-consumer/internal/immudb"
+	audithttp "github.com/gacp-erp/audit-consumer/internal/http"
 	kafkaconsumer "github.com/gacp-erp/audit-consumer/internal/kafka"
 	"go.uber.org/zap"
 )
@@ -57,7 +59,9 @@ func main() {
 		ImmuClient: immuClient,
 		Logger:     logger,
 	})
-
+	// ── HTTP server ──────────────────────────────────────────────────────────
+	httpServer := audithttp.New(":"+cfg.App.HTTPPort, immuClient, logger)
+	httpServer.Start()
 	// ── Graceful shutdown ────────────────────────────────────────────────────
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -80,6 +84,11 @@ func main() {
 		logger.Error("Consumer exited with error", zap.Error(err))
 		os.Exit(1)
 	}
+
+	// Shutdown HTTP server with a 5-second grace period
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer shutdownCancel()
+	httpServer.Shutdown(shutdownCtx)
 
 	logger.Info("Audit consumer shut down cleanly")
 }

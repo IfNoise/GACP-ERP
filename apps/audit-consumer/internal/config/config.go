@@ -36,6 +36,7 @@ type ImmuDBConfig struct {
 type AppConfig struct {
 	LogLevel string
 	Env      string
+	HTTPPort string
 }
 
 // Load reads configuration from environment variables.
@@ -72,6 +73,7 @@ func Load() (*Config, error) {
 		App: AppConfig{
 			LogLevel: getEnv("LOG_LEVEL", "info"),
 			Env:      getEnv("NODE_ENV", "development"),
+			HTTPPort: getEnv("AUDIT_CONSUMER_HTTP_PORT", "8081"),
 		},
 	}, nil
 }
