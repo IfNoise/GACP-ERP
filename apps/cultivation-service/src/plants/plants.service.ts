@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException, Logger } from '@nes
 import {
   type Plant,
   type CreatePlant,
+  type UpdatePlant,
   type PlantStageTransitionRecord,
   type ElectronicSignature,
   type PaginationQuery,
@@ -92,5 +93,25 @@ export class PlantsService {
   async getStageHistory(plantId: string): Promise<PlantStageTransitionRecord[]> {
     await this.getById(plantId); // ensures plant exists
     return this.plantsRepo.getStageHistory(plantId);
+  }
+
+  async list(
+    filters: { batch_id?: string; zone_id?: string; stage?: GrowthStage },
+    pagination: PaginationQuery,
+  ): Promise<PaginatedResponse<Plant>> {
+    return this.plantsRepo.findMany(filters, pagination);
+  }
+
+  async update(id: string, dto: UpdatePlant, updatedBy: string): Promise<Plant> {
+    await this.getById(id); // throws NotFoundException if not found
+    const plant = await this.plantsRepo.update(id, dto, updatedBy);
+    if (!plant) throw new NotFoundException(`Plant ${id} not found`);
+    return plant;
+  }
+
+  async softDelete(id: string, deletedBy: string): Promise<void> {
+    await this.getById(id); // throws NotFoundException if not found
+    await this.plantsRepo.softDelete(id, deletedBy);
+    this.logger.log(`Plant ${id} soft-deleted by ${deletedBy}`);
   }
 }

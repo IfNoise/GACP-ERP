@@ -1,7 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { eq, and, isNull, desc } from 'drizzle-orm';
 import { batchesTable, type Database } from '@gacp-erp/shared-database';
-import { type Batch, type CreateBatch, type UserId } from '@gacp-erp/shared-schemas';
+import {
+  type Batch,
+  type CreateBatch,
+  type UpdateBatch,
+  type UserId,
+} from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../database/database.module';
 
 @Injectable()
@@ -65,6 +70,24 @@ export class BatchesRepository {
 
     if (!rows[0]) throw new Error('Batch insert returned no rows');
     return this.mapRow(rows[0]);
+  }
+
+  async updateFields(id: string, dto: UpdateBatch, updatedBy: string): Promise<void> {
+    await this.db
+      .update(batchesTable)
+      .set({
+        ...(dto.zone_id !== undefined && { zone_id: dto.zone_id }),
+        ...(dto.notes !== undefined && { notes: dto.notes }),
+        ...(dto.planned_harvest_date !== undefined && {
+          planned_harvest_date: new Date(dto.planned_harvest_date),
+        }),
+        ...(dto.status !== undefined && {
+          status: dto.status as (typeof batchesTable.$inferInsert)['status'],
+        }),
+        updated_by: updatedBy,
+        updated_at: new Date(),
+      })
+      .where(and(eq(batchesTable.id, id), isNull(batchesTable.deleted_at)));
   }
 
   async updateStatus(

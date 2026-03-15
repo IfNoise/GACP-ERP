@@ -6,8 +6,10 @@ import {
   type PlantStageTransitionRecord,
   type UserId,
   type CreatePlant,
+  type UpdatePlant,
   type PaginationQuery,
   type PaginatedResponse,
+  type GrowthStage,
 } from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../database/database.module';
 
@@ -127,6 +129,54 @@ export class PlantsRepository {
     );
   }
 
+  async findMany(
+    filters: { batch_id?: string; zone_id?: string; stage?: GrowthStage },
+    pagination: PaginationQuery,
+  ): Promise<PaginatedResponse<Plant>> {
+    const { page, limit } = pagination;
+    const offset = (page - 1) * limit;
+
+    const rows = await this.db
+      .select()
+      .from(plantsTable)
+      .where(
+        and(
+          isNull(plantsTable.deleted_at),
+          filters.batch_id ? eq(plantsTable.batch_id, filters.batch_id) : undefined,
+          filters.zone_id ? eq(plantsTable.zone_id, filters.zone_id) : undefined,
+          filters.stage ? eq(plantsTable.current_stage, filters.stage) : undefined,
+        ),
+      )
+      .limit(limit)
+      .offset(offset)
+      .orderBy(desc(plantsTable.created_at));
+
+    return {
+      data: rows.map((r) => this.mapRowToPlant(r)),
+      page,
+      limit,
+      total: rows.length,
+      totalPages: Math.ceil(rows.length / limit),
+    };
+  }
+
+  async update(id: string, dto: UpdatePlant, updatedBy: string): Promise<Plant | null> {
+    const rows = await this.db
+      .update(plantsTable)
+      .set({
+        ...(dto.room_id !== undefined && { room_id: dto.room_id }),
+        ...(dto.zone_id !== undefined && { zone_id: dto.zone_id }),
+        ...(dto.health_score !== undefined && { current_health_score: dto.health_score }),
+        ...(dto.notes !== undefined && { notes: dto.notes }),
+        updated_by: updatedBy,
+        updated_at: new Date(),
+      })
+      .where(and(eq(plantsTable.id, id), isNull(plantsTable.deleted_at)))
+      .returning();
+
+    return rows[0] ? this.mapRowToPlant(rows[0]) : null;
+  }
+
   async softDelete(id: string, deletedBy: string): Promise<void> {
     await this.db
       .update(plantsTable)
@@ -134,8 +184,10 @@ export class PlantsRepository {
         is_deleted: true,
         deleted_at: new Date(),
         deleted_by: deletedBy,
+        updated_at: new Date(),
+        updated_by: deletedBy,
       })
-      .where(eq(plantsTable.id, id));
+      .where(and(eq(plantsTable.id, id), isNull(plantsTable.deleted_at)));
   }
 
   private mapRowToPlant(row: typeof plantsTable.$inferSelect): Plant {
@@ -146,8 +198,11 @@ export class PlantsRepository {
       strain_id: row.strain_id,
       current_stage: row.current_stage as Plant['current_stage'],
       facility_id: row.facility_id,
+      room_id: row.room_id ?? undefined,
       zone_id: row.zone_id ?? undefined,
+      health_score: row.current_health_score ?? undefined,
       last_stage_change_at: row.last_stage_change_at?.toISOString(),
+      last_operation_at: row.last_operation_at?.toISOString(),
       notes: row.notes ?? undefined,
       created_at: row.created_at.toISOString(),
       updated_at: row.updated_at.toISOString(),
