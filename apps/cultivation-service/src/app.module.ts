@@ -4,6 +4,7 @@ import { PlantsModule } from './plants/plants.module';
 import { BatchesModule } from './batches/batches.module';
 import { QrModule } from './qr/qr.module';
 import { DatabaseModule } from './database/database.module';
+import { OutboxModule } from './outbox/outbox.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DatabaseModule } from './database/database.module';
       envFilePath: ['../../docker/.env', '../../docker/.env.example'],
     }),
     DatabaseModule,
+    OutboxModule,
     PlantsModule,
     BatchesModule,
     QrModule,

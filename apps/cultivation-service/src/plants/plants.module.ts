@@ -2,13 +2,15 @@ import { Module } from '@nestjs/common';
 import { PlantsService } from './plants.service';
 import { PlantsRepository } from './plants.repository';
 import { PlantsController } from './plants.controller';
+import { CreatePlantUseCase } from './use-cases/create-plant.use-case';
+import { TransitionStageUseCase } from './use-cases/transition-stage.use-case';
 import { QrModule } from '../qr/qr.module';
-import { KafkaProducerModule } from '../kafka/kafka-producer.module';
+import { OutboxModule } from '../outbox/outbox.module';
 
 @Module({
-  imports: [QrModule, KafkaProducerModule],
+  imports: [QrModule, OutboxModule],
   controllers: [PlantsController],
-  providers: [PlantsService, PlantsRepository],
+  providers: [PlantsService, PlantsRepository, CreatePlantUseCase, TransitionStageUseCase],
   exports: [PlantsService],
 })
 export class PlantsModule {}

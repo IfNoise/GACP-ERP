@@ -1,6 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { eq, and, desc, isNull } from 'drizzle-orm';
-import { plantsTable, stageRecordsTable, type Database } from '@gacp-erp/shared-database';
+import {
+  plantsTable,
+  stageRecordsTable,
+  type Database,
+  type DbContext,
+} from '@gacp-erp/shared-database';
 import {
   type Plant,
   type PlantStageTransitionRecord,
@@ -82,6 +87,59 @@ export class PlantsRepository {
     return this.mapRowToPlant(rows[0]);
   }
 
+  /**
+   * Transaction-aware variant of `create`.
+   * Call this inside `db.transaction()` when the outbox event must be written
+   * atomically with the plant insert.
+   */
+  async createWithTx(tx: DbContext, dto: CreatePlant, createdBy: string): Promise<Plant> {
+    const rows = await tx
+      .insert(plantsTable)
+      .values({
+        plant_code: dto.plant_code,
+        batch_id: dto.batch_id,
+        strain_id: dto.strain_id,
+        facility_id: dto.facility_id,
+        zone_id: dto.zone_id,
+        notes: dto.notes,
+        created_by: createdBy,
+        updated_by: createdBy,
+      })
+      .returning();
+
+    if (!rows[0]) throw new Error('Plant insert returned no rows');
+    return this.mapRowToPlant(rows[0]);
+  }
+
+  /**
+   * Transaction-aware variant of `updateStage`.
+   * Writes both the plant stage update and the stage_record within the
+   * caller-managed transaction `tx` — no nested transaction is created.
+   */
+  async updateStageWithTx(
+    tx: DbContext,
+    plantId: string,
+    newStage: string,
+    updatedBy: string,
+    stageRecord: Omit<typeof stageRecordsTable.$inferInsert, 'id' | 'created_at'>,
+  ): Promise<void> {
+    await tx
+      .update(plantsTable)
+      .set({
+        current_stage: newStage as (typeof plantsTable.$inferInsert)['current_stage'],
+        last_stage_change_at: new Date(),
+        updated_by: updatedBy,
+        updated_at: new Date(),
+      })
+      .where(eq(plantsTable.id, plantId));
+
+    await tx.insert(stageRecordsTable).values({
+      ...stageRecord,
+      plant_id: plantId,
+    });
+  }
+
+  /** Legacy variant — keeps a self-contained transaction for direct service use. */
   async updateStage(
     plantId: string,
     newStage: string,
@@ -89,20 +147,7 @@ export class PlantsRepository {
     stageRecord: Omit<typeof stageRecordsTable.$inferInsert, 'id' | 'created_at'>,
   ): Promise<void> {
     await this.db.transaction(async (tx) => {
-      await tx
-        .update(plantsTable)
-        .set({
-          current_stage: newStage as (typeof plantsTable.$inferInsert)['current_stage'],
-          last_stage_change_at: new Date(),
-          updated_by: updatedBy,
-          updated_at: new Date(),
-        })
-        .where(eq(plantsTable.id, plantId));
-
-      await tx.insert(stageRecordsTable).values({
-        ...stageRecord,
-        plant_id: plantId,
-      });
+      await this.updateStageWithTx(tx, plantId, newStage, updatedBy, stageRecord);
     });
   }
 

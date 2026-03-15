@@ -520,3 +520,51 @@ export const auditTrailTable = pgTable(
     operationIdx: index('audit_trail_operation_idx').on(t.operation),
   }),
 );
+
+// ── Outbox Events (Transactional Outbox Pattern) ───────────────────────────────
+
+/**
+ * Transactional outbox table.
+ *
+ * Services write domain events here within the same DB transaction as the
+ * domain entity mutation. The OutboxRelayService polls this table and publishes
+ * events to Kafka, then marks them PUBLISHED.
+ *
+ * Guarantees AT-LEAST-ONCE delivery: if the service crashes after DB commit
+ * but before Kafka publish, the relay will re-publish on restart.
+ *
+ * References: Microservices Patterns chapter 3 (Chris Richardson).
+ */
+export const outboxEventsStatusEnum = pgEnum('outbox_event_status', [
+  'PENDING',
+  'PUBLISHED',
+  'FAILED',
+  'DEAD',
+]);
+
+export const outboxEventsTable = pgTable(
+  'outbox_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    /** Kafka topic to publish to */
+    topic: varchar('topic', { length: 255 }).notNull(),
+    /** Kafka message key (usually the aggregate ID) */
+    key: varchar('key', { length: 255 }).notNull(),
+    /** Full event payload serialised as JSONB */
+    payload: jsonb('payload').notNull(),
+    status: outboxEventsStatusEnum('status').notNull().default('PENDING'),
+    /** Number of publish attempts (incremented on each failure) */
+    retry_count: integer('retry_count').notNull().default(0),
+    /** Error message from the last failed publish attempt */
+    last_error: text('last_error'),
+    /** When the event was first published successfully */
+    published_at: timestamp('published_at', { withTimezone: true }),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    statusIdx: index('outbox_events_status_idx').on(t.status),
+    createdAtIdx: index('outbox_events_created_at_idx').on(t.created_at),
+  }),
+);

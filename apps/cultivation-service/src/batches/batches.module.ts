@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { BatchesService } from './batches.service';
 import { BatchesRepository } from './batches.repository';
 import { BatchesController } from './batches.controller';
-import { KafkaProducerModule } from '../kafka/kafka-producer.module';
+import { HarvestBatchUseCase } from './use-cases/harvest-batch.use-case';
+import { OutboxModule } from '../outbox/outbox.module';
 
 @Module({
-  imports: [KafkaProducerModule],
+  imports: [OutboxModule],
   controllers: [BatchesController],
-  providers: [BatchesService, BatchesRepository],
-  exports: [BatchesService],
+  providers: [BatchesService, BatchesRepository, HarvestBatchUseCase],
+  exports: [BatchesService, HarvestBatchUseCase],
 })
 export class BatchesModule {}

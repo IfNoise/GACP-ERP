@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { eq, and, isNull, desc } from 'drizzle-orm';
-import { batchesTable, type Database } from '@gacp-erp/shared-database';
+import { batchesTable, type Database, type DbContext } from '@gacp-erp/shared-database';
 import {
   type Batch,
   type CreateBatch,
@@ -96,6 +96,22 @@ export class BatchesRepository {
     updatedBy: string,
   ): Promise<void> {
     await this.db
+      .update(batchesTable)
+      .set({ status, updated_by: updatedBy, updated_at: new Date() })
+      .where(eq(batchesTable.id, batchId));
+  }
+
+  /**
+   * Transaction-aware variant of `updateStatus`.
+   * Use inside `db.transaction()` in HarvestBatchUseCase.
+   */
+  async updateStatusWithTx(
+    tx: DbContext,
+    batchId: string,
+    status: (typeof batchesTable.$inferInsert)['status'],
+    updatedBy: string,
+  ): Promise<void> {
+    await tx
       .update(batchesTable)
       .set({ status, updated_by: updatedBy, updated_at: new Date() })
       .where(eq(batchesTable.id, batchId));
