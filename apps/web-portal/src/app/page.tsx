@@ -1,5 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+import { LogoutButton } from '@/components/auth/logout-button';
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -11,9 +13,21 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">GACP-ERP Dashboard</h1>
-          <p className="mt-2 text-gray-600">Welcome, {session.user?.name ?? session.user?.email}</p>
+        <header className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">GACP-ERP Dashboard</h1>
+            <p className="mt-2 text-gray-600">
+              Welcome, {session.user?.name ?? session.user?.email}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {(session.roles ?? []).map((role) => (
+                <Badge key={role} variant="success">
+                  {role}
+                </Badge>
+              ))}
+            </div>
+          </div>
+          <LogoutButton />
         </header>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

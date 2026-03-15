@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { SessionProvider } from 'next-auth/react';
+import { AuthProvider } from '@/components/providers/auth-provider';
 import { auth } from '@/lib/auth';
 import './globals.css';
 
@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <AuthProvider session={session}>{children}</AuthProvider>
       </body>
     </html>
   );

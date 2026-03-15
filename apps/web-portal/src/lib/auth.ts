@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 import type { JWT } from 'next-auth/jwt';
 import type { Session } from 'next-auth';
+import { SystemRoleEnum, type SystemRole } from '@gacp-erp/shared-schemas';
 
 /**
  * NextAuth v5 configuration with Keycloak OIDC provider.
@@ -17,14 +18,19 @@ const nextAuth = NextAuth({
   ],
 
   callbacks: {
-    async jwt({ token, account }) {
-      // On initial sign-in, persist token data
+    async jwt({ token, account }): Promise<JWT> {
+      // On initial sign-in, persist token data and extract roles
       if (account) {
+        // Decode roles from access_token JWT payload (Keycloak realm_access.roles)
+        const roles = extractRolesFromToken(account.access_token);
         return {
           ...token,
-          access_token: account.access_token,
-          refresh_token: account.refresh_token,
-          expires_at: account.expires_at,
+          // Use conditional spread to satisfy exactOptionalPropertyTypes:
+          // undefined values must be absent, not explicitly set to undefined.
+          ...(account.access_token !== undefined ? { access_token: account.access_token } : {}),
+          ...(account.refresh_token !== undefined ? { refresh_token: account.refresh_token } : {}),
+          ...(account.expires_at !== undefined ? { expires_at: account.expires_at } : {}),
+          roles,
         };
       }
 
@@ -41,6 +47,7 @@ const nextAuth = NextAuth({
       return {
         ...session,
         accessToken: token['access_token'] as string | undefined,
+        roles: (token['roles'] as Session['roles']) ?? [],
         error: token['error'] as string | undefined,
       };
     },
@@ -81,8 +88,31 @@ async function refreshAccessToken(token: JWT & { refresh_token: string }): Promi
       access_token: refreshed['access_token'] as string,
       expires_at: Math.floor(Date.now() / 1000 + (refreshed['expires_in'] as number)),
       refresh_token: (refreshed['refresh_token'] as string | undefined) ?? token.refresh_token,
+      roles: extractRolesFromToken(refreshed['access_token'] as string | undefined),
     };
   } catch {
     return { ...token, error: 'RefreshAccessTokenError' };
+  }
+}
+
+/**
+ * Decodes Keycloak JWT payload (base64url) and extracts realm_access.roles,
+ * filtering to known SystemRole values only.
+ */
+function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
+  if (!accessToken) return [];
+  try {
+    const parts = accessToken.split('.');
+    if (parts.length !== 3 || !parts[1]) return [];
+    // base64url → base64 → JSON
+    const payload = JSON.parse(
+      Buffer.from(parts[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'),
+    ) as { realm_access?: { roles?: string[] } };
+    const rawRoles = payload.realm_access?.roles ?? [];
+    return rawRoles.filter((r): r is SystemRole =>
+      SystemRoleEnum.options.includes(r as SystemRole),
+    );
+  } catch {
+    return [];
   }
 }

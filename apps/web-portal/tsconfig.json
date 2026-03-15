@@ -14,7 +14,13 @@
     "plugins": [{ "name": "next" }],
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./apps/web-portal/src/*"]
+      "@/*": ["./apps/web-portal/src/*"],
+      "@gacp-erp/shared-schemas": ["libs/shared/schemas/src/index.ts"],
+      "@gacp-erp/shared-schemas/*": ["libs/shared/schemas/src/*"],
+      "@gacp-erp/shared-contracts": ["libs/shared/contracts/src/index.ts"],
+      "@gacp-erp/shared-contracts/*": ["libs/shared/contracts/src/*"],
+      "@gacp-erp/shared-events": ["libs/shared/events/src/index.ts"],
+      "@gacp-erp/shared-events/*": ["libs/shared/events/src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],

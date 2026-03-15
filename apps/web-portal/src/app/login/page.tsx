@@ -1,4 +1,5 @@
 import { signIn } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   return (
@@ -15,14 +16,9 @@ export default function LoginPage() {
             await signIn('keycloak', { redirectTo: '/' });
           }}
         >
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-green-700 px-4 py-3 text-sm font-semibold
-                       text-white transition hover:bg-green-800 focus:outline-none
-                       focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
+          <Button type="submit" size="lg" className="w-full">
             Sign in with Keycloak
-          </button>
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-400">
