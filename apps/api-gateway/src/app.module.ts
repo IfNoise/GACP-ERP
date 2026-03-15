@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { SignatureModule } from './signature/signature.module';
 import { HealthModule } from './health/health.module';
+import { KafkaProducerModule } from './kafka/kafka-producer.module';
+import { AuditInterceptor } from './common/interceptors/audit.interceptor';
 
 @Module({
   imports: [
@@ -24,9 +27,17 @@ import { HealthModule } from './health/health.module';
       ],
     }),
 
+    KafkaProducerModule,
     AuthModule,
     SignatureModule,
     HealthModule,
+  ],
+  providers: [
+    // Register AuditInterceptor globally so it intercepts all controllers
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
+    },
   ],
 })
 export class AppModule {}

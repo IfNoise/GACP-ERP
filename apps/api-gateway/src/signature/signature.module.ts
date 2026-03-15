@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SignatureService } from './signature.service';
 import { SignatureController } from './signature.controller';
+import { KafkaProducerModule } from '../kafka/kafka-producer.module';
 
 /**
  * SignatureModule — 21 CFR Part 11 §11.50 / §11.200.
@@ -13,7 +14,7 @@ import { SignatureController } from './signature.controller';
  * - Document approvals
  */
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, KafkaProducerModule],
   controllers: [SignatureController],
   providers: [SignatureService],
   exports: [SignatureService],

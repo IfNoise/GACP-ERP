@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import {
   type Plant,
   type CreatePlant,
@@ -8,15 +9,29 @@ import {
   type PaginationQuery,
   type PaginatedResponse,
   type GrowthStage,
+  type PlantId,
+  type BatchId,
+  type FacilityId,
+  type ZoneId,
+  type UserId,
 } from '@gacp-erp/shared-schemas';
+import {
+  CULTIVATION_TOPIC,
+  type PlantCreatedEvent,
+  type PlantStageChangedEvent,
+} from '@gacp-erp/shared-events';
 import { type PlantsRepository } from './plants.repository';
 import { PlantAggregate } from './plant.aggregate';
+import { type KafkaProducerService } from '../kafka/kafka-producer.service';
 
 @Injectable()
 export class PlantsService {
   private readonly logger = new Logger(PlantsService.name);
 
-  constructor(private readonly plantsRepo: PlantsRepository) {}
+  constructor(
+    private readonly plantsRepo: PlantsRepository,
+    private readonly kafkaProducer: KafkaProducerService,
+  ) {}
 
   async getById(id: string): Promise<Plant> {
     const plant = await this.plantsRepo.findById(id);
@@ -40,6 +55,28 @@ export class PlantsService {
     }
     const plant = await this.plantsRepo.create(dto, createdBy);
     this.logger.log(`Plant created: ${plant.id} (code: ${plant.plant_code})`);
+
+    const event: PlantCreatedEvent = {
+      eventId: randomUUID(),
+      occurredAt: plant.created_at,
+      eventVersion: '1.0',
+      producerService: 'cultivation-service',
+      topic: CULTIVATION_TOPIC,
+      correlationId: randomUUID(),
+      triggeredBy: createdBy as UserId,
+      eventType: 'PLANT_CREATED',
+      payload: {
+        plantId: plant.id as PlantId,
+        plantCode: plant.plant_code,
+        batchId: plant.batch_id as BatchId,
+        strainId: plant.strain_id,
+        facilityId: plant.facility_id as FacilityId,
+        ...(plant.zone_id && { zoneId: plant.zone_id as ZoneId }),
+        plantedAt: plant.created_at,
+        initialStage: plant.current_stage,
+      },
+    };
+    this.kafkaProducer.publish(CULTIVATION_TOPIC, plant.id, event);
     return plant;
   }
 
@@ -86,6 +123,30 @@ export class PlantsService {
     this.logger.log(
       `Plant ${plantId} transitioned: ${stageRecord.from_stage} → ${toStage} by ${transitionedBy}`,
     );
+
+    const stageEvent: PlantStageChangedEvent = {
+      eventId: randomUUID(),
+      occurredAt: new Date().toISOString(),
+      eventVersion: '1.0',
+      producerService: 'cultivation-service',
+      topic: CULTIVATION_TOPIC,
+      correlationId: randomUUID(),
+      triggeredBy: transitionedBy as UserId,
+      eventType: 'PLANT_STAGE_CHANGED',
+      payload: {
+        plantId: plantId as PlantId,
+        plantCode: plant.plant_code,
+        batchId: plant.batch_id as BatchId,
+        previousStage: stageRecord.from_stage,
+        newStage: toStage,
+        stageRecordId: stageRecord.id,
+        transitionedAt: new Date().toISOString(),
+        notes,
+        signatureProvided: !!signature,
+        isHarvest: toStage === 'HARVESTED',
+      },
+    };
+    this.kafkaProducer.publish(CULTIVATION_TOPIC, plantId, stageEvent);
 
     return stageRecord;
   }
