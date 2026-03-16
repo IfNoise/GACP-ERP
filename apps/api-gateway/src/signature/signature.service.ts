@@ -2,12 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { type ConfigService } from '@nestjs/config';
 import { createSign, createVerify } from 'crypto';
-import type {
-  ElectronicSignature,
-  SignatureType,
-  AuthenticationMethod,
-  UserId,
-  SystemRole,
+import {
+  type ElectronicSignature,
+  type SignatureType,
+  type AuthenticationMethod,
+  type UserId,
+  type SystemRole,
 } from '@gacp-erp/shared-schemas';
 import { AUDIT_TOPIC, type SignatureRecordedEvent } from '@gacp-erp/shared-events';
 import { type KafkaProducerService } from '../kafka/kafka-producer.service';

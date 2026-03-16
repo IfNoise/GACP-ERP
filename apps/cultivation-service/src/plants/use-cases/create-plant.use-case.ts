@@ -13,7 +13,7 @@ import { CULTIVATION_TOPIC, type PlantCreatedEvent } from '@gacp-erp/shared-even
 import { type PlantsRepository } from '../plants.repository';
 import { type OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import type { Database } from '@gacp-erp/shared-database';
+import { type Database } from '@gacp-erp/shared-database';
 
 /**
  * CreatePlantUseCase — Step 3.2

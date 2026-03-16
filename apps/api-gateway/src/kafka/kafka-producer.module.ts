@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { KafkaProducerService } from './kafka-producer.service';
-
-export const KAFKA_CLIENT = 'KAFKA_CLIENT' as const;
+import { KAFKA_CLIENT } from './kafka-tokens';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ export const KAFKA_CLIENT = 'KAFKA_CLIENT' as const;
           options: {
             client: {
               clientId: 'api-gateway',
-              brokers: [cfg.get<string>('KAFKA_BROKERS', 'localhost:9093')],
+              brokers: [cfg.get<string>('KAFKA_BROKERS', 'localhost:9094')],
             },
             producer: {
               allowAutoTopicCreation: true,

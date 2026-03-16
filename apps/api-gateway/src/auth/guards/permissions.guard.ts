@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { type Reflector } from '@nestjs/core';
-import type { JwtPayload, SystemRole } from '@gacp-erp/shared-schemas';
+import { type JwtPayload, type SystemRole } from '@gacp-erp/shared-schemas';
 import {
   PERMISSIONS_KEY,
   ROLE_PERMISSIONS,

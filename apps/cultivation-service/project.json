@@ -15,12 +15,11 @@
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "options": { "buildTarget": "cultivation-service:build" },
-      "configurations": {
-        "development": { "buildTarget": "cultivation-service:build:development" },
-        "production": { "buildTarget": "cultivation-service:build:production" }
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/cultivation-service/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
       }
     },
     "typecheck": {

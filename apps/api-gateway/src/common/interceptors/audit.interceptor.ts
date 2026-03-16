@@ -7,7 +7,12 @@ import {
 } from '@nestjs/common';
 import { type Observable, tap } from 'rxjs';
 import { randomUUID } from 'crypto';
-import type { JwtPayload, SystemRole, AuditAction, UserId } from '@gacp-erp/shared-schemas';
+import {
+  type JwtPayload,
+  type SystemRole,
+  type AuditAction,
+  type UserId,
+} from '@gacp-erp/shared-schemas';
 import { AUDIT_TOPIC, type AuditTrailEntryEvent } from '@gacp-erp/shared-events';
 import { type KafkaProducerService } from '../../kafka/kafka-producer.service';
 

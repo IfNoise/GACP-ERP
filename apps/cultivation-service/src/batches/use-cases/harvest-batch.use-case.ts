@@ -6,7 +6,7 @@ import { harvestRecordsTable } from '@gacp-erp/shared-database';
 import { type BatchesRepository } from '../batches.repository';
 import { type OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import type { Database } from '@gacp-erp/shared-database';
+import { type Database } from '@gacp-erp/shared-database';
 
 export interface HarvestBatchDto {
   batchId: string;

@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { type ConfigService } from '@nestjs/config';
-import type {
-  LoginRequest,
-  TokenResponse,
-  RefreshTokenRequest,
-  JwtPayload,
+import {
+  type LoginRequest,
+  type TokenResponse,
+  type RefreshTokenRequest,
+  type JwtPayload,
 } from '@gacp-erp/shared-schemas';
 
 interface KeycloakTokenResponse {

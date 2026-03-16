@@ -11,12 +11,15 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
+        "isolatedConfig": false,
+        "externalDependencies": "all",
         "outputPath": "dist/apps/api-gateway",
         "main": "apps/api-gateway/src/main.ts",
         "tsConfig": "apps/api-gateway/tsconfig.app.json",
-        "assets": ["apps/api-gateway/src/assets"]
+        "assets": []
       },
       "configurations": {
+        "development": {},
         "production": {
           "optimization": true,
           "extractLicenses": true,
@@ -26,18 +29,11 @@
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "api-gateway:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "api-gateway:build:development"
-        },
-        "production": {
-          "buildTarget": "api-gateway:build:production"
-        }
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/api-gateway/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
       }
     },
     "typecheck": {

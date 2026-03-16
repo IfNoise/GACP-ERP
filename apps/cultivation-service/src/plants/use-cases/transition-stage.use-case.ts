@@ -13,7 +13,7 @@ import { type PlantsRepository } from '../plants.repository';
 import { PlantAggregate } from '../plant.aggregate';
 import { type OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import type { Database } from '@gacp-erp/shared-database';
+import { type Database } from '@gacp-erp/shared-database';
 
 /**
  * TransitionStageUseCase — Step 3.2

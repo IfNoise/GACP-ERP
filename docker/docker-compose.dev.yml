@@ -14,8 +14,8 @@ services:
   kafka:
     environment:
       # Lower retention for dev
-      KAFKA_CFG_LOG_RETENTION_HOURS: 24
-      KAFKA_CFG_LOG_RETENTION_BYTES: 536870912
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 536870912
 
   # Kafka UI for development visibility
   kafka-ui:
@@ -48,25 +48,14 @@ services:
     container_name: gacp-pgadmin
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@gacp-erp.local}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@gacp-erp.example.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-pgadmin_dev_2026}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_CHECK_EMAIL_DELIVERABILITY: 'False'
     ports:
       - '5050:80'
     networks:
       - gacp-net
 
-  # ImmuDB Webconsole
-  immudb-webconsole:
-    image: codenotary/immudb-webconsole:latest
-    container_name: gacp-immudb-webconsole
-    restart: unless-stopped
-    environment:
-      IMMUDB_ADDRESS: immudb
-      IMMUDB_PORT: 3322
-    ports:
-      - '8091:8090'
-    networks:
-      - gacp-net
-    depends_on:
-      - immudb
+  # ImmuDB Webconsole (image removed from Docker Hub — disabled)
+  # immudb-webconsole: disabled

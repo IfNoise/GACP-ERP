@@ -6,7 +6,7 @@ import {
   type OnModuleInit,
 } from '@nestjs/common';
 import { type ClientKafka } from '@nestjs/microservices';
-import { KAFKA_CLIENT } from './kafka-producer.module';
+import { KAFKA_CLIENT } from './kafka-tokens';
 
 /**
  * Fire-and-forget Kafka producer.

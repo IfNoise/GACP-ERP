@@ -51,7 +51,7 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("invalid IMMUDB_PORT: %w", err)
 	}
 
-	brokersRaw := getEnv("KAFKA_BROKERS", "localhost:9093")
+		brokersRaw := getEnv("KAFKA_BROKERS", "localhost:9094")
 	topicsRaw := getEnv(
 		"AUDIT_CONSUMER_TOPICS",
 		"audit.trail.v1,cultivation.plants.v1",
