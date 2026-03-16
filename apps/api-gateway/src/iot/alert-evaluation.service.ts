@@ -4,7 +4,7 @@ import { createHash } from 'crypto';
 import { randomUUID } from 'crypto';
 import { type ConfigService } from '@nestjs/config';
 import { type Database, alertHistoryTable } from '@gacp-erp/shared-database';
-import { type AlertThreshold } from '@gacp-erp/shared-schemas';
+import type { AlertThreshold } from '@gacp-erp/shared-schemas';
 import {
   IOT_ALERTS_TOPIC,
   type AlertTriggeredEvent,
@@ -13,7 +13,7 @@ import {
 import { DATABASE_TOKEN } from '../database/database.module';
 import { type KafkaProducerService } from '../kafka/kafka-producer.service';
 import { type ThresholdService } from './threshold.service';
-import { type z } from 'zod';
+import type { z } from 'zod';
 
 /** VictoriaMetrics instant query response */
 interface VmInstantResult {
