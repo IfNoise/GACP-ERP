@@ -3,12 +3,48 @@ import { redirect } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { LogoutButton } from '@/components/auth/logout-button';
 
+interface BatchItem {
+  status: string;
+}
+
+interface PlantsResponse {
+  total: number;
+}
+
+interface DashboardStats {
+  activeBatches: number;
+  totalPlants: number;
+}
+
+async function fetchDashboardStats(): Promise<DashboardStats> {
+  const base = process.env['CULTIVATION_SERVICE_URL'] ?? 'http://localhost:3002/internal';
+  try {
+    const [batchesRes, plantsRes] = await Promise.all([
+      fetch(`${base}/batches`, { next: { revalidate: 30 } }),
+      fetch(`${base}/plants?limit=1`, { next: { revalidate: 30 } }),
+    ]);
+
+    const batches = batchesRes.ok ? ((await batchesRes.json()) as BatchItem[]) : [];
+    const plantsData = plantsRes.ok ? ((await plantsRes.json()) as PlantsResponse) : { total: 0 };
+
+    const activeBatches = batches.filter(
+      (b) => b.status === 'active' || b.status === 'in_progress',
+    ).length;
+
+    return { activeBatches, totalPlants: plantsData.total };
+  } catch {
+    return { activeBatches: 0, totalPlants: 0 };
+  }
+}
+
 export default async function DashboardPage() {
   const session = await auth();
 
   if (!session) {
     redirect('/login');
   }
+
+  const stats = await fetchDashboardStats();
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
@@ -33,13 +69,13 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <DashboardCard
             title="Active Batches"
-            value="—"
+            value={String(stats.activeBatches)}
             description="Cannabis batches in cultivation"
             href="/batches"
           />
           <DashboardCard
             title="Total Plants"
-            value="—"
+            value={String(stats.totalPlants)}
             description="Plants across all active batches"
             href="/plants"
           />
@@ -55,13 +91,6 @@ export default async function DashboardPage() {
             description="Unresolved CAPA items"
             href="/capa"
           />
-        </div>
-
-        <div className="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm font-medium text-amber-800">
-            🚧 System under development — EPIC 2 in progress. Data will appear after
-            cultivation-service is connected.
-          </p>
         </div>
       </div>
     </main>

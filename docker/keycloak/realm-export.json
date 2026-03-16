@@ -520,8 +520,8 @@
         {
           "id": "eef71e75-fd79-434a-babb-8b345c1d51af",
           "type": "password",
-          "createdDate": 1773661746150,
-          "secretData": "{\"value\":\"0f8RnR5cmBOEDg1AVeVzxE0s4Y9frXg5dYw71mjk5tU=\",\"salt\":\"gGJAXjFiByJONyMlV37XQQ==\",\"additionalParameters\":{}}",
+          "createdDate": 1773664244330,
+          "secretData": "{\"value\":\"rGrNt+ULwA/NPnGrSXpbzUy97hGIo5h5/fypDTwC/6A=\",\"salt\":\"ouJ8rEPXbj1Sj9YUZXSxVQ==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
@@ -544,8 +544,8 @@
         {
           "id": "367008cb-a7a1-4ee3-9f45-82d66310bee2",
           "type": "password",
-          "createdDate": 1773661747995,
-          "secretData": "{\"value\":\"/TAy8O+n+fMvP6JAD+V7w8H1tPE2gfkYFni/j3kPwPM=\",\"salt\":\"taHppINRvkfJFN8a/DIyYg==\",\"additionalParameters\":{}}",
+          "createdDate": 1773664244412,
+          "secretData": "{\"value\":\"/OZK1W6erovzBgLOOUNmTMiQlh4jpxEPraOuYS7x4ms=\",\"salt\":\"BFL3wLiGW4y71oAt5HMBWw==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
@@ -568,8 +568,8 @@
         {
           "id": "25c05698-075d-404a-9ab4-718577176b84",
           "type": "password",
-          "createdDate": 1773661747045,
-          "secretData": "{\"value\":\"NeIKBEquk9LC3+ytj3u/gmwGk0Co5T3nin2kTvrf8oI=\",\"salt\":\"x7FoBsVVrR5ECSsCkeAd0Q==\",\"additionalParameters\":{}}",
+          "createdDate": 1773664244500,
+          "secretData": "{\"value\":\"4zU4vJb0xcIwSRxExZ+nQmk9DKGscDht53hL1DnfQ+U=\",\"salt\":\"sKg9zvESQwZfAcuVVCzaBQ==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
@@ -592,8 +592,8 @@
         {
           "id": "23203592-92b3-47f7-958c-65ca798490d1",
           "type": "password",
-          "createdDate": 1773661747510,
-          "secretData": "{\"value\":\"S2qQhpU5vIQmO3cESpCbG766Cps+hCpqnY1YwVLNI0M=\",\"salt\":\"fBrV4CrR+Feeag+07QvauQ==\",\"additionalParameters\":{}}",
+          "createdDate": 1773664244588,
+          "secretData": "{\"value\":\"aqztxuuasIPB57ZnLl767xoQpUfCHjnOB0JTYgNtVvY=\",\"salt\":\"pJ4+Mk84tbpreDeb22qwig==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
@@ -616,8 +616,8 @@
         {
           "id": "23a35d82-0bb6-4166-ae6a-1bea8607bd92",
           "type": "password",
-          "createdDate": 1773661746586,
-          "secretData": "{\"value\":\"v/NPrIZ1XJYn98rw5JFU87jO8QHMVJxVZBbiKxcCi4s=\",\"salt\":\"QJDJuzc5BYb0csU3KGWLuw==\",\"additionalParameters\":{}}",
+          "createdDate": 1773664244675,
+          "secretData": "{\"value\":\"MJh8P0JOobzwZ4AWXeKvyHd3EXEtXnxiN7BiZKOK4ao=\",\"salt\":\"waBzkyYlJm+VPg8ey7ddQw==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
@@ -2221,36 +2221,12 @@
   ],
   "requiredActions": [
     {
-      "alias": "CONFIGURE_TOTP",
-      "name": "Configure OTP",
-      "enabled": true,
-      "defaultAction": false,
-      "priority": 10,
-      "config": {}
-    },
-    {
-      "alias": "UPDATE_PASSWORD",
-      "name": "Update Password",
-      "enabled": true,
-      "defaultAction": false,
-      "priority": 30,
-      "config": {}
-    },
-    {
       "alias": "UPDATE_PROFILE",
       "name": "Update Profile",
       "providerId": "UPDATE_PROFILE",
       "enabled": true,
       "defaultAction": false,
       "priority": 40,
-      "config": {}
-    },
-    {
-      "alias": "VERIFY_EMAIL",
-      "name": "Verify Email",
-      "enabled": true,
-      "defaultAction": false,
-      "priority": 50,
       "config": {}
     },
     {
@@ -2269,6 +2245,33 @@
       "enabled": true,
       "defaultAction": false,
       "priority": 1000,
+      "config": {}
+    },
+    {
+      "alias": "CONFIGURE_TOTP",
+      "name": "Configure OTP",
+      "providerId": "CONFIGURE_TOTP",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 1001,
+      "config": {}
+    },
+    {
+      "alias": "UPDATE_PASSWORD",
+      "name": "Update Password",
+      "providerId": "UPDATE_PASSWORD",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 1002,
+      "config": {}
+    },
+    {
+      "alias": "VERIFY_EMAIL",
+      "name": "Verify Email",
+      "providerId": "VERIFY_EMAIL",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 1003,
       "config": {}
     }
   ],
