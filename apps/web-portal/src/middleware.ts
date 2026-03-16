@@ -19,6 +19,18 @@ const ROLE_PROTECTED_ROUTES: Array<{ prefix: string; roles: SystemRole[] }> = [
     prefix: '/plants',
     roles: ['SUPER_ADMIN', 'QUALITY_MANAGER', 'CULTIVATION_MANAGER', 'OPERATOR'],
   },
+  // IoT dashboard: all authenticated users can view; threshold management enforced on the API side
+  {
+    prefix: '/iot',
+    roles: [
+      'SUPER_ADMIN',
+      'QUALITY_MANAGER',
+      'CULTIVATION_MANAGER',
+      'OPERATOR',
+      'AUDITOR',
+      'READONLY',
+    ],
+  },
 ];
 
 export default auth(

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { FacilityIdSchema, ZoneIdSchema } from '../common/branded-ids';
+import { UserIdSchema, FacilityIdSchema, ZoneIdSchema } from '../common/branded-ids';
 
 // ─── SENSOR TYPES ─────────────────────────────────────────────────────────────
 export const SensorTypeEnum = z.enum([
@@ -123,3 +123,88 @@ export const EnvironmentDataSchema = z.object({
   alert_count: z.number().int().nonnegative().default(0),
 });
 export type EnvironmentData = z.infer<typeof EnvironmentDataSchema>;
+
+// ─── ALERT LEVEL ─────────────────────────────────────────────────────────────
+export const AlertLevelEnum = z.enum(['WARNING', 'CRITICAL']);
+export type AlertLevel = z.infer<typeof AlertLevelEnum>;
+
+// ─── ALERT THRESHOLD ─────────────────────────────────────────────────────────
+/**
+ * Configurable threshold for a sensor type within a zone.
+ * When exceeded, triggers an AlertTriggeredEvent on Kafka topic iot.alerts.v1.
+ * Managed by QUALITY_MANAGER+ role only.
+ * ALCOA+: Attributable (created_by), Contemporaneous (created_at).
+ */
+export const AlertThresholdSchema = z.object({
+  id: z.string().uuid(),
+  zone_id: ZoneIdSchema,
+  sensor_type: SensorTypeEnum,
+  /** Lower bound — values below this trigger an alert (null = no lower bound) */
+  min_value: z.number().nullable(),
+  /** Upper bound — values above this trigger an alert (null = no upper bound) */
+  max_value: z.number().nullable(),
+  alert_level: AlertLevelEnum,
+  /** Whether this threshold is currently active */
+  is_active: z.boolean().default(true),
+  created_by: UserIdSchema,
+  created_at: z.string().datetime({ offset: true }),
+  updated_at: z.string().datetime({ offset: true }),
+  updated_by: UserIdSchema,
+});
+export type AlertThreshold = z.infer<typeof AlertThresholdSchema>;
+
+export const CreateAlertThresholdSchema = AlertThresholdSchema.omit({
+  id: true,
+  is_active: true,
+  created_at: true,
+  updated_at: true,
+  updated_by: true,
+});
+export type CreateAlertThreshold = z.infer<typeof CreateAlertThresholdSchema>;
+
+// ─── ALERT HISTORY ───────────────────────────────────────────────────────────
+/**
+ * Persistent record of a triggered alert.
+ * Stored in PostgreSQL for audit trail and regulatory reporting.
+ */
+export const AlertHistorySchema = z.object({
+  id: z.string().uuid(),
+  threshold_id: z.string().uuid(),
+  zone_id: ZoneIdSchema,
+  sensor_type: SensorTypeEnum,
+  /** The value that triggered the alert */
+  triggered_value: z.number(),
+  alert_level: AlertLevelEnum,
+  /** When the alert was detected */
+  triggered_at: z.string().datetime({ offset: true }),
+  /** Whether the alert has been acknowledged */
+  acknowledged: z.boolean().default(false),
+  acknowledged_by: UserIdSchema.nullable().optional(),
+  acknowledged_at: z.string().datetime({ offset: true }).nullable().optional(),
+  /** SHA-256 hash of (threshold_id + triggered_value + triggered_at) for integrity */
+  source_hash: z.string().regex(/^[0-9a-f]{64}$/, { message: 'source_hash must be SHA-256 hex' }),
+});
+export type AlertHistory = z.infer<typeof AlertHistorySchema>;
+
+// ─── VICTORIAMETRICS QUERY RESULT ────────────────────────────────────────────
+/**
+ * Parsed result from VictoriaMetrics instant query (/api/v1/query).
+ */
+export const VmInstantQueryResultSchema = z.object({
+  metric: z.record(z.string()),
+  value: z.tuple([z.number(), z.string()]),
+});
+
+export const VmRangeQueryResultSchema = z.object({
+  metric: z.record(z.string()),
+  values: z.array(z.tuple([z.number(), z.string()])),
+});
+
+export const VmQueryResponseSchema = z.object({
+  status: z.literal('success'),
+  data: z.object({
+    resultType: z.enum(['matrix', 'vector', 'scalar', 'string']),
+    result: z.array(z.union([VmInstantQueryResultSchema, VmRangeQueryResultSchema])),
+  }),
+});
+export type VmQueryResponse = z.infer<typeof VmQueryResponseSchema>;

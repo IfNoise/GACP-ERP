@@ -568,3 +568,76 @@ export const outboxEventsTable = pgTable(
     createdAtIdx: index('outbox_events_created_at_idx').on(t.created_at),
   }),
 );
+
+// ── IoT: Alert Thresholds (EPIC 5) ───────────────────────────────────────────
+
+export const alertLevelEnum = pgEnum('alert_level', ['WARNING', 'CRITICAL']);
+
+/**
+ * Configurable alert thresholds per zone + sensor type.
+ * Managed by QUALITY_MANAGER+. Changes are fully audited.
+ */
+export const alertThresholdsTable = pgTable(
+  'alert_thresholds',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    zone_id: uuid('zone_id')
+      .notNull()
+      .references(() => zonesTable.id),
+    sensor_type: varchar('sensor_type', { length: 50 }).notNull(),
+    /** Lower bound — null = no lower limit */
+    min_value: decimal('min_value', { precision: 10, scale: 4 }),
+    /** Upper bound — null = no upper limit */
+    max_value: decimal('max_value', { precision: 10, scale: 4 }),
+    alert_level: alertLevelEnum('alert_level').notNull(),
+    is_active: boolean('is_active').notNull().default(true),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by').notNull(),
+    updated_by: uuid('updated_by').notNull(),
+  },
+  (t) => ({
+    zoneIdx: index('alert_thresholds_zone_idx').on(t.zone_id),
+    activeIdx: index('alert_thresholds_active_idx').on(t.is_active),
+    zoneSensorTypeIdx: index('alert_thresholds_zone_sensor_idx').on(t.zone_id, t.sensor_type),
+  }),
+);
+
+// ── IoT: Alert History (EPIC 5) ──────────────────────────────────────────────
+
+/**
+ * Immutable record of every triggered alert.
+ * Written by AlertEvaluationService cron job.
+ * Required for regulatory audit trail and trend analysis.
+ */
+export const alertHistoryTable = pgTable(
+  'alert_history',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    threshold_id: uuid('threshold_id')
+      .notNull()
+      .references(() => alertThresholdsTable.id),
+    zone_id: uuid('zone_id')
+      .notNull()
+      .references(() => zonesTable.id),
+    sensor_type: varchar('sensor_type', { length: 50 }).notNull(),
+    triggered_value: decimal('triggered_value', { precision: 10, scale: 4 }).notNull(),
+    alert_level: alertLevelEnum('alert_level').notNull(),
+    triggered_at: timestamp('triggered_at', { withTimezone: true }).notNull(),
+    acknowledged: boolean('acknowledged').notNull().default(false),
+    acknowledged_by: uuid('acknowledged_by'),
+    acknowledged_at: timestamp('acknowledged_at', { withTimezone: true }),
+    /** SHA-256 integrity hash: (threshold_id + triggered_value + triggered_at) */
+    source_hash: varchar('source_hash', { length: 64 }).notNull(),
+  },
+  (t) => ({
+    zoneIdx: index('alert_history_zone_idx').on(t.zone_id),
+    triggeredAtIdx: index('alert_history_triggered_at_idx').on(t.triggered_at),
+    acknowledgedIdx: index('alert_history_acknowledged_idx').on(t.acknowledged),
+    thresholdIdx: index('alert_history_threshold_idx').on(t.threshold_id),
+  }),
+);

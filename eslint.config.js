@@ -14,6 +14,8 @@ module.exports = [
       '**/dist/**',
       '**/node_modules/**',
       '**/.nx/**',
+      '**/.next/**',
+      '**/next-env.d.ts',
       '**/coverage/**',
       '**/tmp/**',
       'landing/**',

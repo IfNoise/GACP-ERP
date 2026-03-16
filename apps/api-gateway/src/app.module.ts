@@ -7,6 +7,8 @@ import { SignatureModule } from './signature/signature.module';
 import { HealthModule } from './health/health.module';
 import { KafkaProducerModule } from './kafka/kafka-producer.module';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor';
+import { DatabaseModule } from './database/database.module';
+import { IotModule } from './iot/iot.module';
 
 @Module({
   imports: [
@@ -27,10 +29,12 @@ import { AuditInterceptor } from './common/interceptors/audit.interceptor';
       ],
     }),
 
+    DatabaseModule,
     KafkaProducerModule,
     AuthModule,
     SignatureModule,
     HealthModule,
+    IotModule,
   ],
   providers: [
     // Register AuditInterceptor globally so it intercepts all controllers

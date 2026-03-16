@@ -22,6 +22,9 @@ volumes:
   immudb-data:
   mongodb-data:
   victoriametrics-data:
+  victoriametrics-iot-data:
+  emqx-data:
+  emqx-log:
 
 services:
   # ─── PostgreSQL 15 with PostGIS ─────────────────────────────────
@@ -216,3 +219,70 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # ─── EMQX 5 — MQTT Broker for IoT sensors ─────────────────────
+  emqx:
+    image: emqx/emqx:5.6.0
+    container_name: gacp-emqx
+    <<: *default-restart
+    logging: *default-logging
+    environment:
+      EMQX_NAME: gacp-emqx
+      EMQX_HOST: 127.0.0.1
+      EMQX_DASHBOARD__DEFAULT_USERNAME: ${EMQX_ADMIN:-admin}
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: ${EMQX_ADMIN_PASSWORD:-emqx_secret_2026}
+    ports:
+      - '${EMQX_MQTT_PORT:-1883}:1883'
+      - '${EMQX_DASHBOARD_PORT:-18083}:18083'
+    volumes:
+      - emqx-data:/opt/emqx/data
+      - emqx-log:/opt/emqx/log
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD', '/opt/emqx/bin/emqx', 'ctl', 'status']
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ─── VictoriaMetrics IoT — dedicated time-series for sensor data ─
+  # Separate instance from victoriametrics (app metrics) to isolate IoT data.
+  # retentionPeriod=24 months (vs 12 for app metrics — EU GMP Annex 11 §7.1).
+  # Internal port 8428 (VM default); external port 8429 to avoid conflict.
+  victoriametrics-iot:
+    image: victoriametrics/victoria-metrics:v1.102.0
+    container_name: gacp-victoriametrics-iot
+    <<: *default-restart
+    logging: *default-logging
+    command:
+      - '--storageDataPath=/storage'
+      - '--retentionPeriod=24'
+      - '--httpListenAddr=:8428'
+    ports:
+      - '${VM_IOT_PORT:-8429}:8428'
+    volumes:
+      - victoriametrics-iot-data:/storage
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:8428/-/healthy || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Telegraf 1.30 — IoT metrics collector ────────────────────────
+  telegraf:
+    image: telegraf:1.30
+    container_name: gacp-telegraf
+    <<: *default-restart
+    logging: *default-logging
+    depends_on:
+      emqx:
+        condition: service_healthy
+      victoriametrics-iot:
+        condition: service_healthy
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - gacp-net

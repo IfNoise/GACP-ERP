@@ -13,9 +13,10 @@ const config: Config = {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['js', 'json', 'ts'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/../../',
-  }),
+  moduleNameMapper:
+    pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: '<rootDir>/../../',
+    }) ?? {},
   coverageDirectory: '../../coverage/apps/cultivation-service',
 };
 

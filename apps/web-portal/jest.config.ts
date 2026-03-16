@@ -12,8 +12,9 @@ export default {
     '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/../../',
-  }),
+  moduleNameMapper:
+    pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: '<rootDir>/../../',
+    }) ?? {},
   coverageDirectory: '../../coverage/apps/web-portal',
 };
