@@ -4,7 +4,7 @@ import { FacilityIdSchema, RoomIdSchema, UserIdSchema, ZoneIdSchema } from '../c
 
 // ─── ZONE TYPE ───────────────────────────────────────────────────────────────
 
-export const ZoneTypeEnum = z.enum([
+export const PlantZoneTypeEnum = z.enum([
   'seedling',
   'germination',
   'vegetation',
@@ -17,7 +17,7 @@ export const ZoneTypeEnum = z.enum([
   'processing',
   'quarantine',
 ]);
-export type ZoneType = z.infer<typeof ZoneTypeEnum>;
+export type PlantZoneType = z.infer<typeof PlantZoneTypeEnum>;
 
 // ─── FACILITY ────────────────────────────────────────────────────────────────
 
@@ -87,7 +87,7 @@ export const ZoneSchema = z.object({
   id: ZoneIdSchema,
   room_id: RoomIdSchema,
   zone_code: z.string().min(1).max(20),
-  zone_type: ZoneTypeEnum,
+  zone_type: PlantZoneTypeEnum,
   name: z.string().min(1).max(100),
   area_m2: z.number().positive().optional(),
   environment_config: z.record(z.unknown()).nullable().optional(),
@@ -104,7 +104,7 @@ export type Zone = z.infer<typeof ZoneSchema>;
 export const CreateZoneSchema = z.object({
   room_id: RoomIdSchema,
   zone_code: z.string().min(1).max(20),
-  zone_type: ZoneTypeEnum,
+  zone_type: PlantZoneTypeEnum,
   name: z.string().min(1).max(100),
   area_m2: z.number().positive().optional(),
   max_plants: z.number().int().positive().optional(),

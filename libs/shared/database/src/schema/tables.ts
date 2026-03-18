@@ -1250,3 +1250,494 @@ export const linkedRecordsTable = pgTable(
     lrUniqueIdx: uniqueIndex('lr_unique_idx').on(t.quality_event_id, t.record_type, t.record_id),
   }),
 );
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// EPIC 8 — FINANCIAL OPERATIONS, PROCUREMENT & SPATIAL
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── Financial Enums ───────────────────────────────────────────────────────────
+
+export const accountTypeEnum = pgEnum('account_type', [
+  'ASSET',
+  'LIABILITY',
+  'EQUITY',
+  'REVENUE',
+  'EXPENSE',
+]);
+
+export const journalEntryStatusEnum = pgEnum('journal_entry_status', [
+  'DRAFT',
+  'POSTED',
+  'REVERSED',
+]);
+
+export const valuationMethodEnum = pgEnum('valuation_method', ['FAIR_VALUE', 'COST']);
+
+export const costTypeEnum = pgEnum('cost_type', [
+  'DIRECT_LABOR',
+  'OVERHEAD',
+  'MATERIAL',
+  'DEPRECIATION',
+  'UTILITIES',
+]);
+
+export const payrollRunStatusEnum = pgEnum('payroll_run_status', [
+  'DRAFT',
+  'CALCULATED',
+  'APPROVED',
+  'PAID',
+  'CANCELLED',
+]);
+
+// ── Procurement Enums ─────────────────────────────────────────────────────────
+
+export const supplierQualificationStatusEnum = pgEnum('supplier_qualification_status', [
+  'QUALIFIED',
+  'PROVISIONAL',
+  'DISQUALIFIED',
+]);
+
+export const purchaseOrderStatusEnum = pgEnum('purchase_order_status', [
+  'DRAFT',
+  'SUBMITTED',
+  'ACKNOWLEDGED',
+  'RECEIVING',
+  'CLOSED',
+  'CANCELLED',
+]);
+
+// ── Spatial Enums ─────────────────────────────────────────────────────────────
+
+export const facilityZoneTypeEnum = pgEnum('facility_zone_type', [
+  'CULTIVATION',
+  'PROCESSING',
+  'STORAGE',
+  'UTILITY',
+  'OFFICE',
+  'QUARANTINE',
+]);
+
+// ── Financial Tables ──────────────────────────────────────────────────────────
+
+export const accountsTable = pgTable(
+  'accounts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    account_code: varchar('account_code', { length: 4 }).notNull().unique(),
+    account_type: accountTypeEnum('account_type').notNull(),
+    parent_id: uuid('parent_id'),
+    name: varchar('name', { length: 255 }).notNull(),
+    description: text('description'),
+    is_active: boolean('is_active').notNull().default(true),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    acctCodeIdx: index('acct_code_idx').on(t.account_code),
+    acctTypeIdx: index('acct_type_idx').on(t.account_type),
+  }),
+);
+
+export const journalEntriesTable = pgTable(
+  'journal_entries',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    entry_number: varchar('entry_number', { length: 20 }).notNull().unique(),
+    description: text('description').notNull(),
+    entry_date: timestamp('entry_date', { withTimezone: true }).notNull(),
+    status: journalEntryStatusEnum('status').notNull().default('DRAFT'),
+    reversal_of_id: uuid('reversal_of_id'),
+    electronic_signature: jsonb('electronic_signature'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    jeNumberIdx: index('je_number_idx').on(t.entry_number),
+    jeStatusIdx: index('je_status_idx').on(t.status),
+    jeDateIdx: index('je_date_idx').on(t.entry_date),
+  }),
+);
+
+export const journalLinesTable = pgTable(
+  'journal_lines',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    entry_id: uuid('entry_id')
+      .notNull()
+      .references(() => journalEntriesTable.id, { onDelete: 'cascade' }),
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => accountsTable.id),
+    account_code: varchar('account_code', { length: 4 }).notNull(),
+    description: text('description').notNull(),
+    debit_amount: decimal('debit_amount', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    credit_amount: decimal('credit_amount', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    batch_id: uuid('batch_id'),
+  },
+  (t) => ({
+    jlEntryIdx: index('jl_entry_idx').on(t.entry_id),
+    jlAccountIdx: index('jl_account_idx').on(t.account_id),
+  }),
+);
+
+export const biologicalAssetsTable = pgTable(
+  'biological_assets',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    batch_id: uuid('batch_id')
+      .notNull()
+      .references(() => batchesTable.id),
+    valuation_method: valuationMethodEnum('valuation_method').notNull(),
+    fair_value: decimal('fair_value', { precision: 18, scale: 2 }),
+    cost_to_sell: decimal('cost_to_sell', { precision: 18, scale: 2 }),
+    net_realizable_value: decimal('net_realizable_value', { precision: 18, scale: 2 }),
+    cost_value: decimal('cost_value', { precision: 18, scale: 2 }),
+    quantity_grams: decimal('quantity_grams', { precision: 18, scale: 3 }).notNull(),
+    valued_at: timestamp('valued_at', { withTimezone: true }).notNull(),
+    valued_by: uuid('valued_by')
+      .notNull()
+      .references(() => usersTable.id),
+    electronic_signature: jsonb('electronic_signature').notNull(),
+    journal_entry_id: uuid('journal_entry_id').references(() => journalEntriesTable.id),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    baBatchIdx: index('ba_batch_idx').on(t.batch_id),
+    baValuedAtIdx: index('ba_valued_at_idx').on(t.valued_at),
+  }),
+);
+
+export const costAllocationsTable = pgTable(
+  'cost_allocations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    batch_id: uuid('batch_id')
+      .notNull()
+      .references(() => batchesTable.id),
+    cost_type: costTypeEnum('cost_type').notNull(),
+    amount: decimal('amount', { precision: 18, scale: 2 }).notNull(),
+    period: varchar('period', { length: 7 }).notNull(),
+    allocation_basis: text('allocation_basis').notNull(),
+    journal_entry_id: uuid('journal_entry_id').references(() => journalEntriesTable.id),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    caBatchIdx: index('ca_batch_idx').on(t.batch_id),
+    caPeriodIdx: index('ca_period_idx').on(t.period),
+    caCostTypeIdx: index('ca_cost_type_idx').on(t.cost_type),
+  }),
+);
+
+// ── Payroll Tables ────────────────────────────────────────────────────────────
+
+export const payrollRunsTable = pgTable(
+  'payroll_runs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    run_number: varchar('run_number', { length: 15 }).notNull().unique(),
+    pay_period_start: timestamp('pay_period_start', { withTimezone: true }).notNull(),
+    pay_period_end: timestamp('pay_period_end', { withTimezone: true }).notNull(),
+    status: payrollRunStatusEnum('status').notNull().default('DRAFT'),
+    total_gross: decimal('total_gross', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    total_deductions: decimal('total_deductions', { precision: 18, scale: 2 })
+      .notNull()
+      .default('0.00'),
+    total_net: decimal('total_net', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    electronic_signature: jsonb('electronic_signature'),
+    journal_entry_id: uuid('journal_entry_id').references(() => journalEntriesTable.id),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    prRunNumberIdx: index('pr_run_number_idx').on(t.run_number),
+    prStatusIdx: index('pr_status_idx').on(t.status),
+  }),
+);
+
+export const payrollLinesTable = pgTable(
+  'payroll_lines',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    run_id: uuid('run_id')
+      .notNull()
+      .references(() => payrollRunsTable.id, { onDelete: 'cascade' }),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => usersTable.id),
+    gross_pay: decimal('gross_pay', { precision: 18, scale: 2 }).notNull(),
+    deductions: decimal('deductions', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    net_pay: decimal('net_pay', { precision: 18, scale: 2 }).notNull(),
+    hours_worked: decimal('hours_worked', { precision: 8, scale: 2 }),
+    notes: text('notes'),
+  },
+  (t) => ({
+    plRunIdx: index('pl_run_idx').on(t.run_id),
+    plEmployeeIdx: index('pl_employee_idx').on(t.employee_id),
+  }),
+);
+
+// ── Procurement Tables ────────────────────────────────────────────────────────
+
+export const suppliersTable = pgTable(
+  'suppliers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    supplier_code: varchar('supplier_code', { length: 10 }).notNull().unique(),
+    name: varchar('name', { length: 255 }).notNull(),
+    qualification_status: supplierQualificationStatusEnum('qualification_status')
+      .notNull()
+      .default('PROVISIONAL'),
+    qualification_expiry: timestamp('qualification_expiry', { withTimezone: true }),
+    contact_details: jsonb('contact_details').notNull().default('{}'),
+    is_active: boolean('is_active').notNull().default(true),
+    notes: text('notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    supplierCodeIdx: index('supplier_code_idx').on(t.supplier_code),
+    supplierQualIdx: index('supplier_qual_idx').on(t.qualification_status),
+  }),
+);
+
+export const purchaseOrdersTable = pgTable(
+  'purchase_orders',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    po_number: varchar('po_number', { length: 20 }).notNull().unique(),
+    supplier_id: uuid('supplier_id')
+      .notNull()
+      .references(() => suppliersTable.id),
+    status: purchaseOrderStatusEnum('status').notNull().default('DRAFT'),
+    total_value: decimal('total_value', { precision: 18, scale: 2 }).notNull().default('0.00'),
+    currency: varchar('currency', { length: 3 }).notNull().default('EUR'),
+    expected_delivery_date: timestamp('expected_delivery_date', { withTimezone: true }),
+    three_way_match_passed: boolean('three_way_match_passed'),
+    electronic_signature: jsonb('electronic_signature'),
+    notes: text('notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    poNumberIdx: index('po_number_idx').on(t.po_number),
+    poSupplierIdx: index('po_supplier_idx').on(t.supplier_id),
+    poStatusIdx: index('po_status_idx').on(t.status),
+  }),
+);
+
+export const poLinesTable = pgTable(
+  'po_lines',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    po_id: uuid('po_id')
+      .notNull()
+      .references(() => purchaseOrdersTable.id, { onDelete: 'cascade' }),
+    line_number: integer('line_number').notNull(),
+    item_description: text('item_description').notNull(),
+    quantity: decimal('quantity', { precision: 18, scale: 3 }).notNull(),
+    unit_price: decimal('unit_price', { precision: 18, scale: 2 }).notNull(),
+    unit_of_measure: varchar('unit_of_measure', { length: 20 }).notNull(),
+    received_quantity: decimal('received_quantity', { precision: 18, scale: 3 })
+      .notNull()
+      .default('0.000'),
+  },
+  (t) => ({
+    polPoIdx: index('pol_po_idx').on(t.po_id),
+    polUniqueLineIdx: uniqueIndex('pol_unique_line_idx').on(t.po_id, t.line_number),
+  }),
+);
+
+export const receivingRecordsTable = pgTable(
+  'receiving_records',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    grn_number: varchar('grn_number', { length: 20 }).notNull().unique(),
+    po_id: uuid('po_id')
+      .notNull()
+      .references(() => purchaseOrdersTable.id),
+    received_at: timestamp('received_at', { withTimezone: true }).notNull(),
+    received_by: uuid('received_by')
+      .notNull()
+      .references(() => usersTable.id),
+    quality_check_passed: boolean('quality_check_passed'),
+    electronic_signature: jsonb('electronic_signature').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    grnNumberIdx: index('grn_number_idx').on(t.grn_number),
+    grnPoIdx: index('grn_po_idx').on(t.po_id),
+  }),
+);
+
+export const receivingLinesTable = pgTable(
+  'receiving_lines',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    grn_id: uuid('grn_id')
+      .notNull()
+      .references(() => receivingRecordsTable.id, { onDelete: 'cascade' }),
+    po_line_id: uuid('po_line_id')
+      .notNull()
+      .references(() => poLinesTable.id),
+    received_quantity: decimal('received_quantity', { precision: 18, scale: 3 }).notNull(),
+    notes: text('notes'),
+  },
+  (t) => ({
+    rlGrnIdx: index('rl_grn_idx').on(t.grn_id),
+    rlPoLineIdx: index('rl_po_line_idx').on(t.po_line_id),
+  }),
+);
+
+// ── Spatial Tables ────────────────────────────────────────────────────────────
+
+export const facilityZonesTable = pgTable(
+  'facility_zones',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    zone_code: varchar('zone_code', { length: 20 }).notNull().unique(),
+    zone_name: varchar('zone_name', { length: 255 }).notNull(),
+    zone_type: facilityZoneTypeEnum('zone_type').notNull(),
+    area_sqm: decimal('area_sqm', { precision: 10, scale: 2 }),
+    capacity: integer('capacity'),
+    parent_zone_id: uuid('parent_zone_id'),
+    is_active: boolean('is_active').notNull().default(true),
+    current_occupancy: integer('current_occupancy').notNull().default(0),
+    notes: text('notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    fzCodeIdx: index('fz_code_idx').on(t.zone_code),
+    fzTypeIdx: index('fz_type_idx').on(t.zone_type),
+  }),
+);
+
+export const zoneAssignmentsTable = pgTable(
+  'zone_assignments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    zone_id: uuid('zone_id')
+      .notNull()
+      .references(() => facilityZonesTable.id),
+    batch_id: uuid('batch_id')
+      .notNull()
+      .references(() => batchesTable.id),
+    assigned_at: timestamp('assigned_at', { withTimezone: true }).notNull(),
+    assigned_by: uuid('assigned_by')
+      .notNull()
+      .references(() => usersTable.id),
+    released_at: timestamp('released_at', { withTimezone: true }),
+    released_by: uuid('released_by').references(() => usersTable.id),
+    notes: text('notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    zaZoneIdx: index('za_zone_idx').on(t.zone_id),
+    zaBatchIdx: index('za_batch_idx').on(t.batch_id),
+    zaActiveIdx: index('za_active_idx').on(t.batch_id, t.released_at),
+  }),
+);

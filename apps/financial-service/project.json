@@ -1,0 +1,43 @@
+{
+  "name": "financial-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/financial-service/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:nestjs", "domain:financial", "compliance:critical"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/financial-service",
+        "main": "apps/financial-service/src/main.ts",
+        "tsConfig": "apps/financial-service/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/financial-service/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/financial-service"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/financial-service/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/financial-service"],
+      "options": { "jestConfig": "apps/financial-service/jest.config.ts" }
+    }
+  }
+}
