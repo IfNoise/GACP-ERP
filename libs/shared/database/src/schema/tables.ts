@@ -641,3 +641,414 @@ export const alertHistoryTable = pgTable(
     thresholdIdx: index('alert_history_threshold_idx').on(t.threshold_id),
   }),
 );
+
+// ══════════════════════════════════════════════════════════════════════════════
+// EPIC 6 — Quality Management: Change Control, CAPA, Deviations
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Quality Enums ─────────────────────────────────────────────────────────────
+
+export const changeControlStatusEnum = pgEnum('change_control_status', [
+  'DRAFT',
+  'SUBMITTED',
+  'IMPACT_ASSESSED',
+  'APPROVED',
+  'REJECTED',
+  'IMPLEMENTING',
+  'VERIFIED',
+  'CLOSED',
+]);
+
+export const changeTypeEnum = pgEnum('change_type', ['MINOR', 'MAJOR', 'EMERGENCY']);
+
+export const impactRiskLevelEnum = pgEnum('impact_risk_level', [
+  'LOW',
+  'MEDIUM',
+  'HIGH',
+  'CRITICAL',
+]);
+
+export const approvalStatusEnum = pgEnum('approval_status', ['PENDING', 'APPROVED', 'REJECTED']);
+
+export const retentionClassEnum = pgEnum('retention_class', ['PERMANENT', '7_YEAR', '30_YEAR']);
+
+export const qualityValidationStatusEnum = pgEnum('validation_status', [
+  'unvalidated',
+  'validated',
+  'under_review',
+  'superseded',
+]);
+
+export const capaTypeEnum = pgEnum('capa_type', ['CORRECTIVE', 'PREVENTIVE']);
+
+export const capaSourceEnum = pgEnum('capa_source', [
+  'DEVIATION',
+  'AUDIT',
+  'COMPLAINT',
+  'TREND',
+  'INSPECTION',
+]);
+
+export const capaStatusEnum = pgEnum('capa_status', [
+  'OPEN',
+  'RCA_IN_PROGRESS',
+  'ACTION_PLAN',
+  'IMPLEMENTING',
+  'EFFECTIVENESS_CHECK',
+  'CLOSED',
+]);
+
+export const rootCauseCategoryEnum = pgEnum('root_cause_category', [
+  'HUMAN_ERROR',
+  'PROCESS_FAILURE',
+  'EQUIPMENT_FAILURE',
+  'MATERIAL_DEFECT',
+  'ENVIRONMENTAL',
+  'DOCUMENTATION',
+  'TRAINING_GAP',
+  'SYSTEM_FAILURE',
+  'UNKNOWN',
+]);
+
+export const effectivenessResultEnum = pgEnum('effectiveness_result', [
+  'EFFECTIVE',
+  'PARTIALLY_EFFECTIVE',
+  'INEFFECTIVE',
+]);
+
+export const deviationClassificationEnum = pgEnum('deviation_classification', [
+  'MINOR',
+  'MAJOR',
+  'CRITICAL',
+]);
+
+export const deviationCategoryEnum = pgEnum('deviation_category', [
+  'PROCESS',
+  'EQUIPMENT',
+  'MATERIAL',
+  'ENVIRONMENTAL',
+  'DOCUMENTATION',
+  'PERSONNEL',
+  'UTILITY',
+]);
+
+export const deviationStatusEnum = pgEnum('deviation_status', [
+  'REPORTED',
+  'UNDER_INVESTIGATION',
+  'IMPACT_ASSESSED',
+  'CAPA_INITIATED',
+  'CLOSED',
+]);
+
+// ── Change Controls ────────────────────────────────────────────────────────────
+
+export const changeControlsTable = pgTable(
+  'change_controls',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ccn_number: varchar('ccn_number', { length: 20 }).notNull(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    change_type: changeTypeEnum('change_type').notNull(),
+    status: changeControlStatusEnum('status').notNull().default('DRAFT'),
+    requestor_id: uuid('requestor_id')
+      .notNull()
+      .references(() => usersTable.id),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation Fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id'),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'), // ISO 8601 date string
+    retention_class: retentionClassEnum('retention_class').notNull().default('7_YEAR'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit columns
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    ccnNumberIdx: uniqueIndex('cc_ccn_number_idx').on(t.ccn_number),
+    statusIdx: index('cc_status_idx').on(t.status),
+    requestorIdx: index('cc_requestor_idx').on(t.requestor_id),
+    typeIdx: index('cc_type_idx').on(t.change_type),
+    createdAtIdx: index('cc_created_at_idx').on(t.created_at),
+  }),
+);
+
+// ── Change Impacts ─────────────────────────────────────────────────────────────
+
+export const changeImpactsTable = pgTable(
+  'change_impacts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    change_control_id: uuid('change_control_id')
+      .notNull()
+      .references(() => changeControlsTable.id, { onDelete: 'cascade' }),
+    area: varchar('area', { length: 100 }).notNull(),
+    impact_description: text('impact_description').notNull(),
+    risk_level: impactRiskLevelEnum('risk_level').notNull(),
+    assessed_by: uuid('assessed_by')
+      .notNull()
+      .references(() => usersTable.id),
+    assessed_at: timestamp('assessed_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    changeControlIdx: index('ci_change_control_idx').on(t.change_control_id),
+    riskLevelIdx: index('ci_risk_level_idx').on(t.risk_level),
+  }),
+);
+
+// ── Change Approvals ───────────────────────────────────────────────────────────
+
+export const changeApprovalsTable = pgTable(
+  'change_approvals',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    change_control_id: uuid('change_control_id')
+      .notNull()
+      .references(() => changeControlsTable.id, { onDelete: 'cascade' }),
+    approver_id: uuid('approver_id')
+      .notNull()
+      .references(() => usersTable.id),
+    approval_level: integer('approval_level').notNull(),
+    status: approvalStatusEnum('status').notNull().default('PENDING'),
+    electronic_signature: jsonb('electronic_signature'),
+    decided_at: timestamp('decided_at', { withTimezone: true }),
+    decision_notes: text('decision_notes'),
+  },
+  (t) => ({
+    changeControlIdx: index('ca_change_control_idx').on(t.change_control_id),
+    approverIdx: index('ca_approver_idx').on(t.approver_id),
+    statusIdx: index('ca_status_idx').on(t.status),
+    uniqueApprover: uniqueIndex('ca_unique_approver_idx').on(t.change_control_id, t.approver_id),
+  }),
+);
+
+// ── CAPAs ──────────────────────────────────────────────────────────────────────
+
+export const capasTable = pgTable(
+  'capas',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    capa_number: varchar('capa_number', { length: 20 }).notNull(),
+    type: capaTypeEnum('type').notNull(),
+    source: capaSourceEnum('source').notNull(),
+    status: capaStatusEnum('status').notNull().default('OPEN'),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    root_cause_category: rootCauseCategoryEnum('root_cause_category'),
+    source_record_type: varchar('source_record_type', { length: 50 }),
+    source_record_id: uuid('source_record_id'),
+    due_date: text('due_date'), // ISO 8601 date string
+    assigned_to: uuid('assigned_to').references(() => usersTable.id),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation Fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id'),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'),
+    retention_class: retentionClassEnum('retention_class').notNull().default('7_YEAR'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit columns
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    capaNumberIdx: uniqueIndex('capa_number_idx').on(t.capa_number),
+    statusIdx: index('capa_status_idx').on(t.status),
+    typeIdx: index('capa_type_idx').on(t.type),
+    assignedIdx: index('capa_assigned_idx').on(t.assigned_to),
+    sourceRecIdx: index('capa_source_rec_idx').on(t.source_record_type, t.source_record_id),
+  }),
+);
+
+// ── RCA Findings ───────────────────────────────────────────────────────────────
+
+export const rcaFindingsTable = pgTable(
+  'rca_findings',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    capa_id: uuid('capa_id')
+      .notNull()
+      .references(() => capasTable.id, { onDelete: 'cascade' }),
+    root_cause_category: rootCauseCategoryEnum('root_cause_category').notNull(),
+    root_cause_description: text('root_cause_description').notNull(),
+    contributing_factors: jsonb('contributing_factors')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    immediate_actions_taken: text('immediate_actions_taken'),
+    investigated_by: uuid('investigated_by')
+      .notNull()
+      .references(() => usersTable.id),
+    investigated_at: timestamp('investigated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    capaIdx: index('rca_capa_idx').on(t.capa_id),
+  }),
+);
+
+// ── CAPA Action Plans ──────────────────────────────────────────────────────────
+
+export const capaActionPlansTable = pgTable(
+  'capa_action_plans',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    capa_id: uuid('capa_id')
+      .notNull()
+      .references(() => capasTable.id, { onDelete: 'cascade' }),
+    description: text('description').notNull(),
+    responsible_person: uuid('responsible_person')
+      .notNull()
+      .references(() => usersTable.id),
+    target_date: text('target_date').notNull(), // ISO 8601 date
+    completed_at: timestamp('completed_at', { withTimezone: true }),
+    completion_notes: text('completion_notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    capaIdx: index('cap_capa_idx').on(t.capa_id),
+    responsibleIdx: index('cap_responsible_idx').on(t.responsible_person),
+  }),
+);
+
+// ── Effectiveness Checks ───────────────────────────────────────────────────────
+
+export const effectivenessChecksTable = pgTable(
+  'effectiveness_checks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    capa_id: uuid('capa_id')
+      .notNull()
+      .references(() => capasTable.id, { onDelete: 'cascade' }),
+    result: effectivenessResultEnum('result').notNull(),
+    evidence_description: text('evidence_description').notNull(),
+    check_date: text('check_date').notNull(), // ISO 8601 date
+    checked_by: uuid('checked_by')
+      .notNull()
+      .references(() => usersTable.id),
+    follow_up_capa_id: uuid('follow_up_capa_id').references(() => capasTable.id),
+    electronic_signature: jsonb('electronic_signature').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    capaIdx: index('ec_capa_idx').on(t.capa_id),
+    checkedIdx: index('ec_checked_idx').on(t.checked_by),
+  }),
+);
+
+// ── Deviations ─────────────────────────────────────────────────────────────────
+
+export const deviationsTable = pgTable(
+  'deviations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    deviation_number: varchar('deviation_number', { length: 20 }).notNull(),
+    classification: deviationClassificationEnum('classification').notNull(),
+    category: deviationCategoryEnum('category').notNull(),
+    status: deviationStatusEnum('status').notNull().default('REPORTED'),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    location: varchar('location', { length: 300 }),
+    batch_ids: jsonb('batch_ids')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    occurred_at: timestamp('occurred_at', { withTimezone: true }),
+    reported_by: uuid('reported_by')
+      .notNull()
+      .references(() => usersTable.id),
+    linked_capa_id: uuid('linked_capa_id').references(() => capasTable.id),
+    product_impact: text('product_impact'),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation Fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id'),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'),
+    retention_class: retentionClassEnum('retention_class').notNull().default('7_YEAR'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit columns
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    deviationNumberIdx: uniqueIndex('dev_number_idx').on(t.deviation_number),
+    statusIdx: index('dev_status_idx').on(t.status),
+    classificationIdx: index('dev_classification_idx').on(t.classification),
+    categoryIdx: index('dev_category_idx').on(t.category),
+    reportedByIdx: index('dev_reported_by_idx').on(t.reported_by),
+    capaIdx: index('dev_capa_idx').on(t.linked_capa_id),
+  }),
+);
+
+// ── Deviation Investigations ───────────────────────────────────────────────────
+
+export const deviationInvestigationsTable = pgTable(
+  'deviation_investigations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    deviation_id: uuid('deviation_id')
+      .notNull()
+      .references(() => deviationsTable.id, { onDelete: 'cascade' }),
+    investigator_id: uuid('investigator_id')
+      .notNull()
+      .references(() => usersTable.id),
+    investigation_summary: text('investigation_summary').notNull(),
+    immediate_containment_actions: text('immediate_containment_actions').notNull(),
+    product_impact_assessment: text('product_impact_assessment').notNull(),
+    batches_affected: jsonb('batches_affected')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    investigated_at: timestamp('investigated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    electronic_signature: jsonb('electronic_signature'),
+  },
+  (t) => ({
+    deviationIdx: index('di_deviation_idx').on(t.deviation_id),
+    investigatorIdx: index('di_investigator_idx').on(t.investigator_id),
+  }),
+);

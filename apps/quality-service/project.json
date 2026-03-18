@@ -1,0 +1,43 @@
+{
+  "name": "quality-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/quality-service/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:nestjs", "domain:quality", "compliance:critical"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/quality-service",
+        "main": "apps/quality-service/src/main.ts",
+        "tsConfig": "apps/quality-service/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/quality-service/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/quality-service"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/quality-service/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/quality-service"],
+      "options": { "jestConfig": "apps/quality-service/jest.config.ts" }
+    }
+  }
+}
