@@ -25,6 +25,18 @@ import {
   AssessDeviationImpactSchema,
   LinkCapaToDeviationSchema,
   CloseDeviationSchema,
+  // EPIC 7
+  ValidationProtocolSchema,
+  ValidationProtocolSummarySchema,
+  CreateValidationProtocolSchema,
+  ApproveValidationProtocolSchema,
+  ExecuteValidationTestSchema,
+  CloseValidationProtocolSchema,
+  QualityEventSchema,
+  CreateQualityEventSchema,
+  InvestigateQualityEventSchema,
+  LinkRecordToEventSchema,
+  CloseQualityEventSchema,
 } from '@gacp-erp/shared-schemas';
 
 const c = initContract();
@@ -524,6 +536,182 @@ export const qualityContract = c.router({
       409: ApiErrorSchema,
     },
     summary: 'Close deviation (requires e-signature)',
+  },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // VALIDATION PROTOCOLS (EPIC 7)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  /** Create a new Validation Protocol (DRAFT status) — QUALITY_MANAGER+ */
+  createValidationProtocol: {
+    method: 'POST',
+    path: '/quality/validation-protocols',
+    body: CreateValidationProtocolSchema,
+    responses: {
+      201: ValidationProtocolSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+    },
+    summary: 'Create Validation Protocol (VAL-YYYY-NNNN)',
+  },
+
+  /** Get validation protocol by ID */
+  getValidationProtocol: {
+    method: 'GET',
+    path: '/quality/validation-protocols/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: ValidationProtocolSchema,
+      401: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get Validation Protocol by ID',
+  },
+
+  /** Get validation protocol summary with test statistics */
+  getValidationProtocolSummary: {
+    method: 'GET',
+    path: '/quality/validation-protocols/:id/summary',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: ValidationProtocolSummarySchema,
+      401: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get Validation Protocol summary with test statistics',
+  },
+
+  /** REVIEW → APPROVED — requires electronic signature per 21 CFR Part 11 */
+  approveValidationProtocol: {
+    method: 'POST',
+    path: '/quality/validation-protocols/:id/approve',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: ApproveValidationProtocolSchema,
+    responses: {
+      200: ValidationProtocolSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Approve Validation Protocol (e-signature required)',
+  },
+
+  /** Execute an individual test step during EXECUTING phase */
+  executeValidationTest: {
+    method: 'POST',
+    path: '/quality/validation-protocols/:id/execute-test',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: ExecuteValidationTestSchema,
+    responses: {
+      200: ValidationProtocolSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Execute individual test step (requires e-signature)',
+  },
+
+  /** COMPLETED → CLOSED — requires electronic signature */
+  closeValidationProtocol: {
+    method: 'POST',
+    path: '/quality/validation-protocols/:id/close',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: CloseValidationProtocolSchema,
+    responses: {
+      200: ValidationProtocolSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Close Validation Protocol (e-signature required)',
+  },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // QUALITY EVENTS (EPIC 7)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  /** Report a new Quality Event (OPEN status) */
+  createQualityEvent: {
+    method: 'POST',
+    path: '/quality/quality-events',
+    body: CreateQualityEventSchema,
+    responses: {
+      201: QualityEventSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+    },
+    summary: 'Report Quality Event (QE-YYYY-NNNN)',
+  },
+
+  /** Get Quality Event by ID */
+  getQualityEvent: {
+    method: 'GET',
+    path: '/quality/quality-events/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: QualityEventSchema,
+      401: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get Quality Event by ID',
+  },
+
+  /** OPEN → INVESTIGATING */
+  investigateQualityEvent: {
+    method: 'POST',
+    path: '/quality/quality-events/:id/investigate',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: InvestigateQualityEventSchema,
+    responses: {
+      200: QualityEventSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Begin investigation of Quality Event',
+  },
+
+  /** Link an existing quality record (CAPA / change_control / deviation) */
+  linkRecordToQualityEvent: {
+    method: 'POST',
+    path: '/quality/quality-events/:id/link-record',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: LinkRecordToEventSchema,
+    responses: {
+      200: QualityEventSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Link quality record to Quality Event',
+  },
+
+  /** INVESTIGATING | CAPA_INITIATED → CLOSED — requires electronic signature */
+  closeQualityEvent: {
+    method: 'POST',
+    path: '/quality/quality-events/:id/close',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: CloseQualityEventSchema,
+    responses: {
+      200: QualityEventSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Close Quality Event (e-signature required)',
   },
 });
 

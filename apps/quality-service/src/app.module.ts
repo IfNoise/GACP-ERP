@@ -5,6 +5,8 @@ import { OutboxModule } from './outbox/outbox.module';
 import { ChangeControlModule } from './change-control/change-control.module';
 import { CapaModule } from './capa/capa.module';
 import { DeviationModule } from './deviation/deviation.module';
+import { ValidationProtocolModule } from './validation-protocol/validation-protocol.module';
+import { QualityEventModule } from './quality-event/quality-event.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { DeviationModule } from './deviation/deviation.module';
     ChangeControlModule,
     CapaModule,
     DeviationModule,
+    ValidationProtocolModule,
+    QualityEventModule,
   ],
 })
 export class AppModule {}

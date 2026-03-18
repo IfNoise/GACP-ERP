@@ -1052,3 +1052,201 @@ export const deviationInvestigationsTable = pgTable(
     investigatorIdx: index('di_investigator_idx').on(t.investigator_id),
   }),
 );
+
+// ══════════════════════════════════════════════════════════════════════════════
+// EPIC 7 — Validation Protocols & Quality Events
+// ══════════════════════════════════════════════════════════════════════════════
+
+export const validationProtocolStatusEnum = pgEnum('validation_protocol_status', [
+  'DRAFT',
+  'REVIEW',
+  'APPROVED',
+  'EXECUTING',
+  'COMPLETED',
+  'CLOSED',
+  'SUPERSEDED',
+]);
+
+export const validationProtocolTypeEnum = pgEnum('validation_protocol_type', ['IQ', 'OQ', 'PQ']);
+
+export const validationTestStatusEnum = pgEnum('validation_test_status', [
+  'PENDING',
+  'PASS',
+  'FAIL',
+  'NOT_APPLICABLE',
+]);
+
+export const qualityEventTypeEnum = pgEnum('quality_event_type', [
+  'COMPLAINT',
+  'AUDIT_FINDING',
+  'INSPECTION_OBSERVATION',
+  'QUALITY_ISSUE',
+]);
+
+export const qualityEventSeverityEnum = pgEnum('quality_event_severity', [
+  'LOW',
+  'MEDIUM',
+  'HIGH',
+  'CRITICAL',
+]);
+
+export const qualityEventStatusEnum = pgEnum('quality_event_status', [
+  'OPEN',
+  'INVESTIGATING',
+  'CAPA_INITIATED',
+  'CLOSED',
+]);
+
+export const linkedRecordTypeEnum = pgEnum('linked_record_type', [
+  'change_control',
+  'capa',
+  'deviation',
+]);
+
+// ── Validation Protocols ───────────────────────────────────────────────────────
+
+export const validationProtocolsTable = pgTable(
+  'validation_protocols',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    protocol_number: varchar('protocol_number', { length: 20 }).notNull(),
+    type: validationProtocolTypeEnum('type').notNull(),
+    status: validationProtocolStatusEnum('status').notNull().default('DRAFT'),
+    system_under_test: text('system_under_test').notNull(),
+    change_control_id: uuid('change_control_id').references(() => changeControlsTable.id, {
+      onDelete: 'set null',
+    }),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation Fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id'),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'),
+    retention_class: retentionClassEnum('retention_class').notNull().default('PERMANENT'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit columns
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    vpNumberIdx: uniqueIndex('vp_number_idx').on(t.protocol_number),
+    vpStatusIdx: index('vp_status_idx').on(t.status),
+    vpTypeIdx: index('vp_type_idx').on(t.type),
+    vpChangeControlIdx: index('vp_change_control_idx').on(t.change_control_id),
+    vpCreatedAtIdx: index('vp_created_at_idx').on(t.created_at),
+  }),
+);
+
+// ── Validation Tests ───────────────────────────────────────────────────────────
+
+export const validationTestsTable = pgTable(
+  'validation_tests',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    protocol_id: uuid('protocol_id')
+      .notNull()
+      .references(() => validationProtocolsTable.id, { onDelete: 'cascade' }),
+    step_number: integer('step_number').notNull(),
+    description: text('description').notNull(),
+    expected_result: text('expected_result').notNull(),
+    actual_result: text('actual_result'),
+    status: validationTestStatusEnum('status').notNull().default('PENDING'),
+    exception_note: text('exception_note'),
+    executed_by: uuid('executed_by').references(() => usersTable.id),
+    executed_at: timestamp('executed_at', { withTimezone: true }),
+    electronic_signature: jsonb('electronic_signature'),
+  },
+  (t) => ({
+    vtProtocolIdx: index('vt_protocol_idx').on(t.protocol_id),
+    vtStatusIdx: index('vt_status_idx').on(t.status),
+    vtExecutedByIdx: index('vt_executed_by_idx').on(t.executed_by),
+    vtProtocolStepIdx: uniqueIndex('vt_protocol_step_idx').on(t.protocol_id, t.step_number),
+  }),
+);
+
+// ── Quality Events ─────────────────────────────────────────────────────────────
+
+export const qualityEventsTable = pgTable(
+  'quality_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    event_number: varchar('event_number', { length: 20 }).notNull(),
+    type: qualityEventTypeEnum('type').notNull(),
+    severity: qualityEventSeverityEnum('severity').notNull(),
+    status: qualityEventStatusEnum('status').notNull().default('OPEN'),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    capa_id: uuid('capa_id').references(() => capasTable.id, { onDelete: 'set null' }),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation Fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id').references(
+      () => validationProtocolsTable.id,
+      { onDelete: 'set null' },
+    ),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'),
+    retention_class: retentionClassEnum('retention_class').notNull().default('7_YEAR'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit columns
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    qeNumberIdx: uniqueIndex('qe_number_idx').on(t.event_number),
+    qeStatusIdx: index('qe_status_idx').on(t.status),
+    qeTypeIdx: index('qe_type_idx').on(t.type),
+    qeSeverityIdx: index('qe_severity_idx').on(t.severity),
+    qeCapaIdx: index('qe_capa_idx').on(t.capa_id),
+    qeCreatedAtIdx: index('qe_created_at_idx').on(t.created_at),
+  }),
+);
+
+// ── Linked Records (polymorphic junction) ─────────────────────────────────────
+
+export const linkedRecordsTable = pgTable(
+  'linked_records',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    quality_event_id: uuid('quality_event_id')
+      .notNull()
+      .references(() => qualityEventsTable.id, { onDelete: 'cascade' }),
+    record_type: linkedRecordTypeEnum('record_type').notNull(),
+    record_id: uuid('record_id').notNull(),
+    linked_by: uuid('linked_by')
+      .notNull()
+      .references(() => usersTable.id),
+    linked_at: timestamp('linked_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    lrEventIdx: index('lr_event_idx').on(t.quality_event_id),
+    lrRecordTypeIdx: index('lr_record_type_idx').on(t.record_type, t.record_id),
+    lrUniqueIdx: uniqueIndex('lr_unique_idx').on(t.quality_event_id, t.record_type, t.record_id),
+  }),
+);

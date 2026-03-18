@@ -294,3 +294,153 @@ export const DeviationEventSchema = z.discriminatedUnion('eventType', [
   DeviationClosedEventSchema,
 ]);
 export type DeviationEvent = z.infer<typeof DeviationEventSchema>;
+
+// ════════════════════════════════════════════════════════════════════════════════
+// EPIC 7 — VALIDATION PROTOCOL EVENTS — topic: quality.validation.v1
+// ════════════════════════════════════════════════════════════════════════════════
+
+export const QUALITY_VALIDATION_TOPIC = 'quality.validation.v1' as const;
+export const QUALITY_EVENTS_TOPIC = 'quality.events.v1' as const;
+
+const ValidationProtocolRefSchema = z.object({
+  protocolId: z.string().uuid(),
+  protocolNumber: z.string().regex(/^VAL-\d{4}-\d{4}$/),
+  protocolType: z.enum(['IQ', 'OQ', 'PQ']),
+});
+
+const QualityEventRefSchema = z.object({
+  eventId: z.string().uuid(),
+  eventNumber: z.string().regex(/^QE-\d{4}-\d{4}$/),
+  eventType: z.string(),
+});
+
+export const ValidationStartedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.validation.started'),
+  topic: z.literal(QUALITY_VALIDATION_TOPIC),
+  payload: ValidationProtocolRefSchema.extend({
+    systemUnderTest: z.string(),
+    changeControlId: z.string().uuid().nullable(),
+    startedBy: z.string().uuid(),
+    startedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type ValidationStartedEvent = z.infer<typeof ValidationStartedEventSchema>;
+
+export const TestExecutedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.validation.test_executed'),
+  topic: z.literal(QUALITY_VALIDATION_TOPIC),
+  payload: ValidationProtocolRefSchema.extend({
+    stepNumber: z.number().int().positive(),
+    testStatus: z.enum(['PASS', 'FAIL', 'NOT_APPLICABLE']),
+    executedBy: z.string().uuid(),
+    executedAt: z.string().datetime({ offset: true }),
+    /** Only present when status = FAIL or NOT_APPLICABLE */
+    exceptionNote: z.string().nullable(),
+  }),
+});
+export type TestExecutedEvent = z.infer<typeof TestExecutedEventSchema>;
+
+export const ValidationCompletedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.validation.completed'),
+  topic: z.literal(QUALITY_VALIDATION_TOPIC),
+  payload: ValidationProtocolRefSchema.extend({
+    totalSteps: z.number().int().nonnegative(),
+    passedSteps: z.number().int().nonnegative(),
+    failedSteps: z.number().int().nonnegative(),
+    passRatePct: z.number().min(0).max(100),
+    completedBy: z.string().uuid(),
+    completedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type ValidationCompletedEvent = z.infer<typeof ValidationCompletedEventSchema>;
+
+export const ExceptionRaisedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.validation.exception_raised'),
+  topic: z.literal(QUALITY_VALIDATION_TOPIC),
+  payload: ValidationProtocolRefSchema.extend({
+    stepNumber: z.number().int().positive(),
+    exceptionNote: z.string(),
+    raisedBy: z.string().uuid(),
+    raisedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type ExceptionRaisedEvent = z.infer<typeof ExceptionRaisedEventSchema>;
+
+export const ValidationClosedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.validation.closed'),
+  topic: z.literal(QUALITY_VALIDATION_TOPIC),
+  payload: ValidationProtocolRefSchema.extend({
+    closureSummary: z.string(),
+    auditTxId: z.string().nullable(),
+    closedBy: z.string().uuid(),
+    closedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type ValidationClosedEvent = z.infer<typeof ValidationClosedEventSchema>;
+
+/** Discriminated union of all Validation Protocol events */
+export const ValidationProtocolEventSchema = z.discriminatedUnion('eventType', [
+  ValidationStartedEventSchema,
+  TestExecutedEventSchema,
+  ValidationCompletedEventSchema,
+  ExceptionRaisedEventSchema,
+  ValidationClosedEventSchema,
+]);
+export type ValidationProtocolEvent = z.infer<typeof ValidationProtocolEventSchema>;
+
+// ════════════════════════════════════════════════════════════════════════════════
+// EPIC 7 — QUALITY EVENT EVENTS — topic: quality.events.v1
+// ════════════════════════════════════════════════════════════════════════════════
+
+export const QualityEventReportedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.events.reported'),
+  topic: z.literal(QUALITY_EVENTS_TOPIC),
+  payload: QualityEventRefSchema.extend({
+    severity: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
+    reportedBy: z.string().uuid(),
+    reportedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type QualityEventReportedEvent = z.infer<typeof QualityEventReportedEventSchema>;
+
+export const QualityEventInvestigatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.events.investigated'),
+  topic: z.literal(QUALITY_EVENTS_TOPIC),
+  payload: QualityEventRefSchema.extend({
+    investigatedBy: z.string().uuid(),
+    investigatedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type QualityEventInvestigatedEvent = z.infer<typeof QualityEventInvestigatedEventSchema>;
+
+export const QualityEventCapaLinkedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.events.capa_linked'),
+  topic: z.literal(QUALITY_EVENTS_TOPIC),
+  payload: QualityEventRefSchema.extend({
+    capaId: z.string().uuid(),
+    capaNumber: z.string().regex(/^CA-\d{4}-\d{4}$/),
+    linkedBy: z.string().uuid(),
+  }),
+});
+export type QualityEventCapaLinkedEvent = z.infer<typeof QualityEventCapaLinkedEventSchema>;
+
+export const QualityEventClosedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.events.closed'),
+  topic: z.literal(QUALITY_EVENTS_TOPIC),
+  payload: QualityEventRefSchema.extend({
+    closureSummary: z.string(),
+    auditTxId: z.string().nullable(),
+    closedBy: z.string().uuid(),
+    closedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type QualityEventClosedEvent = z.infer<typeof QualityEventClosedEventSchema>;
+
+/** Discriminated union of all Quality Event events */
+export const QualityEventEventSchema = z.discriminatedUnion('eventType', [
+  QualityEventReportedEventSchema,
+  QualityEventInvestigatedEventSchema,
+  QualityEventCapaLinkedEventSchema,
+  QualityEventClosedEventSchema,
+]);
+export type QualityEventEvent = z.infer<typeof QualityEventEventSchema>;
