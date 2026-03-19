@@ -25,6 +25,8 @@ volumes:
   victoriametrics-iot-data:
   emqx-data:
   emqx-log:
+  mayan-data:
+  mayan-media:
 
 services:
   # ─── PostgreSQL 15 with PostGIS ─────────────────────────────────
@@ -286,3 +288,33 @@ services:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     networks:
       - gacp-net
+
+  # ─── Mayan-EDMS — Document Management System ────────────────────
+  mayan-edms:
+    image: mayanedms/mayanedms:s4
+    container_name: gacp-mayan-edms
+    <<: *default-restart
+    logging: *default-logging
+    environment:
+      MAYAN_DATABASES: "{'default':{'ENGINE':'django.db.backends.postgresql','NAME':'mayan','USER':'${POSTGRES_USER:-gacp}','PASSWORD':'${POSTGRES_PASSWORD:-gacp_secret_2026}','HOST':'postgres','PORT':'5432'}}"
+      MAYAN_CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:-redis_secret_2026}@redis:6379/2
+      MAYAN_CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-redis_secret_2026}@redis:6379/3
+      MAYAN_SECRET_KEY: ${MAYAN_SECRET_KEY:-mayan_secret_key_change_in_production}
+    ports:
+      - '${MAYAN_PORT:-8000}:8000'
+    volumes:
+      - mayan-data:/var/lib/mayan
+      - mayan-media:/usr/local/lib/python3.11/site-packages/mayan/media
+    networks:
+      - gacp-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -sf http://127.0.0.1:8000/en/authentication/login/ || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s

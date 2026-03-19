@@ -24,3 +24,15 @@ export * from './procurement/index';
 
 // ─── Spatial (EPIC 8) ─────────────────────────────────────────────────────────
 export * from './spatial/index';
+
+// ─── Workforce (EPIC 9) ───────────────────────────────────────────────────────
+export * from './workforce/index';
+
+// ─── Training (EPIC 9) ────────────────────────────────────────────────────────
+export * from './training/index';
+
+// ─── Analytics (EPIC 9) ───────────────────────────────────────────────────────
+export * from './analytics/index';
+
+// ─── Integrations (EPIC 9) ────────────────────────────────────────────────────
+export * from './integrations/index';

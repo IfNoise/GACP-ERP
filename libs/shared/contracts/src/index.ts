@@ -6,3 +6,5 @@ export * from './quality.contract';
 export * from './financial.contract';
 export * from './procurement.contract';
 export * from './spatial.contract';
+export * from './workforce.contract';
+export * from './analytics.contract';

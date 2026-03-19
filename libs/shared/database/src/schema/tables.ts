@@ -1741,3 +1741,507 @@ export const zoneAssignmentsTable = pgTable(
     zaActiveIdx: index('za_active_idx').on(t.batch_id, t.released_at),
   }),
 );
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// EPIC 9 — WORKFORCE, TRAINING & DOCUMENT CONTROL
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+export const taskPriorityEnum = pgEnum('task_priority', ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
+
+export const taskStatusEnum = pgEnum('task_status', [
+  'PENDING',
+  'IN_PROGRESS',
+  'COMPLETED',
+  'CANCELLED',
+  'OVERDUE',
+]);
+
+export const timeEntrySourceEnum = pgEnum('time_entry_source', [
+  'MANUAL',
+  'MOBILE',
+  'SYSTEM',
+  'BIOMETRIC',
+]);
+
+export const trainingTypeEnum = pgEnum('training_type', [
+  'INITIAL',
+  'REFRESHER',
+  'GMP',
+  'SAFETY',
+  'ROLE_SPECIFIC',
+  'COMPLIANCE',
+  'SOP',
+]);
+
+export const trainingStatusEnum = pgEnum('training_status', [
+  'SCHEDULED',
+  'IN_PROGRESS',
+  'COMPLETED',
+  'FAILED',
+  'CANCELLED',
+  'EXPIRED',
+]);
+
+export const documentStatusEnum = pgEnum('document_status', [
+  'DRAFT',
+  'UNDER_REVIEW',
+  'APPROVED',
+  'ACTIVE',
+  'SUPERSEDED',
+  'DEPRECATED',
+  'ARCHIVED',
+]);
+
+export const documentTypeEnum = pgEnum('document_type', [
+  'SOP',
+  'WORK_INSTRUCTION',
+  'POLICY',
+  'FORM',
+  'REPORT',
+  'CERTIFICATE',
+  'BATCH_RECORD',
+  'AUDIT_REPORT',
+  'CAPA',
+  'OTHER',
+]);
+
+// ─── Employees ────────────────────────────────────────────────────────────────
+
+export const employeesTable = pgTable(
+  'employees',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    user_id: uuid('user_id').references(() => usersTable.id),
+    employee_number: varchar('employee_number', { length: 20 }).notNull().unique(),
+    first_name: varchar('first_name', { length: 100 }).notNull(),
+    last_name: varchar('last_name', { length: 100 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull().unique(),
+    phone: varchar('phone', { length: 30 }),
+    department: varchar('department', { length: 100 }).notNull(),
+    job_title: varchar('job_title', { length: 150 }).notNull(),
+    role: varchar('role', { length: 100 }).notNull(),
+    hire_date: varchar('hire_date', { length: 10 }).notNull(),
+    is_active: boolean('is_active').notNull().default(true),
+    competency_profile_id: uuid('competency_profile_id'),
+    metadata: jsonb('metadata').default({}),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    empNumberIdx: uniqueIndex('emp_number_idx').on(t.employee_number),
+    empEmailIdx: uniqueIndex('emp_email_idx').on(t.email),
+    empDeptIdx: index('emp_dept_idx').on(t.department),
+    empActiveIdx: index('emp_active_idx').on(t.is_active),
+  }),
+);
+
+// ─── Tasks ────────────────────────────────────────────────────────────────────
+
+export const tasksTable = pgTable(
+  'tasks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    task_number: varchar('task_number', { length: 30 }).notNull().unique(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description'),
+    task_type: varchar('task_type', { length: 100 }).notNull(),
+    priority: taskPriorityEnum('priority').notNull().default('MEDIUM'),
+    status: taskStatusEnum('status').notNull().default('PENDING'),
+    zone_id: uuid('zone_id'),
+    batch_id: uuid('batch_id').references(() => batchesTable.id),
+    scheduled_date: varchar('scheduled_date', { length: 10 }).notNull(),
+    scheduled_start: varchar('scheduled_start', { length: 5 }),
+    scheduled_end: varchar('scheduled_end', { length: 5 }),
+    actual_start: timestamp('actual_start', { withTimezone: true }),
+    actual_end: timestamp('actual_end', { withTimezone: true }),
+    estimated_minutes: integer('estimated_minutes'),
+    sop_reference: varchar('sop_reference', { length: 50 }),
+    instructions: text('instructions'),
+    completion_notes: text('completion_notes'),
+    photo_urls: jsonb('photo_urls').default([]),
+    signature: jsonb('signature'),
+    metadata: jsonb('metadata').default({}),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    taskNumberIdx: uniqueIndex('task_number_idx').on(t.task_number),
+    taskStatusIdx: index('task_status_idx').on(t.status),
+    taskScheduledIdx: index('task_scheduled_idx').on(t.scheduled_date),
+    taskPriorityIdx: index('task_priority_idx').on(t.priority),
+    taskBatchIdx: index('task_batch_idx').on(t.batch_id),
+    taskZoneIdx: index('task_zone_idx').on(t.zone_id),
+  }),
+);
+
+// ─── Task Assignments ─────────────────────────────────────────────────────────
+
+export const taskAssignmentsTable = pgTable(
+  'task_assignments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    task_id: uuid('task_id')
+      .notNull()
+      .references(() => tasksTable.id),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id),
+    assigned_at: timestamp('assigned_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    assigned_by: uuid('assigned_by')
+      .notNull()
+      .references(() => usersTable.id),
+    acknowledged_at: timestamp('acknowledged_at', { withTimezone: true }),
+    is_lead: boolean('is_lead').notNull().default(false),
+  },
+  (t) => ({
+    taTaskIdx: index('ta_task_idx').on(t.task_id),
+    taEmployeeIdx: index('ta_employee_idx').on(t.employee_id),
+    taUniqueIdx: uniqueIndex('ta_unique_idx').on(t.task_id, t.employee_id),
+  }),
+);
+
+// ─── Time Entries ─────────────────────────────────────────────────────────────
+
+export const timeEntriesTable = pgTable(
+  'time_entries',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id),
+    task_id: uuid('task_id').references(() => tasksTable.id),
+    clock_in: timestamp('clock_in', { withTimezone: true }).notNull(),
+    clock_out: timestamp('clock_out', { withTimezone: true }),
+    duration_minutes: integer('duration_minutes').generatedAlwaysAs(
+      sql`EXTRACT(EPOCH FROM (clock_out - clock_in)) / 60`,
+    ),
+    source: timeEntrySourceEnum('source').notNull().default('MANUAL'),
+    notes: text('notes'),
+    approved_by: uuid('approved_by').references(() => usersTable.id),
+    approved_at: timestamp('approved_at', { withTimezone: true }),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    teEmployeeIdx: index('te_employee_idx').on(t.employee_id),
+    teTaskIdx: index('te_task_idx').on(t.task_id),
+    teDateIdx: index('te_date_idx').on(t.clock_in),
+  }),
+);
+
+// ─── Shift Schedules ──────────────────────────────────────────────────────────
+
+export const shiftSchedulesTable = pgTable(
+  'shift_schedules',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id),
+    shift_date: varchar('shift_date', { length: 10 }).notNull(),
+    shift_start: varchar('shift_start', { length: 5 }).notNull(),
+    shift_end: varchar('shift_end', { length: 5 }).notNull(),
+    zone_id: uuid('zone_id'),
+    notes: text('notes'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    ssEmployeeIdx: index('ss_employee_idx').on(t.employee_id),
+    ssDateIdx: index('ss_date_idx').on(t.shift_date),
+  }),
+);
+
+// ─── Training Courses ─────────────────────────────────────────────────────────
+
+export const trainingCoursesTable = pgTable(
+  'training_courses',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    course_id: varchar('course_id', { length: 20 }).notNull().unique(),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description'),
+    training_type: trainingTypeEnum('training_type').notNull(),
+    duration_minutes: integer('duration_minutes').notNull(),
+    passing_score: integer('passing_score').notNull().default(80),
+    validity_months: integer('validity_months'),
+    is_mandatory: boolean('is_mandatory').notNull().default(false),
+    applicable_roles: jsonb('applicable_roles').notNull().default([]),
+    sop_references: jsonb('sop_references').notNull().default([]),
+    regulatory_references: jsonb('regulatory_references').notNull().default([]),
+    content_url: varchar('content_url', { length: 500 }),
+    version: varchar('version', { length: 20 }).notNull().default('1.0'),
+    is_active: boolean('is_active').notNull().default(true),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    tcCourseIdIdx: uniqueIndex('tc_course_id_idx').on(t.course_id),
+    tcTypeIdx: index('tc_type_idx').on(t.training_type),
+    tcActiveIdx: index('tc_active_idx').on(t.is_active),
+  }),
+);
+
+// ─── Curriculum ───────────────────────────────────────────────────────────────
+
+export const curriculumTable = pgTable(
+  'curriculum',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    role: varchar('role', { length: 100 }).notNull(),
+    course_id: uuid('course_id')
+      .notNull()
+      .references(() => trainingCoursesTable.id),
+    is_required: boolean('is_required').notNull().default(true),
+    sequence_order: integer('sequence_order'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    curRoleIdx: index('cur_role_idx').on(t.role),
+    curCourseIdx: index('cur_course_idx').on(t.course_id),
+    curUniqueIdx: uniqueIndex('cur_unique_idx').on(t.role, t.course_id),
+  }),
+);
+
+// ─── Competency Profiles ──────────────────────────────────────────────────────
+
+export const competencyProfilesTable = pgTable(
+  'competency_profiles',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id)
+      .unique(),
+    overall_compliance: integer('overall_compliance').notNull().default(0),
+    last_assessed: timestamp('last_assessed', { withTimezone: true }),
+    competencies: jsonb('competencies').notNull().default([]),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    cpEmployeeIdx: uniqueIndex('cp_employee_idx').on(t.employee_id),
+    cpComplianceIdx: index('cp_compliance_idx').on(t.overall_compliance),
+  }),
+);
+
+// ─── Training Executions ──────────────────────────────────────────────────────
+
+export const trainingExecutionsTable = pgTable(
+  'training_executions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    course_id: uuid('course_id')
+      .notNull()
+      .references(() => trainingCoursesTable.id),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id),
+    trainer_id: uuid('trainer_id').references(() => employeesTable.id),
+    status: trainingStatusEnum('status').notNull().default('SCHEDULED'),
+    scheduled_date: varchar('scheduled_date', { length: 10 }).notNull(),
+    completed_date: varchar('completed_date', { length: 10 }),
+    score: integer('score'),
+    passed: boolean('passed'),
+    expiry_date: varchar('expiry_date', { length: 10 }),
+    attempts: integer('attempts').notNull().default(0),
+    notes: text('notes'),
+    signature: jsonb('signature'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    teExCourseIdx: index('tex_course_idx').on(t.course_id),
+    teExEmployeeIdx: index('tex_employee_idx').on(t.employee_id),
+    teExStatusIdx: index('tex_status_idx').on(t.status),
+    teExScheduledIdx: index('tex_scheduled_idx').on(t.scheduled_date),
+  }),
+);
+
+// ─── Certifications ───────────────────────────────────────────────────────────
+
+export const certificationsTable = pgTable(
+  'certifications',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    certificate_number: varchar('certificate_number', { length: 30 }).notNull().unique(),
+    employee_id: uuid('employee_id')
+      .notNull()
+      .references(() => employeesTable.id),
+    course_id: uuid('course_id')
+      .notNull()
+      .references(() => trainingCoursesTable.id),
+    execution_id: uuid('execution_id')
+      .notNull()
+      .references(() => trainingExecutionsTable.id),
+    issued_date: varchar('issued_date', { length: 10 }).notNull(),
+    expiry_date: varchar('expiry_date', { length: 10 }),
+    is_active: boolean('is_active').notNull().default(true),
+    issued_by: uuid('issued_by')
+      .notNull()
+      .references(() => usersTable.id),
+    revoked_at: timestamp('revoked_at', { withTimezone: true }),
+    revoked_by: uuid('revoked_by').references(() => usersTable.id),
+    revocation_reason: text('revocation_reason'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    certNumberIdx: uniqueIndex('cert_number_idx').on(t.certificate_number),
+    certEmployeeIdx: index('cert_employee_idx').on(t.employee_id),
+    certCourseIdx: index('cert_course_idx').on(t.course_id),
+    certActiveIdx: index('cert_active_idx').on(t.is_active),
+    certExpiryIdx: index('cert_expiry_idx').on(t.expiry_date),
+  }),
+);
+
+// ─── Documents ────────────────────────────────────────────────────────────────
+
+export const documentsTable = pgTable(
+  'documents',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    document_number: varchar('document_number', { length: 30 }).notNull().unique(),
+    title: varchar('title', { length: 255 }).notNull(),
+    document_type: documentTypeEnum('document_type').notNull(),
+    status: documentStatusEnum('status').notNull().default('DRAFT'),
+    description: text('description'),
+    tags: jsonb('tags').notNull().default([]),
+    mayan_document_id: integer('mayan_document_id'),
+    current_version_id: uuid('current_version_id'),
+    owner_id: uuid('owner_id')
+      .notNull()
+      .references(() => usersTable.id),
+    reviewer_id: uuid('reviewer_id').references(() => usersTable.id),
+    approver_id: uuid('approver_id').references(() => usersTable.id),
+    approved_at: timestamp('approved_at', { withTimezone: true }),
+    next_review_date: varchar('next_review_date', { length: 10 }),
+    metadata: jsonb('metadata').default({}),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    docNumberIdx: uniqueIndex('doc_number_idx').on(t.document_number),
+    docTypeIdx: index('doc_type_idx').on(t.document_type),
+    docStatusIdx: index('doc_status_idx').on(t.status),
+    docOwnerIdx: index('doc_owner_idx').on(t.owner_id),
+    docMayanIdx: index('doc_mayan_idx').on(t.mayan_document_id),
+  }),
+);
+
+// ─── Document Versions ────────────────────────────────────────────────────────
+
+export const documentVersionsTable = pgTable(
+  'document_versions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    document_id: uuid('document_id')
+      .notNull()
+      .references(() => documentsTable.id),
+    version_number: varchar('version_number', { length: 20 }).notNull(),
+    change_summary: text('change_summary').notNull(),
+    file_path: varchar('file_path', { length: 500 }),
+    file_hash: varchar('file_hash', { length: 128 }),
+    mayan_version_id: integer('mayan_version_id'),
+    authored_by: uuid('authored_by')
+      .notNull()
+      .references(() => usersTable.id),
+    approved_by: uuid('approved_by').references(() => usersTable.id),
+    approved_at: timestamp('approved_at', { withTimezone: true }),
+    signature: jsonb('signature'),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    dvDocumentIdx: index('dv_document_idx').on(t.document_id),
+    dvVersionIdx: index('dv_version_idx').on(t.document_id, t.version_number),
+  }),
+);
