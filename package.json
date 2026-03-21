@@ -39,6 +39,8 @@
     "@nx/node": "~20.4.0",
     "@nx/react": "~20.4.0",
     "@nx/webpack": "~20.4.0",
+    "@swc/core": "^1.15.18",
+    "@swc/jest": "^0.2.39",
     "@types/jest": "~29.5.14",
     "@types/node": "~22.10.0",
     "@typescript-eslint/eslint-plugin": "~8.18.0",
