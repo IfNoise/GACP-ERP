@@ -6,14 +6,13 @@ COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o audit-consumer .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o audit-consumer .
 
 # ── Run stage ─────────────────────────────────────────────────────────────────
-FROM scratch
+FROM gcr.io/distroless/static-debian12
 
 COPY --from=builder /app/audit-consumer /audit-consumer
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-EXPOSE 8080
+EXPOSE 8089
 
 ENTRYPOINT ["/audit-consumer"]

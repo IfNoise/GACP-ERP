@@ -1,0 +1,480 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contract snapshot tests analyticsContract shape matches snapshot 1`] = `
+{
+  "getAuditReadiness": {
+    "method": "GET",
+    "path": "/analytics/audit-readiness",
+  },
+  "getEmployeePerformance": {
+    "method": "GET",
+    "path": "/analytics/workforce/employees/:id/performance",
+  },
+  "getKpis": {
+    "method": "GET",
+    "path": "/analytics/kpis",
+  },
+  "getTrainingCompliance": {
+    "method": "GET",
+    "path": "/analytics/training/compliance",
+  },
+  "getWorkforceSummary": {
+    "method": "GET",
+    "path": "/analytics/workforce/summary",
+  },
+}
+`;
+
+exports[`Contract snapshot tests auditContract shape matches snapshot 1`] = `
+{
+  "entityHistory": {
+    "method": "GET",
+    "path": "/audit/entity/:entityType/:entityId",
+  },
+  "getById": {
+    "method": "GET",
+    "path": "/audit/trail/:id",
+  },
+  "query": {
+    "method": "GET",
+    "path": "/audit/trail",
+  },
+  "scheduleExport": {
+    "method": "POST",
+    "path": "/audit/export",
+  },
+  "verify": {
+    "method": "GET",
+    "path": "/audit/verify/:txId",
+  },
+}
+`;
+
+exports[`Contract snapshot tests authContract shape matches snapshot 1`] = `
+{
+  "login": {
+    "method": "POST",
+    "path": "/auth/login",
+  },
+  "logout": {
+    "method": "POST",
+    "path": "/auth/logout",
+  },
+  "me": {
+    "method": "GET",
+    "path": "/auth/me",
+  },
+  "reauthenticate": {
+    "method": "POST",
+    "path": "/auth/reauth",
+  },
+  "refresh": {
+    "method": "POST",
+    "path": "/auth/refresh",
+  },
+}
+`;
+
+exports[`Contract snapshot tests cultivationContract shape matches snapshot 1`] = `{}`;
+
+exports[`Contract snapshot tests financialContract shape matches snapshot 1`] = `
+{
+  "createAccount": {
+    "method": "POST",
+    "path": "/financial/accounts",
+  },
+  "createJournalEntry": {
+    "method": "POST",
+    "path": "/financial/journal-entries",
+  },
+  "getAccount": {
+    "method": "GET",
+    "path": "/financial/accounts/:id",
+  },
+  "getJournalEntry": {
+    "method": "GET",
+    "path": "/financial/journal-entries/:id",
+  },
+  "getLatestBiologicalAssetValuation": {
+    "method": "GET",
+    "path": "/financial/biological-assets/:batchId",
+  },
+  "listAccounts": {
+    "method": "GET",
+    "path": "/financial/accounts",
+  },
+  "postJournalEntry": {
+    "method": "POST",
+    "path": "/financial/journal-entries/:id/post",
+  },
+  "recordBiologicalAssetValuation": {
+    "method": "POST",
+    "path": "/financial/biological-assets/valuations",
+  },
+  "reverseJournalEntry": {
+    "method": "POST",
+    "path": "/financial/journal-entries/:id/reverse",
+  },
+}
+`;
+
+exports[`Contract snapshot tests iotContract shape matches snapshot 1`] = `
+{
+  "createThreshold": {
+    "method": "POST",
+    "path": "/iot/thresholds",
+  },
+  "deactivateThreshold": {
+    "method": "DELETE",
+    "path": "/iot/thresholds/:id",
+  },
+  "getThresholdById": {
+    "method": "GET",
+    "path": "/iot/thresholds/:id",
+  },
+  "getZoneHistory": {
+    "method": "GET",
+    "path": "/iot/zones/:zoneId/history",
+  },
+  "getZoneReadings": {
+    "method": "GET",
+    "path": "/iot/zones/:zoneId/readings",
+  },
+  "listAlerts": {
+    "method": "GET",
+    "path": "/iot/alerts",
+  },
+  "listThresholds": {
+    "method": "GET",
+    "path": "/iot/thresholds",
+  },
+}
+`;
+
+exports[`Contract snapshot tests procurementContract shape matches snapshot 1`] = `
+{
+  "acknowledgePurchaseOrder": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders/:id/acknowledge",
+  },
+  "cancelPurchaseOrder": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders/:id/cancel",
+  },
+  "closePurchaseOrder": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders/:id/close",
+  },
+  "createPurchaseOrder": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders",
+  },
+  "createSupplier": {
+    "method": "POST",
+    "path": "/procurement/suppliers",
+  },
+  "getPurchaseOrder": {
+    "method": "GET",
+    "path": "/procurement/purchase-orders/:id",
+  },
+  "getSupplier": {
+    "method": "GET",
+    "path": "/procurement/suppliers/:id",
+  },
+  "listPurchaseOrders": {
+    "method": "GET",
+    "path": "/procurement/purchase-orders",
+  },
+  "listSuppliers": {
+    "method": "GET",
+    "path": "/procurement/suppliers",
+  },
+  "qualifySupplier": {
+    "method": "PATCH",
+    "path": "/procurement/suppliers/:id/qualify",
+  },
+  "receiveGoods": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders/:id/receive-goods",
+  },
+  "submitPurchaseOrder": {
+    "method": "POST",
+    "path": "/procurement/purchase-orders/:id/submit",
+  },
+}
+`;
+
+exports[`Contract snapshot tests qualityContract shape matches snapshot 1`] = `
+{
+  "approveChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/approve",
+  },
+  "approveValidationProtocol": {
+    "method": "POST",
+    "path": "/quality/validation-protocols/:id/approve",
+  },
+  "assessDeviationImpact": {
+    "method": "POST",
+    "path": "/quality/deviations/:id/assess-impact",
+  },
+  "assessImpact": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/assess-impact",
+  },
+  "checkEffectiveness": {
+    "method": "POST",
+    "path": "/quality/capas/:id/effectiveness-check",
+  },
+  "closeCapa": {
+    "method": "POST",
+    "path": "/quality/capas/:id/close",
+  },
+  "closeChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/close",
+  },
+  "closeDeviation": {
+    "method": "POST",
+    "path": "/quality/deviations/:id/close",
+  },
+  "closeQualityEvent": {
+    "method": "POST",
+    "path": "/quality/quality-events/:id/close",
+  },
+  "closeValidationProtocol": {
+    "method": "POST",
+    "path": "/quality/validation-protocols/:id/close",
+  },
+  "createActionPlan": {
+    "method": "POST",
+    "path": "/quality/capas/:id/action-plan",
+  },
+  "createCapa": {
+    "method": "POST",
+    "path": "/quality/capas",
+  },
+  "createChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls",
+  },
+  "createQualityEvent": {
+    "method": "POST",
+    "path": "/quality/quality-events",
+  },
+  "createValidationProtocol": {
+    "method": "POST",
+    "path": "/quality/validation-protocols",
+  },
+  "executeValidationTest": {
+    "method": "POST",
+    "path": "/quality/validation-protocols/:id/execute-test",
+  },
+  "getCapa": {
+    "method": "GET",
+    "path": "/quality/capas/:id",
+  },
+  "getChangeControl": {
+    "method": "GET",
+    "path": "/quality/change-controls/:id",
+  },
+  "getDeviation": {
+    "method": "GET",
+    "path": "/quality/deviations/:id",
+  },
+  "getQualityEvent": {
+    "method": "GET",
+    "path": "/quality/quality-events/:id",
+  },
+  "getValidationProtocol": {
+    "method": "GET",
+    "path": "/quality/validation-protocols/:id",
+  },
+  "getValidationProtocolSummary": {
+    "method": "GET",
+    "path": "/quality/validation-protocols/:id/summary",
+  },
+  "implementCapa": {
+    "method": "POST",
+    "path": "/quality/capas/:id/implement",
+  },
+  "implementChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/implement",
+  },
+  "initiateRca": {
+    "method": "POST",
+    "path": "/quality/capas/:id/initiate-rca",
+  },
+  "investigateDeviation": {
+    "method": "POST",
+    "path": "/quality/deviations/:id/investigate",
+  },
+  "investigateQualityEvent": {
+    "method": "POST",
+    "path": "/quality/quality-events/:id/investigate",
+  },
+  "linkCapaToDeviation": {
+    "method": "POST",
+    "path": "/quality/deviations/:id/link-capa",
+  },
+  "linkRecordToQualityEvent": {
+    "method": "POST",
+    "path": "/quality/quality-events/:id/link-record",
+  },
+  "listCapas": {
+    "method": "GET",
+    "path": "/quality/capas",
+  },
+  "listChangeControls": {
+    "method": "GET",
+    "path": "/quality/change-controls",
+  },
+  "listDeviations": {
+    "method": "GET",
+    "path": "/quality/deviations",
+  },
+  "rejectChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/reject",
+  },
+  "reportDeviation": {
+    "method": "POST",
+    "path": "/quality/deviations",
+  },
+  "submitChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/submit",
+  },
+  "verifyChangeControl": {
+    "method": "POST",
+    "path": "/quality/change-controls/:id/verify",
+  },
+}
+`;
+
+exports[`Contract snapshot tests spatialContract shape matches snapshot 1`] = `
+{
+  "assignBatchToZone": {
+    "method": "POST",
+    "path": "/spatial/zones/assignments",
+  },
+  "createZone": {
+    "method": "POST",
+    "path": "/spatial/zones",
+  },
+  "getBatchAssignment": {
+    "method": "GET",
+    "path": "/spatial/zones/assignments/:id",
+  },
+  "getZone": {
+    "method": "GET",
+    "path": "/spatial/zones/:id",
+  },
+  "listActiveAssignments": {
+    "method": "GET",
+    "path": "/spatial/zones/:zoneId/assignments",
+  },
+  "listZones": {
+    "method": "GET",
+    "path": "/spatial/zones",
+  },
+  "releaseBatchFromZone": {
+    "method": "DELETE",
+    "path": "/spatial/zones/assignments/:id",
+  },
+}
+`;
+
+exports[`Contract snapshot tests workforceContract shape matches snapshot 1`] = `
+{
+  "approveTimeEntry": {
+    "method": "POST",
+    "path": "/workforce/time-entries/:id/approve",
+  },
+  "assignTask": {
+    "method": "POST",
+    "path": "/workforce/tasks/:id/assign",
+  },
+  "clockOut": {
+    "method": "POST",
+    "path": "/workforce/time-entries/:id/clock-out",
+  },
+  "completeTask": {
+    "method": "POST",
+    "path": "/workforce/tasks/:id/complete",
+  },
+  "completeTraining": {
+    "method": "POST",
+    "path": "/workforce/training/executions/:id/complete",
+  },
+  "createCourse": {
+    "method": "POST",
+    "path": "/workforce/training/courses",
+  },
+  "createEmployee": {
+    "method": "POST",
+    "path": "/workforce/employees",
+  },
+  "createTask": {
+    "method": "POST",
+    "path": "/workforce/tasks",
+  },
+  "createTimeEntry": {
+    "method": "POST",
+    "path": "/workforce/time-entries",
+  },
+  "deactivateEmployee": {
+    "method": "POST",
+    "path": "/workforce/employees/:id/deactivate",
+  },
+  "getCompetencyProfile": {
+    "method": "GET",
+    "path": "/workforce/employees/:id/competency",
+  },
+  "getCourse": {
+    "method": "GET",
+    "path": "/workforce/training/courses/:id",
+  },
+  "getEmployee": {
+    "method": "GET",
+    "path": "/workforce/employees/:id",
+  },
+  "getMobileTask": {
+    "method": "GET",
+    "path": "/workforce/tasks/:id/mobile",
+  },
+  "getTask": {
+    "method": "GET",
+    "path": "/workforce/tasks/:id",
+  },
+  "listCertifications": {
+    "method": "GET",
+    "path": "/workforce/training/certifications",
+  },
+  "listCourses": {
+    "method": "GET",
+    "path": "/workforce/training/courses",
+  },
+  "listEmployees": {
+    "method": "GET",
+    "path": "/workforce/employees",
+  },
+  "listTasks": {
+    "method": "GET",
+    "path": "/workforce/tasks",
+  },
+  "listTimeEntries": {
+    "method": "GET",
+    "path": "/workforce/time-entries",
+  },
+  "listTrainingExecutions": {
+    "method": "GET",
+    "path": "/workforce/training/executions",
+  },
+  "scheduleTraining": {
+    "method": "POST",
+    "path": "/workforce/training/executions",
+  },
+}
+`;

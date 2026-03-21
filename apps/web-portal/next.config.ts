@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Standalone output for Docker production builds
+  output: 'standalone',
+
   // Transpile shared monorepo packages
   transpilePackages: [
     '@gacp-erp/shared-schemas',
