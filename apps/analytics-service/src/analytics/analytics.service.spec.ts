@@ -199,4 +199,92 @@ describe('AnalyticsService', () => {
       expect(result.assessedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     });
   });
+
+  // ── Branch coverage: ?? fallbacks and edge cases ──────────────────────────
+
+  describe('Branch: getKpis ?? fallbacks', () => {
+    it('returns defaults when all db queries return empty arrays', async () => {
+      const db = makeMockDb([], [], [], [], []);
+      const svc = new AnalyticsService(db as unknown as Database);
+
+      const result = await svc.getKpis();
+
+      expect(result.find((m) => m.name === 'active_employees')?.value).toBe(0);
+      expect(result.find((m) => m.name === 'task_completion_rate')?.value).toBe(0);
+      expect(result.find((m) => m.name === 'pending_trainings')?.value).toBe(0);
+      expect(result.find((m) => m.name === 'expired_certifications')?.value).toBe(0);
+      expect(result.find((m) => m.name === 'total_hours_logged')?.value).toBe(0);
+    });
+
+    it('trend is UP when taskCompletionRate >= 80', async () => {
+      const db = makeMockDb(
+        [{ count: 1 }],
+        [{ total: 10, completed: 9 }],
+        [{ count: 0 }],
+        [{ count: 0 }],
+        [{ minutes: 0 }],
+      );
+      const svc = new AnalyticsService(db as unknown as Database);
+      const result = await svc.getKpis();
+      expect(result.find((m) => m.name === 'task_completion_rate')?.trend).toBe('UP');
+    });
+  });
+
+  describe('Branch: getTrainingCompliance edge cases', () => {
+    it('handles course with no cert stats (certMap miss)', async () => {
+      const db = makeMockDb(
+        [{ count: 50 }],
+        [{ id: COURSE_UUID, course_id: 'CUR-002', title: 'Missing Stats' }],
+        [], // no certStats
+      );
+      const svc = new AnalyticsService(db as unknown as Database);
+      const result = await svc.getTrainingCompliance();
+      expect(result.items[0]?.compliant).toBe(0);
+      expect(result.items[0]?.expiringSoon).toBe(0);
+      expect(result.items[0]?.expired).toBe(0);
+      expect(result.items[0]?.complianceRate).toBe(0);
+    });
+
+    it('returns 0 complianceRate when totalEmployees is 0', async () => {
+      const db = makeMockDb(
+        [{ count: 0 }],
+        [{ id: COURSE_UUID, course_id: 'CUR-001', title: 'Course' }],
+        [{ course_id: COURSE_UUID, compliant: 5, expiring_soon: 0, expired: 0 }],
+      );
+      const svc = new AnalyticsService(db as unknown as Database);
+      const result = await svc.getTrainingCompliance();
+      expect(result.items[0]?.complianceRate).toBe(0);
+    });
+  });
+
+  describe('Branch: getWorkforceSummary ?? fallbacks', () => {
+    it('returns defaults when all db queries return empty arrays', async () => {
+      const db = makeMockDb([], [], [], []);
+      const svc = new AnalyticsService(db as unknown as Database);
+      const result = await svc.getWorkforceSummary();
+      expect(result.totalEmployees).toBe(0);
+      expect(result.activeEmployees).toBe(0);
+      expect(result.totalTasksScheduled).toBe(0);
+      expect(result.totalTasksCompleted).toBe(0);
+      expect(result.totalTasksOverdue).toBe(0);
+      expect(result.taskCompletionRate).toBe(0);
+      expect(result.totalLaborHours).toBe(0);
+      expect(result.byDepartment).toHaveLength(0);
+    });
+  });
+
+  describe('Branch: getAuditReadiness ?? fallbacks', () => {
+    it('handles zero tasks in audit', async () => {
+      const db = makeMockDb(
+        [{ count: 0 }], // totalEmployees (for training compliance)
+        [], // courses
+        [], // certStats
+        [], // taskResult empty
+      );
+      const svc = new AnalyticsService(db as unknown as Database);
+      const result = await svc.getAuditReadiness();
+      expect(result.overdueTaskRate).toBe(0);
+      expect(result.overallScore).toBeGreaterThanOrEqual(0);
+    });
+  });
 });

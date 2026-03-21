@@ -9,11 +9,13 @@ module.exports = {
     '!src/**/*.test.{ts,tsx}',
     '!src/index.ts',
     '!src/**/*.d.ts',
+    '!src/main.ts',
+    '!src/**/*.module.ts',
   ],
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 70,
+      branches: 80,
       functions: 80,
       lines: 80,
       statements: 80,

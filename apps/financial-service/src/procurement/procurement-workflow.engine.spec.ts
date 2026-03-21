@@ -82,5 +82,23 @@ describe('ProcurementWorkflowEngine', () => {
       expect(engine.nextStatuses('CLOSED')).toEqual([]);
       expect(engine.nextStatuses('CANCELLED')).toEqual([]);
     });
+
+    it('should return [] for unknown status', () => {
+      expect(engine.nextStatuses('UNKNOWN' as never)).toEqual([]);
+    });
+  });
+
+  describe('canTransition() with unknown status', () => {
+    it('should return false for unknown current status', () => {
+      expect(engine.canTransition('UNKNOWN' as never, 'SUBMITTED')).toBe(false);
+    });
+  });
+
+  describe('validateTransition() with unknown status', () => {
+    it('should throw for unknown current status', () => {
+      expect(() => engine.validateTransition('UNKNOWN' as never, 'SUBMITTED')).toThrow(
+        BadRequestException,
+      );
+    });
   });
 });

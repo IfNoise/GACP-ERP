@@ -179,6 +179,19 @@ describe('SpatialPlanningUseCase', () => {
       const [, eventArg] = mockOutboxRepo.createWithTx.mock.calls[0];
       expect(eventArg.payload).toMatchObject({ eventType: 'spatial.zone.batch_assigned' });
     });
+
+    it('should set occupancyAfterPct to 0 when zone has no capacity', async () => {
+      mockRepo.findZoneByIdOrThrow.mockResolvedValue(
+        makeZone({ capacity: null, current_occupancy: 0 }),
+      );
+
+      const dto = { zone_id: ZONE_ID, batch_id: BATCH_ID };
+
+      await useCase.assignBatchToZone(dto as never, AUTHOR_ID);
+
+      const [, eventArg] = mockOutboxRepo.createWithTx.mock.calls[0];
+      expect(eventArg.payload.payload.occupancyAfterPct).toBe(0);
+    });
   });
 
   describe('releaseBatchFromZone', () => {
@@ -195,6 +208,19 @@ describe('SpatialPlanningUseCase', () => {
 
       const [, eventArg] = mockOutboxRepo.createWithTx.mock.calls[0];
       expect(eventArg.payload).toMatchObject({ eventType: 'spatial.zone.batch_released' });
+    });
+
+    it('should handle null zone (zone deleted after assignment)', async () => {
+      mockRepo.findZoneById.mockResolvedValue(null);
+
+      const dto = { assignment_id: ASSIGNMENT_ID };
+      const result = await useCase.releaseBatchFromZone(dto, AUTHOR_ID);
+
+      expect(result.released_at).toBeDefined();
+      const [, eventArg] = mockOutboxRepo.createWithTx.mock.calls[0];
+      expect(eventArg.payload.payload.zoneCode).toBe('');
+      expect(eventArg.payload.payload.zoneType).toBe('STORAGE');
+      expect(eventArg.payload.payload.occupancyAfterPct).toBe(0);
     });
   });
 });

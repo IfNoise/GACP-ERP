@@ -201,8 +201,8 @@ jobs:
       - name: Set NX base/head SHAs
         uses: nrwl/nx-set-shas@v4
 
-      - name: Test affected
-        run: pnpm nx affected --target=test --base=$NX_BASE --head=$NX_HEAD --coverage
+      - name: Test affected with coverage enforcement
+        run: pnpm nx affected --target=test --base=$NX_BASE --head=$NX_HEAD --coverage --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
