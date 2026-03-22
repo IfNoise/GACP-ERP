@@ -74,6 +74,19 @@ export function useTransitionPlantStage() {
   });
 }
 
+export function usePlantStageHistory(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['plants', id, 'stages'],
+    queryFn: async () => {
+      const res = await api.cultivation.plants.getStageHistory({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load stage history');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
 // ─── BATCHES ──────────────────────────────────────────────────────────────────
 
 export function useBatches(query: { page?: number; limit?: number } = {}) {
@@ -111,6 +124,42 @@ export function useCreateBatch() {
       return res.body;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['batches'] }),
+  });
+}
+
+export function useHarvestBatch() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.cultivation.batches.harvest>[0]['body'];
+    }) => {
+      const res = await api.cultivation.batches.harvest({ params: { id }, body });
+      if (res.status !== 201) throw new Error('Failed to record harvest');
+      return res.body;
+    },
+    onSuccess: (_data, { id }) => {
+      qc.invalidateQueries({ queryKey: ['batches', id] });
+      qc.invalidateQueries({ queryKey: ['batches'] });
+      qc.invalidateQueries({ queryKey: ['batches', id, 'harvests'] });
+    },
+  });
+}
+
+export function useBatchHarvests(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['batches', id, 'harvests'],
+    queryFn: async () => {
+      const res = await api.cultivation.batches.getHarvests({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load harvests');
+      return res.body;
+    },
+    enabled: !!id,
   });
 }
 

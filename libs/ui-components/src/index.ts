@@ -12,7 +12,7 @@ export { DateRangePicker } from './date-range-picker';
 export { EntitySearch } from './entity-search';
 export { ConfirmDialog } from './confirm-dialog';
 
-export type { ColumnDef, DataTableProps } from './data-table';
+export type { ColumnDef, DataTableProps, PaginationState } from './data-table';
 export type { FieldConfig, FormBuilderProps } from './form-builder';
 export type { WorkflowStep, WorkflowTimelineProps } from './workflow-timeline';
 export type { SignatureDialogProps } from './signature-dialog';

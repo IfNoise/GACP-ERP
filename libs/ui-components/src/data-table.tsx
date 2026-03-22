@@ -181,4 +181,4 @@ export function DataTable<TData>({
   );
 }
 
-export type { DataTableProps, ColumnDef };
+export type { DataTableProps, ColumnDef, PaginationState };
