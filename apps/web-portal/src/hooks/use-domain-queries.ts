@@ -1883,3 +1883,127 @@ export function useIotAlerts(query: { zone_id?: string; acknowledged?: string } 
     refetchInterval: 15_000,
   });
 }
+
+// ─── DOCUMENTS ────────────────────────────────────────────────────────────────
+
+export function useDocuments(
+  query: {
+    status?: string;
+    document_type?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  } = {},
+) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['documents', query],
+    queryFn: async () => {
+      const res = await api.documents.listDocuments({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.documents.listDocuments>[0]);
+      if (res.status !== 200) throw new Error('Failed to load documents');
+      return res.body;
+    },
+  });
+}
+
+export function useDocument(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['documents', id],
+    queryFn: async () => {
+      const res = await api.documents.getDocument({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load document');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useDocumentVersions(documentId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['documents', documentId, 'versions'],
+    queryFn: async () => {
+      const res = await api.documents.listVersions({ params: { id: documentId } });
+      if (res.status !== 200) throw new Error('Failed to load document versions');
+      return res.body;
+    },
+    enabled: !!documentId,
+  });
+}
+
+export function useCreateDocument() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      body: NonNullable<Parameters<typeof api.documents.createDocument>[0]['body']>,
+    ) => {
+      const res = await api.documents.createDocument({ body });
+      if (res.status !== 201) throw new Error('Failed to create document');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['documents'] }),
+  });
+}
+
+export function useUploadVersion(documentId: string) {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      body: NonNullable<Parameters<typeof api.documents.uploadVersion>[0]['body']>,
+    ) => {
+      const res = await api.documents.uploadVersion({ params: { id: documentId }, body });
+      if (res.status !== 201) throw new Error('Failed to upload version');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['documents', documentId] });
+      qc.invalidateQueries({ queryKey: ['documents', documentId, 'versions'] });
+    },
+  });
+}
+
+export function useSubmitForReview() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.documents.submitForReview>[0]['body']>;
+    }) => {
+      const res = await api.documents.submitForReview({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to submit for review');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['documents'] }),
+  });
+}
+
+export function useApproveDocument() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: { password: string; reason: string };
+    }) => {
+      const res = await api.documents.approveDocument({
+        params: { id },
+        body: body as unknown as Parameters<typeof api.documents.approveDocument>[0]['body'],
+      });
+      if (res.status !== 200) throw new Error('Failed to approve document');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['documents'] }),
+  });
+}

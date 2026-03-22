@@ -34,5 +34,8 @@ export * from './training/index';
 // ─── Analytics (EPIC 9) ───────────────────────────────────────────────────────
 export * from './analytics/index';
 
+// ─── Document Management (EPIC 14.7) ──────────────────────────────────────────
+export * from './document/index';
+
 // ─── Integrations (EPIC 9) ────────────────────────────────────────────────────
 export * from './integrations/index';

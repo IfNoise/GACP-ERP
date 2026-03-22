@@ -8,3 +8,4 @@ export * from './procurement.contract';
 export * from './spatial.contract';
 export * from './workforce.contract';
 export * from './analytics.contract';
+export * from './document.contract';

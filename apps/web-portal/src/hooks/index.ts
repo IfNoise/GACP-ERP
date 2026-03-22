@@ -115,4 +115,12 @@ export {
   // IoT
   useZoneReadings,
   useIotAlerts,
+  // Documents
+  useDocuments,
+  useDocument,
+  useDocumentVersions,
+  useCreateDocument,
+  useUploadVersion,
+  useSubmitForReview,
+  useApproveDocument,
 } from './use-domain-queries';

@@ -13,6 +13,7 @@ import {
   analyticsContract,
   iotContract,
   auditContract,
+  documentContract,
 } from '@gacp-erp/shared-contracts';
 
 function createClient<T extends Parameters<typeof initClient>[0]>(
@@ -43,6 +44,7 @@ export function useApiClient() {
       analytics: createClient(analyticsContract, API_BASE_URL, token),
       iot: createClient(iotContract, API_BASE_URL, token),
       audit: createClient(auditContract, API_BASE_URL, token),
+      documents: createClient(documentContract, API_BASE_URL, token),
     }),
     [token],
   );
