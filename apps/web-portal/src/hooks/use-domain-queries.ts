@@ -1853,6 +1853,41 @@ export function useKpis(query: { period?: string; category?: KpiCategory } = {})
   });
 }
 
+export function useAuditReadiness() {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['analytics', 'auditReadiness'],
+    queryFn: async () => {
+      const res = await api.analytics.getAuditReadiness({ query: {} });
+      if (res.status !== 200) throw new Error('Failed to load audit readiness');
+      return res.body;
+    },
+  });
+}
+
+export function useAuditTrail(
+  query: {
+    entity_type?: string;
+    from?: string;
+    to?: string;
+    user_id?: string;
+    page?: number;
+    limit?: number;
+  } = {},
+) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['audit', 'trail', query],
+    queryFn: async () => {
+      const res = await api.audit.query({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.audit.query>[0]);
+      if (res.status !== 200) throw new Error('Failed to load audit trail');
+      return res.body;
+    },
+  });
+}
+
 // ─── IOT ──────────────────────────────────────────────────────────────────────
 
 export function useZoneReadings(zoneId: string) {

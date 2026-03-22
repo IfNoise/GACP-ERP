@@ -112,6 +112,8 @@ export {
   useKpis,
   useTrainingCompliance,
   useWorkforceSummary,
+  useAuditReadiness,
+  useAuditTrail,
   // IoT
   useZoneReadings,
   useIotAlerts,

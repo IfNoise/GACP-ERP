@@ -82,6 +82,7 @@
     "@ts-rest/open-api": "^3.52.1",
     "@willsoto/nestjs-prometheus": "^6.0.2",
     "@xeokit/xeokit-sdk": "^2.6.107",
-    "prom-client": "^15.1.3"
+    "prom-client": "^15.1.3",
+    "recharts": "^2.15.4"
   }
 }
