@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { MetricsModule } from '@gacp-erp/shared-config';
 import { AuthModule } from './auth/auth.module';
 import { SignatureModule } from './signature/signature.module';
 import { HealthModule } from './health/health.module';
@@ -37,6 +38,7 @@ import { DocsModule } from './docs/docs.module';
     HealthModule,
     IotModule,
     DocsModule,
+    MetricsModule,
   ],
   providers: [
     // Register AuditInterceptor globally so it intercepts all controllers

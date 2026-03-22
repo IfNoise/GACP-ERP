@@ -1,18 +1,23 @@
 import 'reflect-metadata';
+import { initTelemetry, StructuredLogger } from '@gacp-erp/shared-config';
+
+initTelemetry({ serviceName: 'api-gateway' });
+
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyHelmet from '@fastify/helmet';
-import { Logger, VersioningType } from '@nestjs/common';
+import { VersioningType } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ZodValidationPipe } from './common/pipes/zod-validation.pipe';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap(): Promise<void> {
-  const logger = new Logger('Bootstrap');
+  const logger = new StructuredLogger('api-gateway');
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: process.env['NODE_ENV'] !== 'production' }),
+    { logger },
   );
 
   // Security headers

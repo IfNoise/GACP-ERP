@@ -62,7 +62,7 @@ describe('TrainingController', () => {
   describe('listCourses', () => {
     it('should pass pagination', async () => {
       const handler = ctrl.listCourses() as (...args: unknown[]) => unknown;
-      const result = await handler({ query: { page: 1, limit: 10 } });
+      const result = (await handler({ query: { page: 1, limit: 10 } })) as Record<string, unknown>;
       expect(result.status).toBe(200);
       expect(mockRepo.findManyCourses).toHaveBeenCalledWith({ page: 1, limit: 10 });
     });

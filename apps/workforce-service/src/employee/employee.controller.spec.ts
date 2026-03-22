@@ -49,9 +49,9 @@ describe('EmployeeController', () => {
   describe('listEmployees', () => {
     it('should pass filters and pagination', async () => {
       const handler = ctrl.listEmployees() as (...args: unknown[]) => unknown;
-      const result = await handler({
+      const result = (await handler({
         query: { page: 1, limit: 10, department: 'QA', is_active: true },
-      });
+      })) as Record<string, unknown>;
       expect(result.status).toBe(200);
       expect(mockRepo.findMany).toHaveBeenCalledWith(
         { department: 'QA', is_active: true },
@@ -77,7 +77,10 @@ describe('EmployeeController', () => {
   describe('deactivateEmployee', () => {
     it('should deactivate with userId', async () => {
       const handler = ctrl.deactivateEmployee() as (...args: unknown[]) => unknown;
-      const result = await handler({ params: { id: 'emp-1' }, headers: { 'x-user-id': 'user-1' } });
+      const result = (await handler({
+        params: { id: 'emp-1' },
+        headers: { 'x-user-id': 'user-1' },
+      })) as Record<string, unknown>;
       expect(result.status).toBe(200);
       expect(mockRepo.deactivate).toHaveBeenCalledWith('emp-1', 'user-1');
     });

@@ -21,3 +21,13 @@ export type {
   AppConfig,
   ImmudbConfig,
 } from './config.schemas';
+
+// ─── Telemetry ────────────────────────────────────────────────────────────────
+export { initTelemetry, shutdownTelemetry } from './telemetry';
+export type { TelemetryOptions } from './telemetry';
+
+// ─── Logging ──────────────────────────────────────────────────────────────────
+export { StructuredLogger } from './logging';
+
+// ─── Metrics ──────────────────────────────────────────────────────────────────
+export { MetricsModule } from './metrics';

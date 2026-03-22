@@ -86,7 +86,10 @@ describe('TaskController', () => {
   describe('completeTask', () => {
     it('should call use case with userId', async () => {
       const handler = ctrl.completeTask() as (...args: unknown[]) => unknown;
-      const result = await handler({ params: { id: 'task-1' }, headers: { 'x-user-id': 'u-1' } });
+      const result = (await handler({
+        params: { id: 'task-1' },
+        headers: { 'x-user-id': 'u-1' },
+      })) as Record<string, unknown>;
       expect(result.status).toBe(200);
       expect(mockCompleteUseCase.execute).toHaveBeenCalledWith('task-1', 'u-1');
     });

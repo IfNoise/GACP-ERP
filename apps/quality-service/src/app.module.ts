@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { MetricsModule } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { ChangeControlModule } from './change-control/change-control.module';
@@ -21,6 +22,7 @@ import { QualityEventModule } from './quality-event/quality-event.module';
     DeviationModule,
     ValidationProtocolModule,
     QualityEventModule,
+    MetricsModule,
   ],
 })
 export class AppModule {}

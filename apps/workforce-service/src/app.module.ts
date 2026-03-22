@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { MetricsModule } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { EmployeeModule } from './employee/employee.module';
@@ -19,6 +20,7 @@ import { TrainingModule } from './training/training.module';
     TaskModule,
     TimeEntryModule,
     TrainingModule,
+    MetricsModule,
   ],
 })
 export class AppModule {}
