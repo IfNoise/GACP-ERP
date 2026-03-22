@@ -72,16 +72,25 @@ describe('IotController', () => {
   it('listAlerts delegates with parsed filters', async () => {
     mocks.alertHistoryQuery.findAll.mockResolvedValue({ data: [], total: 0 });
 
-    await controller.listAlerts('z', 'temperature', 'WARNING', 'true', 'a', 'b', '2', '50');
+    await controller.listAlerts(
+      '00000000-0000-0000-0000-000000000001',
+      'temperature',
+      'WARNING',
+      'true',
+      '2026-01-01',
+      '2026-01-31',
+      '2',
+      '50',
+    );
 
     expect(mocks.alertHistoryQuery.findAll).toHaveBeenCalledWith(
       expect.objectContaining({
-        zone_id: 'z',
+        zone_id: '00000000-0000-0000-0000-000000000001',
         sensor_type: 'temperature',
         alert_level: 'WARNING',
         acknowledged: true,
-        from: 'a',
-        to: 'b',
+        from: '2026-01-01',
+        to: '2026-01-31',
         page: 2,
         limit: 50,
       }),
@@ -98,22 +107,21 @@ describe('IotController', () => {
     );
   });
 
-  it('listAlerts clamps limit to 1-100', async () => {
+  it('listAlerts rejects limit > 100 with 400', async () => {
     mocks.alertHistoryQuery.findAll.mockResolvedValue({ data: [], total: 0 });
 
-    await controller.listAlerts(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      '1',
-      '999',
-    );
-    expect(mocks.alertHistoryQuery.findAll).toHaveBeenCalledWith(
-      expect.objectContaining({ limit: 100 }),
-    );
+    await expect(
+      controller.listAlerts(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        '1',
+        '999',
+      ),
+    ).rejects.toThrow();
   });
 
   // ─── Thresholds ────────────────────────────────────────────────────────

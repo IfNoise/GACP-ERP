@@ -1,0 +1,87 @@
+version: 2
+
+registries:
+  npm-registry:
+    type: npm-registry
+    url: https://registry.npmjs.org
+
+updates:
+  # ─── Node.js (pnpm) ──────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    registries:
+      - npm-registry
+    groups:
+      nestjs:
+        patterns:
+          - '@nestjs/*'
+      opentelemetry:
+        patterns:
+          - '@opentelemetry/*'
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+      testing:
+        patterns:
+          - 'jest'
+          - '@jest/*'
+          - '@types/jest'
+          - '@swc/*'
+          - 'ts-jest'
+      typescript:
+        patterns:
+          - 'typescript'
+          - 'eslint'
+          - '@typescript-eslint/*'
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    labels:
+      - dependencies
+      - automated
+
+  # ─── Go modules ──────────────────────────────────────────────────
+  - package-ecosystem: gomod
+    directory: /apps/audit-consumer
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - go
+      - automated
+
+  # ─── Docker ──────────────────────────────────────────────────────
+  - package-ecosystem: docker
+    directory: /apps/api-gateway
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - docker
+      - automated
+
+  - package-ecosystem: docker
+    directory: /apps/audit-consumer
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - docker
+      - automated
+
+  # ─── GitHub Actions ──────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - ci
+      - automated

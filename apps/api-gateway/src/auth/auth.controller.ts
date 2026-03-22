@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import {
   LoginRequestSchema,
   RefreshTokenRequestSchema,
@@ -6,6 +6,7 @@ import {
   type RefreshTokenRequest,
   type JwtPayload,
 } from '@gacp-erp/shared-schemas';
+import { z } from 'zod';
 import { type AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -29,12 +30,20 @@ export class AuthController {
     return this.authService.refresh(dto);
   }
 
+  private static readonly LogoutSchema = z.object({
+    refresh_token: z.string().min(1, 'refresh_token is required'),
+  });
+
+  private static readonly ReauthSchema = z.object({
+    password: z.string().min(1, 'password is required'),
+  });
+
   /** POST /api/v1/auth/logout */
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(JwtAuthGuard)
-  logout(@Body('refresh_token') refreshToken: string) {
-    return this.authService.logout(refreshToken);
+  logout(@ZodBody(AuthController.LogoutSchema) dto: { refresh_token: string }) {
+    return this.authService.logout(dto.refresh_token);
   }
 
   /** GET /api/v1/auth/me */
@@ -59,7 +68,10 @@ export class AuthController {
   @Post('reauth')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  reauthenticate(@CurrentUser() user: JwtPayload, @Body('password') password: string) {
-    return this.authService.reauthenticate(user, password);
+  reauthenticate(
+    @CurrentUser() user: JwtPayload,
+    @ZodBody(AuthController.ReauthSchema) dto: { password: string },
+  ) {
+    return this.authService.reauthenticate(user, dto.password);
   }
 }

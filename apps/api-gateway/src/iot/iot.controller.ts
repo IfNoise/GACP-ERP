@@ -18,6 +18,7 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { type JwtPayload } from '@gacp-erp/shared-schemas';
 import { CreateAlertThresholdSchema } from '@gacp-erp/shared-schemas';
+import { z } from 'zod';
 import { type AlertHistoryQueryService } from './alert-history-query.service';
 import { type ThresholdService } from './threshold.service';
 import { type VmProxyService } from './vm-proxy.service';
@@ -58,6 +59,20 @@ export class IotController {
 
   // ─── ALERT HISTORY ─────────────────────────────────────────────────────────
 
+  private static readonly AlertQuerySchema = z.object({
+    zone_id: z.string().uuid().optional(),
+    sensor_type: z.string().max(50).optional(),
+    alert_level: z.enum(['WARNING', 'CRITICAL']).optional(),
+    acknowledged: z
+      .string()
+      .optional()
+      .transform((v) => (v != null ? v === 'true' : undefined)),
+    from: z.string().max(30).optional(),
+    to: z.string().max(30).optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+  });
+
   @Get('alerts')
   async listAlerts(
     @Query('zone_id') zoneId?: string,
@@ -69,17 +84,33 @@ export class IotController {
     @Query('page') pageRaw?: string,
     @Query('limit') limitRaw?: string,
   ) {
-    const page = pageRaw != null ? Math.max(1, parseInt(pageRaw, 10)) : 1;
-    const limit = limitRaw != null ? Math.min(100, Math.max(1, parseInt(limitRaw, 10))) : 20;
-    const acknowledged = acknowledgedRaw != null ? acknowledgedRaw === 'true' : undefined;
-
+    const parsed = IotController.AlertQuerySchema.safeParse({
+      zone_id: zoneId,
+      sensor_type: sensorType,
+      alert_level: alertLevel,
+      acknowledged: acknowledgedRaw,
+      from,
+      to,
+      page: pageRaw,
+      limit: limitRaw,
+    });
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: 'Invalid query parameters',
+        details: parsed.error.issues.map((i) => ({
+          path: i.path.join('.'),
+          message: i.message,
+        })),
+      });
+    }
+    const { page, limit, acknowledged, ...rest } = parsed.data;
     const filters: Parameters<AlertHistoryQueryService['findAll']>[0] = { page, limit };
-    if (zoneId !== undefined) filters.zone_id = zoneId;
-    if (sensorType !== undefined) filters.sensor_type = sensorType;
-    if (alertLevel !== undefined) filters.alert_level = alertLevel;
+    if (rest.zone_id !== undefined) filters.zone_id = rest.zone_id;
+    if (rest.sensor_type !== undefined) filters.sensor_type = rest.sensor_type;
+    if (rest.alert_level !== undefined) filters.alert_level = rest.alert_level;
     if (acknowledged !== undefined) filters.acknowledged = acknowledged;
-    if (from !== undefined) filters.from = from;
-    if (to !== undefined) filters.to = to;
+    if (rest.from !== undefined) filters.from = rest.from;
+    if (rest.to !== undefined) filters.to = rest.to;
 
     return this.alertHistoryQuery.findAll(filters);
   }

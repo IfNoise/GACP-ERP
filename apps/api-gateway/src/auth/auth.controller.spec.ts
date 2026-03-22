@@ -67,7 +67,7 @@ describe('AuthController', () => {
 
   it('logout delegates to authService.logout', async () => {
     authService.logout.mockResolvedValue(undefined);
-    await controller.logout('rt');
+    await controller.logout({ refresh_token: 'rt' });
     expect(authService.logout).toHaveBeenCalledWith('rt');
   });
 
@@ -91,7 +91,7 @@ describe('AuthController', () => {
 
   it('reauthenticate delegates to authService.reauthenticate', async () => {
     authService.reauthenticate.mockResolvedValue({ reauth_token: 'tok', expires_in: 300 });
-    const result = await controller.reauthenticate(mockUser as never, 'pass');
+    const result = await controller.reauthenticate(mockUser as never, { password: 'pass' });
     expect(result).toEqual({ reauth_token: 'tok', expires_in: 300 });
     expect(authService.reauthenticate).toHaveBeenCalledWith(mockUser, 'pass');
   });

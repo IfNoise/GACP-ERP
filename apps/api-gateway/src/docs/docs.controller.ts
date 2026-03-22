@@ -49,7 +49,10 @@ function getOpenApiSpec(): object {
 @Controller({ path: 'docs', version: '' })
 export class DocsController {
   @Get('openapi.json')
-  getOpenApiJson() {
+  getOpenApiJson(@Res() reply: FastifyReply) {
+    if (process.env['NODE_ENV'] === 'production') {
+      return reply.status(404).send({ message: 'Not available in production' });
+    }
     return getOpenApiSpec();
   }
 
