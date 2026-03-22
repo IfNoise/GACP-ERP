@@ -556,6 +556,24 @@ export const qualityContract = c.router({
     summary: 'Create Validation Protocol (VAL-YYYY-NNNN)',
   },
 
+  /** Paginated list of Validation Protocols with optional filters */
+  listValidationProtocols: {
+    method: 'GET',
+    path: '/quality/validation-protocols',
+    query: PaginationQuerySchema.extend({
+      status: z
+        .enum(['DRAFT', 'REVIEW', 'APPROVED', 'EXECUTING', 'COMPLETED', 'CLOSED', 'SUPERSEDED'])
+        .optional(),
+      type: z.enum(['IQ', 'OQ', 'PQ']).optional(),
+    }),
+    responses: {
+      200: paginatedList(ValidationProtocolSchema),
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+    },
+    summary: 'List Validation Protocols (paginated)',
+  },
+
   /** Get validation protocol by ID */
   getValidationProtocol: {
     method: 'GET',
@@ -649,6 +667,25 @@ export const qualityContract = c.router({
       403: ApiErrorSchema,
     },
     summary: 'Report Quality Event (QE-YYYY-NNNN)',
+  },
+
+  /** Paginated list of Quality Events with optional filters */
+  listQualityEvents: {
+    method: 'GET',
+    path: '/quality/quality-events',
+    query: PaginationQuerySchema.extend({
+      status: z.enum(['OPEN', 'INVESTIGATING', 'CAPA_INITIATED', 'CLOSED']).optional(),
+      severity: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
+      type: z
+        .enum(['COMPLAINT', 'AUDIT_FINDING', 'INSPECTION_OBSERVATION', 'QUALITY_ISSUE'])
+        .optional(),
+    }),
+    responses: {
+      200: paginatedList(QualityEventSchema),
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+    },
+    summary: 'List Quality Events (paginated)',
   },
 
   /** Get Quality Event by ID */
