@@ -1289,25 +1289,433 @@ export function useCancelPurchaseOrder() {
 
 // ─── WORKFORCE ────────────────────────────────────────────────────────────────
 
-export function useEmployees(query: { page?: number; limit?: number } = {}) {
+interface EmployeesQuery {
+  page?: number;
+  limit?: number;
+  department?: string;
+  is_active?: string;
+  role?: string;
+}
+
+export function useEmployees(query: EmployeesQuery = {}) {
   const api = useApiClient();
   return useQuery({
     queryKey: ['employees', query],
     queryFn: async () => {
-      const res = await api.workforce.listEmployees({ query: { page: 1, limit: 20, ...query } });
+      const res = await api.workforce.listEmployees({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listEmployees>[0]);
       if (res.status !== 200) throw new Error('Failed to load employees');
       return res.body;
     },
   });
 }
 
-export function useTasks(query: { page?: number; limit?: number } = {}) {
+export function useEmployee(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['employees', id],
+    queryFn: async () => {
+      const res = await api.workforce.getEmployee({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load employee');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateEmployee() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.workforce.createEmployee>[0]['body']) => {
+      const res = await api.workforce.createEmployee({ body });
+      if (res.status !== 201) throw new Error('Failed to create employee');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['employees'] });
+    },
+  });
+}
+
+export function useDeactivateEmployee() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.workforce.deactivateEmployee>[0]['body']>;
+    }) => {
+      const res = await api.workforce.deactivateEmployee({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to deactivate employee');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['employees', id] });
+      qc.invalidateQueries({ queryKey: ['employees'] });
+    },
+  });
+}
+
+export function useEmployeeCompetency(employeeId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['employees', employeeId, 'competency'],
+    queryFn: async () => {
+      const res = await api.workforce.getCompetencyProfile({ params: { id: employeeId } });
+      if (res.status !== 200) throw new Error('Failed to load competency');
+      return res.body;
+    },
+    enabled: !!employeeId,
+  });
+}
+
+// Tasks
+
+interface TasksQuery {
+  page?: number;
+  limit?: number;
+  status?: string;
+  priority?: string;
+  assigned_to?: string;
+  zone_id?: string;
+  batch_id?: string;
+  scheduled_date?: string;
+}
+
+export function useTasks(query: TasksQuery = {}) {
   const api = useApiClient();
   return useQuery({
     queryKey: ['tasks', query],
     queryFn: async () => {
-      const res = await api.workforce.listTasks({ query: { page: 1, limit: 20, ...query } });
+      const res = await api.workforce.listTasks({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listTasks>[0]);
       if (res.status !== 200) throw new Error('Failed to load tasks');
+      return res.body;
+    },
+  });
+}
+
+export function useTask(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['tasks', id],
+    queryFn: async () => {
+      const res = await api.workforce.getTask({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load task');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateTask() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.workforce.createTask>[0]['body']) => {
+      const res = await api.workforce.createTask({ body });
+      if (res.status !== 201) throw new Error('Failed to create task');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+}
+
+export function useCompleteTask() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.workforce.completeTask>[0]['body']>;
+    }) => {
+      const res = await api.workforce.completeTask({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to complete task');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['tasks', id] });
+      qc.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+}
+
+export function useAssignTask() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.workforce.assignTask>[0]['body'];
+    }) => {
+      const res = await api.workforce.assignTask({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to assign task');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['tasks', id] });
+      qc.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+}
+
+// Time Entries
+
+interface TimeEntriesQuery {
+  page?: number;
+  limit?: number;
+  employee_id?: string;
+  task_id?: string;
+  from_date?: string;
+  to_date?: string;
+}
+
+export function useTimeEntries(query: TimeEntriesQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['timeEntries', query],
+    queryFn: async () => {
+      const res = await api.workforce.listTimeEntries({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listTimeEntries>[0]);
+      if (res.status !== 200) throw new Error('Failed to load time entries');
+      return res.body;
+    },
+  });
+}
+
+export function useCreateTimeEntry() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.workforce.createTimeEntry>[0]['body']) => {
+      const res = await api.workforce.createTimeEntry({ body });
+      if (res.status !== 201) throw new Error('Failed to create time entry');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['timeEntries'] });
+    },
+  });
+}
+
+export function useClockOut() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.workforce.clockOut>[0]['body']>;
+    }) => {
+      const res = await api.workforce.clockOut({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to clock out');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['timeEntries'] });
+    },
+  });
+}
+
+export function useApproveTimeEntry() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.workforce.approveTimeEntry>[0]['body']>;
+    }) => {
+      const res = await api.workforce.approveTimeEntry({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to approve time entry');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['timeEntries'] });
+    },
+  });
+}
+
+// Training Courses
+
+interface CoursesQuery {
+  page?: number;
+  limit?: number;
+  training_type?: string;
+  is_mandatory?: string;
+}
+
+export function useCourses(query: CoursesQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['courses', query],
+    queryFn: async () => {
+      const res = await api.workforce.listCourses({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listCourses>[0]);
+      if (res.status !== 200) throw new Error('Failed to load courses');
+      return res.body;
+    },
+  });
+}
+
+export function useCourse(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['courses', id],
+    queryFn: async () => {
+      const res = await api.workforce.getCourse({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load course');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateCourse() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.workforce.createCourse>[0]['body']) => {
+      const res = await api.workforce.createCourse({ body });
+      if (res.status !== 201) throw new Error('Failed to create course');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['courses'] });
+    },
+  });
+}
+
+// Training Executions
+
+interface TrainingExecutionsQuery {
+  page?: number;
+  limit?: number;
+  employee_id?: string;
+  course_id?: string;
+  status?: string;
+}
+
+export function useTrainingExecutions(query: TrainingExecutionsQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['trainingExecutions', query],
+    queryFn: async () => {
+      const res = await api.workforce.listTrainingExecutions({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listTrainingExecutions>[0]);
+      if (res.status !== 200) throw new Error('Failed to load training executions');
+      return res.body;
+    },
+  });
+}
+
+export function useCreateTrainingExecution() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.workforce.scheduleTraining>[0]['body']) => {
+      const res = await api.workforce.scheduleTraining({ body });
+      if (res.status !== 201) throw new Error('Failed to schedule training');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['trainingExecutions'] });
+    },
+  });
+}
+
+export function useCompleteTrainingExecution() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.workforce.completeTraining>[0]['body']>;
+    }) => {
+      const res = await api.workforce.completeTraining({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to complete training');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['trainingExecutions'] });
+      qc.invalidateQueries({ queryKey: ['certifications'] });
+    },
+  });
+}
+
+// Certifications
+
+interface CertificationsQuery {
+  page?: number;
+  limit?: number;
+  employee_id?: string;
+  course_id?: string;
+  is_active?: string;
+}
+
+export function useCertifications(query: CertificationsQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['certifications', query],
+    queryFn: async () => {
+      const res = await api.workforce.listCertifications({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.workforce.listCertifications>[0]);
+      if (res.status !== 200) throw new Error('Failed to load certifications');
+      return res.body;
+    },
+  });
+}
+
+// ─── ANALYTICS (EXTENDED) ────────────────────────────────────────────────────
+
+export function useTrainingCompliance(
+  query: { period?: string; department?: string; is_mandatory?: string } = {},
+) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['analytics', 'trainingCompliance', query],
+    queryFn: async () => {
+      const res = await api.analytics.getTrainingCompliance({
+        query: query as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.analytics.getTrainingCompliance>[0]);
+      if (res.status !== 200) throw new Error('Failed to load training compliance');
+      return res.body;
+    },
+  });
+}
+
+export function useWorkforceSummary(query: { period?: string } = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['analytics', 'workforceSummary', query],
+    queryFn: async () => {
+      const res = await api.analytics.getWorkforceSummary({ query });
+      if (res.status !== 200) throw new Error('Failed to load workforce summary');
       return res.body;
     },
   });
