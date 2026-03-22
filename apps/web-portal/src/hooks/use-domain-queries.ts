@@ -881,14 +881,408 @@ export function useCloseQualityEvent() {
 
 // ─── FINANCIAL ────────────────────────────────────────────────────────────────
 
-export function useAccounts(query: { page?: number; limit?: number } = {}) {
+interface AccountsQuery {
+  page?: number;
+  limit?: number;
+  account_type?: string;
+  is_active?: string;
+}
+
+export function useAccounts(query: AccountsQuery = {}) {
   const api = useApiClient();
   return useQuery({
     queryKey: ['accounts', query],
     queryFn: async () => {
-      const res = await api.financial.listAccounts({ query: { page: 1, limit: 20, ...query } });
+      const res = await api.financial.listAccounts({
+        query: { page: 1, limit: 100, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.financial.listAccounts>[0]);
       if (res.status !== 200) throw new Error('Failed to load accounts');
       return res.body;
+    },
+  });
+}
+
+export function useAccount(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['accounts', id],
+    queryFn: async () => {
+      const res = await api.financial.getAccount({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load account');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateAccount() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.financial.createAccount>[0]['body']) => {
+      const res = await api.financial.createAccount({ body });
+      if (res.status !== 201) throw new Error('Failed to create account');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['accounts'] });
+    },
+  });
+}
+
+interface JournalEntriesQuery {
+  page?: number;
+  limit?: number;
+  status?: string;
+}
+
+export function useJournalEntries(query: JournalEntriesQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['journalEntries', query],
+    queryFn: async () => {
+      const res = await api.financial.listJournalEntries({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.financial.listJournalEntries>[0]);
+      if (res.status !== 200) throw new Error('Failed to load journal entries');
+      return res.body;
+    },
+  });
+}
+
+export function useJournalEntry(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['journalEntries', id],
+    queryFn: async () => {
+      const res = await api.financial.getJournalEntry({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load journal entry');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateJournalEntry() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.financial.createJournalEntry>[0]['body']) => {
+      const res = await api.financial.createJournalEntry({ body });
+      if (res.status !== 201) throw new Error('Failed to create journal entry');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['journalEntries'] });
+    },
+  });
+}
+
+export function usePostJournalEntry() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.financial.postJournalEntry>[0]['body'];
+    }) => {
+      const res = await api.financial.postJournalEntry({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to post journal entry');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['journalEntries', id] });
+      qc.invalidateQueries({ queryKey: ['journalEntries'] });
+    },
+  });
+}
+
+export function useReverseJournalEntry() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.financial.reverseJournalEntry>[0]['body'];
+    }) => {
+      const res = await api.financial.reverseJournalEntry({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to reverse journal entry');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['journalEntries', id] });
+      qc.invalidateQueries({ queryKey: ['journalEntries'] });
+    },
+  });
+}
+
+export function useLatestBiologicalAssetValuation(batchId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['biologicalAssets', batchId],
+    queryFn: async () => {
+      const res = await api.financial.getLatestBiologicalAssetValuation({ params: { batchId } });
+      if (res.status !== 200) throw new Error('Failed to load valuation');
+      return res.body;
+    },
+    enabled: !!batchId,
+  });
+}
+
+export function useRecordBiologicalAssetValuation() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      body: Parameters<typeof api.financial.recordBiologicalAssetValuation>[0]['body'],
+    ) => {
+      const res = await api.financial.recordBiologicalAssetValuation({ body });
+      if (res.status !== 201) throw new Error('Failed to record valuation');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['biologicalAssets'] });
+    },
+  });
+}
+
+// ─── PROCUREMENT ──────────────────────────────────────────────────────────────
+
+interface SuppliersQuery {
+  page?: number;
+  limit?: number;
+  qualification_status?: string;
+  is_active?: string;
+}
+
+export function useSuppliers(query: SuppliersQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['suppliers', query],
+    queryFn: async () => {
+      const res = await api.procurement.listSuppliers({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.procurement.listSuppliers>[0]);
+      if (res.status !== 200) throw new Error('Failed to load suppliers');
+      return res.body;
+    },
+  });
+}
+
+export function useSupplier(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['suppliers', id],
+    queryFn: async () => {
+      const res = await api.procurement.getSupplier({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load supplier');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateSupplier() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.procurement.createSupplier>[0]['body']) => {
+      const res = await api.procurement.createSupplier({ body });
+      if (res.status !== 201) throw new Error('Failed to create supplier');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['suppliers'] });
+    },
+  });
+}
+
+export function useQualifySupplier() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.qualifySupplier>[0]['body'];
+    }) => {
+      const res = await api.procurement.qualifySupplier({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to qualify supplier');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['suppliers', id] });
+      qc.invalidateQueries({ queryKey: ['suppliers'] });
+    },
+  });
+}
+
+interface PurchaseOrdersQuery {
+  page?: number;
+  limit?: number;
+  status?: string;
+  supplier_id?: string;
+}
+
+export function usePurchaseOrders(query: PurchaseOrdersQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['purchaseOrders', query],
+    queryFn: async () => {
+      const res = await api.procurement.listPurchaseOrders({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.procurement.listPurchaseOrders>[0]);
+      if (res.status !== 200) throw new Error('Failed to load purchase orders');
+      return res.body;
+    },
+  });
+}
+
+export function usePurchaseOrder(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['purchaseOrders', id],
+    queryFn: async () => {
+      const res = await api.procurement.getPurchaseOrder({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load purchase order');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreatePurchaseOrder() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.procurement.createPurchaseOrder>[0]['body']) => {
+      const res = await api.procurement.createPurchaseOrder({ body });
+      if (res.status !== 201) throw new Error('Failed to create purchase order');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
+    },
+  });
+}
+
+export function useSubmitPurchaseOrder() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.submitPurchaseOrder>[0]['body'];
+    }) => {
+      const res = await api.procurement.submitPurchaseOrder({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to submit purchase order');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders', id] });
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
+    },
+  });
+}
+
+export function useAcknowledgePurchaseOrder() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.acknowledgePurchaseOrder>[0]['body'];
+    }) => {
+      const res = await api.procurement.acknowledgePurchaseOrder({
+        params: { id },
+        body,
+      } as Parameters<typeof api.procurement.acknowledgePurchaseOrder>[0]);
+      if (res.status !== 200) throw new Error('Failed to acknowledge purchase order');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders', id] });
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
+    },
+  });
+}
+
+export function useReceiveGoods() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.receiveGoods>[0]['body'];
+    }) => {
+      const res = await api.procurement.receiveGoods({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to receive goods');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders', id] });
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
+    },
+  });
+}
+
+export function useClosePurchaseOrder() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.closePurchaseOrder>[0]['body'];
+    }) => {
+      const res = await api.procurement.closePurchaseOrder({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to close purchase order');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders', id] });
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
+    },
+  });
+}
+
+export function useCancelPurchaseOrder() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.procurement.cancelPurchaseOrder>[0]['body'];
+    }) => {
+      const res = await api.procurement.cancelPurchaseOrder({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to cancel purchase order');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['purchaseOrders', id] });
+      qc.invalidateQueries({ queryKey: ['purchaseOrders'] });
     },
   });
 }
@@ -921,14 +1315,116 @@ export function useTasks(query: { page?: number; limit?: number } = {}) {
 
 // ─── SPATIAL ──────────────────────────────────────────────────────────────────
 
-export function useZones(query: { page?: number; limit?: number } = {}) {
+interface ZonesQuery {
+  page?: number;
+  limit?: number;
+  zone_type?: string;
+  is_active?: string;
+}
+
+export function useZones(query: ZonesQuery = {}) {
   const api = useApiClient();
   return useQuery({
     queryKey: ['zones', query],
     queryFn: async () => {
-      const res = await api.spatial.listZones({ query: { page: 1, limit: 20, ...query } });
+      const res = await api.spatial.listZones({
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.spatial.listZones>[0]);
       if (res.status !== 200) throw new Error('Failed to load zones');
       return res.body;
+    },
+  });
+}
+
+export function useZone(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', id],
+    queryFn: async () => {
+      const res = await api.spatial.getZone({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load zone');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateZone() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.spatial.createZone>[0]['body']) => {
+      const res = await api.spatial.createZone({ body });
+      if (res.status !== 201) throw new Error('Failed to create zone');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['zones'] });
+    },
+  });
+}
+
+export function useActiveAssignments(zoneId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', zoneId, 'assignments'],
+    queryFn: async () => {
+      const res = await api.spatial.listActiveAssignments({
+        params: { zoneId },
+        query: { page: 1, limit: 100 },
+      });
+      if (res.status !== 200) throw new Error('Failed to load assignments');
+      return res.body;
+    },
+    enabled: !!zoneId,
+  });
+}
+
+export function useAssignBatchToZone() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.spatial.assignBatchToZone>[0]['body']) => {
+      const res = await api.spatial.assignBatchToZone({ body });
+      if (res.status !== 201) throw new Error('Failed to assign batch');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['zones'] });
+    },
+  });
+}
+
+export function useBatchAssignment(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', 'assignments', id],
+    queryFn: async () => {
+      const res = await api.spatial.getBatchAssignment({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load assignment');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useReleaseBatchFromZone() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.spatial.releaseBatchFromZone>[0]['body'];
+    }) => {
+      const res = await api.spatial.releaseBatchFromZone({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to release batch');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['zones'] });
     },
   });
 }

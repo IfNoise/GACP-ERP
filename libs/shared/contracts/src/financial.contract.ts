@@ -153,6 +153,18 @@ export const financialContract = c.router({
     summary: 'Get a journal entry by ID',
   },
 
+  listJournalEntries: {
+    method: 'GET',
+    path: '/financial/journal-entries',
+    query: PaginationQuerySchema.extend({
+      status: z.enum(['DRAFT', 'POSTED', 'REVERSED']).optional(),
+    }),
+    responses: {
+      200: paginatedList(JournalEntrySchema),
+    },
+    summary: 'List journal entries',
+  },
+
   // ── Biological Asset Valuations (IAS 41) ─────────────────────────────────
 
   recordBiologicalAssetValuation: {
