@@ -20,7 +20,9 @@
       "@gacp-erp/shared-contracts": ["libs/shared/contracts/src/index.ts"],
       "@gacp-erp/shared-contracts/*": ["libs/shared/contracts/src/*"],
       "@gacp-erp/shared-events": ["libs/shared/events/src/index.ts"],
-      "@gacp-erp/shared-events/*": ["libs/shared/events/src/*"]
+      "@gacp-erp/shared-events/*": ["libs/shared/events/src/*"],
+      "@gacp-erp/ui-components": ["libs/ui-components/src/index.ts"],
+      "@gacp-erp/ui-components/*": ["libs/ui-components/src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],

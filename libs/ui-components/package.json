@@ -13,6 +13,32 @@
     "react": "^19.0.0"
   },
   "peerDependencies": {
-    "react": "^19.0.0"
+    "react": "^19.0.0",
+    "@tanstack/react-table": "^8.0.0",
+    "react-hook-form": "^7.0.0",
+    "@hookform/resolvers": "^3.0.0",
+    "zod": "^3.23.0",
+    "date-fns": "^4.0.0",
+    "react-day-picker": "^9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "react-hook-form": {
+      "optional": true
+    },
+    "@hookform/resolvers": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    },
+    "date-fns": {
+      "optional": true
+    },
+    "react-day-picker": {
+      "optional": true
+    }
   }
 }
