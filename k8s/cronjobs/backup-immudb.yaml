@@ -1,0 +1,91 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-immudb
+  namespace: gacp-data
+  labels:
+    app.kubernetes.io/name: backup-immudb
+    app.kubernetes.io/part-of: gacp-erp
+    app.kubernetes.io/component: backup
+spec:
+  schedule: '0 3 * * *' # Daily at 03:00 UTC (after PostgreSQL backup at 02:00)
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: backup-immudb
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: backup-sa
+          containers:
+            - name: backup
+              image: codenotary/immudb:1.9
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+
+                  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+                  BACKUP_DIR="/tmp/immudb-backup-${TIMESTAMP}"
+                  BUCKET="gacp-erp-backups"
+                  PREFIX="immudb/${TIMESTAMP}"
+
+                  echo "[$(date -Iseconds)] Starting ImmuDB backup..."
+
+                  # Login to ImmuDB
+                  immuadmin login immudb --tokenfile /tmp/token
+                  immuadmin set-activedb --name defaultdb
+
+                  # Create backup
+                  mkdir -p "${BACKUP_DIR}"
+                  immuadmin backup --output "${BACKUP_DIR}/backup.tar.gz"
+
+                  echo "[$(date -Iseconds)] Backup created: $(du -sh ${BACKUP_DIR}/backup.tar.gz)"
+
+                  # Upload to MinIO
+                  mc alias set minio http://minio.gacp-data:9000 "${MINIO_ACCESS_KEY}" "${MINIO_SECRET_KEY}"
+                  mc cp "${BACKUP_DIR}/backup.tar.gz" "minio/${BUCKET}/${PREFIX}/backup.tar.gz"
+
+                  # Verify upload
+                  mc stat "minio/${BUCKET}/${PREFIX}/backup.tar.gz"
+
+                  echo "[$(date -Iseconds)] ImmuDB backup uploaded to s3://${BUCKET}/${PREFIX}/"
+
+                  # Cleanup old backups (retain 30 days)
+                  mc rm --recursive --force --older-than 30d "minio/${BUCKET}/immudb/" || true
+
+                  echo "[$(date -Iseconds)] ImmuDB backup complete."
+              env:
+                - name: IMMUDB_ADDRESS
+                  value: immudb.gacp-data:3322
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: ACCESS_KEY_ID
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: SECRET_ACCESS_KEY
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir:
+                sizeLimit: 2Gi

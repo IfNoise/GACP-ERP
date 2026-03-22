@@ -1,0 +1,89 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-archive
+  namespace: gacp-data
+  labels:
+    app.kubernetes.io/name: backup-archive
+    app.kubernetes.io/part-of: gacp-erp
+    app.kubernetes.io/component: backup
+  annotations:
+    description: |
+      Monthly job: copies all daily backups from the current month
+      to a long-term cold storage tier. Regulatory retention: 7 years
+      (21 CFR Part 11, EU GMP Annex 11 §7.1).
+spec:
+  schedule: '0 6 1 * *' # First day of month at 06:00 UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 14400 # 4 hours
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: backup-archive
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: backup-sa
+          containers:
+            - name: archive
+              image: minio/mc:RELEASE.2024-07-31T15-58-33Z
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+
+                  MONTH=$(date -d "yesterday" +%Y-%m)
+                  BUCKET_HOT="gacp-erp-backups"
+                  BUCKET_COLD="gacp-erp-archive"
+
+                  echo "[$(date -Iseconds)] Starting monthly archive for ${MONTH}..."
+
+                  mc alias set minio http://minio.gacp-data:9000 "${MINIO_ACCESS_KEY}" "${MINIO_SECRET_KEY}"
+
+                  # Ensure cold bucket exists with lifecycle policy
+                  mc mb --ignore-existing "minio/${BUCKET_COLD}"
+
+                  # Copy PostgreSQL backups
+                  echo "[$(date -Iseconds)] Archiving PostgreSQL backups..."
+                  mc cp --recursive "minio/${BUCKET_HOT}/postgres/${MONTH}*" "minio/${BUCKET_COLD}/postgres/" || echo "No postgres backups found for ${MONTH}"
+
+                  # Copy ImmuDB backups
+                  echo "[$(date -Iseconds)] Archiving ImmuDB backups..."
+                  mc cp --recursive "minio/${BUCKET_HOT}/immudb/${MONTH}*" "minio/${BUCKET_COLD}/immudb/" || echo "No ImmuDB backups found for ${MONTH}"
+
+                  # Copy MongoDB backups
+                  echo "[$(date -Iseconds)] Archiving MongoDB backups..."
+                  mc cp --recursive "minio/${BUCKET_HOT}/mongodb/${MONTH}*" "minio/${BUCKET_COLD}/mongodb/" || echo "No MongoDB backups found for ${MONTH}"
+
+                  # Copy WORM audit data
+                  echo "[$(date -Iseconds)] Archiving WORM audit data..."
+                  mc cp --recursive "minio/gacp-erp-audit-worm/${MONTH}*" "minio/${BUCKET_COLD}/audit-worm/" || echo "No WORM data found for ${MONTH}"
+
+                  # Summary
+                  echo "[$(date -Iseconds)] Archive summary:"
+                  mc du "minio/${BUCKET_COLD}/" || true
+
+                  echo "[$(date -Iseconds)] Monthly archive complete."
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: ACCESS_KEY_ID
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: SECRET_ACCESS_KEY
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
