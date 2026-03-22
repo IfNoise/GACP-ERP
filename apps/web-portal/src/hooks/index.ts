@@ -112,4 +112,7 @@ export {
   useKpis,
   useTrainingCompliance,
   useWorkforceSummary,
+  // IoT
+  useZoneReadings,
+  useIotAlerts,
 } from './use-domain-queries';

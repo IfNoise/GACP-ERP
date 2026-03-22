@@ -1852,3 +1852,34 @@ export function useKpis(query: { period?: string; category?: KpiCategory } = {})
     },
   });
 }
+
+// ─── IOT ──────────────────────────────────────────────────────────────────────
+
+export function useZoneReadings(zoneId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['iot', 'readings', zoneId],
+    queryFn: async () => {
+      const res = await api.iot.getZoneReadings({ params: { zoneId } });
+      if (res.status !== 200) throw new Error('Failed to load zone readings');
+      return res.body;
+    },
+    enabled: !!zoneId,
+    refetchInterval: 30_000,
+  });
+}
+
+export function useIotAlerts(query: { zone_id?: string; acknowledged?: string } = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['iot', 'alerts', query],
+    queryFn: async () => {
+      const res = await api.iot.listAlerts({
+        query: { page: 1, limit: 50, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.iot.listAlerts>[0]);
+      if (res.status !== 200) throw new Error('Failed to load IoT alerts');
+      return res.body;
+    },
+    refetchInterval: 15_000,
+  });
+}

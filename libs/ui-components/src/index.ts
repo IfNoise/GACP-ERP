@@ -22,3 +22,14 @@ export type { KPICardProps } from './kpi-card';
 export type { DateRangePickerProps } from './date-range-picker';
 export type { EntityOption, EntitySearchProps } from './entity-search';
 export type { ConfirmDialogProps } from './confirm-dialog';
+
+// XeoKit 3D Visualization
+export { FacilityViewer, ZoneHighlighter, SensorOverlay } from './xeokit';
+export type {
+  FacilityViewerProps,
+  FacilityViewerHandle,
+  ZoneEntity,
+  SensorReading,
+  ZoneHighlighterProps,
+  SensorOverlayProps,
+} from './xeokit';
