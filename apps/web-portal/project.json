@@ -46,6 +46,13 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/web-portal"],
       "options": { "jestConfig": "apps/web-portal/jest.config.ts", "passWithNoTests": true }
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx playwright test --config=playwright.config.ts",
+        "cwd": "apps/web-portal"
+      }
     }
   }
 }

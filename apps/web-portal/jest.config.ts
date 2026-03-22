@@ -7,14 +7,17 @@ const { compilerOptions } = require('../../tsconfig.base.json') as {
 export default {
   displayName: 'web-portal',
   preset: '../../jest.preset.js',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  moduleNameMapper:
-    pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(compilerOptions.paths, {
       prefix: '<rootDir>/../../',
-    }) ?? {},
+    }),
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+  },
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/apps/web-portal',
 };
