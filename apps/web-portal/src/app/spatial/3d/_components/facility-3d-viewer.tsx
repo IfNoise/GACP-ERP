@@ -3,19 +3,14 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useZones, useZoneReadings, useIotAlerts } from '@/hooks';
-import {
-  FacilityViewer,
-  ZoneHighlighter,
-  SensorOverlay,
-  StatusBadge,
-  KPICard,
-} from '@gacp-erp/ui-components';
+import { FacilityViewer, ZoneHighlighter, SensorOverlay } from '@gacp-erp/ui-components/xeokit';
+import { StatusBadge, KPICard } from '@gacp-erp/ui-components';
 import type {
   FacilityViewerHandle,
   ZoneEntity,
   SensorReading,
-  StatusVariant,
-} from '@gacp-erp/ui-components';
+} from '@gacp-erp/ui-components/xeokit';
+import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const ZONE_TYPE_VARIANT: Record<string, StatusVariant> = {
   CULTIVATION: 'active',

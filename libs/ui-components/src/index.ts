@@ -23,8 +23,8 @@ export type { DateRangePickerProps } from './date-range-picker';
 export type { EntityOption, EntitySearchProps } from './entity-search';
 export type { ConfirmDialogProps } from './confirm-dialog';
 
-// XeoKit 3D Visualization
-export { FacilityViewer, ZoneHighlighter, SensorOverlay } from './xeokit';
+// XeoKit 3D Visualization — import directly from '@gacp-erp/ui-components/xeokit'
+// to avoid pulling Node-only dependencies into unrelated pages.
 export type {
   FacilityViewerProps,
   FacilityViewerHandle,
