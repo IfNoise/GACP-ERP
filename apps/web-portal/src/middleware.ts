@@ -9,7 +9,6 @@ import type { SystemRole } from '@gacp-erp/shared-schemas';
 const ROLE_PROTECTED_ROUTES: Array<{ prefix: string; roles: SystemRole[] }> = [
   { prefix: '/admin', roles: ['SUPER_ADMIN'] },
   { prefix: '/quality', roles: ['SUPER_ADMIN', 'QUALITY_MANAGER'] },
-  { prefix: '/capa', roles: ['SUPER_ADMIN', 'QUALITY_MANAGER'] },
   { prefix: '/audit', roles: ['SUPER_ADMIN', 'QUALITY_MANAGER', 'AUDITOR'] },
   {
     prefix: '/batches',

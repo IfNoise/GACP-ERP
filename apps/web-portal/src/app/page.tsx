@@ -1,7 +1,5 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
-import { LogoutButton } from '@/components/auth/logout-button';
 
 interface BatchItem {
   status: string;
@@ -47,53 +45,39 @@ export default async function DashboardPage() {
   const stats = await fetchDashboardStats();
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-7xl">
-        <header className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">GACP-ERP Dashboard</h1>
-            <p className="mt-2 text-gray-600">
-              Welcome, {session.user?.name ?? session.user?.email}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {(session.roles ?? []).map((role) => (
-                <Badge key={role} variant="success">
-                  {role}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          <LogoutButton />
-        </header>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <DashboardCard
-            title="Active Batches"
-            value={String(stats.activeBatches)}
-            description="Cannabis batches in cultivation"
-            href="/batches"
-          />
-          <DashboardCard
-            title="Total Plants"
-            value={String(stats.totalPlants)}
-            description="Plants across all active batches"
-            href="/plants"
-          />
-          <DashboardCard
-            title="Pending QC"
-            value="—"
-            description="Harvests awaiting quality review"
-            href="/quality"
-          />
-          <DashboardCard
-            title="Open Deviations"
-            value="—"
-            description="Unresolved CAPA items"
-            href="/capa"
-          />
-        </div>
+    <div className="mx-auto max-w-7xl">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p className="mt-1 text-sm text-gray-500">Overview of your GACP-ERP operations</p>
       </div>
-    </main>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <DashboardCard
+          title="Active Batches"
+          value={String(stats.activeBatches)}
+          description="Cannabis batches in cultivation"
+          href="/batches"
+        />
+        <DashboardCard
+          title="Total Plants"
+          value={String(stats.totalPlants)}
+          description="Plants across all active batches"
+          href="/plants"
+        />
+        <DashboardCard
+          title="Pending QC"
+          value="—"
+          description="Harvests awaiting quality review"
+          href="/quality/change-controls"
+        />
+        <DashboardCard
+          title="Open Deviations"
+          value="—"
+          description="Unresolved CAPA items"
+          href="/quality/capas"
+        />
+      </div>
+    </div>
   );
 }
 
