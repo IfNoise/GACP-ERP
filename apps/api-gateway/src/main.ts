@@ -20,28 +20,43 @@ async function bootstrap(): Promise<void> {
     { logger },
   );
 
-  // Security headers
+  // Security headers (CSP managed separately — Helmet writes to reply.raw, not Fastify API)
   await app.register(fastifyHelmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:'],
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'"],
-        objectSrc: ["'none'"],
-        frameAncestors: ["'none'"],
-        baseUri: ["'self'"],
-        formAction: ["'self'"],
-      },
-    },
+    contentSecurityPolicy: false,
     hsts: {
       maxAge: 31_536_000, // 1 year
       includeSubDomains: true,
       preload: true,
     },
   });
+
+  // CSP: strict for all routes except /api/docs (which sets its own in DocsController)
+  const fastify = app.getHttpAdapter().getInstance();
+  const defaultCsp = [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self'",
+    "img-src 'self' data:",
+    "connect-src 'self'",
+    "font-src 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join('; ');
+  fastify.addHook(
+    'onRequest',
+    (
+      _request: { url: string },
+      reply: { header(h: string, v: string): void },
+      done: () => void,
+    ) => {
+      if (!_request.url.startsWith('/api/docs')) {
+        reply.header('content-security-policy', defaultCsp);
+      }
+      done();
+    },
+  );
 
   // CORS — allow web-portal origin
   app.enableCors({

@@ -1,5 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
+import { randomBytes } from 'node:crypto';
 import { generateOpenApi } from '@ts-rest/open-api';
 import { initContract } from '@ts-rest/core';
 import {
@@ -53,7 +54,7 @@ export class DocsController {
     if (process.env['NODE_ENV'] === 'production') {
       return reply.status(404).send({ message: 'Not available in production' });
     }
-    return getOpenApiSpec();
+    return reply.send(getOpenApiSpec());
   }
 
   @Get()
@@ -61,6 +62,8 @@ export class DocsController {
     if (process.env['NODE_ENV'] === 'production') {
       return reply.status(404).send({ message: 'Not available in production' });
     }
+
+    const nonce = randomBytes(16).toString('base64');
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -72,11 +75,25 @@ export class DocsController {
 <body>
   <div id="swagger-ui"></div>
   <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
-  <script>
+  <script nonce="${nonce}">
     SwaggerUIBundle({ url: '/api/docs/openapi.json', dom_id: '#swagger-ui' });
   </script>
 </body>
 </html>`;
-    return reply.type('text/html').send(html);
+
+    const csp = [
+      "default-src 'self'",
+      `script-src 'self' https://cdn.jsdelivr.net 'nonce-${nonce}'`,
+      "style-src 'self' https://cdn.jsdelivr.net",
+      "connect-src 'self' https://cdn.jsdelivr.net",
+      "img-src 'self' data:",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+    ].join('; ');
+
+    return reply
+      .header('content-security-policy', csp)
+      .type('text/html')
+      .send(html);
   }
 }
