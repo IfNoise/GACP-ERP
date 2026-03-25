@@ -51,3 +51,6 @@ temp/
 # Docker volumes (local)
 docker/volumes/
 docker/data/
+
+# RSA keys for e-signatures (never commit)
+certs/
