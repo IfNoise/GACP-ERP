@@ -24,8 +24,10 @@ import {
   type ReceiveGoods,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import type { SupplierRepository, SupplierFilters } from './supplier.repository';
-import type { ProcurementRepository, POFilters } from './procurement.repository';
+import { type SupplierRepository } from './supplier.repository';
+import type { SupplierFilters } from './supplier.repository';
+import { type ProcurementRepository } from './procurement.repository';
+import type { POFilters } from './procurement.repository';
 import { type CreateSupplierUseCase } from './use-cases/create-supplier.use-case';
 import { type ProcurementWorkflowUseCase } from './use-cases/procurement-workflow.use-case';
 

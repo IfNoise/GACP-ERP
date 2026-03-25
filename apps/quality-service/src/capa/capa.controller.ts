@@ -26,7 +26,8 @@ import {
   type CloseCapaDto,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import type { CapaRepository, CapaFilters } from './capa.repository';
+import { type CapaRepository } from './capa.repository';
+import type { CapaFilters } from './capa.repository';
 import { type CapaWorkflowUseCase } from './use-cases/capa-workflow.use-case';
 
 const ListQuerySchema = PaginationQuerySchema.extend({

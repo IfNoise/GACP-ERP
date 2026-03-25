@@ -24,8 +24,9 @@ import {
   type CloseQualityEvent,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import type { QualityEventRepository, QualityEventFilters } from './quality-event.repository';
-import type { QualityEventWorkflowUseCase } from './use-cases/quality-event-workflow.use-case';
+import { type QualityEventRepository } from './quality-event.repository';
+import type { QualityEventFilters } from './quality-event.repository';
+import { type QualityEventWorkflowUseCase } from './use-cases/quality-event-workflow.use-case';
 
 const ListQuerySchema = PaginationQuerySchema.extend({
   status: QualityEventStatusEnum.optional(),

@@ -21,7 +21,8 @@ import {
   type ReleaseBatchFromZone,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import type { SpatialRepository, ZoneFilters } from './spatial.repository';
+import { type SpatialRepository } from './spatial.repository';
+import type { ZoneFilters } from './spatial.repository';
 import { type SpatialPlanningUseCase } from './use-cases/spatial-planning.use-case';
 
 const ZoneListQuerySchema = PaginationQuerySchema.extend({

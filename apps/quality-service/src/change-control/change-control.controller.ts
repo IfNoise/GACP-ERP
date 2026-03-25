@@ -27,7 +27,8 @@ import {
   type CloseChangeControl,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import type { ChangeControlRepository, ChangeControlFilters } from './change-control.repository';
+import { type ChangeControlRepository } from './change-control.repository';
+import type { ChangeControlFilters } from './change-control.repository';
 import { type CreateChangeControlUseCase } from './use-cases/create-change-control.use-case';
 import { type ChangeControlWorkflowUseCase } from './use-cases/change-control-workflow.use-case';
 import { type AssessImpactUseCase } from './use-cases/assess-impact.use-case';
