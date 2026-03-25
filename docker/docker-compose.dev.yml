@@ -11,12 +11,6 @@ services:
     ports:
       - '5432:5432'
 
-  kafka:
-    environment:
-      # Lower retention for dev
-      KAFKA_LOG_RETENTION_HOURS: 24
-      KAFKA_LOG_RETENTION_BYTES: 536870912
-
   # Kafka UI for development visibility
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
