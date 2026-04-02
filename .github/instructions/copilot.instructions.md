@@ -1,8 +1,8 @@
 # GACP-ERP Copilot Development Instructions
 
-> **Critical Reference Document for all GACP-ERP Development**  
-> Date: September 15, 2025  
-> Version: 1.0  
+> **Critical Reference Document for all GACP-ERP Development**
+> Date: April 2, 2026
+> Version: 2.0
 > Purpose: Comprehensive guidance for GitHub Copilot on GACP-ERP system development
 
 ## 🎯 PROJECT OVERVIEW
@@ -31,16 +31,21 @@ Before starting ANY development task, Copilot MUST:
 # Project Structure & Build System
 Monorepo: NX Workspace (TypeScript-first, multi-language support)
 Frontend: Next.js 15+ App Router (TypeScript)
-Backend: NestJS 10+ (TypeScript)
-Shared Libraries: NX libraries for common code
+Backend: NestJS 10+ with Fastify (TypeScript)
+ORM: Drizzle ORM (PostgreSQL)
+Validation: Zod schemas (runtime + type inference)
+API Contracts: ts-rest (type-safe REST)
+Event Bus: Kafka (KRaft mode, no ZooKeeper)
+Shared Libraries: NX libraries for common code (@gacp-erp/*)
 Build System: NX targets and dependency graph
+Package Manager: pnpm (>=10), Node >=22
 
 # Observability & Monitoring (CRITICAL - Medical Cannabis Compliance)
 Metrics:
   - VictoriaMetrics Cluster (Application Metrics)
   - VictoriaMetrics IoT Cluster (Environmental Data)
-Tracing: Tempo (Distributed Tracing)
-Logging: Loki (Centralized Logging)
+Tracing: OpenTelemetry SDK → Jaeger (dev)
+Logging: nestjs-pino + pino-loki → Loki (centralized)
 APM: OpenTelemetry (Full Instrumentation)
 
 # IoT & Environmental Monitoring
@@ -48,10 +53,18 @@ MQTT: EMQX (Message Broker)
 Data Collection: Telegraf (IoT Metrics Collection)
 Environmental: Separate monitoring stack for grow environment
 
+# Data Layer
+Primary DB: PostgreSQL (PostGIS)
+Immutable Audit: ImmuDB (via Go audit-consumer)
+Cache: Redis
+Documents: MongoDB
+WORM Storage: MinIO
+
 # Infrastructure
 Containerization: Docker
 Orchestration: Kubernetes
 Service Mesh: Istio (with mTLS)
+Auth: Keycloak 23 (JWT + RBAC)
 ```
 
 ### Separation of Concerns (CRITICAL)
@@ -167,50 +180,78 @@ MANDATORY SEQUENCE:
 
 ### Observability (MANDATORY)
 
-```go
-// REQUIRED: Every service must include
-import (
-    "go.opentelemetry.io/otel"
-    "go.opentelemetry.io/otel/trace"
-    "go.opentelemetry.io/otel/metric"
-)
+```typescript
+// REQUIRED: Every service bootstrap (apps/<service>/src/main.ts)
+import { Logger } from 'nestjs-pino';
+import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
-// REQUIRED: Compliance context in all operations
-type ComplianceContext struct {
-    UserID       string    `json:"user_id"`
-    Timestamp    time.Time `json:"timestamp"`
-    Operation    string    `json:"operation"`
-    AuditTrail   bool      `json:"audit_trail"`
-    Regulation   string    `json:"regulation"` // FDA, EU_GMP, GACP
-}
+const app = await NestFactory.create<NestFastifyApplication>(
+  AppModule,
+  new FastifyAdapter(),
+  { bufferLogs: true },
+);
+app.useLogger(app.get(Logger));
+
+// REQUIRED: Logger config via shared-config
+// See: libs/shared/config/src/logging/pino-logger.config.ts
+// AppModule imports: LoggerModule.forRoot(createLoggerOptions('service-name'))
+
+// REQUIRED: Service-level logger in any @Injectable() class
+private readonly logger = new Logger(MyService.name);
+
+// Trace correlation (trace_id / span_id) is automatic via pino mixin
+// Redacted by default: req.headers.authorization, req.headers.cookie
 ```
 
 ### Error Handling (REGULATORY CRITICAL)
 
-```go
-// REQUIRED: All errors must be traceable
-type ComplianceError struct {
-    Code        string    `json:"code"`
-    Message     string    `json:"message"`
-    Timestamp   time.Time `json:"timestamp"`
-    UserID      string    `json:"user_id"`
-    Regulation  string    `json:"regulation"`
-    Severity    string    `json:"severity"`
-    AuditRef    string    `json:"audit_ref"`
+```typescript
+// REQUIRED: Domain errors extend DomainError
+// See: libs/shared/schemas/src/common/result.schema.ts
+import { DomainError, Result, ok, err } from '@gacp-erp/shared-schemas';
+
+export class InvalidTransitionError extends DomainError {
+  readonly code = 'INVALID_TRANSITION';
+  readonly statusCode = 422;
+  constructor(from: string, to: string) {
+    super(`Cannot transition from ${from} to ${to}`);
+  }
 }
+
+// REQUIRED: Return Result<T, E> from domain logic, not exceptions
+function transition(toStage: GrowthStage): Result<StageRecord, InvalidTransitionError> {
+  if (!ALLOWED_TRANSITIONS[currentStage]?.includes(toStage)) {
+    return err(new InvalidTransitionError(currentStage, toStage));
+  }
+  return ok({ stage: toStage, transitionedAt: new Date().toISOString() });
+}
+
+// Use NestJS exceptions only in controllers/use-cases for HTTP responses
 ```
 
 ### Data Validation (ALCOA+ COMPLIANCE)
 
-```go
-// REQUIRED: All data operations must validate ALCOA+ principles
-func ValidateALCOAPlus(data interface{}) error {
-    // Attributable: Clear data ownership
-    // Legible: Human readable
-    // Contemporaneous: Real-time capture
-    // Original: Source data integrity
-    // Accurate: Correct and complete
-}
+```typescript
+// ALCOA+ principles enforced structurally via Zod schemas:
+// See: libs/shared/schemas/src/common/base-entity.schema.ts
+import { BaseEntitySchema, SoftDeletableSchema } from '@gacp-erp/shared-schemas';
+
+// Attributable: created_by, updated_by (UserIdSchema branded type)
+// Contemporaneous: created_at, updated_at (ISO 8601 UTC with offset)
+// Original: SoftDeletableSchema prevents hard-delete (21 CFR Part 11 §11.10(e))
+
+// REQUIRED: All domain entities extend these base schemas
+export const QualityRecordSchema = SoftDeletableSchema.extend({
+  record_type: z.enum(['deviation', 'capa', 'change_control']),
+  status: z.enum(['open', 'in_review', 'approved', 'closed']),
+  // ... domain-specific fields
+});
+
+// REQUIRED: Branded IDs for type-safe entity references
+// See: libs/shared/schemas/src/common/branded-ids.ts
+export const SampleIdSchema = z.string().uuid().brand<'SampleId'>();
+export type SampleId = z.infer<typeof SampleIdSchema>;
 ```
 
 ## 🛡️ SECURITY REQUIREMENTS
@@ -262,10 +303,12 @@ Environmental Metrics:
   - irrigation_flow_rates
 ```
 
-### Distributed Tracing (Tempo)
+### Distributed Tracing (Jaeger / OpenTelemetry)
 
 - **Scope**: All service-to-service communication
-- **Context**: Compliance context propagation
+- **Context**: Compliance context propagation via OTel trace_id/span_id
+- **Stack**: OpenTelemetry SDK instrumentation → Jaeger (dev environment)
+- **Correlation**: Automatic trace_id/span_id injection in pino logs via createLoggerOptions() mixin
 - **Retention**: Regulatory requirements (minimum 3 years)
 
 ## 🧪 TESTING REQUIREMENTS
@@ -388,5 +431,5 @@ When encountering:
 
 **Remember**: This is a medical cannabis system where patient safety and regulatory compliance are paramount. Every line of code should reflect this responsibility.
 
-_Last Updated: September 15, 2025_  
-_Next Review: December 15, 2025_
+_Last Updated: April 2, 2026_
+_Next Review: July 2, 2026_
