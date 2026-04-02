@@ -54,3 +54,7 @@ docker/data/
 
 # RSA keys for e-signatures (never commit)
 certs/
+
+.nx/polygraph
+.claude/worktrees
+.claude/settings.local.json
