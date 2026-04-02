@@ -83,7 +83,10 @@ export class EmployeeRepository {
   async create(
     data: {
       employee_number: string;
-      user_id: UserId;
+      user_id: string;
+      first_name: string;
+      last_name: string;
+      email: string;
       position: string;
       department: string;
       hire_date: string;
@@ -98,9 +101,9 @@ export class EmployeeRepository {
       .values({
         employee_number: data.employee_number,
         user_id: data.user_id,
-        first_name: data.position.split(' ')[0] ?? data.position,
-        last_name: data.position.split(' ')[1] ?? '-',
-        email: `${data.employee_number.toLowerCase()}@internal`,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
         role: data.position,
         job_title: data.position,
         department: data.department,
@@ -124,11 +127,23 @@ export class EmployeeRepository {
     return this.mapRow(rows[0]);
   }
 
+  async findByEmail(email: string): Promise<Employee | null> {
+    const rows = await this.db
+      .select()
+      .from(employeesTable)
+      .where(eq(employeesTable.email, email))
+      .limit(1);
+    return rows[0] ? this.mapRow(rows[0]) : null;
+  }
+
   private mapRow(row: typeof employeesTable.$inferSelect): Employee {
     return {
       id: row.id,
       employee_number: row.employee_number,
       user_id: (row.user_id ?? '') as UserId,
+      first_name: row.first_name,
+      last_name: row.last_name,
+      email: row.email,
       position: row.job_title,
       department: row.department,
       hire_date: row.hire_date,

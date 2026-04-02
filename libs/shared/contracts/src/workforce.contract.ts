@@ -6,6 +6,7 @@ import {
   PaginationQuerySchema,
   EmployeeSchema,
   CreateEmployeeSchema,
+  EmployeeProvisionedResponseSchema,
   TaskSchema,
   CreateTaskSchema,
   MobileTaskSchema,
@@ -46,11 +47,12 @@ export const workforceContract = c.router({
     path: '/workforce/employees',
     body: CreateEmployeeSchema,
     responses: {
-      201: EmployeeSchema,
+      201: EmployeeProvisionedResponseSchema,
       400: ApiErrorSchema,
       409: ApiErrorSchema,
+      500: ApiErrorSchema,
     },
-    summary: 'Create an employee record',
+    summary: 'Provision a new employee with Keycloak user account',
   },
 
   listEmployees: {

@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { BaseEntitySchema } from '../common/base-entity.schema';
 import { UserIdSchema } from '../common/branded-ids';
+import { SystemRoleEnum } from '../auth/auth.schema';
 
 // ─── TASK PRIORITY ────────────────────────────────────────────────────────────
 export const TaskPriorityEnum = z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']);
@@ -25,8 +26,11 @@ export const EmployeeSchema = BaseEntitySchema.extend({
   employee_number: z.string().regex(/^EMP-\d{6}$/, {
     message: 'employee_number must match EMP-NNNNNN',
   }),
-  /** FK → Keycloak user / users table */
+  /** FK → users table (auto-generated during provisioning) */
   user_id: UserIdSchema,
+  first_name: z.string().min(1).max(100),
+  last_name: z.string().min(1).max(100),
+  email: z.string().email(),
   position: z.string().min(2).max(255),
   department: z.string().min(2).max(100),
   /** ISO 8601 date string */
@@ -37,15 +41,41 @@ export const EmployeeSchema = BaseEntitySchema.extend({
 });
 export type Employee = z.infer<typeof EmployeeSchema>;
 
-// ─── CREATE EMPLOYEE ──────────────────────────────────────────────────────────
-export const CreateEmployeeSchema = EmployeeSchema.omit({
-  id: true,
-  created_at: true,
-  updated_at: true,
-  created_by: true,
-  updated_by: true,
+// ─── CREATE EMPLOYEE (provisioning DTO from HR) ─────────────────────────────
+export const CreateEmployeeSchema = z.object({
+  first_name: z.string().min(1).max(100),
+  last_name: z.string().min(1).max(100),
+  email: z.string().email(),
+  /** Keycloak realm role to assign */
+  system_role: SystemRoleEnum,
+  position: z.string().min(2).max(255),
+  department: z.string().min(2).max(100),
+  /** ISO 8601 date string */
+  hire_date: z.string().date(),
+  /** Override auto-generated employee number */
+  employee_number: z
+    .string()
+    .regex(/^EMP-\d{6}$/, {
+      message: 'employee_number must match EMP-NNNNNN',
+    })
+    .optional(),
+  /** FK → competency_profiles.id */
+  competency_profile_id: z.string().uuid().nullable().optional(),
+  is_active: z.boolean().default(true),
 });
 export type CreateEmployee = z.infer<typeof CreateEmployeeSchema>;
+
+// ─── EMPLOYEE PROVISIONED RESPONSE ──────────────────────────────────────────
+/** Returned only from POST /workforce/employees — includes temporary credentials */
+export const EmployeeProvisionedResponseSchema = EmployeeSchema.extend({
+  /** Temporary password for first login (must be changed) */
+  temporary_password: z.string(),
+  /** Assigned Keycloak realm role */
+  system_role: SystemRoleEnum,
+  /** Generated username for Keycloak login */
+  username: z.string(),
+});
+export type EmployeeProvisionedResponse = z.infer<typeof EmployeeProvisionedResponseSchema>;
 
 // ─── TASK ─────────────────────────────────────────────────────────────────────
 /**

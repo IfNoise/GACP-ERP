@@ -40,6 +40,10 @@ export type AuditEventId = z.infer<typeof AuditEventIdSchema>;
 export const SignatureIdSchema = z.string().uuid().brand<'SignatureId'>();
 export type SignatureId = z.infer<typeof SignatureIdSchema>;
 
+/** UUID v4 branded as EmployeeId */
+export const EmployeeIdSchema = z.string().uuid().brand<'EmployeeId'>();
+export type EmployeeId = z.infer<typeof EmployeeIdSchema>;
+
 /**
  * Helper to create a branded UUID schema for a given entity type.
  * @internal Use the specific branded schemas above instead.

@@ -66,14 +66,16 @@ export function EmployeeDetail({ id }: { id: string }) {
           ← Back to employees
         </Link>
         <div className="mt-1 flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">{String(emp['employee_number'])}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {String(emp['first_name'] ?? '')} {String(emp['last_name'] ?? '')}
+          </h1>
           <StatusBadge
             status={emp['is_active'] ? 'active' : 'closed'}
             label={emp['is_active'] ? 'Active' : 'Inactive'}
           />
         </div>
         <p className="mt-1 text-lg text-gray-700">
-          {String(emp['position'])} — {String(emp['department'])}
+          {String(emp['employee_number'])} — {String(emp['position'])} — {String(emp['department'])}
         </p>
       </div>
 
@@ -97,6 +99,16 @@ export function EmployeeDetail({ id }: { id: string }) {
           <div className="card-body">
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <div>
+                <dt className="text-gray-500">Name</dt>
+                <dd className="font-medium">
+                  {String(emp['first_name'] ?? '')} {String(emp['last_name'] ?? '')}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">Email</dt>
+                <dd className="font-medium">{String(emp['email'] ?? '—')}</dd>
+              </div>
+              <div>
                 <dt className="text-gray-500">Position</dt>
                 <dd className="font-medium">{String(emp['position'])}</dd>
               </div>
@@ -105,8 +117,8 @@ export function EmployeeDetail({ id }: { id: string }) {
                 <dd className="font-medium">{String(emp['department'])}</dd>
               </div>
               <div>
-                <dt className="text-gray-500">User ID</dt>
-                <dd className="font-medium">{String(emp['user_id'] ?? '—')}</dd>
+                <dt className="text-gray-500">Employee #</dt>
+                <dd className="font-medium font-mono">{String(emp['employee_number'])}</dd>
               </div>
               <div>
                 <dt className="text-gray-500">Hire Date</dt>

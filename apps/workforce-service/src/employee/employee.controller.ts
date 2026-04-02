@@ -1,12 +1,20 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { workforceContract } from '@gacp-erp/shared-contracts';
 import { EmployeeRepository } from './employee.repository';
 import { CreateEmployeeUseCase } from './use-cases/create-employee.use-case';
+import {
+  DuplicateEmailError,
+  KeycloakProvisioningError,
+  KeycloakCompensationError,
+  UsernameGenerationError,
+} from './errors/employee-provisioning.errors';
 
 @TsRest({ validateResponses: false })
 @Controller()
 export class EmployeeController {
+  private readonly logger = new Logger(EmployeeController.name);
+
   constructor(
     private readonly employeeRepo: EmployeeRepository,
     private readonly createEmployeeUseCase: CreateEmployeeUseCase,
@@ -16,8 +24,39 @@ export class EmployeeController {
   createEmployee() {
     return tsRestHandler(workforceContract.createEmployee, async ({ body, headers }) => {
       const userId = (headers as Record<string, string | undefined>)['x-user-id'] ?? 'system';
-      const result = await this.createEmployeeUseCase.execute(body, userId);
-      return { status: 201 as const, body: result };
+      try {
+        const result = await this.createEmployeeUseCase.execute(body, userId);
+        return { status: 201 as const, body: result };
+      } catch (error) {
+        const now = new Date().toISOString();
+        if (error instanceof DuplicateEmailError || error instanceof UsernameGenerationError) {
+          return {
+            status: 409 as const,
+            body: {
+              statusCode: error.statusCode,
+              error: error.code,
+              message: error.message,
+              timestamp: now,
+            },
+          };
+        }
+        if (
+          error instanceof KeycloakProvisioningError ||
+          error instanceof KeycloakCompensationError
+        ) {
+          this.logger.error(error.message, error);
+          return {
+            status: 500 as const,
+            body: {
+              statusCode: error.statusCode,
+              error: error.code,
+              message: error.message,
+              timestamp: now,
+            },
+          };
+        }
+        throw error;
+      }
     });
   }
 

@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { MetricsModule, createLoggerOptions } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
+import { KeycloakModule } from './keycloak/keycloak.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { EmployeeModule } from './employee/employee.module';
 import { TaskModule } from './task/task.module';
@@ -17,6 +18,7 @@ import { TrainingModule } from './training/training.module';
     }),
     LoggerModule.forRoot(createLoggerOptions('workforce-service')),
     DatabaseModule,
+    KeycloakModule,
     OutboxModule,
     EmployeeModule,
     TaskModule,

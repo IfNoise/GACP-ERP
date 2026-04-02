@@ -168,7 +168,10 @@ describe('EmployeeRepository', () => {
       const result = await repo.create(
         {
           employee_number: 'EMP-001',
-          user_id: 'user-1' as never,
+          user_id: 'user-1',
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'john@test.com',
           position: 'Lead Grower',
           department: 'Cultivation',
           hire_date: '2024-01-15',
@@ -186,7 +189,10 @@ describe('EmployeeRepository', () => {
       await repo.create(
         {
           employee_number: 'EMP-001',
-          user_id: 'user-1' as never,
+          user_id: 'user-1',
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'john@test.com',
           position: 'Lead Grower',
           department: 'Cultivation',
           hire_date: '2024-01-15',
@@ -198,22 +204,23 @@ describe('EmployeeRepository', () => {
       expect(tx.insert).toHaveBeenCalled();
       expect(db.insert).not.toHaveBeenCalled();
     });
+  });
 
-    it('should handle single-word position', async () => {
-      const ins = makeInsertChain([fakeRow]);
-      const db = { insert: jest.fn().mockReturnValue(ins) };
+  describe('findByEmail', () => {
+    it('should return mapped employee when found', async () => {
+      const sel = makeSelectChain([fakeRow]);
+      const db = { select: jest.fn().mockReturnValue(sel) };
       const repo = new EmployeeRepository(db as never);
-      const result = await repo.create(
-        {
-          employee_number: 'EMP-002',
-          user_id: 'user-2' as never,
-          position: 'Manager',
-          department: 'QA',
-          hire_date: '2024-06-01',
-        },
-        'admin',
-      );
-      expect(result).toBeDefined();
+      const result = await repo.findByEmail('john@test.com');
+      expect(result).not.toBeNull();
+      expect(result!.id).toBe('emp-1');
+    });
+
+    it('should return null when not found', async () => {
+      const sel = makeSelectChain([]);
+      const db = { select: jest.fn().mockReturnValue(sel) };
+      const repo = new EmployeeRepository(db as never);
+      expect(await repo.findByEmail('nobody@test.com')).toBeNull();
     });
   });
 

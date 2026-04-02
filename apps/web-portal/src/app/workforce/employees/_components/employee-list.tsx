@@ -37,6 +37,16 @@ export function EmployeeList() {
         </Link>
       ),
     },
+    {
+      id: 'name',
+      header: 'Name',
+      cell: ({ row }) => {
+        const firstName = String(row.original['first_name'] ?? '');
+        const lastName = String(row.original['last_name'] ?? '');
+        return `${firstName} ${lastName}`.trim() || '—';
+      },
+    },
+    { accessorKey: 'email', header: 'Email' },
     { accessorKey: 'position', header: 'Position' },
     { accessorKey: 'department', header: 'Department' },
     {
