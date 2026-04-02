@@ -69,3 +69,25 @@ services:
       - '4318:4318' # OTLP HTTP
     networks:
       - gacp-net
+
+  # ─── Grafana — dashboards for metrics and logs ───────────────────
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: gacp-grafana
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_DISABLE_LOGIN_FORM: 'true'
+    ports:
+      - '${GRAFANA_PORT:-3010}:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - loki
+    networks:
+      - gacp-net
+
+volumes:
+  grafana-data:

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MetricsModule } from '@gacp-erp/shared-config';
+import { LoggerModule } from 'nestjs-pino';
+import { MetricsModule, createLoggerOptions } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 
@@ -10,6 +11,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
       isGlobal: true,
       envFilePath: ['../../docker/.env', '../../docker/.env.example'],
     }),
+    LoggerModule.forRoot(createLoggerOptions('analytics-service')),
     DatabaseModule,
     AnalyticsModule,
     MetricsModule,

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MetricsModule } from '@gacp-erp/shared-config';
+import { LoggerModule } from 'nestjs-pino';
+import { MetricsModule, createLoggerOptions } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { ChangeControlModule } from './change-control/change-control.module';
@@ -15,6 +16,7 @@ import { QualityEventModule } from './quality-event/quality-event.module';
       isGlobal: true,
       envFilePath: ['../../docker/.env', '../../docker/.env.example'],
     }),
+    LoggerModule.forRoot(createLoggerOptions('quality-service')),
     DatabaseModule,
     OutboxModule,
     ChangeControlModule,

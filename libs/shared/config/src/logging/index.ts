@@ -1,1 +1,1 @@
-export { StructuredLogger } from './structured-logger';
+export { createLoggerOptions } from './pino-logger.config';

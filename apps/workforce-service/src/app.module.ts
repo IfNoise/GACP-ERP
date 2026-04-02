@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MetricsModule } from '@gacp-erp/shared-config';
+import { LoggerModule } from 'nestjs-pino';
+import { MetricsModule, createLoggerOptions } from '@gacp-erp/shared-config';
 import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { EmployeeModule } from './employee/employee.module';
@@ -14,6 +15,7 @@ import { TrainingModule } from './training/training.module';
       isGlobal: true,
       envFilePath: ['../../docker/.env', '../../docker/.env.example'],
     }),
+    LoggerModule.forRoot(createLoggerOptions('workforce-service')),
     DatabaseModule,
     OutboxModule,
     EmployeeModule,

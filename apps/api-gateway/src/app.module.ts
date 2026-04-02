@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { MetricsModule } from '@gacp-erp/shared-config';
+import { LoggerModule } from 'nestjs-pino';
+import { MetricsModule, createLoggerOptions } from '@gacp-erp/shared-config';
 import { AuthModule } from './auth/auth.module';
 import { SignatureModule } from './signature/signature.module';
 import { HealthModule } from './health/health.module';
@@ -14,11 +15,11 @@ import { DocsModule } from './docs/docs.module';
 
 @Module({
   imports: [
-    // Global config — reads from process.env / .env file
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['../../docker/.env', '../../docker/.env.example'],
     }),
+    LoggerModule.forRoot(createLoggerOptions('api-gateway')),
 
     // Global rate limiting — 300 req / 60 s per IP
     ThrottlerModule.forRootAsync({

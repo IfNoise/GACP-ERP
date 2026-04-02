@@ -78,6 +78,10 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
+    "nestjs-pino": "^4.1.0",
+    "pino-http": "^10.3.0",
+    "pino-loki": "^2.3.0",
+    "pino-pretty": "^13.0.0",
     "@opentelemetry/auto-instrumentations-node": "^0.71.0",
     "@opentelemetry/exporter-metrics-otlp-grpc": "^0.213.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.213.0",

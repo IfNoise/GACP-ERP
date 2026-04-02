@@ -27,6 +27,7 @@ volumes:
   emqx-log:
   mayan-data:
   mayan-media:
+  loki-data:
 
 services:
   # ─── PostgreSQL 15 with PostGIS ─────────────────────────────────
@@ -318,3 +319,23 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+
+  # ─── Loki — log aggregation backend ──────────────────────────────
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: gacp-loki
+    <<: *default-restart
+    logging: *default-logging
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - '${LOKI_PORT:-3100}:3100'
+    volumes:
+      - loki-data:/loki
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:3100/ready || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { initTelemetry, StructuredLogger } from '@gacp-erp/shared-config';
+import { initTelemetry } from '@gacp-erp/shared-config';
 
 initTelemetry({ serviceName: 'api-gateway' });
 
@@ -7,18 +7,18 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyHelmet from '@fastify/helmet';
 import { VersioningType } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 import { ZodValidationPipe } from './common/pipes/zod-validation.pipe';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap(): Promise<void> {
-  const logger = new StructuredLogger('api-gateway');
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
+    bufferLogs: true,
+  });
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter({ logger: process.env['NODE_ENV'] !== 'production' }),
-    { logger },
-  );
+  const logger = app.get(Logger);
+  app.useLogger(logger);
 
   // Security headers (CSP managed separately — Helmet writes to reply.raw, not Fastify API)
   await app.register(fastifyHelmet, {
@@ -75,6 +75,87 @@ async function bootstrap(): Promise<void> {
 
   // Global prefix
   app.setGlobalPrefix('api');
+
+  // ── Service Proxy ──────────────────────────────────────────────────────────
+  // ts-rest clients send requests to http://gateway/api/{contract_path}
+  // (e.g. POST /api/workforce/employees). These Fastify-level routes forward
+  // them to the corresponding microservice at /internal/{contract_path}.
+  const proxyRoutes: ReadonlyArray<[prefix: string, envVar: string, fallback: string]> = [
+    ['workforce', 'WORKFORCE_SERVICE_URL', 'http://localhost:3005'],
+    ['plants', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
+    ['batches', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
+    ['strains', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
+    ['quality', 'QUALITY_SERVICE_URL', 'http://localhost:3003'],
+    ['financial', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
+    ['procurement', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
+    ['spatial', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
+    ['analytics', 'ANALYTICS_SERVICE_URL', 'http://localhost:3006'],
+  ];
+
+  for (const [prefix, envVar, fallback] of proxyRoutes) {
+    const upstream = process.env[envVar] ?? fallback;
+
+    const proxyHandler = async (
+      request: {
+        method: string;
+        url: string;
+        headers: Record<string, string | undefined>;
+        body?: unknown;
+      },
+      reply: {
+        status(code: number): { header(n: string, v: string): unknown; send(b: unknown): unknown };
+        header(n: string, v: string): unknown;
+        send(b: unknown): unknown;
+      },
+    ): Promise<void> => {
+      // request.url is /api/workforce/employees → strip /api to get /workforce/employees
+      const stripApi = request.url.replace(/^\/api/, '');
+      const targetUrl = `${upstream}/internal${stripApi}`;
+      try {
+        const fwdHeaders: Record<string, string> = {};
+        for (const h of ['authorization', 'content-type', 'x-user-id', 'traceparent'] as const) {
+          const v = request.headers[h];
+          if (v) fwdHeaders[h] = v;
+        }
+        const ip = request.headers['x-forwarded-for'] ?? request.headers['x-real-ip'];
+        if (ip) fwdHeaders['x-forwarded-for'] = ip;
+
+        const hasBody =
+          request.body != null && request.method !== 'GET' && request.method !== 'HEAD';
+        if (hasBody && !fwdHeaders['content-type']) {
+          fwdHeaders['content-type'] = 'application/json';
+        }
+
+        const res = await fetch(targetUrl, {
+          method: request.method,
+          headers: fwdHeaders,
+          body: hasBody ? JSON.stringify(request.body) : undefined,
+          signal: AbortSignal.timeout(30_000),
+        });
+
+        const r = reply.status(res.status);
+        const ct = res.headers.get('content-type');
+        if (ct) r.header('content-type', ct);
+        r.send(res.status === 204 ? null : await res.text());
+      } catch (err) {
+        logger.error(`Proxy error → ${request.method} ${targetUrl}: ${err}`);
+        reply
+          .status(502)
+          .header('content-type', 'application/json')
+          .send(JSON.stringify({ statusCode: 502, message: 'Upstream service unavailable' }));
+      }
+    };
+
+    // Register at /api/{prefix} and /api/{prefix}/* to match gateway global prefix
+    for (const url of [`/api/${prefix}`, `/api/${prefix}/*`]) {
+      fastify.route({
+        method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as const,
+        url,
+        handler: proxyHandler as never,
+      });
+    }
+    logger.debug(`Proxy /api/${prefix}/* → ${upstream}/internal/${prefix}/*`);
+  }
 
   const port = parseInt(process.env['PORT'] ?? '3001', 10);
   const host = process.env['HOST'] ?? '0.0.0.0';
