@@ -24,12 +24,12 @@ import {
   type ReceiveGoods,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import { type SupplierRepository } from './supplier.repository';
+import { SupplierRepository } from './supplier.repository';
 import type { SupplierFilters } from './supplier.repository';
-import { type ProcurementRepository } from './procurement.repository';
+import { ProcurementRepository } from './procurement.repository';
 import type { POFilters } from './procurement.repository';
-import { type CreateSupplierUseCase } from './use-cases/create-supplier.use-case';
-import { type ProcurementWorkflowUseCase } from './use-cases/procurement-workflow.use-case';
+import { CreateSupplierUseCase } from './use-cases/create-supplier.use-case';
+import { ProcurementWorkflowUseCase } from './use-cases/procurement-workflow.use-case';
 
 const SupplierListQuerySchema = PaginationQuerySchema.extend({
   qualification_status: SupplierQualificationStatusEnum.optional(),

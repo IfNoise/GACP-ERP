@@ -17,7 +17,7 @@ import {
   type UpdateBatch,
 } from '@gacp-erp/shared-schemas';
 import { z } from 'zod';
-import { type BatchesService } from './batches.service';
+import { BatchesService } from './batches.service';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
 
 const ListBatchesQuerySchema = z.object({

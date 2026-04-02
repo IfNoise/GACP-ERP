@@ -9,9 +9,9 @@ import {
   type PaginatedResponse,
   type GrowthStage,
 } from '@gacp-erp/shared-schemas';
-import { type PlantsRepository } from './plants.repository';
-import { type CreatePlantUseCase } from './use-cases/create-plant.use-case';
-import { type TransitionStageUseCase } from './use-cases/transition-stage.use-case';
+import { PlantsRepository } from './plants.repository';
+import { CreatePlantUseCase } from './use-cases/create-plant.use-case';
+import { TransitionStageUseCase } from './use-cases/transition-stage.use-case';
 
 @Injectable()
 export class PlantsService {

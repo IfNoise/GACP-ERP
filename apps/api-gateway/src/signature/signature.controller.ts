@@ -13,8 +13,8 @@ import { z } from 'zod';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { type JwtPayload, ElectronicSignatureSchema } from '@gacp-erp/shared-schemas';
-import { type SignatureService } from './signature.service';
-import { type FastifyRequest } from 'fastify';
+import { SignatureService } from './signature.service';
+import { FastifyRequest } from 'fastify';
 
 const SignRequestSchema = z.object({
   /** The raw JSON-serialisable content being signed */

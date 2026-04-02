@@ -14,7 +14,7 @@ import {
   type UserId,
 } from '@gacp-erp/shared-schemas';
 import { AUDIT_TOPIC, type AuditTrailEntryEvent } from '@gacp-erp/shared-events';
-import { type KafkaProducerService } from '../../kafka/kafka-producer.service';
+import { KafkaProducerService } from '../../kafka/kafka-producer.service';
 
 // UUID pattern — used to extract entity IDs from URL segments
 const UUID_PATTERN = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;

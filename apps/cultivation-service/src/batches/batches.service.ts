@@ -14,8 +14,8 @@ import {
   type BatchCreatedEvent,
   type BatchStatusChangedEvent,
 } from '@gacp-erp/shared-events';
-import { type BatchesRepository } from './batches.repository';
-import { type KafkaProducerService } from '../kafka/kafka-producer.service';
+import { BatchesRepository } from './batches.repository';
+import { KafkaProducerService } from '../kafka/kafka-producer.service';
 
 @Injectable()
 export class BatchesService {

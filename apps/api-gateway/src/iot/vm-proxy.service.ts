@@ -1,5 +1,5 @@
 import { Injectable, Logger, BadGatewayException } from '@nestjs/common';
-import { type ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 export interface ZoneReading {
   sensor_type: string;

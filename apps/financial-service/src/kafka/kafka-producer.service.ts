@@ -5,7 +5,7 @@ import {
   type OnModuleDestroy,
   type OnModuleInit,
 } from '@nestjs/common';
-import { type ClientKafka } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 import { KAFKA_CLIENT } from './kafka-tokens';
 
 @Injectable()

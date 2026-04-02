@@ -11,8 +11,8 @@ import {
   type BiologicalAssetValuedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type BiologicalAssetRepository } from '../biological-asset.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { BiologicalAssetRepository } from '../biological-asset.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class BiologicalAssetValuationUseCase {

@@ -1,7 +1,7 @@
 import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
-import { type OutboxRepository } from './outbox.repository';
-import { type KafkaProducerService } from '../kafka/kafka-producer.service';
+import { OutboxRepository } from './outbox.repository';
+import { KafkaProducerService } from '../kafka/kafka-producer.service';
 
 const RELAY_INTERVAL_MS = 5_000;
 const RELAY_BATCH_SIZE = 50;

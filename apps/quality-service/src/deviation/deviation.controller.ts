@@ -25,10 +25,10 @@ import {
   type CloseDeviation,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import { type DeviationRepository } from './deviation.repository';
+import { DeviationRepository } from './deviation.repository';
 import type { DeviationFilters } from './deviation.repository';
-import { type DeviationWorkflowUseCase } from './use-cases/deviation-workflow.use-case';
-import { type CapaRepository } from '../capa/capa.repository';
+import { DeviationWorkflowUseCase } from './use-cases/deviation-workflow.use-case';
+import { CapaRepository } from '../capa/capa.repository';
 
 const LinkCapaBodySchema = z.object({ capa_id: z.string().uuid() });
 

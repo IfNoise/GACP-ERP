@@ -1,7 +1,7 @@
 import { Injectable, Logger, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
 import { eq, and } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
-import { type Database, alertThresholdsTable } from '@gacp-erp/shared-database';
+import { Database, alertThresholdsTable } from '@gacp-erp/shared-database';
 import { type CreateAlertThreshold, type AlertThreshold } from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../database/database.module';
 import { type JwtPayload } from '@gacp-erp/shared-schemas';

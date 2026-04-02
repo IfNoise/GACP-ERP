@@ -16,8 +16,8 @@ import {
   type BatchReleasedFromZoneEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type SpatialRepository } from '../spatial.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { SpatialRepository } from '../spatial.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class SpatialPlanningUseCase {

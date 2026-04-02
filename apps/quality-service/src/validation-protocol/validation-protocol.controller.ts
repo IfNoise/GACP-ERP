@@ -24,10 +24,10 @@ import {
   type CloseValidationProtocol,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import { type ValidationProtocolRepository } from './validation-protocol.repository';
+import { ValidationProtocolRepository } from './validation-protocol.repository';
 import type { ValidationProtocolFilters } from './validation-protocol.repository';
-import { type CreateValidationProtocolUseCase } from './use-cases/create-validation-protocol.use-case';
-import { type ValidationProtocolWorkflowUseCase } from './use-cases/validation-protocol-workflow.use-case';
+import { CreateValidationProtocolUseCase } from './use-cases/create-validation-protocol.use-case';
+import { ValidationProtocolWorkflowUseCase } from './use-cases/validation-protocol-workflow.use-case';
 
 const ListQuerySchema = PaginationQuerySchema.extend({
   status: ValidationProtocolStatusEnum.optional(),

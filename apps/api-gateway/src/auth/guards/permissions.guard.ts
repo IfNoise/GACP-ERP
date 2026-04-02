@@ -4,7 +4,7 @@ import {
   type ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { type Reflector } from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 import { type JwtPayload, type SystemRole } from '@gacp-erp/shared-schemas';
 import {
   PERMISSIONS_KEY,

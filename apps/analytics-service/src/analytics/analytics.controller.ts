@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { analyticsContract } from '@gacp-erp/shared-contracts';
-import { type AnalyticsService } from './analytics.service';
+import { AnalyticsService } from './analytics.service';
 
 @TsRest({ validateResponses: false })
 @Controller()

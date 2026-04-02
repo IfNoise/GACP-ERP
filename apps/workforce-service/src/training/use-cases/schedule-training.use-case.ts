@@ -4,8 +4,8 @@ import { type Database } from '@gacp-erp/shared-database';
 import { type CreateTrainingExecution, type UserId } from '@gacp-erp/shared-schemas';
 import { TRAINING_EXECUTION_TOPIC, type TrainingScheduledEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type TrainingRepository } from '../training.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { TrainingRepository } from '../training.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class ScheduleTrainingUseCase {

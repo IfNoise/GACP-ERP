@@ -4,8 +4,8 @@ import { type Database } from '@gacp-erp/shared-database';
 import type { CreateJournalEntry, JournalEntry, UserId } from '@gacp-erp/shared-schemas';
 import { FINANCE_TRANSACTION_TOPIC, type JournalEntryPostedEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type JournalEntryRepository } from '../journal-entry.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { JournalEntryRepository } from '../journal-entry.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class CreateJournalEntryUseCase {

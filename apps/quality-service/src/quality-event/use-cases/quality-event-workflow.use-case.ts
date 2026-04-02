@@ -18,8 +18,8 @@ import {
   type QualityEventClosedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type QualityEventRepository } from '../quality-event.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { QualityEventRepository } from '../quality-event.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import { QualityEventWorkflowEngine } from '../quality-event-workflow.engine';
 
 @Injectable()

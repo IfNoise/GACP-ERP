@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { workforceContract } from '@gacp-erp/shared-contracts';
-import { type TaskRepository } from './task.repository';
-import { type CreateTaskUseCase } from './use-cases/create-task.use-case';
-import { type CompleteTaskUseCase } from './use-cases/complete-task.use-case';
+import { TaskRepository } from './task.repository';
+import { CreateTaskUseCase } from './use-cases/create-task.use-case';
+import { CompleteTaskUseCase } from './use-cases/complete-task.use-case';
 
 @TsRest({ validateResponses: false })
 @Controller()

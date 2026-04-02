@@ -4,8 +4,8 @@ import { type Database } from '@gacp-erp/shared-database';
 import { type CreateTimeEntry, type UserId } from '@gacp-erp/shared-schemas';
 import { WORKFORCE_TIME_TOPIC, type TimeEntryCreatedEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type TimeEntryRepository } from '../time-entry.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { TimeEntryRepository } from '../time-entry.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 const SOURCE_MAP: Record<string, 'MANUAL' | 'MOBILE' | 'SYSTEM'> = {
   TERMINAL: 'MOBILE',

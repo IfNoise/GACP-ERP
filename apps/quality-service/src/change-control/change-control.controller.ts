@@ -27,11 +27,11 @@ import {
   type CloseChangeControl,
 } from '@gacp-erp/shared-schemas';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
-import { type ChangeControlRepository } from './change-control.repository';
+import { ChangeControlRepository } from './change-control.repository';
 import type { ChangeControlFilters } from './change-control.repository';
-import { type CreateChangeControlUseCase } from './use-cases/create-change-control.use-case';
-import { type ChangeControlWorkflowUseCase } from './use-cases/change-control-workflow.use-case';
-import { type AssessImpactUseCase } from './use-cases/assess-impact.use-case';
+import { CreateChangeControlUseCase } from './use-cases/create-change-control.use-case';
+import { ChangeControlWorkflowUseCase } from './use-cases/change-control-workflow.use-case';
+import { AssessImpactUseCase } from './use-cases/assess-impact.use-case';
 
 const ListQuerySchema = PaginationQuerySchema.extend({
   status: ChangeControlStatusEnum.optional(),

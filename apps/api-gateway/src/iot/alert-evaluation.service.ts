@@ -2,8 +2,8 @@ import { Injectable, Logger, Inject } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { createHash } from 'crypto';
 import { randomUUID } from 'crypto';
-import { type ConfigService } from '@nestjs/config';
-import { type Database, alertHistoryTable } from '@gacp-erp/shared-database';
+import { ConfigService } from '@nestjs/config';
+import { Database, alertHistoryTable } from '@gacp-erp/shared-database';
 import type { AlertThreshold } from '@gacp-erp/shared-schemas';
 import {
   IOT_ALERTS_TOPIC,
@@ -11,8 +11,8 @@ import {
   type ThresholdBreachedEventSchema,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../database/database.module';
-import { type KafkaProducerService } from '../kafka/kafka-producer.service';
-import { type ThresholdService } from './threshold.service';
+import { KafkaProducerService } from '../kafka/kafka-producer.service';
+import { ThresholdService } from './threshold.service';
 import type { z } from 'zod';
 
 /** VictoriaMetrics instant query response */

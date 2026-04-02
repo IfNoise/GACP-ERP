@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { workforceContract } from '@gacp-erp/shared-contracts';
-import { type TrainingRepository } from './training.repository';
-import { type ScheduleTrainingUseCase } from './use-cases/schedule-training.use-case';
-import { type CompleteTrainingUseCase } from './use-cases/complete-training.use-case';
+import { TrainingRepository } from './training.repository';
+import { ScheduleTrainingUseCase } from './use-cases/schedule-training.use-case';
+import { CompleteTrainingUseCase } from './use-cases/complete-training.use-case';
 
 @TsRest({ validateResponses: false })
 @Controller()

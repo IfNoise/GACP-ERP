@@ -12,8 +12,8 @@ import {
   type ChangeClosedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type ChangeControlRepository } from '../change-control.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { ChangeControlRepository } from '../change-control.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import {
   ChangeControlWorkflowEngine,
   InvalidChangeControlTransitionError,

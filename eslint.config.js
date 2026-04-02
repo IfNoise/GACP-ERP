@@ -33,10 +33,12 @@ module.exports = [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
-      ],
+      // DISABLED: consistent-type-imports adds `type` to DI class imports,
+      // which breaks NestJS emitDecoratorMetadata (erases class references
+      // at compile time → DI receives undefined). Requires type-aware linting
+      // (parserOptions.project) to detect decorator metadata usage, but that
+      // cannot run reliably from the repo root during lint-staged.
+      '@typescript-eslint/consistent-type-imports': 'off',
       // NOTE: no-floating-promises / no-misused-promises require type info
       // (parserOptions.project). They cannot run reliably from the repo root
       // during lint-staged without a per-project tsconfig context.

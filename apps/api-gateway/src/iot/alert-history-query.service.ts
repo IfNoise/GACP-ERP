@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { and, eq, gte, lte, desc } from 'drizzle-orm';
-import { type Database, alertHistoryTable } from '@gacp-erp/shared-database';
+import { Database, alertHistoryTable } from '@gacp-erp/shared-database';
 import { type AlertHistory } from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../database/database.module';
 

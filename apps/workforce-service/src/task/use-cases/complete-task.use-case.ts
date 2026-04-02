@@ -4,8 +4,8 @@ import { type Database } from '@gacp-erp/shared-database';
 import { type UserId } from '@gacp-erp/shared-schemas';
 import { WORKFORCE_TASK_TOPIC, type TaskCompletedEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type TaskRepository } from '../task.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { TaskRepository } from '../task.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class CompleteTaskUseCase {

@@ -3,8 +3,8 @@ import { randomUUID } from 'crypto';
 import { type Batch, type BatchId, type UserId } from '@gacp-erp/shared-schemas';
 import { CULTIVATION_TOPIC, type BatchStatusChangedEvent } from '@gacp-erp/shared-events';
 import { harvestRecordsTable } from '@gacp-erp/shared-database';
-import { type BatchesRepository } from '../batches.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { BatchesRepository } from '../batches.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
 import { type Database } from '@gacp-erp/shared-database';
 

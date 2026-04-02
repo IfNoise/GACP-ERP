@@ -7,7 +7,7 @@ import {
   type JwtPayload,
 } from '@gacp-erp/shared-schemas';
 import { z } from 'zod';
-import { type AuthService } from './auth.service';
+import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ZodBody } from '../common/decorators/zod-body.decorator';

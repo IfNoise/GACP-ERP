@@ -5,8 +5,8 @@ import { type CreateTask, type UserId } from '@gacp-erp/shared-schemas';
 import { WORKFORCE_TASK_TOPIC, type TaskCreatedEvent } from '@gacp-erp/shared-events';
 import { Inject } from '@nestjs/common';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type TaskRepository } from '../task.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { TaskRepository } from '../task.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class CreateTaskUseCase {

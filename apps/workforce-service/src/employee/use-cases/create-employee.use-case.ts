@@ -4,8 +4,8 @@ import { type Database } from '@gacp-erp/shared-database';
 import { type CreateEmployee, type UserId } from '@gacp-erp/shared-schemas';
 import { WORKFORCE_EMPLOYEE_TOPIC, type EmployeeCreatedEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type EmployeeRepository } from '../employee.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { EmployeeRepository } from '../employee.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class CreateEmployeeUseCase {

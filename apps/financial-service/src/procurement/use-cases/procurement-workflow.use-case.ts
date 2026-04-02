@@ -16,9 +16,9 @@ import {
   type ThreeWayMatchCompletedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type ProcurementRepository } from '../procurement.repository';
+import { ProcurementRepository } from '../procurement.repository';
 import { ProcurementWorkflowEngine } from '../procurement-workflow.engine';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 export interface SubmitPOCommand {
   poId: string;

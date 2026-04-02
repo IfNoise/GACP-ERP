@@ -18,8 +18,8 @@ import {
   type DeviationClosedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type DeviationRepository } from '../deviation.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { DeviationRepository } from '../deviation.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import {
   DeviationWorkflowEngine,
   InvalidDeviationTransitionError,

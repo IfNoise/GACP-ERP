@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { workforceContract } from '@gacp-erp/shared-contracts';
-import { type TimeEntryRepository } from './time-entry.repository';
-import { type ClockInUseCase } from './use-cases/clock-in.use-case';
+import { TimeEntryRepository } from './time-entry.repository';
+import { ClockInUseCase } from './use-cases/clock-in.use-case';
 
 @TsRest({ validateResponses: false })
 @Controller()

@@ -2,7 +2,7 @@ import { Injectable, Logger, Inject } from '@nestjs/common';
 import { type Database } from '@gacp-erp/shared-database';
 import type { CreateSupplier, Supplier, UserId } from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type SupplierRepository } from '../supplier.repository';
+import { SupplierRepository } from '../supplier.repository';
 
 @Injectable()
 export class CreateSupplierUseCase {

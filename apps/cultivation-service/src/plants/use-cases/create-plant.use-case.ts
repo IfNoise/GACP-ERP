@@ -10,8 +10,8 @@ import {
   type UserId,
 } from '@gacp-erp/shared-schemas';
 import { CULTIVATION_TOPIC, type PlantCreatedEvent } from '@gacp-erp/shared-events';
-import { type PlantsRepository } from '../plants.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { PlantsRepository } from '../plants.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
 import { type Database } from '@gacp-erp/shared-database';
 

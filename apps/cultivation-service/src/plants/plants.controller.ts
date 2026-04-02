@@ -21,8 +21,8 @@ import {
   type UpdatePlant,
   type StageTransition,
 } from '@gacp-erp/shared-schemas';
-import { type PlantsService } from './plants.service';
-import { type QrService } from '../qr/qr.service';
+import { PlantsService } from './plants.service';
+import { QrService } from '../qr/qr.service';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
 
 const ListPlantsQuerySchema = PaginationQuerySchema.extend({

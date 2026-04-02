@@ -19,9 +19,9 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { type JwtPayload } from '@gacp-erp/shared-schemas';
 import { CreateAlertThresholdSchema } from '@gacp-erp/shared-schemas';
 import { z } from 'zod';
-import { type AlertHistoryQueryService } from './alert-history-query.service';
-import { type ThresholdService } from './threshold.service';
-import { type VmProxyService } from './vm-proxy.service';
+import { AlertHistoryQueryService } from './alert-history-query.service';
+import { ThresholdService } from './threshold.service';
+import { VmProxyService } from './vm-proxy.service';
 
 @Controller({ path: 'iot', version: '1' })
 @UseGuards(JwtAuthGuard)

@@ -9,8 +9,8 @@ import {
   type CertificationIssuedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type TrainingRepository } from '../training.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { TrainingRepository } from '../training.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 
 @Injectable()
 export class CompleteTrainingUseCase {

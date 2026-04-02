@@ -6,7 +6,7 @@ import {
   type UserId,
 } from '@gacp-erp/shared-schemas';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type ValidationProtocolRepository } from '../validation-protocol.repository';
+import { ValidationProtocolRepository } from '../validation-protocol.repository';
 
 @Injectable()
 export class CreateValidationProtocolUseCase {

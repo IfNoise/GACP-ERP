@@ -20,8 +20,8 @@ import {
   type CapaClosedEvent,
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { type CapaRepository } from '../capa.repository';
-import { type OutboxRepository } from '../../outbox/outbox.repository';
+import { CapaRepository } from '../capa.repository';
+import { OutboxRepository } from '../../outbox/outbox.repository';
 import { CapaWorkflowEngine, InvalidCapaTransitionError } from '../capa-workflow.engine';
 
 @Injectable()
