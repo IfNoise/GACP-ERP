@@ -4,6 +4,7 @@ import { SoftDeletableSchema, ElectronicSignatureSchema } from '../common/base-e
 import {
   BatchIdSchema,
   FacilityIdSchema,
+  PlantIdSchema,
   StrainIdSchema,
   UserIdSchema,
   ZoneIdSchema,
@@ -134,3 +135,31 @@ export const CreateHarvestSchema = z.object({
   electronic_signature: ElectronicSignatureSchema,
 });
 export type CreateHarvest = z.infer<typeof CreateHarvestSchema>;
+
+// ─── CLONE BATCH ───────────────────────────────────────────────────────────
+/**
+ * DTO for cloning a batch from a mother plant.
+ * Creates a new child batch with N clone plants linked to the source mother.
+ */
+export const CloneBatchSchema = z.object({
+  /** The mother plant that cuttings are taken from (must be in MOTHER_PLANT stage) */
+  mother_plant_id: PlantIdSchema,
+  /** Number of cuttings/clones to produce */
+  clone_count: z.number().int().positive().max(500),
+  /** Batch number for the new clone batch */
+  batch_number: z.string().min(1).max(50),
+  /** Facility where clones will be placed */
+  facility_id: FacilityIdSchema,
+  /** Zone for clone rooting (ideally clone_room) */
+  zone_id: ZoneIdSchema.optional(),
+  /** Optional plant code prefix — clones will be numbered: PREFIX-001, PREFIX-002, etc. */
+  plant_code_prefix: z
+    .string()
+    .min(2)
+    .max(14)
+    .regex(/^[A-Z0-9-]+$/)
+    .optional(),
+  notes: z.string().max(2000).optional(),
+  planned_harvest_date: z.string().datetime({ offset: true }).optional(),
+});
+export type CloneBatch = z.infer<typeof CloneBatchSchema>;

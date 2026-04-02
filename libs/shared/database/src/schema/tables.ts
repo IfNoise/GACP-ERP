@@ -85,10 +85,14 @@ export const plantOperationTypeEnum = pgEnum('plant_operation_type', [
   'fertilizing',
   'health_check',
   'pest_treatment',
+  'cloning',
   'harvest',
   'destruction',
   'observation',
 ]);
+
+/** How the plant originated (seed, clone, tissue_culture) */
+export const plantSourceTypeEnum = pgEnum('plant_source_type', ['seed', 'clone', 'tissue_culture']);
 
 /** Audit trail operations — INSERT only in production (DS-DI-002) */
 export const auditOperationEnum = pgEnum('audit_operation', ['INSERT', 'UPDATE', 'DELETE']);
@@ -307,6 +311,12 @@ export const plantsTable = pgTable(
       .notNull()
       .references(() => strainsTable.id),
     current_stage: growthStageEnum('current_stage').notNull().default('SEED'),
+    /** How this plant originated: seed, clone, or tissue_culture */
+    source_type: plantSourceTypeEnum('source_type').notNull().default('seed'),
+    /** ID of the mother plant this clone was taken from (null for seed-grown) */
+    mother_plant_id: uuid('mother_plant_id'),
+    /** Clone generation number (0 = seed-grown, 1 = first clone gen, etc.) */
+    generation: integer('generation').notNull().default(0),
     facility_id: uuid('facility_id')
       .notNull()
       .references(() => facilitiesTable.id),
@@ -342,6 +352,8 @@ export const plantsTable = pgTable(
     batchIdx: index('plants_batch_idx').on(t.batch_id),
     strainIdx: index('plants_strain_idx').on(t.strain_id),
     stageIdx: index('plants_stage_idx').on(t.current_stage),
+    sourceTypeIdx: index('plants_source_type_idx').on(t.source_type),
+    motherPlantIdx: index('plants_mother_plant_idx').on(t.mother_plant_id),
     facilityZoneIdx: index('plants_facility_zone_idx').on(t.facility_id, t.zone_id),
     healthIdx: index('plants_health_idx').on(t.current_health_score),
   }),

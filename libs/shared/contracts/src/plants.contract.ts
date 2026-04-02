@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
   ApiErrorSchema,
   BatchSchema,
+  CloneBatchSchema,
   CreateBatchSchema,
   CreateHarvestSchema,
   CreatePlantSchema,
@@ -228,6 +229,25 @@ const batchesContract = c.router({
       404: ApiErrorSchema,
     },
     summary: 'Get harvest records for batch',
+  },
+
+  clone: {
+    method: 'POST',
+    path: '/batches/clone',
+    body: CloneBatchSchema,
+    responses: {
+      201: z.object({
+        batch: BatchSchema,
+        plants: z.array(PlantSchema),
+      }),
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema, // Mother plant not found
+      409: ApiErrorSchema, // Duplicate batch_number
+      422: ApiErrorSchema,
+    },
+    summary: 'Clone a batch from mother plant cuttings (OPERATOR+)',
   },
 });
 

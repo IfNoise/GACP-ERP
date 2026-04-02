@@ -15,6 +15,16 @@ import {
   ZoneIdSchema,
 } from '../common/branded-ids';
 
+// ─── PLANT SOURCE TYPE ──────────────────────────────────────────────────────
+/**
+ * How this plant originated. Critical for GACP traceability:
+ * - seed: grown from seed
+ * - clone: cutting taken from a mother plant
+ * - tissue_culture: tissue-culture plantlet
+ */
+export const PlantSourceTypeEnum = z.enum(['seed', 'clone', 'tissue_culture']);
+export type PlantSourceType = z.infer<typeof PlantSourceTypeEnum>;
+
 // ─── GROWTH STAGE ENUM ───────────────────────────────────────────────────────
 /**
  * Plant lifecycle stages per GACP cultivation protocol.
@@ -25,7 +35,7 @@ export const GrowthStageEnum = z.enum([
   'GERMINATION',
   'CLONING',
   'VEGETATIVE',
-  'MOTHER_PLANT', // Not a separate stage in the lifecycle, but useful to track for reporting
+  'MOTHER_PLANT',
   'FLOWERING',
   'HARVESTING',
   'HARVESTED',
@@ -38,7 +48,7 @@ export const VALID_STAGE_TRANSITIONS: Readonly<Record<GrowthStage, readonly Grow
   SEED: ['GERMINATION', 'DESTROYED'],
   GERMINATION: ['CLONING', 'VEGETATIVE', 'DESTROYED'],
   CLONING: ['VEGETATIVE', 'DESTROYED'],
-  VEGETATIVE: ['FLOWERING', 'DESTROYED'],
+  VEGETATIVE: ['FLOWERING', 'MOTHER_PLANT', 'DESTROYED'],
   MOTHER_PLANT: ['VEGETATIVE', 'DESTROYED'],
   FLOWERING: ['HARVESTING', 'DESTROYED'],
   HARVESTING: ['HARVESTED', 'DESTROYED'],
@@ -73,6 +83,15 @@ export const PlantSchema = SoftDeletableSchema.extend({
   strain_id: StrainIdSchema,
   /** Current lifecycle stage */
   current_stage: GrowthStageEnum,
+  /** How this plant originated (seed, clone, tissue_culture) */
+  source_type: PlantSourceTypeEnum.default('seed'),
+  /** ID of the mother plant this clone was taken from (null for seed-grown plants) */
+  mother_plant_id: PlantIdSchema.nullable().optional(),
+  /**
+   * Clone generation number. Seed = 0, first clone from seed-grown mother = 1,
+   * clone from that clone's mother = 2, etc. Used for genetic drift tracking.
+   */
+  generation: z.number().int().nonnegative().default(0),
   /** Physical location */
   facility_id: FacilityIdSchema,
   room_id: RoomIdSchema.optional(),
@@ -113,6 +132,11 @@ export const CreatePlantSchema = z.object({
     .min(3)
     .max(20)
     .regex(/^[A-Z0-9-]+$/),
+  source_type: PlantSourceTypeEnum.default('seed'),
+  /** Required when source_type is 'clone' — the mother plant ID */
+  mother_plant_id: PlantIdSchema.nullable().optional(),
+  /** Clone generation (auto-calculated from mother if not provided) */
+  generation: z.number().int().nonnegative().optional(),
   notes: z.string().max(2000).optional(),
 });
 export type CreatePlant = z.infer<typeof CreatePlantSchema>;
@@ -193,6 +217,7 @@ export const PlantOperationTypeEnum = z.enum([
   'fertilizing',
   'health_check',
   'pest_treatment',
+  'cloning', // Taking cuttings from a mother plant
   'harvest',
   'destruction',
   'observation',

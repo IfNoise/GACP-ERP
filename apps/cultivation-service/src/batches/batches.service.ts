@@ -2,8 +2,10 @@ import { Injectable, NotFoundException, BadRequestException, Logger } from '@nes
 import { randomUUID } from 'crypto';
 import {
   type Batch,
+  type Plant,
   type CreateBatch,
   type UpdateBatch,
+  type CloneBatch,
   type BatchStatus,
   type BatchId,
   type FacilityId,
@@ -16,6 +18,7 @@ import {
 } from '@gacp-erp/shared-events';
 import { BatchesRepository } from './batches.repository';
 import { KafkaProducerService } from '../kafka/kafka-producer.service';
+import { CloneBatchUseCase } from './use-cases/clone-batch.use-case';
 
 @Injectable()
 export class BatchesService {
@@ -24,6 +27,7 @@ export class BatchesService {
   constructor(
     private readonly batchesRepo: BatchesRepository,
     private readonly kafkaProducer: KafkaProducerService,
+    private readonly cloneBatchUseCase: CloneBatchUseCase,
   ) {}
 
   async getById(id: string): Promise<Batch> {
@@ -98,5 +102,9 @@ export class BatchesService {
       },
     };
     this.kafkaProducer.publish(CULTIVATION_TOPIC, batch.id, event);
+  }
+
+  async cloneBatch(dto: CloneBatch, createdBy: string): Promise<{ batch: Batch; plants: Plant[] }> {
+    return this.cloneBatchUseCase.execute(dto, createdBy);
   }
 }

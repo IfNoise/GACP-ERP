@@ -11,6 +11,6 @@ import { OutboxModule } from '../outbox/outbox.module';
   imports: [QrModule, OutboxModule],
   controllers: [PlantsController],
   providers: [PlantsService, PlantsRepository, CreatePlantUseCase, TransitionStageUseCase],
-  exports: [PlantsService],
+  exports: [PlantsService, PlantsRepository],
 })
 export class PlantsModule {}

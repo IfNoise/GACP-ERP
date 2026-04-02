@@ -12,9 +12,11 @@ import {
 import {
   CreateBatchSchema,
   UpdateBatchSchema,
+  CloneBatchSchema,
   BatchStatusEnum,
   type CreateBatch,
   type UpdateBatch,
+  type CloneBatch,
 } from '@gacp-erp/shared-schemas';
 import { z } from 'zod';
 import { BatchesService } from './batches.service';
@@ -68,5 +70,12 @@ export class BatchesController {
     @Headers('x-user-id') userId: string,
   ) {
     return this.batchesService.updateStatus(id, body.status, userId ?? 'system');
+  }
+
+  /** POST /api/v1/batches/clone — Create a new batch from mother plant cuttings */
+  @Post('clone')
+  @HttpCode(HttpStatus.CREATED)
+  clone(@ZodBody(CloneBatchSchema) dto: CloneBatch, @Headers('x-user-id') userId: string) {
+    return this.batchesService.cloneBatch(dto, userId ?? 'system');
   }
 }
