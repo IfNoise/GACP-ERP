@@ -14,15 +14,18 @@ import { z } from 'zod';
 import {
   CreatePlantSchema,
   UpdatePlantSchema,
+  MovePlantSchema,
   StageTransitionSchema,
   PaginationQuerySchema,
   GrowthStageEnum,
   type CreatePlant,
   type UpdatePlant,
+  type MovePlant,
   type StageTransition,
 } from '@gacp-erp/shared-schemas';
 import { PlantsService } from './plants.service';
 import { QrService } from '../qr/qr.service';
+import { ZoneRepository } from '../facilities/zone.repository';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
 
 const ListPlantsQuerySchema = PaginationQuerySchema.extend({
@@ -36,6 +39,7 @@ export class PlantsController {
   constructor(
     private readonly plantsService: PlantsService,
     private readonly qrService: QrService,
+    private readonly zoneRepo: ZoneRepository,
   ) {}
 
   /** GET /api/v1/plants */
@@ -66,7 +70,8 @@ export class PlantsController {
   @Get(':id/qr')
   async getQr(@Param('id') id: string) {
     const plant = await this.plantsService.getById(id);
-    return this.qrService.generatePlantQr(plant.id, plant.plant_code, plant.facility_id);
+    const facilityId = await this.zoneRepo.resolveFacilityId(plant.zone_id);
+    return this.qrService.generatePlantQr(plant.id, plant.plant_code, facilityId ?? 'unknown');
   }
 
   /** POST /api/v1/plants */
@@ -74,6 +79,16 @@ export class PlantsController {
   @HttpCode(HttpStatus.CREATED)
   create(@ZodBody(CreatePlantSchema) dto: CreatePlant, @Headers('x-user-id') userId: string) {
     return this.plantsService.create(dto, userId ?? 'system');
+  }
+
+  /** POST /api/v1/plants/:id/move */
+  @Post(':id/move')
+  move(
+    @Param('id') id: string,
+    @ZodBody(MovePlantSchema) dto: MovePlant,
+    @Headers('x-user-id') userId: string,
+  ) {
+    return this.plantsService.movePlant(id, dto, userId ?? 'system');
   }
 
   /** POST /api/v1/plants/:id/transition */

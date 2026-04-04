@@ -4,6 +4,7 @@ export {
   usePlants,
   usePlant,
   useCreatePlant,
+  useMovePlant,
   useTransitionPlantStage,
   usePlantStageHistory,
   // Batches
@@ -125,4 +126,24 @@ export {
   useUploadVersion,
   useSubmitForReview,
   useApproveDocument,
+  // Facilities (Cultivation Spatial Hierarchy)
+  useFacilities,
+  useFacility,
+  useCreateFacility,
+  useUpdateFacility,
+  // Buildings
+  useBuildings,
+  useBuilding,
+  useCreateBuilding,
+  useUpdateBuilding,
+  // Rooms (under buildings)
+  useBuildingRooms,
+  useCreateRoom,
+  useRoom,
+  useUpdateRoom,
+  // Zones (under rooms)
+  useRoomZones,
+  useCreateCultivationZone,
+  useCultivationZone,
+  useUpdateCultivationZone,
 } from './use-domain-queries';

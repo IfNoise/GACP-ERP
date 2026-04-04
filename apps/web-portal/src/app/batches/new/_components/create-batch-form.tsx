@@ -3,22 +3,21 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useCreateBatch, useZones } from '@/hooks';
+import { useCreateBatch, useFacilities } from '@/hooks';
 import { Button } from '@gacp-erp/ui-components';
 
 export function CreateBatchForm() {
   const router = useRouter();
   const createBatch = useCreateBatch();
-  const { data: zonesData } = useZones({ limit: 100 });
 
-  const zones =
-    (zonesData as unknown as { data?: { id: string; zone_name: string }[] })?.data ?? [];
+  const { data: facilitiesData } = useFacilities({ limit: 100 });
+  const facilities =
+    (facilitiesData as unknown as { data?: { id: string; name: string }[] })?.data ?? [];
 
   const [form, setForm] = useState({
     batch_number: '',
     strain_id: '',
     facility_id: '',
-    zone_id: '',
     planned_plant_count: '',
     planned_start_date: '',
     planned_harvest_date: '',
@@ -29,7 +28,8 @@ export function CreateBatchForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.batch_number || !form.planned_plant_count) return;
+    if (!form.batch_number || !form.planned_plant_count || !form.facility_id || !form.strain_id)
+      return;
 
     createBatch.mutate(
       {
@@ -37,7 +37,6 @@ export function CreateBatchForm() {
         strain_id: form.strain_id,
         facility_id: form.facility_id,
         planned_plant_count: parseInt(form.planned_plant_count, 10),
-        ...(form.zone_id ? { zone_id: form.zone_id } : {}),
         ...(form.planned_start_date
           ? { planned_start_date: new Date(form.planned_start_date).toISOString() }
           : {}),
@@ -54,7 +53,7 @@ export function CreateBatchForm() {
     <div className="space-y-6">
       <div>
         <Link href="/batches" className="text-sm text-gray-500 hover:text-gray-700">
-          ← Back to batches
+          &larr; Back to batches
         </Link>
         <h1 className="mt-1 text-2xl font-bold text-gray-900">New Batch</h1>
       </div>
@@ -77,24 +76,43 @@ export function CreateBatchForm() {
             />
           </div>
 
-          {/* Zone */}
+          {/* Facility (license binding) */}
           <div>
-            <label htmlFor="zone_id" className="block text-sm font-medium text-gray-700">
-              Zone
+            <label htmlFor="facility_id" className="block text-sm font-medium text-gray-700">
+              Facility *
             </label>
             <select
-              id="zone_id"
-              value={form.zone_id}
-              onChange={(e) => update('zone_id', e.target.value)}
+              id="facility_id"
+              value={form.facility_id}
+              onChange={(e) => update('facility_id', e.target.value)}
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              required
             >
-              <option value="">No zone</option>
-              {zones.map((z) => (
-                <option key={z.id} value={z.id}>
-                  {z.zone_name}
+              <option value="">Select facility...</option>
+              {facilities.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.name}
                 </option>
               ))}
             </select>
+            <p className="mt-1 text-xs text-gray-400">Regulatory license binding for this batch</p>
+          </div>
+
+          {/* Strain ID */}
+          <div>
+            <label htmlFor="strain_id" className="block text-sm font-medium text-gray-700">
+              Strain ID *
+            </label>
+            <input
+              id="strain_id"
+              type="text"
+              value={form.strain_id}
+              onChange={(e) => update('strain_id', e.target.value)}
+              placeholder="UUID of the strain"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              required
+            />
+            <p className="mt-1 text-xs text-gray-400">Cannabis strain identifier (UUID)</p>
           </div>
 
           {/* Planned Plant Count */}
@@ -152,7 +170,7 @@ export function CreateBatchForm() {
               onChange={(e) => update('notes', e.target.value)}
               rows={3}
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
-              placeholder="Optional notes…"
+              placeholder="Optional notes..."
             />
           </div>
 
@@ -166,7 +184,7 @@ export function CreateBatchForm() {
           {/* Actions */}
           <div className="flex gap-3 pt-2">
             <Button type="submit" disabled={createBatch.isPending}>
-              {createBatch.isPending ? 'Creating…' : 'Create Batch'}
+              {createBatch.isPending ? 'Creating...' : 'Create Batch'}
             </Button>
             <Link href="/batches">
               <Button variant="secondary">Cancel</Button>

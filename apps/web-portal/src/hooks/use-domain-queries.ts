@@ -52,6 +52,28 @@ export function useCreatePlant() {
   });
 }
 
+export function useMovePlant() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: Parameters<typeof api.cultivation.plants.move>[0]['body'];
+    }) => {
+      const res = await api.cultivation.plants.move({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to move plant');
+      return res.body;
+    },
+    onSuccess: (_data, { id }) => {
+      qc.invalidateQueries({ queryKey: ['plants', id] });
+      qc.invalidateQueries({ queryKey: ['plants'] });
+    },
+  });
+}
+
 export function useTransitionPlantStage() {
   const api = useApiClient();
   const qc = useQueryClient();
@@ -2040,5 +2062,321 @@ export function useApproveDocument() {
       return res.body;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['documents'] }),
+  });
+}
+
+// ─── FACILITIES (Cultivation Spatial Hierarchy) ──────────────────────────────
+
+interface FacilitiesQuery {
+  page?: number;
+  limit?: number;
+  is_active?: string;
+}
+
+export function useFacilities(query: FacilitiesQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['facilities', query],
+    queryFn: async () => {
+      const res = await api.facility.facilities.list({
+        query: { page: 1, limit: 20, ...query },
+      });
+      if (res.status !== 200) throw new Error('Failed to load facilities');
+      return res.body;
+    },
+  });
+}
+
+export function useFacility(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['facilities', id],
+    queryFn: async () => {
+      const res = await api.facility.facilities.getById({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load facility');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateFacility() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.facility.facilities.create>[0]['body']) => {
+      const res = await api.facility.facilities.create({ body });
+      if (res.status !== 201) throw new Error('Failed to create facility');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['facilities'] }),
+  });
+}
+
+export function useUpdateFacility() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.facility.facilities.update>[0]['body']>;
+    }) => {
+      const res = await api.facility.facilities.update({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to update facility');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['facilities', id] });
+      qc.invalidateQueries({ queryKey: ['facilities'] });
+    },
+  });
+}
+
+// ─── BUILDINGS ───────────────────────────────────────────────────────────────
+
+interface BuildingsQuery {
+  page?: number;
+  limit?: number;
+  building_type?: string;
+}
+
+export function useBuildings(facilityId: string, query: BuildingsQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['facilities', facilityId, 'buildings', query],
+    queryFn: async () => {
+      const res = await api.facility.facilities.listBuildings({
+        params: { facilityId },
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.facility.facilities.listBuildings>[0]);
+      if (res.status !== 200) throw new Error('Failed to load buildings');
+      return res.body;
+    },
+    enabled: !!facilityId,
+  });
+}
+
+export function useBuilding(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['buildings', id],
+    queryFn: async () => {
+      const res = await api.facility.buildings.getById({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load building');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateBuilding() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      facilityId,
+      body,
+    }: {
+      facilityId: string;
+      body: Parameters<typeof api.facility.facilities.createBuilding>[0]['body'];
+    }) => {
+      const res = await api.facility.facilities.createBuilding({
+        params: { facilityId },
+        body,
+      });
+      if (res.status !== 201) throw new Error('Failed to create building');
+      return res.body;
+    },
+    onSuccess: (_d, { facilityId }) => {
+      qc.invalidateQueries({ queryKey: ['facilities', facilityId, 'buildings'] });
+    },
+  });
+}
+
+export function useUpdateBuilding() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.facility.buildings.update>[0]['body']>;
+    }) => {
+      const res = await api.facility.buildings.update({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to update building');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['buildings', id] });
+      qc.invalidateQueries({ queryKey: ['facilities'] });
+    },
+  });
+}
+
+// ─── ROOMS (under buildings) ─────────────────────────────────────────────────
+
+export function useBuildingRooms(
+  buildingId: string,
+  query: { page?: number; limit?: number } = {},
+) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['buildings', buildingId, 'rooms', query],
+    queryFn: async () => {
+      const res = await api.facility.buildings.listRooms({
+        params: { buildingId },
+        query: { page: 1, limit: 20, ...query },
+      });
+      if (res.status !== 200) throw new Error('Failed to load rooms');
+      return res.body;
+    },
+    enabled: !!buildingId,
+  });
+}
+
+export function useCreateRoom() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      buildingId,
+      body,
+    }: {
+      buildingId: string;
+      body: Parameters<typeof api.facility.buildings.createRoom>[0]['body'];
+    }) => {
+      const res = await api.facility.buildings.createRoom({
+        params: { buildingId },
+        body,
+      });
+      if (res.status !== 201) throw new Error('Failed to create room');
+      return res.body;
+    },
+    onSuccess: (_d, { buildingId }) => {
+      qc.invalidateQueries({ queryKey: ['buildings', buildingId, 'rooms'] });
+    },
+  });
+}
+
+export function useRoom(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['rooms', id],
+    queryFn: async () => {
+      const res = await api.facility.rooms.getById({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load room');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useUpdateRoom() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.facility.rooms.update>[0]['body']>;
+    }) => {
+      const res = await api.facility.rooms.update({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to update room');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['rooms', id] });
+      qc.invalidateQueries({ queryKey: ['buildings'] });
+    },
+  });
+}
+
+// ─── ZONES (under rooms) ────────────────────────────────────────────────────
+
+interface RoomZonesQuery {
+  page?: number;
+  limit?: number;
+  zone_type?: string;
+}
+
+export function useRoomZones(roomId: string, query: RoomZonesQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['rooms', roomId, 'zones', query],
+    queryFn: async () => {
+      const res = await api.facility.rooms.listZones({
+        params: { roomId },
+        query: { page: 1, limit: 20, ...query } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.facility.rooms.listZones>[0]);
+      if (res.status !== 200) throw new Error('Failed to load zones');
+      return res.body;
+    },
+    enabled: !!roomId,
+  });
+}
+
+export function useCreateCultivationZone() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      roomId,
+      body,
+    }: {
+      roomId: string;
+      body: Parameters<typeof api.facility.rooms.createZone>[0]['body'];
+    }) => {
+      const res = await api.facility.rooms.createZone({
+        params: { roomId },
+        body,
+      });
+      if (res.status !== 201) throw new Error('Failed to create zone');
+      return res.body;
+    },
+    onSuccess: (_d, { roomId }) => {
+      qc.invalidateQueries({ queryKey: ['rooms', roomId, 'zones'] });
+    },
+  });
+}
+
+export function useCultivationZone(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['cultivationZones', id],
+    queryFn: async () => {
+      const res = await api.facility.zones.getById({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load zone');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useUpdateCultivationZone() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.facility.zones.update>[0]['body']>;
+    }) => {
+      const res = await api.facility.zones.update({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to update zone');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['cultivationZones', id] });
+      qc.invalidateQueries({ queryKey: ['rooms'] });
+    },
   });
 }
