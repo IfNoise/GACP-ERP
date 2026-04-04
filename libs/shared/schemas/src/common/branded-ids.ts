@@ -20,6 +20,10 @@ export type UserId = z.infer<typeof UserIdSchema>;
 export const FacilityIdSchema = z.string().uuid().brand<'FacilityId'>();
 export type FacilityId = z.infer<typeof FacilityIdSchema>;
 
+/** UUID v4 branded as BuildingId */
+export const BuildingIdSchema = z.string().uuid().brand<'BuildingId'>();
+export type BuildingId = z.infer<typeof BuildingIdSchema>;
+
 /** UUID v4 branded as ZoneId */
 export const ZoneIdSchema = z.string().uuid().brand<'ZoneId'>();
 export type ZoneId = z.infer<typeof ZoneIdSchema>;

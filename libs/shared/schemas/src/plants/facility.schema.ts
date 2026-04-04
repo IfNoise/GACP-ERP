@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-import { FacilityIdSchema, RoomIdSchema, UserIdSchema, ZoneIdSchema } from '../common/branded-ids';
+import {
+  BuildingIdSchema,
+  FacilityIdSchema,
+  RoomIdSchema,
+  UserIdSchema,
+  ZoneIdSchema,
+} from '../common/branded-ids';
 
 // ─── ZONE TYPE ───────────────────────────────────────────────────────────────
 
@@ -18,6 +24,11 @@ export const PlantZoneTypeEnum = z.enum([
   'quarantine',
 ]);
 export type PlantZoneType = z.infer<typeof PlantZoneTypeEnum>;
+
+// ─── BUILDING TYPE ──────────────────────────────────────────────────────────
+
+export const BuildingTypeEnum = z.enum(['indoor', 'greenhouse', 'open_ground']);
+export type BuildingType = z.infer<typeof BuildingTypeEnum>;
 
 // ─── FACILITY ────────────────────────────────────────────────────────────────
 
@@ -57,11 +68,35 @@ export const CreateFacilitySchema = z.object({
 });
 export type CreateFacility = z.infer<typeof CreateFacilitySchema>;
 
+// ─── BUILDING ───────────────────────────────────────────────────────────────
+
+export const BuildingSchema = z.object({
+  id: BuildingIdSchema,
+  facility_id: FacilityIdSchema,
+  building_code: z.string().min(1).max(20),
+  name: z.string().min(1).max(255),
+  building_type: BuildingTypeEnum,
+  is_active: z.boolean().default(true),
+  created_at: z.string().datetime({ offset: true }),
+  updated_at: z.string().datetime({ offset: true }),
+  created_by: UserIdSchema,
+  updated_by: UserIdSchema,
+});
+export type Building = z.infer<typeof BuildingSchema>;
+
+export const CreateBuildingSchema = z.object({
+  facility_id: FacilityIdSchema,
+  building_code: z.string().min(1).max(20),
+  name: z.string().min(1).max(255),
+  building_type: BuildingTypeEnum,
+});
+export type CreateBuilding = z.infer<typeof CreateBuildingSchema>;
+
 // ─── ROOM ────────────────────────────────────────────────────────────────────
 
 export const RoomSchema = z.object({
   id: RoomIdSchema,
-  facility_id: FacilityIdSchema,
+  building_id: BuildingIdSchema,
   room_code: z.string().min(1).max(30),
   name: z.string().min(1).max(100),
   dimensions: z.record(z.unknown()).nullable().optional(),
@@ -74,7 +109,7 @@ export const RoomSchema = z.object({
 export type Room = z.infer<typeof RoomSchema>;
 
 export const CreateRoomSchema = z.object({
-  facility_id: FacilityIdSchema,
+  building_id: BuildingIdSchema,
   room_code: z.string().min(1).max(30),
   name: z.string().min(1).max(100),
   dimensions: z.record(z.unknown()).optional(),
@@ -111,3 +146,17 @@ export const CreateZoneSchema = z.object({
   environment_config: z.record(z.unknown()).optional(),
 });
 export type CreateZone = z.infer<typeof CreateZoneSchema>;
+
+// ─── UPDATE SCHEMAS ─────────────────────────────────────────────────────────
+
+export const UpdateFacilitySchema = CreateFacilitySchema.partial();
+export type UpdateFacility = z.infer<typeof UpdateFacilitySchema>;
+
+export const UpdateBuildingSchema = CreateBuildingSchema.omit({ facility_id: true }).partial();
+export type UpdateBuilding = z.infer<typeof UpdateBuildingSchema>;
+
+export const UpdateRoomSchema = CreateRoomSchema.omit({ building_id: true }).partial();
+export type UpdateRoom = z.infer<typeof UpdateRoomSchema>;
+
+export const UpdateZoneSchema = CreateZoneSchema.omit({ room_id: true }).partial();
+export type UpdateZone = z.infer<typeof UpdateZoneSchema>;

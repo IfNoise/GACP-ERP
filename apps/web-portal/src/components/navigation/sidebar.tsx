@@ -32,6 +32,7 @@ import {
   FileBarChart,
   Map,
   Box,
+  Building2,
   ChevronDown,
   ChevronRight,
   PanelLeftClose,
@@ -76,6 +77,7 @@ const navGroups: NavGroup[] = [
     icon: Sprout,
     roles: ['SUPER_ADMIN', 'QUALITY_MANAGER', 'CULTIVATION_MANAGER', 'OPERATOR'],
     items: [
+      { label: 'Facilities', href: '/facilities', icon: Building2 },
       { label: 'Plants', href: '/plants', icon: Sprout },
       { label: 'Batches', href: '/batches', icon: Layers },
     ],

@@ -97,6 +97,9 @@ export const plantSourceTypeEnum = pgEnum('plant_source_type', ['seed', 'clone',
 /** Audit trail operations — INSERT only in production (DS-DI-002) */
 export const auditOperationEnum = pgEnum('audit_operation', ['INSERT', 'UPDATE', 'DELETE']);
 
+/** Building types — indoor, greenhouse, or open ground */
+export const buildingTypeEnum = pgEnum('building_type', ['indoor', 'greenhouse', 'open_ground']);
+
 // ── Facilities ─────────────────────────────────────────────────────────────────
 
 export const facilitiesTable = pgTable(
@@ -124,15 +127,46 @@ export const facilitiesTable = pgTable(
   }),
 );
 
+// ── Buildings ────────────────────────────────────────────────────────────────
+
+export const buildingsTable = pgTable(
+  'buildings',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    facility_id: uuid('facility_id')
+      .notNull()
+      .references(() => facilitiesTable.id),
+    building_code: varchar('building_code', { length: 20 }).notNull(),
+    name: varchar('name', { length: 255 }).notNull(),
+    building_type: buildingTypeEnum('building_type').notNull().default('indoor'),
+    is_active: boolean('is_active').notNull().default(true),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by').notNull(),
+    updated_by: uuid('updated_by').notNull(),
+  },
+  (t) => ({
+    facilityBuildingCodeIdx: uniqueIndex('buildings_facility_code_idx').on(
+      t.facility_id,
+      t.building_code,
+    ),
+    facilityIdx: index('buildings_facility_idx').on(t.facility_id),
+  }),
+);
+
 // ── Rooms ─────────────────────────────────────────────────────────────────────
 
 export const roomsTable = pgTable(
   'rooms',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    facility_id: uuid('facility_id')
+    building_id: uuid('building_id')
       .notNull()
-      .references(() => facilitiesTable.id),
+      .references(() => buildingsTable.id),
     room_code: varchar('room_code', { length: 30 }).notNull(),
     name: varchar('name', { length: 100 }).notNull(),
     dimensions: jsonb('dimensions'),
@@ -147,8 +181,8 @@ export const roomsTable = pgTable(
     updated_by: uuid('updated_by').notNull(),
   },
   (t) => ({
-    facilityRoomCodeIdx: uniqueIndex('rooms_facility_code_idx').on(t.facility_id, t.room_code),
-    facilityIdx: index('rooms_facility_idx').on(t.facility_id),
+    buildingRoomCodeIdx: uniqueIndex('rooms_building_code_idx').on(t.building_id, t.room_code),
+    buildingIdx: index('rooms_building_idx').on(t.building_id),
   }),
 );
 
@@ -265,7 +299,6 @@ export const batchesTable = pgTable(
     facility_id: uuid('facility_id')
       .notNull()
       .references(() => facilitiesTable.id),
-    zone_id: uuid('zone_id').references(() => zonesTable.id),
     planned_plant_count: integer('planned_plant_count').notNull(),
     actual_plant_count: integer('actual_plant_count').notNull().default(0),
     notes: text('notes'),
@@ -317,11 +350,10 @@ export const plantsTable = pgTable(
     mother_plant_id: uuid('mother_plant_id'),
     /** Clone generation number (0 = seed-grown, 1 = first clone gen, etc.) */
     generation: integer('generation').notNull().default(0),
-    facility_id: uuid('facility_id')
+    /** Current zone — sole spatial reference (room/building/facility derive from hierarchy) */
+    zone_id: uuid('zone_id')
       .notNull()
-      .references(() => facilitiesTable.id),
-    room_id: uuid('room_id').references(() => roomsTable.id),
-    zone_id: uuid('zone_id').references(() => zonesTable.id),
+      .references(() => zonesTable.id),
     /** Health score 0-100 per GACP cultivation standards */
     current_health_score: integer('current_health_score').default(100),
     /** Physical position (x, y, z) within zone */
@@ -354,7 +386,7 @@ export const plantsTable = pgTable(
     stageIdx: index('plants_stage_idx').on(t.current_stage),
     sourceTypeIdx: index('plants_source_type_idx').on(t.source_type),
     motherPlantIdx: index('plants_mother_plant_idx').on(t.mother_plant_id),
-    facilityZoneIdx: index('plants_facility_zone_idx').on(t.facility_id, t.zone_id),
+    zoneIdx: index('plants_zone_idx').on(t.zone_id),
     healthIdx: index('plants_health_idx').on(t.current_health_score),
   }),
 );

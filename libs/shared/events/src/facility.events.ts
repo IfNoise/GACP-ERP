@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
 import {
+  BuildingIdSchema,
+  BuildingTypeEnum,
   FacilityIdSchema,
+  PlantZoneTypeEnum,
   RoomIdSchema,
   UserIdSchema,
   ZoneIdSchema,
 } from '@gacp-erp/shared-schemas';
-import { ZoneTypeEnum } from '@gacp-erp/shared-schemas';
 import { EventHeaderSchema } from './base.events';
 
 // ─── KAFKA TOPIC ──────────────────────────────────────────────────────────────
@@ -26,6 +28,21 @@ export const FacilityCreatedEventSchema = EventHeaderSchema.extend({
 });
 export type FacilityCreatedEvent = z.infer<typeof FacilityCreatedEventSchema>;
 
+// ─── BUILDING CREATED ────────────────────────────────────────────────────────
+export const BuildingCreatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('BUILDING_CREATED'),
+  topic: z.literal(FACILITY_TOPIC),
+  payload: z.object({
+    buildingId: BuildingIdSchema,
+    buildingCode: z.string(),
+    facilityId: FacilityIdSchema,
+    buildingType: BuildingTypeEnum,
+    name: z.string(),
+    createdBy: UserIdSchema,
+  }),
+});
+export type BuildingCreatedEvent = z.infer<typeof BuildingCreatedEventSchema>;
+
 // ─── ROOM CREATED ─────────────────────────────────────────────────────────────
 export const RoomCreatedEventSchema = EventHeaderSchema.extend({
   eventType: z.literal('ROOM_CREATED'),
@@ -33,6 +50,7 @@ export const RoomCreatedEventSchema = EventHeaderSchema.extend({
   payload: z.object({
     roomId: RoomIdSchema,
     roomCode: z.string(),
+    buildingId: BuildingIdSchema,
     facilityId: FacilityIdSchema,
     name: z.string(),
     createdBy: UserIdSchema,
@@ -48,8 +66,9 @@ export const ZoneCreatedEventSchema = EventHeaderSchema.extend({
     zoneId: ZoneIdSchema,
     zoneCode: z.string(),
     roomId: RoomIdSchema,
+    buildingId: BuildingIdSchema,
     facilityId: FacilityIdSchema,
-    zoneType: ZoneTypeEnum,
+    zoneType: PlantZoneTypeEnum,
     name: z.string(),
     maxPlants: z.number().int().positive().optional(),
     createdBy: UserIdSchema,
@@ -77,6 +96,7 @@ export type ZoneCapacityChangedEvent = z.infer<typeof ZoneCapacityChangedEventSc
 // ─── DISCRIMINATED UNION ──────────────────────────────────────────────────────
 export const FacilityEventSchema = z.discriminatedUnion('eventType', [
   FacilityCreatedEventSchema,
+  BuildingCreatedEventSchema,
   RoomCreatedEventSchema,
   ZoneCreatedEventSchema,
   ZoneCapacityChangedEventSchema,

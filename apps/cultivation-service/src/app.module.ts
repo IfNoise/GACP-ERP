@@ -7,6 +7,7 @@ import { BatchesModule } from './batches/batches.module';
 import { QrModule } from './qr/qr.module';
 import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
+import { FacilityModule } from './facilities/facility.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OutboxModule } from './outbox/outbox.module';
     LoggerModule.forRoot(createLoggerOptions('cultivation-service')),
     DatabaseModule,
     OutboxModule,
+    FacilityModule,
     PlantsModule,
     BatchesModule,
     QrModule,
