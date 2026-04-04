@@ -47,8 +47,6 @@ export const BatchSchema = SoftDeletableSchema.extend({
   parent_batch_id: BatchIdSchema.nullable().optional(),
   strain_id: StrainIdSchema,
   facility_id: FacilityIdSchema,
-  /** Physical zone within the facility where the batch is located */
-  zone_id: ZoneIdSchema.optional(),
   status: BatchStatusEnum.default('PLANNED'),
   /** QA compliance review status */
   compliance_status: ComplianceStatusEnum.default('pending'),
@@ -74,7 +72,6 @@ export const CreateBatchSchema = z.object({
   parent_batch_id: BatchIdSchema.nullable().optional(),
   strain_id: StrainIdSchema,
   facility_id: FacilityIdSchema,
-  zone_id: ZoneIdSchema.optional(),
   compliance_status: ComplianceStatusEnum.optional(),
   planned_plant_count: z.number().int().positive(),
   notes: z.string().max(2000).optional(),
@@ -84,7 +81,6 @@ export const CreateBatchSchema = z.object({
 export type CreateBatch = z.infer<typeof CreateBatchSchema>;
 
 export const UpdateBatchSchema = z.object({
-  zone_id: ZoneIdSchema.optional(),
   notes: z.string().max(2000).optional(),
   planned_harvest_date: z.string().datetime({ offset: true }).optional(),
   status: BatchStatusEnum.optional(),
@@ -150,8 +146,8 @@ export const CloneBatchSchema = z.object({
   batch_number: z.string().min(1).max(50),
   /** Facility where clones will be placed */
   facility_id: FacilityIdSchema,
-  /** Zone for clone rooting (ideally clone_room) */
-  zone_id: ZoneIdSchema.optional(),
+  /** Zone for clone rooting (required — initial placement for clone plants) */
+  zone_id: ZoneIdSchema,
   /** Optional plant code prefix — clones will be numbered: PREFIX-001, PREFIX-002, etc. */
   plant_code_prefix: z
     .string()

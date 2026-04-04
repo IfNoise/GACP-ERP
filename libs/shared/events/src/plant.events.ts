@@ -4,7 +4,6 @@ import {
   BatchIdSchema,
   FacilityIdSchema,
   PlantIdSchema,
-  RoomIdSchema,
   UserIdSchema,
   ZoneIdSchema,
 } from '@gacp-erp/shared-schemas';
@@ -28,9 +27,7 @@ export const PlantCreatedEventSchema = EventHeaderSchema.extend({
     plantCode: z.string(),
     batchId: BatchIdSchema,
     strainId: z.string().uuid(),
-    facilityId: FacilityIdSchema,
-    roomId: RoomIdSchema.optional(),
-    zoneId: ZoneIdSchema.optional(),
+    zoneId: ZoneIdSchema,
     plantedAt: z.string().datetime({ offset: true }),
     initialStage: GrowthStageEnum,
   }),
@@ -57,18 +54,16 @@ export const PlantStageChangedEventSchema = EventHeaderSchema.extend({
 export type PlantStageChangedEvent = z.infer<typeof PlantStageChangedEventSchema>;
 
 // ─── PLANT MOVED ──────────────────────────────────────────────────────────────
-/** Published when a plant is physically relocated to a different zone or room. */
+/** Published when a plant is physically relocated to a different zone. */
 export const PlantMovedEventSchema = EventHeaderSchema.extend({
   eventType: z.literal('PLANT_MOVED'),
   topic: z.literal(CULTIVATION_TOPIC),
   payload: z.object({
     plantId: PlantIdSchema,
     plantCode: z.string(),
-    facilityId: FacilityIdSchema,
-    previousRoomId: RoomIdSchema.nullable(),
-    newRoomId: RoomIdSchema.nullable(),
-    previousZoneId: ZoneIdSchema.nullable(),
-    newZoneId: ZoneIdSchema.nullable(),
+    previousZoneId: ZoneIdSchema,
+    newZoneId: ZoneIdSchema,
+    operationId: z.string().uuid(),
     movedAt: z.string().datetime({ offset: true }),
     reason: z.string().max(500).optional(),
   }),

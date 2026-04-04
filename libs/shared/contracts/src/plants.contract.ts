@@ -10,6 +10,7 @@ import {
   CreatePlantSchema,
   GrowthStageRecordSchema,
   HarvestRecordSchema,
+  MovePlantSchema,
   PaginationQuerySchema,
   PlantSchema,
   StageTransitionSchema,
@@ -95,6 +96,22 @@ const plantsContract = c.router({
       404: ApiErrorSchema,
     },
     summary: 'Update plant metadata',
+  },
+
+  move: {
+    method: 'POST',
+    path: '/plants/:id/move',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: MovePlantSchema,
+    responses: {
+      200: PlantSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      422: ApiErrorSchema,
+    },
+    summary: 'Move plant to a different zone (OPERATOR+)',
   },
 
   transition: {

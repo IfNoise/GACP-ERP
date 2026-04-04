@@ -47,7 +47,6 @@ const fakeRow = {
   status: 'ACTIVE',
   compliance_status: 'pending',
   facility_id: 'facility-1',
-  zone_id: 'zone-1',
   planned_plant_count: 100,
   actual_plant_count: 0,
   notes: null,
@@ -85,7 +84,6 @@ describe('BatchesRepository', () => {
     it('should map row with all optional fields populated', async () => {
       const fullRow = {
         ...fakeRow,
-        zone_id: 'zone-1',
         notes: 'some notes',
         actual_start_date: new Date('2026-01-02'),
         actual_harvest_date: new Date('2026-06-02'),
@@ -94,7 +92,7 @@ describe('BatchesRepository', () => {
       const repo = new BatchesRepository(db as unknown as Database);
       const result = await repo.findById('batch-1');
       expect(result).toBeDefined();
-      expect(result!.zone_id).toBe('zone-1');
+      expect(result!.notes).toBe('some notes');
     });
   });
 
@@ -145,7 +143,6 @@ describe('BatchesRepository', () => {
         batch_number: 'BATCH-002',
         strain_id: 'strain-1',
         facility_id: 'facility-1',
-        zone_id: 'zone-1',
         planned_plant_count: 50,
       } as never;
       const result = await repo.create(dto, 'user-1');
@@ -198,7 +195,6 @@ describe('BatchesRepository', () => {
       await repo.updateFields(
         'batch-1',
         {
-          zone_id: 'zone-2',
           notes: 'updated',
           planned_harvest_date: '2026-07-01',
           status: 'HARVESTING',
@@ -207,7 +203,6 @@ describe('BatchesRepository', () => {
       );
       expect(setFn).toHaveBeenCalledWith(
         expect.objectContaining({
-          zone_id: 'zone-2',
           notes: 'updated',
           updated_by: 'user-2',
         }),

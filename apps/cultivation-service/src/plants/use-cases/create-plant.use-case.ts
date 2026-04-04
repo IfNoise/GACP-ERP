@@ -5,26 +5,24 @@ import {
   type CreatePlant,
   type PlantId,
   type BatchId,
-  type FacilityId,
   type ZoneId,
   type UserId,
 } from '@gacp-erp/shared-schemas';
 import { CULTIVATION_TOPIC, type PlantCreatedEvent } from '@gacp-erp/shared-events';
 import { PlantsRepository } from '../plants.repository';
 import { OutboxRepository } from '../../outbox/outbox.repository';
+import { ZoneRepository } from '../../facilities/zone.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
 import { type Database } from '@gacp-erp/shared-database';
 
 /**
- * CreatePlantUseCase — Step 3.2
+ * CreatePlantUseCase
  *
  * Orchestrates:
  * 1. Duplicate plant_code check
- * 2. DB transaction: INSERT into plants + INSERT into outbox_events
- * 3. The OutboxRelayService later publishes the outbox event to Kafka
- *
- * Outbox pattern guarantees: if DB commit succeeds, the PlantCreatedEvent
- * will eventually be published to Kafka (AT-LEAST-ONCE).
+ * 2. Zone existence + active validation
+ * 3. DB transaction: INSERT into plants + INSERT into outbox_events
+ * 4. The OutboxRelayService later publishes the outbox event to Kafka
  */
 @Injectable()
 export class CreatePlantUseCase {
@@ -34,12 +32,22 @@ export class CreatePlantUseCase {
     @Inject(DATABASE_TOKEN) private readonly db: Database,
     private readonly plantsRepo: PlantsRepository,
     private readonly outboxRepo: OutboxRepository,
+    private readonly zoneRepo: ZoneRepository,
   ) {}
 
   async execute(dto: CreatePlant, createdBy: string): Promise<Plant> {
     const existing = await this.plantsRepo.findByCode(dto.plant_code);
     if (existing) {
       throw new BadRequestException(`Plant code "${dto.plant_code}" already exists`);
+    }
+
+    // Validate zone exists and is active
+    const zone = await this.zoneRepo.findById(dto.zone_id);
+    if (!zone) {
+      throw new BadRequestException(`Zone "${dto.zone_id}" not found`);
+    }
+    if (!zone.is_active) {
+      throw new BadRequestException(`Zone "${dto.zone_id}" is inactive`);
     }
 
     const plant = await this.db.transaction(async (tx) => {
@@ -59,8 +67,7 @@ export class CreatePlantUseCase {
           plantCode: newPlant.plant_code,
           batchId: newPlant.batch_id as BatchId,
           strainId: newPlant.strain_id,
-          facilityId: newPlant.facility_id as FacilityId,
-          ...(newPlant.zone_id ? { zoneId: newPlant.zone_id as ZoneId } : {}),
+          zoneId: newPlant.zone_id as ZoneId,
           plantedAt: newPlant.created_at,
           initialStage: newPlant.current_stage,
         },

@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CreatePlantUseCase } from './create-plant.use-case';
 import type { PlantsRepository } from '../plants.repository';
 import type { OutboxRepository } from '../../outbox/outbox.repository';
+import type { ZoneRepository } from '../../facilities/zone.repository';
 import type { Plant, CreatePlant } from '@gacp-erp/shared-schemas';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
@@ -11,25 +12,26 @@ const fakePlant = {
   plant_code: 'PLT-001',
   batch_id: 'batch-uuid-1',
   strain_id: 'strain-uuid-1',
-  facility_id: 'facility-uuid-1',
-  zone_id: null,
-  qr_code: 'QR-001',
+  zone_id: 'zone-uuid-1',
   current_stage: 'SEED',
-  is_active: true,
+  source_type: 'seed',
+  mother_plant_id: null,
+  generation: 0,
+  is_deleted: false,
+  deleted_at: null,
+  deleted_by: null,
   notes: null,
-  planted_at: new Date().toISOString(),
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   created_by: 'user-1',
   updated_by: 'user-1',
-  deleted_at: null,
 } as unknown as Plant;
 
 const createDto = {
   plant_code: 'PLT-001',
   batch_id: 'batch-uuid-1',
   strain_id: 'strain-uuid-1',
-  facility_id: 'facility-uuid-1',
+  zone_id: 'zone-uuid-1',
 } as unknown as CreatePlant;
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -38,6 +40,7 @@ describe('CreatePlantUseCase', () => {
   let useCase: CreatePlantUseCase;
   let plantsRepo: jest.Mocked<PlantsRepository>;
   let outboxRepo: jest.Mocked<OutboxRepository>;
+  let zoneRepo: jest.Mocked<ZoneRepository>;
   let mockDb: { transaction: jest.Mock };
 
   beforeEach(() => {
@@ -50,6 +53,10 @@ describe('CreatePlantUseCase', () => {
       createWithTx: jest.fn(),
     } as unknown as jest.Mocked<OutboxRepository>;
 
+    zoneRepo = {
+      findById: jest.fn().mockResolvedValue({ id: 'zone-uuid-1', is_active: true }),
+    } as unknown as jest.Mocked<ZoneRepository>;
+
     // The transaction mock immediately calls the callback with itself as `tx`
     mockDb = {
       transaction: jest.fn().mockImplementation(async (cb: (tx: unknown) => Promise<Plant>) => {
@@ -57,7 +64,7 @@ describe('CreatePlantUseCase', () => {
       }),
     };
 
-    useCase = new CreatePlantUseCase(mockDb as never, plantsRepo, outboxRepo);
+    useCase = new CreatePlantUseCase(mockDb as never, plantsRepo, outboxRepo, zoneRepo);
   });
 
   describe('duplicate plant_code check', () => {
@@ -69,6 +76,22 @@ describe('CreatePlantUseCase', () => {
       );
 
       expect(mockDb.transaction).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('zone validation', () => {
+    it('throws BadRequestException when zone not found', async () => {
+      plantsRepo.findByCode.mockResolvedValue(null);
+      zoneRepo.findById.mockResolvedValue(null);
+
+      await expect(useCase.execute(createDto, 'user-1')).rejects.toThrow(BadRequestException);
+    });
+
+    it('throws BadRequestException when zone is inactive', async () => {
+      plantsRepo.findByCode.mockResolvedValue(null);
+      zoneRepo.findById.mockResolvedValue({ id: 'zone-uuid-1', is_active: false } as never);
+
+      await expect(useCase.execute(createDto, 'user-1')).rejects.toThrow(BadRequestException);
     });
   });
 

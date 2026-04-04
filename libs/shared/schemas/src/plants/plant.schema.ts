@@ -7,9 +7,7 @@ import {
 } from '../common/base-entity.schema';
 import {
   BatchIdSchema,
-  FacilityIdSchema,
   PlantIdSchema,
-  RoomIdSchema,
   StrainIdSchema,
   UserIdSchema,
   ZoneIdSchema,
@@ -92,10 +90,8 @@ export const PlantSchema = SoftDeletableSchema.extend({
    * clone from that clone's mother = 2, etc. Used for genetic drift tracking.
    */
   generation: z.number().int().nonnegative().default(0),
-  /** Physical location */
-  facility_id: FacilityIdSchema,
-  room_id: RoomIdSchema.optional(),
-  zone_id: ZoneIdSchema.optional(),
+  /** Current zone (sole spatial reference — room/building/facility derive from hierarchy) */
+  zone_id: ZoneIdSchema,
   /**
    * Structured plant code: PLANT-YYYY-NNN (max 20 chars).
    * Unique across the system. Regex: /^[A-Z0-9-]+$/
@@ -124,9 +120,7 @@ export type Plant = z.infer<typeof PlantSchema>;
 export const CreatePlantSchema = z.object({
   batch_id: BatchIdSchema,
   strain_id: StrainIdSchema,
-  facility_id: FacilityIdSchema,
-  room_id: RoomIdSchema.optional(),
-  zone_id: ZoneIdSchema.optional(),
+  zone_id: ZoneIdSchema,
   plant_code: z
     .string()
     .min(3)
@@ -142,12 +136,17 @@ export const CreatePlantSchema = z.object({
 export type CreatePlant = z.infer<typeof CreatePlantSchema>;
 
 export const UpdatePlantSchema = z.object({
-  room_id: RoomIdSchema.optional(),
-  zone_id: ZoneIdSchema.optional(),
   health_score: z.number().int().min(0).max(100).optional(),
   notes: z.string().max(2000).optional(),
 });
 export type UpdatePlant = z.infer<typeof UpdatePlantSchema>;
+
+// ─── MOVE PLANT ──────────────────────────────────────────────────────────────
+export const MovePlantSchema = z.object({
+  zone_id: ZoneIdSchema,
+  reason: z.string().max(500).optional(),
+});
+export type MovePlant = z.infer<typeof MovePlantSchema>;
 
 // ─── STAGE TRANSITION ────────────────────────────────────────────────────────
 export const StageTransitionSchema = z.object({

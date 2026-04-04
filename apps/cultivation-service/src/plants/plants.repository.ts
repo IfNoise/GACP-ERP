@@ -73,7 +73,6 @@ export class PlantsRepository {
         plant_code: dto.plant_code,
         batch_id: dto.batch_id,
         strain_id: dto.strain_id,
-        facility_id: dto.facility_id,
         zone_id: dto.zone_id,
         source_type: (dto.source_type ??
           'seed') as (typeof plantsTable.$inferInsert)['source_type'],
@@ -103,7 +102,6 @@ export class PlantsRepository {
         plant_code: dto.plant_code,
         batch_id: dto.batch_id,
         strain_id: dto.strain_id,
-        facility_id: dto.facility_id,
         zone_id: dto.zone_id,
         source_type: (dto.source_type ??
           'seed') as (typeof plantsTable.$inferInsert)['source_type'],
@@ -217,8 +215,6 @@ export class PlantsRepository {
     const rows = await this.db
       .update(plantsTable)
       .set({
-        ...(dto.room_id !== undefined && { room_id: dto.room_id }),
-        ...(dto.zone_id !== undefined && { zone_id: dto.zone_id }),
         ...(dto.health_score !== undefined && { current_health_score: dto.health_score }),
         ...(dto.notes !== undefined && { notes: dto.notes }),
         updated_by: updatedBy,
@@ -228,6 +224,18 @@ export class PlantsRepository {
       .returning();
 
     return rows[0] ? this.mapRowToPlant(rows[0]) : null;
+  }
+
+  async updateZoneWithTx(
+    tx: DbContext,
+    plantId: string,
+    zoneId: string,
+    updatedBy: string,
+  ): Promise<void> {
+    await tx
+      .update(plantsTable)
+      .set({ zone_id: zoneId, updated_by: updatedBy, updated_at: new Date() })
+      .where(and(eq(plantsTable.id, plantId), isNull(plantsTable.deleted_at)));
   }
 
   async softDelete(id: string, deletedBy: string): Promise<void> {
@@ -253,9 +261,7 @@ export class PlantsRepository {
       source_type: (row.source_type ?? 'seed') as Plant['source_type'],
       mother_plant_id: row.mother_plant_id ?? null,
       generation: row.generation ?? 0,
-      facility_id: row.facility_id,
-      room_id: row.room_id ?? undefined,
-      zone_id: row.zone_id ?? undefined,
+      zone_id: row.zone_id,
       health_score: row.current_health_score ?? undefined,
       last_stage_change_at: row.last_stage_change_at?.toISOString(),
       last_operation_at: row.last_operation_at?.toISOString(),

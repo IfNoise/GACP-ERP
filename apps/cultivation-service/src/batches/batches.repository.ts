@@ -55,7 +55,6 @@ export class BatchesRepository {
         parent_batch_id: dto.parent_batch_id ?? undefined,
         strain_id: dto.strain_id,
         facility_id: dto.facility_id,
-        zone_id: dto.zone_id,
         compliance_status: dto.compliance_status ?? 'pending',
         planned_plant_count: dto.planned_plant_count,
         notes: dto.notes,
@@ -76,7 +75,6 @@ export class BatchesRepository {
     await this.db
       .update(batchesTable)
       .set({
-        ...(dto.zone_id !== undefined && { zone_id: dto.zone_id }),
         ...(dto.notes !== undefined && { notes: dto.notes }),
         ...(dto.planned_harvest_date !== undefined && {
           planned_harvest_date: new Date(dto.planned_harvest_date),
@@ -126,7 +124,6 @@ export class BatchesRepository {
       status: row.status as Batch['status'],
       compliance_status: row.compliance_status as Batch['compliance_status'],
       facility_id: row.facility_id,
-      zone_id: row.zone_id ?? undefined,
       planned_plant_count: row.planned_plant_count,
       actual_plant_count: row.actual_plant_count,
       notes: row.notes ?? undefined,

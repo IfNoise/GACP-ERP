@@ -7,9 +7,10 @@ import { CloneBatchUseCase } from './use-cases/clone-batch.use-case';
 import { OutboxModule } from '../outbox/outbox.module';
 import { KafkaProducerModule } from '../kafka/kafka-producer.module';
 import { PlantsModule } from '../plants/plants.module';
+import { FacilityModule } from '../facilities/facility.module';
 
 @Module({
-  imports: [OutboxModule, KafkaProducerModule, PlantsModule],
+  imports: [OutboxModule, KafkaProducerModule, PlantsModule, FacilityModule],
   controllers: [BatchesController],
   providers: [BatchesService, BatchesRepository, HarvestBatchUseCase, CloneBatchUseCase],
   exports: [BatchesService, HarvestBatchUseCase, CloneBatchUseCase],

@@ -3,6 +3,7 @@ import {
   type Plant,
   type CreatePlant,
   type UpdatePlant,
+  type MovePlant,
   type PlantStageTransitionRecord,
   type ElectronicSignature,
   type PaginationQuery,
@@ -12,6 +13,7 @@ import {
 import { PlantsRepository } from './plants.repository';
 import { CreatePlantUseCase } from './use-cases/create-plant.use-case';
 import { TransitionStageUseCase } from './use-cases/transition-stage.use-case';
+import { MovePlantUseCase } from './use-cases/move-plant.use-case';
 
 @Injectable()
 export class PlantsService {
@@ -21,6 +23,7 @@ export class PlantsService {
     private readonly plantsRepo: PlantsRepository,
     private readonly createPlantUseCase: CreatePlantUseCase,
     private readonly transitionStageUseCase: TransitionStageUseCase,
+    private readonly movePlantUseCase: MovePlantUseCase,
   ) {}
 
   async getById(id: string): Promise<Plant> {
@@ -69,6 +72,10 @@ export class PlantsService {
     const plant = await this.plantsRepo.update(id, dto, updatedBy);
     if (!plant) throw new NotFoundException(`Plant ${id} not found`);
     return plant;
+  }
+
+  async movePlant(plantId: string, dto: MovePlant, movedBy: string): Promise<Plant> {
+    return this.movePlantUseCase.execute(plantId, dto, movedBy);
   }
 
   async softDelete(id: string, deletedBy: string): Promise<void> {

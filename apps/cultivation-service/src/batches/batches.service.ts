@@ -19,6 +19,7 @@ import {
 import { BatchesRepository } from './batches.repository';
 import { KafkaProducerService } from '../kafka/kafka-producer.service';
 import { CloneBatchUseCase } from './use-cases/clone-batch.use-case';
+import { FacilityRepository } from '../facilities/facility.repository';
 
 @Injectable()
 export class BatchesService {
@@ -28,6 +29,7 @@ export class BatchesService {
     private readonly batchesRepo: BatchesRepository,
     private readonly kafkaProducer: KafkaProducerService,
     private readonly cloneBatchUseCase: CloneBatchUseCase,
+    private readonly facilityRepo: FacilityRepository,
   ) {}
 
   async getById(id: string): Promise<Batch> {
@@ -45,6 +47,16 @@ export class BatchesService {
     if (existing) {
       throw new BadRequestException(`Batch number "${dto.batch_number}" already exists`);
     }
+
+    // Validate facility exists and is active
+    const facility = await this.facilityRepo.findById(dto.facility_id);
+    if (!facility) {
+      throw new BadRequestException(`Facility "${dto.facility_id}" not found`);
+    }
+    if (!facility.is_active) {
+      throw new BadRequestException(`Facility "${dto.facility_id}" is inactive`);
+    }
+
     const batch = await this.batchesRepo.create(dto, createdBy);
     this.logger.log(`Batch created: ${batch.id} (${batch.batch_number})`);
 

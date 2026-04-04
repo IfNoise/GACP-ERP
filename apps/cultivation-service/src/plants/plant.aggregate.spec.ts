@@ -32,7 +32,7 @@ function makePlant(overrides: Partial<Plant> = {}): Plant {
     id: '00000000-0000-0000-0000-000000000010' as Plant['id'],
     batch_id: '00000000-0000-0000-0000-000000000020' as Plant['batch_id'],
     strain_id: '00000000-0000-0000-0000-000000000030' as Plant['strain_id'],
-    facility_id: '00000000-0000-0000-0000-000000000040' as Plant['facility_id'],
+    zone_id: '00000000-0000-0000-0000-000000000040' as Plant['zone_id'],
     plant_code: 'PLANT-2026-001',
     current_stage: GrowthStageEnum.enum.SEED,
     created_at: now,
