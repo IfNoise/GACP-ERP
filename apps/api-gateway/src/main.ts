@@ -113,9 +113,27 @@ async function bootstrap(): Promise<void> {
       const targetUrl = `${upstream}/internal${stripApi}`;
       try {
         const fwdHeaders: Record<string, string> = {};
-        for (const h of ['authorization', 'content-type', 'x-user-id', 'traceparent'] as const) {
+        for (const h of ['authorization', 'content-type', 'traceparent'] as const) {
           const v = request.headers[h];
           if (v) fwdHeaders[h] = v;
+        }
+
+        // Extract user sub from JWT and inject as x-user-id (trusted by downstream services)
+        const authHeader = request.headers['authorization'];
+        if (authHeader?.startsWith('Bearer ')) {
+          const parts = authHeader.slice(7).split('.');
+          if (parts.length === 3) {
+            try {
+              const payload = JSON.parse(Buffer.from(parts[1]!, 'base64url').toString()) as {
+                sub?: string;
+              };
+              if (payload.sub) {
+                fwdHeaders['x-user-id'] = payload.sub;
+              }
+            } catch {
+              // Malformed JWT payload — skip user ID injection
+            }
+          }
         }
         const ip = request.headers['x-forwarded-for'] ?? request.headers['x-real-ip'];
         if (ip) fwdHeaders['x-forwarded-for'] = ip;

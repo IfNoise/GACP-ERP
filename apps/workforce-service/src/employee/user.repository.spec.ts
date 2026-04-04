@@ -78,6 +78,25 @@ describe('UserRepository', () => {
     });
   });
 
+  describe('findByKeycloakId', () => {
+    it('should return user when found', async () => {
+      const sel = makeSelectChain([{ id: 'user-uuid-1' }]);
+      const db = { select: jest.fn().mockReturnValue(sel) };
+      const repo = new UserRepository(db as never);
+
+      const result = await repo.findByKeycloakId('kc-uuid-1');
+      expect(result).toEqual({ id: 'user-uuid-1' });
+    });
+
+    it('should return null when not found', async () => {
+      const sel = makeSelectChain([]);
+      const db = { select: jest.fn().mockReturnValue(sel) };
+      const repo = new UserRepository(db as never);
+
+      expect(await repo.findByKeycloakId('unknown-kc-id')).toBeNull();
+    });
+  });
+
   describe('findByEmail', () => {
     it('should return user when found', async () => {
       const sel = makeSelectChain([{ id: 'user-uuid-1' }]);

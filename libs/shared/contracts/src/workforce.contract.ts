@@ -49,6 +49,7 @@ export const workforceContract = c.router({
     responses: {
       201: EmployeeProvisionedResponseSchema,
       400: ApiErrorSchema,
+      401: ApiErrorSchema,
       409: ApiErrorSchema,
       500: ApiErrorSchema,
     },
@@ -90,6 +91,7 @@ export const workforceContract = c.router({
     body: z.object({ reason: z.string().min(1).optional() }),
     responses: {
       200: EmployeeSchema,
+      401: ApiErrorSchema,
       404: ApiErrorSchema,
     },
     summary: 'Deactivate an employee',

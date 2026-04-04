@@ -2,6 +2,7 @@ import { Controller, Logger } from '@nestjs/common';
 import { TsRest, TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { workforceContract } from '@gacp-erp/shared-contracts';
 import { EmployeeRepository } from './employee.repository';
+import { UserRepository } from './user.repository';
 import { CreateEmployeeUseCase } from './use-cases/create-employee.use-case';
 import {
   DuplicateEmailError,
@@ -17,13 +18,36 @@ export class EmployeeController {
 
   constructor(
     private readonly employeeRepo: EmployeeRepository,
+    private readonly userRepo: UserRepository,
     private readonly createEmployeeUseCase: CreateEmployeeUseCase,
   ) {}
+
+  /**
+   * Resolve the x-user-id header (Keycloak sub) to the internal users.id.
+   * Returns null if the header is missing or the user is not found.
+   */
+  private async resolveUserId(headers: Record<string, unknown>): Promise<string | null> {
+    const keycloakSub = (headers as Record<string, string | undefined>)['x-user-id'];
+    if (!keycloakSub) return null;
+    const user = await this.userRepo.findByKeycloakId(keycloakSub);
+    return user?.id ?? null;
+  }
 
   @TsRestHandler(workforceContract.createEmployee)
   createEmployee() {
     return tsRestHandler(workforceContract.createEmployee, async ({ body, headers }) => {
-      const userId = (headers as Record<string, string | undefined>)['x-user-id'] ?? 'system';
+      const userId = await this.resolveUserId(headers as Record<string, unknown>);
+      if (!userId) {
+        return {
+          status: 401 as const,
+          body: {
+            statusCode: 401,
+            error: 'UNAUTHORIZED',
+            message: 'Missing or unresolvable user identity. Ensure you are logged in.',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      }
       try {
         const result = await this.createEmployeeUseCase.execute(body, userId);
         return { status: 201 as const, body: result };
@@ -85,7 +109,18 @@ export class EmployeeController {
   @TsRestHandler(workforceContract.deactivateEmployee)
   deactivateEmployee() {
     return tsRestHandler(workforceContract.deactivateEmployee, async ({ params, headers }) => {
-      const userId = (headers as Record<string, string | undefined>)['x-user-id'] ?? 'system';
+      const userId = await this.resolveUserId(headers as Record<string, unknown>);
+      if (!userId) {
+        return {
+          status: 401 as const,
+          body: {
+            statusCode: 401,
+            error: 'UNAUTHORIZED',
+            message: 'Missing or unresolvable user identity. Ensure you are logged in.',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      }
       const result = await this.employeeRepo.deactivate(params.id, userId);
       return { status: 200 as const, body: result };
     });

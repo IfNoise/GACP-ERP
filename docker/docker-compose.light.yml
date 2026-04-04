@@ -1,0 +1,171 @@
+version: '3.9'
+
+# ─── Lightweight dev stack ──────────────────────────────────────────────────
+# Usage: docker compose -f docker/docker-compose.light.yml up -d
+#
+# Includes ONLY the services needed for NestJS microservice development:
+#   postgres, kafka, keycloak, loki, jaeger
+#
+# Excluded: mongodb, redis, emqx, victoriametrics, victoriametrics-iot,
+#           telegraf, mayan-edms, immudb
+
+x-logging: &default-logging
+  driver: 'json-file'
+  options:
+    max-size: '10m'
+    max-file: '3'
+
+x-restart: &default-restart
+  restart: unless-stopped
+
+networks:
+  gacp-net:
+    driver: bridge
+    name: gacp-erp-network
+
+volumes:
+  postgres-data:
+  kafka-data:
+  keycloak-data:
+  loki-data:
+
+services:
+  # ─── PostgreSQL 15 with PostGIS ─────────────────────────────────
+  postgres:
+    image: postgis/postgis:15-3.5
+    container_name: gacp-postgres
+    <<: *default-restart
+    logging: *default-logging
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gacp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gacp_secret_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-gacp_erp}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_LOG_STATEMENT: 'all'
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init/postgres:/docker-entrypoint-initdb.d:ro
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-gacp} -d ${POSTGRES_DB:-gacp_erp}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ─── Apache Kafka 3.7 (KRaft mode) ─────────────────────────────
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: gacp-kafka
+    <<: *default-restart
+    logging: *default-logging
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
+    ports:
+      - '${KAFKA_PORT:-9094}:9094'
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD-SHELL', '/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list']
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ─── Keycloak 23 ────────────────────────────────────────────────
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: gacp-keycloak
+    <<: *default-restart
+    logging: *default-logging
+    command: start-dev --import-realm
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-gacp_erp}
+      KC_DB_USERNAME: ${POSTGRES_USER:-gacp}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-gacp_secret_2026}
+      KC_DB_SCHEMA: keycloak
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_secret_2026}
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HOSTNAME_STRICT_HTTPS: 'false'
+      KC_HTTP_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true'
+      KC_HEALTH_ENABLED: 'true'
+      KC_LOG_LEVEL: INFO
+    ports:
+      - '${KEYCLOAK_PORT:-8080}:8080'
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    networks:
+      - gacp-net
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'exec 3<>/dev/tcp/localhost/8080 && echo -e "GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep -q "200 OK"',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  # ─── Loki — log aggregation ─────────────────────────────────────
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: gacp-loki
+    <<: *default-restart
+    logging: *default-logging
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - '${LOKI_PORT:-3100}:3100'
+    volumes:
+      - loki-data:/loki
+    networks:
+      - gacp-net
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:3100/ready || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ─── Jaeger — distributed tracing ───────────────────────────────
+  jaeger:
+    image: jaegertracing/all-in-one:1.56
+    container_name: gacp-jaeger
+    <<: *default-restart
+    logging: *default-logging
+    environment:
+      COLLECTOR_OTLP_ENABLED: 'true'
+    ports:
+      - '${JAEGER_UI_PORT:-16686}:16686'
+      - '${OTEL_OTLP_PORT:-4317}:4317'
+      - '4318:4318'
+    networks:
+      - gacp-net

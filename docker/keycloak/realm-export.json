@@ -639,6 +639,9 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": ["default-roles-gacp-erp"],
+      "clientRoles": {
+        "realm-management": ["manage-users", "view-users", "manage-realm"]
+      },
       "notBefore": 0,
       "groups": []
     }

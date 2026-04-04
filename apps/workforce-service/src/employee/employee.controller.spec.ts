@@ -19,6 +19,10 @@ const mockRepo = {
   deactivate: jest.fn().mockResolvedValue({ id: 'emp-1', is_active: false }),
 };
 
+const mockUserRepo = {
+  findByKeycloakId: jest.fn(),
+};
+
 const mockUseCase = {
   execute: jest.fn().mockResolvedValue({ id: 'emp-1' }),
 };
@@ -28,21 +32,38 @@ describe('EmployeeController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    ctrl = new EmployeeController(mockRepo as never, mockUseCase as never);
+    ctrl = new EmployeeController(mockRepo as never, mockUserRepo as never, mockUseCase as never);
   });
 
   describe('createEmployee', () => {
-    it('should call use case with userId from headers', async () => {
+    it('should resolve keycloak sub to internal user id and call use case', async () => {
+      mockUserRepo.findByKeycloakId.mockResolvedValueOnce({ id: 'internal-user-1' });
       const handler = ctrl.createEmployee() as (...args: unknown[]) => unknown;
-      const result = await handler({ body: { name: 'Test' }, headers: { 'x-user-id': 'user-1' } });
+      const result = await handler({
+        body: { name: 'Test' },
+        headers: { 'x-user-id': 'keycloak-sub-1' },
+      });
       expect(result).toEqual({ status: 201, body: { id: 'emp-1' } });
-      expect(mockUseCase.execute).toHaveBeenCalledWith({ name: 'Test' }, 'user-1');
+      expect(mockUserRepo.findByKeycloakId).toHaveBeenCalledWith('keycloak-sub-1');
+      expect(mockUseCase.execute).toHaveBeenCalledWith({ name: 'Test' }, 'internal-user-1');
     });
 
-    it('should default userId to system', async () => {
+    it('should return 401 when x-user-id header is missing', async () => {
       const handler = ctrl.createEmployee() as (...args: unknown[]) => unknown;
-      await handler({ body: {}, headers: {} });
-      expect(mockUseCase.execute).toHaveBeenCalledWith({}, 'system');
+      const result = (await handler({ body: {}, headers: {} })) as Record<string, unknown>;
+      expect(result.status).toBe(401);
+      expect(mockUseCase.execute).not.toHaveBeenCalled();
+    });
+
+    it('should return 401 when keycloak sub cannot be resolved to internal user', async () => {
+      mockUserRepo.findByKeycloakId.mockResolvedValueOnce(null);
+      const handler = ctrl.createEmployee() as (...args: unknown[]) => unknown;
+      const result = (await handler({
+        body: {},
+        headers: { 'x-user-id': 'unknown-sub' },
+      })) as Record<string, unknown>;
+      expect(result.status).toBe(401);
+      expect(mockUseCase.execute).not.toHaveBeenCalled();
     });
   });
 
@@ -75,20 +96,25 @@ describe('EmployeeController', () => {
   });
 
   describe('deactivateEmployee', () => {
-    it('should deactivate with userId', async () => {
+    it('should resolve userId and deactivate', async () => {
+      mockUserRepo.findByKeycloakId.mockResolvedValueOnce({ id: 'internal-user-1' });
       const handler = ctrl.deactivateEmployee() as (...args: unknown[]) => unknown;
       const result = (await handler({
         params: { id: 'emp-1' },
-        headers: { 'x-user-id': 'user-1' },
+        headers: { 'x-user-id': 'keycloak-sub-1' },
       })) as Record<string, unknown>;
       expect(result.status).toBe(200);
-      expect(mockRepo.deactivate).toHaveBeenCalledWith('emp-1', 'user-1');
+      expect(mockRepo.deactivate).toHaveBeenCalledWith('emp-1', 'internal-user-1');
     });
 
-    it('should default userId to system', async () => {
+    it('should return 401 when x-user-id is missing', async () => {
       const handler = ctrl.deactivateEmployee() as (...args: unknown[]) => unknown;
-      await handler({ params: { id: 'emp-1' }, headers: {} });
-      expect(mockRepo.deactivate).toHaveBeenCalledWith('emp-1', 'system');
+      const result = (await handler({
+        params: { id: 'emp-1' },
+        headers: {},
+      })) as Record<string, unknown>;
+      expect(result.status).toBe(401);
+      expect(mockRepo.deactivate).not.toHaveBeenCalled();
     });
   });
 });

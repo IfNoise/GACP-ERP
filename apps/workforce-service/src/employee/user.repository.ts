@@ -36,6 +36,15 @@ export class UserRepository {
     return { id: row.id, keycloak_id: row.keycloak_id, username: row.username };
   }
 
+  async findByKeycloakId(keycloakId: string): Promise<{ id: string } | null> {
+    const rows = await this.db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.keycloak_id, keycloakId))
+      .limit(1);
+    return rows[0] ?? null;
+  }
+
   async findByEmail(email: string): Promise<{ id: string } | null> {
     const rows = await this.db
       .select({ id: usersTable.id })

@@ -47,8 +47,8 @@ export class CreateEmployeeUseCase {
     const baseUsername = this.generateBaseUsername(dto.first_name, dto.last_name);
     const username = await this.resolveUniqueUsername(baseUsername);
 
-    // 3. Generate temporary password
-    const temporaryPassword = randomBytes(16).toString('base64url');
+    // 3. Generate temporary password (must satisfy Keycloak policy: 12+ chars, upper, digit, special)
+    const temporaryPassword = `${randomBytes(12).toString('base64url')}!A1`;
 
     // 4. Determine required actions
     const requiredActions = ['UPDATE_PASSWORD'];
@@ -71,7 +71,11 @@ export class CreateEmployeeUseCase {
         requiredActions,
       });
     } catch (error) {
-      this.logger.error(`Keycloak user creation failed for ${dto.email}`, error);
+      const detail =
+        error && typeof error === 'object' && 'statusCode' in error
+          ? `status=${(error as { statusCode: number }).statusCode} body=${(error as { responseBody?: string }).responseBody ?? ''}`
+          : '';
+      this.logger.error(`Keycloak user creation failed for ${dto.email} ${detail}`.trim(), error);
       throw new KeycloakProvisioningError(error instanceof Error ? error.message : String(error));
     }
 
