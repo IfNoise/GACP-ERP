@@ -32,7 +32,6 @@
 
 - TypeScript/JavaScript (NestJS, Next.js, Libraries)
 - Go services (Audit Consumer, Performance-critical services)
-- Java Maven (Keycloak custom handlers)
 - Shared contracts, types, and configurations
 - CommonJS/ESM compatibility resolved at architecture level
 
@@ -133,8 +132,7 @@ gacp-erp/
 │   ├── api-gateway/             # NestJS API gateway
 │   ├── cultivation-service/     # NestJS microservice
 │   ├── quality-service/         # NestJS microservice
-│   ├── audit-consumer/          # Go service
-│   └── keycloak-handlers/       # Java Maven project
+│   └── audit-consumer/          # Go service
 ├── libs/
 │   ├── shared/
 │   │   ├── contracts/           # API contracts (ts-rest + Zod)

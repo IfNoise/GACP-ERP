@@ -114,8 +114,8 @@ ai_status: draft
                               │
 ┌─────────────────────────────────────────────────────────────────────┐
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│ │Kubernetes   │ │Apache Kafka │ │MQTT Broker  │ │Keycloak     │   │
-│ │(Container   │ │(Events)     │ │EMQX (IoT)   │ │(Auth)       │   │
+│ │Kubernetes   │ │Apache Kafka │ │MQTT Broker  │ │Zitadel      │   │
+│ │(Container   │ │(Events)     │ │EMQX (IoT)   │ │(Auth/OIDC)  │   │
 │ │Orchestration│ │             │ │             │ │             │   │
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘   │
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
@@ -767,7 +767,7 @@ export class JitsiService {
     conferenceId: string,
     userId: string
   ): Promise<z.infer<typeof JoinResponseSchema>> {
-    // Authenticate user via Keycloak SSO
+    // Authenticate user via Zitadel OIDC
     // Generate secure conference JWT
     // Configure participant permissions
     // Log access for audit trail
@@ -799,7 +799,7 @@ export class JitsiService {
 VirtualHost "gacp-erp.local"
     authentication = "token"
     app_id = "gacp_erp"
-    app_secret = "secure_secret_from_keycloak"
+    app_secret = "secure_secret_from_zitadel"
     allow_empty_token = false
 
     modules_enabled = {
@@ -1972,19 +1972,20 @@ interface JwtPayload {
   exp: number;
 }
 
-// Keycloak Integration
+// Zitadel Integration
 @Injectable()
 export class AuthService {
-  constructor(private readonly keycloakService: KeycloakService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   async validateToken(token: string): Promise<JwtPayload> {
     try {
-      const decoded = await this.keycloakService.verifyToken(token);
+      const decoded = await this.jwtService.verifyAsync(token);
+      const zitadelRoles = decoded['urn:zitadel:iam:org:project:roles'] ?? {};
       return {
         sub: decoded.sub,
         email: decoded.email,
-        roles: decoded.realm_access?.roles || [],
-        permissions: decoded.resource_access?.["gacp-erp"]?.roles || [],
+        roles: Object.keys(zitadelRoles),
+        permissions: decoded.permissions || [],
         facilities: decoded.facilities || [],
         iat: decoded.iat,
         exp: decoded.exp,
