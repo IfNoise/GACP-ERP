@@ -44,6 +44,10 @@ export type AuditEventId = z.infer<typeof AuditEventIdSchema>;
 export const SignatureIdSchema = z.string().uuid().brand<'SignatureId'>();
 export type SignatureId = z.infer<typeof SignatureIdSchema>;
 
+/** UUID v4 branded as SupplierId */
+export const SupplierIdSchema = z.string().uuid().brand<'SupplierId'>();
+export type SupplierId = z.infer<typeof SupplierIdSchema>;
+
 /** UUID v4 branded as EmployeeId */
 export const EmployeeIdSchema = z.string().uuid().brand<'EmployeeId'>();
 export type EmployeeId = z.infer<typeof EmployeeIdSchema>;

@@ -8,6 +8,8 @@ import {
   CreateBatchSchema,
   CreateHarvestSchema,
   CreatePlantSchema,
+  CreateStrainSchema,
+  DeactivateStrainSchema,
   GrowthStageRecordSchema,
   HarvestRecordSchema,
   MovePlantSchema,
@@ -17,6 +19,7 @@ import {
   StrainSchema,
   UpdateBatchSchema,
   UpdatePlantSchema,
+  UpdateStrainSchema,
 } from '@gacp-erp/shared-schemas';
 
 const c = initContract();
@@ -273,7 +276,14 @@ const strainsContract = c.router({
   list: {
     method: 'GET',
     path: '/strains',
-    query: PaginationQuerySchema,
+    query: PaginationQuerySchema.extend({
+      species: z.string().optional(),
+      supplier_id: z.string().uuid().optional(),
+      is_active: z
+        .string()
+        .transform((v) => v === 'true')
+        .optional(),
+    }),
     responses: {
       200: paginatedList(StrainSchema),
       401: ApiErrorSchema,
@@ -291,6 +301,53 @@ const strainsContract = c.router({
       404: ApiErrorSchema,
     },
     summary: 'Get strain by ID',
+  },
+
+  create: {
+    method: 'POST',
+    path: '/strains',
+    body: CreateStrainSchema,
+    responses: {
+      201: StrainSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      409: ApiErrorSchema,
+      422: ApiErrorSchema,
+    },
+    summary: 'Register a new strain (CULTIVATION_MANAGER+)',
+  },
+
+  update: {
+    method: 'PATCH',
+    path: '/strains/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: UpdateStrainSchema,
+    responses: {
+      200: StrainSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+      422: ApiErrorSchema,
+    },
+    summary: 'Update strain metadata (CULTIVATION_MANAGER+)',
+  },
+
+  deactivate: {
+    method: 'POST',
+    path: '/strains/:id/deactivate',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: DeactivateStrainSchema,
+    responses: {
+      200: StrainSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Deactivate a strain (soft-delete, CULTIVATION_MANAGER+)',
   },
 });
 

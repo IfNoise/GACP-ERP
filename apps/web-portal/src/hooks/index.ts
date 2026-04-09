@@ -13,6 +13,12 @@ export {
   useCreateBatch,
   useHarvestBatch,
   useBatchHarvests,
+  // Strains
+  useStrains,
+  useStrain,
+  useCreateStrain,
+  useUpdateStrain,
+  useDeactivateStrain,
   // Change Controls
   useChangeControls,
   useChangeControl,

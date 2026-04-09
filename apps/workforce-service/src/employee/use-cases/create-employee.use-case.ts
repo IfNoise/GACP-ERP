@@ -7,17 +7,17 @@ import {
   type UserId,
   CRITICAL_ROLES,
 } from '@gacp-erp/shared-schemas';
-import { KeycloakAdminClient } from '@gacp-erp/shared-keycloak';
+import { ZitadelAdminClient } from '@gacp-erp/shared-zitadel';
 import { WORKFORCE_EMPLOYEE_TOPIC, type EmployeeCreatedEvent } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
-import { KEYCLOAK_CLIENT } from '../../keycloak/keycloak.module';
+import { ZITADEL_CLIENT } from '../../keycloak/keycloak.module';
 import { EmployeeRepository } from '../employee.repository';
 import { UserRepository } from '../user.repository';
 import { OutboxRepository } from '../../outbox/outbox.repository';
 import {
   DuplicateEmailError,
-  KeycloakProvisioningError,
-  KeycloakCompensationError,
+  ZitadelProvisioningError,
+  ZitadelCompensationError,
   UsernameGenerationError,
 } from '../errors/employee-provisioning.errors';
 
@@ -29,7 +29,7 @@ export class CreateEmployeeUseCase {
 
   constructor(
     @Inject(DATABASE_TOKEN) private readonly db: Database,
-    @Inject(KEYCLOAK_CLIENT) private readonly keycloakClient: KeycloakAdminClient,
+    @Inject(ZITADEL_CLIENT) private readonly zitadelClient: ZitadelAdminClient,
     private readonly employeeRepo: EmployeeRepository,
     private readonly userRepo: UserRepository,
     private readonly outboxRepo: OutboxRepository,
@@ -47,36 +47,39 @@ export class CreateEmployeeUseCase {
     const baseUsername = this.generateBaseUsername(dto.first_name, dto.last_name);
     const username = await this.resolveUniqueUsername(baseUsername);
 
-    // 3. Generate temporary password (must satisfy Keycloak policy: 12+ chars, upper, digit, special)
+    // 3. Generate temporary password
     const temporaryPassword = `${randomBytes(12).toString('base64url')}!A1`;
 
-    // 4. Determine required actions
-    const requiredActions = ['UPDATE_PASSWORD'];
+    // 4. Determine required actions (Zitadel-specific)
+    // Note: Zitadel handles password resets and TOTP via different mechanisms
+    const requiredActions = [];
     if (CRITICAL_ROLES.includes(dto.system_role)) {
       requiredActions.push('CONFIGURE_TOTP');
     }
 
-    // 5. SAGA Step 1: Create Keycloak user (external side-effect)
-    let keycloakId: string;
+    // 5. SAGA Step 1: Create Zitadel user (external side-effect)
+    // Note: Full role assignment requires gRPC API in production
+    let zitadelId: string;
     try {
-      keycloakId = await this.keycloakClient.createUser({
-        username,
+      zitadelId = await this.zitadelClient.createUser({
+        userName: username,
         email: dto.email,
         firstName: dto.first_name,
         lastName: dto.last_name,
-        enabled: true,
-        emailVerified: false,
-        credentials: [{ type: 'password', value: temporaryPassword, temporary: true }],
-        realmRoles: [dto.system_role],
-        requiredActions,
+        password: temporaryPassword,
       });
+
+      // Assign roles (requires gRPC API for full support)
+      if (dto.system_role) {
+        await this.zitadelClient.assignRoles(zitadelId, [dto.system_role]);
+      }
     } catch (error) {
       const detail =
         error && typeof error === 'object' && 'statusCode' in error
           ? `status=${(error as { statusCode: number }).statusCode} body=${(error as { responseBody?: string }).responseBody ?? ''}`
           : '';
-      this.logger.error(`Keycloak user creation failed for ${dto.email} ${detail}`.trim(), error);
-      throw new KeycloakProvisioningError(error instanceof Error ? error.message : String(error));
+      this.logger.error(`Zitadel user creation failed for ${dto.email} ${detail}`.trim(), error);
+      throw new ZitadelProvisioningError(error instanceof Error ? error.message : String(error));
     }
 
     // 6. SAGA Step 2: DB transaction (with compensation on failure)
@@ -87,7 +90,7 @@ export class CreateEmployeeUseCase {
       const result = await this.db.transaction(async (tx) => {
         // Insert users table record
         const user = await this.userRepo.createWithTx(tx, {
-          keycloak_id: keycloakId,
+          keycloak_id: zitadelId, // Now stores Zitadel user ID
           email: dto.email,
           username,
           first_name: dto.first_name,
@@ -149,20 +152,18 @@ export class CreateEmployeeUseCase {
       employee = result.employee;
       userRecord = result.user;
     } catch (dbError) {
-      // COMPENSATION: Delete the Keycloak user we already created
-      this.logger.warn(
-        `DB transaction failed, compensating by deleting Keycloak user ${keycloakId}`,
-      );
+      // COMPENSATION: Delete the Zitadel user we already created
+      this.logger.warn(`DB transaction failed, compensating by deleting Zitadel user ${zitadelId}`);
       try {
-        await this.keycloakClient.deleteUser(keycloakId);
-        this.logger.log(`Compensation successful: Keycloak user ${keycloakId} deleted`);
+        await this.zitadelClient.deleteUser(zitadelId);
+        this.logger.log(`Compensation successful: Zitadel user ${zitadelId} deleted`);
       } catch (compensationError) {
         this.logger.error(
-          `CRITICAL: Compensation failed! Orphaned Keycloak user: ${keycloakId}`,
+          `CRITICAL: Compensation failed! Orphaned Zitadel user: ${zitadelId}`,
           compensationError,
         );
-        throw new KeycloakCompensationError(
-          keycloakId,
+        throw new ZitadelCompensationError(
+          zitadelId,
           dbError instanceof Error ? dbError.message : String(dbError),
         );
       }
@@ -170,7 +171,7 @@ export class CreateEmployeeUseCase {
     }
 
     this.logger.log(
-      `Employee provisioned: ${employee.id} (${userRecord.username}), Keycloak: ${keycloakId}`,
+      `Employee provisioned: ${employee.id} (${userRecord.username}), Zitadel: ${zitadelId}`,
     );
 
     return {

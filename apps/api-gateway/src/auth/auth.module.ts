@@ -8,7 +8,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'keycloak-jwt' })],
+  imports: [PassportModule.register({ defaultStrategy: 'zitadel-jwt' })],
   providers: [JwtStrategy, JwtAuthGuard, RolesGuard, PermissionsGuard, AuthService],
   controllers: [AuthController],
   exports: [JwtAuthGuard, RolesGuard, PermissionsGuard, PassportModule],

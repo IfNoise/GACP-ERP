@@ -8,9 +8,9 @@ import 'next-auth/jwt';
  */
 declare module 'next-auth' {
   interface Session {
-    /** Keycloak access token — forwarded to API Gateway in Authorization header */
+    /** Zitadel access token — forwarded to API Gateway in Authorization header */
     accessToken?: string;
-    /** Decoded realm roles from the access token JWT */
+    /** Decoded roles from the access token JWT (from Zitadel urn:zitadel:iam:org:project:roles claim) */
     roles: SystemRole[];
     /** Set when token refresh fails ('RefreshAccessTokenError') */
     error?: string;

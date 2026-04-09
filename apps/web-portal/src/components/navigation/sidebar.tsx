@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Sprout,
   Layers,
+  Dna,
   ShieldCheck,
   FileText,
   ClipboardList,
@@ -80,6 +81,7 @@ const navGroups: NavGroup[] = [
       { label: 'Facilities', href: '/facilities', icon: Building2 },
       { label: 'Plants', href: '/plants', icon: Sprout },
       { label: 'Batches', href: '/batches', icon: Layers },
+      { label: 'Strains', href: '/strains', icon: Dna },
     ],
   },
   {

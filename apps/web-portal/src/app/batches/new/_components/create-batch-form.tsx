@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useCreateBatch, useFacilities } from '@/hooks';
+import { useCreateBatch, useFacilities, useStrains } from '@/hooks';
 import { Button } from '@gacp-erp/ui-components';
 
 export function CreateBatchForm() {
@@ -13,6 +13,11 @@ export function CreateBatchForm() {
   const { data: facilitiesData } = useFacilities({ limit: 100 });
   const facilities =
     (facilitiesData as unknown as { data?: { id: string; name: string }[] })?.data ?? [];
+
+  const { data: strainsData } = useStrains({ limit: 100, is_active: 'true' });
+  const strains =
+    (strainsData as unknown as { data?: { id: string; name: string; cultivar_code: string }[] })
+      ?.data ?? [];
 
   const [form, setForm] = useState({
     batch_number: '',
@@ -98,21 +103,25 @@ export function CreateBatchForm() {
             <p className="mt-1 text-xs text-gray-400">Regulatory license binding for this batch</p>
           </div>
 
-          {/* Strain ID */}
+          {/* Strain */}
           <div>
             <label htmlFor="strain_id" className="block text-sm font-medium text-gray-700">
-              Strain ID *
+              Strain *
             </label>
-            <input
+            <select
               id="strain_id"
-              type="text"
               value={form.strain_id}
               onChange={(e) => update('strain_id', e.target.value)}
-              placeholder="UUID of the strain"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
               required
-            />
-            <p className="mt-1 text-xs text-gray-400">Cannabis strain identifier (UUID)</p>
+            >
+              <option value="">Select strain...</option>
+              {strains.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.cultivar_code} — {s.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Planned Plant Count */}

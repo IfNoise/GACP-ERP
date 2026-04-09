@@ -1,27 +1,59 @@
 import NextAuth from 'next-auth';
-import KeycloakProvider from 'next-auth/providers/keycloak';
+import { type OAuthConfig, type OAuthUserConfig } from 'next-auth/providers';
 import type { JWT } from 'next-auth/jwt';
 import type { Session } from 'next-auth';
 import { SystemRoleEnum, type SystemRole } from '@gacp-erp/shared-schemas';
 
 /**
- * NextAuth v5 configuration with Keycloak OIDC provider.
+ * Zitadel OIDC provider configuration.
+ * NextAuth doesn't have built-in Zitadel provider, so we use generic OIDC.
+ */
+interface ZitadelProfile {
+  sub: string;
+  email: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  email_verified: boolean;
+}
+
+const ZitadelProvider: OAuthConfig<ZitadelProfile> = {
+  id: 'zitadel',
+  name: 'Zitadel',
+  type: 'oidc',
+  issuer: process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080',
+  clientId: process.env['ZITADEL_CLIENT_ID'] ?? 'web-portal',
+  clientSecret: process.env['ZITADEL_CLIENT_SECRET'] ?? '',
+  authorization: {
+    params: {
+      scope: 'openid profile email',
+    },
+  },
+  userinfo: {
+    url: `${process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080'}/oidc/v1/userinfo`,
+  },
+  profile(profile: ZitadelProfile) {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      image: undefined,
+    };
+  },
+} as OAuthConfig<ZitadelProfile> & OAuthUserConfig<ZitadelProfile>;
+
+/**
+ * NextAuth v5 configuration with Zitadel OIDC provider.
  * Token refresh is handled automatically via jwt callback.
  */
 const nextAuth = NextAuth({
-  providers: [
-    KeycloakProvider({
-      clientId: process.env['KEYCLOAK_CLIENT_ID'] ?? 'web-portal',
-      clientSecret: process.env['KEYCLOAK_CLIENT_SECRET'] ?? '',
-      issuer: process.env['KEYCLOAK_ISSUER'] ?? 'http://localhost:8080/realms/gacp-erp',
-    }),
-  ],
+  providers: [ZitadelProvider],
 
   callbacks: {
     async jwt({ token, account }): Promise<JWT> {
       // On initial sign-in, persist token data and extract roles
       if (account) {
-        // Decode roles from access_token JWT payload (Keycloak realm_access.roles)
+        // Decode roles from access_token JWT payload (Zitadel custom claims)
         const roles = extractRolesFromToken(account.access_token);
         return {
           ...token,
@@ -66,15 +98,16 @@ export const auth: typeof nextAuth.auth = nextAuth.auth;
 
 async function refreshAccessToken(token: JWT & { refresh_token: string }): Promise<JWT> {
   try {
-    const url = `${process.env['KEYCLOAK_ISSUER']}/protocol/openid-connect/token`;
+    const zitadelUrl = process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080';
+    const url = `${zitadelUrl}/oauth/v2/token`;
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         grant_type: 'refresh_token',
-        client_id: process.env['KEYCLOAK_CLIENT_ID'] ?? 'web-portal',
-        client_secret: process.env['KEYCLOAK_CLIENT_SECRET'] ?? '',
+        client_id: process.env['ZITADEL_CLIENT_ID'] ?? 'web-portal',
+        client_secret: process.env['ZITADEL_CLIENT_SECRET'] ?? '',
         refresh_token: token.refresh_token,
       }).toString(),
     });
@@ -96,8 +129,8 @@ async function refreshAccessToken(token: JWT & { refresh_token: string }): Promi
 }
 
 /**
- * Decodes Keycloak JWT payload (base64url) and extracts realm_access.roles,
- * filtering to known SystemRole values only.
+ * Decodes Zitadel JWT payload (base64url) and extracts roles from custom claim.
+ * Zitadel stores roles in: urn:zitadel:iam:org:project:roles
  */
 function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
   if (!accessToken) return [];
@@ -107,8 +140,14 @@ function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
     // base64url → base64 → JSON
     const payload = JSON.parse(
       Buffer.from(parts[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'),
-    ) as { realm_access?: { roles?: string[] } };
-    const rawRoles = payload.realm_access?.roles ?? [];
+    ) as {
+      'urn:zitadel:iam:org:project:roles'?: Record<string, unknown>;
+    };
+
+    // Zitadel stores roles as { roleId: [roleName, ...] }
+    const zitadelRoles = payload['urn:zitadel:iam:org:project:roles'] ?? {};
+    const rawRoles = Object.values(zitadelRoles).flat() as string[];
+
     return rawRoles.filter((r): r is SystemRole =>
       SystemRoleEnum.options.includes(r as SystemRole),
     );

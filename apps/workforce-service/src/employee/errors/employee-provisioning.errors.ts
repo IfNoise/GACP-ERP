@@ -9,26 +9,30 @@ export class DuplicateEmailError extends DomainError {
   }
 }
 
-export class KeycloakProvisioningError extends DomainError {
-  readonly code = 'KEYCLOAK_PROVISIONING_FAILED';
+export class ZitadelProvisioningError extends DomainError {
+  readonly code = 'ZITADEL_PROVISIONING_FAILED';
   readonly statusCode = 500;
 
   constructor(message: string) {
-    super(`Keycloak provisioning failed: ${message}`);
+    super(`Zitadel provisioning failed: ${message}`);
   }
 }
 
-export class KeycloakCompensationError extends DomainError {
-  readonly code = 'KEYCLOAK_COMPENSATION_FAILED';
+export class ZitadelCompensationError extends DomainError {
+  readonly code = 'ZITADEL_COMPENSATION_FAILED';
   readonly statusCode = 500;
 
-  constructor(keycloakId: string, originalError: string) {
+  constructor(zitadelId: string, originalError: string) {
     super(
-      `CRITICAL: Failed to delete Keycloak user ${keycloakId} during compensation. ` +
+      `CRITICAL: Failed to delete Zitadel user ${zitadelId} during compensation. ` +
         `Original error: ${originalError}. Manual cleanup required.`,
     );
   }
 }
+
+// Keep old names for backward compatibility
+export const KeycloakProvisioningError = ZitadelProvisioningError;
+export const KeycloakCompensationError = ZitadelCompensationError;
 
 export class UsernameGenerationError extends DomainError {
   readonly code = 'USERNAME_GENERATION_FAILED';

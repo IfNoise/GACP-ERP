@@ -18,7 +18,8 @@ volumes:
   postgres-data:
   redis-data:
   kafka-data:
-  keycloak-data:
+  zitadel-data:
+  zitadel-bootstrap:
   immudb-data:
   mongodb-data:
   victoriametrics-data:
@@ -112,46 +113,52 @@ services:
       retries: 5
       start_period: 30s
 
-  # ─── Keycloak 23 ─────────────────────────────────────────────────
-  keycloak:
-    image: quay.io/keycloak/keycloak:23.0
-    container_name: gacp-keycloak
+  # ─── Zitadel (Self-Hosted Identity Provider) ───────────────────
+  zitadel:
+    image: ghcr.io/zitadel/zitadel:latest
+    container_name: gacp-zitadel
     <<: *default-restart
     logging: *default-logging
-    command: start-dev --import-realm
+    command: 'start-from-init --masterkey=${ZITADEL_MASTERKEY}'
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-gacp_erp}
-      KC_DB_USERNAME: ${POSTGRES_USER:-gacp}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-gacp_secret_2026}
-      KC_DB_SCHEMA: keycloak
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_secret_2026}
-      KC_HOSTNAME_STRICT: 'false'
-      KC_HOSTNAME_STRICT_HTTPS: 'false'
-      KC_HTTP_ENABLED: 'true'
-      KC_METRICS_ENABLED: 'true'
-      KC_HEALTH_ENABLED: 'true'
-      KC_LOG_LEVEL: INFO
+      ZITADEL_DEFAULTINSTANCE_ORGNAME: ${ZITADEL_ORG_NAME:-GACP-ERP}
+      ZITADEL_EXTERNALSECURE: 'false'
+      ZITADEL_EXTERNALHOST: localhost:8080
+      ZITADEL_TLS_ENABLED: 'false'
+      ZITADEL_DATABASE_POSTGRES_DSN: 'postgresql://${POSTGRES_USER:-gacp}:${POSTGRES_PASSWORD:-gacp_secret_2026}@postgres:5432/postgres?sslmode=disable'
     ports:
-      - '${KEYCLOAK_PORT:-8080}:8080'
+      - '8080:8080'
     volumes:
-      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - zitadel-data:/crdb
+      - zitadel-bootstrap:/zitadel/bootstrap
     networks:
       - gacp-net
     healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'exec 3<>/dev/tcp/localhost/8080 && echo -e "GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep -q "200 OK"',
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 90s
+      test: ['CMD', '/app/zitadel', 'ready']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  # ─── Zitadel Login UI ──────────────────────────────────────────
+  zitadel-login:
+    image: ghcr.io/zitadel/zitadel-login:latest
+    container_name: gacp-zitadel-login
+    <<: *default-restart
+    logging: *default-logging
+    depends_on:
+      zitadel:
+        condition: service_healthy
+    environment:
+      ZITADEL_API_URL: 'http://zitadel:8080'
+      NEXT_PUBLIC_BASE_PATH: '/ui/v2/login'
+    ports:
+      - '3001:3000'
+    networks:
+      - gacp-net
 
   # ─── ImmuDB 1.9 ──────────────────────────────────────────────────
   immudb:

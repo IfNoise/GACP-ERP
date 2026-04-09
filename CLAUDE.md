@@ -38,7 +38,7 @@ libs/shared/
   events/     @gacp-erp/shared-events     Kafka event schemas (Zod discriminated unions)
   database/   @gacp-erp/shared-database   Drizzle ORM schema, connection factory, migrations
   config/     @gacp-erp/shared-config     Logger config, telemetry, metrics modules
-  keycloak/   @gacp-erp/shared-keycloak   Keycloak admin REST client
+  zitadel/    @gacp-erp/shared-zitadel    Zitadel admin REST client
 libs/ui-components/  @gacp-erp/ui-components  Shared React components
 
 dsl/          YAML-based regulatory SOPs, forms, checklists (single source of truth)
@@ -130,7 +130,31 @@ Use `@ZodBody(Schema)` decorator for request validation. Versioned routes: `@Con
 
 ### Auth
 
-Keycloak JWT strategy (`apps/api-gateway/src/auth/jwt.strategy.ts`). Guards: `JwtAuthGuard`, `RolesGuard` (`apps/api-gateway/src/auth/guards/`). Roles: `SUPER_ADMIN`, `QUALITY_MANAGER`, `CULTIVATION_MANAGER`, `OPERATOR`, `AUDITOR`, `READONLY`. Audit interceptor logs all mutations to `audit.trail.v1` Kafka topic.
+Zitadel (OIDC self-hosted) on port 8080. JWT strategy (`apps/api-gateway/src/auth/jwt.strategy.ts`). Roles extracted from Zitadel custom JWT claim `urn:zitadel:iam:org:project:roles`. Guards: `JwtAuthGuard`, `RolesGuard` (`apps/api-gateway/src/auth/guards/`). Roles: `SUPER_ADMIN`, `QUALITY_MANAGER`, `CULTIVATION_MANAGER`, `OPERATOR`, `AUDITOR`, `READONLY`. Audit interceptor logs all mutations to `audit.trail.v1` Kafka topic.
+
+**Zitadel** instead of Keycloak:
+
+- Container: `ghcr.io/zitadel/zitadel:latest` in `docker/docker-compose.yml`
+- Env vars: `ZITADEL_URL`, `ZITADEL_ISSUER`, `ZITADEL_JWKS_URI`, `ZITADEL_CLIENT_ID`, `ZITADEL_CLIENT_SECRET`, `ZITADEL_ADMIN_CLIENT_ID`, `ZITADEL_ADMIN_CLIENT_SECRET`
+- Admin client: `libs/shared/zitadel/src/zitadel-admin.client.ts` (REST API, limited role assignment — gRPC recommended for production)
+- Web portal: NextAuth v5 + generic OIDC provider (not Keycloak-specific)
+
+**Dev Setup (2026-04-09):**
+
+- ✅ Zitadel API running on `localhost:8080` with HTTP (dev only)
+- ✅ OIDC discovery endpoint returns correct issuer + token/JWKS endpoints
+- ✅ Console accessible at `http://localhost:8080/ui/console`
+- ✅ Built-in v1 login UI accessible at `http://localhost:8080/ui/login`
+- ⚠️ zitadel-login v2 (Next.js) enabled but has known issue: gRPC instance domain resolution fails when proxied through nginx. Root cause: Zitadel instance not registered under `localhost` domain. **User forbids disabling this service.** Solution requires: (1) registering custom domain via Zitadel Admin API post-init, OR (2) using gRPC with `X-Zitadel-Instance-ID` header instead of domain lookup. Workaround: use built-in v1 login at `/ui/login`.
+
+**To Fix zitadel-login in Production:**
+
+1. Access Zitadel console at `http://localhost:8080/ui/console`
+2. Log in with admin credentials (created during init)
+3. Navigate to Instance settings → Custom Domains
+4. Add `localhost` as a custom domain for the instance
+5. Restart zitadel-login: `docker compose -f docker-compose.light.yml restart zitadel-login`
+6. Test login UI: `GET http://localhost:8080/ui/v2/login/` should work without 500 errors
 
 ## Logging
 

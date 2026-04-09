@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Authentication Flow', () => {
   test('redirects to login when unauthenticated', async ({ page }) => {
     await page.goto('/plants');
-    // Should redirect to Keycloak or login page
+    // Should redirect to Zitadel or login page
     await expect(page).not.toHaveURL('/plants');
   });
 

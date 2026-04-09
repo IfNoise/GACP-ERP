@@ -9,6 +9,7 @@ import {
   BatchIdSchema,
   PlantIdSchema,
   StrainIdSchema,
+  SupplierIdSchema,
   UserIdSchema,
   ZoneIdSchema,
 } from '../common/branded-ids';
@@ -54,23 +55,134 @@ export const VALID_STAGE_TRANSITIONS: Readonly<Record<GrowthStage, readonly Grow
   DESTROYED: [],
 } as const;
 
+// ─── STRAIN SPECIES ─────────────────────────────────────────────────────────
+export const StrainSpeciesEnum = z.enum([
+  'Cannabis sativa',
+  'Cannabis indica',
+  'Cannabis ruderalis',
+  'hybrid',
+]);
+export type StrainSpecies = z.infer<typeof StrainSpeciesEnum>;
+
+// ─── STRAIN SOURCE TYPE ─────────────────────────────────────────────────────
+/** How the genetics were originally obtained (seed bank, breeder, etc.) */
+export const StrainSourceTypeEnum = z.enum(['seed', 'clone', 'tissue_culture']);
+export type StrainSourceType = z.infer<typeof StrainSourceTypeEnum>;
+
+// ─── TERPENE PROFILE ────────────────────────────────────────────────────────
+/** Terpene analysis: { myrcene: 1.2, limonene: 0.8, ... } (% dry weight) */
+export const TerpeneProfileSchema = z.record(z.string(), z.number().nonnegative());
+export type TerpeneProfile = z.infer<typeof TerpeneProfileSchema>;
+
+// ─── LINEAGE ────────────────────────────────────────────────────────────────
+/** Structured genetic lineage for backward traceability */
+export const LineageSchema = z.object({
+  mother: z.string().max(255).optional(),
+  father: z.string().max(255).optional(),
+  generation: z.number().int().nonnegative().optional(),
+  notes: z.string().max(500).optional(),
+});
+export type Lineage = z.infer<typeof LineageSchema>;
+
 // ─── STRAIN ──────────────────────────────────────────────────────────────────
 export const StrainSchema = SoftDeletableSchema.extend({
   id: StrainIdSchema,
   name: z.string().min(1).max(200),
   cultivar_code: z.string().min(1).max(50).toUpperCase(),
-  species: z.enum(['Cannabis sativa', 'Cannabis indica', 'Cannabis ruderalis', 'hybrid']),
+  species: StrainSpeciesEnum,
+  genetics: z.string().max(255).optional(),
+  /** Breeder or breeding company (backward traceability per SOP 8.1) */
+  breeder: z.string().max(255).optional(),
+  /** Seed bank source (WHO GACP seed banking) */
+  seed_bank: z.string().max(255).optional(),
+  /** How the genetics were obtained */
+  source_type: StrainSourceTypeEnum,
+  // ── Cannabinoid profile ──
   thc_percentage_min: z.number().min(0).max(100).optional(),
   thc_percentage_max: z.number().min(0).max(100).optional(),
   cbd_percentage_min: z.number().min(0).max(100).optional(),
   cbd_percentage_max: z.number().min(0).max(100).optional(),
-  expected_flowering_days: z.number().int().positive().optional(),
+  // ── Growth parameters ──
+  flowering_time_days_min: z.number().int().positive().optional(),
+  flowering_time_days_max: z.number().int().positive().optional(),
   expected_yield_grams_min: z.number().positive().optional(),
   expected_yield_grams_max: z.number().positive().optional(),
+  /** Terpene analysis profile (SOP 9.1) */
+  terpene_profile: TerpeneProfileSchema.optional(),
+  /** URL to DNA fingerprinting report (mandatory per SOP 9.1 / WHO GACP 3.1.1) */
+  dna_profile_url: z.string().url().optional(),
+  /** Structured genetic lineage (WHO GACP backward traceability) */
+  lineage: LineageSchema.optional(),
+  // ── Procurement / Cost ──
+  /** Total acquisition cost for this genetics */
+  acquisition_cost: z.number().nonnegative().optional(),
+  /** Currency for cost fields (ISO 4217, default EUR) */
+  currency: z.string().length(3).default('EUR'),
+  /** Cost per seed or clone unit */
+  cost_per_unit: z.number().nonnegative().optional(),
+  /** Unit type for cost_per_unit */
+  unit_type: z.string().max(20).optional(),
+  // ── Regulatory ──
+  /** Required quarantine period in days (seeds: 7-14, clones: 14-21) */
+  quarantine_days: z.number().int().positive().optional(),
+  /** Multi-generation consistency verified (SOP 4.1 stability testing) */
+  stability_verified: z.boolean().default(false),
+  /** EU regulatory registration number */
+  registration_number: z.string().max(100).optional(),
+  // ── Common ──
+  notes: z.string().max(2000).optional(),
+  certificate_url: z.string().url().optional(),
+  supplier_id: SupplierIdSchema.optional(),
+  is_active: z.boolean().default(true),
+});
+export type Strain = z.infer<typeof StrainSchema>;
+
+// ─── STRAIN CREATE/UPDATE/DEACTIVATE ────────────────────────────────────────
+export const CreateStrainSchema = z.object({
+  name: z.string().min(1).max(200),
+  cultivar_code: z.string().min(1).max(50).toUpperCase(),
+  species: StrainSpeciesEnum.default('hybrid'),
+  genetics: z.string().max(255).optional(),
+  breeder: z.string().max(255).optional(),
+  seed_bank: z.string().max(255).optional(),
+  source_type: StrainSourceTypeEnum.default('seed'),
+  // Cannabinoids
+  thc_percentage_min: z.number().min(0).max(100).optional(),
+  thc_percentage_max: z.number().min(0).max(100).optional(),
+  cbd_percentage_min: z.number().min(0).max(100).optional(),
+  cbd_percentage_max: z.number().min(0).max(100).optional(),
+  // Growth
+  flowering_time_days_min: z.number().int().positive().optional(),
+  flowering_time_days_max: z.number().int().positive().optional(),
+  expected_yield_grams_min: z.number().positive().optional(),
+  expected_yield_grams_max: z.number().positive().optional(),
+  // Terpenes & DNA
+  terpene_profile: TerpeneProfileSchema.optional(),
+  dna_profile_url: z.string().url().optional(),
+  lineage: LineageSchema.optional(),
+  // Cost
+  acquisition_cost: z.number().nonnegative().optional(),
+  currency: z.string().length(3).default('EUR'),
+  cost_per_unit: z.number().nonnegative().optional(),
+  unit_type: z.string().max(20).optional(),
+  // Regulatory
+  quarantine_days: z.number().int().positive().optional(),
+  stability_verified: z.boolean().optional(),
+  registration_number: z.string().max(100).optional(),
+  // Common
+  supplier_id: SupplierIdSchema.optional(),
   notes: z.string().max(2000).optional(),
   certificate_url: z.string().url().optional(),
 });
-export type Strain = z.infer<typeof StrainSchema>;
+export type CreateStrain = z.infer<typeof CreateStrainSchema>;
+
+export const UpdateStrainSchema = CreateStrainSchema.partial();
+export type UpdateStrain = z.infer<typeof UpdateStrainSchema>;
+
+export const DeactivateStrainSchema = z.object({
+  reason: z.string().max(500).optional(),
+});
+export type DeactivateStrain = z.infer<typeof DeactivateStrainSchema>;
 
 // ─── PLANT ───────────────────────────────────────────────────────────────────
 export const PlantSchema = SoftDeletableSchema.extend({

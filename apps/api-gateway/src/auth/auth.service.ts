@@ -7,11 +7,11 @@ import {
   type JwtPayload,
 } from '@gacp-erp/shared-schemas';
 
-interface KeycloakTokenResponse {
+interface ZitadelTokenResponse {
   access_token: string;
   refresh_token: string;
   expires_in: number;
-  refresh_expires_in: number;
+  refresh_expires_in?: number;
   token_type: string;
 }
 
@@ -22,16 +22,17 @@ export class AuthService {
   constructor(private readonly config: ConfigService) {}
 
   /**
-   * Password-grant login via Keycloak Token endpoint.
+   * Password-grant login via Zitadel OAuth token endpoint.
    * Used by web-portal for direct credential auth.
    */
   async login(dto: LoginRequest): Promise<TokenResponse> {
-    const url = `${this.config.getOrThrow<string>('KEYCLOAK_URL')}/realms/${this.config.getOrThrow<string>('KEYCLOAK_REALM')}/protocol/openid-connect/token`;
+    const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const url = `${zitadelUrl}/oauth/v2/token`;
 
     const params = new URLSearchParams({
       grant_type: 'password',
-      client_id: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_SECRET'),
+      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
       username: dto.username,
       password: dto.password,
       scope: 'openid profile email',
@@ -45,17 +46,17 @@ export class AuthService {
 
     if (!response.ok) {
       const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-      this.logger.warn(`Keycloak login failed: ${JSON.stringify(body)}`);
+      this.logger.warn(`Zitadel login failed: ${JSON.stringify(body)}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const tokens = (await response.json()) as KeycloakTokenResponse;
+    const tokens = (await response.json()) as ZitadelTokenResponse;
 
     return {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
       expires_in: tokens.expires_in,
-      refresh_expires_in: tokens.refresh_expires_in,
+      refresh_expires_in: tokens.refresh_expires_in || tokens.expires_in,
       token_type: 'Bearer' as const,
       scope: '',
     };
@@ -65,12 +66,13 @@ export class AuthService {
    * Refresh access token using a valid refresh_token.
    */
   async refresh(dto: RefreshTokenRequest): Promise<TokenResponse> {
-    const url = `${this.config.getOrThrow<string>('KEYCLOAK_URL')}/realms/${this.config.getOrThrow<string>('KEYCLOAK_REALM')}/protocol/openid-connect/token`;
+    const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const url = `${zitadelUrl}/oauth/v2/token`;
 
     const params = new URLSearchParams({
       grant_type: 'refresh_token',
-      client_id: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_SECRET'),
+      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
       refresh_token: dto.refresh_token,
     });
 
@@ -84,28 +86,29 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token expired or invalid');
     }
 
-    const tokens = (await response.json()) as KeycloakTokenResponse;
+    const tokens = (await response.json()) as ZitadelTokenResponse;
 
     return {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
       expires_in: tokens.expires_in,
-      refresh_expires_in: tokens.refresh_expires_in,
+      refresh_expires_in: tokens.refresh_expires_in || tokens.expires_in,
       token_type: 'Bearer' as const,
       scope: '',
     };
   }
 
   /**
-   * Logout — revokes the token in Keycloak.
+   * Logout — revokes the token in Zitadel.
    */
   async logout(refreshToken: string): Promise<void> {
-    const url = `${this.config.getOrThrow<string>('KEYCLOAK_URL')}/realms/${this.config.getOrThrow<string>('KEYCLOAK_REALM')}/protocol/openid-connect/logout`;
+    const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const url = `${zitadelUrl}/oauth/v2/revocation`;
 
     const params = new URLSearchParams({
-      client_id: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('KEYCLOAK_CLIENT_SECRET'),
-      refresh_token: refreshToken,
+      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
+      token: refreshToken,
     });
 
     await fetch(url, {

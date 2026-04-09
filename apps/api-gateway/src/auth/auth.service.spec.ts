@@ -5,10 +5,9 @@ import { AuthService } from './auth.service';
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const mockConfig: Record<string, string> = {
-  KEYCLOAK_URL: 'http://keycloak:8080',
-  KEYCLOAK_REALM: 'gacp-erp',
-  KEYCLOAK_CLIENT_ID: 'api-gateway',
-  KEYCLOAK_CLIENT_SECRET: 'secret',
+  ZITADEL_URL: 'http://zitadel:8080',
+  ZITADEL_CLIENT_ID: 'api-gateway',
+  ZITADEL_CLIENT_SECRET: 'secret',
   REAUTH_SECRET: 'reauth-secret-key',
 };
 
@@ -22,18 +21,17 @@ function makeConfigService(): ConfigService {
   } as unknown as ConfigService;
 }
 
-function makeKeycloakTokens() {
+function makeZitadelTokens() {
   return {
     access_token: 'at-123',
     refresh_token: 'rt-456',
     expires_in: 300,
-    refresh_expires_in: 1800,
     token_type: 'Bearer',
   };
 }
 
 const mockUser = {
-  sub: 'user-001',
+  sub: 'user-ulid-001',
   preferred_username: 'jane.doe',
   email: 'jane@test.com',
   given_name: 'Jane',
@@ -64,7 +62,7 @@ describe('AuthService', () => {
     it('returns tokens on success', async () => {
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(makeKeycloakTokens()),
+        json: () => Promise.resolve(makeZitadelTokens()),
       });
 
       const result = await service.login({ username: 'jane', password: 'pass' });
@@ -75,7 +73,7 @@ describe('AuthService', () => {
       expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('throws UnauthorizedException on Keycloak failure', async () => {
+    it('throws UnauthorizedException on Zitadel failure', async () => {
       fetchSpy.mockResolvedValue({
         ok: false,
         json: () => Promise.resolve({ error: 'invalid_grant' }),
@@ -104,7 +102,7 @@ describe('AuthService', () => {
     it('returns tokens on success', async () => {
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(makeKeycloakTokens()),
+        json: () => Promise.resolve(makeZitadelTokens()),
       });
 
       const result = await service.refresh({ refresh_token: 'rt-old' });
@@ -125,14 +123,14 @@ describe('AuthService', () => {
   // ─── logout ─────────────────────────────────────────────────────────────
 
   describe('logout', () => {
-    it('calls Keycloak logout endpoint', async () => {
+    it('calls Zitadel revocation endpoint', async () => {
       fetchSpy.mockResolvedValue({ ok: true });
 
       await service.logout('rt-to-revoke');
 
       expect(fetchSpy).toHaveBeenCalledTimes(1);
       const [url, opts] = fetchSpy.mock.calls[0] as [string, RequestInit];
-      expect(url).toContain('/protocol/openid-connect/logout');
+      expect(url).toContain('/oauth/v2/revocation');
       expect(opts.method).toBe('POST');
     });
   });
@@ -144,7 +142,7 @@ describe('AuthService', () => {
       // first call = login verify, second call should not happen
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(makeKeycloakTokens()),
+        json: () => Promise.resolve(makeZitadelTokens()),
       });
 
       const result = await service.reauthenticate(mockUser as never, 'correct-pass');

@@ -253,22 +253,61 @@ export const usersTable = pgTable(
 
 // ── Strains ────────────────────────────────────────────────────────────────────
 
+export const strainSourceTypeEnum = pgEnum('strain_source_type', [
+  'seed',
+  'clone',
+  'tissue_culture',
+]);
+
 export const strainsTable = pgTable(
   'strains',
   {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 255 }).notNull(),
-    code: varchar('code', { length: 50 }).notNull(),
-    description: text('description'),
+    cultivar_code: varchar('cultivar_code', { length: 50 }).notNull(),
+    species: varchar('species', { length: 50 }).notNull().default('hybrid'),
     genetics: varchar('genetics', { length: 255 }),
+    /** Breeder or breeding company (backward traceability per SOP 8.1) */
+    breeder: varchar('breeder', { length: 255 }),
+    /** Seed bank source (WHO GACP seed banking) */
+    seed_bank: varchar('seed_bank', { length: 255 }),
+    /** How the genetics were obtained */
+    source_type: strainSourceTypeEnum('source_type').notNull().default('seed'),
     thc_percentage_min: decimal('thc_percentage_min', { precision: 5, scale: 2 }),
     thc_percentage_max: decimal('thc_percentage_max', { precision: 5, scale: 2 }),
     cbd_percentage_min: decimal('cbd_percentage_min', { precision: 5, scale: 2 }),
     cbd_percentage_max: decimal('cbd_percentage_max', { precision: 5, scale: 2 }),
     flowering_time_days_min: integer('flowering_time_days_min'),
     flowering_time_days_max: integer('flowering_time_days_max'),
-    expected_yield_g_per_plant: decimal('expected_yield_g_per_plant', { precision: 8, scale: 2 }),
+    expected_yield_grams_min: decimal('expected_yield_grams_min', { precision: 8, scale: 2 }),
+    expected_yield_grams_max: decimal('expected_yield_grams_max', { precision: 8, scale: 2 }),
+    /** Terpene analysis profile (JSON: { myrcene: 1.2, limonene: 0.8, ... }) */
+    terpene_profile: jsonb('terpene_profile'),
+    /** URL to DNA fingerprinting report (mandatory per SOP 9.1) */
+    dna_profile_url: text('dna_profile_url'),
+    /** Structured lineage (JSON: { mother: "...", father: "...", generation: 3 }) */
+    lineage: jsonb('lineage'),
+    /** Total acquisition cost for this genetics */
+    acquisition_cost: decimal('acquisition_cost', { precision: 12, scale: 2 }),
+    /** Currency for cost fields (ISO 4217) */
+    currency: varchar('currency', { length: 3 }).notNull().default('EUR'),
+    /** Cost per seed or clone unit */
+    cost_per_unit: decimal('cost_per_unit', { precision: 10, scale: 2 }),
+    /** Unit type for cost_per_unit */
+    unit_type: varchar('unit_type', { length: 20 }),
+    /** Required quarantine period in days (seeds: 7-14, clones: 14-21) */
+    quarantine_days: integer('quarantine_days'),
+    /** Multi-generation consistency verified (SOP 4.1 stability testing) */
+    stability_verified: boolean('stability_verified').notNull().default(false),
+    /** EU regulatory registration number */
+    registration_number: varchar('registration_number', { length: 100 }),
+    notes: text('notes'),
+    certificate_url: text('certificate_url'),
+    supplier_id: uuid('supplier_id').references(() => suppliersTable.id),
     is_active: boolean('is_active').notNull().default(true),
+    is_deleted: boolean('is_deleted').notNull().default(false),
+    deleted_at: timestamp('deleted_at', { withTimezone: true }),
+    deleted_by: uuid('deleted_by'),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
@@ -279,7 +318,10 @@ export const strainsTable = pgTable(
     updated_by: uuid('updated_by').notNull(),
   },
   (t) => ({
-    codeIdx: uniqueIndex('strains_code_idx').on(t.code),
+    cultivarCodeIdx: uniqueIndex('strains_cultivar_code_idx').on(t.cultivar_code),
+    supplierIdx: index('strains_supplier_idx').on(t.supplier_id),
+    speciesIdx: index('strains_species_idx').on(t.species),
+    sourceTypeIdx: index('strains_source_type_idx').on(t.source_type),
   }),
 );
 

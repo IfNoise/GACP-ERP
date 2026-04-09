@@ -10,9 +10,8 @@ function createStrategy(): JwtStrategy {
   // (the constructor talks to JWKS endpoints which are unavailable in unit tests).
   const config = {
     getOrThrow: (key: string) => {
-      if (key === 'KEYCLOAK_JWKS_URI')
-        return 'https://keycloak.local/realms/gacp-erp/protocol/openid-connect/certs';
-      if (key === 'KEYCLOAK_ISSUER') return 'https://keycloak.local/realms/gacp-erp';
+      if (key === 'ZITADEL_JWKS_URI') return 'https://zitadel.local/oauth/v2/certs';
+      if (key === 'ZITADEL_ISSUER') return 'https://zitadel.local';
       throw new Error(`Unexpected config key: ${key}`);
     },
     get: (_key: string, fallback: string) => fallback,
@@ -32,24 +31,24 @@ describe('JwtStrategy — validate()', () => {
     strategy = createStrategy();
   });
 
-  it('returns a valid JwtPayload for a token with realm roles', () => {
+  it('returns a valid JwtPayload for a token with Zitadel project roles', () => {
     const payload: Record<string, unknown> = {
-      sub: 'user-uuid-1',
+      sub: 'user-ulid-1',
       email: 'user@example.com',
       preferred_username: 'user1',
       given_name: 'John',
       family_name: 'Doe',
-      realm_access: { roles: ['OPERATOR'] },
+      'urn:zitadel:iam:org:project:roles': { role_id_1: ['OPERATOR'] },
       iat: 1000000,
       exp: 2000000,
       jti: 'jti-1',
-      iss: 'https://keycloak.local/realms/gacp-erp',
+      iss: 'https://zitadel.local',
       aud: 'api-gateway',
     };
 
     const result = strategy.validate(payload);
 
-    expect(result.sub).toBe('user-uuid-1');
+    expect(result.sub).toBe('user-ulid-1');
     expect(result.email).toBe('user@example.com');
     expect(result.preferred_username).toBe('user1');
     expect(result.realm_access.roles).toEqual(['OPERATOR']);
@@ -57,9 +56,9 @@ describe('JwtStrategy — validate()', () => {
     expect(result.exp).toBe(2000000);
   });
 
-  it('throws UnauthorizedException when realm_access is missing', () => {
+  it('throws UnauthorizedException when Zitadel roles claim is missing', () => {
     const payload: Record<string, unknown> = {
-      sub: 'user-uuid-2',
+      sub: 'user-ulid-2',
       preferred_username: 'user2',
       iat: 1000000,
       exp: 2000000,
@@ -67,14 +66,14 @@ describe('JwtStrategy — validate()', () => {
     };
 
     expect(() => strategy.validate(payload)).toThrow(UnauthorizedException);
-    expect(() => strategy.validate(payload)).toThrow('Token contains no realm roles');
+    expect(() => strategy.validate(payload)).toThrow('Token contains no project roles');
   });
 
-  it('throws UnauthorizedException when roles array is empty', () => {
+  it('throws UnauthorizedException when roles object is empty', () => {
     const payload: Record<string, unknown> = {
-      sub: 'user-uuid-3',
+      sub: 'user-ulid-3',
       preferred_username: 'user3',
-      realm_access: { roles: [] },
+      'urn:zitadel:iam:org:project:roles': {},
       iat: 1000000,
       exp: 2000000,
       iss: 'issuer',
@@ -85,9 +84,9 @@ describe('JwtStrategy — validate()', () => {
 
   it('handles optional fields gracefully (undefined values)', () => {
     const payload: Record<string, unknown> = {
-      sub: 'user-uuid-4',
+      sub: 'user-ulid-4',
       preferred_username: 'user4',
-      realm_access: { roles: ['READONLY'] },
+      'urn:zitadel:iam:org:project:roles': { role_id_1: ['READONLY'] },
       iat: 1000000,
       exp: 2000000,
       iss: 'issuer',
@@ -102,11 +101,14 @@ describe('JwtStrategy — validate()', () => {
     expect(result.aud).toBeUndefined();
   });
 
-  it('handles multiple realm roles', () => {
+  it('handles multiple roles from different role IDs', () => {
     const payload: Record<string, unknown> = {
-      sub: 'user-uuid-5',
+      sub: 'user-ulid-5',
       preferred_username: 'admin',
-      realm_access: { roles: ['SUPER_ADMIN', 'QUALITY_MANAGER'] },
+      'urn:zitadel:iam:org:project:roles': {
+        role_id_1: ['SUPER_ADMIN'],
+        role_id_2: ['QUALITY_MANAGER'],
+      },
       iat: 1000000,
       exp: 2000000,
       iss: 'issuer',
@@ -115,5 +117,22 @@ describe('JwtStrategy — validate()', () => {
     const result = strategy.validate(payload);
 
     expect(result.realm_access.roles).toEqual(['SUPER_ADMIN', 'QUALITY_MANAGER']);
+  });
+
+  it('flattens roles from single role ID with multiple role names', () => {
+    const payload: Record<string, unknown> = {
+      sub: 'user-ulid-6',
+      preferred_username: 'poweruser',
+      'urn:zitadel:iam:org:project:roles': {
+        role_id_1: ['CULTIVATION_MANAGER', 'QUALITY_MANAGER'],
+      },
+      iat: 1000000,
+      exp: 2000000,
+      iss: 'issuer',
+    };
+
+    const result = strategy.validate(payload);
+
+    expect(result.realm_access.roles).toEqual(['CULTIVATION_MANAGER', 'QUALITY_MANAGER']);
   });
 });

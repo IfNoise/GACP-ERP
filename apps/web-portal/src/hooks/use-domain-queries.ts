@@ -185,6 +185,98 @@ export function useBatchHarvests(id: string) {
   });
 }
 
+// ─── STRAINS ─────────────────────────────────────────────────────────────────
+
+interface StrainsQuery {
+  page?: number;
+  limit?: number;
+  species?: string;
+  supplier_id?: string;
+  is_active?: string;
+}
+
+export function useStrains(query: StrainsQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['strains', query],
+    queryFn: async () => {
+      const res = await api.cultivation.strains.list({ query: { page: 1, limit: 50, ...query } });
+      if (res.status !== 200) throw new Error('Failed to load strains');
+      return res.body;
+    },
+  });
+}
+
+export function useStrain(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['strains', id],
+    queryFn: async () => {
+      const res = await api.cultivation.strains.getById({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load strain');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateStrain() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.cultivation.strains.create>[0]['body']) => {
+      const res = await api.cultivation.strains.create({ body });
+      if (res.status !== 201) throw new Error('Failed to create strain');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['strains'] }),
+  });
+}
+
+export function useUpdateStrain() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.cultivation.strains.update>[0]['body']>;
+    }) => {
+      const res = await api.cultivation.strains.update({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to update strain');
+      return res.body;
+    },
+    onSuccess: (_data, { id }) => {
+      qc.invalidateQueries({ queryKey: ['strains', id] });
+      qc.invalidateQueries({ queryKey: ['strains'] });
+    },
+  });
+}
+
+export function useDeactivateStrain() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.cultivation.strains.deactivate>[0]['body']>;
+    }) => {
+      const res = await api.cultivation.strains.deactivate({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to deactivate strain');
+      return res.body;
+    },
+    onSuccess: (_data, { id }) => {
+      qc.invalidateQueries({ queryKey: ['strains', id] });
+      qc.invalidateQueries({ queryKey: ['strains'] });
+    },
+  });
+}
+
 // ─── QUALITY — CHANGE CONTROLS ───────────────────────────────────────────────
 
 interface ChangeControlsQuery {
