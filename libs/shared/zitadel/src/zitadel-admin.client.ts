@@ -1,12 +1,12 @@
 import type { SystemRole } from '@gacp-erp/shared-schemas';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Config & Types ───────────────────────────────────────────────────────────
 
 export interface ZitadelConfig {
   url: string;
   clientId: string;
   clientSecret: string;
-  projectId: string; // Zitadel project ID for role management
+  projectId: string;
 }
 
 export interface ZitadelTokenResponse {
@@ -31,23 +31,23 @@ export interface ZitadelUserCreate {
   email?: string;
   firstName?: string;
   lastName?: string;
+  /** Plain-text temporary password. User will be prompted to change on first login. */
   password?: string;
 }
 
-export interface ZitadelRole {
-  id: string;
-  key: string;
-  displayName: string;
-  group?: string;
+export interface ZitadelOidcApp {
+  appId: string;
+  clientId: string;
+  clientSecret?: string;
 }
 
 // ─── Client ───────────────────────────────────────────────────────────────────
 
 /**
- * Typed Zitadel Admin REST API client.
- * Uses service account credentials for operations.
+ * Zitadel Admin REST API client.
+ * Uses client_credentials grant (service account) for all management calls.
  *
- * All methods throw on non-2xx responses with structured error info.
+ * REST API reference: https://zitadel.com/docs/apis/introduction
  */
 export class ZitadelAdminClient {
   private adminToken: string | null = null;
@@ -62,20 +62,20 @@ export class ZitadelAdminClient {
       return this.adminToken;
     }
 
-    const url = `${this.config.url}/oauth/v2/token`;
-    const res = await fetch(url, {
+    const res = await fetch(`${this.config.url}/oauth/v2/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: this.config.clientId,
         client_secret: this.config.clientSecret,
-        scope: 'urn:zitadel:iam:org:project:id:{projectId}:aud',
+        scope: `openid urn:zitadel:iam:org:project:id:${this.config.projectId}:aud urn:zitadel:iam:org:projects:roles`,
       }).toString(),
     });
 
     if (!res.ok) {
-      throw new ZitadelAdminError('Failed to obtain admin token', res.status);
+      const body = await res.text().catch(() => '');
+      throw new ZitadelAdminError('Failed to obtain admin token', res.status, body);
     }
 
     const data = (await res.json()) as ZitadelTokenResponse;
@@ -98,13 +98,12 @@ export class ZitadelAdminClient {
     if (!res.ok) {
       const body = await res.text().catch(() => '');
       throw new ZitadelAdminError(
-        `Zitadel admin request failed: ${options.method ?? 'GET'} ${path} → ${res.status}`,
+        `Zitadel request failed: ${options.method ?? 'GET'} ${path} → ${res.status}`,
         res.status,
         body,
       );
     }
 
-    // 204 No Content or just status code responses
     if (res.status === 204 || res.headers.get('content-length') === '0') {
       return undefined as unknown as T;
     }
@@ -115,140 +114,276 @@ export class ZitadelAdminClient {
   // ─── Users ────────────────────────────────────────────────────────────────
 
   /**
-   * Get user by username.
-   * Note: Zitadel REST API is limited; gRPC is recommended for production.
+   * Find a human user by exact username.
+   * Uses POST /v2/users/_search with username filter.
    */
   async getUserByUsername(userName: string): Promise<ZitadelUser | null> {
     try {
-      const response = await this.request<{ users?: Array<{ userId: string; userName: string }> }>(
-        `/v2/users/_by_user_name/${encodeURIComponent(userName)}`,
-      );
-      if (response && response.users && response.users.length > 0) {
-        const user = response.users[0];
-        return {
-          userId: user.userId,
-          userName: user.userName,
-          state: 'ACTIVE',
-        };
-      }
-      return null;
+      const res = await this.request<{
+        result?: Array<{ userId: string; userName: string }>;
+      }>('/v2/users/_search', {
+        method: 'POST',
+        body: JSON.stringify({
+          queries: [{ userNameQuery: { userName, method: 'TEXT_QUERY_METHOD_EQUALS' } }],
+        }),
+      });
+      const first = res.result?.[0];
+      if (!first) return null;
+      return { userId: first.userId, userName: first.userName, state: 'ACTIVE' };
     } catch {
       return null;
     }
   }
 
-  /**
-   * Get user by ID.
-   */
+  /** Get a user by ID. */
   async getUserById(userId: string): Promise<ZitadelUser> {
-    return this.request<ZitadelUser>(`/v2/users/${userId}`);
+    const res = await this.request<{
+      user: {
+        userId: string;
+        userName: string;
+        state: string;
+        human?: {
+          email?: { email?: string };
+          profile?: { givenName?: string; familyName?: string };
+        };
+      };
+    }>(`/v2/users/${userId}`);
+
+    return {
+      userId: res.user.userId,
+      userName: res.user.userName,
+      ...(res.user.human?.email?.email !== undefined && { email: res.user.human.email.email }),
+      ...(res.user.human?.profile?.givenName !== undefined && {
+        firstName: res.user.human.profile.givenName,
+      }),
+      ...(res.user.human?.profile?.familyName !== undefined && {
+        lastName: res.user.human.profile.familyName,
+      }),
+      state: (res.user.state ?? 'ACTIVE') as ZitadelUser['state'],
+    };
   }
 
   /**
-   * Create a new user.
-   * Note: Zitadel requires gRPC for full user creation with roles.
+   * Create a human user with a temporary password.
+   * User will be required to change password on first login.
+   * Returns the new userId.
    */
   async createUser(user: ZitadelUserCreate): Promise<string> {
-    const response = await this.request<{ userId: string }>('/v2/users/human', {
+    const res = await this.request<{ userId: string }>('/v2/users/human', {
       method: 'POST',
       body: JSON.stringify({
         userName: user.userName,
-        email: user.email,
+        ...(user.email && { email: { email: user.email, isVerified: true } }),
         profile: {
-          givenName: user.firstName || '',
-          familyName: user.lastName || '',
+          givenName: user.firstName ?? '',
+          familyName: user.lastName ?? '',
         },
-        hashedPassword: user.password ? Buffer.from(user.password).toString('base64') : undefined,
+        ...(user.password && {
+          password: { password: user.password, changeRequired: true },
+        }),
       }),
     });
 
-    if (!response.userId) {
-      throw new ZitadelAdminError('No user ID returned from create user', 201);
-    }
-
-    return response.userId;
+    if (!res.userId) throw new ZitadelAdminError('No userId returned from createUser', 201);
+    return res.userId;
   }
 
-  /**
-   * Update a user.
-   */
+  /** Update profile and/or email of a user. */
   async updateUser(userId: string, update: Partial<ZitadelUserCreate>): Promise<void> {
-    await this.request<void>(`/v2/users/${userId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        userName: update.userName,
-        email: update.email,
-        profile: {
-          givenName: update.firstName,
-          familyName: update.lastName,
-        },
-      }),
-    });
+    if (update.firstName !== undefined || update.lastName !== undefined) {
+      await this.request<void>(`/v2/users/${userId}/profile`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          givenName: update.firstName ?? '',
+          familyName: update.lastName ?? '',
+        }),
+      });
+    }
+    if (update.email !== undefined) {
+      await this.request<void>(`/v2/users/${userId}/email`, {
+        method: 'PUT',
+        body: JSON.stringify({ email: update.email, isVerified: true }),
+      });
+    }
   }
 
-  /**
-   * Delete a user (soft delete).
-   */
+  /** Permanently delete a user account. */
   async deleteUser(userId: string): Promise<void> {
     await this.request<void>(`/v2/users/${userId}`, { method: 'DELETE' });
   }
 
   // ─── Role Assignments ─────────────────────────────────────────────────────
-  // Note: Full role management requires gRPC API.
-  // These REST endpoints provide limited functionality.
 
   /**
-   * Get roles for a user in the project.
-   * Note: Limited REST API support; gRPC recommended.
-   */
-  async getUserRoles(userId: string): Promise<string[]> {
-    try {
-      const response = await this.request<{ roles?: Array<{ key: string }> }>(
-        `/v2/users/${userId}/grants?projectId=${this.config.projectId}`,
-      );
-      return (response.roles ?? []).map((r) => r.key);
-    } catch {
-      return [];
-    }
-  }
-
-  /**
-   * Assign roles to a user.
-   * Note: Requires gRPC API for full implementation.
-   * This is a placeholder for REST API.
+   * Assign project roles to a user.
+   * Creates a new user grant if none exists; updates the existing one otherwise.
    */
   async assignRoles(userId: string, roles: SystemRole[]): Promise<void> {
-    // Zitadel REST API has limited role assignment.
-    // For production, use gRPC API:
-    // - management.UserServiceClient.AddUserGrant()
-    for (const role of roles) {
-      await this.request<void>(`/v2/users/${userId}/grants`, {
+    const existingGrantId = await this.getUserGrantId(userId);
+
+    if (existingGrantId) {
+      await this.request<void>(`/management/v1/users/${userId}/grants/${existingGrantId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ roleKeys: roles }),
+      });
+    } else {
+      await this.request<void>(`/management/v1/users/${userId}/grants`, {
         method: 'POST',
-        body: JSON.stringify({
-          projectId: this.config.projectId,
-          role: role,
-        }),
+        body: JSON.stringify({ projectId: this.config.projectId, roleKeys: roles }),
       });
     }
   }
 
   /**
-   * Remove roles from a user.
+   * Remove all project roles from a user by deleting the grant.
    */
-  async removeRoles(userId: string, roles: SystemRole[]): Promise<void> {
-    for (const role of roles) {
-      await this.request<void>(
-        `/v2/users/${userId}/grants?projectId=${this.config.projectId}&role=${role}`,
-        { method: 'DELETE' },
+  async removeRoles(userId: string, _roles: SystemRole[]): Promise<void> {
+    const grantId = await this.getUserGrantId(userId);
+    if (!grantId) return;
+    await this.request<void>(`/management/v1/users/${userId}/grants/${grantId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /** Get project roles assigned to a user. */
+  async getUserRoles(userId: string): Promise<string[]> {
+    try {
+      const res = await this.request<{ result?: Array<{ roleKeys?: string[] }> }>(
+        `/management/v1/users/${userId}/grants?projectId=${this.config.projectId}`,
       );
+      return res.result?.[0]?.roleKeys ?? [];
+    } catch {
+      return [];
     }
   }
 
-  // ─── Health ──────────────────────────────────────────────────────────────
+  private async getUserGrantId(userId: string): Promise<string | null> {
+    try {
+      const res = await this.request<{ result?: Array<{ id: string; projectId: string }> }>(
+        `/management/v1/users/${userId}/grants?projectId=${this.config.projectId}`,
+      );
+      return res.result?.[0]?.id ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  // ─── Projects ─────────────────────────────────────────────────────────────
 
   /**
-   * Check if Zitadel is reachable.
+   * Create a new project and return its ID.
    */
+  async createProject(name: string): Promise<string> {
+    const res = await this.request<{ id: string }>('/management/v1/projects', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        projectRoleAssertion: true,
+        projectRoleCheck: true,
+        hasProjectCheck: false,
+      }),
+    });
+    return res.id;
+  }
+
+  /**
+   * Add a role to an existing project.
+   */
+  async createProjectRole(
+    projectId: string,
+    roleKey: string,
+    displayName: string,
+    group?: string,
+  ): Promise<void> {
+    await this.request<void>(`/management/v1/projects/${projectId}/roles`, {
+      method: 'POST',
+      body: JSON.stringify({ roleKey, displayName, ...(group && { group }) }),
+    });
+  }
+
+  // ─── Applications ─────────────────────────────────────────────────────────
+
+  /**
+   * Create an OIDC application inside a project.
+   *
+   * @param isPublic  true = SPA/mobile (PKCE, no secret); false = confidential web app
+   * Returns { appId, clientId, clientSecret? } — clientSecret is only returned once.
+   */
+  async createOidcApp(
+    projectId: string,
+    name: string,
+    opts: {
+      redirectUris: string[];
+      postLogoutRedirectUris?: string[];
+      isPublic?: boolean;
+    },
+  ): Promise<ZitadelOidcApp> {
+    const res = await this.request<{ appId: string; clientId: string; clientSecret?: string }>(
+      `/management/v1/projects/${projectId}/apps/oidc`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          redirectUris: opts.redirectUris,
+          postLogoutRedirectUris: opts.postLogoutRedirectUris ?? [],
+          responseTypes: ['OIDC_RESPONSE_TYPE_CODE'],
+          grantTypes: opts.isPublic
+            ? ['OIDC_GRANT_TYPE_AUTHORIZATION_CODE', 'OIDC_GRANT_TYPE_REFRESH_TOKEN']
+            : [
+                'OIDC_GRANT_TYPE_AUTHORIZATION_CODE',
+                'OIDC_GRANT_TYPE_REFRESH_TOKEN',
+                'OIDC_GRANT_TYPE_CLIENT_CREDENTIALS',
+              ],
+          appType: opts.isPublic ? 'OIDC_APP_TYPE_USER_AGENT' : 'OIDC_APP_TYPE_WEB',
+          authMethodType: opts.isPublic
+            ? 'OIDC_AUTH_METHOD_TYPE_NONE'
+            : 'OIDC_AUTH_METHOD_TYPE_BASIC',
+          accessTokenType: 'OIDC_TOKEN_TYPE_JWT',
+          accessTokenRoleAssertion: true,
+          idTokenRoleAssertion: true,
+          idTokenUserinfoAssertion: true,
+        }),
+      },
+    );
+    return {
+      appId: res.appId,
+      clientId: res.clientId,
+      ...(res.clientSecret !== undefined && { clientSecret: res.clientSecret }),
+    };
+  }
+
+  /**
+   * Create a machine (service account) user.
+   * Returns userId.
+   */
+  async createMachineUser(userName: string, name: string, description?: string): Promise<string> {
+    const res = await this.request<{ userId: string }>('/v2/users/machine', {
+      method: 'POST',
+      body: JSON.stringify({
+        userName,
+        name,
+        description,
+        accessTokenType: 'ACCESS_TOKEN_TYPE_JWT',
+      }),
+    });
+    if (!res.userId) throw new ZitadelAdminError('No userId returned from createMachineUser', 201);
+    return res.userId;
+  }
+
+  /**
+   * Create a Personal Access Token (PAT) for a machine user.
+   * The token string is only returned once.
+   */
+  async createMachinePat(userId: string, expirationDate?: string): Promise<string> {
+    const res = await this.request<{ token: string }>(`/v2/users/${userId}/pats`, {
+      method: 'POST',
+      body: JSON.stringify({ expirationDate: expirationDate ?? '2030-12-31T23:59:59Z' }),
+    });
+    return res.token;
+  }
+
+  // ─── Health ───────────────────────────────────────────────────────────────
+
   async healthCheck(): Promise<boolean> {
     try {
       const res = await fetch(`${this.config.url}/.well-known/openid-configuration`);

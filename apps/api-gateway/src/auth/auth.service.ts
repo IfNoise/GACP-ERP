@@ -24,9 +24,15 @@ export class AuthService {
   /**
    * Password-grant login via Zitadel OAuth token endpoint.
    * Used by web-portal for direct credential auth.
+   *
+   * Scopes requested:
+   *   - openid profile email  — standard OIDC claims
+   *   - urn:zitadel:iam:org:projects:roles  — include role grants in access token
+   *   - urn:zitadel:iam:org:project:id:{projectId}:aud  — add project as token audience
    */
   async login(dto: LoginRequest): Promise<TokenResponse> {
     const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const projectId = this.config.getOrThrow<string>('ZITADEL_PROJECT_ID');
     const url = `${zitadelUrl}/oauth/v2/token`;
 
     const params = new URLSearchParams({
@@ -35,7 +41,11 @@ export class AuthService {
       client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
       username: dto.username,
       password: dto.password,
-      scope: 'openid profile email',
+      scope: [
+        'openid profile email',
+        'urn:zitadel:iam:org:projects:roles',
+        `urn:zitadel:iam:org:project:id:${projectId}:aud`,
+      ].join(' '),
     });
 
     const response = await fetch(url, {
@@ -67,6 +77,7 @@ export class AuthService {
    */
   async refresh(dto: RefreshTokenRequest): Promise<TokenResponse> {
     const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const projectId = this.config.getOrThrow<string>('ZITADEL_PROJECT_ID');
     const url = `${zitadelUrl}/oauth/v2/token`;
 
     const params = new URLSearchParams({
@@ -74,6 +85,11 @@ export class AuthService {
       client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
       client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
       refresh_token: dto.refresh_token,
+      scope: [
+        'openid profile email',
+        'urn:zitadel:iam:org:projects:roles',
+        `urn:zitadel:iam:org:project:id:${projectId}:aud`,
+      ].join(' '),
     });
 
     const response = await fetch(url, {

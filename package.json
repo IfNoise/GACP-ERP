@@ -28,7 +28,8 @@
     "infra:light": "docker compose -f docker/docker-compose.light.yml up -d",
     "infra:light:down": "docker compose -f docker/docker-compose.light.yml down",
     "infra:light:logs": "docker compose -f docker/docker-compose.light.yml logs -f",
-    "openapi:generate": "tsx libs/shared/contracts/src/openapi.ts"
+    "openapi:generate": "tsx libs/shared/contracts/src/openapi.ts",
+    "zitadel:setup": "ZITADEL_URL=${ZITADEL_URL:-http://localhost:8080} tsx scripts/setup-zitadel.mts"
   },
   "devDependencies": {
     "@nx-go/nx-go": "~2.2.0",

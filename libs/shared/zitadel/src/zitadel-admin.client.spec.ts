@@ -53,6 +53,7 @@ describe('ZitadelAdminClient', () => {
       global.fetch = jest.fn().mockResolvedValue({
         ok: false,
         status: 401,
+        text: async () => 'Unauthorized',
       });
 
       await expect(

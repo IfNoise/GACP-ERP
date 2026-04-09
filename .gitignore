@@ -25,6 +25,7 @@ lcov-report/
 .env.*.local
 !.env.example
 !docker/.env.example
+.zitadel-setup.env
 
 # Logs
 logs/

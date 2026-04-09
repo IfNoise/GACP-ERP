@@ -38,7 +38,8 @@ describe('JwtStrategy — validate()', () => {
       preferred_username: 'user1',
       given_name: 'John',
       family_name: 'Doe',
-      'urn:zitadel:iam:org:project:roles': { role_id_1: ['OPERATOR'] },
+      // Real Zitadel format: keys are role names, values are org context objects
+      'urn:zitadel:iam:org:project:roles': { OPERATOR: { org123: 'proj456' } },
       iat: 1000000,
       exp: 2000000,
       jti: 'jti-1',
@@ -86,7 +87,7 @@ describe('JwtStrategy — validate()', () => {
     const payload: Record<string, unknown> = {
       sub: 'user-ulid-4',
       preferred_username: 'user4',
-      'urn:zitadel:iam:org:project:roles': { role_id_1: ['READONLY'] },
+      'urn:zitadel:iam:org:project:roles': { READONLY: { org123: 'proj456' } },
       iat: 1000000,
       exp: 2000000,
       iss: 'issuer',
@@ -106,8 +107,8 @@ describe('JwtStrategy — validate()', () => {
       sub: 'user-ulid-5',
       preferred_username: 'admin',
       'urn:zitadel:iam:org:project:roles': {
-        role_id_1: ['SUPER_ADMIN'],
-        role_id_2: ['QUALITY_MANAGER'],
+        SUPER_ADMIN: { org123: 'proj456' },
+        QUALITY_MANAGER: { org123: 'proj456' },
       },
       iat: 1000000,
       exp: 2000000,
@@ -124,7 +125,8 @@ describe('JwtStrategy — validate()', () => {
       sub: 'user-ulid-6',
       preferred_username: 'poweruser',
       'urn:zitadel:iam:org:project:roles': {
-        role_id_1: ['CULTIVATION_MANAGER', 'QUALITY_MANAGER'],
+        CULTIVATION_MANAGER: { org123: 'proj456' },
+        QUALITY_MANAGER: { org123: 'proj456' },
       },
       iat: 1000000,
       exp: 2000000,

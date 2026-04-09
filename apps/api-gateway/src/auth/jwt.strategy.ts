@@ -10,6 +10,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
   constructor(config: ConfigService) {
     const jwksUri = config.getOrThrow<string>('ZITADEL_JWKS_URI');
     const issuer = config.getOrThrow<string>('ZITADEL_ISSUER');
+    // When tokens include `urn:zitadel:iam:org:project:id:{id}:aud` scope, the
+    // aud claim becomes the projectId. Validate against it when configured; otherwise
+    // omit audience check and rely on issuer + RS256 signature verification.
+    const projectId = config.get<string>('ZITADEL_PROJECT_ID');
 
     super({
       secretOrKeyProvider: passportJwtSecret({
@@ -19,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
         jwksUri,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      audience: config.get<string>('ZITADEL_CLIENT_ID', 'api-gateway'),
+      ...(projectId ? { audience: projectId } : {}),
       issuer,
       algorithms: ['RS256'],
     });
@@ -29,11 +33,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
    * Called after signature verification.
    * Returns the validated payload — attached to request.user by Passport.
    *
-   * Zitadel stores roles in `urn:zitadel:iam:org:project:roles` as an object
-   * where keys are role IDs and values are role names.
+   * Zitadel `urn:zitadel:iam:org:project:roles` structure:
+   *   { "ROLE_KEY": { "<orgId>": "<projectId>" }, ... }
+   * The role NAMES are the top-level keys of this object.
    */
   validate(payload: Record<string, unknown>): JwtPayload {
-    // Zitadel stores roles in a custom claim with role IDs mapping
     const zitadelRolesClaim = payload['urn:zitadel:iam:org:project:roles'] as
       | Record<string, unknown>
       | undefined;
@@ -42,8 +46,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
       throw new UnauthorizedException('Token contains no project roles');
     }
 
-    // Convert Zitadel roles object to flat array of role names
-    const roles = Object.values(zitadelRolesClaim).flat() as string[];
+    // Role names are the top-level keys: { "SUPER_ADMIN": { orgId: projectId } }
+    const roles = Object.keys(zitadelRolesClaim);
 
     return {
       sub: payload['sub'] as string,

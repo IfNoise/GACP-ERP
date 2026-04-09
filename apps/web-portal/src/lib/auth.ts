@@ -26,7 +26,16 @@ const ZitadelProvider: OAuthConfig<ZitadelProfile> = {
   clientSecret: process.env['ZITADEL_CLIENT_SECRET'] ?? '',
   authorization: {
     params: {
-      scope: 'openid profile email',
+      // Request Zitadel-specific scopes to get role claims in the access token.
+      // urn:zitadel:iam:org:projects:roles  → include role grants claim in JWT
+      // urn:zitadel:iam:org:project:id:*:aud → add project as JWT audience (validates in api-gateway)
+      scope: [
+        'openid profile email',
+        'urn:zitadel:iam:org:projects:roles',
+        ...(process.env['ZITADEL_PROJECT_ID']
+          ? [`urn:zitadel:iam:org:project:id:${process.env['ZITADEL_PROJECT_ID']}:aud`]
+          : []),
+      ].join(' '),
     },
   },
   userinfo: {
@@ -37,7 +46,7 @@ const ZitadelProvider: OAuthConfig<ZitadelProfile> = {
       id: profile.sub,
       name: profile.name,
       email: profile.email,
-      image: undefined,
+      image: null,
     };
   },
 } as OAuthConfig<ZitadelProfile> & OAuthUserConfig<ZitadelProfile>;
