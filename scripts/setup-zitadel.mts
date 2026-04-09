@@ -80,15 +80,31 @@ async function main(): Promise<void> {
   if (!oidc.ok) die(`Cannot reach Zitadel at ${ZITADEL_URL}`);
   console.log('✅ Zitadel reachable');
 
-  // 2. Create project
+  // 2. Create project (idempotent — look up existing if already created)
   console.log('\n📁 Creating project GACP-ERP...');
-  const { id: projectId } = await api<{ id: string }>('/management/v1/projects', {
-    name: 'GACP-ERP',
-    projectRoleAssertion: true,
-    projectRoleCheck: true,
-    hasProjectCheck: false,
-  });
-  console.log(`   Project ID: ${projectId}`);
+  let projectId: string;
+  try {
+    const res = await api<{ id: string }>('/management/v1/projects', {
+      name: 'GACP-ERP',
+      projectRoleAssertion: true,
+      projectRoleCheck: true,
+      hasProjectCheck: false,
+    });
+    projectId = res.id;
+    console.log(`   Project ID: ${projectId}`);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (!isAlreadyExists(msg)) throw e;
+    // Look up the existing project by name
+    const list = await api<{ result?: Array<{ id: string; name: string }> }>(
+      '/management/v1/projects/_search',
+      { queries: [{ nameQuery: { name: 'GACP-ERP', method: 'TEXT_QUERY_METHOD_EQUALS' } }] },
+    );
+    const existing = list.result?.[0];
+    if (!existing) throw new Error('Project GACP-ERP already exists but could not be found');
+    projectId = existing.id;
+    console.log(`   ⚠️  Project already exists — ID: ${projectId}`);
+  }
 
   // 3. Create project roles
   console.log('\n🎭 Creating project roles...');
@@ -99,82 +115,99 @@ async function main(): Promise<void> {
       group: role.group,
     }).catch((e: unknown) => {
       const msg = e instanceof Error ? e.message : String(e);
-      if (msg.includes('already exists') || msg.includes('6')) {
+      if (isAlreadyExists(msg)) {
         console.log(`   ⚠️  ${role.key} already exists — skipping`);
-      } else {
-        throw e;
+        return;
       }
+      throw e;
     });
     console.log(`   ✅ ${role.key}`);
   }
 
-  // 4. Create web-portal OIDC app (public SPA)
+  // 4. Create web-portal OIDC app (public SPA, idempotent)
   console.log('\n🌐 Creating web-portal OIDC application...');
-  const webPortal = await api<{ appId: string; clientId: string }>(
-    `/management/v1/projects/${projectId}/apps/oidc`,
-    {
-      name: 'web-portal',
-      redirectUris: WEB_PORTAL_REDIRECT_URIS,
-      postLogoutRedirectUris: ['http://localhost:3000'],
-      responseTypes: ['OIDC_RESPONSE_TYPE_CODE'],
-      grantTypes: ['OIDC_GRANT_TYPE_AUTHORIZATION_CODE', 'OIDC_GRANT_TYPE_REFRESH_TOKEN'],
-      appType: 'OIDC_APP_TYPE_USER_AGENT',
-      authMethodType: 'OIDC_AUTH_METHOD_TYPE_NONE', // Public client — PKCE only
-      accessTokenType: 'OIDC_TOKEN_TYPE_JWT',
-      accessTokenRoleAssertion: true,
-      idTokenRoleAssertion: true,
-      idTokenUserinfoAssertion: true,
-      devMode: true, // Allow http:// redirect URIs in dev
-    },
-  );
+  const webPortal = await createOrFindApp(projectId, 'web-portal', {
+    name: 'web-portal',
+    redirectUris: WEB_PORTAL_REDIRECT_URIS,
+    postLogoutRedirectUris: ['http://localhost:3000'],
+    responseTypes: ['OIDC_RESPONSE_TYPE_CODE'],
+    grantTypes: ['OIDC_GRANT_TYPE_AUTHORIZATION_CODE', 'OIDC_GRANT_TYPE_REFRESH_TOKEN'],
+    appType: 'OIDC_APP_TYPE_USER_AGENT',
+    authMethodType: 'OIDC_AUTH_METHOD_TYPE_NONE',
+    accessTokenType: 'OIDC_TOKEN_TYPE_JWT',
+    accessTokenRoleAssertion: true,
+    idTokenRoleAssertion: true,
+    idTokenUserinfoAssertion: true,
+    devMode: true,
+  });
   console.log(`   App ID:    ${webPortal.appId}`);
   console.log(`   Client ID: ${webPortal.clientId}`);
 
-  // 5. Create api-gateway OIDC app (confidential — password grant + client_credentials)
+  // 5. Create api-gateway OIDC app (confidential, idempotent)
   console.log('\n🔐 Creating api-gateway OIDC application...');
-  const apiGateway = await api<{ appId: string; clientId: string; clientSecret?: string }>(
-    `/management/v1/projects/${projectId}/apps/oidc`,
-    {
-      name: 'api-gateway',
-      redirectUris: [],
-      postLogoutRedirectUris: [],
-      responseTypes: ['OIDC_RESPONSE_TYPE_CODE'],
-      grantTypes: [
-        'OIDC_GRANT_TYPE_AUTHORIZATION_CODE',
-        'OIDC_GRANT_TYPE_REFRESH_TOKEN',
-        'OIDC_GRANT_TYPE_CLIENT_CREDENTIALS',
-      ],
-      appType: 'OIDC_APP_TYPE_WEB',
-      authMethodType: 'OIDC_AUTH_METHOD_TYPE_BASIC', // Confidential client
-      accessTokenType: 'OIDC_TOKEN_TYPE_JWT',
-      accessTokenRoleAssertion: true,
-      idTokenRoleAssertion: true,
-      idTokenUserinfoAssertion: true,
-    },
-  );
+  const apiGateway = await createOrFindApp(projectId, 'api-gateway', {
+    name: 'api-gateway',
+    redirectUris: [],
+    postLogoutRedirectUris: [],
+    responseTypes: ['OIDC_RESPONSE_TYPE_CODE'],
+    grantTypes: [
+      'OIDC_GRANT_TYPE_AUTHORIZATION_CODE',
+      'OIDC_GRANT_TYPE_REFRESH_TOKEN',
+      'OIDC_GRANT_TYPE_CLIENT_CREDENTIALS',
+    ],
+    appType: 'OIDC_APP_TYPE_WEB',
+    authMethodType: 'OIDC_AUTH_METHOD_TYPE_BASIC',
+    accessTokenType: 'OIDC_TOKEN_TYPE_JWT',
+    accessTokenRoleAssertion: true,
+    idTokenRoleAssertion: true,
+    idTokenUserinfoAssertion: true,
+  });
   console.log(`   App ID:     ${apiGateway.appId}`);
   console.log(`   Client ID:  ${apiGateway.clientId}`);
   console.log(`   Has Secret: ${Boolean(apiGateway.clientSecret)}`);
 
   // 6. Create admin-service machine user (for workforce-service provisioning)
   console.log('\n🤖 Creating admin-service machine user...');
-  const machineUser = await api<{ userId: string }>('/v2/users/machine', {
-    userName: 'admin-service',
-    name: 'GACP-ERP Admin Service',
-    description: 'Service account for workforce-service user provisioning',
-    accessTokenType: 'ACCESS_TOKEN_TYPE_JWT',
-  });
-  console.log(`   User ID: ${machineUser.userId}`);
+  let machineUserId: string;
+  try {
+    const machineUser = await api<{ userId: string }>('/management/v1/users/machine', {
+      userName: 'admin-service',
+      name: 'GACP-ERP Admin Service',
+      description: 'Service account for workforce-service user provisioning',
+      accessTokenType: 'ACCESS_TOKEN_TYPE_JWT',
+    });
+    machineUserId = machineUser.userId;
+    console.log(`   User ID: ${machineUserId}`);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (!isAlreadyExists(msg)) throw e;
+    // Look up existing machine user
+    const list = await api<{ result?: Array<{ userId: string; userName: string }> }>(
+      '/v2/users/_search',
+      { queries: [{ userNameQuery: { userName: 'admin-service', method: 'TEXT_QUERY_METHOD_EQUALS' } }] },
+    );
+    const existing = list.result?.[0];
+    if (!existing) throw new Error('admin-service user exists but could not be found');
+    machineUserId = existing.userId;
+    console.log(`   ⚠️  admin-service already exists — ID: ${machineUserId}`);
+  }
 
-  // Grant admin-service the IAM_OWNER role so it can provision users
-  await api(`/management/v1/users/${machineUser.userId}/grants`, {
+  // Grant admin-service the SUPER_ADMIN project role
+  await api(`/management/v1/users/${machineUserId}/grants`, {
     projectId,
     roleKeys: ['SUPER_ADMIN'],
+  }).catch((e: unknown) => {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (isAlreadyExists(msg)) {
+      console.log('   ⚠️  Grant already exists — skipping');
+      return;
+    }
+    throw e;
   });
 
   // Create PAT for admin-service
   const { token: adminPat } = await api<{ token: string }>(
-    `/v2/users/${machineUser.userId}/pats`,
+    `/management/v1/users/${machineUserId}/pats`,
     { expirationDate: '2030-12-31T23:59:59Z' },
   );
   console.log('   PAT created (shown below)');
@@ -225,6 +258,36 @@ async function main(): Promise<void> {
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function isAlreadyExists(msg: string): boolean {
+  // gRPC code 6 = AlreadyExists; Zitadel also returns it in error messages
+  return msg.includes('already exists') || / → 409:/.test(msg) || /\b6\b.*AlreadyExists/.test(msg);
+}
+
+async function createOrFindApp(
+  projectId: string,
+  appName: string,
+  body: Record<string, unknown>,
+): Promise<{ appId: string; clientId: string; clientSecret?: string }> {
+  try {
+    return await api<{ appId: string; clientId: string; clientSecret?: string }>(
+      `/management/v1/projects/${projectId}/apps/oidc`,
+      body,
+    );
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (!isAlreadyExists(msg)) throw e;
+    // Look up the existing app
+    const list = await api<{ result?: Array<{ id: string; name: string; oidcConfig?: { clientId: string } }> }>(
+      `/management/v1/projects/${projectId}/apps/_search`,
+      { queries: [{ nameQuery: { name: appName, method: 'TEXT_QUERY_METHOD_EQUALS' } }] },
+    );
+    const existing = list.result?.[0];
+    if (!existing?.oidcConfig) throw new Error(`App ${appName} exists but could not be retrieved`);
+    console.log(`   ⚠️  ${appName} already exists — clientSecret NOT available (regenerate in console if needed)`);
+    return { appId: existing.id, clientId: existing.oidcConfig.clientId };
+  }
+}
 
 function tryReadFile(path: string): string | null {
   try {
