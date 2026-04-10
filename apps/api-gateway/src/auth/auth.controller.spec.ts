@@ -5,7 +5,6 @@ import { type AuthService } from './auth.service';
 
 function makeAuthService(): jest.Mocked<AuthService> {
   return {
-    login: jest.fn(),
     refresh: jest.fn(),
     logout: jest.fn(),
     reauthenticate: jest.fn(),
@@ -30,23 +29,6 @@ describe('AuthController', () => {
   beforeEach(() => {
     authService = makeAuthService();
     controller = new AuthController(authService as never);
-  });
-
-  it('login delegates to authService.login', async () => {
-    const dto = { username: 'u', password: 'p' };
-    const tokens = {
-      access_token: 'at',
-      refresh_token: 'rt',
-      expires_in: 300,
-      refresh_expires_in: 1800,
-      token_type: 'Bearer' as const,
-      scope: '',
-    };
-    authService.login.mockResolvedValue(tokens);
-
-    const result = await controller.login(dto);
-    expect(result).toEqual(tokens);
-    expect(authService.login).toHaveBeenCalledWith(dto);
   });
 
   it('refresh delegates to authService.refresh', async () => {

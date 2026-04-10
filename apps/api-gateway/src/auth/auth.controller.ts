@@ -1,8 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import {
-  LoginRequestSchema,
   RefreshTokenRequestSchema,
-  type LoginRequest,
   type RefreshTokenRequest,
   type JwtPayload,
 } from '@gacp-erp/shared-schemas';
@@ -15,13 +13,6 @@ import { ZodBody } from '../common/decorators/zod-body.decorator';
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  /** POST /api/v1/auth/login */
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  login(@ZodBody(LoginRequestSchema) dto: LoginRequest) {
-    return this.authService.login(dto);
-  }
 
   /** POST /api/v1/auth/refresh */
   @Post('refresh')

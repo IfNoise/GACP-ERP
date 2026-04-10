@@ -38,6 +38,8 @@
       "@gacp-erp/shared-config/*": ["libs/shared/config/src/*"],
       "@gacp-erp/shared-keycloak": ["libs/shared/keycloak/src/index.ts"],
       "@gacp-erp/shared-keycloak/*": ["libs/shared/keycloak/src/*"],
+      "@gacp-erp/shared-zitadel": ["libs/shared/zitadel/src/index.ts"],
+      "@gacp-erp/shared-zitadel/*": ["libs/shared/zitadel/src/*"],
       "@gacp-erp/ui-components": ["libs/ui-components/src/index.ts"],
       "@gacp-erp/ui-components/*": ["libs/ui-components/src/*"]
     }

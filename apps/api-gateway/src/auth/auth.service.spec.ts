@@ -9,6 +9,7 @@ const mockConfig: Record<string, string> = {
   ZITADEL_API_GW_CLIENT_ID: 'api-gateway',
   ZITADEL_API_GW_CLIENT_SECRET: 'secret',
   ZITADEL_PROJECT_ID: 'test-project-id',
+  ZITADEL_ADMIN_PAT: 'admin-pat-token',
   REAUTH_SECRET: 'reauth-secret-key',
 };
 
@@ -32,7 +33,7 @@ function makeZitadelTokens() {
 }
 
 const mockUser = {
-  sub: 'user-ulid-001',
+  sub: '00000000-0000-0000-0000-000000000001',
   preferred_username: 'jane.doe',
   email: 'jane@test.com',
   given_name: 'Jane',
@@ -55,46 +56,6 @@ describe('AuthService', () => {
 
   afterEach(() => {
     fetchSpy.mockRestore();
-  });
-
-  // ─── login ──────────────────────────────────────────────────────────────
-
-  describe('login', () => {
-    it('returns tokens on success', async () => {
-      fetchSpy.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(makeZitadelTokens()),
-      });
-
-      const result = await service.login({ username: 'jane', password: 'pass' });
-
-      expect(result.access_token).toBe('at-123');
-      expect(result.refresh_token).toBe('rt-456');
-      expect(result.token_type).toBe('Bearer');
-      expect(fetchSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('throws UnauthorizedException on Zitadel failure', async () => {
-      fetchSpy.mockResolvedValue({
-        ok: false,
-        json: () => Promise.resolve({ error: 'invalid_grant' }),
-      });
-
-      await expect(service.login({ username: 'bad', password: 'bad' })).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
-
-    it('throws UnauthorizedException when json() rejects', async () => {
-      fetchSpy.mockResolvedValue({
-        ok: false,
-        json: () => Promise.reject(new Error('bad json')),
-      });
-
-      await expect(service.login({ username: 'bad', password: 'bad' })).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
   });
 
   // ─── refresh ────────────────────────────────────────────────────────────
@@ -139,26 +100,44 @@ describe('AuthService', () => {
   // ─── reauthenticate ─────────────────────────────────────────────────────
 
   describe('reauthenticate', () => {
-    it('returns reauth_token on success', async () => {
-      // first call = login verify, second call should not happen
+    it('calls Zitadel Session API v2 with userId and password', async () => {
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(makeZitadelTokens()),
+        json: () => Promise.resolve({ sessionId: 'sess-001', sessionToken: 'st-abc' }),
+      });
+
+      await service.reauthenticate(mockUser as never, 'correct-pass');
+
+      const [url, opts] = fetchSpy.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe('http://zitadel:8080/v2/sessions');
+      expect(opts.method).toBe('POST');
+      const body = JSON.parse(opts.body as string) as Record<string, unknown>;
+      expect(body).toMatchObject({
+        checks: {
+          user: { userId: mockUser.sub },
+          password: { password: 'correct-pass' },
+        },
+      });
+    });
+
+    it('returns reauth_token on success', async () => {
+      fetchSpy.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ sessionId: 'sess-001', sessionToken: 'st-abc' }),
       });
 
       const result = await service.reauthenticate(mockUser as never, 'correct-pass');
 
       expect(result.reauth_token).toBeDefined();
       expect(result.expires_in).toBe(300);
-      // token is base64url encoded
       const decoded = Buffer.from(result.reauth_token, 'base64url').toString();
       expect(decoded).toContain(mockUser.sub);
     });
 
-    it('throws when login fails', async () => {
+    it('throws UnauthorizedException when session creation fails', async () => {
       fetchSpy.mockResolvedValue({
         ok: false,
-        json: () => Promise.resolve({ error: 'invalid_grant' }),
+        json: () => Promise.resolve({ code: 16, message: 'invalid password' }),
       });
 
       await expect(service.reauthenticate(mockUser as never, 'wrong-pass')).rejects.toThrow(

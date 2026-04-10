@@ -4,5 +4,4 @@ export type {
   ZitadelTokenResponse,
   ZitadelUser,
   ZitadelUserCreate,
-  ZitadelRole,
 } from './zitadel-admin.client';

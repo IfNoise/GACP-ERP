@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import {
   ApiErrorSchema,
-  LoginRequestSchema,
   RefreshTokenRequestSchema,
   TokenResponseSchema,
   UserPublicSchema,
@@ -12,27 +11,13 @@ import {
 const c = initContract();
 
 /**
- * Authentication contract — Keycloak-backed auth endpoints.
+ * Authentication contract — Zitadel-backed auth endpoints.
  * Route: /auth/*
+ *
+ * Note: login (ROPC) is not supported by Zitadel.
+ * Frontend authentication uses OIDC Authorization Code + PKCE via NextAuth.
  */
 export const authContract = c.router({
-  /**
-   * Login with username/password (+ optional TOTP).
-   * Proxies to Keycloak token endpoint and returns JWT tokens.
-   */
-  login: {
-    method: 'POST',
-    path: '/auth/login',
-    body: LoginRequestSchema,
-    responses: {
-      200: TokenResponseSchema,
-      400: ApiErrorSchema,
-      401: ApiErrorSchema,
-      423: ApiErrorSchema, // Account locked
-    },
-    summary: 'Login and obtain JWT tokens',
-  },
-
   /**
    * Refresh access token using refresh token.
    */
@@ -49,7 +34,7 @@ export const authContract = c.router({
   },
 
   /**
-   * Logout — invalidates the session in Keycloak.
+   * Logout — revokes the token in Zitadel.
    */
   logout: {
     method: 'POST',

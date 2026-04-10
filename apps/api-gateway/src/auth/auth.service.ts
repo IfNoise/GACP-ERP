@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  type LoginRequest,
   type TokenResponse,
   type RefreshTokenRequest,
   type JwtPayload,
@@ -20,57 +19,6 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(private readonly config: ConfigService) {}
-
-  /**
-   * Password-grant login via Zitadel OAuth token endpoint.
-   * Used by web-portal for direct credential auth.
-   *
-   * Scopes requested:
-   *   - openid profile email  — standard OIDC claims
-   *   - urn:zitadel:iam:org:projects:roles  — include role grants in access token
-   *   - urn:zitadel:iam:org:project:id:{projectId}:aud  — add project as token audience
-   */
-  async login(dto: LoginRequest): Promise<TokenResponse> {
-    const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
-    const projectId = this.config.getOrThrow<string>('ZITADEL_PROJECT_ID');
-    const url = `${zitadelUrl}/oauth/v2/token`;
-
-    const params = new URLSearchParams({
-      grant_type: 'password',
-      client_id: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_SECRET'),
-      username: dto.username,
-      password: dto.password,
-      scope: [
-        'openid profile email',
-        'urn:zitadel:iam:org:projects:roles',
-        `urn:zitadel:iam:org:project:id:${projectId}:aud`,
-      ].join(' '),
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-    });
-
-    if (!response.ok) {
-      const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-      this.logger.warn(`Zitadel login failed: ${JSON.stringify(body)}`);
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const tokens = (await response.json()) as ZitadelTokenResponse;
-
-    return {
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
-      expires_in: tokens.expires_in,
-      refresh_expires_in: tokens.refresh_expires_in || tokens.expires_in,
-      token_type: 'Bearer' as const,
-      scope: '',
-    };
-  }
 
   /**
    * Refresh access token using a valid refresh_token.
@@ -136,16 +84,39 @@ export class AuthService {
 
   /**
    * Re-authentication for 21 CFR §11.200 critical operations.
-   * Returns a short-lived re-auth token (5 minutes) after credential verification.
+   * Uses Zitadel Session API v2 to verify credentials server-side without ROPC.
+   * Returns a short-lived re-auth token (5 minutes) on success.
    */
   async reauthenticate(
     user: JwtPayload,
     password: string,
   ): Promise<{ reauth_token: string; expires_in: number }> {
-    // Verify credentials by attempting a new password grant
-    await this.login({ username: user.preferred_username, password });
+    const zitadelUrl = this.config.getOrThrow<string>('ZITADEL_URL');
+    const adminPat = this.config.getOrThrow<string>('ZITADEL_ADMIN_PAT');
 
-    // Generate a short-lived HMAC reauth token scoped to this user
+    // Verify credentials via Zitadel Session API v2 (POST /v2/sessions)
+    // Uses userId (sub) for unambiguous user lookup
+    const response = await fetch(`${zitadelUrl}/v2/sessions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminPat}`,
+      },
+      body: JSON.stringify({
+        checks: {
+          user: { userId: user.sub },
+          password: { password },
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+      this.logger.warn(`Zitadel credential verification failed: ${JSON.stringify(body)}`);
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Session created = credentials valid; issue HMAC reauth token
     const { createHmac } = await import('crypto');
     const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
     const payload = `${user.sub}:${user.preferred_username}:${expiresAt}`;

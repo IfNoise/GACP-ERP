@@ -5,19 +5,19 @@ import type { OutboxRepository } from '../../outbox/outbox.repository';
 import { WORKFORCE_EMPLOYEE_TOPIC } from '@gacp-erp/shared-events';
 import {
   DuplicateEmailError,
-  KeycloakProvisioningError,
-  KeycloakCompensationError,
+  ZitadelProvisioningError,
+  ZitadelCompensationError,
   UsernameGenerationError,
 } from '../errors/employee-provisioning.errors';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
-const KEYCLOAK_USER_ID = 'kc-uuid-001';
+const ZITADEL_USER_ID = 'zitadel-uuid-001';
 const DB_USER_ID = 'db-user-uuid-1';
 
 const fakeUserRecord = {
   id: DB_USER_ID,
-  keycloak_id: KEYCLOAK_USER_ID,
+  keycloak_id: ZITADEL_USER_ID,
   username: 'john_doe',
 };
 
@@ -56,7 +56,7 @@ describe('CreateEmployeeUseCase', () => {
   let employeeRepo: jest.Mocked<EmployeeRepository>;
   let userRepo: jest.Mocked<UserRepository>;
   let outboxRepo: jest.Mocked<OutboxRepository>;
-  let mockKeycloakClient: { createUser: jest.Mock; deleteUser: jest.Mock };
+  let mockZitadelClient: { createUser: jest.Mock; deleteUser: jest.Mock; assignRoles: jest.Mock };
   let mockDb: { transaction: jest.Mock };
 
   beforeEach(() => {
@@ -75,9 +75,10 @@ describe('CreateEmployeeUseCase', () => {
       createWithTx: jest.fn().mockResolvedValue(undefined),
     } as unknown as jest.Mocked<OutboxRepository>;
 
-    mockKeycloakClient = {
-      createUser: jest.fn().mockResolvedValue(KEYCLOAK_USER_ID),
+    mockZitadelClient = {
+      createUser: jest.fn().mockResolvedValue(ZITADEL_USER_ID),
       deleteUser: jest.fn().mockResolvedValue(undefined),
+      assignRoles: jest.fn().mockResolvedValue(undefined),
     };
 
     mockDb = {
@@ -88,7 +89,7 @@ describe('CreateEmployeeUseCase', () => {
 
     useCase = new CreateEmployeeUseCase(
       mockDb as never,
-      mockKeycloakClient as never,
+      mockZitadelClient as never,
       employeeRepo,
       userRepo,
       outboxRepo,
@@ -98,10 +99,11 @@ describe('CreateEmployeeUseCase', () => {
   // ── IQ: Installation Qualification — saga execution ─────────────────────────
 
   describe('IQ: happy path provisioning', () => {
-    it('creates Keycloak user, then DB records in a transaction', async () => {
+    it('creates Zitadel user, assigns roles, then writes DB records in a transaction', async () => {
       await useCase.execute(createDto as never, 'hr-user-1');
 
-      expect(mockKeycloakClient.createUser).toHaveBeenCalledTimes(1);
+      expect(mockZitadelClient.createUser).toHaveBeenCalledTimes(1);
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledTimes(1);
       expect(mockDb.transaction).toHaveBeenCalledTimes(1);
       expect(userRepo.createWithTx).toHaveBeenCalledTimes(1);
       expect(employeeRepo.create).toHaveBeenCalledTimes(1);
@@ -121,62 +123,62 @@ describe('CreateEmployeeUseCase', () => {
       expect(result.email).toBe('john.doe@company.com');
     });
 
-    it('calls Keycloak createUser with correct parameters', async () => {
+    it('calls Zitadel createUser with correct parameters', async () => {
       await useCase.execute(createDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.username).toBe('john_doe');
-      expect(kcCall.email).toBe('john.doe@company.com');
-      expect(kcCall.firstName).toBe('John');
-      expect(kcCall.lastName).toBe('Doe');
-      expect(kcCall.enabled).toBe(true);
-      expect(kcCall.credentials).toEqual([
-        expect.objectContaining({ type: 'password', temporary: true }),
-      ]);
-      expect(kcCall.realmRoles).toEqual(['OPERATOR']);
+      const call = mockZitadelClient.createUser.mock.calls[0]![0];
+      expect(call.userName).toBe('john_doe');
+      expect(call.email).toBe('john.doe@company.com');
+      expect(call.firstName).toBe('John');
+      expect(call.lastName).toBe('Doe');
+      expect(typeof call.password).toBe('string');
+      expect(call.password.length).toBeGreaterThan(0);
     });
 
-    it('passes keycloak_id to userRepo.createWithTx', async () => {
+    it('calls assignRoles with the Zitadel user ID and correct role', async () => {
+      await useCase.execute(createDto as never, 'hr-user-1');
+
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledWith(ZITADEL_USER_ID, ['OPERATOR']);
+    });
+
+    it('passes zitadel_id to userRepo.createWithTx as keycloak_id', async () => {
       await useCase.execute(createDto as never, 'hr-user-1');
 
       const userCreateCall = userRepo.createWithTx.mock.calls[0]![1];
-      expect(userCreateCall.keycloak_id).toBe(KEYCLOAK_USER_ID);
+      expect(userCreateCall.keycloak_id).toBe(ZITADEL_USER_ID);
     });
   });
 
-  // ── OQ: Operational Qualification — MFA ─────────────────────────────────────
+  // ── OQ: Role assignment per system_role ──────────────────────────────────────
 
-  describe('OQ: MFA for critical roles', () => {
-    it('adds CONFIGURE_TOTP to requiredActions for SUPER_ADMIN', async () => {
+  describe('OQ: role assignment', () => {
+    it('assigns SUPER_ADMIN role via assignRoles', async () => {
       const adminDto = { ...createDto, system_role: 'SUPER_ADMIN' as const };
       await useCase.execute(adminDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.requiredActions).toContain('UPDATE_PASSWORD');
-      expect(kcCall.requiredActions).toContain('CONFIGURE_TOTP');
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledWith(ZITADEL_USER_ID, ['SUPER_ADMIN']);
     });
 
-    it('adds CONFIGURE_TOTP to requiredActions for QUALITY_MANAGER', async () => {
+    it('assigns QUALITY_MANAGER role via assignRoles', async () => {
       const qmDto = { ...createDto, system_role: 'QUALITY_MANAGER' as const };
       await useCase.execute(qmDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.requiredActions).toContain('CONFIGURE_TOTP');
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledWith(ZITADEL_USER_ID, [
+        'QUALITY_MANAGER',
+      ]);
     });
 
-    it('does NOT add CONFIGURE_TOTP for OPERATOR', async () => {
+    it('assigns OPERATOR role via assignRoles', async () => {
       await useCase.execute(createDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.requiredActions).toEqual(['UPDATE_PASSWORD']);
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledWith(ZITADEL_USER_ID, ['OPERATOR']);
     });
 
-    it('does NOT add CONFIGURE_TOTP for AUDITOR', async () => {
+    it('assigns AUDITOR role via assignRoles', async () => {
       const audDto = { ...createDto, system_role: 'AUDITOR' as const };
       await useCase.execute(audDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.requiredActions).toEqual(['UPDATE_PASSWORD']);
+      expect(mockZitadelClient.assignRoles).toHaveBeenCalledWith(ZITADEL_USER_ID, ['AUDITOR']);
     });
   });
 
@@ -186,16 +188,16 @@ describe('CreateEmployeeUseCase', () => {
     it('generates username as first_last lowercase', async () => {
       await useCase.execute(createDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.username).toBe('john_doe');
+      const call = mockZitadelClient.createUser.mock.calls[0]![0];
+      expect(call.userName).toBe('john_doe');
     });
 
     it('strips non-alphanumeric characters except underscore', async () => {
       const dto = { ...createDto, first_name: "J'ean-Luc", last_name: "O'Brien" };
       await useCase.execute(dto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.username).toBe('jeanluc_obrien');
+      const call = mockZitadelClient.createUser.mock.calls[0]![0];
+      expect(call.userName).toBe('jeanluc_obrien');
     });
 
     it('resolves conflict by appending _2 suffix', async () => {
@@ -205,8 +207,8 @@ describe('CreateEmployeeUseCase', () => {
 
       await useCase.execute(createDto as never, 'hr-user-1');
 
-      const kcCall = mockKeycloakClient.createUser.mock.calls[0]![0];
-      expect(kcCall.username).toBe('john_doe_2');
+      const call = mockZitadelClient.createUser.mock.calls[0]![0];
+      expect(call.userName).toBe('john_doe_2');
     });
 
     it('throws UsernameGenerationError when all attempts exhausted', async () => {
@@ -215,7 +217,7 @@ describe('CreateEmployeeUseCase', () => {
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
         UsernameGenerationError,
       );
-      expect(mockKeycloakClient.createUser).not.toHaveBeenCalled();
+      expect(mockZitadelClient.createUser).not.toHaveBeenCalled();
     });
   });
 
@@ -228,7 +230,7 @@ describe('CreateEmployeeUseCase', () => {
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
         DuplicateEmailError,
       );
-      expect(mockKeycloakClient.createUser).not.toHaveBeenCalled();
+      expect(mockZitadelClient.createUser).not.toHaveBeenCalled();
       expect(mockDb.transaction).not.toHaveBeenCalled();
     });
 
@@ -238,7 +240,7 @@ describe('CreateEmployeeUseCase', () => {
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
         DuplicateEmailError,
       );
-      expect(mockKeycloakClient.createUser).not.toHaveBeenCalled();
+      expect(mockZitadelClient.createUser).not.toHaveBeenCalled();
     });
   });
 
@@ -298,36 +300,36 @@ describe('CreateEmployeeUseCase', () => {
 
   // ── PQ: Performance Qualification — failure & compensation ────────────────
 
-  describe('PQ: Keycloak failure — no DB writes', () => {
-    it('throws KeycloakProvisioningError and does not start DB transaction', async () => {
-      mockKeycloakClient.createUser.mockRejectedValueOnce(new Error('Connection refused'));
+  describe('PQ: Zitadel failure — no DB writes', () => {
+    it('throws ZitadelProvisioningError and does not start DB transaction', async () => {
+      mockZitadelClient.createUser.mockRejectedValueOnce(new Error('Connection refused'));
 
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
-        KeycloakProvisioningError,
+        ZitadelProvisioningError,
       );
       expect(mockDb.transaction).not.toHaveBeenCalled();
     });
   });
 
   describe('PQ: DB failure with successful compensation', () => {
-    it('deletes Keycloak user and re-throws the DB error', async () => {
+    it('deletes Zitadel user and re-throws the DB error', async () => {
       const dbError = new Error('unique_violation');
       mockDb.transaction.mockRejectedValueOnce(dbError);
 
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
         'unique_violation',
       );
-      expect(mockKeycloakClient.deleteUser).toHaveBeenCalledWith(KEYCLOAK_USER_ID);
+      expect(mockZitadelClient.deleteUser).toHaveBeenCalledWith(ZITADEL_USER_ID);
     });
   });
 
   describe('PQ: DB failure with failed compensation', () => {
-    it('throws KeycloakCompensationError when deleteUser also fails', async () => {
+    it('throws ZitadelCompensationError when deleteUser also fails', async () => {
       mockDb.transaction.mockRejectedValueOnce(new Error('db_error'));
-      mockKeycloakClient.deleteUser.mockRejectedValueOnce(new Error('kc_cleanup_failed'));
+      mockZitadelClient.deleteUser.mockRejectedValueOnce(new Error('zitadel_cleanup_failed'));
 
       await expect(useCase.execute(createDto as never, 'hr-user-1')).rejects.toThrow(
-        KeycloakCompensationError,
+        ZitadelCompensationError,
       );
     });
   });

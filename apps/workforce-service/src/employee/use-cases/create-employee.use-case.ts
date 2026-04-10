@@ -5,7 +5,6 @@ import {
   type CreateEmployee,
   type EmployeeProvisionedResponse,
   type UserId,
-  CRITICAL_ROLES,
 } from '@gacp-erp/shared-schemas';
 import { ZitadelAdminClient } from '@gacp-erp/shared-zitadel';
 import { WORKFORCE_EMPLOYEE_TOPIC, type EmployeeCreatedEvent } from '@gacp-erp/shared-events';
@@ -50,15 +49,7 @@ export class CreateEmployeeUseCase {
     // 3. Generate temporary password
     const temporaryPassword = `${randomBytes(12).toString('base64url')}!A1`;
 
-    // 4. Determine required actions (Zitadel-specific)
-    // Note: Zitadel handles password resets and TOTP via different mechanisms
-    const requiredActions = [];
-    if (CRITICAL_ROLES.includes(dto.system_role)) {
-      requiredActions.push('CONFIGURE_TOTP');
-    }
-
-    // 5. SAGA Step 1: Create Zitadel user (external side-effect)
-    // Note: Full role assignment requires gRPC API in production
+    // 4. SAGA Step 1: Create Zitadel user (external side-effect)
     let zitadelId: string;
     try {
       zitadelId = await this.zitadelClient.createUser({
