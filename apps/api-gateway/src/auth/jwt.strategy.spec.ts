@@ -10,7 +10,7 @@ function createStrategy(projectId?: string): JwtStrategy {
   // (the constructor talks to JWKS endpoints which are unavailable in unit tests).
   const config = {
     getOrThrow: (key: string) => {
-      if (key === 'ZITADEL_JWKS_URI') return 'https://zitadel.local/oauth/v2/certs';
+      if (key === 'ZITADEL_JWKS_URI') return 'https://zitadel.local/oauth/v2/keys';
       if (key === 'ZITADEL_ISSUER') return 'https://zitadel.local';
       throw new Error(`Unexpected config key: ${key}`);
     },
