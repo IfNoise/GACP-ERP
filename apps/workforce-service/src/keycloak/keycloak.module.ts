@@ -18,6 +18,7 @@ export const ZITADEL_CLIENT = 'ZITADEL_CLIENT' as const;
           clientId: config.getOrThrow<string>('ZITADEL_ADMIN_CLIENT_ID'),
           clientSecret: config.getOrThrow<string>('ZITADEL_ADMIN_CLIENT_SECRET'),
           projectId: config.getOrThrow<string>('ZITADEL_PROJECT_ID'),
+          pat: config.get<string>('ZITADEL_ADMIN_PAT'),
         });
       },
     },

@@ -7,6 +7,8 @@ export interface ZitadelConfig {
   clientId: string;
   clientSecret: string;
   projectId: string;
+  /** Optional PAT (Personal Access Token). When provided, skips client_credentials flow. */
+  pat?: string;
 }
 
 export interface ZitadelTokenResponse {
@@ -58,6 +60,9 @@ export class ZitadelAdminClient {
   // ─── Auth ─────────────────────────────────────────────────────────────────
 
   private async getAdminToken(): Promise<string> {
+    // PAT takes precedence — no token fetch needed
+    if (this.config.pat) return this.config.pat;
+
     if (this.adminToken && Date.now() < this.tokenExpiresAt - 10_000) {
       return this.adminToken;
     }
