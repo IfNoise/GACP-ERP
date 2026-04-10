@@ -53,30 +53,6 @@ export function parseKafkaConfig(env: NodeJS.ProcessEnv, clientId?: string): Kaf
   });
 }
 
-// ─── Keycloak ─────────────────────────────────────────────────────────────────
-
-export const KeycloakEnvConfigSchema = z.object({
-  url: z.string().url(),
-  realm: z.string().min(1),
-  jwksUri: z.string().url(),
-  /** api-gateway confidential client */
-  clientId: z.string().min(1),
-  clientSecret: z.string().min(1),
-  issuer: z.string().url(),
-});
-export type KeycloakEnvConfig = z.infer<typeof KeycloakEnvConfigSchema>;
-
-export function parseKeycloakConfig(env: NodeJS.ProcessEnv): KeycloakEnvConfig {
-  return KeycloakEnvConfigSchema.parse({
-    url: env['KEYCLOAK_URL'],
-    realm: env['KEYCLOAK_REALM'],
-    jwksUri: env['KEYCLOAK_JWKS_URI'],
-    clientId: env['KEYCLOAK_CLIENT_API_GATEWAY'],
-    clientSecret: env['KEYCLOAK_CLIENT_API_GATEWAY_SECRET'],
-    issuer: env['KEYCLOAK_ISSUER'],
-  });
-}
-
 // ─── Redis ────────────────────────────────────────────────────────────────────
 
 export const RedisConfigSchema = z.object({

@@ -55,13 +55,11 @@ export async function createTestApp(
   // Env vars required by ConfigService / JwtStrategy constructor
   process.env['DATABASE_URL'] ??=
     'postgresql://gacp_test:gacp_test_pass@localhost:5433/gacp_erp_test';
-  process.env['KEYCLOAK_JWKS_URI'] ??=
-    'http://localhost:8080/realms/gacp/protocol/openid-connect/certs';
-  process.env['KEYCLOAK_ISSUER'] ??= 'http://localhost:8080/realms/gacp';
-  process.env['KEYCLOAK_CLIENT_ID'] ??= 'api-gateway';
-  process.env['KEYCLOAK_CLIENT_SECRET'] ??= 'test-secret';
-  process.env['KEYCLOAK_URL'] ??= 'http://localhost:8080';
-  process.env['KEYCLOAK_REALM'] ??= 'gacp';
+  process.env['ZITADEL_JWKS_URI'] ??= 'http://localhost:8080/oauth/v2/keys';
+  process.env['ZITADEL_ISSUER'] ??= 'http://localhost:8080';
+  process.env['ZITADEL_API_GW_CLIENT_ID'] ??= 'api-gateway';
+  process.env['ZITADEL_API_GW_CLIENT_SECRET'] ??= 'test-secret';
+  process.env['ZITADEL_URL'] ??= 'http://localhost:8080';
 
   let builder = Test.createTestingModule({
     imports: [AppModule],

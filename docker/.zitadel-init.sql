@@ -1,3 +1,0 @@
-CREATE USER IF NOT EXISTS zitadel WITH PASSWORD 'zitadel_secret_2026';
-CREATE DATABASE zitadel OWNER zitadel;
-GRANT ALL PRIVILEGES ON DATABASE zitadel TO zitadel;

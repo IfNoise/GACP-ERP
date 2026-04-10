@@ -1,7 +1,6 @@
 import {
   parseDatabaseConfig,
   parseKafkaConfig,
-  parseKeycloakConfig,
   parseRedisConfig,
   parseAppConfig,
   parseImmudbConfig,
@@ -17,12 +16,6 @@ const baseEnv: Record<string, string> = {
   KAFKA_BROKERS: 'localhost:9092',
   KAFKA_CLIENT_ID: 'test-client',
   KAFKA_GROUP_ID: 'test-group',
-  KEYCLOAK_URL: 'http://localhost:8080',
-  KEYCLOAK_REALM: 'gacp',
-  KEYCLOAK_JWKS_URI: 'http://localhost:8080/realms/gacp/protocol/openid-connect/certs',
-  KEYCLOAK_CLIENT_API_GATEWAY: 'api-gw',
-  KEYCLOAK_CLIENT_API_GATEWAY_SECRET: 'secret',
-  KEYCLOAK_ISSUER: 'http://localhost:8080/realms/gacp',
   REDIS_HOST: 'localhost',
   REDIS_URL: 'redis://localhost:6379',
   NODE_ENV: 'test',
@@ -55,13 +48,6 @@ describe('parseKafkaConfig', () => {
   it('uses clientId override', () => {
     const cfg = parseKafkaConfig(baseEnv as unknown as NodeJS.ProcessEnv, 'custom');
     expect(cfg.clientId).toBe('custom');
-  });
-});
-
-describe('parseKeycloakConfig', () => {
-  it('parses valid env', () => {
-    const cfg = parseKeycloakConfig(baseEnv as unknown as NodeJS.ProcessEnv);
-    expect(cfg.realm).toBe('gacp');
   });
 });
 

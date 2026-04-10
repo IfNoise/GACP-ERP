@@ -3,8 +3,6 @@ export {
   parseDatabaseConfig,
   KafkaConfigSchema,
   parseKafkaConfig,
-  KeycloakEnvConfigSchema,
-  parseKeycloakConfig,
   RedisConfigSchema,
   parseRedisConfig,
   AppConfigSchema,
@@ -16,7 +14,6 @@ export {
 export type {
   DatabaseConfig,
   KafkaConfig,
-  KeycloakEnvConfig,
   RedisConfig,
   AppConfig,
   ImmudbConfig,
