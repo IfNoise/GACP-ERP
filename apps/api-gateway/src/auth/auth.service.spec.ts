@@ -6,8 +6,8 @@ import { AuthService } from './auth.service';
 
 const mockConfig: Record<string, string> = {
   ZITADEL_URL: 'http://zitadel:8080',
-  ZITADEL_CLIENT_ID: 'api-gateway',
-  ZITADEL_CLIENT_SECRET: 'secret',
+  ZITADEL_API_GW_CLIENT_ID: 'api-gateway',
+  ZITADEL_API_GW_CLIENT_SECRET: 'secret',
   ZITADEL_PROJECT_ID: 'test-project-id',
   REAUTH_SECRET: 'reauth-secret-key',
 };

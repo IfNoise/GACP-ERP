@@ -5,7 +5,7 @@ import { type ConfigService } from '@nestjs/config';
 // We can't call `super()` with real JWKS in a unit test,
 // so we test only the `validate()` method which is the custom logic.
 
-function createStrategy(): JwtStrategy {
+function createStrategy(projectId?: string): JwtStrategy {
   // Use Object.create to get an instance without calling the real constructor
   // (the constructor talks to JWKS endpoints which are unavailable in unit tests).
   const config = {
@@ -21,6 +21,10 @@ function createStrategy(): JwtStrategy {
   const instance = Object.create(proto) as JwtStrategy;
   // Attach config for potential use
   Object.defineProperty(instance, 'config', { value: config });
+  // Set projectId for project-specific claim tests
+  if (projectId !== undefined) {
+    Object.defineProperty(instance, 'projectId', { value: projectId, writable: false });
+  }
   return instance;
 }
 
@@ -136,5 +140,24 @@ describe('JwtStrategy — validate()', () => {
     const result = strategy.validate(payload);
 
     expect(result.realm_access.roles).toEqual(['CULTIVATION_MANAGER', 'QUALITY_MANAGER']);
+  });
+
+  it('reads project-specific claim urn:zitadel:iam:org:project:{id}:roles when projectId is configured', () => {
+    const strategyWithProject = createStrategy('proj123');
+    const payload: Record<string, unknown> = {
+      sub: 'user-ulid-7',
+      preferred_username: 'svc-user',
+      'urn:zitadel:iam:org:project:proj123:roles': {
+        SUPER_ADMIN: { org456: 'proj123' },
+      },
+      aud: ['proj123'],
+      iat: 1000000,
+      exp: 2000000,
+      iss: 'issuer',
+    };
+
+    const result = strategyWithProject.validate(payload);
+
+    expect(result.realm_access.roles).toEqual(['SUPER_ADMIN']);
   });
 });

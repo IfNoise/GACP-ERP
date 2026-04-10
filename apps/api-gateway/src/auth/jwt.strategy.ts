@@ -7,6 +7,9 @@ import type { JwtPayload } from '@gacp-erp/shared-schemas';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
+  // Stored for dynamic roles claim lookup in validate()
+  private readonly projectId: string | undefined;
+
   constructor(config: ConfigService) {
     const jwksUri = config.getOrThrow<string>('ZITADEL_JWKS_URI');
     const issuer = config.getOrThrow<string>('ZITADEL_ISSUER');
@@ -27,20 +30,33 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'zitadel-jwt') {
       issuer,
       algorithms: ['RS256'],
     });
+
+    this.projectId = projectId;
   }
 
   /**
    * Called after signature verification.
    * Returns the validated payload — attached to request.user by Passport.
    *
-   * Zitadel `urn:zitadel:iam:org:project:roles` structure:
-   *   { "ROLE_KEY": { "<orgId>": "<projectId>" }, ... }
-   * The role NAMES are the top-level keys of this object.
+   * Zitadel role claim formats (both are supported):
+   *   - `urn:zitadel:iam:org:project:roles`             — generic (all projects)
+   *   - `urn:zitadel:iam:org:project:{projectId}:roles` — project-specific (when audience scope is requested)
+   *
+   * Structure in both cases: { "ROLE_KEY": { "<orgId>": "<projectId>" }, ... }
+   * The role NAMES are the top-level keys.
    */
   validate(payload: Record<string, unknown>): JwtPayload {
-    const zitadelRolesClaim = payload['urn:zitadel:iam:org:project:roles'] as
-      | Record<string, unknown>
-      | undefined;
+    // Try project-specific claim first (when audience scope `urn:zitadel:iam:org:project:id:{id}:aud` is used)
+    // then fall back to generic claim (from `urn:zitadel:iam:org:projects:roles` scope)
+    const projectSpecificClaim = this.projectId
+      ? `urn:zitadel:iam:org:project:${this.projectId}:roles`
+      : undefined;
+
+    const zitadelRolesClaim = (
+      projectSpecificClaim !== undefined
+        ? (payload[projectSpecificClaim] ?? payload['urn:zitadel:iam:org:project:roles'])
+        : payload['urn:zitadel:iam:org:project:roles']
+    ) as Record<string, unknown> | undefined;
 
     if (!zitadelRolesClaim || Object.keys(zitadelRolesClaim).length === 0) {
       throw new UnauthorizedException('Token contains no project roles');

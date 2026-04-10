@@ -37,8 +37,8 @@ export class AuthService {
 
     const params = new URLSearchParams({
       grant_type: 'password',
-      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
+      client_id: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_SECRET'),
       username: dto.username,
       password: dto.password,
       scope: [
@@ -82,8 +82,8 @@ export class AuthService {
 
     const params = new URLSearchParams({
       grant_type: 'refresh_token',
-      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
+      client_id: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_SECRET'),
       refresh_token: dto.refresh_token,
       scope: [
         'openid profile email',
@@ -122,8 +122,8 @@ export class AuthService {
     const url = `${zitadelUrl}/oauth/v2/revocation`;
 
     const params = new URLSearchParams({
-      client_id: this.config.getOrThrow<string>('ZITADEL_CLIENT_ID'),
-      client_secret: this.config.getOrThrow<string>('ZITADEL_CLIENT_SECRET'),
+      client_id: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_ID'),
+      client_secret: this.config.getOrThrow<string>('ZITADEL_API_GW_CLIENT_SECRET'),
       token: refreshToken,
     });
 
