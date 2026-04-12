@@ -24,6 +24,14 @@ export const StrainUpdatedEvent = EventHeaderSchema.extend({
 });
 export type StrainUpdatedEvent = z.infer<typeof StrainUpdatedEvent>;
 
+export const StrainActivatedEvent = EventHeaderSchema.extend({
+  eventType: z.literal('STRAIN_ACTIVATED'),
+  strainId: z.string().uuid(),
+  inspectionId: z.string().uuid(),
+  inspectionNumber: z.string(),
+});
+export type StrainActivatedEvent = z.infer<typeof StrainActivatedEvent>;
+
 export const StrainDeactivatedEvent = EventHeaderSchema.extend({
   eventType: z.literal('STRAIN_DEACTIVATED'),
   strainId: z.string().uuid(),
@@ -35,6 +43,7 @@ export type StrainDeactivatedEvent = z.infer<typeof StrainDeactivatedEvent>;
 export const StrainEvent = z.discriminatedUnion('eventType', [
   StrainCreatedEvent,
   StrainUpdatedEvent,
+  StrainActivatedEvent,
   StrainDeactivatedEvent,
 ]);
 export type StrainEvent = z.infer<typeof StrainEvent>;

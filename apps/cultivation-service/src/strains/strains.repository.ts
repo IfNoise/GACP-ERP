@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, inArray, isNotNull } from 'drizzle-orm';
 import {
   strainsTable,
   batchesTable,
+  incomingInspectionsTable,
   type Database,
   type DbContext,
 } from '@gacp-erp/shared-database';
@@ -27,7 +28,21 @@ export class StrainsRepository {
       .where(and(eq(strainsTable.id, id), eq(strainsTable.is_deleted, false)))
       .limit(1);
 
-    return rows[0] ? this.mapRow(rows[0]) : null;
+    if (!rows[0]) return null;
+
+    const inspections = await this.db
+      .select({ status: incomingInspectionsTable.status })
+      .from(incomingInspectionsTable)
+      .where(
+        and(
+          eq(incomingInspectionsTable.strain_id, id),
+          isNotNull(incomingInspectionsTable.strain_id),
+        ),
+      )
+      .orderBy(desc(incomingInspectionsTable.created_at))
+      .limit(1);
+
+    return this.mapRow(rows[0], inspections[0]?.status ?? null);
   }
 
   async findByCode(cultivarCode: string): Promise<Strain | null> {
@@ -64,8 +79,35 @@ export class StrainsRepository {
       .offset(offset)
       .orderBy(desc(strainsTable.created_at));
 
+    // Fetch latest inspection status for each strain in one query
+    const strainIds = rows.map((r) => r.id);
+    const statusMap = new Map<string, string>();
+
+    if (strainIds.length > 0) {
+      const inspections = await this.db
+        .select({
+          strain_id: incomingInspectionsTable.strain_id,
+          status: incomingInspectionsTable.status,
+        })
+        .from(incomingInspectionsTable)
+        .where(
+          and(
+            inArray(incomingInspectionsTable.strain_id, strainIds),
+            isNotNull(incomingInspectionsTable.strain_id),
+          ),
+        )
+        .orderBy(desc(incomingInspectionsTable.created_at));
+
+      // Keep only the most recent entry per strain (result already DESC by created_at)
+      for (const row of inspections) {
+        if (row.strain_id && !statusMap.has(row.strain_id)) {
+          statusMap.set(row.strain_id, row.status);
+        }
+      }
+    }
+
     return {
-      data: rows.map((r) => this.mapRow(r)),
+      data: rows.map((r) => this.mapRow(r, statusMap.get(r.id) ?? null)),
       page,
       limit,
       total: rows.length,
@@ -193,6 +235,21 @@ export class StrainsRepository {
     return this.mapRow(rows[0]);
   }
 
+  async activateWithTx(tx: DbContext, id: string, activatedBy: string): Promise<Strain> {
+    const rows = await tx
+      .update(strainsTable)
+      .set({
+        is_active: true,
+        updated_by: activatedBy,
+        updated_at: new Date(),
+      })
+      .where(and(eq(strainsTable.id, id), eq(strainsTable.is_deleted, false)))
+      .returning();
+
+    if (!rows[0]) throw new Error('Strain activate returned no rows');
+    return this.mapRow(rows[0]);
+  }
+
   async countActiveBatchesByStrain(strainId: string): Promise<number> {
     const rows = await this.db
       .select()
@@ -201,7 +258,10 @@ export class StrainsRepository {
     return rows.length;
   }
 
-  private mapRow(row: typeof strainsTable.$inferSelect): Strain {
+  private mapRow(
+    row: typeof strainsTable.$inferSelect,
+    inspectionStatus: string | null = null,
+  ): Strain {
     return {
       id: row.id,
       name: row.name,
@@ -237,6 +297,7 @@ export class StrainsRepository {
       stability_verified: row.stability_verified,
       registration_number: row.registration_number ?? undefined,
       is_active: row.is_active,
+      current_inspection_status: inspectionStatus,
       created_at: row.created_at.toISOString(),
       updated_at: row.updated_at.toISOString(),
       created_by: row.created_by as UserId,

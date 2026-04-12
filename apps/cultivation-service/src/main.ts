@@ -5,8 +5,24 @@ initTelemetry({ serviceName: 'cultivation-service' });
 
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
+import { Transport, type MicroserviceOptions } from '@nestjs/microservices';
 import { Logger } from 'nestjs-pino';
+import { Kafka } from 'kafkajs';
+import { QUALITY_INSPECTION_TOPIC } from '@gacp-erp/shared-events';
 import { AppModule } from './app.module';
+
+/** Ensure consumed topics exist before NestJS subscribes. */
+async function ensureTopics(brokers: string[]): Promise<void> {
+  const admin = new Kafka({ clientId: 'cultivation-service-init', brokers }).admin();
+  try {
+    await admin.connect();
+    await admin.createTopics({
+      topics: [{ topic: QUALITY_INSPECTION_TOPIC, numPartitions: 3, replicationFactor: 1 }],
+    });
+  } finally {
+    await admin.disconnect();
+  }
+}
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
@@ -16,9 +32,31 @@ async function bootstrap(): Promise<void> {
   app.useLogger(app.get(Logger));
   app.setGlobalPrefix('internal');
 
+  const kafkaBrokers = process.env['KAFKA_BROKERS'] ?? 'localhost:9094';
+
+  await ensureTopics([kafkaBrokers]);
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'cultivation-service-consumer',
+        brokers: [kafkaBrokers],
+      },
+      consumer: {
+        groupId: 'cultivation-service-group',
+      },
+      subscribe: {
+        fromBeginning: false,
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
+
   const port = parseInt(process.env['PORT'] ?? '3002', 10);
   await app.listen(port, '0.0.0.0');
-  app.get(Logger).log(`Cultivation Service running on port ${port}`);
+  app.get(Logger).log(`Cultivation Service running on port ${port} (hybrid HTTP + Kafka)`);
 }
 
 void bootstrap();

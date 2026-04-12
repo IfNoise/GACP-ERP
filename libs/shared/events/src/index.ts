@@ -13,6 +13,7 @@ export * from './quality.events';
 // ─── EPIC 8 ───────────────────────────────────────────────────────────────────
 export * from './financial.events';
 export * from './procurement.events';
+export * from './supplier.events';
 export * from './spatial.events';
 
 // ─── EPIC 9 ───────────────────────────────────────────────────────────────────
@@ -30,9 +31,11 @@ export {
   QUALITY_CHANGE_TOPIC,
   QUALITY_CAPA_TOPIC,
   QUALITY_DEVIATION_TOPIC,
+  QUALITY_INSPECTION_TOPIC,
 } from './quality.events';
 export { FINANCE_TRANSACTION_TOPIC } from './financial.events';
 export { PROCUREMENT_PO_TOPIC } from './procurement.events';
+export { SUPPLIER_TOPIC } from './supplier.events';
 export { SPATIAL_ZONE_TOPIC } from './spatial.events';
 export {
   WORKFORCE_EMPLOYEE_TOPIC,
