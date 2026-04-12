@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTasks, useCompleteTask } from '@/hooks';
-import { StatusBadge } from '@gacp-erp/ui-components';
+import { StatusBadge, Button, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const COLUMNS = ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'OVERDUE'] as const;
@@ -58,7 +58,7 @@ export function TaskBoard() {
             <option value="HIGH">High</option>
             <option value="URGENT">Urgent</option>
           </select>
-          <Link href="/workforce/tasks/new" className="btn btn-primary">
+          <Link href="/workforce/tasks/new" className={buttonVariants()}>
             New Task
           </Link>
         </div>
@@ -100,13 +100,14 @@ export function TaskBoard() {
                         </p>
                       ) : null}
                       {col === 'IN_PROGRESS' && (
-                        <button
-                          className="mt-2 text-xs text-green-600 hover:text-green-800"
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => handleComplete(String(task['id']))}
                           disabled={completeMutation.isPending}
                         >
                           ✓ Mark Complete
-                        </button>
+                        </Button>
                       )}
                     </div>
                   ))}

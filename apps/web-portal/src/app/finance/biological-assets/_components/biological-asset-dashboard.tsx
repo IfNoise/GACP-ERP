@@ -6,7 +6,7 @@ import {
   useLatestBiologicalAssetValuation,
   useRecordBiologicalAssetValuation,
 } from '@/hooks';
-import { StatusBadge, KPICard } from '@gacp-erp/ui-components';
+import { StatusBadge, KPICard, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const METHOD_VARIANT: Record<string, StatusVariant> = {
@@ -60,13 +60,13 @@ export function BiologicalAssetDashboard() {
             IAS 41 biological asset valuations for cannabis batches
           </p>
         </div>
-        <button
-          className="btn btn-primary"
+        <Button
+          variant={showForm ? 'outline' : 'default'}
           onClick={() => setShowForm((v) => !v)}
           disabled={!selectedBatchId}
         >
           {showForm ? 'Cancel' : 'Record Valuation'}
-        </button>
+        </Button>
       </div>
 
       {/* Batch selector */}
@@ -208,9 +208,9 @@ export function BiologicalAssetDashboard() {
             </div>
           </div>
           <div className="card-body border-t pt-4">
-            <button type="submit" className="btn btn-primary" disabled={recordMutation.isPending}>
+            <Button type="submit" disabled={recordMutation.isPending}>
               {recordMutation.isPending ? 'Recording...' : 'Record Valuation'}
-            </button>
+            </Button>
           </div>
         </form>
       )}

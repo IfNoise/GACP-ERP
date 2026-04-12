@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Button } from '@gacp-erp/ui-components';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { SystemRole } from '@gacp-erp/shared-schemas';
 import {
@@ -224,11 +225,11 @@ function NavGroupSection({
 
   return (
     <div>
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen((prev) => !prev)}
-        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
-          ${isActive ? 'text-brand-700' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}
+        className={`w-full flex items-center gap-3 ${isActive ? 'text-brand-700' : ''}`}
       >
         <group.icon className="h-4.5 w-4.5 shrink-0" />
         <span className="flex-1 text-left">{group.title}</span>
@@ -237,7 +238,7 @@ function NavGroupSection({
         ) : (
           <ChevronRight className="h-4 w-4 shrink-0 text-gray-400" />
         )}
-      </button>
+      </Button>
 
       {open && (
         <div className="mt-0.5 ml-3 space-y-0.5 border-l border-gray-200 pl-3">
@@ -303,14 +304,16 @@ export function Sidebar() {
 
       {/* Collapse toggle */}
       <div className="border-t border-gray-200 p-3">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => setCollapsed((prev) => !prev)}
-          className="flex w-full items-center justify-center rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+          className="w-full"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
-        </button>
+        </Button>
       </div>
     </aside>
   );

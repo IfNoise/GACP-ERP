@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useChangeControl, useApproveChangeControl, useRejectChangeControl } from '@/hooks';
-import { SignatureDialog } from '@gacp-erp/ui-components';
+import { Button, SignatureDialog } from '@gacp-erp/ui-components';
 
 export function ApproveChangeControlForm({ id }: { id: string }) {
   const router = useRouter();
@@ -76,14 +76,14 @@ export function ApproveChangeControlForm({ id }: { id: string }) {
                 onChange={(e) => setJustification(e.target.value)}
               />
             </div>
-            <button
+            <Button
               type="button"
-              className="btn btn-primary"
+              variant="default"
               disabled={approve.isPending}
               onClick={() => handleAction('approve')}
             >
               {approve.isPending ? 'Approving...' : 'Approve with Signature'}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -102,14 +102,14 @@ export function ApproveChangeControlForm({ id }: { id: string }) {
                 required
               />
             </div>
-            <button
+            <Button
               type="button"
-              className="btn btn-danger"
+              variant="destructive"
               disabled={reject.isPending || rejectionReason.length < 10}
               onClick={() => handleAction('reject')}
             >
               {reject.isPending ? 'Rejecting...' : 'Reject with Signature'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

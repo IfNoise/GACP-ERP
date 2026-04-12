@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { DatePicker, Button } from '@gacp-erp/ui-components';
 
 const TEMPLATES = [
   { value: 'daily-plant-report', label: 'Daily Plant Activity Report' },
@@ -103,24 +104,22 @@ export function ReportGenerateForm() {
             <label htmlFor="dateFrom" className="mb-1 block text-sm font-medium text-gray-700">
               From *
             </label>
-            <input
-              id="dateFrom"
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full rounded border px-3 py-2 text-sm"
+            <DatePicker
+              value={dateFrom ? new Date(dateFrom) : undefined}
+              onChange={(date) => setDateFrom(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+              placeholder="Select from date"
+              className="w-full"
             />
           </div>
           <div>
             <label htmlFor="dateTo" className="mb-1 block text-sm font-medium text-gray-700">
               To *
             </label>
-            <input
-              id="dateTo"
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="w-full rounded border px-3 py-2 text-sm"
+            <DatePicker
+              value={dateTo ? new Date(dateTo) : undefined}
+              onChange={(date) => setDateTo(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+              placeholder="Select to date"
+              className="w-full"
             />
           </div>
         </div>
@@ -147,13 +146,9 @@ export function ReportGenerateForm() {
 
         {/* Actions */}
         <div className="flex gap-3 pt-2">
-          <button
-            onClick={handleGenerate}
-            disabled={generating}
-            className="rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+          <Button onClick={handleGenerate} disabled={generating}>
             {generating ? 'Generating…' : 'Generate Report'}
-          </button>
+          </Button>
           <Link
             href="/reports"
             className="rounded-md border px-6 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"

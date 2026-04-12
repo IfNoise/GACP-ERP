@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { AlertThreshold } from '@gacp-erp/shared-schemas';
+import { Button, Badge } from '@gacp-erp/ui-components';
 import { ThresholdForm } from './threshold-form';
 
 interface ThresholdManagerProps {
@@ -9,9 +10,9 @@ interface ThresholdManagerProps {
   canManage: boolean;
 }
 
-const LEVEL_BADGE: Record<string, string> = {
-  WARNING: 'bg-yellow-100 text-yellow-800',
-  CRITICAL: 'bg-red-100 text-red-800',
+const LEVEL_VARIANT: Record<string, 'warning' | 'destructive'> = {
+  WARNING: 'warning',
+  CRITICAL: 'destructive',
 };
 
 export function ThresholdManager({ zoneId, canManage }: ThresholdManagerProps) {
@@ -75,21 +76,18 @@ export function ThresholdManager({ zoneId, canManage }: ThresholdManagerProps) {
                 <td className="py-2 pr-4 text-gray-700">{t.min_value ?? '—'}</td>
                 <td className="py-2 pr-4 text-gray-700">{t.max_value ?? '—'}</td>
                 <td className="py-2 pr-4">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${LEVEL_BADGE[t.alert_level]}`}
-                  >
-                    {t.alert_level}
-                  </span>
+                  <Badge variant={LEVEL_VARIANT[t.alert_level] ?? 'default'}>{t.alert_level}</Badge>
                 </td>
                 {canManage && (
                   <td className="py-2">
-                    <button
+                    <Button
+                      variant="destructive"
+                      size="sm"
                       onClick={() => void handleDeactivate(t.id)}
                       disabled={deactivating === t.id}
-                      className="text-xs text-red-600 hover:underline disabled:opacity-50"
                     >
                       {deactivating === t.id ? 'Removing…' : 'Deactivate'}
-                    </button>
+                    </Button>
                   </td>
                 )}
               </tr>

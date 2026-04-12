@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useJournalEntry, usePostJournalEntry, useReverseJournalEntry } from '@/hooks';
-import { StatusBadge, AuditTrailPanel, SignatureDialog } from '@gacp-erp/ui-components';
+import { StatusBadge, AuditTrailPanel, SignatureDialog, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
 import { useState } from 'react';
 
@@ -84,18 +84,14 @@ export function JournalEntryDetail({ id }: { id: string }) {
       {/* Actions */}
       <div className="flex gap-3">
         {status === 'DRAFT' && (
-          <button
-            className="btn btn-primary"
-            onClick={() => setSignAction('post')}
-            disabled={!isBalanced}
-          >
+          <Button onClick={() => setSignAction('post')} disabled={!isBalanced}>
             Post Entry
-          </button>
+          </Button>
         )}
         {status === 'POSTED' && (
-          <button className="btn btn-secondary" onClick={() => setSignAction('reverse')}>
+          <Button variant="secondary" onClick={() => setSignAction('reverse')}>
             Reverse Entry
-          </button>
+          </Button>
         )}
       </div>
 

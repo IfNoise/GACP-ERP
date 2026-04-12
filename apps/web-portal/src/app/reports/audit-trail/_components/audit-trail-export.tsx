@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuditTrail } from '@/hooks';
-import { DataTable } from '@gacp-erp/ui-components';
+import { DataTable, DatePicker, Button, Badge } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
 const ENTITY_TYPES = [
@@ -108,9 +108,7 @@ export function AuditTrailExport() {
       accessorKey: 'entity_type',
       header: 'Entity',
       cell: ({ row }) => (
-        <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium">
-          {String(row.original['entity_type'] ?? '')}
-        </span>
+        <Badge variant="default">{String(row.original['entity_type'] ?? '')}</Badge>
       ),
     },
     { accessorKey: 'action', header: 'Action' },
@@ -150,20 +148,12 @@ export function AuditTrailExport() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={handleExportCSV}
-            disabled={rows.length === 0}
-            className="rounded-md border px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-          >
+          <Button variant="outline" onClick={handleExportCSV} disabled={rows.length === 0}>
             Export CSV
-          </button>
-          <button
-            onClick={handleExportPDF}
-            disabled={rows.length === 0}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+          </Button>
+          <Button onClick={handleExportPDF} disabled={rows.length === 0}>
             Export PDF
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -189,20 +179,18 @@ export function AuditTrailExport() {
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-500">From</label>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="rounded border px-3 py-1.5 text-sm"
+          <DatePicker
+            value={dateFrom ? new Date(dateFrom) : undefined}
+            onChange={(date) => setDateFrom(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+            placeholder="From date"
           />
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-500">To</label>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="rounded border px-3 py-1.5 text-sm"
+          <DatePicker
+            value={dateTo ? new Date(dateTo) : undefined}
+            onChange={(date) => setDateTo(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+            placeholder="To date"
           />
         </div>
         <div>

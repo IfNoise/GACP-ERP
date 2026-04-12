@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useValidationProtocol, useValidationProtocolSummary } from '@/hooks';
-import { StatusBadge, WorkflowTimeline } from '@gacp-erp/ui-components';
-import type { StatusVariant, WorkflowStep } from '@gacp-erp/ui-components';
+import { StatusBadge, WorkflowTimeline, DataTable, buttonVariants } from '@gacp-erp/ui-components';
+import type { StatusVariant, WorkflowStep, ColumnDef } from '@gacp-erp/ui-components';
 
 const VP_STAGES = ['DRAFT', 'REVIEW', 'APPROVED', 'EXECUTING', 'COMPLETED', 'CLOSED'] as const;
 
@@ -23,6 +23,40 @@ const TEST_STATUS_VARIANT: Record<string, StatusVariant> = {
   FAIL: 'rejected',
   NOT_APPLICABLE: 'cancelled',
 };
+
+const TEST_STEP_COLUMNS: ColumnDef<Record<string, unknown>>[] = [
+  {
+    accessorKey: 'step_number',
+    header: '#',
+    cell: ({ row }) => <span className="font-medium">{String(row.original['step_number'])}</span>,
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    cell: ({ row }) => String(row.original['description']),
+  },
+  {
+    accessorKey: 'expected_result',
+    header: 'Expected Result',
+    cell: ({ row }) => String(row.original['expected_result']),
+  },
+  {
+    accessorKey: 'actual_result',
+    header: 'Actual Result',
+    cell: ({ row }) =>
+      row.original['actual_result'] ? String(row.original['actual_result']) : '—',
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <StatusBadge
+        status={TEST_STATUS_VARIANT[String(row.original['status'])] ?? 'draft'}
+        label={String(row.original['status'])}
+      />
+    ),
+  },
+];
 
 export function ValidationProtocolDetail({ id }: { id: string }) {
   const { data, isLoading } = useValidationProtocol(id);
@@ -66,7 +100,7 @@ export function ValidationProtocolDetail({ id }: { id: string }) {
       <WorkflowTimeline steps={steps} />
 
       {status === 'EXECUTING' && (
-        <Link href={`/quality/validation-protocols/${id}/execute`} className="btn btn-primary">
+        <Link href={`/quality/validation-protocols/${id}/execute`} className={buttonVariants()}>
           Execute Test Steps
         </Link>
       )}
@@ -108,35 +142,13 @@ export function ValidationProtocolDetail({ id }: { id: string }) {
           <h2 className="text-lg font-semibold">Test Steps ({testSteps.length})</h2>
         </div>
         <div className="card-body overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b text-gray-500">
-                <th className="pb-2 pr-4">#</th>
-                <th className="pb-2 pr-4">Description</th>
-                <th className="pb-2 pr-4">Expected Result</th>
-                <th className="pb-2 pr-4">Actual Result</th>
-                <th className="pb-2 pr-4">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {testSteps.map((step) => (
-                <tr key={String(step['id'])} className="border-b last:border-0">
-                  <td className="py-2 pr-4 font-medium">{String(step['step_number'])}</td>
-                  <td className="py-2 pr-4">{String(step['description'])}</td>
-                  <td className="py-2 pr-4">{String(step['expected_result'])}</td>
-                  <td className="py-2 pr-4">
-                    {step['actual_result'] ? String(step['actual_result']) : '—'}
-                  </td>
-                  <td className="py-2 pr-4">
-                    <StatusBadge
-                      status={TEST_STATUS_VARIANT[String(step['status'])] ?? 'draft'}
-                      label={String(step['status'])}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable<Record<string, unknown>>
+            data={testSteps}
+            columns={TEST_STEP_COLUMNS}
+            pageSize={50}
+            searchPlaceholder="Search test steps..."
+            emptyMessage="No test steps found"
+          />
         </div>
       </div>
     </div>

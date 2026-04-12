@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useDocuments } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -175,12 +175,9 @@ export function DocumentList() {
             placeholder="Search documents…"
             className="rounded-l border px-3 py-1.5 text-sm"
           />
-          <button
-            onClick={handleSearch}
-            className="rounded-r bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
-          >
+          <Button variant="secondary" size="sm" onClick={handleSearch} className="rounded-r">
             Search
-          </button>
+          </Button>
         </div>
       </div>
 

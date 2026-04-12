@@ -12,6 +12,8 @@ import {
   Tooltip,
 } from 'recharts';
 import { useKpis } from '@/hooks';
+import { DataTable } from '@gacp-erp/ui-components';
+import type { ColumnDef } from '@gacp-erp/ui-components';
 
 function trailingMonths(count = 12): string[] {
   const months: string[] = [];
@@ -32,19 +34,65 @@ const MODULE_COLOR: Record<string, string> = {
   COMPLIANCE: '#8b5cf6',
 };
 
+interface KpiRow {
+  name: string;
+  value: number;
+  unit: string;
+  trend: string;
+  target: number | null;
+}
+
+const KPI_COLUMNS: ColumnDef<KpiRow>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Metric',
+    cell: ({ row }) => <span className="font-medium">{row.original.name}</span>,
+  },
+  {
+    accessorKey: 'value',
+    header: 'Value',
+    cell: ({ row }) =>
+      row.original.unit === '%'
+        ? `${row.original.value.toFixed(1)}%`
+        : row.original.value.toLocaleString(),
+  },
+  {
+    accessorKey: 'target',
+    header: 'Target',
+    cell: ({ row }) =>
+      row.original.target != null
+        ? row.original.unit === '%'
+          ? `${row.original.target}%`
+          : row.original.target
+        : '—',
+  },
+  {
+    accessorKey: 'trend',
+    header: 'Trend',
+    cell: ({ row }) => (
+      <span
+        className={
+          row.original.trend === 'UP'
+            ? 'text-green-600'
+            : row.original.trend === 'DOWN'
+              ? 'text-red-600'
+              : 'text-gray-400'
+        }
+      >
+        {row.original.trend === 'UP' ? '↑' : row.original.trend === 'DOWN' ? '↓' : '→'}{' '}
+        {row.original.trend}
+      </span>
+    ),
+  },
+];
+
 interface Props {
   module: string;
 }
 
 export function ModuleTrend({ module: mod }: Props) {
   const { data: kpis } = useKpis({ category: mod as 'WORKFORCE' });
-  const kpiList = (kpis ?? []) as {
-    name: string;
-    value: number;
-    unit: string;
-    trend: string;
-    target: number | null;
-  }[];
+  const kpiList = (kpis ?? []) as KpiRow[];
 
   const trendData = useMemo(() => {
     const first = kpiList[0];
@@ -111,42 +159,13 @@ export function ModuleTrend({ module: mod }: Props) {
           <h2 className="mb-3 text-sm font-semibold text-gray-700 uppercase">
             Current Period KPIs
           </h2>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b text-left text-gray-500">
-                <th className="py-2">Metric</th>
-                <th className="py-2">Value</th>
-                <th className="py-2">Target</th>
-                <th className="py-2">Trend</th>
-              </tr>
-            </thead>
-            <tbody>
-              {kpiList.map((kpi) => (
-                <tr key={kpi.name} className="border-b last:border-0">
-                  <td className="py-2 font-medium">{kpi.name}</td>
-                  <td className="py-2">
-                    {kpi.unit === '%' ? `${kpi.value.toFixed(1)}%` : kpi.value.toLocaleString()}
-                  </td>
-                  <td className="py-2 text-gray-400">
-                    {kpi.target != null ? (kpi.unit === '%' ? `${kpi.target}%` : kpi.target) : '—'}
-                  </td>
-                  <td className="py-2">
-                    <span
-                      className={
-                        kpi.trend === 'UP'
-                          ? 'text-green-600'
-                          : kpi.trend === 'DOWN'
-                            ? 'text-red-600'
-                            : 'text-gray-400'
-                      }
-                    >
-                      {kpi.trend === 'UP' ? '↑' : kpi.trend === 'DOWN' ? '↓' : '→'} {kpi.trend}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable<KpiRow>
+            data={kpiList}
+            columns={KPI_COLUMNS}
+            pageSize={20}
+            searchPlaceholder="Search KPIs..."
+            emptyMessage="No KPIs available"
+          />
         </div>
       )}
     </div>

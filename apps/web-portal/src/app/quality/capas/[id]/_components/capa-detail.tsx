@@ -2,7 +2,12 @@
 
 import Link from 'next/link';
 import { useCAPA } from '@/hooks';
-import { StatusBadge, WorkflowTimeline, AuditTrailPanel } from '@gacp-erp/ui-components';
+import {
+  StatusBadge,
+  WorkflowTimeline,
+  AuditTrailPanel,
+  buttonVariants,
+} from '@gacp-erp/ui-components';
 import type { StatusVariant, WorkflowStep, AuditEvent } from '@gacp-erp/ui-components';
 
 const CAPA_STAGES = [
@@ -97,7 +102,7 @@ export function CAPADetail({ id }: { id: string }) {
       {/* Actions */}
       <div className="flex gap-3">
         {status === 'OPEN' && (
-          <Link href={`/quality/capas/${id}/rca`} className="btn btn-primary">
+          <Link href={`/quality/capas/${id}/rca`} className={buttonVariants()}>
             Initiate RCA
           </Link>
         )}

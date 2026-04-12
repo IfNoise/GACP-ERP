@@ -15,6 +15,8 @@ import {
   WorkflowTimeline,
   AuditTrailPanel,
   SignatureDialog,
+  Button,
+  buttonVariants,
 } from '@gacp-erp/ui-components';
 import type { StatusVariant, WorkflowStep, AuditEvent } from '@gacp-erp/ui-components';
 
@@ -120,20 +122,25 @@ export function PurchaseOrderDetail({ id }: { id: string }) {
       : []),
   ];
 
-  const actionButtons: { label: string; action: SignAction; show: boolean; variant: string }[] = [
-    { label: 'Submit PO', action: 'submit', show: status === 'DRAFT', variant: 'btn-primary' },
+  const actionButtons: {
+    label: string;
+    action: SignAction;
+    show: boolean;
+    variant: 'default' | 'outline';
+  }[] = [
+    { label: 'Submit PO', action: 'submit', show: status === 'DRAFT', variant: 'default' },
     {
       label: 'Acknowledge',
       action: 'acknowledge',
       show: status === 'SUBMITTED',
-      variant: 'btn-primary',
+      variant: 'default',
     },
-    { label: 'Close PO', action: 'close', show: status === 'RECEIVING', variant: 'btn-primary' },
+    { label: 'Close PO', action: 'close', show: status === 'RECEIVING', variant: 'default' },
     {
       label: 'Cancel PO',
       action: 'cancel',
       show: ['DRAFT', 'SUBMITTED'].includes(status),
-      variant: 'btn-secondary',
+      variant: 'outline',
     },
   ];
 
@@ -160,16 +167,12 @@ export function PurchaseOrderDetail({ id }: { id: string }) {
         {actionButtons
           .filter((a) => a.show)
           .map((a) => (
-            <button
-              key={a.action}
-              className={`btn ${a.variant}`}
-              onClick={() => setSignAction(a.action)}
-            >
+            <Button key={a.action} variant={a.variant} onClick={() => setSignAction(a.action)}>
               {a.label}
-            </button>
+            </Button>
           ))}
         {status === 'ACKNOWLEDGED' && (
-          <Link href="/procurement/receiving" className="btn btn-primary">
+          <Link href="/procurement/receiving" className={buttonVariants()}>
             Receive Goods
           </Link>
         )}

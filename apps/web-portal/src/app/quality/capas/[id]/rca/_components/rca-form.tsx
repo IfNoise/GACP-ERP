@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCAPA, useInitiateRca } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 const ROOT_CAUSE_CATEGORIES = [
   'HUMAN_ERROR',
@@ -116,10 +117,10 @@ export function RCAForm({ id }: { id: string }) {
             />
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="btn btn-primary" disabled={initRca.isPending}>
+            <Button type="submit" variant="default" disabled={initRca.isPending}>
               {initRca.isPending ? 'Submitting...' : 'Submit RCA'}
-            </button>
-            <Link href={`/quality/capas/${id}`} className="btn btn-secondary">
+            </Button>
+            <Link href={`/quality/capas/${id}`} className={buttonVariants({ variant: 'outline' })}>
               Cancel
             </Link>
           </div>

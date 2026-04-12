@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useEmployees } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -86,7 +86,7 @@ export function EmployeeList() {
           <h1 className="text-2xl font-bold text-gray-900">Employees</h1>
           <p className="mt-1 text-sm text-gray-500">Employee directory and competency profiles</p>
         </div>
-        <Link href="/workforce/employees/new" className="btn btn-primary">
+        <Link href="/workforce/employees/new" className={buttonVariants()}>
           New Employee
         </Link>
       </div>

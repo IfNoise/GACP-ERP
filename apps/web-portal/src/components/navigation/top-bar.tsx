@@ -3,6 +3,7 @@
 import { useAuth } from '@/components/providers/auth-provider';
 import { LogoutButton } from '@/components/auth/logout-button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@gacp-erp/ui-components';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Sidebar } from './sidebar';
@@ -40,13 +41,15 @@ function MobileMenuToggle() {
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={() => setOpen(true)}
-        className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 lg:hidden"
+        className="lg:hidden"
       >
         <Menu className="h-5 w-5" />
-      </button>
+      </Button>
 
       {/* Mobile overlay */}
       {open && (
@@ -64,13 +67,15 @@ function MobileMenuToggle() {
           {/* Sidebar panel */}
           <div className="relative z-50 animate-slide-in">
             <Sidebar />
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 rounded-lg p-1 text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4"
             >
               <X className="h-5 w-5" />
-            </button>
+            </Button>
           </div>
         </div>
       )}

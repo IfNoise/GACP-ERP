@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useDeviations } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -106,7 +106,7 @@ export function DeviationList() {
           <h1 className="text-2xl font-bold text-gray-900">Deviations</h1>
           <p className="mt-1 text-sm text-gray-500">Track and investigate deviations</p>
         </div>
-        <Link href="/quality/deviations/new" className="btn btn-primary">
+        <Link href="/quality/deviations/new" className={buttonVariants()}>
           Report Deviation
         </Link>
       </div>

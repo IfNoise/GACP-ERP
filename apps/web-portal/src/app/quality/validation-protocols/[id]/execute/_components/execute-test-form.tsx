@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useValidationProtocol, useExecuteValidationTest } from '@/hooks';
-import { StatusBadge, SignatureDialog } from '@gacp-erp/ui-components';
+import { Button, StatusBadge, SignatureDialog } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const TEST_STATUS_VARIANT: Record<string, StatusVariant> = {
@@ -83,12 +83,13 @@ export function ExecuteTestForm({ protocolId }: { protocolId: string }) {
             const isPending = String(step['status']) === 'PENDING';
             const isSelected = selectedStep === stepNum;
             return (
-              <button
+              <Button
                 key={stepNum}
                 type="button"
+                variant="ghost"
                 disabled={!isPending}
                 onClick={() => setSelectedStep(stepNum)}
-                className={`w-full rounded border p-3 text-left transition ${isSelected ? 'border-green-500 bg-green-50' : isPending ? 'hover:border-gray-400' : 'opacity-50'}`}
+                className={`w-full rounded border p-3 text-left transition ${isSelected ? '' : isPending ? '' : 'opacity-50'}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Step {stepNum}</span>
@@ -101,7 +102,7 @@ export function ExecuteTestForm({ protocolId }: { protocolId: string }) {
                 <p className="mt-1 text-xs text-gray-500">
                   Expected: {String(step['expected_result'])}
                 </p>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -147,14 +148,15 @@ export function ExecuteTestForm({ protocolId }: { protocolId: string }) {
                   />
                 </div>
               )}
-              <button
+              <Button
                 type="button"
-                className="btn btn-primary w-full"
+                variant="default"
+                className="w-full"
                 disabled={execute.isPending || !actualResult}
                 onClick={handleExecute}
               >
                 {execute.isPending ? 'Executing...' : 'Record Result with Signature'}
-              </button>
+              </Button>
             </div>
           </div>
         )}

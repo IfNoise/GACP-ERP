@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useZones } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -100,7 +100,7 @@ export function ZoneList() {
           <h1 className="text-2xl font-bold text-gray-900">Facility Zones</h1>
           <p className="mt-1 text-sm text-gray-500">Manage spatial zones and batch assignments</p>
         </div>
-        <Link href="/spatial/zones/new" className="btn btn-primary">
+        <Link href="/spatial/zones/new" className={buttonVariants()}>
           New Zone
         </Link>
       </div>

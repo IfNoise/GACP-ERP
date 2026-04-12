@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Button } from '@gacp-erp/ui-components';
 import {
   useCreateBatch,
   useBulkCreatePlants,
@@ -302,24 +303,19 @@ function BatchStep({
           <label className="mb-2 block text-sm font-medium text-gray-700">Batch Source</label>
           <div className="flex flex-wrap gap-2">
             {SOURCE_TYPES.map((s) => (
-              <button
+              <Button
                 key={s.value}
                 type="button"
+                variant={form.batch_source_type === s.value ? 'default' : 'secondary'}
                 onClick={() => {
                   set('batch_source_type', s.value);
                   set('source_grn_id', '');
                   set('source_batch_id', '');
                 }}
                 title={s.description}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors
-                  ${
-                    form.batch_source_type === s.value
-                      ? 'bg-brand-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
               >
                 {s.label}
-              </button>
+              </Button>
             ))}
           </div>
           <p className="mt-1 text-xs text-gray-500">
@@ -431,13 +427,9 @@ function BatchStep({
           >
             Cancel
           </Link>
-          <button
-            type="submit"
-            disabled={createBatch.isPending}
-            className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-          >
+          <Button type="submit" disabled={createBatch.isPending}>
             {createBatch.isPending ? 'Creating…' : 'Create Batch →'}
-          </button>
+          </Button>
         </div>
       </div>
     </form>
@@ -550,19 +542,14 @@ function PlantsStep({
           <label className="mb-2 block text-sm font-medium text-gray-700">Plant Source Type</label>
           <div className="flex gap-2">
             {PLANT_SOURCE_TYPES.map((s) => (
-              <button
+              <Button
                 key={s.value}
                 type="button"
+                variant={form.source_type === s.value ? 'default' : 'secondary'}
                 onClick={() => set('source_type', s.value)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors
-                  ${
-                    form.source_type === s.value
-                      ? 'bg-brand-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
               >
                 {s.label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -618,13 +605,9 @@ function PlantsStep({
         {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
 
         <div className="flex justify-end gap-3 border-t border-gray-100 pt-4">
-          <button
-            type="submit"
-            disabled={bulkCreate.isPending}
-            className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-50"
-          >
+          <Button type="submit" disabled={bulkCreate.isPending}>
             {bulkCreate.isPending ? 'Creating plants…' : 'Create Plants'}
-          </button>
+          </Button>
         </div>
       </div>
     </form>
@@ -664,13 +647,9 @@ function SuccessView({ state }: { readonly state: SuccessState }) {
           >
             View Plants
           </Link>
-          <button
-            type="button"
-            onClick={() => router.push('/cultivation/intake')}
-            className="rounded-lg px-5 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100"
-          >
+          <Button type="button" variant="ghost" onClick={() => router.push('/cultivation/intake')}>
             New Intake
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateDocument } from '@/hooks';
+import { Button, DatePicker } from '@gacp-erp/ui-components';
 
 const DOC_TYPES = [
   { value: 'SOP', label: 'Standard Operating Procedure' },
@@ -164,25 +165,24 @@ export function DocumentUploadForm() {
           >
             Next Review Date
           </label>
-          <input
-            id="next_review_date"
-            name="next_review_date"
-            type="date"
-            value={form.next_review_date}
-            onChange={handleChange}
-            className="w-full rounded border px-3 py-2 text-sm"
+          <DatePicker
+            value={form.next_review_date ? new Date(form.next_review_date) : undefined}
+            onChange={(date) =>
+              setForm((prev) => ({
+                ...prev,
+                next_review_date: date ? (date.toISOString().split('T')[0] ?? '') : '',
+              }))
+            }
+            placeholder="Select review date"
+            className="w-full"
           />
         </div>
 
         {/* Actions */}
         <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={createDocument.isPending}
-            className="rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+          <Button type="submit" disabled={createDocument.isPending}>
             {createDocument.isPending ? 'Creating…' : 'Create Document'}
-          </button>
+          </Button>
           <Link
             href="/documents"
             className="rounded-md border px-6 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"

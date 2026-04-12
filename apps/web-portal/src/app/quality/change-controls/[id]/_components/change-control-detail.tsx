@@ -2,7 +2,12 @@
 
 import Link from 'next/link';
 import { useChangeControl } from '@/hooks';
-import { StatusBadge, WorkflowTimeline, AuditTrailPanel } from '@gacp-erp/ui-components';
+import {
+  StatusBadge,
+  WorkflowTimeline,
+  AuditTrailPanel,
+  buttonVariants,
+} from '@gacp-erp/ui-components';
 import type { StatusVariant, WorkflowStep, AuditEvent } from '@gacp-erp/ui-components';
 
 const CC_STAGES = [
@@ -107,7 +112,7 @@ export function ChangeControlDetail({ id }: { id: string }) {
         {actionLinks
           .filter((a) => a.show)
           .map((a) => (
-            <Link key={a.href} href={a.href} className="btn btn-primary">
+            <Link key={a.href} href={a.href} className={buttonVariants()}>
               {a.label}
             </Link>
           ))}

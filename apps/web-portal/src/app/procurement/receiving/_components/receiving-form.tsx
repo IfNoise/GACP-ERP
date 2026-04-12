@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePurchaseOrders, usePurchaseOrder, useReceiveGoods } from '@/hooks';
-import { SignatureDialog } from '@gacp-erp/ui-components';
+import { SignatureDialog, Button, buttonVariants } from '@gacp-erp/ui-components';
 
 interface ReceivingLine {
   po_line_id: string;
@@ -211,14 +211,13 @@ export function ReceivingForm() {
         )}
 
         <div className="flex gap-3">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={receiveMutation.isPending || lines.length === 0}
-          >
+          <Button type="submit" disabled={receiveMutation.isPending || lines.length === 0}>
             {receiveMutation.isPending ? 'Recording...' : 'Record Goods Received'}
-          </button>
-          <Link href="/procurement/purchase-orders" className="btn btn-secondary">
+          </Button>
+          <Link
+            href="/procurement/purchase-orders"
+            className={buttonVariants({ variant: 'outline' })}
+          >
             Cancel
           </Link>
         </div>

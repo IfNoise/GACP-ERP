@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import Link from 'next/link';
 import { useDocument, useDocumentVersions, useSubmitForReview } from '@/hooks';
-import { StatusBadge } from '@gacp-erp/ui-components';
+import { StatusBadge, Button, Badge } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const STATUS_VARIANT: Record<string, StatusVariant> = {
@@ -71,13 +71,13 @@ export function DocumentDetail({ id }: Props) {
         </div>
         <div className="flex gap-2">
           {status === 'DRAFT' && (
-            <button
+            <Button
+              variant="default"
               onClick={handleSubmitForReview}
               disabled={submitForReview.isPending}
-              className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600 disabled:opacity-50"
             >
               Submit for Review
-            </button>
+            </Button>
           )}
           {(status === 'UNDER_REVIEW' || status === 'DRAFT') && (
             <Link
@@ -144,9 +144,7 @@ export function DocumentDetail({ id }: Props) {
           {Array.isArray(d['tags']) && (d['tags'] as string[]).length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1">
               {(d['tags'] as string[]).map((tag: string) => (
-                <span key={tag} className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-                  {tag}
-                </span>
+                <Badge key={tag}>{tag}</Badge>
               ))}
             </div>
           )}

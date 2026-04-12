@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import type { AlertThreshold } from '@gacp-erp/shared-schemas';
+import { Badge } from '@gacp-erp/ui-components';
 import { ZoneReadingsPanel } from './_components/zone-readings-panel';
 
 interface Zone {
@@ -89,9 +90,9 @@ export default async function IotDashboardPage() {
                   <div>
                     <h2 className="text-lg font-semibold text-gray-800">
                       {zone.name}
-                      <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                      <Badge variant="default" className="ml-2">
                         {zone.zone_type}
-                      </span>
+                      </Badge>
                     </h2>
                     <p className="text-sm text-gray-500">{zone.zone_code}</p>
                   </div>

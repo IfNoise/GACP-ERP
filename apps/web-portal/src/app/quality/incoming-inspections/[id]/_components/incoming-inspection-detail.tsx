@@ -10,6 +10,8 @@ import {
   useRejectInspection,
 } from '@/hooks/use-domain-queries';
 import {
+  Button,
+  Badge,
   StatusBadge,
   WorkflowTimeline,
   SignatureDialog,
@@ -36,9 +38,9 @@ const WORKFLOW_STEPS = [
 function BoolResult({ value, label }: { value: boolean | null; label: string }) {
   if (value === null || value === undefined) return <span className="text-gray-400">-</span>;
   return (
-    <span className={value ? 'text-green-700' : 'text-red-700'}>
+    <Badge variant={value ? 'success' : 'destructive'}>
       {value ? 'Pass' : 'Fail'} ({label})
-    </span>
+    </Badge>
   );
 }
 
@@ -284,28 +286,28 @@ export function IncomingInspectionDetail({ id }: { id: string }) {
       {/* Action buttons */}
       <div className="mt-6 flex gap-4">
         {status === 'PENDING' && (
-          <button className="btn btn-primary" onClick={() => setShowPerformForm(true)}>
+          <Button variant="default" onClick={() => setShowPerformForm(true)}>
             Perform Inspection
-          </button>
+          </Button>
         )}
         {status === 'IN_PROGRESS' && (
           <>
-            <button className="btn btn-primary" onClick={() => setShowTestForm(true)}>
+            <Button variant="default" onClick={() => setShowTestForm(true)}>
               Record Test Results
-            </button>
-            <button className="btn btn-danger" onClick={() => setShowSignatureDialog('reject')}>
+            </Button>
+            <Button variant="destructive" onClick={() => setShowSignatureDialog('reject')}>
               Reject
-            </button>
+            </Button>
           </>
         )}
         {status === 'QUARANTINE' && (
           <>
-            <button className="btn btn-primary" onClick={() => setShowSignatureDialog('release')}>
+            <Button variant="default" onClick={() => setShowSignatureDialog('release')}>
               Release
-            </button>
-            <button className="btn btn-danger" onClick={() => setShowSignatureDialog('reject')}>
+            </Button>
+            <Button variant="destructive" onClick={() => setShowSignatureDialog('reject')}>
               Reject
-            </button>
+            </Button>
           </>
         )}
       </div>
@@ -343,12 +345,12 @@ export function IncomingInspectionDetail({ id }: { id: string }) {
               />
             </div>
             <div className="flex gap-2">
-              <button className="btn btn-primary" onClick={() => setShowSignatureDialog('perform')}>
+              <Button variant="default" onClick={() => setShowSignatureDialog('perform')}>
                 Submit with Signature
-              </button>
-              <button className="btn btn-secondary" onClick={() => setShowPerformForm(false)}>
+              </Button>
+              <Button variant="outline" onClick={() => setShowPerformForm(false)}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -400,18 +402,18 @@ export function IncomingInspectionDetail({ id }: { id: string }) {
               />
             </div>
             <div className="flex gap-2">
-              <button
-                className="btn btn-primary"
+              <Button
+                variant="default"
                 onClick={handleRecordTestResults}
                 disabled={testResultsMutation.isPending}
               >
                 {testResultsMutation.isPending
                   ? 'Submitting...'
                   : 'Submit Results & Enter Quarantine'}
-              </button>
-              <button className="btn btn-secondary" onClick={() => setShowTestForm(false)}>
+              </Button>
+              <Button variant="outline" onClick={() => setShowTestForm(false)}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>

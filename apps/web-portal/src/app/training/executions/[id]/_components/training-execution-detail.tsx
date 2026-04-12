@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTrainingExecutions, useCompleteTrainingExecution } from '@/hooks';
-import { StatusBadge, SignatureDialog, AuditTrailPanel, KPICard } from '@gacp-erp/ui-components';
+import {
+  StatusBadge,
+  SignatureDialog,
+  AuditTrailPanel,
+  KPICard,
+  Button,
+} from '@gacp-erp/ui-components';
 import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
 
 const EXEC_STATUS_VARIANT: Record<string, StatusVariant> = {
@@ -120,9 +126,7 @@ export function TrainingExecutionDetail({ id }: { id: string }) {
           {/* Actions */}
           {String(execData['status']) === 'IN_PROGRESS' && (
             <div className="flex gap-3">
-              <button className="btn btn-primary" onClick={() => setSignOpen(true)}>
-                Complete Training
-              </button>
+              <Button onClick={() => setSignOpen(true)}>Complete Training</Button>
             </div>
           )}
         </>

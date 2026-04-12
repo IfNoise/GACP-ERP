@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useStrains } from '@/hooks';
+import { Button, Dialog } from '@gacp-erp/ui-components';
 
 export type ItemType = 'standard' | 'genetic_material' | 'equipment' | 'consumable' | 'service';
 
@@ -14,12 +15,15 @@ export interface POLineData {
   strain_id: string | null;
 }
 
-export const ITEM_TYPE_BADGE: Record<ItemType, { label: string; cls: string }> = {
-  standard: { label: 'Standard', cls: 'bg-gray-100 text-gray-700' },
-  genetic_material: { label: 'Genetics', cls: 'bg-green-100 text-green-700' },
-  equipment: { label: 'Equipment', cls: 'bg-blue-100 text-blue-700' },
-  consumable: { label: 'Consumable', cls: 'bg-amber-100 text-amber-700' },
-  service: { label: 'Service', cls: 'bg-purple-100 text-purple-700' },
+export const ITEM_TYPE_BADGE: Record<
+  ItemType,
+  { label: string; variant: 'default' | 'success' | 'info' | 'warning' | 'outline' }
+> = {
+  standard: { label: 'Standard', variant: 'default' },
+  genetic_material: { label: 'Genetics', variant: 'success' },
+  equipment: { label: 'Equipment', variant: 'info' },
+  consumable: { label: 'Consumable', variant: 'warning' },
+  service: { label: 'Service', variant: 'outline' },
 };
 
 const SOURCE_TYPE_LABELS: Record<string, string> = {
@@ -106,165 +110,156 @@ export function POLineDialog({ initial, onSave, onClose }: POLineDialogProps) {
     (!isGenetic || form.strain_id !== null);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-lg rounded-lg bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b px-6 py-4">
-          <h2 className="text-lg font-semibold">{initial ? 'Edit Line' : 'Add Line'}</h2>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            ✕
-          </button>
+    <Dialog
+      open
+      onClose={onClose}
+      title={initial ? 'Edit Line' : 'Add Line'}
+      size="lg"
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="button" disabled={!valid} onClick={() => onSave(form)}>
+            {initial ? 'Save Changes' : 'Add Line'}
+          </Button>
+        </>
+      }
+    >
+      <div className="space-y-4">
+        {/* Item Type */}
+        <div>
+          <label className="label">Item Type</label>
+          <div className="flex flex-wrap gap-2">
+            {(
+              Object.entries(ITEM_TYPE_BADGE) as [ItemType, { label: string; variant: string }][]
+            ).map(([val, { label }]) => (
+              <Button
+                key={val}
+                type="button"
+                onClick={() => set('item_type', val)}
+                className={[
+                  'rounded-full px-3 py-1 text-sm font-medium ring-2 transition-all',
+                  form.item_type === val ? 'ring-current' : 'ring-transparent opacity-60',
+                ].join(' ')}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-4 px-6 py-4">
-          {/* Item Type */}
+        {/* Strain Selector (only for genetics) */}
+        {isGenetic && (
           <div>
-            <label className="label">Item Type</label>
-            <div className="flex flex-wrap gap-2">
-              {(
-                Object.entries(ITEM_TYPE_BADGE) as [ItemType, { label: string; cls: string }][]
-              ).map(([val, { label, cls }]) => (
-                <button
-                  key={val}
-                  type="button"
-                  onClick={() => set('item_type', val)}
-                  className={[
-                    'rounded-full px-3 py-1 text-sm font-medium ring-2 transition-all',
-                    cls,
-                    form.item_type === val ? 'ring-current' : 'ring-transparent opacity-60',
-                  ].join(' ')}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Strain Selector (only for genetics) */}
-          {isGenetic && (
-            <div>
-              <label className="label">Strain *</label>
-              <select
-                className="input"
-                value={form.strain_id ?? ''}
-                onChange={(e) => set('strain_id', e.target.value || null)}
-                required
-              >
-                <option value="">— Select strain —</option>
-                {strains.map((s) => (
-                  <option key={String(s['id'])} value={String(s['id'])}>
-                    {String(s['cultivar_code'])} — {String(s['name'])} (
-                    {SOURCE_TYPE_LABELS[String(s['source_type'])] ?? String(s['source_type'])})
-                    {strainStatusSuffix(s['is_active'], s['current_inspection_status'])}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Description */}
-          <div>
-            <label className="label">Description *</label>
-            <input
+            <label className="label">Strain *</label>
+            <select
               className="input"
-              value={form.item_description}
-              onChange={(e) => set('item_description', e.target.value)}
-              placeholder={
-                isGenetic
-                  ? 'e.g. OG Kush feminised seeds'
-                  : form.item_type === 'service'
-                    ? 'e.g. Lab testing — cannabinoid profile'
-                    : ''
-              }
-              maxLength={200}
+              value={form.strain_id ?? ''}
+              onChange={(e) => set('strain_id', e.target.value || null)}
               required
-            />
+            >
+              <option value="">— Select strain —</option>
+              {strains.map((s) => (
+                <option key={String(s['id'])} value={String(s['id'])}>
+                  {String(s['cultivar_code'])} — {String(s['name'])} (
+                  {SOURCE_TYPE_LABELS[String(s['source_type'])] ?? String(s['source_type'])})
+                  {strainStatusSuffix(s['is_active'], s['current_inspection_status'])}
+                </option>
+              ))}
+            </select>
           </div>
+        )}
 
-          {/* Quantity + UoM */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label">Quantity *</label>
-              <input
-                type="number"
-                className="input"
-                value={form.quantity || ''}
-                onChange={(e) => set('quantity', Number(e.target.value))}
-                min={0.001}
-                step="any"
-                required
-              />
-            </div>
-            <div>
-              <label className="label">Unit of Measure</label>
-              {customUom ? (
-                <input
-                  className="input"
-                  autoFocus
-                  placeholder="e.g. vial"
-                  value={form.unit_of_measure}
-                  onChange={(e) => set('unit_of_measure', e.target.value)}
-                  onBlur={() => {
-                    if (!form.unit_of_measure.trim()) {
-                      setCustomUom(false);
-                      set('unit_of_measure', 'pc');
-                    }
-                  }}
-                />
-              ) : (
-                <select
-                  className="input"
-                  value={selectedUomOption}
-                  onChange={(e) => handleUomSelect(e.target.value)}
-                >
-                  {UOM_PRESET.map((u) => (
-                    <option key={u} value={u}>
-                      {u}
-                    </option>
-                  ))}
-                  <option value="__other__">Other…</option>
-                </select>
-              )}
-            </div>
-          </div>
+        {/* Description */}
+        <div>
+          <label className="label">Description *</label>
+          <input
+            className="input"
+            value={form.item_description}
+            onChange={(e) => set('item_description', e.target.value)}
+            placeholder={
+              isGenetic
+                ? 'e.g. OG Kush feminised seeds'
+                : form.item_type === 'service'
+                  ? 'e.g. Lab testing — cannabinoid profile'
+                  : ''
+            }
+            maxLength={200}
+            required
+          />
+        </div>
 
-          {/* Unit Price */}
+        {/* Quantity + UoM */}
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="label">Unit Price</label>
+            <label className="label">Quantity *</label>
             <input
               type="number"
               className="input"
-              value={form.unit_price || ''}
-              onChange={(e) => set('unit_price', Number(e.target.value))}
-              min={0}
-              step={0.01}
+              value={form.quantity || ''}
+              onChange={(e) => set('quantity', Number(e.target.value))}
+              min={0.001}
+              step="any"
+              required
             />
           </div>
-
-          {/* Running total preview */}
-          {form.quantity > 0 && form.unit_price > 0 && (
-            <p className="text-right text-sm text-gray-500">
-              Line total:{' '}
-              <span className="font-semibold text-gray-900">
-                {(form.quantity * form.unit_price).toFixed(2)}
-              </span>
-            </p>
-          )}
+          <div>
+            <label className="label">Unit of Measure</label>
+            {customUom ? (
+              <input
+                className="input"
+                autoFocus
+                placeholder="e.g. vial"
+                value={form.unit_of_measure}
+                onChange={(e) => set('unit_of_measure', e.target.value)}
+                onBlur={() => {
+                  if (!form.unit_of_measure.trim()) {
+                    setCustomUom(false);
+                    set('unit_of_measure', 'pc');
+                  }
+                }}
+              />
+            ) : (
+              <select
+                className="input"
+                value={selectedUomOption}
+                onChange={(e) => handleUomSelect(e.target.value)}
+              >
+                {UOM_PRESET.map((u) => (
+                  <option key={u} value={u}>
+                    {u}
+                  </option>
+                ))}
+                <option value="__other__">Other…</option>
+              </select>
+            )}
+          </div>
         </div>
 
-        <div className="flex justify-end gap-3 border-t px-6 py-4">
-          <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={!valid}
-            onClick={() => onSave(form)}
-          >
-            {initial ? 'Save Changes' : 'Add Line'}
-          </button>
+        {/* Unit Price */}
+        <div>
+          <label className="label">Unit Price</label>
+          <input
+            type="number"
+            className="input"
+            value={form.unit_price || ''}
+            onChange={(e) => set('unit_price', Number(e.target.value))}
+            min={0}
+            step={0.01}
+          />
         </div>
+
+        {/* Running total preview */}
+        {form.quantity > 0 && form.unit_price > 0 && (
+          <p className="text-right text-sm text-gray-500">
+            Line total:{' '}
+            <span className="font-semibold text-gray-900">
+              {(form.quantity * form.unit_price).toFixed(2)}
+            </span>
+          </p>
+        )}
       </div>
-    </div>
+    </Dialog>
   );
 }

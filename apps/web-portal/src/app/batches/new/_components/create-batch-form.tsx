@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateBatch, useFacilities, useStrains } from '@/hooks';
-import { Button } from '@gacp-erp/ui-components';
+import { Button, DatePicker } from '@gacp-erp/ui-components';
 
 export function CreateBatchForm() {
   const router = useRouter();
@@ -146,24 +146,29 @@ export function CreateBatchForm() {
               <label htmlFor="start_date" className="block text-sm font-medium text-gray-700">
                 Planned Start
               </label>
-              <input
-                id="start_date"
-                type="date"
-                value={form.planned_start_date}
-                onChange={(e) => update('planned_start_date', e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              <DatePicker
+                value={form.planned_start_date ? new Date(form.planned_start_date) : undefined}
+                onChange={(date) =>
+                  update('planned_start_date', date ? (date.toISOString().split('T')[0] ?? '') : '')
+                }
+                placeholder="Select start date"
+                className="mt-1 w-full"
               />
             </div>
             <div>
               <label htmlFor="harvest_date" className="block text-sm font-medium text-gray-700">
                 Planned Harvest
               </label>
-              <input
-                id="harvest_date"
-                type="date"
-                value={form.planned_harvest_date}
-                onChange={(e) => update('planned_harvest_date', e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              <DatePicker
+                value={form.planned_harvest_date ? new Date(form.planned_harvest_date) : undefined}
+                onChange={(date) =>
+                  update(
+                    'planned_harvest_date',
+                    date ? (date.toISOString().split('T')[0] ?? '') : '',
+                  )
+                }
+                placeholder="Select harvest date"
+                className="mt-1 w-full"
               />
             </div>
           </div>

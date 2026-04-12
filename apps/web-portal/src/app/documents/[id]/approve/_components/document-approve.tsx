@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useDocument, useApproveDocument } from '@/hooks';
-import { StatusBadge, SignatureDialog } from '@gacp-erp/ui-components';
+import { StatusBadge, SignatureDialog, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const STATUS_VARIANT: Record<string, StatusVariant> = {
@@ -115,12 +115,9 @@ export function DocumentApprove({ id }: Props) {
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <button
-          onClick={() => setSignatureOpen(true)}
-          className="rounded-md bg-green-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-green-700"
-        >
+        <Button variant="default" size="lg" onClick={() => setSignatureOpen(true)}>
           Sign & Approve
-        </button>
+        </Button>
         <Link
           href={`/documents/${id}`}
           className="rounded-md border px-6 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"

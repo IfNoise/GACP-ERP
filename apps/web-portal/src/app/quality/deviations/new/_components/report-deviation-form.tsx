@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useReportDeviation } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 const DEV_CLASSIFICATIONS = ['MINOR', 'MAJOR', 'CRITICAL'] as const;
 const DEV_CATEGORIES = [
@@ -130,10 +131,10 @@ export function ReportDeviationForm() {
             </div>
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="btn btn-primary" disabled={report.isPending}>
+            <Button type="submit" variant="default" disabled={report.isPending}>
               {report.isPending ? 'Reporting...' : 'Report Deviation'}
-            </button>
-            <Link href="/quality/deviations" className="btn btn-secondary">
+            </Button>
+            <Link href="/quality/deviations" className={buttonVariants({ variant: 'outline' })}>
               Cancel
             </Link>
           </div>

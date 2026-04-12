@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateSupplier } from '@/hooks';
-import { Button } from '@gacp-erp/ui-components';
+import { Button, DatePicker } from '@gacp-erp/ui-components';
 
 export function CreateSupplierForm() {
   const router = useRouter();
@@ -102,12 +102,13 @@ export function CreateSupplierForm() {
             >
               Qualification Expiry
             </label>
-            <input
-              id="qualification_expiry"
-              type="date"
-              value={form.qualification_expiry}
-              onChange={(e) => update('qualification_expiry', e.target.value)}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+            <DatePicker
+              value={form.qualification_expiry ? new Date(form.qualification_expiry) : undefined}
+              onChange={(date) =>
+                update('qualification_expiry', date ? (date.toISOString().split('T')[0] ?? '') : '')
+              }
+              placeholder="Select expiry date"
+              className="mt-1 w-full"
             />
           </div>
 

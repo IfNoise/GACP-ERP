@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useChangeControls } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -97,7 +97,7 @@ export function ChangeControlList() {
           <h1 className="text-2xl font-bold text-gray-900">Change Controls</h1>
           <p className="mt-1 text-sm text-gray-500">Manage change control records (CCN)</p>
         </div>
-        <Link href="/quality/change-controls/new" className="btn btn-primary">
+        <Link href="/quality/change-controls/new" className={buttonVariants()}>
           New Change Control
         </Link>
       </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateChangeControl } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 const CHANGE_TYPES = ['MINOR', 'MAJOR', 'EMERGENCY'] as const;
 
@@ -77,10 +78,13 @@ export function CreateChangeControlForm() {
             />
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="btn btn-primary" disabled={create.isPending}>
+            <Button type="submit" variant="default" disabled={create.isPending}>
               {create.isPending ? 'Creating...' : 'Create Change Control'}
-            </button>
-            <Link href="/quality/change-controls" className="btn btn-secondary">
+            </Button>
+            <Link
+              href="/quality/change-controls"
+              className={buttonVariants({ variant: 'outline' })}
+            >
               Cancel
             </Link>
           </div>

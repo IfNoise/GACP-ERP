@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useBuilding, useBuildingRooms, useCreateRoom } from '@/hooks';
-import { DataTable, StatusBadge, Button } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button, Badge } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@gacp-erp/ui-components';
 
 interface Room {
@@ -104,9 +104,7 @@ export function BuildingDetail({
           <div>
             <dt className="font-medium text-gray-500">Type</dt>
             <dd className="text-gray-900">
-              <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
-                {(b['building_type'] as string).replace('_', ' ')}
-              </span>
+              <Badge variant="info">{(b['building_type'] as string).replace('_', ' ')}</Badge>
             </dd>
           </div>
           <div>

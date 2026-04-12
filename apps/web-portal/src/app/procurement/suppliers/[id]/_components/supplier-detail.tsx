@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSupplier, useQualifySupplier } from '@/hooks';
-import { StatusBadge, AuditTrailPanel, SignatureDialog } from '@gacp-erp/ui-components';
+import { StatusBadge, AuditTrailPanel, SignatureDialog, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
 import { useState } from 'react';
 
@@ -71,9 +71,7 @@ export function SupplierDetail({ id }: { id: string }) {
       {/* Actions */}
       {qualStatus !== 'QUALIFIED' && (
         <div className="flex gap-3">
-          <button className="btn btn-primary" onClick={() => setShowSign(true)}>
-            Qualify Supplier
-          </button>
+          <Button onClick={() => setShowSign(true)}>Qualify Supplier</Button>
         </div>
       )}
 

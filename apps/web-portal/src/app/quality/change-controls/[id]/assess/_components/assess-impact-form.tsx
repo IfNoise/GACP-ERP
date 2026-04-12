@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useChangeControl, useAssessImpact } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 const RISK_LEVELS = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] as const;
 
@@ -63,13 +64,14 @@ export function AssessImpactForm({ id }: { id: string }) {
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Impact #{idx + 1}</h3>
                 {impacts.length > 1 && (
-                  <button
+                  <Button
                     type="button"
-                    className="text-sm text-red-600 hover:underline"
+                    variant="destructive"
+                    size="sm"
                     onClick={() => removeRow(idx)}
                   >
                     Remove
-                  </button>
+                  </Button>
                 )}
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -111,15 +113,18 @@ export function AssessImpactForm({ id }: { id: string }) {
           </div>
         ))}
 
-        <button type="button" className="btn btn-secondary" onClick={addRow}>
+        <Button type="button" variant="outline" onClick={addRow}>
           + Add Impact
-        </button>
+        </Button>
 
         <div className="flex gap-3">
-          <button type="submit" className="btn btn-primary" disabled={assess.isPending}>
+          <Button type="submit" variant="default" disabled={assess.isPending}>
             {assess.isPending ? 'Submitting...' : 'Submit Assessment'}
-          </button>
-          <Link href={`/quality/change-controls/${id}`} className="btn btn-secondary">
+          </Button>
+          <Link
+            href={`/quality/change-controls/${id}`}
+            className={buttonVariants({ variant: 'outline' })}
+          >
             Cancel
           </Link>
         </div>

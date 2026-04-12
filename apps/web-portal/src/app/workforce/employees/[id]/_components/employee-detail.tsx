@@ -8,8 +8,8 @@ import {
   useTimeEntries,
   useCertifications,
 } from '@/hooks';
-import { StatusBadge, AuditTrailPanel, KPICard } from '@gacp-erp/ui-components';
-import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
+import { StatusBadge, AuditTrailPanel, KPICard, DataTable } from '@gacp-erp/ui-components';
+import type { StatusVariant, AuditEvent, ColumnDef } from '@gacp-erp/ui-components';
 
 const PRIORITY_VARIANT: Record<string, StatusVariant> = {
   LOW: 'draft',
@@ -24,6 +24,67 @@ const TASK_STATUS_VARIANT: Record<string, StatusVariant> = {
   COMPLETED: 'approved',
   OVERDUE: 'overdue',
 };
+
+const TASK_COLUMNS: ColumnDef<Record<string, unknown>>[] = [
+  {
+    accessorKey: 'title',
+    header: 'Task',
+    cell: ({ row }) => String(row.original['title']),
+  },
+  {
+    accessorKey: 'priority',
+    header: 'Priority',
+    cell: ({ row }) => (
+      <StatusBadge
+        status={PRIORITY_VARIANT[String(row.original['priority'])] ?? 'draft'}
+        label={String(row.original['priority'])}
+      />
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <StatusBadge
+        status={TASK_STATUS_VARIANT[String(row.original['status'])] ?? 'draft'}
+        label={String(row.original['status'])}
+      />
+    ),
+  },
+];
+
+const CERT_COLUMNS: ColumnDef<Record<string, unknown>>[] = [
+  {
+    accessorKey: 'certificate_number',
+    header: 'Certificate #',
+    cell: ({ row }) => (
+      <span className="font-mono">{String(row.original['certificate_number'])}</span>
+    ),
+  },
+  {
+    accessorKey: 'course_id',
+    header: 'Course',
+    cell: ({ row }) => `${String(row.original['course_id']).slice(0, 8)}…`,
+  },
+  {
+    accessorKey: 'valid_until',
+    header: 'Valid Until',
+    cell: ({ row }) => new Date(String(row.original['valid_until'])).toLocaleDateString(),
+  },
+  {
+    id: 'cert_status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const validUntil = new Date(String(row.original['valid_until']));
+      const now = new Date();
+      const daysLeft = Math.ceil((validUntil.getTime() - now.getTime()) / 86400000);
+      const certStatus: StatusVariant =
+        daysLeft < 0 ? 'rejected' : daysLeft < 30 ? 'overdue' : 'approved';
+      const certLabel = daysLeft < 0 ? 'Expired' : daysLeft < 30 ? 'Expiring' : 'Valid';
+      return <StatusBadge status={certStatus} label={certLabel} />;
+    },
+  },
+];
 
 export function EmployeeDetail({ id }: { id: string }) {
   const { data, isLoading } = useEmployee(id);
@@ -162,38 +223,13 @@ export function EmployeeDetail({ id }: { id: string }) {
           <h2 className="text-lg font-semibold">Recent Tasks ({tasks.length})</h2>
         </div>
         <div className="card-body">
-          {tasks.length === 0 ? (
-            <p className="text-sm text-gray-500">No tasks assigned</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-gray-500">
-                  <th className="pb-2">Task</th>
-                  <th className="pb-2">Priority</th>
-                  <th className="pb-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.map((t) => (
-                  <tr key={String(t['id'])} className="border-b">
-                    <td className="py-2">{String(t['title'])}</td>
-                    <td className="py-2">
-                      <StatusBadge
-                        status={PRIORITY_VARIANT[String(t['priority'])] ?? 'draft'}
-                        label={String(t['priority'])}
-                      />
-                    </td>
-                    <td className="py-2">
-                      <StatusBadge
-                        status={TASK_STATUS_VARIANT[String(t['status'])] ?? 'draft'}
-                        label={String(t['status'])}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <DataTable<Record<string, unknown>>
+            data={tasks}
+            columns={TASK_COLUMNS}
+            pageSize={10}
+            searchPlaceholder="Search tasks..."
+            emptyMessage="No tasks assigned"
+          />
         </div>
       </div>
 
@@ -203,40 +239,13 @@ export function EmployeeDetail({ id }: { id: string }) {
           <h2 className="text-lg font-semibold">Certifications ({certs.length})</h2>
         </div>
         <div className="card-body">
-          {certs.length === 0 ? (
-            <p className="text-sm text-gray-500">No certifications found</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-gray-500">
-                  <th className="pb-2">Certificate #</th>
-                  <th className="pb-2">Course</th>
-                  <th className="pb-2">Valid Until</th>
-                  <th className="pb-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {certs.map((c) => {
-                  const validUntil = new Date(String(c['valid_until']));
-                  const now = new Date();
-                  const daysLeft = Math.ceil((validUntil.getTime() - now.getTime()) / 86400000);
-                  const certStatus: StatusVariant =
-                    daysLeft < 0 ? 'rejected' : daysLeft < 30 ? 'overdue' : 'approved';
-                  const certLabel = daysLeft < 0 ? 'Expired' : daysLeft < 30 ? 'Expiring' : 'Valid';
-                  return (
-                    <tr key={String(c['id'])} className="border-b">
-                      <td className="py-2 font-mono">{String(c['certificate_number'])}</td>
-                      <td className="py-2">{String(c['course_id']).slice(0, 8)}…</td>
-                      <td className="py-2">{validUntil.toLocaleDateString()}</td>
-                      <td className="py-2">
-                        <StatusBadge status={certStatus} label={certLabel} />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
+          <DataTable<Record<string, unknown>>
+            data={certs}
+            columns={CERT_COLUMNS}
+            pageSize={20}
+            searchPlaceholder="Search certifications..."
+            emptyMessage="No certifications found"
+          />
         </div>
       </div>
 

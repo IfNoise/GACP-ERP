@@ -7,7 +7,7 @@ import {
   useAssignBatchToZone,
   useReleaseBatchFromZone,
 } from '@/hooks';
-import { StatusBadge, AuditTrailPanel, KPICard } from '@gacp-erp/ui-components';
+import { StatusBadge, AuditTrailPanel, KPICard, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
 import { useState } from 'react';
 
@@ -145,9 +145,9 @@ export function ZoneDetail({ id }: { id: string }) {
       <div className="card">
         <div className="card-header flex items-center justify-between">
           <h2 className="text-lg font-semibold">Active Batch Assignments ({assignments.length})</h2>
-          <button className="btn btn-primary" onClick={() => setShowAssignForm((v) => !v)}>
+          <Button onClick={() => setShowAssignForm((v) => !v)}>
             {showAssignForm ? 'Cancel' : 'Assign Batch'}
-          </button>
+          </Button>
         </div>
         <div className="card-body">
           {showAssignForm && (
@@ -165,9 +165,9 @@ export function ZoneDetail({ id }: { id: string }) {
                 value={assignNotes}
                 onChange={(e) => setAssignNotes(e.target.value)}
               />
-              <button type="submit" className="btn btn-primary" disabled={assignMutation.isPending}>
+              <Button type="submit" disabled={assignMutation.isPending}>
                 {assignMutation.isPending ? 'Assigning...' : 'Assign'}
-              </button>
+              </Button>
             </form>
           )}
 
@@ -194,13 +194,14 @@ export function ZoneDetail({ id }: { id: string }) {
                     <td className="py-2">{String(a['assigned_by'] ?? '').slice(0, 8)}</td>
                     <td className="py-2 text-gray-500">{String(a['notes'] ?? '—')}</td>
                     <td className="py-2">
-                      <button
-                        className="text-red-500 hover:text-red-700"
+                      <Button
+                        variant="destructive"
+                        size="sm"
                         onClick={() => handleRelease(String(a['id']))}
                         disabled={releaseMutation.isPending}
                       >
                         Release
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 ))}

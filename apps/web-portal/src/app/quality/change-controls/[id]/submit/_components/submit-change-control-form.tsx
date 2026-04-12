@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useChangeControl, useSubmitChangeControl } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 export function SubmitChangeControlForm({ id }: { id: string }) {
   const router = useRouter();
@@ -51,10 +52,13 @@ export function SubmitChangeControlForm({ id }: { id: string }) {
             />
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="btn btn-primary" disabled={submit.isPending}>
+            <Button type="submit" variant="default" disabled={submit.isPending}>
               {submit.isPending ? 'Submitting...' : 'Submit for Review'}
-            </button>
-            <Link href={`/quality/change-controls/${id}`} className="btn btn-secondary">
+            </Button>
+            <Link
+              href={`/quality/change-controls/${id}`}
+              className={buttonVariants({ variant: 'outline' })}
+            >
               Cancel
             </Link>
           </div>

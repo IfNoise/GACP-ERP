@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import type { AlertThreshold } from '@gacp-erp/shared-schemas';
+import { Badge } from '@gacp-erp/ui-components';
 import { ZoneReadingsPanel } from '../_components/zone-readings-panel';
 import { ZoneTimeSeriesChart } from '../_components/zone-time-series-chart';
 import { ThresholdManager } from '../_components/threshold-manager';
@@ -88,13 +89,9 @@ export default async function ZoneDetailPage({ params }: ZoneDetailPageProps) {
                 </span>
                 <span className="text-sm text-gray-500">{zone.zone_code}</span>
                 {zone.is_active ? (
-                  <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
-                    Active
-                  </span>
+                  <Badge variant="success">Active</Badge>
                 ) : (
-                  <span className="rounded-full bg-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-                    Inactive
-                  </span>
+                  <Badge variant="default">Inactive</Badge>
                 )}
               </div>
               {zone.description && <p className="mt-2 text-sm text-gray-600">{zone.description}</p>}

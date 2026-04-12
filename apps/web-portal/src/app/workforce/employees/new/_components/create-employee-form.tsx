@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useCreateEmployee } from '@/hooks';
-import { Button } from '@gacp-erp/ui-components';
+import { Button, DatePicker } from '@gacp-erp/ui-components';
 import { SystemRoleEnum, CRITICAL_ROLES } from '@gacp-erp/shared-schemas';
 
 const ROLE_LABELS: Record<string, string> = {
@@ -138,13 +138,14 @@ export function CreateEmployeeForm() {
                   <code className="rounded bg-gray-100 px-2 py-1 text-sm font-mono">
                     {credentials.username}
                   </code>
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleCopy(credentials.username, 'username')}
-                    className="text-xs text-green-700 hover:underline"
                   >
                     {copied === 'username' ? 'Copied!' : 'Copy'}
-                  </button>
+                  </Button>
                 </dd>
               </div>
               <div>
@@ -153,13 +154,14 @@ export function CreateEmployeeForm() {
                   <code className="rounded bg-gray-100 px-2 py-1 text-sm font-mono">
                     {credentials.temporary_password}
                   </code>
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleCopy(credentials.temporary_password, 'password')}
-                    className="text-xs text-green-700 hover:underline"
                   >
                     {copied === 'password' ? 'Copied!' : 'Copy'}
-                  </button>
+                  </Button>
                 </dd>
               </div>
             </dl>
@@ -328,13 +330,13 @@ export function CreateEmployeeForm() {
             <label htmlFor="hire_date" className="block text-sm font-medium text-gray-700">
               Hire Date *
             </label>
-            <input
-              id="hire_date"
-              type="date"
-              value={form.hire_date}
-              onChange={(e) => update('hire_date', e.target.value)}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
-              required
+            <DatePicker
+              value={form.hire_date ? new Date(form.hire_date) : undefined}
+              onChange={(date) =>
+                update('hire_date', date ? (date.toISOString().split('T')[0] ?? '') : '')
+              }
+              placeholder="Select hire date"
+              className="mt-1 w-full"
             />
           </div>
 

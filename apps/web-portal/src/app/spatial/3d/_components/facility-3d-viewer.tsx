@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useZones, useZoneReadings, useIotAlerts } from '@/hooks';
 import { FacilityViewer, ZoneHighlighter, SensorOverlay } from '@gacp-erp/ui-components/xeokit';
-import { StatusBadge, KPICard } from '@gacp-erp/ui-components';
+import { StatusBadge, KPICard, Button } from '@gacp-erp/ui-components';
 import type {
   FacilityViewerHandle,
   ZoneEntity,
@@ -133,12 +133,9 @@ export function Facility3DViewer() {
           <p className="text-xs text-gray-500">Interactive visualization of all zones</p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            className="rounded border px-3 py-1 text-xs hover:bg-gray-50"
-            onClick={() => viewerRef.current?.resetView()}
-          >
+          <Button variant="outline" size="sm" onClick={() => viewerRef.current?.resetView()}>
             Reset View
-          </button>
+          </Button>
           <label className="flex items-center gap-1 text-xs text-gray-600">
             <input
               type="checkbox"
@@ -148,12 +145,9 @@ export function Facility3DViewer() {
             Labels
           </label>
           {selectedZoneId && (
-            <button
-              className="rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700"
-              onClick={handleNavigateToZone}
-            >
+            <Button size="sm" onClick={handleNavigateToZone}>
               Go to Zone Detail →
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -199,12 +193,9 @@ export function Facility3DViewer() {
           <div className="absolute right-3 top-3 z-20 w-64 rounded-lg bg-white/95 p-4 shadow-lg backdrop-blur">
             <div className="mb-2 flex items-center justify-between">
               <h3 className="text-sm font-semibold">{selectedZone.zone_name}</h3>
-              <button
-                className="text-gray-400 hover:text-gray-600"
-                onClick={() => setSelectedZoneId(undefined)}
-              >
+              <Button variant="ghost" onClick={() => setSelectedZoneId(undefined)}>
                 ✕
-              </button>
+              </Button>
             </div>
             <p className="text-xs text-gray-500">{selectedZone.zone_code}</p>
             <div className="mt-2">
@@ -232,12 +223,9 @@ export function Facility3DViewer() {
                 ⚠ {alertsByZone[selectedZone.id]}
               </p>
             )}
-            <button
-              className="mt-4 w-full rounded bg-green-600 px-3 py-1.5 text-xs text-white hover:bg-green-700"
-              onClick={handleNavigateToZone}
-            >
+            <Button className="mt-4 w-full" size="sm" onClick={handleNavigateToZone}>
               View Zone Detail
-            </button>
+            </Button>
           </div>
         )}
       </div>

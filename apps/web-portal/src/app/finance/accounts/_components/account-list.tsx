@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAccounts } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -84,7 +84,7 @@ export function AccountList() {
           <h1 className="text-2xl font-bold text-gray-900">Chart of Accounts</h1>
           <p className="mt-1 text-sm text-gray-500">Manage financial accounts (IAS 41 compliant)</p>
         </div>
-        <Link href="/finance/accounts/new" className="btn btn-primary">
+        <Link href="/finance/accounts/new" className={buttonVariants()}>
           New Account
         </Link>
       </div>

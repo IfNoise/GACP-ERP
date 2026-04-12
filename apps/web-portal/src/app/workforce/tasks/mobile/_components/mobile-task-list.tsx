@@ -1,7 +1,7 @@
 'use client';
 
 import { useTasks, useCompleteTask } from '@/hooks';
-import { StatusBadge } from '@gacp-erp/ui-components';
+import { StatusBadge, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
 const PRIORITY_VARIANT: Record<string, StatusVariant> = {
@@ -65,13 +65,13 @@ export function MobileTaskList() {
                 </div>
               </div>
               {String(task['status']) === 'IN_PROGRESS' && (
-                <button
-                  className="mt-3 w-full rounded-lg bg-green-600 py-3 text-center font-medium text-white active:bg-green-700"
+                <Button
+                  className="mt-3 w-full"
                   onClick={() => handleComplete(String(task['id']))}
                   disabled={completeMutation.isPending}
                 >
                   ✓ Complete Task
-                </button>
+                </Button>
               )}
             </div>
           ))}

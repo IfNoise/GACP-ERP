@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateCAPA } from '@/hooks';
+import { Button, DatePicker, buttonVariants } from '@gacp-erp/ui-components';
 
 const CAPA_TYPES = ['CORRECTIVE', 'PREVENTIVE'] as const;
 const CAPA_SOURCES = ['DEVIATION', 'AUDIT', 'COMPLAINT', 'TREND', 'INSPECTION'] as const;
@@ -101,18 +102,23 @@ export function CreateCAPAForm() {
           </div>
           <div>
             <label className="label">Due Date (optional)</label>
-            <input
-              type="date"
-              className="input w-full"
-              value={form.due_date}
-              onChange={(e) => setForm((f) => ({ ...f, due_date: e.target.value }))}
+            <DatePicker
+              value={form.due_date ? new Date(form.due_date) : undefined}
+              onChange={(date) =>
+                setForm((f) => ({
+                  ...f,
+                  due_date: date ? (date.toISOString().split('T')[0] ?? '') : '',
+                }))
+              }
+              placeholder="Select due date"
+              className="w-full"
             />
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="btn btn-primary" disabled={create.isPending}>
+            <Button type="submit" variant="default" disabled={create.isPending}>
               {create.isPending ? 'Creating...' : 'Create CAPA'}
-            </button>
-            <Link href="/quality/capas" className="btn btn-secondary">
+            </Button>
+            <Link href="/quality/capas" className={buttonVariants({ variant: 'outline' })}>
               Cancel
             </Link>
           </div>

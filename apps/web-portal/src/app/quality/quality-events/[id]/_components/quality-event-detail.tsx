@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { useQualityEvent } from '@/hooks';
-import { StatusBadge, WorkflowTimeline, AuditTrailPanel } from '@gacp-erp/ui-components';
+import {
+  StatusBadge,
+  Badge,
+  WorkflowTimeline,
+  AuditTrailPanel,
+  buttonVariants,
+} from '@gacp-erp/ui-components';
 import type { StatusVariant, WorkflowStep, AuditEvent } from '@gacp-erp/ui-components';
 
 const QE_STAGES = ['OPEN', 'INVESTIGATING', 'CAPA_INITIATED', 'CLOSED'] as const;
@@ -144,9 +150,7 @@ export function QualityEventDetail({ id }: { id: string }) {
                 <ul className="divide-y">
                   {linkedRecords.map((lr, i) => (
                     <li key={i} className="flex items-center justify-between py-2 text-sm">
-                      <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium">
-                        {lr.record_type.replace(/_/g, ' ')}
-                      </span>
+                      <Badge variant="default">{lr.record_type.replace(/_/g, ' ')}</Badge>
                       <span className="font-mono text-gray-600">{lr.record_id}</span>
                     </li>
                   ))}
@@ -162,7 +166,7 @@ export function QualityEventDetail({ id }: { id: string }) {
       {status !== 'CLOSED' && (
         <div className="flex gap-3">
           {status === 'OPEN' && (
-            <Link href={`/quality/quality-events/${id}/investigate`} className="btn btn-primary">
+            <Link href={`/quality/quality-events/${id}/investigate`} className={buttonVariants()}>
               Start Investigation
             </Link>
           )}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAccounts, useCreateJournalEntry } from '@/hooks';
+import { Button, buttonVariants } from '@gacp-erp/ui-components';
 
 interface JournalLine {
   account_id: string;
@@ -123,9 +124,9 @@ export function CreateJournalEntryForm() {
         <div className="card">
           <div className="card-header flex items-center justify-between">
             <h2 className="text-lg font-semibold">Journal Lines</h2>
-            <button type="button" className="btn btn-secondary" onClick={addLine}>
+            <Button type="button" variant="secondary" onClick={addLine}>
               + Add Line
-            </button>
+            </Button>
           </div>
           <div className="card-body overflow-x-auto">
             <table className="w-full text-sm">
@@ -250,14 +251,10 @@ export function CreateJournalEntryForm() {
         </div>
 
         <div className="flex gap-3">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={!isBalanced || createMutation.isPending}
-          >
+          <Button type="submit" disabled={!isBalanced || createMutation.isPending}>
             {createMutation.isPending ? 'Creating...' : 'Create Journal Entry'}
-          </button>
-          <Link href="/finance/journal-entries" className="btn btn-secondary">
+          </Button>
+          <Link href="/finance/journal-entries" className={buttonVariants({ variant: 'outline' })}>
             Cancel
           </Link>
         </div>

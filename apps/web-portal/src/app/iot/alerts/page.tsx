@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
+import { Button, Badge } from '@gacp-erp/ui-components';
 
 interface AlertHistoryItem {
   id: string;
@@ -55,9 +56,9 @@ async function fetchAlerts(
   }
 }
 
-const LEVEL_STYLE: Record<string, string> = {
-  WARNING: 'bg-yellow-100 text-yellow-800',
-  CRITICAL: 'bg-red-100 text-red-800',
+const LEVEL_VARIANT: Record<string, 'warning' | 'destructive'> = {
+  WARNING: 'warning',
+  CRITICAL: 'destructive',
 };
 
 export default async function AlertHistoryPage({ searchParams }: AlertsPageProps) {
@@ -127,12 +128,7 @@ export default async function AlertHistoryPage({ searchParams }: AlertsPageProps
             </select>
           </div>
           {params.zone_id && <input type="hidden" name="zone_id" value={params.zone_id} />}
-          <button
-            type="submit"
-            className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Apply
-          </button>
+          <Button type="submit">Apply</Button>
           <Link
             href="/iot/alerts"
             className="rounded-md px-4 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100"
@@ -178,17 +174,15 @@ export default async function AlertHistoryPage({ searchParams }: AlertsPageProps
                     </td>
                     <td className="px-4 py-3 font-mono">{alert.triggered_value}</td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${LEVEL_STYLE[alert.alert_level]}`}
-                      >
+                      <Badge variant={LEVEL_VARIANT[alert.alert_level] ?? 'default'}>
                         {alert.alert_level}
-                      </span>
+                      </Badge>
                     </td>
                     <td className="px-4 py-3">
                       {alert.acknowledged ? (
-                        <span className="text-green-600">✓ {alert.acknowledged_by}</span>
+                        <Badge variant="success">✓ {alert.acknowledged_by}</Badge>
                       ) : (
-                        <span className="text-gray-400">Pending</span>
+                        <Badge variant="default">Pending</Badge>
                       )}
                     </td>
                   </tr>

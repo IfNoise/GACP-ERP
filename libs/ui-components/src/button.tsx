@@ -19,6 +19,21 @@ const sizeClasses: Record<Size, string> = {
   icon: 'h-9 w-9 p-0',
 };
 
+export function buttonVariants(options?: {
+  variant?: Variant;
+  size?: Size;
+  className?: string;
+}): string {
+  return cn(
+    'inline-flex items-center justify-center rounded-lg font-semibold transition',
+    'focus:outline-none focus:ring-2 focus:ring-offset-2',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    variantClasses[options?.variant ?? 'default'],
+    sizeClasses[options?.size ?? 'md'],
+    options?.className,
+  );
+}
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;

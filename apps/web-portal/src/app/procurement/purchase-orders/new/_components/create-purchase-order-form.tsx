@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSuppliers, useCreatePurchaseOrder } from '@/hooks';
+import { Button, Badge, buttonVariants } from '@gacp-erp/ui-components';
 import { POLineDialog, POLineData, EMPTY_LINE, ITEM_TYPE_BADGE } from './po-line-dialog';
 
 export function CreatePurchaseOrderForm() {
@@ -145,9 +146,9 @@ export function CreatePurchaseOrderForm() {
         <div className="card">
           <div className="card-header flex items-center justify-between">
             <h2 className="text-lg font-semibold">Order Lines</h2>
-            <button type="button" className="btn btn-secondary" onClick={openAddDialog}>
+            <Button type="button" variant="outline" onClick={openAddDialog}>
               + Add Line
-            </button>
+            </Button>
           </div>
           <div className="card-body overflow-x-auto">
             <table className="w-full text-sm">
@@ -170,11 +171,7 @@ export function CreatePurchaseOrderForm() {
                     <tr key={idx} className="border-b">
                       <td className="py-2 text-gray-400">{idx + 1}</td>
                       <td className="py-2">
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${badge.cls}`}
-                        >
-                          {badge.label}
-                        </span>
+                        <Badge variant={badge.variant}>{badge.label}</Badge>
                       </td>
                       <td className="py-2">
                         <span className="font-medium">{line.item_description}</span>
@@ -190,21 +187,23 @@ export function CreatePurchaseOrderForm() {
                       </td>
                       <td className="py-2">
                         <div className="flex items-center gap-2">
-                          <button
+                          <Button
                             type="button"
-                            className="text-blue-500 hover:text-blue-700"
+                            variant="ghost"
+                            size="sm"
                             onClick={() => openEditDialog(idx)}
                           >
                             Edit
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             type="button"
-                            className="text-red-400 hover:text-red-600 disabled:opacity-30"
+                            variant="destructive"
+                            size="icon"
                             onClick={() => removeLine(idx)}
                             disabled={lines.length <= 1}
                           >
                             ✕
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -227,10 +226,13 @@ export function CreatePurchaseOrderForm() {
         </div>
 
         <div className="flex gap-3">
-          <button type="submit" className="btn btn-primary" disabled={createMutation.isPending}>
+          <Button type="submit" disabled={createMutation.isPending}>
             {createMutation.isPending ? 'Creating...' : 'Create Purchase Order'}
-          </button>
-          <Link href="/procurement/purchase-orders" className="btn btn-secondary">
+          </Button>
+          <Link
+            href="/procurement/purchase-orders"
+            className={buttonVariants({ variant: 'outline' })}
+          >
             Cancel
           </Link>
         </div>

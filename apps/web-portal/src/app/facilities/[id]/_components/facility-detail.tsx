@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useFacility, useBuildings, useCreateBuilding } from '@/hooks';
-import { DataTable, StatusBadge, Button } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button, Badge } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@gacp-erp/ui-components';
 
 const BUILDING_TYPES = ['indoor', 'greenhouse', 'open_ground'] as const;
@@ -36,9 +36,7 @@ function getBuildingColumns(facilityId: string): ColumnDef<Building, unknown>[] 
       accessorKey: 'building_type',
       header: 'Type',
       cell: ({ row }) => (
-        <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
-          {row.original.building_type.replace('_', ' ')}
-        </span>
+        <Badge variant="info">{row.original.building_type.replace('_', ' ')}</Badge>
       ),
     },
     {

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRoom, useRoomZones, useCreateCultivationZone } from '@/hooks';
-import { DataTable, StatusBadge, Button } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button, Badge } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@gacp-erp/ui-components';
 
 const ZONE_TYPES = [
@@ -37,11 +37,7 @@ const zoneColumns: ColumnDef<Zone, unknown>[] = [
   {
     accessorKey: 'zone_type',
     header: 'Type',
-    cell: ({ row }) => (
-      <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-        {row.original.zone_type}
-      </span>
-    ),
+    cell: ({ row }) => <Badge variant="success">{row.original.zone_type}</Badge>,
   },
   { accessorKey: 'max_plants', header: 'Max Plants' },
   {

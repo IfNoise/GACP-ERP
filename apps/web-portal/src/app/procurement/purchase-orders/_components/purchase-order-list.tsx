@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePurchaseOrders } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -95,8 +95,8 @@ export function PurchaseOrderList() {
           <h1 className="text-2xl font-bold text-gray-900">Purchase Orders</h1>
           <p className="mt-1 text-sm text-gray-500">Manage procurement purchase orders</p>
         </div>
-        <Link href="/procurement/purchase-orders/new" className="btn btn-primary">
-          New Purchase Order
+        <Link href="/procurement/purchase-orders/new">
+          <Button>New Purchase Order</Button>
         </Link>
       </div>
 

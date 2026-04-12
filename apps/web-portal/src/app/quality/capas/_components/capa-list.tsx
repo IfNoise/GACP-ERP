@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useCAPAs } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, buttonVariants } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -105,7 +105,7 @@ export function CAPAList() {
           <h1 className="text-2xl font-bold text-gray-900">CAPAs</h1>
           <p className="mt-1 text-sm text-gray-500">Corrective and Preventive Actions</p>
         </div>
-        <Link href="/quality/capas/new" className="btn btn-primary">
+        <Link href="/quality/capas/new" className={buttonVariants()}>
           New CAPA
         </Link>
       </div>

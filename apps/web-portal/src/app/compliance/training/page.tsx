@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { TrainingExecutionsTable, CertificationsTable } from './_components/training-tables';
 
 interface TrainingExecution {
   id: string;
@@ -52,14 +53,6 @@ async function fetchCertifications(): Promise<PaginatedResult<Certification> | n
   }
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  COMPLETED: 'bg-green-100 text-green-700',
-  FAILED: 'bg-red-100 text-red-700',
-  SCHEDULED: 'bg-blue-100 text-blue-700',
-  IN_PROGRESS: 'bg-yellow-100 text-yellow-700',
-  EXPIRED: 'bg-gray-100 text-gray-600',
-};
-
 export default async function TrainingCompliancePage() {
   const session = await auth();
   if (!session) redirect('/login');
@@ -96,44 +89,9 @@ export default async function TrainingCompliancePage() {
               )}
             </h2>
           </div>
-          {!executions || executions.data.length === 0 ? (
-            <div className="px-6 py-10 text-center text-gray-400">No training records found</div>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Trainee ID</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Course ID</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Status</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Score</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Completed</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {executions.data.map((e) => (
-                  <tr key={e.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-3 font-mono text-xs text-gray-600">
-                      {e.trainee_id.slice(0, 8)}…
-                    </td>
-                    <td className="px-6 py-3 font-mono text-xs text-gray-600">
-                      {e.course_id.slice(0, 8)}…
-                    </td>
-                    <td className="px-6 py-3">
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[e.status] ?? 'bg-gray-100 text-gray-600'}`}
-                      >
-                        {e.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-3">{e.score !== null ? `${e.score}%` : '—'}</td>
-                    <td className="px-6 py-3 text-gray-500">
-                      {e.completed_at ? new Date(e.completed_at).toLocaleDateString() : '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <div className="p-4">
+            <TrainingExecutionsTable data={executions?.data ?? []} />
+          </div>
         </div>
 
         {/* Certifications */}
@@ -148,47 +106,9 @@ export default async function TrainingCompliancePage() {
               )}
             </h2>
           </div>
-          {!certifications || certifications.data.length === 0 ? (
-            <div className="px-6 py-10 text-center text-gray-400">No certifications found</div>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Certificate #</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Employee ID</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Issued</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Valid Until</th>
-                  <th className="px-6 py-3 text-left font-medium text-gray-500">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {certifications.data.map((cert) => {
-                  const expired = new Date(cert.valid_until) < new Date();
-                  return (
-                    <tr key={cert.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-3 font-mono text-xs">{cert.certificate_number}</td>
-                      <td className="px-6 py-3 font-mono text-xs text-gray-600">
-                        {cert.employee_id.slice(0, 8)}…
-                      </td>
-                      <td className="px-6 py-3 text-gray-500">
-                        {new Date(cert.issued_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-3 text-gray-500">
-                        {new Date(cert.valid_until).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-3">
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${expired ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}
-                        >
-                          {expired ? 'EXPIRED' : 'VALID'}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
+          <div className="p-4">
+            <CertificationsTable data={certifications?.data ?? []} />
+          </div>
         </div>
       </div>
     </main>

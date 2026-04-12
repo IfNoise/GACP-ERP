@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTimeEntries, useCreateTimeEntry, useClockOut } from '@/hooks';
-import { DataTable, StatusBadge } from '@gacp-erp/ui-components';
+import { DataTable, StatusBadge, Button, DatePicker } from '@gacp-erp/ui-components';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 
@@ -57,12 +57,13 @@ export function TimeEntryList() {
         return out ? (
           new Date(String(out)).toLocaleString()
         ) : (
-          <button
-            className="text-sm text-green-600 hover:text-green-800"
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => handleClockOut(String(row.original['id']))}
           >
             Clock Out
-          </button>
+          </Button>
         );
       },
     },
@@ -104,32 +105,26 @@ export function TimeEntryList() {
           <h1 className="text-2xl font-bold text-gray-900">Time Entries</h1>
           <p className="mt-1 text-sm text-gray-500">Track clock-in/clock-out and work hours</p>
         </div>
-        <button
-          className="btn btn-primary"
-          onClick={handleClockIn}
-          disabled={clockInMutation.isPending}
-        >
+        <Button onClick={handleClockIn} disabled={clockInMutation.isPending}>
           {clockInMutation.isPending ? 'Clocking In...' : 'Clock In'}
-        </button>
+        </Button>
       </div>
 
       <div className="flex gap-3">
         <div>
           <label className="text-xs text-gray-500">From</label>
-          <input
-            type="date"
-            className="input"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
+          <DatePicker
+            value={fromDate ? new Date(fromDate) : undefined}
+            onChange={(date) => setFromDate(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+            placeholder="From date"
           />
         </div>
         <div>
           <label className="text-xs text-gray-500">To</label>
-          <input
-            type="date"
-            className="input"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
+          <DatePicker
+            value={toDate ? new Date(toDate) : undefined}
+            onChange={(date) => setToDate(date ? (date.toISOString().split('T')[0] ?? '') : '')}
+            placeholder="To date"
           />
         </div>
       </div>

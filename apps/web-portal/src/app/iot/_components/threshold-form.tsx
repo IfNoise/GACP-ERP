@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { AlertThreshold } from '@gacp-erp/shared-schemas';
+import { Button } from '@gacp-erp/ui-components';
 
 const SENSOR_TYPES = [
   'TEMPERATURE',
@@ -65,14 +66,7 @@ export function ThresholdForm({ zoneId, onCreated }: ThresholdFormProps) {
   };
 
   if (!open) {
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-      >
-        + Add Threshold
-      </button>
-    );
+    return <Button onClick={() => setOpen(true)}>+ Add Threshold</Button>;
   }
 
   return (
@@ -131,20 +125,12 @@ export function ThresholdForm({ zoneId, onCreated }: ThresholdFormProps) {
         {error && <p className="col-span-full text-sm text-red-600">{error}</p>}
 
         <div className="col-span-full flex gap-2">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+          <Button type="submit" disabled={submitting}>
             {submitting ? 'Saving…' : 'Save'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="rounded-md px-4 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100"
-          >
+          </Button>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
     </div>
