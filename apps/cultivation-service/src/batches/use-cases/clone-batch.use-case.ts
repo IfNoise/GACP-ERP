@@ -76,6 +76,8 @@ export class CloneBatchUseCase {
         .values({
           batch_number: dto.batch_number,
           parent_batch_id: mother.batch_id,
+          batch_source_type: 'internal_clone',
+          source_batch_id: mother.batch_id,
           strain_id: mother.strain_id,
           facility_id: dto.facility_id,
           status: 'ACTIVE',

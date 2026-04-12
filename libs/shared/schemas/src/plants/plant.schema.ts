@@ -13,6 +13,7 @@ import {
   UserIdSchema,
   ZoneIdSchema,
 } from '../common/branded-ids';
+import { IncomingInspectionStatusEnum } from '../quality/incoming-inspection.schema';
 
 // ─── PLANT SOURCE TYPE ──────────────────────────────────────────────────────
 /**
@@ -134,6 +135,8 @@ export const StrainSchema = SoftDeletableSchema.extend({
   certificate_url: z.string().url().optional(),
   supplier_id: SupplierIdSchema.optional(),
   is_active: z.boolean().default(true),
+  /** Latest inspection status from incoming_inspections (null = no inspection yet) */
+  current_inspection_status: IncomingInspectionStatusEnum.nullable().default(null),
 });
 export type Strain = z.infer<typeof StrainSchema>;
 
@@ -408,3 +411,36 @@ export const CreatePlantOperationSchema = z.object({
   equipment_cost: z.number().nonnegative().optional(),
 });
 export type CreatePlantOperation = z.infer<typeof CreatePlantOperationSchema>;
+
+// ─── BULK CREATE PLANTS ───────────────────────────────────────────────────────
+/**
+ * DTO for the bulk plant intake operation.
+ * Creates `count` plants in the specified batch/zone in a single transaction.
+ * Plant codes are auto-generated as `{plant_code_prefix}-{YYYY}-{NNN}`.
+ */
+export const BulkCreatePlantsSchema = z.object({
+  batch_id: BatchIdSchema,
+  strain_id: StrainIdSchema,
+  zone_id: ZoneIdSchema,
+  source_type: PlantSourceTypeEnum.default('seed'),
+  count: z.number().int().positive().max(10000),
+  /**
+   * Prefix for generated plant codes, e.g. "CLN-2026-A".
+   * Codes will be: PREFIX-001, PREFIX-002, …
+   */
+  plant_code_prefix: z
+    .string()
+    .min(2)
+    .max(12)
+    .regex(/^[A-Z0-9-]+$/, {
+      message: 'plant_code_prefix must be uppercase alphanumeric and hyphens',
+    }),
+  notes: z.string().max(2000).optional(),
+});
+export type BulkCreatePlants = z.infer<typeof BulkCreatePlantsSchema>;
+
+export const BulkCreatePlantsResultSchema = z.object({
+  created: z.number().int().nonnegative(),
+  plant_ids: z.array(z.string().uuid()),
+});
+export type BulkCreatePlantsResult = z.infer<typeof BulkCreatePlantsResultSchema>;

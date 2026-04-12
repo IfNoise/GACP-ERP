@@ -191,6 +191,23 @@ export const HarvestCompletedEventSchema = EventHeaderSchema.extend({
 });
 export type HarvestCompletedEvent = z.infer<typeof HarvestCompletedEventSchema>;
 
+// ─── PLANTS CREATED IN BULK (intake) ─────────────────────────────────────────
+/** Published once per bulk plant intake — carries all generated plant IDs. */
+export const PlantsCreatedInBulkEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('PLANTS_CREATED_IN_BULK'),
+  topic: z.literal(CULTIVATION_TOPIC),
+  payload: z.object({
+    batchId: BatchIdSchema,
+    strainId: z.string().uuid(),
+    zoneId: ZoneIdSchema,
+    sourceType: z.enum(['seed', 'clone', 'tissue_culture']),
+    plantCount: z.number().int().positive(),
+    plantIds: z.array(PlantIdSchema),
+    createdAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type PlantsCreatedInBulkEvent = z.infer<typeof PlantsCreatedInBulkEventSchema>;
+
 // ─── DISCRIMINATED UNION ──────────────────────────────────────────────────────
 /**
  * Union of all cultivation domain events.
@@ -213,5 +230,6 @@ export const CultivationEventSchema = z.discriminatedUnion('eventType', [
   BatchStatusChangedEventSchema,
   BatchComplianceStatusChangedEventSchema,
   HarvestCompletedEventSchema,
+  PlantsCreatedInBulkEventSchema,
 ]);
 export type CultivationEvent = z.infer<typeof CultivationEventSchema>;

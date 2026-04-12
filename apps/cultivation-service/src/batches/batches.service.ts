@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
-import { randomUUID } from 'crypto';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import {
   type Batch,
   type Plant,
@@ -8,27 +7,23 @@ import {
   type CloneBatch,
   type BatchStatus,
   type BatchId,
-  type FacilityId,
   type UserId,
 } from '@gacp-erp/shared-schemas';
-import {
-  CULTIVATION_TOPIC,
-  type BatchCreatedEvent,
-  type BatchStatusChangedEvent,
-} from '@gacp-erp/shared-events';
+import { CULTIVATION_TOPIC, type BatchStatusChangedEvent } from '@gacp-erp/shared-events';
 import { BatchesRepository } from './batches.repository';
 import { KafkaProducerService } from '../kafka/kafka-producer.service';
 import { CloneBatchUseCase } from './use-cases/clone-batch.use-case';
+import { CreateBatchUseCase } from './use-cases/create-batch.use-case';
 import { FacilityRepository } from '../facilities/facility.repository';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class BatchesService {
-  private readonly logger = new Logger(BatchesService.name);
-
   constructor(
     private readonly batchesRepo: BatchesRepository,
     private readonly kafkaProducer: KafkaProducerService,
     private readonly cloneBatchUseCase: CloneBatchUseCase,
+    private readonly createBatchUseCase: CreateBatchUseCase,
     private readonly facilityRepo: FacilityRepository,
   ) {}
 
@@ -48,7 +43,6 @@ export class BatchesService {
       throw new BadRequestException(`Batch number "${dto.batch_number}" already exists`);
     }
 
-    // Validate facility exists and is active
     const facility = await this.facilityRepo.findById(dto.facility_id);
     if (!facility) {
       throw new BadRequestException(`Facility "${dto.facility_id}" not found`);
@@ -57,43 +51,18 @@ export class BatchesService {
       throw new BadRequestException(`Facility "${dto.facility_id}" is inactive`);
     }
 
-    const batch = await this.batchesRepo.create(dto, createdBy);
-    this.logger.log(`Batch created: ${batch.id} (${batch.batch_number})`);
-
-    const event: BatchCreatedEvent = {
-      eventId: randomUUID(),
-      occurredAt: batch.created_at,
-      eventVersion: '1.0',
-      producerService: 'cultivation-service',
-      topic: CULTIVATION_TOPIC,
-      correlationId: randomUUID(),
-      triggeredBy: createdBy as UserId,
-      eventType: 'BATCH_CREATED',
-      payload: {
-        batchId: batch.id as BatchId,
-        batchNumber: batch.batch_number,
-        strainId: batch.strain_id,
-        facilityId: batch.facility_id as FacilityId,
-        initialQuantity: batch.planned_plant_count,
-        startedAt: batch.created_at,
-        ...(batch.planned_harvest_date && { targetHarvestAt: batch.planned_harvest_date }),
-        propagationMethod: batch.parent_batch_id ? 'clone' : 'seed',
-      },
-    };
-    this.kafkaProducer.publish(CULTIVATION_TOPIC, batch.id, event);
-    return batch;
+    return this.createBatchUseCase.execute(dto, createdBy);
   }
 
   async update(id: string, dto: UpdateBatch, updatedBy: string): Promise<Batch> {
-    await this.getById(id); // throws NotFoundException if not found
+    await this.getById(id);
     await this.batchesRepo.updateFields(id, dto, updatedBy);
     return this.getById(id);
   }
 
   async updateStatus(id: string, status: BatchStatus, updatedBy: string): Promise<void> {
-    const batch = await this.getById(id); // throws NotFoundException if not found
+    const batch = await this.getById(id);
     const previousStatus = batch.status;
-    // BatchStatus values match batchesTable status enum values
     await this.batchesRepo.updateStatus(id, status as never, updatedBy);
 
     const event: BatchStatusChangedEvent = {

@@ -52,6 +52,19 @@ export function useCreatePlant() {
   });
 }
 
+export function useBulkCreatePlants() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.cultivation.plants.bulkCreate>[0]['body']) => {
+      const res = await api.cultivation.plants.bulkCreate({ body });
+      if (res.status !== 201) throw new Error('Failed to bulk-create plants');
+      return res.body;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['plants'] }),
+  });
+}
+
 export function useMovePlant() {
   const api = useApiClient();
   const qc = useQueryClient();
@@ -2469,6 +2482,131 @@ export function useUpdateCultivationZone() {
     onSuccess: (_d, { id }) => {
       qc.invalidateQueries({ queryKey: ['cultivationZones', id] });
       qc.invalidateQueries({ queryKey: ['rooms'] });
+    },
+  });
+}
+
+// ─── INCOMING INSPECTIONS ─────────────────────────────────────────────────────
+
+interface IncomingInspectionsQuery {
+  page?: number;
+  limit?: number;
+  status?: 'PENDING' | 'IN_PROGRESS' | 'QUARANTINE' | 'RELEASED' | 'REJECTED';
+  supplier_id?: string;
+  strain_id?: string;
+}
+
+export function useIncomingInspections(query: IncomingInspectionsQuery = {}) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['incomingInspections', query],
+    queryFn: async () => {
+      const res = await api.quality.listIncomingInspections({
+        query: { page: 1, limit: 20, ...query },
+      });
+      if (res.status !== 200) throw new Error('Failed to load incoming inspections');
+      return res.body;
+    },
+  });
+}
+
+export function useIncomingInspection(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['incomingInspections', id],
+    queryFn: async () => {
+      const res = await api.quality.getIncomingInspection({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load incoming inspection');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function usePerformInspection() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.quality.performInspection>[0]['body']>;
+    }) => {
+      const res = await api.quality.performInspection({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to perform inspection');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['incomingInspections', id] });
+      qc.invalidateQueries({ queryKey: ['incomingInspections'] });
+    },
+  });
+}
+
+export function useRecordTestResults() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.quality.recordTestResults>[0]['body']>;
+    }) => {
+      const res = await api.quality.recordTestResults({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to record test results');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['incomingInspections', id] });
+      qc.invalidateQueries({ queryKey: ['incomingInspections'] });
+    },
+  });
+}
+
+export function useReleaseInspection() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.quality.releaseInspection>[0]['body']>;
+    }) => {
+      const res = await api.quality.releaseInspection({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to release inspection');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['incomingInspections', id] });
+      qc.invalidateQueries({ queryKey: ['incomingInspections'] });
+    },
+  });
+}
+
+export function useRejectInspection() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      body,
+    }: {
+      id: string;
+      body: NonNullable<Parameters<typeof api.quality.rejectInspection>[0]['body']>;
+    }) => {
+      const res = await api.quality.rejectInspection({ params: { id }, body });
+      if (res.status !== 200) throw new Error('Failed to reject inspection');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['incomingInspections', id] });
+      qc.invalidateQueries({ queryKey: ['incomingInspections'] });
     },
   });
 }

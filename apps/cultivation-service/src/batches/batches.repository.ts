@@ -53,6 +53,36 @@ export class BatchesRepository {
       .values({
         batch_number: dto.batch_number,
         parent_batch_id: dto.parent_batch_id ?? undefined,
+        batch_source_type: dto.batch_source_type ?? 'internal_clone',
+        source_batch_id: dto.source_batch_id ?? undefined,
+        source_grn_id: dto.source_grn_id ?? undefined,
+        strain_id: dto.strain_id,
+        facility_id: dto.facility_id,
+        compliance_status: dto.compliance_status ?? 'pending',
+        planned_plant_count: dto.planned_plant_count,
+        notes: dto.notes,
+        planned_start_date: dto.planned_start_date ? new Date(dto.planned_start_date) : undefined,
+        planned_harvest_date: dto.planned_harvest_date
+          ? new Date(dto.planned_harvest_date)
+          : undefined,
+        created_by: createdBy,
+        updated_by: createdBy,
+      })
+      .returning();
+
+    if (!rows[0]) throw new Error('Batch insert returned no rows');
+    return this.mapRow(rows[0]);
+  }
+
+  async createWithTx(tx: DbContext, dto: CreateBatch, createdBy: string): Promise<Batch> {
+    const rows = await tx
+      .insert(batchesTable)
+      .values({
+        batch_number: dto.batch_number,
+        parent_batch_id: dto.parent_batch_id ?? undefined,
+        batch_source_type: dto.batch_source_type ?? 'internal_clone',
+        source_batch_id: dto.source_batch_id ?? undefined,
+        source_grn_id: dto.source_grn_id ?? undefined,
         strain_id: dto.strain_id,
         facility_id: dto.facility_id,
         compliance_status: dto.compliance_status ?? 'pending',
@@ -120,6 +150,9 @@ export class BatchesRepository {
       id: row.id,
       batch_number: row.batch_number,
       parent_batch_id: row.parent_batch_id ?? null,
+      batch_source_type: row.batch_source_type,
+      source_batch_id: row.source_batch_id ?? null,
+      source_grn_id: row.source_grn_id ?? null,
       strain_id: row.strain_id,
       status: row.status as Batch['status'],
       compliance_status: row.compliance_status as Batch['compliance_status'],

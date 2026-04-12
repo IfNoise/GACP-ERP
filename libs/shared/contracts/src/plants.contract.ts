@@ -4,6 +4,8 @@ import { z } from 'zod';
 import {
   ApiErrorSchema,
   BatchSchema,
+  BulkCreatePlantsResultSchema,
+  BulkCreatePlantsSchema,
   CloneBatchSchema,
   CreateBatchSchema,
   CreateHarvestSchema,
@@ -84,6 +86,20 @@ const plantsContract = c.router({
       422: ApiErrorSchema,
     },
     summary: 'Create a new plant (OPERATOR+)',
+  },
+
+  bulkCreate: {
+    method: 'POST',
+    path: '/plants/bulk',
+    body: BulkCreatePlantsSchema,
+    responses: {
+      201: BulkCreatePlantsResultSchema,
+      400: ApiErrorSchema,
+      401: ApiErrorSchema,
+      403: ApiErrorSchema,
+      422: ApiErrorSchema,
+    },
+    summary: 'Bulk-create plants from a batch intake (OPERATOR+)',
   },
 
   update: {

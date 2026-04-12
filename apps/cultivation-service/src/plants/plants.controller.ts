@@ -12,12 +12,14 @@ import {
 } from '@nestjs/common';
 import { z } from 'zod';
 import {
+  BulkCreatePlantsSchema,
   CreatePlantSchema,
   UpdatePlantSchema,
   MovePlantSchema,
   StageTransitionSchema,
   PaginationQuerySchema,
   GrowthStageEnum,
+  type BulkCreatePlants,
   type CreatePlant,
   type UpdatePlant,
   type MovePlant,
@@ -27,6 +29,7 @@ import { PlantsService } from './plants.service';
 import { QrService } from '../qr/qr.service';
 import { ZoneRepository } from '../facilities/zone.repository';
 import { ZodBody } from '../common/decorators/zod-body.decorator';
+import { BulkCreatePlantsUseCase } from './use-cases/bulk-create-plants.use-case';
 
 const ListPlantsQuerySchema = PaginationQuerySchema.extend({
   batch_id: z.string().uuid().optional(),
@@ -40,6 +43,7 @@ export class PlantsController {
     private readonly plantsService: PlantsService,
     private readonly qrService: QrService,
     private readonly zoneRepo: ZoneRepository,
+    private readonly bulkCreatePlantsUseCase: BulkCreatePlantsUseCase,
   ) {}
 
   /** GET /api/v1/plants */
@@ -79,6 +83,16 @@ export class PlantsController {
   @HttpCode(HttpStatus.CREATED)
   create(@ZodBody(CreatePlantSchema) dto: CreatePlant, @Headers('x-user-id') userId: string) {
     return this.plantsService.create(dto, userId ?? 'system');
+  }
+
+  /** POST /api/v1/plants/bulk */
+  @Post('bulk')
+  @HttpCode(HttpStatus.CREATED)
+  bulkCreate(
+    @ZodBody(BulkCreatePlantsSchema) dto: BulkCreatePlants,
+    @Headers('x-user-id') userId: string,
+  ) {
+    return this.bulkCreatePlantsUseCase.execute(dto, userId ?? 'system');
   }
 
   /** POST /api/v1/plants/:id/move */
