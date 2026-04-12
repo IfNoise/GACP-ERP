@@ -94,6 +94,14 @@ export const plantOperationTypeEnum = pgEnum('plant_operation_type', [
 /** How the plant originated (seed, clone, tissue_culture) */
 export const plantSourceTypeEnum = pgEnum('plant_source_type', ['seed', 'clone', 'tissue_culture']);
 
+/** Batch origin — who/what provided the genetic material for this batch */
+export const batchSourceTypeEnum = pgEnum('batch_source_type', [
+  'external_purchase',
+  'internal_clone',
+  'seed_bank',
+  'tissue_culture',
+]);
+
 /** Audit trail operations — INSERT only in production (DS-DI-002) */
 export const auditOperationEnum = pgEnum('audit_operation', ['INSERT', 'UPDATE', 'DELETE']);
 
@@ -225,7 +233,7 @@ export const usersTable = pgTable(
   'users',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    keycloak_id: varchar('keycloak_id', { length: 36 }).notNull(),
+    keycloak_id: varchar('keycloak_id', { length: 64 }).notNull(),
     email: varchar('email', { length: 255 }).notNull(),
     username: varchar('username', { length: 100 }).notNull(),
     first_name: varchar('first_name', { length: 100 }).notNull().default(''),
@@ -333,6 +341,9 @@ export const batchesTable = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     batch_number: varchar('batch_number', { length: 50 }).notNull(),
     parent_batch_id: uuid('parent_batch_id'),
+    batch_source_type: batchSourceTypeEnum('batch_source_type').notNull().default('internal_clone'),
+    source_batch_id: uuid('source_batch_id'), // FK enforced in migration 025 — self-ref causes TS inference loop
+    source_grn_id: uuid('source_grn_id'), // FK enforced in migration 025 — forward-ref to receivingRecordsTable
     strain_id: uuid('strain_id')
       .notNull()
       .references(() => strainsTable.id),
@@ -368,6 +379,9 @@ export const batchesTable = pgTable(
     facilityIdx: index('batches_facility_idx').on(t.facility_id),
     complianceIdx: index('batches_compliance_idx').on(t.compliance_status),
     parentIdx: index('batches_parent_idx').on(t.parent_batch_id),
+    sourceTypeIdx: index('batches_source_type_idx').on(t.batch_source_type),
+    sourceGrnIdx: index('batches_source_grn_idx').on(t.source_grn_id),
+    sourceBatchIdx: index('batches_source_batch_idx').on(t.source_batch_id),
   }),
 );
 
@@ -1503,7 +1517,7 @@ export const biologicalAssetsTable = pgTable(
     valued_by: uuid('valued_by')
       .notNull()
       .references(() => usersTable.id),
-    electronic_signature: jsonb('electronic_signature').notNull(),
+    electronic_signature: jsonb('electronic_signature'),
     journal_entry_id: uuid('journal_entry_id').references(() => journalEntriesTable.id),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
@@ -1698,10 +1712,12 @@ export const poLinesTable = pgTable(
     received_quantity: decimal('received_quantity', { precision: 18, scale: 3 })
       .notNull()
       .default('0.000'),
+    strain_id: uuid('strain_id').references(() => strainsTable.id),
   },
   (t) => ({
     polPoIdx: index('pol_po_idx').on(t.po_id),
     polUniqueLineIdx: uniqueIndex('pol_unique_line_idx').on(t.po_id, t.line_number),
+    polStrainIdx: index('pol_strain_idx').on(t.strain_id),
   }),
 );
 
@@ -1754,6 +1770,83 @@ export const receivingLinesTable = pgTable(
   (t) => ({
     rlGrnIdx: index('rl_grn_idx').on(t.grn_id),
     rlPoLineIdx: index('rl_po_line_idx').on(t.po_line_id),
+  }),
+);
+
+// ── Incoming Inspection Enums ─────────────────────────────────────────────────
+
+export const incomingInspectionStatusEnum = pgEnum('incoming_inspection_status', [
+  'PENDING',
+  'IN_PROGRESS',
+  'QUARANTINE',
+  'RELEASED',
+  'REJECTED',
+]);
+
+// ── Incoming Inspections Table ───────────────────────────────────────────────
+
+export const incomingInspectionsTable = pgTable(
+  'incoming_inspections',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    inspection_number: varchar('inspection_number', { length: 20 }).notNull().unique(),
+    grn_id: uuid('grn_id')
+      .notNull()
+      .references(() => receivingRecordsTable.id),
+    po_id: uuid('po_id')
+      .notNull()
+      .references(() => purchaseOrdersTable.id),
+    supplier_id: uuid('supplier_id')
+      .notNull()
+      .references(() => suppliersTable.id),
+    strain_id: uuid('strain_id').references(() => strainsTable.id),
+    status: incomingInspectionStatusEnum('status').notNull().default('PENDING'),
+    // Visual & quantitative inspection
+    visual_check_passed: boolean('visual_check_passed'),
+    quantity_verified: boolean('quantity_verified'),
+    quality_assessment_notes: text('quality_assessment_notes'),
+    // Lab test results
+    dna_fingerprint_passed: boolean('dna_fingerprint_passed'),
+    cannabinoid_profile_passed: boolean('cannabinoid_profile_passed'),
+    pathogen_screening_passed: boolean('pathogen_screening_passed'),
+    germination_rate: decimal('germination_rate', { precision: 5, scale: 2 }),
+    // Quarantine tracking
+    quarantine_days_required: integer('quarantine_days_required').notNull().default(7),
+    quarantine_start_date: timestamp('quarantine_start_date', { withTimezone: true }),
+    quarantine_end_date: timestamp('quarantine_end_date', { withTimezone: true }),
+    // Disposition
+    disposition_decision: varchar('disposition_decision', { length: 20 }),
+    disposition_reason: text('disposition_reason'),
+    electronic_signature: jsonb('electronic_signature'),
+    // GxP Validation fields
+    validation_status: qualityValidationStatusEnum('validation_status')
+      .notNull()
+      .default('unvalidated'),
+    validation_protocol_id: uuid('validation_protocol_id'),
+    last_validated_at: timestamp('last_validated_at', { withTimezone: true }),
+    next_review_date: text('next_review_date'),
+    retention_class: retentionClassEnum('retention_class').notNull().default('7_YEAR'),
+    audit_tx_id: varchar('audit_tx_id', { length: 200 }),
+    // Audit
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_by: uuid('created_by')
+      .notNull()
+      .references(() => usersTable.id),
+    updated_by: uuid('updated_by')
+      .notNull()
+      .references(() => usersTable.id),
+  },
+  (t) => ({
+    iiStatusIdx: index('ii_status_idx').on(t.status),
+    iiGrnIdx: index('ii_grn_idx').on(t.grn_id),
+    iiPoIdx: index('ii_po_idx').on(t.po_id),
+    iiSupplierIdx: index('ii_supplier_idx').on(t.supplier_id),
+    iiStrainIdx: index('ii_strain_idx').on(t.strain_id),
   }),
 );
 

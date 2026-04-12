@@ -52,6 +52,10 @@ export type SupplierId = z.infer<typeof SupplierIdSchema>;
 export const EmployeeIdSchema = z.string().uuid().brand<'EmployeeId'>();
 export type EmployeeId = z.infer<typeof EmployeeIdSchema>;
 
+/** UUID v4 branded as ReceivingRecordId (GRN) */
+export const ReceivingRecordIdSchema = z.string().uuid().brand<'ReceivingRecordId'>();
+export type ReceivingRecordId = z.infer<typeof ReceivingRecordIdSchema>;
+
 /**
  * Helper to create a branded UUID schema for a given entity type.
  * @internal Use the specific branded schemas above instead.

@@ -5,6 +5,7 @@ import {
   BatchIdSchema,
   FacilityIdSchema,
   PlantIdSchema,
+  ReceivingRecordIdSchema,
   StrainIdSchema,
   UserIdSchema,
   ZoneIdSchema,
@@ -25,6 +26,19 @@ export const BatchStatusEnum = z.enum([
 ]);
 export type BatchStatus = z.infer<typeof BatchStatusEnum>;
 
+// ─── BATCH SOURCE TYPE ────────────────────────────────────────────────────────
+/**
+ * Describes the origin of the genetic material for a batch.
+ * GACP chain-of-custody: Plant → Batch → {GRN → PO → Supplier | Mother Batch}.
+ */
+export const BatchSourceTypeEnum = z.enum([
+  'external_purchase', // seeds or clones bought from a supplier (source_grn_id required)
+  'internal_clone', // cut from our own mother plants (source_batch_id required)
+  'seed_bank', // from own seed bank inventory (no external ref needed)
+  'tissue_culture', // TC lab — source_grn_id optional if purchased externally
+]);
+export type BatchSourceType = z.infer<typeof BatchSourceTypeEnum>;
+
 // ─── BATCH ────────────────────────────────────────────────────────────────────
 /**
  * A batch is a group of plants from the same strain started at the same time.
@@ -43,8 +57,14 @@ export const BatchSchema = SoftDeletableSchema.extend({
     .regex(/^[A-Z0-9_-]+$/, {
       message: 'batch_number must be uppercase alphanumeric with _ and -',
     }),
-  /** Parent batch (for splits/clones) */
+  /** Parent batch (legacy clone lineage field — prefer source_batch_id) */
   parent_batch_id: BatchIdSchema.nullable().optional(),
+  /** Explicit source type for GACP traceability */
+  batch_source_type: BatchSourceTypeEnum.default('internal_clone'),
+  /** For internal_clone: the batch the mother plants belong to */
+  source_batch_id: BatchIdSchema.nullable().optional(),
+  /** For external_purchase: the GRN that delivered this genetic material */
+  source_grn_id: ReceivingRecordIdSchema.nullable().optional(),
   strain_id: StrainIdSchema,
   facility_id: FacilityIdSchema,
   status: BatchStatusEnum.default('PLANNED'),
@@ -67,17 +87,33 @@ export const BatchSchema = SoftDeletableSchema.extend({
 export type Batch = z.infer<typeof BatchSchema>;
 
 // ─── CREATE/UPDATE DTOs ───────────────────────────────────────────────────────
-export const CreateBatchSchema = z.object({
-  batch_number: z.string().min(1).max(50),
-  parent_batch_id: BatchIdSchema.nullable().optional(),
-  strain_id: StrainIdSchema,
-  facility_id: FacilityIdSchema,
-  compliance_status: ComplianceStatusEnum.optional(),
-  planned_plant_count: z.number().int().positive(),
-  notes: z.string().max(2000).optional(),
-  planned_start_date: z.string().datetime({ offset: true }).optional(),
-  planned_harvest_date: z.string().datetime({ offset: true }).optional(),
-});
+export const CreateBatchSchema = z
+  .object({
+    batch_number: z.string().min(1).max(50),
+    /** Explicit origin of the genetic material */
+    batch_source_type: BatchSourceTypeEnum.default('internal_clone'),
+    /** GRN reference — required when batch_source_type is 'external_purchase' */
+    source_grn_id: ReceivingRecordIdSchema.nullable().optional(),
+    /** Mother batch reference — required when batch_source_type is 'internal_clone' */
+    source_batch_id: BatchIdSchema.nullable().optional(),
+    /** Legacy clone lineage field (kept for backward compat with CloneBatchUseCase) */
+    parent_batch_id: BatchIdSchema.nullable().optional(),
+    strain_id: StrainIdSchema,
+    facility_id: FacilityIdSchema,
+    compliance_status: ComplianceStatusEnum.optional(),
+    planned_plant_count: z.number().int().positive(),
+    notes: z.string().max(2000).optional(),
+    planned_start_date: z.string().datetime({ offset: true }).optional(),
+    planned_harvest_date: z.string().datetime({ offset: true }).optional(),
+  })
+  .refine((v) => v.batch_source_type !== 'external_purchase' || v.source_grn_id != null, {
+    message: 'source_grn_id is required for external_purchase batches',
+    path: ['source_grn_id'],
+  })
+  .refine((v) => v.batch_source_type !== 'internal_clone' || v.source_batch_id != null, {
+    message: 'source_batch_id is required for internal_clone batches',
+    path: ['source_batch_id'],
+  });
 export type CreateBatch = z.infer<typeof CreateBatchSchema>;
 
 export const UpdateBatchSchema = z.object({
