@@ -11,6 +11,9 @@ import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 import { ZodValidationPipe } from './common/pipes/zod-validation.pipe';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { type Database, usersTable } from '@gacp-erp/shared-database';
+import { eq } from 'drizzle-orm';
+import { DATABASE_TOKEN } from './database/database.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
@@ -96,6 +99,27 @@ async function bootstrap(): Promise<void> {
     ['analytics', 'ANALYTICS_SERVICE_URL', 'http://localhost:3006'],
   ];
 
+  // In-memory cache: Zitadel sub → internal UUID
+  const db = app.get<Database>(DATABASE_TOKEN);
+  const subToUuid = new Map<string, string>();
+
+  async function resolveUserId(zitadelSub: string): Promise<string> {
+    const cached = subToUuid.get(zitadelSub);
+    if (cached) return cached;
+    const rows = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.keycloak_id, zitadelSub))
+      .limit(1);
+    const found = rows[0]?.id;
+    if (found) {
+      subToUuid.set(zitadelSub, found);
+      return found;
+    }
+    // No mapping — return original (will fail on UUID columns but at least won't silently lose it)
+    return zitadelSub;
+  }
+
   for (const [prefix, envVar, fallback] of proxyRoutes) {
     const upstream = process.env[envVar] ?? fallback;
 
@@ -122,7 +146,7 @@ async function bootstrap(): Promise<void> {
           if (v) fwdHeaders[h] = v;
         }
 
-        // Extract user sub from JWT and inject as x-user-id (trusted by downstream services)
+        // Extract user sub from JWT and resolve to internal UUID for downstream services
         const authHeader = request.headers['authorization'];
         if (authHeader?.startsWith('Bearer ')) {
           const parts = authHeader.slice(7).split('.');
@@ -132,7 +156,7 @@ async function bootstrap(): Promise<void> {
                 sub?: string;
               };
               if (payload.sub) {
-                fwdHeaders['x-user-id'] = payload.sub;
+                fwdHeaders['x-user-id'] = await resolveUserId(payload.sub);
               }
             } catch {
               // Malformed JWT payload — skip user ID injection

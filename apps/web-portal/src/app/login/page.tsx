@@ -13,11 +13,11 @@ export default function LoginPage() {
         <form
           action={async () => {
             'use server';
-            await signIn('keycloak', { redirectTo: '/' });
+            await signIn('zitadel', { redirectTo: '/' });
           }}
         >
           <Button type="submit" size="lg" className="w-full">
-            Sign in with Keycloak
+            Sign in with Zitadel
           </Button>
         </form>
 

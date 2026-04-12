@@ -6,7 +6,10 @@ import { SystemRoleEnum, type SystemRole } from '@gacp-erp/shared-schemas';
 
 /**
  * Zitadel OIDC provider configuration.
- * NextAuth doesn't have built-in Zitadel provider, so we use generic OIDC.
+ *
+ * Using type:'oauth' instead of type:'oidc' to bypass oauth4webapi autodiscovery,
+ * which rejects HTTP endpoints in strict validation mode (oauth4webapi@3.x).
+ * Endpoints are specified explicitly from Zitadel's well-known OIDC document.
  */
 interface ZitadelProfile {
   sub: string;
@@ -17,30 +20,29 @@ interface ZitadelProfile {
   email_verified: boolean;
 }
 
+const issuer = process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080';
+const projectId = process.env['ZITADEL_PROJECT_ID'];
+
 const ZitadelProvider: OAuthConfig<ZitadelProfile> = {
   id: 'zitadel',
   name: 'Zitadel',
-  type: 'oidc',
-  issuer: process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080',
-  clientId: process.env['ZITADEL_CLIENT_ID'] ?? 'web-portal',
+  type: 'oauth',
+  issuer: issuer,
+  clientId: process.env['ZITADEL_CLIENT_ID'] ?? '',
   clientSecret: process.env['ZITADEL_CLIENT_SECRET'] ?? '',
   authorization: {
+    url: `${issuer}/oauth/v2/authorize`,
     params: {
-      // Request Zitadel-specific scopes to get role claims in the access token.
-      // urn:zitadel:iam:org:projects:roles  → include role grants claim in JWT
-      // urn:zitadel:iam:org:project:id:*:aud → add project as JWT audience (validates in api-gateway)
       scope: [
         'openid profile email',
         'urn:zitadel:iam:org:projects:roles',
-        ...(process.env['ZITADEL_PROJECT_ID']
-          ? [`urn:zitadel:iam:org:project:id:${process.env['ZITADEL_PROJECT_ID']}:aud`]
-          : []),
+        ...(projectId ? [`urn:zitadel:iam:org:project:id:${projectId}:aud`] : []),
       ].join(' '),
     },
   },
-  userinfo: {
-    url: `${process.env['ZITADEL_ISSUER'] ?? 'http://localhost:8080'}/oidc/v1/userinfo`,
-  },
+  token: `${issuer}/oauth/v2/token`,
+  userinfo: `${issuer}/oidc/v1/userinfo`,
+  checks: ['pkce', 'state'],
   profile(profile: ZitadelProfile) {
     return {
       id: profile.sub,
@@ -139,7 +141,10 @@ async function refreshAccessToken(token: JWT & { refresh_token: string }): Promi
 
 /**
  * Decodes Zitadel JWT payload (base64url) and extracts roles from custom claim.
- * Zitadel stores roles in: urn:zitadel:iam:org:project:roles
+ * Zitadel stores roles in project-specific claim when project audience scope is requested:
+ *   urn:zitadel:iam:org:project:{projectId}:roles
+ * Falls back to generic claim:
+ *   urn:zitadel:iam:org:project:roles
  */
 function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
   if (!accessToken) return [];
@@ -149,13 +154,21 @@ function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
     // base64url → base64 → JSON
     const payload = JSON.parse(
       Buffer.from(parts[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'),
-    ) as {
-      'urn:zitadel:iam:org:project:roles'?: Record<string, unknown>;
-    };
+    ) as Record<string, unknown>;
 
-    // Zitadel stores roles as { roleId: [roleName, ...] }
-    const zitadelRoles = payload['urn:zitadel:iam:org:project:roles'] ?? {};
-    const rawRoles = Object.values(zitadelRoles).flat() as string[];
+    const projectId = process.env['ZITADEL_PROJECT_ID'];
+    const projectSpecificClaim = projectId
+      ? `urn:zitadel:iam:org:project:${projectId}:roles`
+      : undefined;
+
+    const rolesObj = (
+      projectSpecificClaim !== undefined
+        ? (payload[projectSpecificClaim] ?? payload['urn:zitadel:iam:org:project:roles'])
+        : payload['urn:zitadel:iam:org:project:roles']
+    ) as Record<string, unknown> | undefined;
+
+    if (!rolesObj) return [];
+    const rawRoles = Object.keys(rolesObj);
 
     return rawRoles.filter((r): r is SystemRole =>
       SystemRoleEnum.options.includes(r as SystemRole),

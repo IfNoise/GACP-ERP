@@ -87,7 +87,7 @@ async function main(): Promise<void> {
     const res = await api<{ id: string }>('/management/v1/projects', {
       name: 'GACP-ERP',
       projectRoleAssertion: true,
-      projectRoleCheck: true,
+      projectRoleCheck: false,
       hasProjectCheck: false,
     });
     projectId = res.id;
