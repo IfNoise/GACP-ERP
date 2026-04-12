@@ -86,8 +86,8 @@ export const BiologicalAssetSchema = BaseEntitySchema.extend({
   quantity_grams: z.number().nonnegative(),
   valued_at: z.string().datetime({ offset: true }),
   valued_by: UserIdSchema,
-  /** E-signature of the person who authorized this valuation */
-  electronic_signature: ElectronicSignatureSchema,
+  /** E-signature of the person who authorized this valuation — null for system-triggered records */
+  electronic_signature: ElectronicSignatureSchema.nullable(),
   /** FK to journal_entries — the JE that records this valuation change */
   journal_entry_id: z.string().uuid().nullable(),
 });
@@ -195,7 +195,8 @@ export const RecordBiologicalAssetValuationSchema = z.object({
   fair_value: z.number().nonnegative().optional(),
   cost_to_sell: z.number().nonnegative().optional(),
   cost_value: z.number().nonnegative().optional(),
-  quantity_grams: z.number().positive(),
-  electronic_signature: ElectronicSignatureSchema,
+  quantity_grams: z.number().nonnegative(),
+  /** Optional for system-triggered entries (initial IAS 41 recognition); required for manual revaluations */
+  electronic_signature: ElectronicSignatureSchema.optional(),
 });
 export type RecordBiologicalAssetValuation = z.infer<typeof RecordBiologicalAssetValuationSchema>;

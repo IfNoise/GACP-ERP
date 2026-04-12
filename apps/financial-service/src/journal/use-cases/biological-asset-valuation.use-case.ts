@@ -43,7 +43,7 @@ export class BiologicalAssetValuationUseCase {
         quantity_grams: dto.quantity_grams,
         valued_at: now,
         valued_by: authorId as UserId,
-        electronic_signature: dto.electronic_signature,
+        electronic_signature: dto.electronic_signature ?? null,
         journal_entry_id: null,
         created_by: authorId as UserId,
         updated_by: authorId as UserId,
