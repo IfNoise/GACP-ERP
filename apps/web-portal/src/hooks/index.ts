@@ -4,6 +4,7 @@ export {
   usePlants,
   usePlant,
   useCreatePlant,
+  useBulkCreatePlants,
   useMovePlant,
   useTransitionPlantStage,
   usePlantStageHistory,

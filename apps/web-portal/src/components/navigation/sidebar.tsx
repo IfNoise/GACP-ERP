@@ -82,6 +82,7 @@ const navGroups: NavGroup[] = [
       { label: 'Plants', href: '/plants', icon: Sprout },
       { label: 'Batches', href: '/batches', icon: Layers },
       { label: 'Strains', href: '/strains', icon: Dna },
+      { label: 'Intake', href: '/cultivation/intake', icon: Package },
     ],
   },
   {
@@ -95,6 +96,7 @@ const navGroups: NavGroup[] = [
       { label: 'Deviations', href: '/quality/deviations', icon: AlertTriangle },
       { label: 'Validation', href: '/quality/validation-protocols', icon: FlaskConical },
       { label: 'Quality Events', href: '/quality/quality-events', icon: CalendarCheck },
+      { label: 'Incoming Inspections', href: '/quality/incoming-inspections', icon: Package },
     ],
   },
   {
@@ -152,7 +154,7 @@ const navGroups: NavGroup[] = [
     icon: Map,
     roles: ['SUPER_ADMIN', 'QUALITY_MANAGER', 'CULTIVATION_MANAGER'],
     items: [
-      { label: 'Zones', href: '/spatial', icon: Map },
+      { label: 'Zones', href: '/spatial/zones', icon: Map },
       { label: '3D Facility', href: '/spatial/3d', icon: Box },
     ],
   },
