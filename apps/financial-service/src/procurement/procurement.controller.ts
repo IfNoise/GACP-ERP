@@ -18,6 +18,7 @@ import {
   SupplierQualificationStatusEnum,
   PurchaseOrderStatusEnum,
   PaginationQuerySchema,
+  ElectronicSignatureSchema,
   type CreateSupplier,
   type CreatePurchaseOrder,
   type SubmitPurchaseOrder,
@@ -29,6 +30,7 @@ import type { SupplierFilters } from './supplier.repository';
 import { ProcurementRepository } from './procurement.repository';
 import type { POFilters } from './procurement.repository';
 import { CreateSupplierUseCase } from './use-cases/create-supplier.use-case';
+import { QualifySupplierUseCase } from './use-cases/qualify-supplier.use-case';
 import { ProcurementWorkflowUseCase } from './use-cases/procurement-workflow.use-case';
 
 const SupplierListQuerySchema = PaginationQuerySchema.extend({
@@ -55,19 +57,7 @@ const AcknowledgeBodySchema = z.object({
 });
 
 const ClosePOBodySchema = z.object({
-  electronic_signature: z.object({
-    signed_by: z.string().uuid(),
-    signer_name: z.string().min(1),
-    signer_role: z.string().min(1),
-    signature_type: z.literal('ELECTRONIC'),
-    authentication_method: z.enum(['PASSWORD', 'MFA', 'BIOMETRIC', 'SMART_CARD']),
-    digital_signature: z.string().min(1),
-    content_hash: z.string().min(1),
-    ip_address: z.string().ip(),
-    workstation_id: z.string().min(1),
-    signature_meaning: z.string().min(1),
-    signed_at: z.string().datetime(),
-  }),
+  electronic_signature: ElectronicSignatureSchema,
 });
 
 const CancelPOBodySchema = z.object({ reason: z.string().min(1) });
@@ -78,6 +68,7 @@ export class ProcurementController {
     private readonly supplierRepo: SupplierRepository,
     private readonly procurementRepo: ProcurementRepository,
     private readonly createSupplierUseCase: CreateSupplierUseCase,
+    private readonly qualifySupplierUseCase: QualifySupplierUseCase,
     private readonly workflowUseCase: ProcurementWorkflowUseCase,
   ) {}
 
@@ -113,13 +104,12 @@ export class ProcurementController {
     @ZodBody(QualifySupplierBodySchema) body: z.infer<typeof QualifySupplierBodySchema>,
     @Headers('x-user-id') userId: string,
   ) {
-    return this.supplierRepo.update(undefined as never, id, {
-      qualification_status: body.qualification_status,
-      ...(body.qualification_expiry !== undefined && {
-        qualification_expiry: body.qualification_expiry,
-      }),
-      notes: body.notes ?? null,
-      updated_by: (userId ?? 'system') as never,
+    return this.qualifySupplierUseCase.execute({
+      supplierId: id,
+      qualificationStatus: body.qualification_status,
+      qualificationExpiry: body.qualification_expiry,
+      notes: body.notes,
+      authorId: userId ?? 'system',
     });
   }
 

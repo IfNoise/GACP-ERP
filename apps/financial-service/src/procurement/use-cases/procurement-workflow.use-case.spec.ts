@@ -39,6 +39,7 @@ const makePOLine = (overrides: Record<string, unknown> = {}) => ({
   unit_price: 5,
   unit_of_measure: 'KG',
   received_quantity: 0,
+  strain_id: null,
   ...overrides,
 });
 
@@ -95,6 +96,23 @@ const mockOutboxRepo = {
   createWithTx: jest.fn().mockResolvedValue(undefined),
 };
 
+const mockSupplierRepo = {
+  findByIdOrThrow: jest.fn().mockResolvedValue({
+    id: SUPPLIER_ID,
+    supplier_code: 'SUP-0001',
+    name: 'Test Supplier',
+    qualification_status: 'QUALIFIED',
+    qualification_expiry: null,
+    contact_details: { email: null, phone: null, address: null, contact_person: null },
+    is_active: true,
+    notes: null,
+    created_at: '2026-01-15T00:00:00.000Z',
+    updated_at: '2026-01-15T00:00:00.000Z',
+    created_by: AUTHOR_ID,
+    updated_by: AUTHOR_ID,
+  }),
+};
+
 const mockDb = {
   transaction: jest.fn().mockImplementation((fn: (tx: unknown) => Promise<unknown>) => fn({})),
 };
@@ -102,7 +120,12 @@ const mockDb = {
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 const buildUseCase = () =>
-  new ProcurementWorkflowUseCase(mockDb as never, mockRepo as never, mockOutboxRepo as never);
+  new ProcurementWorkflowUseCase(
+    mockDb as never,
+    mockRepo as never,
+    mockSupplierRepo as never,
+    mockOutboxRepo as never,
+  );
 
 // ─── TESTS ────────────────────────────────────────────────────────────────────
 

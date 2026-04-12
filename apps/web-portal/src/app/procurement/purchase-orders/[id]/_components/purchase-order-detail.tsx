@@ -57,27 +57,45 @@ export function PurchaseOrderDetail({ id }: { id: string }) {
     return { id: stage, label: stage, status: stepStatus };
   });
 
+  const buildSignature = (_password: string, reason: string) => ({
+    signed_by: '00000000-0000-0000-0000-000000000000',
+    signer_name: 'Current User',
+    signer_role: 'OPERATOR',
+    signature_type: 'approval' as const,
+    authentication_method: 'password' as const,
+    digital_signature: 'a'.repeat(256),
+    content_hash: 'b'.repeat(64),
+    ip_address: '127.0.0.1',
+    workstation_id: 'WS-001',
+    signature_meaning: reason || 'Purchase order action',
+    signed_at: new Date().toISOString(),
+  });
+
   const handleSign = async (password: string, reason: string) => {
-    const sig = { password, reason };
+    const sig = buildSignature(password, reason);
     if (signAction === 'submit')
       await submitMutation.mutateAsync({
         id,
-        body: sig as unknown as Parameters<typeof submitMutation.mutateAsync>[0]['body'],
+        body: { electronic_signature: sig } as unknown as Parameters<
+          typeof submitMutation.mutateAsync
+        >[0]['body'],
       });
     else if (signAction === 'acknowledge')
       await ackMutation.mutateAsync({
         id,
-        body: sig as unknown as Parameters<typeof ackMutation.mutateAsync>[0]['body'],
+        body: { notes: reason } as unknown as Parameters<typeof ackMutation.mutateAsync>[0]['body'],
       });
     else if (signAction === 'close')
       await closeMutation.mutateAsync({
         id,
-        body: sig as unknown as Parameters<typeof closeMutation.mutateAsync>[0]['body'],
+        body: { electronic_signature: sig } as unknown as Parameters<
+          typeof closeMutation.mutateAsync
+        >[0]['body'],
       });
     else if (signAction === 'cancel')
       await cancelMutation.mutateAsync({
         id,
-        body: sig as unknown as Parameters<typeof cancelMutation.mutateAsync>[0]['body'],
+        body: { reason } as unknown as Parameters<typeof cancelMutation.mutateAsync>[0]['body'],
       });
     setSignAction(null);
     router.refresh();

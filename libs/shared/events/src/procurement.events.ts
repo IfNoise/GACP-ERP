@@ -60,6 +60,16 @@ export const GoodsReceivedEventSchema = EventHeaderSchema.extend({
     qualityCheckPassed: z.boolean(),
     receivedBy: z.string().uuid(),
     receivedAt: z.string().datetime({ offset: true }),
+    /** PO line details with strain references (optional for backward compat) */
+    lines: z
+      .array(
+        z.object({
+          poLineId: z.string().uuid(),
+          strainId: z.string().uuid().nullable(),
+          quantityReceived: z.number(),
+        }),
+      )
+      .optional(),
   }),
 });
 export type GoodsReceivedEvent = z.infer<typeof GoodsReceivedEventSchema>;

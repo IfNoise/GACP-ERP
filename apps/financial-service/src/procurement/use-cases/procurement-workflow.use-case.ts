@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject } from '@nestjs/common';
+import { Injectable, Logger, Inject, BadRequestException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { type Database } from '@gacp-erp/shared-database';
 import type {
@@ -17,6 +17,7 @@ import {
 } from '@gacp-erp/shared-events';
 import { DATABASE_TOKEN } from '../../database/database.module';
 import { ProcurementRepository } from '../procurement.repository';
+import { SupplierRepository } from '../supplier.repository';
 import { ProcurementWorkflowEngine } from '../procurement-workflow.engine';
 import { OutboxRepository } from '../../outbox/outbox.repository';
 
@@ -60,10 +61,19 @@ export class ProcurementWorkflowUseCase {
   constructor(
     @Inject(DATABASE_TOKEN) private readonly db: Database,
     private readonly repo: ProcurementRepository,
+    private readonly supplierRepo: SupplierRepository,
     private readonly outboxRepo: OutboxRepository,
   ) {}
 
   async createPO(dto: CreatePurchaseOrder, authorId: string): Promise<PurchaseOrder> {
+    // Validate supplier is QUALIFIED per EU GMP Chapter 7 / WHO GACP §5
+    const supplier = await this.supplierRepo.findByIdOrThrow(dto.supplier_id);
+    if (supplier.qualification_status !== 'QUALIFIED') {
+      throw new BadRequestException(
+        `Supplier ${supplier.supplier_code} is ${supplier.qualification_status}. Only QUALIFIED suppliers can have purchase orders.`,
+      );
+    }
+
     const poNumber = await this.repo.nextPoNumber();
     const now = new Date().toISOString();
 
@@ -83,6 +93,7 @@ export class ProcurementWorkflowUseCase {
           unit_price: l.unit_price,
           unit_of_measure: l.unit_of_measure,
           received_quantity: 0,
+          strain_id: l.strain_id ?? null,
         })),
         total_value: totalValue,
         currency: dto.currency ?? 'EUR',
@@ -255,6 +266,14 @@ export class ProcurementWorkflowUseCase {
           qualityCheckPassed: grn.quality_check_passed,
           receivedBy: cmd.authorId,
           receivedAt: grn.received_at,
+          lines: cmd.lines.map((rl) => {
+            const poLine = po.lines.find((pl) => pl.id === rl.po_line_id);
+            return {
+              poLineId: rl.po_line_id,
+              strainId: poLine?.strain_id ?? null,
+              quantityReceived: rl.quantity_received,
+            };
+          }),
         },
       };
 

@@ -63,6 +63,8 @@ export const POLineSchema = z.object({
   unit_of_measure: z.string().min(1).max(20),
   /** Quantity received so far (updated during RECEIVING status) */
   received_quantity: z.number().nonnegative().default(0),
+  /** Reference to strain if this line is for genetic material */
+  strain_id: z.string().uuid().nullable().default(null),
 });
 export type POLine = z.infer<typeof POLineSchema>;
 
@@ -145,6 +147,8 @@ export const CreatePurchaseOrderSchema = z.object({
         quantity: z.number().positive(),
         unit_price: z.number().nonnegative(),
         unit_of_measure: z.string().min(1).max(20),
+        /** Reference to strain if this line is for genetic material */
+        strain_id: z.string().uuid().optional(),
       }),
     )
     .min(1),

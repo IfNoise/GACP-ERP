@@ -166,6 +166,7 @@ export class ProcurementRepository {
           unit_price: String(line.unit_price),
           unit_of_measure: line.unit_of_measure,
           received_quantity: String(line.received_quantity ?? 0),
+          strain_id: line.strain_id ?? null,
         })),
       )
       .returning();
@@ -271,6 +272,7 @@ export class ProcurementRepository {
         unit_price: parseFloat(l.unit_price),
         unit_of_measure: l.unit_of_measure,
         received_quantity: parseFloat(l.received_quantity),
+        strain_id: l.strain_id ?? null,
       })),
       total_value: parseFloat(row.total_value),
       currency: row.currency,

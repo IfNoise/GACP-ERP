@@ -4,20 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSuppliers, useCreatePurchaseOrder } from '@/hooks';
-
-interface POLine {
-  item_description: string;
-  quantity: number;
-  unit_price: number;
-  unit_of_measure: string;
-}
-
-const EMPTY_LINE: POLine = {
-  item_description: '',
-  quantity: 0,
-  unit_price: 0,
-  unit_of_measure: 'kg',
-};
+import { POLineDialog, POLineData, EMPTY_LINE, ITEM_TYPE_BADGE } from './po-line-dialog';
 
 export function CreatePurchaseOrderForm() {
   const router = useRouter();
@@ -28,19 +15,35 @@ export function CreatePurchaseOrderForm() {
   const [currency, setCurrency] = useState('USD');
   const [expectedDelivery, setExpectedDelivery] = useState('');
   const [notes, setNotes] = useState('');
-  const [lines, setLines] = useState<POLine[]>([{ ...EMPTY_LINE }]);
+  const [lines, setLines] = useState<POLineData[]>([{ ...EMPTY_LINE }]);
 
-  const suppliers = ((suppliersData as Record<string, unknown>)?.['data'] ?? []) as Record<
-    string,
-    unknown
-  >[];
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingIdx, setEditingIdx] = useState<number | null>(null);
+
+  const suppliers = ((suppliersData as Record<string, unknown> | undefined)?.['data'] ??
+    []) as Record<string, unknown>[];
 
   const totalValue = lines.reduce((s, l) => s + l.quantity * l.unit_price, 0);
 
-  const updateLine = (idx: number, patch: Partial<POLine>) => {
-    setLines((prev) => prev.map((l, i) => (i === idx ? { ...l, ...patch } : l)));
+  const openAddDialog = () => {
+    setEditingIdx(null);
+    setDialogOpen(true);
   };
-  const addLine = () => setLines((prev) => [...prev, { ...EMPTY_LINE }]);
+
+  const openEditDialog = (idx: number) => {
+    setEditingIdx(idx);
+    setDialogOpen(true);
+  };
+
+  const handleDialogSave = (line: POLineData) => {
+    if (editingIdx === null) {
+      setLines((prev) => [...prev, line]);
+    } else {
+      setLines((prev) => prev.map((l, i) => (i === editingIdx ? line : l)));
+    }
+    setDialogOpen(false);
+  };
+
   const removeLine = (idx: number) => {
     if (lines.length <= 1) return;
     setLines((prev) => prev.filter((_, i) => i !== idx));
@@ -55,7 +58,14 @@ export function CreatePurchaseOrderForm() {
       notes: notes || undefined,
       lines: lines
         .filter((l) => l.item_description && l.quantity > 0)
-        .map((l, i) => ({ line_number: i + 1, ...l })),
+        .map((l, i) => ({
+          line_number: i + 1,
+          item_description: l.item_description,
+          quantity: l.quantity,
+          unit_price: l.unit_price,
+          unit_of_measure: l.unit_of_measure,
+          ...(l.strain_id ? { strain_id: l.strain_id } : {}),
+        })),
     } as Parameters<typeof createMutation.mutateAsync>[0];
 
     const result = await createMutation.mutateAsync(body);
@@ -76,6 +86,7 @@ export function CreatePurchaseOrderForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Order header */}
         <div className="card">
           <div className="card-header">
             <h2 className="text-lg font-semibold">Order Details</h2>
@@ -130,10 +141,11 @@ export function CreatePurchaseOrderForm() {
           </div>
         </div>
 
+        {/* Order lines */}
         <div className="card">
           <div className="card-header flex items-center justify-between">
             <h2 className="text-lg font-semibold">Order Lines</h2>
-            <button type="button" className="btn btn-secondary" onClick={addLine}>
+            <button type="button" className="btn btn-secondary" onClick={openAddDialog}>
               + Add Line
             </button>
           </div>
@@ -141,6 +153,8 @@ export function CreatePurchaseOrderForm() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-gray-500">
+                  <th className="pb-2">#</th>
+                  <th className="pb-2">Type</th>
                   <th className="pb-2">Description</th>
                   <th className="pb-2 text-right">Qty</th>
                   <th className="pb-2">UoM</th>
@@ -150,63 +164,56 @@ export function CreatePurchaseOrderForm() {
                 </tr>
               </thead>
               <tbody>
-                {lines.map((line, idx) => (
-                  <tr key={idx} className="border-b">
-                    <td className="py-2">
-                      <input
-                        className="input w-48"
-                        value={line.item_description}
-                        onChange={(e) => updateLine(idx, { item_description: e.target.value })}
-                        required
-                      />
-                    </td>
-                    <td className="py-2">
-                      <input
-                        type="number"
-                        className="input w-24 text-right"
-                        value={line.quantity || ''}
-                        onChange={(e) => updateLine(idx, { quantity: Number(e.target.value) })}
-                        min={1}
-                        required
-                      />
-                    </td>
-                    <td className="py-2">
-                      <input
-                        className="input w-20"
-                        value={line.unit_of_measure}
-                        onChange={(e) => updateLine(idx, { unit_of_measure: e.target.value })}
-                      />
-                    </td>
-                    <td className="py-2">
-                      <input
-                        type="number"
-                        className="input w-28 text-right"
-                        value={line.unit_price || ''}
-                        onChange={(e) => updateLine(idx, { unit_price: Number(e.target.value) })}
-                        min={0}
-                        step={0.01}
-                        required
-                      />
-                    </td>
-                    <td className="py-2 text-right font-medium">
-                      {(line.quantity * line.unit_price).toFixed(2)}
-                    </td>
-                    <td className="py-2">
-                      <button
-                        type="button"
-                        className="text-red-500 hover:text-red-700"
-                        onClick={() => removeLine(idx)}
-                        disabled={lines.length <= 1}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {lines.map((line, idx) => {
+                  const badge = ITEM_TYPE_BADGE[line.item_type];
+                  return (
+                    <tr key={idx} className="border-b">
+                      <td className="py-2 text-gray-400">{idx + 1}</td>
+                      <td className="py-2">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${badge.cls}`}
+                        >
+                          {badge.label}
+                        </span>
+                      </td>
+                      <td className="py-2">
+                        <span className="font-medium">{line.item_description}</span>
+                        {line.strain_id && (
+                          <span className="ml-2 text-xs text-green-600">● genetics linked</span>
+                        )}
+                      </td>
+                      <td className="py-2 text-right">{line.quantity}</td>
+                      <td className="py-2 text-gray-500">{line.unit_of_measure}</td>
+                      <td className="py-2 text-right">{line.unit_price.toFixed(2)}</td>
+                      <td className="py-2 text-right font-medium">
+                        {(line.quantity * line.unit_price).toFixed(2)}
+                      </td>
+                      <td className="py-2">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            className="text-blue-500 hover:text-blue-700"
+                            onClick={() => openEditDialog(idx)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-400 hover:text-red-600 disabled:opacity-30"
+                            onClick={() => removeLine(idx)}
+                            disabled={lines.length <= 1}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
               <tfoot>
                 <tr className="border-t-2 font-semibold">
-                  <td colSpan={4} className="py-2">
+                  <td colSpan={6} className="py-2">
                     Total
                   </td>
                   <td className="py-2 text-right">
@@ -228,6 +235,14 @@ export function CreatePurchaseOrderForm() {
           </Link>
         </div>
       </form>
+
+      {dialogOpen && (
+        <POLineDialog
+          initial={editingIdx !== null ? (lines[editingIdx] ?? null) : null}
+          onSave={handleDialogSave}
+          onClose={() => setDialogOpen(false)}
+        />
+      )}
     </div>
   );
 }

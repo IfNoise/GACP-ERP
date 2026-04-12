@@ -33,6 +33,7 @@ const fakeLineRow = {
   unit_price: '10.00',
   unit_of_measure: 'kg',
   received_quantity: '0.00',
+  strain_id: null,
 };
 
 const fakeRecRow = {
@@ -240,6 +241,7 @@ describe('ProcurementRepository', () => {
             unit_price: 10,
             unit_of_measure: 'kg',
             received_quantity: 0,
+            strain_id: null,
           },
         ],
         created_by: 'user-1' as never,

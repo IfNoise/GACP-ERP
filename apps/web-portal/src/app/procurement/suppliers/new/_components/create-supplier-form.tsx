@@ -38,9 +38,7 @@ export function CreateSupplierForm() {
         name: form.name,
         qualification_status:
           (form.qualification_status as 'QUALIFIED' | 'PROVISIONAL' | 'DISQUALIFIED') || undefined,
-        qualification_expiry: form.qualification_expiry
-          ? new Date(form.qualification_expiry).toISOString()
-          : undefined,
+        qualification_expiry: form.qualification_expiry || undefined,
         contact_details: Object.keys(contactDetails).length > 0 ? contactDetails : undefined,
         notes: form.notes || undefined,
       },
