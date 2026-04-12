@@ -37,6 +37,13 @@ import {
   InvestigateQualityEventSchema,
   LinkRecordToEventSchema,
   CloseQualityEventSchema,
+  // Incoming Inspections
+  IncomingInspectionSchema,
+  PerformInspectionSchema,
+  RecordTestResultsSchema,
+  ReleaseInspectionSchema,
+  RejectInspectionSchema,
+  IncomingInspectionStatusEnum,
 } from '@gacp-erp/shared-schemas';
 
 const c = initContract();
@@ -749,6 +756,100 @@ export const qualityContract = c.router({
       409: ApiErrorSchema,
     },
     summary: 'Close Quality Event (e-signature required)',
+  },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // INCOMING INSPECTIONS
+  // ════════════════════════════════════════════════════════════════════════════
+
+  /** List incoming inspections (filterable by status, supplier, strain) */
+  listIncomingInspections: {
+    method: 'GET',
+    path: '/quality/incoming-inspections',
+    query: PaginationQuerySchema.extend({
+      status: IncomingInspectionStatusEnum.optional(),
+      supplier_id: z.string().uuid().optional(),
+      strain_id: z.string().uuid().optional(),
+    }),
+    responses: {
+      200: z.object({
+        data: z.array(IncomingInspectionSchema),
+        total: z.number(),
+      }),
+    },
+    summary: 'List incoming inspections',
+  },
+
+  /** Get incoming inspection by ID */
+  getIncomingInspection: {
+    method: 'GET',
+    path: '/quality/incoming-inspections/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: IncomingInspectionSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get incoming inspection by ID',
+  },
+
+  /** Perform visual & quantity inspection (PENDING -> IN_PROGRESS) */
+  performInspection: {
+    method: 'POST',
+    path: '/quality/incoming-inspections/:id/perform',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: PerformInspectionSchema,
+    responses: {
+      200: IncomingInspectionSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Perform visual & quantity inspection',
+  },
+
+  /** Record lab test results (IN_PROGRESS -> QUARANTINE) */
+  recordTestResults: {
+    method: 'POST',
+    path: '/quality/incoming-inspections/:id/test-results',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: RecordTestResultsSchema,
+    responses: {
+      200: IncomingInspectionSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Record lab test results and enter quarantine',
+  },
+
+  /** Release from quarantine (QUARANTINE -> RELEASED) */
+  releaseInspection: {
+    method: 'POST',
+    path: '/quality/incoming-inspections/:id/release',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: ReleaseInspectionSchema,
+    responses: {
+      200: IncomingInspectionSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Release from quarantine (all criteria must be met)',
+  },
+
+  /** Reject inspection (IN_PROGRESS | QUARANTINE -> REJECTED) */
+  rejectInspection: {
+    method: 'POST',
+    path: '/quality/incoming-inspections/:id/reject',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: RejectInspectionSchema,
+    responses: {
+      200: IncomingInspectionSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Reject inspection material',
   },
 });
 

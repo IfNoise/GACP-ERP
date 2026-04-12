@@ -444,3 +444,82 @@ export const QualityEventEventSchema = z.discriminatedUnion('eventType', [
   QualityEventClosedEventSchema,
 ]);
 export type QualityEventEvent = z.infer<typeof QualityEventEventSchema>;
+
+// ════════════════════════════════════════════════════════════════════════════════
+// INCOMING INSPECTION EVENTS — topic: quality.inspection.v1
+// ════════════════════════════════════════════════════════════════════════════════
+
+export const QUALITY_INSPECTION_TOPIC = 'quality.inspection.v1' as const;
+
+const InspectionRefSchema = z.object({
+  inspectionId: z.string().uuid(),
+  inspectionNumber: z.string().regex(/^INS-\d{4}-\d{4}$/),
+  grnId: z.string().uuid(),
+  poId: z.string().uuid(),
+  supplierId: z.string().uuid(),
+  strainId: z.string().uuid().nullable(),
+});
+
+export const InspectionCreatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.inspection.created'),
+  topic: z.literal(QUALITY_INSPECTION_TOPIC),
+  payload: InspectionRefSchema.extend({
+    createdBy: z.string().uuid(),
+    createdAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type InspectionCreatedEvent = z.infer<typeof InspectionCreatedEventSchema>;
+
+export const InspectionStartedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.inspection.started'),
+  topic: z.literal(QUALITY_INSPECTION_TOPIC),
+  payload: InspectionRefSchema.extend({
+    startedBy: z.string().uuid(),
+    startedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type InspectionStartedEvent = z.infer<typeof InspectionStartedEventSchema>;
+
+export const InspectionQuarantinedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.inspection.quarantined'),
+  topic: z.literal(QUALITY_INSPECTION_TOPIC),
+  payload: InspectionRefSchema.extend({
+    quarantineStartDate: z.string().datetime({ offset: true }),
+    quarantineEndDate: z.string().datetime({ offset: true }),
+    quarantineDaysRequired: z.number().int(),
+    quarantinedBy: z.string().uuid(),
+  }),
+});
+export type InspectionQuarantinedEvent = z.infer<typeof InspectionQuarantinedEventSchema>;
+
+export const InspectionReleasedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.inspection.released'),
+  topic: z.literal(QUALITY_INSPECTION_TOPIC),
+  payload: InspectionRefSchema.extend({
+    dispositionReason: z.string().nullable(),
+    releasedBy: z.string().uuid(),
+    releasedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type InspectionReleasedEvent = z.infer<typeof InspectionReleasedEventSchema>;
+
+export const InspectionRejectedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('quality.inspection.rejected'),
+  topic: z.literal(QUALITY_INSPECTION_TOPIC),
+  payload: InspectionRefSchema.extend({
+    dispositionReason: z.string(),
+    rejectedBy: z.string().uuid(),
+    rejectedAt: z.string().datetime({ offset: true }),
+  }),
+});
+export type InspectionRejectedEvent = z.infer<typeof InspectionRejectedEventSchema>;
+
+/** Discriminated union of all Incoming Inspection events */
+export const IncomingInspectionEventSchema = z.discriminatedUnion('eventType', [
+  InspectionCreatedEventSchema,
+  InspectionStartedEventSchema,
+  InspectionQuarantinedEventSchema,
+  InspectionReleasedEventSchema,
+  InspectionRejectedEventSchema,
+]);
+export type IncomingInspectionEvent = z.infer<typeof IncomingInspectionEventSchema>;

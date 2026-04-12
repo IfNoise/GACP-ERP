@@ -9,6 +9,7 @@ import { CapaModule } from './capa/capa.module';
 import { DeviationModule } from './deviation/deviation.module';
 import { ValidationProtocolModule } from './validation-protocol/validation-protocol.module';
 import { QualityEventModule } from './quality-event/quality-event.module';
+import { IncomingInspectionModule } from './incoming-inspection/incoming-inspection.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { QualityEventModule } from './quality-event/quality-event.module';
     DeviationModule,
     ValidationProtocolModule,
     QualityEventModule,
+    IncomingInspectionModule,
     MetricsModule,
   ],
 })
