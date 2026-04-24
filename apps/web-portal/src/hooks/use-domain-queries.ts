@@ -1855,6 +1855,7 @@ interface ZonesQuery {
   limit?: number;
   zone_type?: string;
   is_active?: string;
+  top_level_only?: string;
 }
 
 export function useZones(query: ZonesQuery = {}) {
@@ -1960,6 +1961,158 @@ export function useReleaseBatchFromZone() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['zones'] });
+    },
+  });
+}
+
+type ZoneFlat = {
+  id: string;
+  zone_code: string;
+  zone_name: string;
+  zone_type: string;
+  is_active: boolean;
+  current_occupancy?: number;
+  capacity?: number | null;
+  parent_zone_id?: string | null;
+};
+type ZoneNodeTree = ZoneFlat & { sub_zones: ZoneNodeTree[] };
+
+function buildZoneTree(flat: unknown[]): ZoneNodeTree[] {
+  const nodes = flat as ZoneFlat[];
+  const map = new Map<string, ZoneNodeTree>(nodes.map((n) => [n.id, { ...n, sub_zones: [] }]));
+  const roots: ZoneNodeTree[] = [];
+  for (const node of map.values()) {
+    if (node.parent_zone_id && map.has(node.parent_zone_id)) {
+      map.get(node.parent_zone_id)!.sub_zones.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+}
+
+/** Fetch a flat list of all zones and build a tree for ZonePicker */
+export function useZoneTree(isActive = true) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', 'tree', isActive],
+    queryFn: async () => {
+      const res = await api.spatial.listZones({
+        query: {
+          page: 1,
+          limit: 500,
+          is_active: isActive ? 'true' : undefined,
+        } as unknown as Record<string, unknown>,
+      } as Parameters<typeof api.spatial.listZones>[0]);
+      if (res.status !== 200) throw new Error('Failed to load zones');
+      // Build hierarchical tree from flat list
+      return buildZoneTree((res.body as { data?: unknown[] }).data ?? []);
+    },
+    staleTime: 30_000,
+  });
+}
+
+/** Fetch full zone hierarchy (zone → sub-zones → racks → shelves → trays) */
+export function useZoneHierarchy(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', id, 'hierarchy'],
+    queryFn: async () => {
+      const res = await api.spatial.getZoneHierarchy({
+        params: { id },
+        query: { depth: 'full' },
+      });
+      if (res.status !== 200) throw new Error('Failed to load zone hierarchy');
+      return res.body;
+    },
+    enabled: !!id,
+    staleTime: 30_000,
+  });
+}
+
+export function useZoneRacks(zoneId: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['zones', zoneId, 'racks'],
+    queryFn: async () => {
+      const res = await api.spatial.listZoneRacks({
+        params: { zoneId },
+        query: { page: 1, limit: 100 },
+      });
+      if (res.status !== 200) throw new Error('Failed to load racks');
+      return res.body;
+    },
+    enabled: !!zoneId,
+    staleTime: 30_000,
+  });
+}
+
+export function useCreateRack() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Parameters<typeof api.spatial.createRack>[0]['body']) => {
+      const res = await api.spatial.createRack({ body });
+      if (res.status !== 201) throw new Error('Failed to create rack');
+      return res.body;
+    },
+    onSuccess: (data) => {
+      void qc.invalidateQueries({ queryKey: ['zones', data.zone_id, 'racks'] });
+      void qc.invalidateQueries({ queryKey: ['zones', data.zone_id, 'hierarchy'] });
+    },
+  });
+}
+
+export function useDeleteRack() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ rackId, zoneId }: { rackId: string; zoneId: string }) => {
+      const res = await api.spatial.deleteRack({ params: { id: rackId }, body: {} });
+      if (res.status !== 200) throw new Error('Failed to delete rack');
+      return { zoneId };
+    },
+    onSuccess: ({ zoneId }) => {
+      void qc.invalidateQueries({ queryKey: ['zones', zoneId, 'racks'] });
+      void qc.invalidateQueries({ queryKey: ['zones', zoneId, 'hierarchy'] });
+    },
+  });
+}
+
+export function useCreateTray() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      rackId,
+      zoneId,
+      body,
+    }: {
+      rackId: string;
+      zoneId: string;
+      body: Parameters<typeof api.spatial.createTray>[0]['body'];
+    }) => {
+      const res = await api.spatial.createTray({ params: { rackId }, body });
+      if (res.status !== 201) throw new Error('Failed to create tray');
+      return { zoneId };
+    },
+    onSuccess: ({ zoneId }) => {
+      void qc.invalidateQueries({ queryKey: ['zones', zoneId, 'hierarchy'] });
+    },
+  });
+}
+
+export function useDeleteTray() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ trayId, zoneId }: { trayId: string; zoneId: string }) => {
+      const res = await api.spatial.deleteTray({ params: { id: trayId }, body: {} });
+      if (res.status !== 200) throw new Error('Failed to delete tray');
+      return { zoneId };
+    },
+    onSuccess: ({ zoneId }) => {
+      void qc.invalidateQueries({ queryKey: ['zones', zoneId, 'hierarchy'] });
     },
   });
 }

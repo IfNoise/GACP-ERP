@@ -93,6 +93,13 @@ export {
   useAssignBatchToZone,
   useBatchAssignment,
   useReleaseBatchFromZone,
+  useZoneTree,
+  useZoneHierarchy,
+  useZoneRacks,
+  useCreateRack,
+  useDeleteRack,
+  useCreateTray,
+  useDeleteTray,
   // Workforce
   useEmployees,
   useEmployee,

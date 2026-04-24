@@ -6,9 +6,20 @@ import {
   useActiveAssignments,
   useAssignBatchToZone,
   useReleaseBatchFromZone,
+  useZoneHierarchy,
+  useCreateRack,
+  useDeleteRack,
+  useCreateTray,
+  useDeleteTray,
 } from '@/hooks';
-import { StatusBadge, AuditTrailPanel, KPICard, Button } from '@gacp-erp/ui-components';
-import type { StatusVariant, AuditEvent } from '@gacp-erp/ui-components';
+import {
+  StatusBadge,
+  AuditTrailPanel,
+  KPICard,
+  Button,
+  RackManager,
+} from '@gacp-erp/ui-components';
+import type { StatusVariant, AuditEvent, RackManagerRack } from '@gacp-erp/ui-components';
 import { useState } from 'react';
 
 const TYPE_VARIANT: Record<string, StatusVariant> = {
@@ -25,6 +36,18 @@ export function ZoneDetail({ id }: { id: string }) {
   const { data: assignmentsData, isLoading: loadingAssign } = useActiveAssignments(id);
   const assignMutation = useAssignBatchToZone();
   const releaseMutation = useReleaseBatchFromZone();
+
+  const {
+    data: hierarchyData,
+    isLoading: hierarchyLoading,
+    error: hierarchyError,
+  } = useZoneHierarchy(id);
+  const createRackMutation = useCreateRack();
+  const deleteRackMutation = useDeleteRack();
+  const createTrayMutation = useCreateTray();
+  const deleteTrayMutation = useDeleteTray();
+
+  const racks = ((hierarchyData as Record<string, unknown>)?.racks ?? []) as RackManagerRack[];
 
   const [batchId, setBatchId] = useState('');
   const [assignNotes, setAssignNotes] = useState('');
@@ -208,6 +231,40 @@ export function ZoneDetail({ id }: { id: string }) {
               </tbody>
             </table>
           )}
+        </div>
+      </div>
+
+      {/* Racks & Trays */}
+      <div className="card">
+        <div className="card-header">
+          <h2 className="text-lg font-semibold">Стеллажи и поддоны</h2>
+        </div>
+        <div className="card-body">
+          <RackManager
+            racks={racks}
+            isLoading={hierarchyLoading}
+            error={hierarchyError ? 'Ошибка загрузки стеллажей' : null}
+            canEdit
+            onCreate={async (dto) => {
+              const body = { zone_id: id, ...dto } as Parameters<
+                typeof createRackMutation.mutateAsync
+              >[0];
+              await createRackMutation.mutateAsync(body);
+            }}
+            onDelete={async (rackId) => {
+              await deleteRackMutation.mutateAsync({ rackId, zoneId: id });
+            }}
+            onCreateTray={async (rackId, dto) => {
+              await createTrayMutation.mutateAsync({
+                rackId,
+                zoneId: id,
+                body: dto as Parameters<typeof createTrayMutation.mutateAsync>[0]['body'],
+              });
+            }}
+            onDeleteTray={async (trayId) => {
+              await deleteTrayMutation.mutateAsync({ trayId, zoneId: id });
+            }}
+          />
         </div>
       </div>
 
