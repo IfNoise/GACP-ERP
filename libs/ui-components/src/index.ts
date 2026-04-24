@@ -13,6 +13,8 @@ export { DatePicker } from './date-picker';
 export { EntitySearch } from './entity-search';
 export { ConfirmDialog } from './confirm-dialog';
 export { Dialog } from './dialog';
+export { ZonePicker } from './zone-picker';
+export { RackManager } from './rack-manager';
 
 export type { ColumnDef, DataTableProps, PaginationState } from './data-table';
 export type { FieldConfig, FormBuilderProps } from './form-builder';
@@ -26,6 +28,15 @@ export type { DatePickerProps } from './date-picker';
 export type { EntityOption, EntitySearchProps } from './entity-search';
 export type { ConfirmDialogProps } from './confirm-dialog';
 export type { DialogProps } from './dialog';
+export type { ZonePickerProps, ZoneNode } from './zone-picker';
+export type {
+  RackManagerProps,
+  RackManagerRack,
+  RackManagerShelf,
+  RackManagerTray,
+  CreateRackDto,
+  CreateTrayDto,
+} from './rack-manager';
 
 // XeoKit 3D Visualization — import directly from '@gacp-erp/ui-components/xeokit'
 // to avoid pulling Node-only dependencies into unrelated pages.
