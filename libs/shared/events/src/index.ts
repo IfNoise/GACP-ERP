@@ -36,7 +36,7 @@ export {
 export { FINANCE_TRANSACTION_TOPIC } from './financial.events';
 export { PROCUREMENT_PO_TOPIC } from './procurement.events';
 export { SUPPLIER_TOPIC } from './supplier.events';
-export { SPATIAL_ZONE_TOPIC } from './spatial.events';
+export { SPATIAL_ZONE_TOPIC, SPATIAL_RACKS_TOPIC } from './spatial.events';
 export {
   WORKFORCE_EMPLOYEE_TOPIC,
   WORKFORCE_TASK_TOPIC,

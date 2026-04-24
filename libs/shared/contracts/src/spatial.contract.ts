@@ -9,6 +9,10 @@ import {
   ZoneAssignmentSchema,
   AssignBatchToZoneSchema,
   ReleaseBatchFromZoneSchema,
+  TraySchema,
+  RackSchema,
+  CreateRackSchema,
+  CreateTraySchema,
 } from '@gacp-erp/shared-schemas';
 
 const c = initContract();
@@ -55,11 +59,15 @@ export const spatialContract = c.router({
         .string()
         .transform((v) => v === 'true')
         .optional(),
+      top_level_only: z
+        .string()
+        .transform((v) => v === 'true')
+        .optional(),
     }),
     responses: {
       200: paginatedList(FacilityZoneSchema),
     },
-    summary: 'List facility zones',
+    summary: 'List facility zones (optionally top-level only)',
   },
 
   getZone: {
@@ -122,5 +130,142 @@ export const spatialContract = c.router({
       404: ApiErrorSchema,
     },
     summary: 'List active batch assignments for a zone',
+  },
+
+  // ── Hierarchical Zones ────────────────────────────────────────────────────
+
+  /** Get zone hierarchy with all sub-zones and racks */
+  getZoneHierarchy: {
+    method: 'GET',
+    path: '/spatial/zones/:id/hierarchy',
+    pathParams: z.object({ id: z.string().uuid() }),
+    query: z.object({
+      depth: z.enum(['direct', 'full']).default('full').optional(),
+    }),
+    responses: {
+      200: z.object({
+        id: z.string().uuid(),
+        zone_code: z.string(),
+        zone_name: z.string(),
+        zone_type: z.string(),
+        sub_zones: z.array(FacilityZoneSchema).default([]),
+        racks: z
+          .array(
+            z.object({
+              id: z.string().uuid(),
+              zone_id: z.string().uuid(),
+              rack_code: z.string(),
+              rack_type: z.string(),
+              shelf_count: z.number(),
+              shelves: z
+                .array(
+                  z.object({
+                    id: z.string().uuid(),
+                    shelf_index: z.number(),
+                    trays: z.array(TraySchema).default([]),
+                  }),
+                )
+                .default([]),
+            }),
+          )
+          .default([]),
+      }),
+      404: ApiErrorSchema,
+    },
+    summary: 'Get full zone hierarchy with sub-zones, racks, shelves, and trays',
+  },
+
+  // ── Racks ─────────────────────────────────────────────────────────────────────
+
+  createRack: {
+    method: 'POST',
+    path: '/spatial/racks',
+    body: CreateRackSchema,
+    responses: {
+      201: RackSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Create a rack in a zone (auto-creates shelves)',
+  },
+
+  listZoneRacks: {
+    method: 'GET',
+    path: '/spatial/zones/:zoneId/racks',
+    pathParams: z.object({ zoneId: z.string().uuid() }),
+    query: PaginationQuerySchema,
+    responses: {
+      200: paginatedList(RackSchema),
+      404: ApiErrorSchema,
+    },
+    summary: 'List racks in a zone',
+  },
+
+  getRack: {
+    method: 'GET',
+    path: '/spatial/racks/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: RackSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get a rack by ID',
+  },
+
+  deleteRack: {
+    method: 'DELETE',
+    path: '/spatial/racks/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: z.object({}),
+    responses: {
+      200: z.object({ message: z.string() }),
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Delete a rack (must have no occupied trays)',
+  },
+
+  // ── Trays ─────────────────────────────────────────────────────────────────────
+
+  createTray: {
+    method: 'POST',
+    path: '/spatial/racks/:rackId/trays',
+    pathParams: z.object({ rackId: z.string().uuid() }),
+    body: CreateTraySchema,
+    responses: {
+      201: TraySchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Create a tray on a shelf',
+  },
+
+  listRackTrays: {
+    method: 'GET',
+    path: '/spatial/racks/:rackId/trays',
+    pathParams: z.object({ rackId: z.string().uuid() }),
+    query: PaginationQuerySchema,
+    responses: {
+      200: paginatedList(TraySchema),
+      404: ApiErrorSchema,
+    },
+    summary: 'List trays in a rack',
+  },
+
+  deleteTray: {
+    method: 'DELETE',
+    path: '/spatial/trays/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: z.object({}),
+    responses: {
+      200: z.object({ message: z.string() }),
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+      409: ApiErrorSchema,
+    },
+    summary: 'Delete a tray (must be empty)',
   },
 });

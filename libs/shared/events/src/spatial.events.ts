@@ -63,3 +63,72 @@ export const SpatialZoneEventSchema = z.discriminatedUnion('eventType', [
   SpatialBatchReleasedFromZoneEventSchema,
 ]);
 export type SpatialZoneEvent = z.infer<typeof SpatialZoneEventSchema>;
+
+// ════════════════════════════════════════════════════════════════════════════════
+// SPATIAL RACK/TRAY EVENTS — topic: spatial.racks.v1
+// ════════════════════════════════════════════════════════════════════════════════
+
+export const SPATIAL_RACKS_TOPIC = 'spatial.racks.v1' as const;
+
+export const RackCreatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('RACK_CREATED'),
+  topic: z.literal(SPATIAL_RACKS_TOPIC),
+  payload: z.object({
+    rackId: z.string().uuid(),
+    zoneId: z.string().uuid(),
+    rackCode: z.string(),
+    rackType: z.enum(['1-shelf', '2-shelf', '3-shelf', 'custom']),
+    shelfCount: z.number().int().positive(),
+    createdBy: z.string().uuid(),
+  }),
+});
+export type RackCreatedEvent = z.infer<typeof RackCreatedEventSchema>;
+
+export const RackDeletedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('RACK_DELETED'),
+  topic: z.literal(SPATIAL_RACKS_TOPIC),
+  payload: z.object({
+    rackId: z.string().uuid(),
+    zoneId: z.string().uuid(),
+    rackCode: z.string(),
+    deletedBy: z.string().uuid(),
+  }),
+});
+export type RackDeletedEvent = z.infer<typeof RackDeletedEventSchema>;
+
+export const TrayCreatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('TRAY_CREATED'),
+  topic: z.literal(SPATIAL_RACKS_TOPIC),
+  payload: z.object({
+    trayId: z.string().uuid(),
+    rackId: z.string().uuid(),
+    trayCode: z.string(),
+    shelfIndex: z.number().int().nonnegative(),
+    positionIndex: z.number().int().nonnegative(),
+    traySize: z.enum(['small', 'medium', 'large', 'custom']),
+    plantCapacity: z.number().int().positive().nullable(),
+    createdBy: z.string().uuid(),
+  }),
+});
+export type TrayCreatedEvent = z.infer<typeof TrayCreatedEventSchema>;
+
+export const TrayDeletedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('TRAY_DELETED'),
+  topic: z.literal(SPATIAL_RACKS_TOPIC),
+  payload: z.object({
+    trayId: z.string().uuid(),
+    rackId: z.string().uuid(),
+    trayCode: z.string(),
+    deletedBy: z.string().uuid(),
+  }),
+});
+export type TrayDeletedEvent = z.infer<typeof TrayDeletedEventSchema>;
+
+/** Discriminated union of all Spatial Rack/Tray events */
+export const SpatialRacksEventSchema = z.discriminatedUnion('eventType', [
+  RackCreatedEventSchema,
+  RackDeletedEventSchema,
+  TrayCreatedEventSchema,
+  TrayDeletedEventSchema,
+]);
+export type SpatialRacksEvent = z.infer<typeof SpatialRacksEventSchema>;
