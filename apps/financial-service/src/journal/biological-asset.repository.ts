@@ -42,11 +42,11 @@ export class BiologicalAssetRepository {
       .values({
         batch_id: data.batch_id,
         valuation_method: data.valuation_method,
-        fair_value: data.fair_value !== undefined ? String(data.fair_value) : null,
-        cost_to_sell: data.cost_to_sell !== undefined ? String(data.cost_to_sell) : null,
+        fair_value: data.fair_value != null ? String(data.fair_value) : null,
+        cost_to_sell: data.cost_to_sell != null ? String(data.cost_to_sell) : null,
         net_realizable_value:
-          data.net_realizable_value !== undefined ? String(data.net_realizable_value) : null,
-        cost_value: data.cost_value !== undefined ? String(data.cost_value) : null,
+          data.net_realizable_value != null ? String(data.net_realizable_value) : null,
+        cost_value: data.cost_value != null ? String(data.cost_value) : null,
         quantity_grams: String(data.quantity_grams),
         valued_at: new Date(data.valued_at),
         valued_by: data.valued_by,
