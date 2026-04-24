@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@gacp-erp/ui-components';
+import { Button, ZonePicker } from '@gacp-erp/ui-components';
+import type { ZoneNode } from '@gacp-erp/ui-components';
 import {
   useCreateBatch,
   useBulkCreatePlants,
   useStrains,
   useBatches,
-  useZones,
+  useZoneTree,
   useFacilities,
 } from '@/hooks';
 
@@ -132,7 +133,12 @@ function StepIndicator({ step }: { readonly step: 1 | 2 }) {
 function BatchStep({
   onSuccess,
 }: {
-  readonly onSuccess: (batchId: string, batchNumber: string, plannedCount: number) => void;
+  readonly onSuccess: (
+    batchId: string,
+    batchNumber: string,
+    plannedCount: number,
+    strainId: string,
+  ) => void;
 }) {
   const createBatch = useCreateBatch();
   const { data: strainsData } = useStrains({ is_active: 'true', limit: 100 } as Parameters<
@@ -214,8 +220,8 @@ function BatchStep({
       } as Parameters<typeof createBatch.mutateAsync>[0];
 
       const result = await createBatch.mutateAsync(body);
-      const created = result as { id: string; batch_number: string };
-      onSuccess(created.id, created.batch_number, plannedCount);
+      const created = result as { id: string; batch_number: string; strain_id: string };
+      onSuccess(created.id, created.batch_number, plannedCount, created.strain_id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create batch');
     }
@@ -442,19 +448,17 @@ function PlantsStep({
   batchId,
   batchNumber,
   plannedCount,
+  strainId,
   onSuccess,
 }: {
   readonly batchId: string;
   readonly batchNumber: string;
   readonly plannedCount: number;
+  readonly strainId: string;
   readonly onSuccess: (count: number) => void;
 }) {
   const bulkCreate = useBulkCreatePlants();
-  const { data: zonesData } = useZones({ is_active: 'true', limit: 200 } as Parameters<
-    typeof useZones
-  >[0]);
-
-  const zones = (zonesData as { data?: unknown[] } | undefined)?.data ?? [];
+  const { data: zoneTree, isLoading: zonesLoading, error: zonesError } = useZoneTree(true);
 
   const [form, setForm] = useState<PlantsForm>({
     zone_id: '',
@@ -490,6 +494,7 @@ function PlantsStep({
     try {
       const result = await bulkCreate.mutateAsync({
         batch_id: batchId,
+        strain_id: strainId,
         zone_id: form.zone_id,
         source_type: form.source_type,
         plant_code_prefix: form.plant_code_prefix.toUpperCase(),
@@ -521,20 +526,15 @@ function PlantsStep({
           <label className="mb-1 block text-sm font-medium text-gray-700">
             Zone <span className="text-red-500">*</span>
           </label>
-          <select
+          <ZonePicker
             value={form.zone_id}
-            onChange={(e) => set('zone_id', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-            required
-          >
-            <option value="">Select zone…</option>
-            {(zones as { id: string; name: string; zone_type?: string }[]).map((z) => (
-              <option key={z.id} value={z.id}>
-                {z.name}
-                {z.zone_type ? ` (${z.zone_type})` : ''}
-              </option>
-            ))}
-          </select>
+            onChange={(zoneId: string, _zone: ZoneNode) => set('zone_id', zoneId)}
+            zones={zoneTree ?? []}
+            isLoading={zonesLoading}
+            error={zonesError ? 'Failed to load zones' : null}
+            showOccupancy
+            placeholder="Select zone…"
+          />
         </div>
 
         {/* Source type pills */}
@@ -565,7 +565,7 @@ function PlantsStep({
               value={form.plant_code_prefix}
               onChange={(e) => set('plant_code_prefix', e.target.value.toUpperCase())}
               maxLength={12}
-              pattern="[A-Z0-9-]+"
+              pattern="[-A-Z0-9]+"
               placeholder="BATCH26"
               className="w-full rounded-lg border border-gray-300 px-3 py-2 font-mono text-sm uppercase focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
               required
@@ -664,6 +664,7 @@ export function IntakeWizard() {
     id: string;
     number: string;
     plannedCount: number;
+    strainId: string;
   } | null>(null);
   const [success, setSuccess] = useState<SuccessState | null>(null);
 
@@ -677,8 +678,8 @@ export function IntakeWizard() {
 
       {step === 1 && (
         <BatchStep
-          onSuccess={(batchId, batchNumber, plannedCount) => {
-            setBatchInfo({ id: batchId, number: batchNumber, plannedCount });
+          onSuccess={(batchId, batchNumber, plannedCount, strainId) => {
+            setBatchInfo({ id: batchId, number: batchNumber, plannedCount, strainId });
             setStep(2);
           }}
         />
@@ -689,6 +690,7 @@ export function IntakeWizard() {
           batchId={batchInfo.id}
           batchNumber={batchInfo.number}
           plannedCount={batchInfo.plannedCount}
+          strainId={batchInfo.strainId}
           onSuccess={(plantCount) =>
             setSuccess({ batchId: batchInfo.id, batchNumber: batchInfo.number, plantCount })
           }

@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, Logger, Inject } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { and, isNull, like, max } from 'drizzle-orm';
+import { and, isNull, like, max, eq } from 'drizzle-orm';
 import {
   type BulkCreatePlants,
   type BulkCreatePlantsResult,
@@ -11,8 +11,7 @@ import {
   type ZoneId,
 } from '@gacp-erp/shared-schemas';
 import { CULTIVATION_TOPIC, type PlantsCreatedInBulkEvent } from '@gacp-erp/shared-events';
-import { plantsTable, type Database } from '@gacp-erp/shared-database';
-import { ZoneRepository } from '../../facilities/zone.repository';
+import { plantsTable, facilityZonesTable, type Database } from '@gacp-erp/shared-database';
 import { OutboxRepository } from '../../outbox/outbox.repository';
 import { DATABASE_TOKEN } from '../../database/database.module';
 
@@ -31,11 +30,15 @@ export class BulkCreatePlantsUseCase {
   constructor(
     @Inject(DATABASE_TOKEN) private readonly db: Database,
     private readonly outboxRepo: OutboxRepository,
-    private readonly zoneRepo: ZoneRepository,
   ) {}
 
   async execute(dto: BulkCreatePlants, createdBy: string): Promise<BulkCreatePlantsResult> {
-    const zone = await this.zoneRepo.findById(dto.zone_id);
+    const zoneRows = await this.db
+      .select({ id: facilityZonesTable.id, is_active: facilityZonesTable.is_active })
+      .from(facilityZonesTable)
+      .where(eq(facilityZonesTable.id, dto.zone_id))
+      .limit(1);
+    const zone = zoneRows[0];
     if (!zone) throw new BadRequestException(`Zone "${dto.zone_id}" not found`);
     if (!zone.is_active) throw new BadRequestException(`Zone "${dto.zone_id}" is inactive`);
 
