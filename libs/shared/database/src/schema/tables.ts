@@ -409,7 +409,7 @@ export const plantsTable = pgTable(
     /** Current zone — sole spatial reference (room/building/facility derive from hierarchy) */
     zone_id: uuid('zone_id')
       .notNull()
-      .references(() => zonesTable.id),
+      .references(() => facilityZonesTable.id),
     /** Health score 0-100 per GACP cultivation standards */
     current_health_score: integer('current_health_score').default(100),
     /** Physical position (x, y, z) within zone */
@@ -1918,6 +1918,171 @@ export const zoneAssignmentsTable = pgTable(
     zaZoneIdx: index('za_zone_idx').on(t.zone_id),
     zaBatchIdx: index('za_batch_idx').on(t.batch_id),
     zaActiveIdx: index('za_active_idx').on(t.batch_id, t.released_at),
+  }),
+);
+
+// ─── Spatial Hierarchy Tables (Racks, Shelves, Trays) ────────────────────────
+
+/** Rack type: physical shelf configuration */
+export const rackTypeEnum = pgEnum('rack_type_enum', ['1-shelf', '2-shelf', '3-shelf', 'custom']);
+
+/** Tray size for plants */
+export const traySizeEnum = pgEnum('tray_size_enum', ['small', 'medium', 'large', 'custom']);
+
+/** Spatial entity types for addressing */
+export const spatialEntityTypeEnum = pgEnum('spatial_entity_type_enum', [
+  'facility',
+  'zone',
+  'rack',
+  'shelf',
+  'tray',
+  'plant',
+]);
+
+export const racksTable = pgTable(
+  'racks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    zone_id: uuid('zone_id')
+      .notNull()
+      .references(() => facilityZonesTable.id, { onDelete: 'restrict' }),
+
+    rack_code: varchar('rack_code', { length: 20 }).notNull(),
+    rack_type: rackTypeEnum('rack_type').notNull(),
+    shelf_count: integer('shelf_count').notNull(),
+
+    // Position in zone (grid coordinates)
+    row_position: integer('row_position'),
+    column_position: integer('column_position'),
+
+    // 3D coordinates
+    coordinates: jsonb('coordinates'),
+
+    max_tray_capacity: integer('max_tray_capacity'),
+    supported_tray_sizes: text('supported_tray_sizes')
+      .array()
+      .default(sql`ARRAY['small', 'medium', 'large']`),
+
+    qr_code: varchar('qr_code', { length: 255 }).unique(),
+
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    rackZoneIdx: index('racks_zone_idx').on(t.zone_id),
+    rackCodeIdx: index('racks_code_idx').on(t.rack_code),
+    rackZonePositionIdx: index('racks_zone_position_idx').on(
+      t.zone_id,
+      t.row_position,
+      t.column_position,
+    ),
+    rackZoneCodeUnique: uniqueIndex('racks_zone_code_unique').on(t.zone_id, t.rack_code),
+  }),
+);
+
+export const shelvesTable = pgTable(
+  'shelves',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    rack_id: uuid('rack_id')
+      .notNull()
+      .references(() => racksTable.id, { onDelete: 'cascade' }),
+
+    shelf_index: integer('shelf_index').notNull(),
+    height_from_floor: decimal('height_from_floor', { precision: 8, scale: 2 }),
+
+    max_trays: integer('max_trays'),
+    occupied_positions: integer('occupied_positions').notNull().default(0),
+
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    shelfRackIdx: index('shelves_rack_idx').on(t.rack_id),
+    shelfRackIndexUnique: uniqueIndex('shelves_rack_index_unique').on(t.rack_id, t.shelf_index),
+  }),
+);
+
+export const traysTable = pgTable(
+  'trays',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    rack_id: uuid('rack_id')
+      .notNull()
+      .references(() => racksTable.id, { onDelete: 'cascade' }),
+
+    shelf_index: integer('shelf_index').notNull(),
+    position_index: integer('position_index').notNull(),
+
+    tray_code: varchar('tray_code', { length: 30 }).notNull(),
+    tray_size: traySizeEnum('tray_size').notNull(),
+    plant_capacity: integer('plant_capacity'),
+
+    // Grid layout: {rows: number, cols: number, spacing: number, pattern: string}
+    plant_layout: jsonb('plant_layout'),
+
+    occupied_slots: integer('occupied_slots').notNull().default(0),
+    qr_code: varchar('qr_code', { length: 255 }).unique(),
+
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    trayRackIdx: index('trays_rack_idx').on(t.rack_id),
+    trayCodeIdx: index('trays_code_idx').on(t.tray_code),
+    trayRackShelfIdx: index('trays_rack_shelf_idx').on(t.rack_id, t.shelf_index),
+    trayRackPositionUnique: uniqueIndex('trays_rack_position_unique').on(
+      t.rack_id,
+      t.shelf_index,
+      t.position_index,
+    ),
+  }),
+);
+
+export const spatialAddressesTable = pgTable(
+  'spatial_addresses',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    entity_id: uuid('entity_id').notNull().unique(),
+    entity_type: spatialEntityTypeEnum('entity_type').notNull(),
+
+    // Hierarchical address components
+    spatial_address: varchar('spatial_address', { length: 200 }).unique(),
+
+    facility_code: varchar('facility_code', { length: 10 }),
+    zone_code: varchar('zone_code', { length: 20 }),
+    subzone_code: varchar('subzone_code', { length: 20 }),
+    rack_code: varchar('rack_code', { length: 20 }),
+    shelf_index: integer('shelf_index'),
+    tray_position: integer('tray_position'),
+    plant_slot: integer('plant_slot'),
+
+    // 3D coordinates
+    coordinates: jsonb('coordinates'),
+
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    saEntityIdx: index('spatial_addresses_entity_idx').on(t.entity_type, t.entity_id),
+    saHierarchicalIdx: index('spatial_addresses_hierarchical_idx').on(
+      t.facility_code,
+      t.zone_code,
+      t.rack_code,
+    ),
   }),
 );
 
