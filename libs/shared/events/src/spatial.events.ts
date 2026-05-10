@@ -56,11 +56,22 @@ export const SpatialBatchReleasedFromZoneEventSchema = EventHeaderSchema.extend(
 });
 export type BatchReleasedFromZoneEvent = z.infer<typeof SpatialBatchReleasedFromZoneEventSchema>;
 
+export const SpatialZoneBoundsUpdatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('spatial.zone.bounds_updated'),
+  topic: z.literal(SPATIAL_ZONE_TOPIC),
+  payload: ZoneRefSchema.extend({
+    bounds3d: z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]),
+    updatedBy: z.string().uuid(),
+  }),
+});
+export type ZoneBoundsUpdatedEvent = z.infer<typeof SpatialZoneBoundsUpdatedEventSchema>;
+
 /** Discriminated union of all Spatial Zone events */
 export const SpatialZoneEventSchema = z.discriminatedUnion('eventType', [
   SpatialZoneCreatedEventSchema,
   SpatialBatchAssignedToZoneEventSchema,
   SpatialBatchReleasedFromZoneEventSchema,
+  SpatialZoneBoundsUpdatedEventSchema,
 ]);
 export type SpatialZoneEvent = z.infer<typeof SpatialZoneEventSchema>;
 

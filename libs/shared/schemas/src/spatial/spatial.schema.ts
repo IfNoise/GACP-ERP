@@ -35,6 +35,11 @@ export const FacilityZoneSchema = BaseEntitySchema.extend({
   /** Current number of active batch assignments */
   current_occupancy: z.number().int().nonnegative().default(0),
   notes: z.string().max(1000).nullable(),
+  /** Axis-aligned bounding box in 3D scene space: [x, y, z, width, height, depth] (metres) */
+  bounds_3d: z
+    .tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()])
+    .nullable()
+    .optional(),
 });
 export type FacilityZone = z.infer<typeof FacilityZoneSchema>;
 

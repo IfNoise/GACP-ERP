@@ -148,6 +148,10 @@ export const buildingsTable = pgTable(
     name: varchar('name', { length: 255 }).notNull(),
     building_type: buildingTypeEnum('building_type').notNull().default('indoor'),
     is_active: boolean('is_active').notNull().default(true),
+    /** URL to the uploaded 3D building model (IFC/glTF/XKT), served from storage. */
+    model_url: text('model_url'),
+    /** Format of the 3D model: ifc | gltf | xkt */
+    model_format: text('model_format'),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
@@ -1865,6 +1869,8 @@ export const facilityZonesTable = pgTable(
     is_active: boolean('is_active').notNull().default(true),
     current_occupancy: integer('current_occupancy').notNull().default(0),
     notes: text('notes'),
+    /** Axis-aligned bounding box in 3D scene space: {x, y, z, width, height, depth} (metres). */
+    bounds_3d: jsonb('bounds_3d'),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

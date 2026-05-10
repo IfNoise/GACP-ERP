@@ -15,6 +15,27 @@ import {
   CreateTraySchema,
 } from '@gacp-erp/shared-schemas';
 
+const BoundsSchema = z.tuple([
+  z.number(),
+  z.number(),
+  z.number(),
+  z.number(),
+  z.number(),
+  z.number(),
+]);
+
+const BuildingSchema = z.object({
+  id: z.string().uuid(),
+  facility_id: z.string().uuid(),
+  building_name: z.string(),
+  building_code: z.string(),
+  is_active: z.boolean(),
+  model_url: z.string().url().nullable(),
+  model_format: z.enum(['ifc', 'gltf', 'xkt']).nullable(),
+  created_at: z.string().datetime({ offset: true }),
+  updated_at: z.string().datetime({ offset: true }),
+});
+
 const c = initContract();
 
 function paginatedList<T extends z.ZodTypeAny>(itemSchema: T) {
@@ -267,5 +288,58 @@ export const spatialContract = c.router({
       409: ApiErrorSchema,
     },
     summary: 'Delete a tray (must be empty)',
+  },
+
+  // ── Zone 3D Bounds ────────────────────────────────────────────────────────────
+
+  updateZoneBounds: {
+    method: 'PATCH',
+    path: '/spatial/zones/:id/bounds',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: z.object({ bounds_3d: BoundsSchema }),
+    responses: {
+      200: FacilityZoneSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Update 3D bounding box of a zone [x,y,z,w,h,d] in metres',
+  },
+
+  // ── Buildings ─────────────────────────────────────────────────────────────────
+
+  listBuildings: {
+    method: 'GET',
+    path: '/buildings',
+    responses: {
+      200: z.array(BuildingSchema),
+    },
+    summary: 'List all active buildings',
+  },
+
+  getBuilding: {
+    method: 'GET',
+    path: '/buildings/:id',
+    pathParams: z.object({ id: z.string().uuid() }),
+    responses: {
+      200: BuildingSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Get a building by ID',
+  },
+
+  updateBuildingModel: {
+    method: 'PUT',
+    path: '/buildings/:id/model',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: z.object({
+      model_url: z.string().url(),
+      model_format: z.enum(['ifc', 'gltf', 'xkt']),
+    }),
+    responses: {
+      200: BuildingSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Register 3D model URL and format for a building',
   },
 });
