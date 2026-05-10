@@ -6,7 +6,6 @@ import { DatabaseModule } from './database/database.module';
 import { OutboxModule } from './outbox/outbox.module';
 import { FinancialModule } from './account/financial.module';
 import { ProcurementModule } from './procurement/procurement.module';
-import { SpatialModule } from './spatial/spatial.module';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import { SpatialModule } from './spatial/spatial.module';
     OutboxModule,
     FinancialModule,
     ProcurementModule,
-    SpatialModule,
     MetricsModule,
   ],
 })
