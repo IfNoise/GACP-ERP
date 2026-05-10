@@ -1,0 +1,43 @@
+{
+  "name": "spatial-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/spatial-service/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:nestjs", "domain:spatial"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/spatial-service",
+        "main": "apps/spatial-service/src/main.ts",
+        "tsConfig": "apps/spatial-service/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/spatial-service/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/spatial-service"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/spatial-service/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/spatial-service"],
+      "options": { "jestConfig": "apps/spatial-service/jest.config.ts" }
+    }
+  }
+}
