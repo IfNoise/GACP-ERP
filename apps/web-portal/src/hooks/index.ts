@@ -160,4 +160,9 @@ export {
   useCreateCultivationZone,
   useCultivationZone,
   useUpdateCultivationZone,
+  // Spatial buildings (spatial-service)
+  useSpatialBuildings,
+  useSpatialBuilding,
+  useUpdateBuildingModel,
+  useUpdateZoneBounds,
 } from './use-domain-queries';

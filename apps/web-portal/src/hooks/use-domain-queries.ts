@@ -2763,3 +2763,81 @@ export function useRejectInspection() {
     },
   });
 }
+
+// ─── SPATIAL BUILDINGS (spatial-service) ─────────────────────────────────────
+
+export function useSpatialBuildings() {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['spatial-buildings'],
+    queryFn: async () => {
+      const res = await api.spatial.listBuildings({});
+      if (res.status !== 200) throw new Error('Failed to load buildings');
+      return res.body;
+    },
+  });
+}
+
+export function useSpatialBuilding(id: string) {
+  const api = useApiClient();
+  return useQuery({
+    queryKey: ['spatial-buildings', id],
+    queryFn: async () => {
+      const res = await api.spatial.getBuilding({ params: { id } });
+      if (res.status !== 200) throw new Error('Failed to load building');
+      return res.body;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useUpdateBuildingModel() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      model_url,
+      model_format,
+    }: {
+      id: string;
+      model_url: string;
+      model_format: 'ifc' | 'gltf' | 'xkt';
+    }) => {
+      const res = await api.spatial.updateBuildingModel({
+        params: { id },
+        body: { model_url, model_format },
+      });
+      if (res.status !== 200) throw new Error('Failed to update building model');
+      return res.body;
+    },
+    onSuccess: (_d, { id }) => {
+      qc.invalidateQueries({ queryKey: ['spatial-buildings'] });
+      qc.invalidateQueries({ queryKey: ['spatial-buildings', id] });
+    },
+  });
+}
+
+export function useUpdateZoneBounds() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      bounds_3d,
+    }: {
+      id: string;
+      bounds_3d: [number, number, number, number, number, number];
+    }) => {
+      const res = await api.spatial.updateZoneBounds({
+        params: { id },
+        body: { bounds_3d },
+      });
+      if (res.status !== 200) throw new Error('Failed to update zone bounds');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['zones'] });
+    },
+  });
+}

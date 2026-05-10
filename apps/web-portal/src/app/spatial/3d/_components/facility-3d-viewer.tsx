@@ -2,7 +2,13 @@
 
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useZones, useZoneReadings, useIotAlerts } from '@/hooks';
+import {
+  useZones,
+  useZoneReadings,
+  useIotAlerts,
+  useSpatialBuildings,
+  useUpdateZoneBounds,
+} from '@/hooks';
 import { FacilityViewer, ZoneHighlighter, SensorOverlay } from '@gacp-erp/ui-components/xeokit';
 import { StatusBadge, KPICard, Button } from '@gacp-erp/ui-components';
 import type {
@@ -21,6 +27,71 @@ const ZONE_TYPE_VARIANT: Record<string, StatusVariant> = {
   QUARANTINE: 'rejected',
 };
 
+interface BuildingRecord {
+  id: string;
+  building_name: string;
+  building_code: string;
+  model_url: string | null;
+  model_format: string | null;
+}
+
+interface ZoneAssignBoundsModalProps {
+  bounds: [number, number, number, number, number, number];
+  zones: ZoneEntity[];
+  onConfirm: (zoneId: string) => void;
+  onClose: () => void;
+  isPending: boolean;
+}
+
+function ZoneAssignBoundsModal({
+  bounds,
+  zones,
+  onConfirm,
+  onClose,
+  isPending,
+}: ZoneAssignBoundsModalProps) {
+  const [selectedZoneId, setSelectedZoneId] = useState('');
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="w-96 rounded-xl bg-white p-6 shadow-2xl">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Assign Bounds to Zone</h2>
+
+        <p className="mb-3 text-xs text-gray-500">
+          Bounds: [{bounds.map((v) => v.toFixed(2)).join(', ')}]
+        </p>
+
+        <label className="mb-1 block text-xs font-medium text-gray-700">Select zone</label>
+        <select
+          className="mb-4 w-full rounded border px-3 py-2 text-sm"
+          value={selectedZoneId}
+          onChange={(e) => setSelectedZoneId(e.target.value)}
+        >
+          <option value="">— choose a zone —</option>
+          {zones.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.zone_code} — {z.zone_name}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            disabled={!selectedZoneId || isPending}
+            onClick={() => selectedZoneId && onConfirm(selectedZoneId)}
+          >
+            {isPending ? 'Saving…' : 'Assign'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Facility3DViewer() {
   const router = useRouter();
   const viewerRef = useRef<FacilityViewerHandle>(null);
@@ -30,6 +101,13 @@ export function Facility3DViewer() {
   const [hoveredZone, setHoveredZone] = useState<ZoneEntity | null>(null);
   const [showLabels, setShowLabels] = useState(true);
 
+  // Building model state
+  const [selectedBuildingId, setSelectedBuildingId] = useState<string>('');
+  const [editMode, setEditMode] = useState(false);
+  const [pendingBounds, setPendingBounds] = useState<
+    [number, number, number, number, number, number] | null
+  >(null);
+
   // Fetch zones
   const { data: zonesData, isLoading } = useZones({ limit: 100 });
   const zones = ((zonesData as Record<string, unknown>)?.['data'] ?? []) as Record<
@@ -37,13 +115,21 @@ export function Facility3DViewer() {
     unknown
   >[];
 
+  // Fetch buildings from spatial-service
+  const { data: buildingsRaw } = useSpatialBuildings();
+  const buildings = (buildingsRaw as BuildingRecord[] | undefined) ?? [];
+
+  const selectedBuilding = buildings.find((b) => b.id === selectedBuildingId) ?? null;
+
   // Fetch sensor readings for selected zone
   const { data: sensorData } = useZoneReadings(selectedZoneId ?? '');
 
   // Fetch active alerts
   const { data: alertsData } = useIotAlerts({ acknowledged: 'false' });
 
-  // Map zones to ZoneEntity for 3D viewer
+  const updateZoneBounds = useUpdateZoneBounds();
+
+  // Map zones to ZoneEntity for 3D viewer — use real bounds_3d if available
   const zoneEntities: ZoneEntity[] = useMemo(
     () =>
       zones.map((z, idx) => ({
@@ -55,15 +141,17 @@ export function Facility3DViewer() {
           ? { occupancy: Number(z['current_occupancy']) / Number(z['capacity']) }
           : {}),
         is_active: z['is_active'] !== false,
-        // Auto-layout in a grid
-        bounds: [(idx % 5) * 8, 0, Math.floor(idx / 5) * 8, 6, 3, 6] as [
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-        ],
+        // Use real 3D bounds if available, otherwise auto-layout grid
+        bounds: Array.isArray(z['bounds_3d'])
+          ? (z['bounds_3d'] as [number, number, number, number, number, number])
+          : ([(idx % 5) * 8, 0, Math.floor(idx / 5) * 8, 6, 3, 6] as [
+              number,
+              number,
+              number,
+              number,
+              number,
+              number,
+            ]),
       })),
     [zones],
   );
@@ -113,6 +201,29 @@ export function Facility3DViewer() {
     }
   }, [selectedZoneId, router]);
 
+  const handleBoundsCreated = useCallback(
+    (bounds: [number, number, number, number, number, number]) => {
+      setPendingBounds(bounds);
+    },
+    [],
+  );
+
+  const handleAssignBounds = useCallback(
+    (zoneId: string) => {
+      if (!pendingBounds) return;
+      updateZoneBounds.mutate(
+        { id: zoneId, bounds_3d: pendingBounds },
+        {
+          onSuccess: () => {
+            setPendingBounds(null);
+            setEditMode(false);
+          },
+        },
+      );
+    },
+    [pendingBounds, updateZoneBounds],
+  );
+
   const selectedZone = zoneEntities.find((z) => z.id === selectedZoneId);
 
   // Summary KPIs
@@ -132,7 +243,42 @@ export function Facility3DViewer() {
           <h1 className="text-lg font-bold text-gray-900">3D Facility Viewer</h1>
           <p className="text-xs text-gray-500">Interactive visualization of all zones</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Building model selector */}
+          {buildings.length > 0 && (
+            <select
+              className="rounded border px-2 py-1 text-xs"
+              value={selectedBuildingId}
+              onChange={(e) => {
+                setSelectedBuildingId(e.target.value);
+                setEditMode(false);
+                setPendingBounds(null);
+              }}
+            >
+              <option value="">No building model</option>
+              {buildings.map((b) => (
+                <option key={b.id} value={b.id} disabled={!b.model_url}>
+                  {b.building_code} — {b.building_name}
+                  {!b.model_url ? ' (no model)' : ''}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* Mark zone button (only when a model with URL is selected) */}
+          {selectedBuilding?.model_url && (
+            <Button
+              variant={editMode ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setEditMode((v) => !v);
+                setPendingBounds(null);
+              }}
+            >
+              {editMode ? 'Stop Marking' : 'Mark Zone'}
+            </Button>
+          )}
+
           <Button variant="outline" size="sm" onClick={() => viewerRef.current?.resetView()}>
             Reset View
           </Button>
@@ -176,6 +322,12 @@ export function Facility3DViewer() {
               onZoneHover={handleZoneHover}
               selectedZoneId={selectedZoneId}
               showLabels={showLabels}
+              modelUrl={selectedBuilding?.model_url ?? undefined}
+              modelFormat={
+                (selectedBuilding?.model_format as 'ifc' | 'gltf' | 'xkt' | undefined) ?? undefined
+              }
+              editMode={editMode}
+              onBoundsCreated={handleBoundsCreated}
             />
 
             <ZoneHighlighter
@@ -229,6 +381,17 @@ export function Facility3DViewer() {
           </div>
         )}
       </div>
+
+      {/* Zone bounds assignment modal */}
+      {pendingBounds && (
+        <ZoneAssignBoundsModal
+          bounds={pendingBounds}
+          zones={zoneEntities}
+          onConfirm={handleAssignBounds}
+          onClose={() => setPendingBounds(null)}
+          isPending={updateZoneBounds.isPending}
+        />
+      )}
     </div>
   );
 }

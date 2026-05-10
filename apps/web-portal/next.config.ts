@@ -17,12 +17,18 @@ const nextConfig: NextConfig = {
   },
 
   // Stub Node-only modules that @xeokit/xeokit-sdk references internally
+  // Enable WASM for web-ifc (IFC loader)
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         path: false,
+      };
+      // Enable async WebAssembly for web-ifc
+      config.experiments = {
+        ...config.experiments,
+        asyncWebAssembly: true,
       };
     }
     return config;
@@ -47,7 +53,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' ${new URL(process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001').origin}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
+            value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' ${new URL(process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001').origin} ${new URL(process.env.NEXT_PUBLIC_MODEL_URL ?? 'http://localhost:3007').origin}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
           },
         ],
       },
