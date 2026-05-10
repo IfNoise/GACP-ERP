@@ -59,3 +59,9 @@ certs/
 .nx/polygraph
 .claude/worktrees
 .claude/settings.local.json
+
+# Tools
+opencode.json
+
+# Uploads (spatial-service model files)
+uploads/
