@@ -13,6 +13,7 @@
     "react": "^19.0.0"
   },
   "peerDependencies": {
+    "web-ifc": "^0.0.57",
     "react": "^19.0.0",
     "@tanstack/react-table": "^8.0.0",
     "react-hook-form": "^7.0.0",
@@ -22,6 +23,9 @@
     "react-day-picker": "^9.0.0"
   },
   "peerDependenciesMeta": {
+    "web-ifc": {
+      "optional": true
+    },
     "@tanstack/react-table": {
       "optional": true
     },

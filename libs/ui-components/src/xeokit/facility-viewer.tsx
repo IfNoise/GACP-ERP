@@ -49,6 +49,16 @@ export interface FacilityViewerProps {
   className?: string | undefined;
   /** Show zone labels */
   showLabels?: boolean | undefined;
+  /** URL to a 3D building model (IFC/glTF/XKT) to load as background */
+  modelUrl?: string | undefined;
+  /** Format of the 3D model file */
+  modelFormat?: 'ifc' | 'gltf' | 'xkt' | undefined;
+  /** Enable zone marking mode: clicking scene surface creates a bounding box preview */
+  editMode?: boolean | undefined;
+  /** Called with [x,y,z,w,h,d] when user places a bounding box in editMode */
+  onBoundsCreated?:
+    | ((bounds: [number, number, number, number, number, number]) => void)
+    | undefined;
 }
 
 export interface FacilityViewerHandle {
@@ -59,26 +69,40 @@ export interface FacilityViewerHandle {
 
 // ── XeoKit lazy import types ───────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 type XeoKitModule = typeof import('@xeokit/xeokit-sdk');
+
+/** Default box size (metres) placed on surface-click in editMode */
+const DEFAULT_BOUNDS_SIZE: [number, number, number] = [2, 2, 2];
 
 /**
  * FacilityViewer — main 3D canvas component backed by XeoKit SDK.
  *
- * Renders zones as color-coded boxes in a 3D scene. Supports click/hover
- * interaction, optional sensor overlays, and camera controls (orbit/pan/zoom).
+ * Renders zones as color-coded boxes in a 3D scene. Optionally loads a 3D
+ * building model (IFC/glTF/XKT) and supports zone-marking via bounding boxes.
  *
  * XeoKit is loaded lazily (dynamic import) to avoid SSR issues.
  */
 export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerProps>(
   function FacilityViewer(
-    { zones, onZoneClick, onZoneHover, selectedZoneId, className, showLabels = true },
+    {
+      zones,
+      onZoneClick,
+      onZoneHover,
+      selectedZoneId,
+      className,
+      showLabels = true,
+      modelUrl,
+      modelFormat,
+      editMode = false,
+      onBoundsCreated,
+    },
     ref,
   ) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const viewerRef = useRef<InstanceType<XeoKitModule['Viewer']> | null>(null);
     const xeokitRef = useRef<XeoKitModule | null>(null);
     const meshesRef = useRef<Map<string, unknown>>(new Map());
+    const previewMeshRef = useRef<unknown>(null);
     const [ready, setReady] = useState(false);
 
     // ── Initialise viewer once ───────────────────────────────────────────────
@@ -121,6 +145,65 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
         }
       };
     }, []);
+
+    // ── Load 3D building model ───────────────────────────────────────────────
+
+    useEffect(() => {
+      const viewer = viewerRef.current;
+      const xeokit = xeokitRef.current;
+      if (!viewer || !xeokit || !ready || !modelUrl || !modelFormat) return;
+
+      let loadedModel: { destroy(): void } | null = null;
+
+      (async () => {
+        try {
+          if (modelFormat === 'ifc') {
+            // Lazy load WebIFCLoaderPlugin + web-ifc WASM
+            const [{ WebIFCLoaderPlugin }, WebIFC] = await Promise.all([
+              import('@xeokit/xeokit-sdk'),
+              import('web-ifc'),
+            ]);
+            const ifcAPI = new WebIFC.IfcAPI();
+            // Load web-ifc WASM from CDN to ensure the .wasm is reachable
+            // Expect the wasm to be served from Next.js `public/static/`.
+            // Place `web-ifc.wasm` into `apps/web-portal/public/static/web-ifc.wasm`.
+            ifcAPI.SetWasmPath('/static/', true);
+            // Initialize using default locateFile; absolute wasm path above
+            // ensures Emscripten will fetch `/static/web-ifc.wasm`.
+            await ifcAPI.Init();
+            const ifcLoader = new WebIFCLoaderPlugin(viewer, {
+              WebIFC,
+              IfcAPI: ifcAPI,
+            } as unknown as import('@xeokit/xeokit-sdk').WebIFCLoaderPluginConfiguration);
+            loadedModel = ifcLoader.load({
+              id: 'building-model',
+              src: modelUrl,
+              edges: true,
+            }) as { destroy(): void };
+          } else if (modelFormat === 'xkt') {
+            const { XKTLoaderPlugin } = await import('@xeokit/xeokit-sdk');
+            const xktLoader = new XKTLoaderPlugin(viewer);
+            loadedModel = xktLoader.load({
+              id: 'building-model',
+              src: modelUrl,
+            }) as { destroy(): void };
+          } else if (modelFormat === 'gltf') {
+            const { GLTFLoaderPlugin } = await import('@xeokit/xeokit-sdk');
+            const gltfLoader = new GLTFLoaderPlugin(viewer);
+            loadedModel = gltfLoader.load({
+              id: 'building-model',
+              src: modelUrl,
+            }) as { destroy(): void };
+          }
+        } catch (err) {
+          console.error('[FacilityViewer] Failed to load building model:', err);
+        }
+      })();
+
+      return () => {
+        loadedModel?.destroy();
+      };
+    }, [ready, modelUrl, modelFormat]);
 
     // ── Render / update zones ────────────────────────────────────────────────
 
@@ -180,11 +263,17 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
       });
     }, [selectedZoneId]);
 
-    // ── Click / hover handlers ───────────────────────────────────────────────
+    // ── Click / hover handlers + editMode surface picking ───────────────────
 
     useEffect(() => {
       const viewer = viewerRef.current;
-      if (!viewer || !ready) return;
+      const xeokit = xeokitRef.current;
+      if (!viewer || !xeokit || !ready) return;
+
+      const ctrl = viewer.cameraControl as unknown as {
+        on: (event: string, handler: (e: Record<string, unknown>) => void) => number;
+        off: (subId: number) => void;
+      };
 
       const onPick = (e: { entity?: { id?: string } }) => {
         if (!e.entity?.id) return;
@@ -203,19 +292,67 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
         onZoneHover?.(zone ?? null);
       };
 
-      // XeoKit runtime events not fully typed in SDK declarations
-      const ctrl = viewer.cameraControl as unknown as {
-        on: (event: string, handler: (e: Record<string, unknown>) => void) => number;
-        off: (subId: number) => void;
+      const onPickedSurface = (e: Record<string, unknown>) => {
+        if (!editMode || !onBoundsCreated) return;
+
+        const worldPos = e['worldPos'] as [number, number, number] | undefined;
+        if (!worldPos) return;
+
+        const [wx, wy, wz] = worldPos;
+        const [bw, bh, bd] = DEFAULT_BOUNDS_SIZE;
+        const bounds: [number, number, number, number, number, number] = [wx, wy, wz, bw, bh, bd];
+
+        // Remove previous preview
+        if (previewMeshRef.current) {
+          try {
+            (previewMeshRef.current as { destroy(): void }).destroy();
+          } catch {
+            /* ignore */
+          }
+          previewMeshRef.current = null;
+        }
+
+        // Draw wireframe preview box
+        previewMeshRef.current = new xeokit.Mesh(viewer.scene, {
+          id: 'bounds-preview',
+          geometry: new xeokit.ReadableGeometry(viewer.scene, {
+            ...xeokit.buildBoxGeometry({ xSize: bw / 2, ySize: bh / 2, zSize: bd / 2 }),
+          }),
+          material: new xeokit.PhongMaterial(viewer.scene, {
+            diffuse: [1, 1, 0],
+            alpha: 0.3,
+            wireframe: true,
+          }),
+          position: [wx + bw / 2, wy + bh / 2, wz + bd / 2],
+          pickable: false,
+        });
+
+        onBoundsCreated(bounds);
       };
+
       const pickSub = ctrl.on('picked', onPick);
       const hoverSub = ctrl.on('hover', onHover);
+      const surfaceSub = ctrl.on('pickedSurface', onPickedSurface);
 
       return () => {
         ctrl.off(pickSub);
         ctrl.off(hoverSub);
+        ctrl.off(surfaceSub);
       };
-    }, [zones, onZoneClick, onZoneHover, ready]);
+    }, [zones, onZoneClick, onZoneHover, ready, editMode, onBoundsCreated]);
+
+    // ── Clear preview when editMode turns off ────────────────────────────────
+
+    useEffect(() => {
+      if (!editMode && previewMeshRef.current) {
+        try {
+          (previewMeshRef.current as { destroy(): void }).destroy();
+        } catch {
+          /* ignore */
+        }
+        previewMeshRef.current = null;
+      }
+    }, [editMode]);
 
     // ── Imperative handle ────────────────────────────────────────────────────
 
@@ -255,6 +392,14 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
           className="h-full w-full"
           style={{ touchAction: 'none' }}
         />
+
+        {/* Edit mode indicator */}
+        {editMode && ready && (
+          <div className="pointer-events-none absolute left-3 top-3 rounded bg-yellow-400/90 px-3 py-1 text-xs font-semibold text-yellow-900 shadow">
+            Zone Marking Mode — Click surface to place bounds
+          </div>
+        )}
+
         {/* Zone labels overlay */}
         {showLabels && ready && (
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
