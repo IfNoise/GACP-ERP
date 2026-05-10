@@ -89,13 +89,13 @@ async function bootstrap(): Promise<void> {
     ['batches', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
     ['strains', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
     ['facilities', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
-    ['buildings', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
     ['rooms', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
     ['zones', 'CULTIVATION_SERVICE_URL', 'http://localhost:3002'],
     ['quality', 'QUALITY_SERVICE_URL', 'http://localhost:3003'],
     ['financial', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
     ['procurement', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
-    ['spatial', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
+    ['spatial', 'SPATIAL_SERVICE_URL', 'http://localhost:3007'],
+    ['buildings', 'SPATIAL_SERVICE_URL', 'http://localhost:3007'],
     ['analytics', 'ANALYTICS_SERVICE_URL', 'http://localhost:3006'],
   ];
 
