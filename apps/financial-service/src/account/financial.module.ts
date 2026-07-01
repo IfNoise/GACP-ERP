@@ -6,11 +6,12 @@ import { CreateJournalEntryUseCase } from '../journal/use-cases/create-journal-e
 import { BiologicalAssetValuationUseCase } from '../journal/use-cases/biological-asset-valuation.use-case';
 import { FinancialController } from './financial.controller';
 import { BatchIntakeConsumer } from '../batch-intake.consumer';
+import { IfcIngestionConsumer } from '../ifc-ingestion.consumer';
 import { OutboxModule } from '../outbox/outbox.module';
 
 @Module({
   imports: [OutboxModule],
-  controllers: [FinancialController, BatchIntakeConsumer],
+  controllers: [FinancialController, BatchIntakeConsumer, IfcIngestionConsumer],
   providers: [
     AccountRepository,
     JournalEntryRepository,
