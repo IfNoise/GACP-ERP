@@ -29,6 +29,7 @@ apps/
   financial-service/    (port 3004)  Accounting, procurement, spatial planning
   workforce-service/    (port 3005)  HR, training, scheduling, time tracking
   analytics-service/    (port 3006)  Reporting, dashboards
+  ifc-service/          (port 3008)  IFC revision lifecycle, diff, approval, projection
   audit-consumer/                    Go service -- Kafka consumer -> ImmuDB (not TypeScript!)
   web-portal/                        Next.js 15 App Router frontend
 

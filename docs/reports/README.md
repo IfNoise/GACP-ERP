@@ -70,6 +70,13 @@
 | **[AUDIT_EXECUTIVE_SUMMARY.md](./AUDIT_EXECUTIVE_SUMMARY.md)** | Исполнительное резюме аудита | ✅ Завершён | Краткий обзор для руководства |
 | **[AUDIT_ACTION_CHECKLIST.md](./AUDIT_ACTION_CHECKLIST.md)** | Чек-лист немедленных действий | ✅ Завершён | План исправлений с приоритетами |
 
+### 🧩 IFC Integration (29 июня 2026)
+
+| Файл | Описание | Статус | Назначение |
+|------|----------|--------|-----------|
+| **[IFC_INTEGRATION_STATUS_2026-06-29.md](./IFC_INTEGRATION_STATUS_2026-06-29.md)** | Снимок текущей реализации IFC и рамка для deep integration Spatial/Financial/IoT | ✅ Active | Базовый артефакт для архитектурной дискуссии |
+| **[IFC_DEEP_INTEGRATION_RFC_v0.3_2026-06-29.md](./IFC_DEEP_INTEGRATION_RFC_v0.3_2026-06-29.md)** | RFC v0.3: отдельный IFC сервис, IfcOpenShell, diff-with-approval, psets/classification + modeling guide | ✅ Draft | Рабочий документ для архитектурного согласования |
+
 ### 📊 Отчёты валидации
 
 | Файл | Описание | Статус | Размер |

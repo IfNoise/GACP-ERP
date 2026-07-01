@@ -61,6 +61,7 @@ GACP-ERP is a pharmaceutical-grade medical cannabis ERP system. All code must co
 | financial-service   | 3004 |
 | workforce-service   | 3005 |
 | analytics-service   | 3006 |
+| ifc-service         | 3008 |
 
 ## Shared Library Aliases
 
