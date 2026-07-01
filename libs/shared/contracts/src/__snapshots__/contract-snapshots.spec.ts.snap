@@ -52,10 +52,6 @@ exports[`Contract snapshot tests auditContract shape matches snapshot 1`] = `
 
 exports[`Contract snapshot tests authContract shape matches snapshot 1`] = `
 {
-  "login": {
-    "method": "POST",
-    "path": "/auth/login",
-  },
   "logout": {
     "method": "POST",
     "path": "/auth/logout",
@@ -103,6 +99,10 @@ exports[`Contract snapshot tests financialContract shape matches snapshot 1`] = 
     "method": "GET",
     "path": "/financial/accounts",
   },
+  "listJournalEntries": {
+    "method": "GET",
+    "path": "/financial/journal-entries",
+  },
   "postJournalEntry": {
     "method": "POST",
     "path": "/financial/journal-entries/:id/post",
@@ -114,6 +114,43 @@ exports[`Contract snapshot tests financialContract shape matches snapshot 1`] = 
   "reverseJournalEntry": {
     "method": "POST",
     "path": "/financial/journal-entries/:id/reverse",
+  },
+}
+`;
+
+exports[`Contract snapshot tests ifcContract shape matches snapshot 1`] = `
+{
+  "approveRevision": {
+    "method": "POST",
+    "path": "/ifc/revisions/:revisionId/approve",
+  },
+  "getProjectionStatus": {
+    "method": "GET",
+    "path": "/ifc/revisions/:revisionId/projections",
+  },
+  "getRevision": {
+    "method": "GET",
+    "path": "/ifc/revisions/:revisionId",
+  },
+  "getRevisionDiff": {
+    "method": "GET",
+    "path": "/ifc/revisions/:revisionId/diff",
+  },
+  "listRevisions": {
+    "method": "GET",
+    "path": "/ifc/revisions",
+  },
+  "rejectRevision": {
+    "method": "POST",
+    "path": "/ifc/revisions/:revisionId/reject",
+  },
+  "requestApproval": {
+    "method": "POST",
+    "path": "/ifc/revisions/:revisionId/approval-request",
+  },
+  "uploadRevision": {
+    "method": "POST",
+    "path": "/ifc/revisions",
   },
 }
 `;
@@ -282,6 +319,10 @@ exports[`Contract snapshot tests qualityContract shape matches snapshot 1`] = `
     "method": "GET",
     "path": "/quality/deviations/:id",
   },
+  "getIncomingInspection": {
+    "method": "GET",
+    "path": "/quality/incoming-inspections/:id",
+  },
   "getQualityEvent": {
     "method": "GET",
     "path": "/quality/quality-events/:id",
@@ -334,9 +375,37 @@ exports[`Contract snapshot tests qualityContract shape matches snapshot 1`] = `
     "method": "GET",
     "path": "/quality/deviations",
   },
+  "listIncomingInspections": {
+    "method": "GET",
+    "path": "/quality/incoming-inspections",
+  },
+  "listQualityEvents": {
+    "method": "GET",
+    "path": "/quality/quality-events",
+  },
+  "listValidationProtocols": {
+    "method": "GET",
+    "path": "/quality/validation-protocols",
+  },
+  "performInspection": {
+    "method": "POST",
+    "path": "/quality/incoming-inspections/:id/perform",
+  },
+  "recordTestResults": {
+    "method": "POST",
+    "path": "/quality/incoming-inspections/:id/test-results",
+  },
   "rejectChangeControl": {
     "method": "POST",
     "path": "/quality/change-controls/:id/reject",
+  },
+  "rejectInspection": {
+    "method": "POST",
+    "path": "/quality/incoming-inspections/:id/reject",
+  },
+  "releaseInspection": {
+    "method": "POST",
+    "path": "/quality/incoming-inspections/:id/release",
   },
   "reportDeviation": {
     "method": "POST",
@@ -359,21 +428,61 @@ exports[`Contract snapshot tests spatialContract shape matches snapshot 1`] = `
     "method": "POST",
     "path": "/spatial/zones/assignments",
   },
+  "createRack": {
+    "method": "POST",
+    "path": "/spatial/racks",
+  },
+  "createTray": {
+    "method": "POST",
+    "path": "/spatial/racks/:rackId/trays",
+  },
   "createZone": {
     "method": "POST",
     "path": "/spatial/zones",
+  },
+  "deleteRack": {
+    "method": "DELETE",
+    "path": "/spatial/racks/:id",
+  },
+  "deleteTray": {
+    "method": "DELETE",
+    "path": "/spatial/trays/:id",
   },
   "getBatchAssignment": {
     "method": "GET",
     "path": "/spatial/zones/assignments/:id",
   },
+  "getBuilding": {
+    "method": "GET",
+    "path": "/buildings/:id",
+  },
+  "getRack": {
+    "method": "GET",
+    "path": "/spatial/racks/:id",
+  },
   "getZone": {
     "method": "GET",
     "path": "/spatial/zones/:id",
   },
+  "getZoneHierarchy": {
+    "method": "GET",
+    "path": "/spatial/zones/:id/hierarchy",
+  },
   "listActiveAssignments": {
     "method": "GET",
     "path": "/spatial/zones/:zoneId/assignments",
+  },
+  "listBuildings": {
+    "method": "GET",
+    "path": "/buildings",
+  },
+  "listRackTrays": {
+    "method": "GET",
+    "path": "/spatial/racks/:rackId/trays",
+  },
+  "listZoneRacks": {
+    "method": "GET",
+    "path": "/spatial/zones/:zoneId/racks",
   },
   "listZones": {
     "method": "GET",
@@ -382,6 +491,18 @@ exports[`Contract snapshot tests spatialContract shape matches snapshot 1`] = `
   "releaseBatchFromZone": {
     "method": "DELETE",
     "path": "/spatial/zones/assignments/:id",
+  },
+  "updateBuildingModel": {
+    "method": "PUT",
+    "path": "/buildings/:id/model",
+  },
+  "updateZoneBounds": {
+    "method": "PATCH",
+    "path": "/spatial/zones/:id/bounds",
+  },
+  "updateZoneSpaceId": {
+    "method": "PATCH",
+    "path": "/spatial/zones/:id/space",
   },
 }
 `;

@@ -305,6 +305,19 @@ export const spatialContract = c.router({
     summary: 'Update 3D bounding box of a zone [x,y,z,w,h,d] in metres',
   },
 
+  updateZoneSpaceId: {
+    method: 'PATCH',
+    path: '/spatial/zones/:id/space',
+    pathParams: z.object({ id: z.string().uuid() }),
+    body: z.object({ ifc_space_id: z.string().max(255).nullable() }),
+    responses: {
+      200: FacilityZoneSchema,
+      400: ApiErrorSchema,
+      404: ApiErrorSchema,
+    },
+    summary: 'Bind a zone to an IfcSpace entity ID from the loaded building model',
+  },
+
   // ── Buildings ─────────────────────────────────────────────────────────────────
 
   listBuildings: {

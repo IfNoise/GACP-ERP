@@ -10,3 +10,4 @@ export * from './spatial.contract';
 export * from './workforce.contract';
 export * from './analytics.contract';
 export * from './document.contract';
+export * from './ifc.contract';

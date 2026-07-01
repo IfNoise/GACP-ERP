@@ -9,6 +9,7 @@ import {
   spatialContract,
   workforceContract,
   analyticsContract,
+  ifcContract,
 } from './index';
 
 /**
@@ -67,5 +68,9 @@ describe('Contract snapshot tests', () => {
 
   it('analyticsContract shape matches snapshot', () => {
     expect(extractContractShape(analyticsContract)).toMatchSnapshot();
+  });
+
+  it('ifcContract shape matches snapshot', () => {
+    expect(extractContractShape(ifcContract)).toMatchSnapshot();
   });
 });

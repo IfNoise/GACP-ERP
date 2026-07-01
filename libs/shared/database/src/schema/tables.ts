@@ -673,6 +673,64 @@ export const outboxEventsTable = pgTable(
   }),
 );
 
+// ── IFC Integration: Revision Lifecycle (EPIC 10) ────────────────────────────
+
+export const ifcRevisionStatusEnum = pgEnum('ifc_revision_status', [
+  'uploaded',
+  'parsed',
+  'diff_ready',
+  'pending_approval',
+  'approved',
+  'rejected',
+  'projected',
+  'failed',
+]);
+
+/**
+ * IFC model revision records — each row tracks one uploaded model file
+ * through the diff-with-approval lifecycle before projections are applied
+ * to spatial/financial/IoT domains.
+ *
+ * FDA 21 CFR Part 11 / ALCOA+: hard-delete forbidden; every revision
+ * is retained with full status history via status_history JSONB column.
+ */
+export const ifcRevisionsTable = pgTable(
+  'ifc_revisions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    model_id: varchar('model_id', { length: 255 }).notNull(),
+    source_file_uri: text('source_file_uri').notNull(),
+    /** SHA-256 hex of the uploaded IFC file — used for deduplication */
+    source_file_hash: varchar('source_file_hash', { length: 64 }).notNull(),
+    status: ifcRevisionStatusEnum('status').notNull().default('uploaded'),
+    manifest_uri: text('manifest_uri'),
+    change_summary: text('change_summary'),
+    change_control_id: varchar('change_control_id', { length: 100 }),
+    approved_by: jsonb('approved_by')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    approved_at: timestamp('approved_at', { withTimezone: true }),
+    /** JSONB array of status-change log entries for audit */
+    status_history: jsonb('status_history')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    uploaded_by: uuid('uploaded_by')
+      .notNull()
+      .references(() => usersTable.id),
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => ({
+    modelIdIdx: index('ifc_revisions_model_id_idx').on(t.model_id),
+    statusIdx: index('ifc_revisions_status_idx').on(t.status),
+    hashIdx: index('ifc_revisions_hash_idx').on(t.source_file_hash),
+  }),
+);
+
 // ── IoT: Alert Thresholds (EPIC 5) ───────────────────────────────────────────
 
 export const alertLevelEnum = pgEnum('alert_level', ['WARNING', 'CRITICAL']);
@@ -1871,6 +1929,8 @@ export const facilityZonesTable = pgTable(
     notes: text('notes'),
     /** Axis-aligned bounding box in 3D scene space: {x, y, z, width, height, depth} (metres). */
     bounds_3d: jsonb('bounds_3d'),
+    /** XeoKit scene entity ID of the IfcSpace object in the loaded building model. */
+    ifc_space_id: varchar('ifc_space_id', { length: 255 }),
     created_at: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

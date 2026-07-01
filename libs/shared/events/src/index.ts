@@ -20,6 +20,7 @@ export * from './spatial.events';
 export * from './workforce.events';
 export * from './training.events';
 export * from './analytics.events';
+export * from './ifc.events';
 
 // ─── Topic registry ───────────────────────────────────────────────────────────
 export { CULTIVATION_TOPIC } from './plant.events';
@@ -44,3 +45,4 @@ export {
 } from './workforce.events';
 export { TRAINING_EXECUTION_TOPIC, TRAINING_CERTIFICATION_TOPIC } from './training.events';
 export { ANALYTICS_REPORT_TOPIC } from './analytics.events';
+export { IFC_INGESTION_TOPIC, IFC_PROJECTION_TOPIC } from './ifc.events';

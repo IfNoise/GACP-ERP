@@ -11,6 +11,7 @@ import {
   spatialContract,
   workforceContract,
   analyticsContract,
+  ifcContract,
 } from './index';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -28,14 +29,17 @@ const apiContract = c.router({
   spatial: spatialContract,
   workforce: workforceContract,
   analytics: analyticsContract,
+  ifc: ifcContract,
 });
 
-const openApiDocument = generateOpenApi(apiContract, {
+// Work around incompatible generic constraints between ts-rest/open-api typing
+// and current contract composition; runtime structure is valid AppRouter.
+const openApiDocument = generateOpenApi(apiContract as never, {
   info: {
     title: 'GACP-ERP API',
     version: '1.0.0',
     description:
-      'GACP-ERP platform API — cultivation, quality, financial, workforce, audit, IoT, analytics',
+      'GACP-ERP platform API — cultivation, quality, financial, workforce, audit, IoT, analytics, IFC integration',
     contact: {
       name: 'GACP-ERP Team',
     },

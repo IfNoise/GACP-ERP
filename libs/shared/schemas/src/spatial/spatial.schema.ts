@@ -40,6 +40,8 @@ export const FacilityZoneSchema = BaseEntitySchema.extend({
     .tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()])
     .nullable()
     .optional(),
+  /** XeoKit scene entity ID of the IfcSpace in the loaded building model */
+  ifc_space_id: z.string().max(255).nullable().optional(),
 });
 export type FacilityZone = z.infer<typeof FacilityZoneSchema>;
 

@@ -9,6 +9,7 @@ import {
   spatialContract,
   workforceContract,
   analyticsContract,
+  ifcContract,
 } from './index';
 
 describe('Contracts barrel export', () => {
@@ -23,6 +24,7 @@ describe('Contracts barrel export', () => {
     expect(spatialContract).toBeDefined();
     expect(workforceContract).toBeDefined();
     expect(analyticsContract).toBeDefined();
+    expect(ifcContract).toBeDefined();
   });
 });
 

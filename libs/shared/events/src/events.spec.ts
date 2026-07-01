@@ -18,6 +18,8 @@ import {
   TRAINING_EXECUTION_TOPIC,
   TRAINING_CERTIFICATION_TOPIC,
   ANALYTICS_REPORT_TOPIC,
+  IFC_INGESTION_TOPIC,
+  IFC_PROJECTION_TOPIC,
   // base
   EventHeaderSchema,
   SopReferenceSchema,
@@ -44,6 +46,8 @@ describe('Event topics', () => {
       TRAINING_EXECUTION_TOPIC,
       TRAINING_CERTIFICATION_TOPIC,
       ANALYTICS_REPORT_TOPIC,
+      IFC_INGESTION_TOPIC,
+      IFC_PROJECTION_TOPIC,
     ];
     for (const t of topics) {
       expect(typeof t).toBe('string');

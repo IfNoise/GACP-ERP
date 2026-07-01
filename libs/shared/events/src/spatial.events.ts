@@ -66,12 +66,23 @@ export const SpatialZoneBoundsUpdatedEventSchema = EventHeaderSchema.extend({
 });
 export type ZoneBoundsUpdatedEvent = z.infer<typeof SpatialZoneBoundsUpdatedEventSchema>;
 
+export const SpatialZoneSpaceIdUpdatedEventSchema = EventHeaderSchema.extend({
+  eventType: z.literal('spatial.zone.space_id_updated'),
+  topic: z.literal(SPATIAL_ZONE_TOPIC),
+  payload: ZoneRefSchema.extend({
+    ifcSpaceId: z.string().nullable(),
+    updatedBy: z.string().uuid(),
+  }),
+});
+export type ZoneSpaceIdUpdatedEvent = z.infer<typeof SpatialZoneSpaceIdUpdatedEventSchema>;
+
 /** Discriminated union of all Spatial Zone events */
 export const SpatialZoneEventSchema = z.discriminatedUnion('eventType', [
   SpatialZoneCreatedEventSchema,
   SpatialBatchAssignedToZoneEventSchema,
   SpatialBatchReleasedFromZoneEventSchema,
   SpatialZoneBoundsUpdatedEventSchema,
+  SpatialZoneSpaceIdUpdatedEventSchema,
 ]);
 export type SpatialZoneEvent = z.infer<typeof SpatialZoneEventSchema>;
 
