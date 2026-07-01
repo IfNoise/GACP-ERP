@@ -1,5 +1,8 @@
 import { signIn } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
+import { DevLoginForm } from './_components/dev-login-form';
+
+const isDevAuth = process.env['AUTH_MODE'] === 'dev';
 
 export default function LoginPage() {
   return (
@@ -10,16 +13,20 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-gray-500">Cannabis Cultivation Management</p>
         </div>
 
-        <form
-          action={async () => {
-            'use server';
-            await signIn('zitadel', { redirectTo: '/' });
-          }}
-        >
-          <Button type="submit" size="lg" className="w-full">
-            Sign in with Zitadel
-          </Button>
-        </form>
+        {isDevAuth ? (
+          <DevLoginForm />
+        ) : (
+          <form
+            action={async () => {
+              'use server';
+              await signIn('zitadel', { redirectTo: '/' });
+            }}
+          >
+            <Button type="submit" size="lg" className="w-full">
+              Sign in with Zitadel
+            </Button>
+          </form>
+        )}
 
         <p className="mt-6 text-center text-xs text-gray-400">
           Access restricted to authorised personnel only.

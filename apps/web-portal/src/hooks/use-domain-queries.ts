@@ -2841,3 +2841,21 @@ export function useUpdateZoneBounds() {
     },
   });
 }
+
+export function useUpdateZoneSpaceId() {
+  const api = useApiClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ifc_space_id }: { id: string; ifc_space_id: string | null }) => {
+      const res = await api.spatial.updateZoneSpaceId({
+        params: { id },
+        body: { ifc_space_id },
+      });
+      if (res.status !== 200) throw new Error('Failed to update zone space id');
+      return res.body;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['zones'] });
+    },
+  });
+}

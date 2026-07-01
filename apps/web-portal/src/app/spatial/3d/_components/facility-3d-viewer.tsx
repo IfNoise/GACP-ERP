@@ -8,6 +8,7 @@ import {
   useIotAlerts,
   useSpatialBuildings,
   useUpdateZoneBounds,
+  useUpdateZoneSpaceId,
 } from '@/hooks';
 import { FacilityViewer, ZoneHighlighter, SensorOverlay } from '@gacp-erp/ui-components/xeokit';
 import { StatusBadge, KPICard, Button } from '@gacp-erp/ui-components';
@@ -15,6 +16,7 @@ import type {
   FacilityViewerHandle,
   ZoneEntity,
   SensorReading,
+  SpaceInfo,
 } from '@gacp-erp/ui-components/xeokit';
 import type { StatusVariant } from '@gacp-erp/ui-components';
 
@@ -92,6 +94,53 @@ function ZoneAssignBoundsModal({
   );
 }
 
+interface SpaceAssignModalProps {
+  spaceName?: string | undefined;
+  zones: ZoneEntity[];
+  onConfirm: (zoneId: string) => void;
+  onClose: () => void;
+}
+
+function SpaceAssignModal({ spaceName, zones, onConfirm, onClose }: SpaceAssignModalProps) {
+  const [selectedZoneId, setSelectedZoneId] = useState('');
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="w-96 rounded-xl bg-white p-6 shadow-2xl">
+        <h2 className="mb-1 text-base font-semibold text-gray-900">Assign Space to Zone</h2>
+        {spaceName && <p className="mb-4 text-xs text-gray-500">Room: {spaceName}</p>}
+
+        <label className="mb-1 block text-xs font-medium text-gray-700">Select zone</label>
+        <select
+          className="mb-4 w-full rounded border px-3 py-2 text-sm"
+          value={selectedZoneId}
+          onChange={(e) => setSelectedZoneId(e.target.value)}
+        >
+          <option value="">— choose a zone —</option>
+          {zones.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.zone_code} — {z.zone_name}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            disabled={!selectedZoneId}
+            onClick={() => selectedZoneId && onConfirm(selectedZoneId)}
+          >
+            Assign
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Facility3DViewer() {
   const router = useRouter();
   const viewerRef = useRef<FacilityViewerHandle>(null);
@@ -104,9 +153,17 @@ export function Facility3DViewer() {
   // Building model state
   const [selectedBuildingId, setSelectedBuildingId] = useState<string>('');
   const [editMode, setEditMode] = useState(false);
+  const [spaceMappingMode, setSpaceMappingMode] = useState(false);
   const [pendingBounds, setPendingBounds] = useState<
     [number, number, number, number, number, number] | null
   >(null);
+  const [pendingSpace, setPendingSpace] = useState<{
+    id: string;
+    name?: string | undefined;
+  } | null>(null);
+  const [discoveredSpaces, setDiscoveredSpaces] = useState<SpaceInfo[]>([]);
+  /** Local session mapping: zoneId → IFC entity ID (persisted to backend via space_id) */
+  const [spaceAssignments, setSpaceAssignments] = useState<Record<string, string>>({});
 
   // Fetch zones
   const { data: zonesData, isLoading } = useZones({ limit: 100 });
@@ -128,32 +185,56 @@ export function Facility3DViewer() {
   const { data: alertsData } = useIotAlerts({ acknowledged: 'false' });
 
   const updateZoneBounds = useUpdateZoneBounds();
+  const updateZoneSpaceId = useUpdateZoneSpaceId();
 
   // Map zones to ZoneEntity for 3D viewer — use real bounds_3d if available
   const zoneEntities: ZoneEntity[] = useMemo(
     () =>
-      zones.map((z, idx) => ({
-        id: String(z['id']),
-        zone_code: String(z['zone_code'] ?? ''),
-        zone_name: String(z['zone_name'] ?? ''),
-        zone_type: String(z['zone_type'] ?? 'UTILITY'),
-        ...(z['current_occupancy'] != null && z['capacity'] != null && Number(z['capacity']) > 0
-          ? { occupancy: Number(z['current_occupancy']) / Number(z['capacity']) }
-          : {}),
-        is_active: z['is_active'] !== false,
-        // Use real 3D bounds if available, otherwise auto-layout grid
-        bounds: Array.isArray(z['bounds_3d'])
-          ? (z['bounds_3d'] as [number, number, number, number, number, number])
-          : ([(idx % 5) * 8, 0, Math.floor(idx / 5) * 8, 6, 3, 6] as [
-              number,
-              number,
-              number,
-              number,
-              number,
-              number,
-            ]),
-      })),
-    [zones],
+      zones.map((z, idx) => {
+        // 1. Session assignment > backend ifc_space_id
+        let spaceId: string | undefined =
+          spaceAssignments[String(z['id'])] ??
+          (z['ifc_space_id'] ? String(z['ifc_space_id']) : undefined) ??
+          (z['space_id'] ? String(z['space_id']) : undefined);
+
+        // 2. Auto-match IfcSpace by name when model is loaded but no stored spaceId
+        if (!spaceId && discoveredSpaces.length > 0) {
+          const zoneName = String(z['zone_name'] ?? '')
+            .toLowerCase()
+            .trim();
+          const zoneCode = String(z['zone_code'] ?? '')
+            .toLowerCase()
+            .trim();
+          const matched = discoveredSpaces.find((s) => {
+            const sName = s.name?.toLowerCase().trim() ?? '';
+            return sName === zoneName || sName === zoneCode;
+          });
+          if (matched) spaceId = matched.id;
+        }
+
+        return {
+          id: String(z['id']),
+          zone_code: String(z['zone_code'] ?? ''),
+          zone_name: String(z['zone_name'] ?? ''),
+          zone_type: String(z['zone_type'] ?? 'UTILITY'),
+          spaceId,
+          ...(z['current_occupancy'] != null && z['capacity'] != null && Number(z['capacity']) > 0
+            ? { occupancy: Number(z['current_occupancy']) / Number(z['capacity']) }
+            : {}),
+          is_active: z['is_active'] !== false,
+          bounds: Array.isArray(z['bounds_3d'])
+            ? (z['bounds_3d'] as [number, number, number, number, number, number])
+            : ([(idx % 5) * 8, 0, Math.floor(idx / 5) * 8, 6, 3, 6] as [
+                number,
+                number,
+                number,
+                number,
+                number,
+                number,
+              ]),
+        };
+      }),
+    [zones, discoveredSpaces, spaceAssignments],
   );
 
   // Map sensor data for the overlay
@@ -190,6 +271,28 @@ export function Facility3DViewer() {
   const handleZoneClick = useCallback((zone: ZoneEntity) => {
     setSelectedZoneId(zone.id);
   }, []);
+
+  const handleModelLoaded = useCallback((spaces: SpaceInfo[]) => {
+    setDiscoveredSpaces(spaces);
+  }, []);
+
+  const handleSpacePicked = useCallback((entityId: string, name?: string) => {
+    setPendingSpace({ id: entityId, name });
+  }, []);
+
+  const handleAssignSpace = useCallback(
+    (zoneId: string) => {
+      if (!pendingSpace) return;
+      const entityId = pendingSpace.id;
+      // Optimistic local update so viewer reacts immediately
+      setSpaceAssignments((prev) => ({ ...prev, [zoneId]: entityId }));
+      setPendingSpace(null);
+      setSpaceMappingMode(false);
+      // Persist to backend
+      updateZoneSpaceId.mutate({ id: zoneId, ifc_space_id: entityId });
+    },
+    [pendingSpace, updateZoneSpaceId],
+  );
 
   const handleZoneHover = useCallback((zone: ZoneEntity | null) => {
     setHoveredZone(zone);
@@ -253,6 +356,7 @@ export function Facility3DViewer() {
                 setSelectedBuildingId(e.target.value);
                 setEditMode(false);
                 setPendingBounds(null);
+                setDiscoveredSpaces([]);
               }}
             >
               <option value="">No building model</option>
@@ -263,6 +367,22 @@ export function Facility3DViewer() {
                 </option>
               ))}
             </select>
+          )}
+
+          {/* Map spaces button — visible when model is loaded */}
+          {selectedBuilding?.model_url && (
+            <Button
+              variant={spaceMappingMode ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setSpaceMappingMode((v) => !v);
+                setEditMode(false);
+                setPendingBounds(null);
+                setPendingSpace(null);
+              }}
+            >
+              {spaceMappingMode ? 'Stop Mapping' : 'Map Spaces'}
+            </Button>
           )}
 
           {/* Mark zone button (only when a model with URL is selected) */}
@@ -328,6 +448,9 @@ export function Facility3DViewer() {
               }
               editMode={editMode}
               onBoundsCreated={handleBoundsCreated}
+              onModelLoaded={handleModelLoaded}
+              spaceMappingMode={spaceMappingMode}
+              onSpacePicked={handleSpacePicked}
             />
 
             <ZoneHighlighter
@@ -390,6 +513,19 @@ export function Facility3DViewer() {
           onConfirm={handleAssignBounds}
           onClose={() => setPendingBounds(null)}
           isPending={updateZoneBounds.isPending}
+        />
+      )}
+
+      {/* Space → zone assignment modal */}
+      {pendingSpace && (
+        <SpaceAssignModal
+          spaceName={pendingSpace.name}
+          zones={zoneEntities}
+          onConfirm={handleAssignSpace}
+          onClose={() => {
+            setPendingSpace(null);
+            setSpaceMappingMode(false);
+          }}
         />
       )}
     </div>

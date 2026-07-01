@@ -165,4 +165,5 @@ export {
   useSpatialBuilding,
   useUpdateBuildingModel,
   useUpdateZoneBounds,
+  useUpdateZoneSpaceId,
 } from './use-domain-queries';

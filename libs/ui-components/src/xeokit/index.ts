@@ -7,6 +7,7 @@ export type {
   FacilityViewerHandle,
   ZoneEntity,
   SensorReading,
+  SpaceInfo,
 } from './facility-viewer';
 export type { ZoneHighlighterProps } from './zone-highlighter';
 export type { SensorOverlayProps } from './sensor-overlay';

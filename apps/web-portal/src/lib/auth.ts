@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import { type OAuthConfig, type OAuthUserConfig } from 'next-auth/providers';
+import Credentials from 'next-auth/providers/credentials';
 import type { JWT } from 'next-auth/jwt';
 import type { Session } from 'next-auth';
 import { SystemRoleEnum, type SystemRole } from '@gacp-erp/shared-schemas';
@@ -53,15 +54,70 @@ const ZitadelProvider: OAuthConfig<ZitadelProfile> = {
   },
 } as OAuthConfig<ZitadelProfile> & OAuthUserConfig<ZitadelProfile>;
 
+// ── Dev auth bypass ────────────────────────────────────────────────────────────
+// When AUTH_MODE=dev, Zitadel is replaced by a local CredentialsProvider.
+// A synthetic JWT is issued so api-gateway proxy can extract x-user-id.
+// NEVER set AUTH_MODE=dev in production.
+
+const DEV_USER_IDS: Record<string, string> = {
+  SUPER_ADMIN: '00000000-0000-0000-0000-000000000001',
+  QUALITY_MANAGER: '00000000-0000-0000-0000-000000000002',
+  CULTIVATION_MANAGER: '00000000-0000-0000-0000-000000000003',
+  OPERATOR: '00000000-0000-0000-0000-000000000004',
+  AUDITOR: '00000000-0000-0000-0000-000000000005',
+  READONLY: '00000000-0000-0000-0000-000000000006',
+};
+
+function buildDevAccessToken(role: string, sub: string): string {
+  const header = Buffer.from(JSON.stringify({ alg: 'none' })).toString('base64url');
+  const payload = Buffer.from(
+    JSON.stringify({ sub, preferred_username: `dev-${role.toLowerCase()}` }),
+  ).toString('base64url');
+  return `${header}.${payload}.dev`;
+}
+
+const isDevAuth = process.env['AUTH_MODE'] === 'dev';
+
+const DevCredentialsProvider = Credentials({
+  id: 'dev-credentials',
+  credentials: { role: { label: 'Role', type: 'text' } },
+  authorize(credentials) {
+    const role =
+      typeof credentials['role'] === 'string' ? credentials['role'].toUpperCase() : 'SUPER_ADMIN';
+    const sub = DEV_USER_IDS[role] ?? '00000000-0000-0000-0000-000000000001';
+    return {
+      id: sub,
+      name: `dev-${role.toLowerCase()}`,
+      email: `${role.toLowerCase()}@dev.local`,
+      role,
+    };
+  },
+});
+
+// ──────────────────────────────────────────────────────────────────────────────
+
 /**
- * NextAuth v5 configuration with Zitadel OIDC provider.
+ * NextAuth v5 configuration with Zitadel OIDC provider (prod) or
+ * local CredentialsProvider (dev, AUTH_MODE=dev).
  * Token refresh is handled automatically via jwt callback.
  */
 const nextAuth = NextAuth({
-  providers: [ZitadelProvider],
+  providers: isDevAuth ? [DevCredentialsProvider] : [ZitadelProvider],
 
   callbacks: {
-    async jwt({ token, account }): Promise<JWT> {
+    async jwt({ token, account, user }): Promise<JWT> {
+      // Dev credentials sign-in — build synthetic session
+      if (account?.provider === 'dev-credentials' && user) {
+        const rawUser = user as Record<string, unknown>;
+        const role = typeof rawUser['role'] === 'string' ? rawUser['role'] : 'SUPER_ADMIN';
+        return {
+          ...token,
+          access_token: buildDevAccessToken(role, user.id),
+          expires_at: Math.floor(Date.now() / 1000) + 86400,
+          roles: [role as SystemRole],
+        };
+      }
+
       // On initial sign-in, persist token data and extract roles
       if (account) {
         // Decode roles from access_token JWT payload (Zitadel custom claims)
@@ -81,6 +137,9 @@ const nextAuth = NextAuth({
       if (Date.now() < ((token['expires_at'] as number) ?? 0) * 1000) {
         return token;
       }
+
+      // Dev tokens don't expire — return as-is
+      if (isDevAuth) return token;
 
       // Refresh the access token
       return refreshAccessToken(token as JWT & { refresh_token: string });
@@ -156,10 +215,8 @@ function extractRolesFromToken(accessToken: string | undefined): SystemRole[] {
       Buffer.from(parts[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'),
     ) as Record<string, unknown>;
 
-    const projectId = process.env['ZITADEL_PROJECT_ID'];
-    const projectSpecificClaim = projectId
-      ? `urn:zitadel:iam:org:project:${projectId}:roles`
-      : undefined;
+    const pid = process.env['ZITADEL_PROJECT_ID'];
+    const projectSpecificClaim = pid ? `urn:zitadel:iam:org:project:${pid}:roles` : undefined;
 
     const rolesObj = (
       projectSpecificClaim !== undefined

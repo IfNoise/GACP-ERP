@@ -531,15 +531,25 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
       return () => {
         cancelled = true;
         setModelLoaded(false);
-        loadedModel?.destroy();
-        // Destroy IfcSpace proxy meshes
-        spaceProxyMeshesRef.current.forEach((mesh) => {
+        // When the viewer is still alive (e.g. modelUrl changed) we destroy
+        // explicitly.  When the viewer is already gone its own destroy() already
+        // cleaned everything up, so calling model/mesh destroy() would traverse
+        // a half-torn-down XeoKit internals and throw "Cannot read properties of
+        // null (reading 'off')".
+        if (viewerRef.current) {
           try {
-            (mesh as { destroy(): void }).destroy();
+            loadedModel?.destroy();
           } catch {
-            /* ignore */
+            /* viewer may be in a partial teardown state */
           }
-        });
+          spaceProxyMeshesRef.current.forEach((mesh) => {
+            try {
+              (mesh as { destroy(): void }).destroy();
+            } catch {
+              /* ignore */
+            }
+          });
+        }
         spaceProxyMeshesRef.current.clear();
       };
     }, [ready, modelUrl, modelFormat]);
@@ -877,10 +887,14 @@ export const FacilityViewer = forwardRef<FacilityViewerHandle, FacilityViewerPro
         safeOff(pickSub);
         safeOff(hoverSub);
         safeOff(surfaceSub);
-        // Clear any lingering hover highlight
-        if (hoverHighlightRef.current && sceneObjectsForPick) {
-          const e = sceneObjectsForPick[hoverHighlightRef.current];
-          if (e) e.highlighted = false;
+        // Clear any lingering hover highlight (guard: viewer may already be gone)
+        if (hoverHighlightRef.current && sceneObjectsForPick && viewerRef.current) {
+          try {
+            const e = sceneObjectsForPick[hoverHighlightRef.current];
+            if (e) e.highlighted = false;
+          } catch {
+            /* ignore */
+          }
           hoverHighlightRef.current = null;
         }
       };
