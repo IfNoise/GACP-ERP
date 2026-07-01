@@ -1,0 +1,43 @@
+{
+  "name": "ifc-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ifc-service/src",
+  "projectType": "application",
+  "tags": ["type:app", "runtime:nestjs", "domain:ifc", "compliance:critical"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ifc-service",
+        "main": "apps/ifc-service/src/main.ts",
+        "tsConfig": "apps/ifc-service/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -r ts-node/register/transpile-only -r tsconfig-paths/register apps/ifc-service/src/main.ts",
+        "cwd": "{workspaceRoot}",
+        "envFile": "docker/.env"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/ifc-service"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": { "lintFilePatterns": ["apps/ifc-service/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/ifc-service"],
+      "options": { "jestConfig": "apps/ifc-service/jest.config.ts" }
+    }
+  }
+}
