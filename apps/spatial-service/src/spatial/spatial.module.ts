@@ -6,13 +6,15 @@ import { DeleteRackUseCase } from './use-cases/delete-rack.use-case';
 import { CreateTrayUseCase } from './use-cases/create-tray.use-case';
 import { DeleteTrayUseCase } from './use-cases/delete-tray.use-case';
 import { UpdateZoneBoundsUseCase } from './use-cases/update-zone-bounds.use-case';
+import { UpdateZoneSpaceIdUseCase } from './use-cases/update-zone-space-id.use-case';
 import { SpatialController } from './spatial.controller';
 import { BuildingsController } from '../buildings/buildings.controller';
 import { OutboxModule } from '../outbox/outbox.module';
+import { IfcIngestionConsumer } from '../ifc-ingestion.consumer';
 
 @Module({
   imports: [OutboxModule],
-  controllers: [SpatialController, BuildingsController],
+  controllers: [SpatialController, BuildingsController, IfcIngestionConsumer],
   providers: [
     SpatialRepository,
     SpatialPlanningUseCase,
@@ -21,6 +23,7 @@ import { OutboxModule } from '../outbox/outbox.module';
     CreateTrayUseCase,
     DeleteTrayUseCase,
     UpdateZoneBoundsUseCase,
+    UpdateZoneSpaceIdUseCase,
   ],
   exports: [SpatialRepository],
 })

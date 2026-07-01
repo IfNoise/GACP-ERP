@@ -5,6 +5,7 @@ initTelemetry({ serviceName: 'spatial-service' });
 
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
+import { type MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from 'nestjs-pino';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
@@ -36,6 +37,19 @@ async function bootstrap(): Promise<void> {
   });
 
   app.setGlobalPrefix('internal');
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'spatial-service-consumer',
+        brokers: [process.env['KAFKA_BROKERS'] ?? 'localhost:9094'],
+      },
+      consumer: { groupId: 'spatial-service-group' },
+    },
+  });
+
+  await app.startAllMicroservices();
 
   const port = parseInt(process.env['PORT'] ?? '3007', 10);
   await app.listen(port, '0.0.0.0');

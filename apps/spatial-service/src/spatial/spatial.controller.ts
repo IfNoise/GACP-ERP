@@ -34,6 +34,7 @@ import { DeleteRackUseCase } from './use-cases/delete-rack.use-case';
 import { CreateTrayUseCase } from './use-cases/create-tray.use-case';
 import { DeleteTrayUseCase } from './use-cases/delete-tray.use-case';
 import { UpdateZoneBoundsUseCase } from './use-cases/update-zone-bounds.use-case';
+import { UpdateZoneSpaceIdUseCase } from './use-cases/update-zone-space-id.use-case';
 
 const ZoneListQuerySchema = PaginationQuerySchema.extend({
   limit: z.coerce.number().int().min(1).max(1000).default(20),
@@ -52,6 +53,10 @@ const UpdateBoundsSchema = z.object({
   bounds_3d: z.tuple([z.number(), z.number(), z.number(), z.number(), z.number(), z.number()]),
 });
 
+const UpdateSpaceIdSchema = z.object({
+  ifc_space_id: z.string().max(255).nullable(),
+});
+
 @Controller({ path: 'spatial', version: '1' })
 export class SpatialController {
   constructor(
@@ -62,6 +67,7 @@ export class SpatialController {
     private readonly createTrayUseCase: CreateTrayUseCase,
     private readonly deleteTrayUseCase: DeleteTrayUseCase,
     private readonly updateZoneBoundsUseCase: UpdateZoneBoundsUseCase,
+    private readonly updateZoneSpaceIdUseCase: UpdateZoneSpaceIdUseCase,
   ) {}
 
   @Post('zones')
@@ -105,6 +111,15 @@ export class SpatialController {
     @Headers('x-user-id') userId: string,
   ) {
     return this.updateZoneBoundsUseCase.execute(id, dto.bounds_3d, userId ?? 'system');
+  }
+
+  @Patch('zones/:id/space')
+  updateZoneSpaceId(
+    @Param('id') id: string,
+    @ZodBody(UpdateSpaceIdSchema) dto: { ifc_space_id: string | null },
+    @Headers('x-user-id') userId: string,
+  ) {
+    return this.updateZoneSpaceIdUseCase.execute(id, dto.ifc_space_id, userId ?? 'system');
   }
 
   @Post('zones/assignments')

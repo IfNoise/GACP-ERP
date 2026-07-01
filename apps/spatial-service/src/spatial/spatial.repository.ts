@@ -167,6 +167,19 @@ export class SpatialRepository {
     return this.findZoneByIdOrThrow(id);
   }
 
+  async updateZoneSpaceId(
+    tx: DbContext,
+    id: string,
+    ifc_space_id: string | null,
+    updatedBy: UserId,
+  ): Promise<FacilityZone> {
+    await tx
+      .update(facilityZonesTable)
+      .set({ ifc_space_id, updated_at: new Date(), updated_by: updatedBy })
+      .where(eq(facilityZonesTable.id, id));
+    return this.findZoneByIdOrThrow(id);
+  }
+
   async findAssignmentById(id: string): Promise<ZoneAssignment | null> {
     const rows = await this.db
       .select()
@@ -620,6 +633,7 @@ export class SpatialRepository {
       current_occupancy: row.current_occupancy,
       notes: row.notes ?? null,
       bounds_3d: row.bounds_3d as [number, number, number, number, number, number] | null,
+      ifc_space_id: row.ifc_space_id ?? null,
       created_at: row.created_at.toISOString(),
       updated_at: row.updated_at.toISOString(),
       created_by: row.created_by as UserId,
