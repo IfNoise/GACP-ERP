@@ -7,6 +7,7 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyHelmet from '@fastify/helmet';
 import { VersioningType } from '@nestjs/common';
+import { type MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 import { ZodValidationPipe } from './common/pipes/zod-validation.pipe';
@@ -79,6 +80,19 @@ async function bootstrap(): Promise<void> {
   // Global prefix
   app.setGlobalPrefix('api');
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'api-gateway-consumer',
+        brokers: [process.env['KAFKA_BROKERS'] ?? 'localhost:9094'],
+      },
+      consumer: { groupId: 'api-gateway-group' },
+    },
+  });
+
+  await app.startAllMicroservices();
+
   // ── Service Proxy ──────────────────────────────────────────────────────────
   // ts-rest clients send requests to http://gateway/api/{contract_path}
   // (e.g. POST /api/workforce/employees). These Fastify-level routes forward
@@ -96,6 +110,7 @@ async function bootstrap(): Promise<void> {
     ['procurement', 'FINANCIAL_SERVICE_URL', 'http://localhost:3004'],
     ['spatial', 'SPATIAL_SERVICE_URL', 'http://localhost:3007'],
     ['buildings', 'SPATIAL_SERVICE_URL', 'http://localhost:3007'],
+    ['ifc', 'IFC_SERVICE_URL', 'http://localhost:3008'],
     ['analytics', 'ANALYTICS_SERVICE_URL', 'http://localhost:3006'],
   ];
 
@@ -172,12 +187,17 @@ async function bootstrap(): Promise<void> {
           fwdHeaders['content-type'] = 'application/json';
         }
 
-        const res = await fetch(targetUrl, {
+        const requestInit: RequestInit = {
           method: request.method,
           headers: fwdHeaders,
-          body: hasBody ? JSON.stringify(request.body) : undefined,
           signal: AbortSignal.timeout(30_000),
-        });
+        };
+
+        if (hasBody) {
+          requestInit.body = JSON.stringify(request.body);
+        }
+
+        const res = await fetch(targetUrl, requestInit);
 
         const r = reply.status(res.status);
         const ct = res.headers.get('content-type');
@@ -185,10 +205,11 @@ async function bootstrap(): Promise<void> {
         r.send(res.status === 204 ? null : await res.text());
       } catch (err) {
         logger.error(`Proxy error → ${request.method} ${targetUrl}: ${err}`);
-        reply
-          .status(502)
-          .header('content-type', 'application/json')
-          .send(JSON.stringify({ statusCode: 502, message: 'Upstream service unavailable' }));
+        const errorResponse = reply.status(502);
+        errorResponse.header('content-type', 'application/json');
+        errorResponse.send(
+          JSON.stringify({ statusCode: 502, message: 'Upstream service unavailable' }),
+        );
       }
     };
 

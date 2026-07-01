@@ -7,6 +7,7 @@ import { AlertEvaluationService } from './alert-evaluation.service';
 import { AlertHistoryQueryService } from './alert-history-query.service';
 import { VmProxyService } from './vm-proxy.service';
 import { IotController } from './iot.controller';
+import { IfcIngestionConsumer } from './ifc-ingestion.consumer';
 
 /**
  * IotModule — EPIC 5: IoT & Environmental Monitoring.
@@ -23,7 +24,7 @@ import { IotController } from './iot.controller';
  */
 @Module({
   imports: [ScheduleModule.forRoot(), ConfigModule, KafkaProducerModule],
-  controllers: [IotController],
+  controllers: [IotController, IfcIngestionConsumer],
   providers: [ThresholdService, AlertEvaluationService, VmProxyService, AlertHistoryQueryService],
   exports: [ThresholdService],
 })
